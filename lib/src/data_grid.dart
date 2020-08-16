@@ -45,6 +45,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   void initState() {
+    applySortIdxIntoRows();
+
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
     leftFixedRowsVerticalScroll = verticalScroll.addAndGet();
     bodyRowsVerticalScroll = verticalScroll.addAndGet();
@@ -70,6 +72,16 @@ class _PlutoGridState extends State<PlutoGrid> {
     stateManager.addListener(changeStateListener);
 
     super.initState();
+  }
+
+  void applySortIdxIntoRows() {
+    // 컬럼 정렬 시 기본 정렬을 위한 값
+    for (var i = 0; i < widget.rows.length; i += 1) {
+      if (widget.rows[i].sortIdx != null) {
+        break;
+      }
+      widget.rows[i].sortIdx = i;
+    }
   }
 
   void changeStateListener() {

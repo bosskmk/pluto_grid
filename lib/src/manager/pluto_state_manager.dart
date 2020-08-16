@@ -3,11 +3,11 @@ part of pluto_grid;
 class PlutoStateManager extends ChangeNotifier {
   List<PlutoColumn> _columns;
 
-  List<PlutoColumn> get columns => _columns;
+  List<PlutoColumn> get columns => [..._columns];
 
   List<PlutoRow> _rows;
 
-  List<PlutoRow> get rows => _rows;
+  List<PlutoRow> get rows => [..._rows];
 
   FocusNode _gridFocusNode;
 
@@ -145,6 +145,38 @@ class PlutoStateManager extends ChangeNotifier {
         break;
       }
     }
+    notifyListeners();
+  }
+
+  void toggleSortColumn(GlobalKey columnKey) {
+    for (var i = 0; i < _columns.length; i += 1) {
+      if (_columns[i]._key == columnKey) {
+        final field = _columns[i].field;
+        if (_columns[i].sort.isNone) {
+          _columns[i].sort = PlutoColumnSort.Ascending;
+
+          _rows.sort((a, b) => a.cells[field].value
+              .toString()
+              .compareTo(b.cells[field].value.toString()));
+        } else if (_columns[i].sort.isAscending) {
+          _columns[i].sort = PlutoColumnSort.Descending;
+
+          _rows.sort((b, a) => a.cells[field].value
+              .toString()
+              .compareTo(b.cells[field].value.toString()));
+        } else {
+          _columns[i].sort = PlutoColumnSort.None;
+
+          _rows.sort((a, b) {
+            if (a.sortIdx == null || b.sortIdx == null) return 0;
+            return a.sortIdx.compareTo(b.sortIdx);
+          });
+        }
+      } else {
+        _columns[i].sort = PlutoColumnSort.None;
+      }
+    }
+
     notifyListeners();
   }
 
@@ -294,7 +326,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
   }
 
-  /// rowIdx 로 스크롤
+  /// 해당 Row 로 세로축 스크롤
   void moveScrollByRow(MoveDirection direction, int rowIdx) {
     if (!direction.vertical) {
       return;
@@ -307,7 +339,7 @@ class PlutoStateManager extends ChangeNotifier {
     scrollByDirection(direction, offset);
   }
 
-  /// columnIdx 로 스크롤
+  /// 해당 Column 으로 가로축 스크롤
   void moveScrollByColumn(MoveDirection direction, int columnIdx) {
     if (!direction.horizontal) {
       return;
@@ -342,6 +374,7 @@ class PlutoStateManager extends ChangeNotifier {
     scrollByDirection(direction, offset);
   }
 
+  /// 컬럼 위치를 변경
   void moveColumn(GlobalKey columnKey, double offset) {
     double currentOffset = 0.0 - _scroll.horizontal.offset;
 
@@ -380,6 +413,22 @@ class PlutoStateManager extends ChangeNotifier {
     } else {
       _columns.insert(indexToMove + 1, _columns[columnIndex]);
       _columns.removeRange(columnIndex, columnIndex + 1);
+    }
+
+    notifyListeners();
+  }
+
+  /// 컬럼 사이즈를 변경
+  void resizeColumn(GlobalKey columnKey, double offset) {
+    for (var i = 0; i < _columns.length; i += 1) {
+      if (_columns[i]._key == columnKey) {
+        final setWidth = _columns[i].width + offset;
+
+        _columns[i].width = setWidth > PlutoDefaultSettings.columnWidth
+            ? setWidth
+            : PlutoDefaultSettings.columnWidth;
+        break;
+      }
     }
 
     notifyListeners();

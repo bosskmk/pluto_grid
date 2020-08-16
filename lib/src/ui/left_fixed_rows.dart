@@ -12,6 +12,8 @@ class LeftFixedRows extends StatefulWidget {
 class _LeftFixedRowsState extends State<LeftFixedRows> {
   List<PlutoColumn> _columns;
 
+  List<PlutoRow> _rows;
+
   @override
   void dispose() {
     widget.stateManager.removeListener(changeStateListener);
@@ -23,15 +25,19 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
   void initState() {
     _columns = widget.stateManager.leftFixedColumns;
 
+    _rows = widget.stateManager.rows;
+
     widget.stateManager.addListener(changeStateListener);
 
     super.initState();
   }
 
   void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false) {
+    if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false ||
+        listEquals(_rows, widget.stateManager.rows) == false) {
       setState(() {
         _columns = widget.stateManager.leftFixedColumns;
+        _rows = widget.stateManager.rows;
       });
     }
   }
@@ -41,11 +47,12 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
     return ListView.builder(
       controller: widget.stateManager.scroll.leftFixedRowsVertical,
       scrollDirection: Axis.vertical,
-      itemCount: widget.stateManager.rows.length,
+      itemCount: _rows.length,
       itemBuilder: (ctx, i) {
         return RowWidget(
+          key: ValueKey('left_fixed_row_${_rows[i]._key.toString()}'),
           stateManager: widget.stateManager,
-          row: widget.stateManager.rows[i],
+          row: _rows[i],
           columns: _columns,
         );
       },

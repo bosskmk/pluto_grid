@@ -2,7 +2,7 @@ part of pluto_grid;
 
 enum MenuItem { Fixed }
 
-class HeaderWidget extends StatelessWidget {
+class HeaderWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
@@ -11,12 +11,49 @@ class HeaderWidget extends StatelessWidget {
     @required this.column,
   }) : super(key: column._key);
 
+  @override
+  _HeaderWidgetState createState() => _HeaderWidgetState();
+}
+
+class _HeaderWidgetState extends State<HeaderWidget> {
+  PlutoColumnSort _sort;
+
+  @override
+  void dispose() {
+    widget.stateManager.removeListener(changeStateListener);
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _sort = widget.column.sort;
+
+    widget.stateManager.addListener(changeStateListener);
+
+    super.initState();
+  }
+
+  void changeStateListener() {
+    final changedColumn = widget.stateManager.columns.firstWhere((
+        element) => element._key == widget.column._key);
+
+    if (_sort != changedColumn.sort) {
+      setState(() {
+        _sort = changedColumn.sort;
+      });
+    }
+  }
+
   void _showContextMenu(BuildContext context, Offset position) async {
     // TODO : 아래 GestureDetector 의 onTapDown 이벤트가 클릭을 빨리하면 동작하지 않아 null
     if (position == null) {
       return;
     }
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+    final RenderBox overlay = Overlay
+        .of(context)
+        .context
+        .findRenderObject();
     final MenuItem selectedMenu = await showMenu<MenuItem>(
       context: context,
       position: RelativeRect.fromRect(
@@ -24,7 +61,7 @@ class HeaderWidget extends StatelessWidget {
       items: [
         PopupMenuItem(
           value: MenuItem.Fixed,
-          child: column.fixed.isFixed == true
+          child: widget.column.fixed.isFixed == true
               ? const Text('고정 해제')
               : const Text('왼쪽 고정'),
         ),
@@ -33,7 +70,7 @@ class HeaderWidget extends StatelessWidget {
 
     switch (selectedMenu) {
       case MenuItem.Fixed:
-        stateManager.toggleFixedColumn(column._key);
+        widget.stateManager.toggleFixedColumn(widget.column._key);
         break;
     }
   }
@@ -47,18 +84,18 @@ class HeaderWidget extends StatelessWidget {
         Positioned(
           child: Draggable(
             onDragEnd: (dragDetails) {
-              stateManager.moveColumn(column._key, dragDetails.offset.dx);
-//              handleMoveColumn(dragDetails.offset.dx);
+              widget.stateManager.moveColumn(
+                  widget.column._key, dragDetails.offset.dx);
             },
             feedback: Container(
-              width: column.width,
-              height: stateManager.style.rowHeight,
+              width: widget.column.width,
+              height: widget.stateManager.style.rowHeight,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.black26,
               ),
               child: Text(
-                column.title,
+                widget.column.title,
                 style: const TextStyle(
                   color: Colors.black,
                   decoration: TextDecoration.none,
@@ -72,14 +109,14 @@ class HeaderWidget extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-//                handleSorted();
+                widget.stateManager.toggleSortColumn(widget.column._key);
               },
               child: Container(
-                width: column.width,
-                height: stateManager.style.rowHeight,
+                width: widget.column.width,
+                height: widget.stateManager.style.rowHeight,
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  column.title,
+                  widget.column.title,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -103,12 +140,13 @@ class HeaderWidget extends StatelessWidget {
               _currentPosition = details.localPosition;
             },
             onHorizontalDragEnd: (DragEndDetails details) {
-//              handleResizeColumn(_currentPosition.dx - 20);
+              widget.stateManager.resizeColumn(
+                  widget.column._key, _currentPosition.dx - 20);
             },
             child: Transform.rotate(
               angle: 90 * pi / 180,
               child: IconButton(
-                icon: HeaderIcon(null),
+                icon: HeaderIcon(widget.column.sort),
                 iconSize: 18,
                 onPressed: () {
                   _showContextMenu(context, _tapDownPosition);

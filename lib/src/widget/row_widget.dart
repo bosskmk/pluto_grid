@@ -10,7 +10,7 @@ class RowWidget extends StatelessWidget {
     this.stateManager,
     this.row,
     this.columns,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

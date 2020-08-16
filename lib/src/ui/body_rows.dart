@@ -11,6 +11,7 @@ class BodyRows extends StatefulWidget {
 
 class _BodyRowsState extends State<BodyRows> {
   List<PlutoColumn> _columns;
+  List<PlutoRow> _rows;
   double _width;
 
   @override
@@ -24,6 +25,8 @@ class _BodyRowsState extends State<BodyRows> {
   void initState() {
     _columns = getColumns();
 
+    _rows = widget.stateManager.rows;
+
     _width = getWidth();
 
     widget.stateManager.addListener(changeStateListener);
@@ -32,9 +35,12 @@ class _BodyRowsState extends State<BodyRows> {
   }
 
   void changeStateListener() {
-    if (listEquals(_columns, getColumns()) == false || _width != getWidth()) {
+    if (listEquals(_columns, getColumns()) == false ||
+        listEquals(_rows, widget.stateManager.rows) == false ||
+        _width != getWidth()) {
       setState(() {
         _columns = getColumns();
+        _rows = widget.stateManager.rows;
         _width = getWidth();
       });
     }
@@ -63,11 +69,12 @@ class _BodyRowsState extends State<BodyRows> {
           child: ListView.builder(
             controller: widget.stateManager.scroll.bodyRowsVertical,
             scrollDirection: Axis.vertical,
-            itemCount: widget.stateManager.rows.length,
+            itemCount: _rows.length,
             itemBuilder: (ctx, i) {
               return RowWidget(
+                key: ValueKey('body_row_${_rows[i]._key.toString()}'),
                 stateManager: widget.stateManager,
-                row: widget.stateManager.rows[i],
+                row: _rows[i],
                 columns: _columns,
               );
             },

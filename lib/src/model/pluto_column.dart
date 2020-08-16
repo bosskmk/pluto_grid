@@ -62,6 +62,34 @@ enum PlutoColumnSort {
   Descending,
 }
 
+extension PlutoColumnSortExtension on PlutoColumnSort {
+  bool get isNone {
+    return this == null || this == PlutoColumnSort.None;
+  }
+
+  bool get isAscending {
+    return this == PlutoColumnSort.Ascending;
+  }
+
+  bool get isDescending {
+    return this == PlutoColumnSort.Descending;
+  }
+
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
+
+  PlutoColumnSort fromString(String value) {
+    if (value == PlutoColumnSort.Ascending.toShortString()) {
+      return PlutoColumnSort.Ascending;
+    } else if (value == PlutoColumnSort.Descending.toShortString()) {
+      return PlutoColumnSort.Descending;
+    } else {
+      return PlutoColumnSort.None;
+    }
+  }
+}
+
 class PlutoColumnType {
   /// 문자열 컬럼으로 설정 합니다.
   PlutoColumnType.text({
