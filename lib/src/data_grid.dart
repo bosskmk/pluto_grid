@@ -20,6 +20,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   LinkedScrollControllerGroup verticalScroll = LinkedScrollControllerGroup();
   ScrollController leftFixedRowsVerticalScroll;
   ScrollController bodyRowsVerticalScroll;
+  ScrollController rightRowsVerticalScroll;
 
   LinkedScrollControllerGroup horizontalScroll = LinkedScrollControllerGroup();
   ScrollController bodyHeadersHorizontalScroll;
@@ -28,13 +29,18 @@ class _PlutoGridState extends State<PlutoGrid> {
   PlutoStateManager stateManager;
 
   double leftFixedColumnWidth;
+  double bodyColumnWidth;
+  double rightFixedColumnWidth;
   bool showFixedColumn;
 
   @override
   void dispose() {
     gridFocusNode.dispose();
+
     leftFixedRowsVerticalScroll.dispose();
-    bodyRowsHorizontalScroll.dispose();
+    bodyRowsVerticalScroll.dispose();
+    rightRowsVerticalScroll.dispose();
+
     bodyHeadersHorizontalScroll.dispose();
     bodyRowsHorizontalScroll.dispose();
 
@@ -48,8 +54,11 @@ class _PlutoGridState extends State<PlutoGrid> {
     applySortIdxIntoRows();
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
+
     leftFixedRowsVerticalScroll = verticalScroll.addAndGet();
     bodyRowsVerticalScroll = verticalScroll.addAndGet();
+    rightRowsVerticalScroll = verticalScroll.addAndGet();
+
     bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
 
@@ -61,6 +70,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         vertical: verticalScroll,
         leftFixedRowsVertical: leftFixedRowsVerticalScroll,
         bodyRowsVertical: bodyRowsVerticalScroll,
+        rightRowsVerticalScroll: rightRowsVerticalScroll,
         horizontal: horizontalScroll,
         bodyHeadersHorizontal: bodyHeadersHorizontalScroll,
         bodyRowsHorizontal: bodyRowsHorizontalScroll,
@@ -68,6 +78,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     );
 
     leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
+    bodyColumnWidth = stateManager.bodyColumnsWidth;
+    rightFixedColumnWidth = stateManager.rightFixedColumnsWidth;
 
     stateManager.addListener(changeStateListener);
 
@@ -85,9 +97,13 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void changeStateListener() {
-    if (leftFixedColumnWidth != stateManager.leftFixedColumnsWidth) {
+    if (leftFixedColumnWidth != stateManager.leftFixedColumnsWidth ||
+        rightFixedColumnWidth != stateManager.rightFixedColumnsWidth ||
+        bodyColumnWidth != stateManager.bodyColumnsWidth) {
       setState(() {
         leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
+        rightFixedColumnWidth = stateManager.rightFixedColumnsWidth;
+        bodyColumnWidth = stateManager.bodyColumnsWidth;
       });
     }
   }
@@ -121,8 +137,16 @@ class _PlutoGridState extends State<PlutoGrid> {
     stateManager.setLayout(size);
     if (showFixedColumn != stateManager.layout.showFixedColumn) {
       showFixedColumn = stateManager.layout.showFixedColumn;
+
       leftFixedColumnWidth =
           showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
+
+      rightFixedColumnWidth =
+          showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
+
+      bodyColumnWidth = showFixedColumn
+          ? stateManager.bodyColumnsWidth
+          : stateManager.columnsWidth;
     }
   }
 
@@ -142,11 +166,12 @@ class _PlutoGridState extends State<PlutoGrid> {
           ),
           child: Stack(
             children: [
-              if (showFixedColumn == true)
+              if (showFixedColumn == true && leftFixedColumnWidth > 0)
                 Positioned.fill(
+                  left: 0,
                   child: LeftFixedHeaders(stateManager),
                 ),
-              if (showFixedColumn == true)
+              if (showFixedColumn == true && leftFixedColumnWidth > 0)
                 Positioned.fill(
                   top: stateManager.style.rowHeight,
                   left: 0,
@@ -155,18 +180,45 @@ class _PlutoGridState extends State<PlutoGrid> {
               Positioned.fill(
                 top: 0,
                 left: leftFixedColumnWidth,
+                right: rightFixedColumnWidth,
                 child: BodyHeaders(stateManager),
               ),
               Positioned.fill(
                 top: stateManager.style.rowHeight,
                 left: leftFixedColumnWidth,
+                right: rightFixedColumnWidth,
                 child: BodyRows(stateManager),
               ),
-              if (showFixedColumn == true)
+              if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                Positioned.fill(
+                  top: 0,
+                  left: size.maxWidth -
+                      rightFixedColumnWidth -
+                      PlutoDefaultSettings.totalShadowLineWidth,
+                  child: RightFixedHeaders(stateManager),
+                ),
+              if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                Positioned.fill(
+                  top: stateManager.style.rowHeight,
+                  left: size.maxWidth -
+                      rightFixedColumnWidth -
+                      PlutoDefaultSettings.totalShadowLineWidth,
+                  child: RightFixedRows(stateManager),
+                ),
+              if (showFixedColumn == true && leftFixedColumnWidth > 0)
                 Positioned(
                   top: 0,
                   bottom: 0,
                   left: leftFixedColumnWidth,
+                  child: ShadowLine(Axis.vertical),
+                ),
+              if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: size.maxWidth -
+                      rightFixedColumnWidth -
+                      PlutoDefaultSettings.totalShadowLineWidth,
                   child: ShadowLine(Axis.vertical),
                 ),
               Positioned(
@@ -192,4 +244,11 @@ class PlutoDefaultSettings {
 
   /// 기본 컬럼 넓이
   static const double columnWidth = 200.0;
+
+  /// Fixed 컬럼 구분 선(ShadowLine) 크기
+  static const double shadowLineSize = 3.0;
+
+  /// Fixed 컬럼 구분 선 넓이 합계
+  static const double totalShadowLineWidth =
+      PlutoDefaultSettings.shadowLineSize * 2;
 }

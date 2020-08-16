@@ -38,8 +38,11 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// fixed 컬럼이 있는 경우 넓이가 좁을 때 fixed 컬럼의 순서를 유지하는 전체 컬럼의 인덱스 리스트
   List<int> get columnIndexesForShowFixed {
-    // todo : 우측 고정
-    return [...leftFixedColumnIndexes, ...bodyColumnIndexes];
+    return [
+      ...leftFixedColumnIndexes,
+      ...bodyColumnIndexes,
+      ...rightFixedColumnIndexes
+    ];
   }
 
   /// 전체 컬럼의 넓이
@@ -65,6 +68,27 @@ class PlutoStateManager extends ChangeNotifier {
   /// 왼쪽 고정 컬럼의 넓이
   double get leftFixedColumnsWidth {
     return leftFixedColumns.fold(
+        0, (double value, element) => value + element.width);
+  }
+
+  /// 오른쪽 고정 컬럼
+  List<PlutoColumn> get rightFixedColumns {
+    return _columns.where((e) => e.fixed.isRight).toList();
+  }
+
+  /// 오른쪽 컬럼 인덱스 리스트
+  List<int> get rightFixedColumnIndexes {
+    return _columns.fold<List<int>>([], (List<int> previousValue, element) {
+      if (element.fixed.isRight) {
+        return [...previousValue, columns.indexOf(element)];
+      }
+      return previousValue;
+    }).toList();
+  }
+
+  /// 오른쪽 고정 컬럼의 넓이
+  double get rightFixedColumnsWidth {
+    return rightFixedColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
@@ -136,12 +160,11 @@ class PlutoStateManager extends ChangeNotifier {
   void toggleEditing() => setEditing(!(_isEditing == true));
 
   /// 컬럼의 고정 여부를 토글
-  void toggleFixedColumn(GlobalKey columnKey) {
+  void toggleFixedColumn(GlobalKey columnKey, PlutoColumnFixed fixed) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
-        _columns[i].fixed = _columns[i].fixed.isFixed
-            ? PlutoColumnFixed.None
-            : PlutoColumnFixed.Left;
+        _columns[i].fixed =
+            _columns[i].fixed.isFixed ? PlutoColumnFixed.None : fixed;
         break;
       }
     }
@@ -365,7 +388,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     if (direction.isRight) {
       final double screenOffset = _layout.showFixedColumn == true
-          ? _layout.maxWidth - leftFixedColumnsWidth
+          ? _layout.maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
           : _layout.maxWidth;
       offset -= screenOffset;
       offset += 6;
@@ -376,6 +399,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 컬럼 위치를 변경
   void moveColumn(GlobalKey columnKey, double offset) {
+    // todo : 우측 고정 2개 상태에서 body 스크롤 좌측 끝으로 하고 우측 고정 컬럼 끼리 이동 시 오류
     double currentOffset = 0.0 - _scroll.horizontal.offset;
 
     int columnIndex;
@@ -441,8 +465,14 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 화면 넓이에서 fixed 컬럼이 보여질지 여부
   bool isShowFixedColumn(double maxWidth) {
-    return leftFixedColumns.length > 0 &&
-        maxWidth > (leftFixedColumnsWidth + _style.bodyMinWidth);
+    final bool hasFixedColumn =
+        leftFixedColumns.length > 0 || rightFixedColumns.length > 0;
+
+    return hasFixedColumn &&
+        maxWidth >
+            (leftFixedColumnsWidth +
+                rightFixedColumnsWidth +
+                _style.bodyMinWidth);
   }
 }
 
@@ -450,6 +480,7 @@ class PlutoScrollController {
   LinkedScrollControllerGroup vertical;
   ScrollController leftFixedRowsVertical;
   ScrollController bodyRowsVertical;
+  ScrollController rightRowsVerticalScroll;
 
   LinkedScrollControllerGroup horizontal;
   ScrollController bodyHeadersHorizontal;
@@ -459,6 +490,7 @@ class PlutoScrollController {
     this.vertical,
     this.leftFixedRowsVertical,
     this.bodyRowsVertical,
+    this.rightRowsVerticalScroll,
     this.horizontal,
     this.bodyHeadersHorizontal,
     this.bodyRowsHorizontal,

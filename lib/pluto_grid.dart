@@ -22,3 +22,5 @@ part './src/widget/editable_cell/text_cell_widget.dart';
 part './src/widget/header_widget.dart';
 part './src/widget/row_widget.dart';
 part './src/widget/shadow_line.dart';
+part './src/ui/right_fixed_headers.dart';
+part './src/ui/right_fixed_rows.dart';

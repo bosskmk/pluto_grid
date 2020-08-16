@@ -13,7 +13,11 @@ class DummyData {
         title: faker.food.cuisine(),
         field: i.toString(),
         type: PlutoColumnType.text(),
-        fixed: i < 2 ? PlutoColumnFixed.Left : null,
+        fixed: (i) {
+          if (i < 2) return PlutoColumnFixed.Left;
+          if (i > columnLength - 3) return PlutoColumnFixed.Right;
+          return null;
+        }(i),
       );
     }).toList();
 

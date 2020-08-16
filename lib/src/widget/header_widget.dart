@@ -1,6 +1,6 @@
 part of pluto_grid;
 
-enum MenuItem { Fixed }
+enum MenuItem { FixedLeft, FixedRight }
 
 class HeaderWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
@@ -35,8 +35,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
 
   void changeStateListener() {
-    final changedColumn = widget.stateManager.columns.firstWhere((
-        element) => element._key == widget.column._key);
+    final changedColumn = widget.stateManager.columns
+        .firstWhere((element) => element._key == widget.column._key);
 
     if (_sort != changedColumn.sort) {
       setState(() {
@@ -46,31 +46,40 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    // TODO : 아래 GestureDetector 의 onTapDown 이벤트가 클릭을 빨리하면 동작하지 않아 null
+    // todo : 아래 GestureDetector 의 onTapDown 이벤트가 클릭을 빨리하면 동작하지 않아 null
     if (position == null) {
       return;
     }
-    final RenderBox overlay = Overlay
-        .of(context)
-        .context
-        .findRenderObject();
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
     final MenuItem selectedMenu = await showMenu<MenuItem>(
       context: context,
       position: RelativeRect.fromRect(
           position & Size(40, 40), Offset.zero & overlay.size),
       items: [
         PopupMenuItem(
-          value: MenuItem.Fixed,
+          value: MenuItem.FixedLeft,
           child: widget.column.fixed.isFixed == true
               ? const Text('고정 해제')
-              : const Text('왼쪽 고정'),
+              : const Text('좌측 고정'),
         ),
+        if (widget.column.fixed.isFixed != true)
+          PopupMenuItem(
+            value: MenuItem.FixedRight,
+            child: widget.column.fixed.isFixed == true
+                ? const Text('고정 해제')
+                : const Text('우측 고정'),
+          ),
       ],
     );
 
     switch (selectedMenu) {
-      case MenuItem.Fixed:
-        widget.stateManager.toggleFixedColumn(widget.column._key);
+      case MenuItem.FixedLeft:
+        widget.stateManager
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Left);
+        break;
+      case MenuItem.FixedRight:
+        widget.stateManager
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
         break;
     }
   }
@@ -84,8 +93,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         Positioned(
           child: Draggable(
             onDragEnd: (dragDetails) {
-              widget.stateManager.moveColumn(
-                  widget.column._key, dragDetails.offset.dx);
+              widget.stateManager
+                  .moveColumn(widget.column._key, dragDetails.offset.dx);
             },
             feedback: Container(
               width: widget.column.width,
@@ -140,8 +149,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               _currentPosition = details.localPosition;
             },
             onHorizontalDragEnd: (DragEndDetails details) {
-              widget.stateManager.resizeColumn(
-                  widget.column._key, _currentPosition.dx - 20);
+              widget.stateManager
+                  .resizeColumn(widget.column._key, _currentPosition.dx - 20);
             },
             child: Transform.rotate(
               angle: 90 * pi / 180,
