@@ -72,8 +72,9 @@ class _BodyRowsState extends State<BodyRows> {
             itemCount: _rows.length,
             itemBuilder: (ctx, i) {
               return RowWidget(
-                key: ValueKey('body_row_${_rows[i]._key.toString()}'),
+                key: ValueKey('bodyRow_${_rows[i]._key}'),
                 stateManager: widget.stateManager,
+                rowIdx: i,
                 row: _rows[i],
                 columns: _columns,
               );

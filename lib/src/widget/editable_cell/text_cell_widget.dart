@@ -30,7 +30,7 @@ class _TextCellWidgetState extends State<TextCellWidget> {
      */
     if (_cellEditingStatus.isChanged) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-//        widget.onSave(_textController.text);
+        _changeValue();
       });
     }
 
@@ -50,6 +50,10 @@ class _TextCellWidgetState extends State<TextCellWidget> {
       baseOffset: 0,
       extentOffset: _textController.value.text.length,
     );
+  }
+
+  void _changeValue() {
+    widget.stateManager.changedCellValue(widget.cell._key, _textController.text);
   }
 
   @override
@@ -75,7 +79,7 @@ class _TextCellWidgetState extends State<TextCellWidget> {
         _cellEditingStatus = _CellEditingStatus.UPDATED;
         _cellFocus.unfocus();
         widget.stateManager.gridFocusNode.requestFocus();
-//        widget.onSave(_textController.text);
+        _changeValue();
       },
       onTap: () => _selection(),
     );

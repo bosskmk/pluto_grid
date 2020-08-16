@@ -5,12 +5,16 @@ class CellWidget extends StatefulWidget {
   final PlutoCell cell;
   final double width;
   final double height;
+  final PlutoColumn column;
+  final int rowIdx;
 
   CellWidget({
     this.stateManager,
     this.cell,
     this.width,
     this.height,
+    this.column,
+    this.rowIdx,
   }) : super(key: cell._key);
 
   @override
@@ -68,16 +72,27 @@ class _CellWidgetState extends State<CellWidget> {
   }
 
   Widget _buildCell() {
-    if (_isCurrentCell && _isEditing) {
-      return TextCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-      );
-    } else {
+    if (!_isCurrentCell || !_isEditing) {
       return Text(
         widget.cell.value,
         overflow: TextOverflow.ellipsis,
       );
+    }
+
+    switch (widget.column.type.name) {
+      case _PlutoColumnTypeName.Select:
+        return SelectCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+          column: widget.column,
+        );
+      case _PlutoColumnTypeName.Number:
+      case _PlutoColumnTypeName.Text:
+      default:
+        return TextCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+        );
     }
   }
 
@@ -87,15 +102,14 @@ class _CellWidgetState extends State<CellWidget> {
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
         if (_isCurrentCell && _isEditing != true) {
-          setState(() {
-            _isEditing = true;
-          });
           widget.stateManager.setEditing(true);
         } else {
-          setState(() {
-            _isCurrentCell = true;
-          });
-          widget.stateManager.setCurrentCell(widget.cell);
+          widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+        }
+      },
+      onTapUp: (TapUpDetails details) {
+        if (widget.stateManager.mode.isSelectRow) {
+          widget.stateManager.handleOnSelectedRow();
         }
       },
       child: Container(

@@ -12,10 +12,15 @@ class DummyData {
       return PlutoColumn(
         title: faker.food.cuisine(),
         field: i.toString(),
-        type: PlutoColumnType.text(),
+        type: (i) {
+          if (i == 2)
+            return PlutoColumnType.select(['One', 'Two', 'Three']);
+          else
+            return PlutoColumnType.text();
+        }(i),
         fixed: (i) {
-          if (i < 2) return PlutoColumnFixed.Left;
-          if (i > columnLength - 3) return PlutoColumnFixed.Right;
+          if (i < 1) return PlutoColumnFixed.Left;
+          if (i > columnLength - 2) return PlutoColumnFixed.Right;
           return null;
         }(i),
       );
@@ -27,7 +32,7 @@ class DummyData {
 
       dummyColumns.forEach((element) {
         cells[element.field] = PlutoCell(
-          value: faker.food.restaurant(),
+          value: element.field == '2' ? 'One' : faker.food.restaurant(),
         );
       });
 

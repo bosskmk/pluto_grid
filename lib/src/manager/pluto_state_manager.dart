@@ -21,17 +21,31 @@ class PlutoStateManager extends ChangeNotifier {
 
   PlutoStyle get style => _style;
 
+  PlutoMode _mode;
+
+  PlutoMode get mode => _mode;
+
+  final PlutoOnChangedEventCallback _onChanged;
+
+  final PlutoOnSelectedEventCallback _onSelected;
+
   PlutoStateManager({
     @required List<PlutoColumn> columns,
     @required List<PlutoRow> rows,
     @required FocusNode gridFocusNode,
     @required PlutoScrollController scroll,
     PlutoStyle style,
+    PlutoMode mode,
+    PlutoOnChangedEventCallback onChangedEventCallback,
+    PlutoOnSelectedEventCallback onSelectedEventCallback,
   })  : this._columns = columns,
         this._rows = rows,
         this._gridFocusNode = gridFocusNode,
         this._scroll = scroll,
-        this._style = style ?? PlutoStyle();
+        this._style = style ?? PlutoStyle(),
+        this._mode = mode,
+        this._onChanged = onChangedEventCallback,
+        this._onSelected = onSelectedEventCallback;
 
   /// 전체 컬럼의 인덱스 리스트
   List<int> get columnIndexes => _columns.asMap().keys.toList();
@@ -133,13 +147,47 @@ class PlutoStateManager extends ChangeNotifier {
   PlutoCell get currentCell => _currentCell;
 
   /// 현재 선택 된 셀을 변경
-  void setCurrentCell(PlutoCell cell) {
+  void setCurrentCell(PlutoCell cell, int rowIdx) {
     if (_currentCell != null && _currentCell._key == cell._key) {
       return;
     }
     _currentCell = cell;
     _isEditing = false;
+
+    if (rowIdx != null) _currentRowIdx = rowIdx;
+
     notifyListeners();
+  }
+
+  int _currentRowIdx;
+
+  int get currentRowIdx => _currentRowIdx;
+
+  PlutoRow get currentRow {
+    if (_currentRowIdx == null) {
+      return null;
+    }
+
+    return _rows[_currentRowIdx];
+  }
+
+  void updateCurrentRowIdx(GlobalKey cellKey) {
+    if (cellKey == null) {
+      return;
+    }
+
+    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+      for (var columnIdx = 0;
+      columnIdx < columnIndexes.length;
+      columnIdx += 1) {
+        final field = _columns[columnIndexes[columnIdx]].field;
+
+        if (_rows[rowIdx].cells[field]._key == cellKey) {
+          _currentRowIdx = rowIdx;
+        }
+      }
+    }
+    return;
   }
 
   /// 현재 셀의 편집 상태
@@ -149,6 +197,10 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 현재 셀의 편집 상태를 변경
   void setEditing(bool flag) {
+    if (mode.isSelectRow) {
+      return;
+    }
+
     if (_currentCell == null || _isEditing == flag) {
       return;
     }
@@ -199,6 +251,8 @@ class PlutoStateManager extends ChangeNotifier {
         _columns[i].sort = PlutoColumnSort.None;
       }
     }
+
+    updateCurrentRowIdx(_currentCell?._key);
 
     notifyListeners();
   }
@@ -328,7 +382,7 @@ class PlutoStateManager extends ChangeNotifier {
     );
 
     setCurrentCell(
-        _rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field]);
+        _rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field], toMove.rowIdx);
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition.columnIdx);
@@ -356,8 +410,12 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     final double offset = direction.isUp
-        ? ((rowIdx - 1) * _style.rowHeight)
-        : ((rowIdx + 3) * _style.rowHeight) + 6 - (_layout.maxHeight);
+        ? ((rowIdx - 1) *
+            (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth))
+        : ((rowIdx + 3) *
+                (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth)) +
+            6 -
+            (_layout.maxHeight);
 
     scrollByDirection(direction, offset);
   }
@@ -458,6 +516,55 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changedCellValue(GlobalKey cellKey, String value) {
+    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+      for (var columnIdx = 0;
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
+        final field = _columns[columnIndexes[columnIdx]].field;
+
+        if (_rows[rowIdx].cells[field]._key == cellKey) {
+          final currentColumn = _columns[columnIndexes[columnIdx]];
+
+          // 읽기 전용 컬럼인 경우 값 변경 불가
+          if (currentColumn.type.readOnly) {
+            return;
+          }
+
+          final oldValue = _rows[rowIdx].cells[field].value;
+
+          if (currentColumn.type.name.isSelect &&
+              !currentColumn.type.selectItems.contains(value)) {
+            value = oldValue;
+          }
+
+          _rows[rowIdx].cells[field].value = value;
+
+          if (oldValue != value) {
+            if (_onChanged != null) {
+              _onChanged(PlutoOnChangedEvent(
+                columnIdx: columnIdx,
+                rowIdx: rowIdx,
+                value: value,
+                oldValue: oldValue,
+              ));
+            }
+
+            notifyListeners();
+          }
+
+          return;
+        }
+      }
+    }
+  }
+
+  void handleOnSelectedRow() {
+    if (_mode.isSelectRow == true && _onSelected != null) {
+      _onSelected(PlutoOnSelectedEvent(row: currentRow));
+    }
+  }
+
   /// 셀이 현재 선택 된 셀인지 여부
   bool isCurrentCell(PlutoCell cell) {
     return _currentCell != null && _currentCell._key == cell._key;
@@ -472,7 +579,8 @@ class PlutoStateManager extends ChangeNotifier {
         maxWidth >
             (leftFixedColumnsWidth +
                 rightFixedColumnsWidth +
-                _style.bodyMinWidth);
+                _style.bodyMinWidth +
+                PlutoDefaultSettings.totalShadowLineWidth);
   }
 }
 

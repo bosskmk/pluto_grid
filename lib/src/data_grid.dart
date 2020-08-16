@@ -1,14 +1,40 @@
 part of pluto_grid;
 
+enum PlutoMode {
+  Normal,
+  SelectRow,
+}
+
+extension PlutoModeExtension on PlutoMode {
+  bool get isNormal => this == PlutoMode.Normal;
+
+  bool get isSelectRow => this == PlutoMode.SelectRow;
+}
+
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
+  final PlutoMode mode;
+  final PlutoOnChangedEventCallback onChanged;
+  final PlutoOnSelectedEventCallback onSelectedRow;
 
-  PlutoGrid({
+  const PlutoGrid({
     Key key,
     @required this.columns,
     @required this.rows,
-  });
+    this.onChanged,
+  })  : this.mode = PlutoMode.Normal,
+        this.onSelectedRow = null,
+        super(key: key);
+
+  const PlutoGrid.popup({
+    Key key,
+    @required this.columns,
+    @required this.rows,
+    this.onChanged,
+    this.onSelectedRow,
+    @required this.mode,
+  }) : super(key: key);
 
   @override
   _PlutoGridState createState() => _PlutoGridState();
@@ -75,6 +101,9 @@ class _PlutoGridState extends State<PlutoGrid> {
         bodyHeadersHorizontal: bodyHeadersHorizontalScroll,
         bodyRowsHorizontal: bodyRowsHorizontalScroll,
       ),
+      mode: widget.mode,
+      onChangedEventCallback: widget.onChanged,
+      onSelectedEventCallback: widget.onSelectedRow,
     );
 
     leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
@@ -82,6 +111,14 @@ class _PlutoGridState extends State<PlutoGrid> {
     rightFixedColumnWidth = stateManager.rightFixedColumnsWidth;
 
     stateManager.addListener(changeStateListener);
+
+    // 셀 선택 모드 시작시 첫 셀을 선택
+    if (widget.mode.isSelectRow) {
+      stateManager.setCurrentCell(widget.rows.first.cells.entries.first.value, 0);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        stateManager.gridFocusNode.requestFocus();
+      });
+    }
 
     super.initState();
   }
@@ -125,6 +162,12 @@ class _PlutoGridState extends State<PlutoGrid> {
         return stateManager.moveCurrentCell(MoveDirection.Down);
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
         // 엔터
+        if (widget.mode.isSelectRow) {
+          widget.onSelectedRow(PlutoOnSelectedEvent(
+            row: stateManager.currentRow,
+          ));
+          return false;
+        }
         stateManager.toggleEditing();
       } else if (event.logicalKey.keyLabel != null) {
         // 문자
@@ -135,19 +178,18 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   void setLayout(BoxConstraints size) {
     stateManager.setLayout(size);
-    if (showFixedColumn != stateManager.layout.showFixedColumn) {
-      showFixedColumn = stateManager.layout.showFixedColumn;
 
-      leftFixedColumnWidth =
-          showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
+    showFixedColumn = stateManager.layout.showFixedColumn;
 
-      rightFixedColumnWidth =
-          showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
+    leftFixedColumnWidth =
+    showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
 
-      bodyColumnWidth = showFixedColumn
-          ? stateManager.bodyColumnsWidth
-          : stateManager.columnsWidth;
-    }
+    rightFixedColumnWidth =
+    showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
+
+    bodyColumnWidth = showFixedColumn
+        ? stateManager.bodyColumnsWidth
+        : stateManager.columnsWidth;
   }
 
   @override
@@ -244,6 +286,9 @@ class PlutoDefaultSettings {
 
   /// 기본 컬럼 넓이
   static const double columnWidth = 200.0;
+
+  /// Row border width
+  static const double rowBorderWidth = 1.0;
 
   /// Fixed 컬럼 구분 선(ShadowLine) 크기
   static const double shadowLineSize = 3.0;

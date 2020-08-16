@@ -41,6 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: PlutoGrid(
           columns: dummyData.dummyColumns, // or dummyData.dummyColumns,
           rows: dummyData.dummyRows, // or dummyData.dummyRows,
+          onChanged: (PlutoOnChangedEvent event) {
+            print(event);
+          },
         ),
       ),
     );

@@ -50,8 +50,9 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
       itemCount: _rows.length,
       itemBuilder: (ctx, i) {
         return RowWidget(
-          key: ValueKey('left_fixed_row_${_rows[i]._key.toString()}'),
+          key: ValueKey('LeftFixedRow_${_rows[i]._key}'),
           stateManager: widget.stateManager,
+          rowIdx: i,
           row: _rows[i],
           columns: _columns,
         );

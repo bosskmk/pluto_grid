@@ -94,22 +94,22 @@ class PlutoColumnType {
   /// 문자열 컬럼으로 설정 합니다.
   PlutoColumnType.text({
     this.readOnly = false,
-  }) : this._name = _PlutoColumnTypeName.Text;
+  }) : this.name = _PlutoColumnTypeName.Text;
 
   /// 숫자 컬럼으로 설정 합니다.
   PlutoColumnType.number({
     this.readOnly = false,
-  }) : this._name = _PlutoColumnTypeName.Number;
+  }) : this.name = _PlutoColumnTypeName.Number;
 
   /// 선택 목록을 제공하여 선택 컬럼으로 설정 합니다.
   PlutoColumnType.select(
     List<dynamic> items, {
     this.readOnly = false,
-  })  : this._name = _PlutoColumnTypeName.Select,
+  })  : this.name = _PlutoColumnTypeName.Select,
         this.selectItems = items;
 
   /// 컬럼 종류의 이름 입니다.
-  _PlutoColumnTypeName _name;
+  _PlutoColumnTypeName name;
 
   bool readOnly;
 
@@ -121,4 +121,18 @@ enum _PlutoColumnTypeName {
   Text,
   Number,
   Select,
+}
+
+extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
+  bool get isText {
+    return this == _PlutoColumnTypeName.Text;
+  }
+
+  bool get isNumber {
+    return this == _PlutoColumnTypeName.Number;
+  }
+
+  bool get isSelect {
+    return this == _PlutoColumnTypeName.Select;
+  }
 }
