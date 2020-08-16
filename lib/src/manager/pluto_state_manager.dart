@@ -272,7 +272,8 @@ class PlutoStateManager extends ChangeNotifier {
       columnIndexes,
     );
 
-    setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field]);
+    setCurrentCell(
+        _rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field]);
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition.columnIdx);
@@ -339,6 +340,49 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     scrollByDirection(direction, offset);
+  }
+
+  void moveColumn(GlobalKey columnKey, double offset) {
+    double currentOffset = 0.0 - _scroll.horizontal.offset;
+
+    int columnIndex;
+    int indexToMove;
+
+    final List<int> _columnIndexes =
+        _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+
+    for (var i = 0; i < _columnIndexes.length; i += 1) {
+      if (currentOffset < offset &&
+          offset < currentOffset + _columns[_columnIndexes[i]].width) {
+        indexToMove = _columnIndexes[i];
+      }
+
+      currentOffset += _columns[_columnIndexes[i]].width;
+
+      if (_columns[_columnIndexes[i]]._key == columnKey) {
+        columnIndex = _columnIndexes[i];
+      }
+
+      if (indexToMove != null && columnIndex != null) {
+        break;
+      }
+    }
+
+    if (columnIndex == indexToMove || indexToMove == null) {
+      return;
+    }
+
+    // 컬럼의 순서 변경
+    _columns[columnIndex].fixed = _columns[indexToMove].fixed;
+    if (indexToMove < columnIndex) {
+      _columns.insert(indexToMove, _columns[columnIndex]);
+      _columns.removeRange(columnIndex + 1, columnIndex + 2);
+    } else {
+      _columns.insert(indexToMove + 1, _columns[columnIndex]);
+      _columns.removeRange(columnIndex, columnIndex + 1);
+    }
+
+    notifyListeners();
   }
 
   /// 셀이 현재 선택 된 셀인지 여부

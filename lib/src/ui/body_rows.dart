@@ -10,7 +10,7 @@ class BodyRows extends StatefulWidget {
 }
 
 class _BodyRowsState extends State<BodyRows> {
-  List<int> _columnIndexes;
+  List<PlutoColumn> _columns;
   double _width;
 
   @override
@@ -22,7 +22,7 @@ class _BodyRowsState extends State<BodyRows> {
 
   @override
   void initState() {
-    _columnIndexes = getColumnIndexes();
+    _columns = getColumns();
 
     _width = getWidth();
 
@@ -32,19 +32,18 @@ class _BodyRowsState extends State<BodyRows> {
   }
 
   void changeStateListener() {
-    if (listEquals(_columnIndexes, getColumnIndexes()) == false ||
-        _width != getWidth()) {
+    if (listEquals(_columns, getColumns()) == false || _width != getWidth()) {
       setState(() {
-        _columnIndexes = getColumnIndexes();
+        _columns = getColumns();
         _width = getWidth();
       });
     }
   }
 
-  List<int> getColumnIndexes() {
+  List<PlutoColumn> getColumns() {
     return widget.stateManager.layout.showFixedColumn == true
-        ? widget.stateManager.bodyColumnIndexes
-        : widget.stateManager.columnIndexes;
+        ? widget.stateManager.bodyColumns
+        : widget.stateManager.columns;
   }
 
   double getWidth() {
@@ -69,7 +68,7 @@ class _BodyRowsState extends State<BodyRows> {
               return RowWidget(
                 stateManager: widget.stateManager,
                 row: widget.stateManager.rows[i],
-                columnIndexes: _columnIndexes,
+                columns: _columns,
               );
             },
           ),

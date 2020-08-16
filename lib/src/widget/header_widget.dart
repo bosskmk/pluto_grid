@@ -47,6 +47,7 @@ class HeaderWidget extends StatelessWidget {
         Positioned(
           child: Draggable(
             onDragEnd: (dragDetails) {
+              stateManager.moveColumn(column._key, dragDetails.offset.dx);
 //              handleMoveColumn(dragDetails.offset.dx);
             },
             feedback: Container(

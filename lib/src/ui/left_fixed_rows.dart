@@ -10,7 +10,7 @@ class LeftFixedRows extends StatefulWidget {
 }
 
 class _LeftFixedRowsState extends State<LeftFixedRows> {
-  List<int> _columnIndexes;
+  List<PlutoColumn> _columns;
 
   @override
   void dispose() {
@@ -21,7 +21,7 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
 
   @override
   void initState() {
-    _columnIndexes = widget.stateManager.leftFixedColumnIndexes;
+    _columns = widget.stateManager.leftFixedColumns;
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -29,11 +29,9 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
   }
 
   void changeStateListener() {
-    if (listEquals(
-            _columnIndexes, widget.stateManager.leftFixedColumnIndexes) ==
-        false) {
+    if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false) {
       setState(() {
-        _columnIndexes = widget.stateManager.leftFixedColumnIndexes;
+        _columns = widget.stateManager.leftFixedColumns;
       });
     }
   }
@@ -48,7 +46,7 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
         return RowWidget(
           stateManager: widget.stateManager,
           row: widget.stateManager.rows[i],
-          columnIndexes: _columnIndexes,
+          columns: _columns,
         );
       },
     );
