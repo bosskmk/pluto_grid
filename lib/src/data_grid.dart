@@ -183,7 +183,15 @@ class _PlutoGridState extends State<PlutoGrid> {
           ));
           return false;
         }
+        if (stateManager.isEditing) {
+          stateManager.moveCurrentCell(MoveDirection.Down);
+        }
         stateManager.toggleEditing();
+      } else if(event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
+        // ESC
+        if (stateManager.isEditing) {
+          stateManager.setEditing(false);
+        }
       } else if (event.logicalKey.keyLabel != null) {
         // 문자
         if (stateManager.isEditing != true &&
