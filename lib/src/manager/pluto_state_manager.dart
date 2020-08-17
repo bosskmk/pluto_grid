@@ -379,24 +379,30 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// 현재 셀을 direction 방향의 셀로 변경하고 스크롤을 이동 시킴
-  bool moveCurrentCell(MoveDirection direction) {
-    if (_currentCell == null) return false;
+  /// [force] true : 편집상태에서 탭키로 좌우 이동 허용
+  void moveCurrentCell(
+    MoveDirection direction, {
+    bool force = false,
+  }) {
+    if (_currentCell == null) return;
 
-    if (_isEditing && direction.horizontal) {
+    // @formatter:off
+    if (!force && _isEditing && direction.horizontal) {
       // Select 타입의 컬럼은 편집 상태라도 좌우로 이동 가능
       if (currentColumn?.type?.name?.isSelect == true) {}
       // 수정 불가 컬럼은 편집 상태라도 좌우로 이동 가능
       else if (currentColumn?.type?.readOnly == true) {}
       // 그 밖의 수정 상태에서 좌우 이동 불가능
-      else return false;
+      else return;
     }
+    // @formatter:on
 
     final columnIndexes = columnIndexesByShowFixed();
     final cellPosition =
-        cellPositionByCellKey(_currentCell._key, columnIndexes);
+    cellPositionByCellKey(_currentCell._key, columnIndexes);
 
     if (canNotMoveCell(cellPosition, direction)) {
-      return false;
+      return;
     }
 
     final toMove = cellPositionToMove(
@@ -413,7 +419,7 @@ class PlutoStateManager extends ChangeNotifier {
     } else if (direction.vertical) {
       moveScrollByRow(direction, cellPosition.rowIdx);
     }
-    return true;
+    return;
   }
 
   /// offset 으로 direction 뱡향으로 스크롤
@@ -435,11 +441,11 @@ class PlutoStateManager extends ChangeNotifier {
 
     final double offset = direction.isUp
         ? ((rowIdx - 1) *
-            (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth))
+        (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth))
         : ((rowIdx + 3) *
-                (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth)) +
-            5 -
-            (_layout.maxHeight);
+        (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth)) +
+        5 -
+        (_layout.maxHeight);
 
     scrollByDirection(direction, offset);
   }
@@ -451,7 +457,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     final PlutoColumn columnToMove =
-        _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
+    _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -465,7 +471,7 @@ class PlutoStateManager extends ChangeNotifier {
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
     double offset = layout.showFixedColumn == true
         ? bodyColumnsWidthAtColumnIdx(
-            columnIdx + direction.offset - leftFixedColumnIndexes.length)
+        columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
     if (direction.isRight) {
@@ -488,7 +494,7 @@ class PlutoStateManager extends ChangeNotifier {
     int indexToMove;
 
     final List<int> _columnIndexes =
-        _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+    _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
 
     for (var i = 0; i < _columnIndexes.length; i += 1) {
       if (currentOffset < offset &&
@@ -543,8 +549,8 @@ class PlutoStateManager extends ChangeNotifier {
   void changedCellValue(GlobalKey cellKey, String value) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
+      columnIdx < columnIndexes.length;
+      columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {

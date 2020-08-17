@@ -164,34 +164,54 @@ class _PlutoGridState extends State<PlutoGrid> {
     if (event.runtimeType == RawKeyDownEvent) {
       if (event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
         // 왼쪽
-        return stateManager.moveCurrentCell(MoveDirection.Left);
+        stateManager.moveCurrentCell(MoveDirection.Left);
+        return true;
       } else if (event.logicalKey.keyId ==
           LogicalKeyboardKey.arrowRight.keyId) {
         // 오른쪽
-        return stateManager.moveCurrentCell(MoveDirection.Right);
+        stateManager.moveCurrentCell(MoveDirection.Right);
+        return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId) {
         // 위
-        return stateManager.moveCurrentCell(MoveDirection.Up);
+        stateManager.moveCurrentCell(MoveDirection.Up);
+        return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
         // 아래
-        return stateManager.moveCurrentCell(MoveDirection.Down);
+        stateManager.moveCurrentCell(MoveDirection.Down);
+        return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
         // 엔터
         if (widget.mode.isSelectRow) {
           widget.onSelectedRow(PlutoOnSelectedEvent(
             row: stateManager.currentRow,
           ));
-          return false;
+          return true;
         }
         if (stateManager.isEditing) {
-          stateManager.moveCurrentCell(MoveDirection.Down);
+          if (event.isShiftPressed) {
+            stateManager.moveCurrentCell(MoveDirection.Up);
+          } else {
+            stateManager.moveCurrentCell(MoveDirection.Down);
+          }
         }
         stateManager.toggleEditing();
+        return true;
+      } else if (event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId) {
+        // Tab
+        final saveIsEditing = stateManager._isEditing;
+        if (event.isShiftPressed) {
+          stateManager.moveCurrentCell(MoveDirection.Left, force: true);
+        } else {
+          stateManager.moveCurrentCell(MoveDirection.Right, force: true);
+        }
+        stateManager.setEditing(saveIsEditing);
+        return true;
       } else if(event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
         // ESC
         if (stateManager.isEditing) {
           stateManager.setEditing(false);
         }
+        return true;
       } else if (event.logicalKey.keyLabel != null) {
         // 문자
         if (stateManager.isEditing != true &&
@@ -200,9 +220,10 @@ class _PlutoGridState extends State<PlutoGrid> {
           stateManager.changedCellValue(
               stateManager.currentCell._key, event.logicalKey.keyLabel);
         }
+        return true;
       }
     }
-    return false;
+    return true;
   }
 
   void setLayout(BoxConstraints size) {
