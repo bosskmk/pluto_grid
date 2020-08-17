@@ -1,5 +1,19 @@
 part of pluto_grid;
 
+/// [Todo list]
+/// 셀 값 변경 이벤트 정리
+/// 컬럼 정렬 시 rowIdx 설명 추가 (rowIdx 는 보이는 상태에서의 rowIdx)
+/// row selection 추가
+/// select_cell_widget 시작 시 기본 값 선택 처리
+/// number column type 추가
+/// 날짜 선택 column type 추가
+/// 셀 이동 시 스크롤 오류 수정 (셀이 보이지 않는 상태에서 이동 될 때 스크롤 안됨)
+/// 셀 multi selection 추가
+/// 컬럼 검색 추가
+/// 페이지 up, down 추가 (키 이벤트)
+/// 페이지 네비게이션 추가 (UI)
+/// 컬럼 auto_width 추가
+
 enum PlutoMode {
   Normal,
   SelectRow,
