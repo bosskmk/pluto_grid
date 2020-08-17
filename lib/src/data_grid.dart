@@ -114,7 +114,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     // 셀 선택 모드 시작시 첫 셀을 선택
     if (widget.mode.isSelectRow) {
-      stateManager.setCurrentCell(widget.rows.first.cells.entries.first.value, 0);
+      stateManager.setCurrentCell(
+          widget.rows.first.cells.entries.first.value, 0);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         stateManager.gridFocusNode.requestFocus();
       });
@@ -171,6 +172,12 @@ class _PlutoGridState extends State<PlutoGrid> {
         stateManager.toggleEditing();
       } else if (event.logicalKey.keyLabel != null) {
         // 문자
+        if (stateManager.isEditing != true &&
+            stateManager.currentCell != null) {
+          stateManager.setEditing(true);
+          stateManager.changedCellValue(
+              stateManager.currentCell._key, event.logicalKey.keyLabel);
+        }
       }
     }
     return false;
@@ -182,10 +189,10 @@ class _PlutoGridState extends State<PlutoGrid> {
     showFixedColumn = stateManager.layout.showFixedColumn;
 
     leftFixedColumnWidth =
-    showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
+        showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
 
     rightFixedColumnWidth =
-    showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
+        showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
 
     bodyColumnWidth = showFixedColumn
         ? stateManager.bodyColumnsWidth
