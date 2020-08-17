@@ -3,10 +3,12 @@ part of pluto_grid;
 class TextCellWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
+  final PlutoColumn column;
 
   TextCellWidget({
     this.stateManager,
     this.cell,
+    this.column,
   });
 
   @override
@@ -63,15 +65,7 @@ class _TextCellWidgetState extends State<TextCellWidget> {
     return TextField(
       focusNode: _cellFocus,
       controller: _textController,
-      style: TextStyle(
-        fontSize: 18,
-      ),
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.all(0),
-        isDense: true,
-      ),
-      maxLines: 1,
+      readOnly: widget.column.type.readOnly,
       onChanged: (String value) {
         _cellEditingStatus = _CellEditingStatus.CHANGED;
       },
@@ -82,6 +76,15 @@ class _TextCellWidgetState extends State<TextCellWidget> {
         _changeValue();
       },
       onTap: () => _selection(),
+      style: TextStyle(
+        fontSize: 18,
+      ),
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.all(0),
+        isDense: true,
+      ),
+      maxLines: 1,
     );
   }
 }

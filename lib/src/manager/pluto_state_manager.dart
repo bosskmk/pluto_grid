@@ -141,6 +141,23 @@ class PlutoStateManager extends ChangeNotifier {
     );
   }
 
+  /// 현재 선택 된 셀의 컬럼
+  PlutoColumn get currentColumn {
+    if (currentColumnField == null) {
+      return null;
+    }
+
+    return _columns
+        .where((element) => element.field == currentColumnField)
+        ?.first;
+  }
+
+  /// 현재 선택 된 셀의 컬럼 field 이름
+  String get currentColumnField => currentRow.cells.entries
+      .where((entry) => entry.value._key == _currentCell?._key)
+      ?.first
+      ?.key;
+
   /// 현재 선택 된 셀
   PlutoCell _currentCell;
 
@@ -159,6 +176,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 현재 선택 된 셀의 Row index
   int _currentRowIdx;
 
   int get currentRowIdx => _currentRowIdx;
@@ -171,6 +189,8 @@ class PlutoStateManager extends ChangeNotifier {
     return _rows[_currentRowIdx];
   }
 
+  /// currentRowIdx 를 업데이트
+  /// - rows 의 위치가 정렬 등으로 바뀔 때 호출
   void updateCurrentRowIdx(GlobalKey cellKey) {
     if (cellKey == null) {
       return;
@@ -178,8 +198,8 @@ class PlutoStateManager extends ChangeNotifier {
 
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {
@@ -223,6 +243,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 컬럼 정렬 토글
   void toggleSortColumn(GlobalKey columnKey) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
@@ -359,12 +380,15 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 현재 셀을 direction 방향의 셀로 변경하고 스크롤을 이동 시킴
   bool moveCurrentCell(MoveDirection direction) {
-    if (_currentCell == null) {
-      return false;
-    }
+    if (_currentCell == null) return false;
 
     if (_isEditing && direction.horizontal) {
-      return false;
+      // Select 타입의 컬럼은 편집 상태라도 좌우로 이동 가능
+      if (currentColumn?.type?.name?.isSelect == true) {}
+      // 수정 불가 컬럼은 편집 상태라도 좌우로 이동 가능
+      else if (currentColumn?.type?.readOnly == true) {}
+      // 그 밖의 수정 상태에서 좌우 이동 불가능
+      else return false;
     }
 
     final columnIndexes = columnIndexesByShowFixed();
@@ -381,8 +405,8 @@ class PlutoStateManager extends ChangeNotifier {
       columnIndexes,
     );
 
-    setCurrentCell(
-        _rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field], toMove.rowIdx);
+    setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field],
+        toMove.rowIdx);
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition.columnIdx);
@@ -414,7 +438,7 @@ class PlutoStateManager extends ChangeNotifier {
             (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth))
         : ((rowIdx + 3) *
                 (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth)) +
-            6 -
+            5 -
             (_layout.maxHeight);
 
     scrollByDirection(direction, offset);
@@ -506,9 +530,9 @@ class PlutoStateManager extends ChangeNotifier {
       if (_columns[i]._key == columnKey) {
         final setWidth = _columns[i].width + offset;
 
-        _columns[i].width = setWidth > PlutoDefaultSettings.columnWidth
+        _columns[i].width = setWidth > PlutoDefaultSettings.minColumnWidth
             ? setWidth
-            : PlutoDefaultSettings.columnWidth;
+            : PlutoDefaultSettings.minColumnWidth;
         break;
       }
     }

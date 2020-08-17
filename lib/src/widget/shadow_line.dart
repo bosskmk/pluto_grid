@@ -2,8 +2,12 @@ part of pluto_grid;
 
 class ShadowLine extends StatelessWidget {
   final Axis axis;
+  final bool reverse;
 
-  const ShadowLine(this.axis);
+  const ShadowLine({
+    this.axis,
+    this.reverse,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +15,15 @@ class ShadowLine extends StatelessWidget {
       width: axis == Axis.vertical ? 1 : 0,
       height: axis == Axis.horizontal ? 1 : 0,
       decoration: BoxDecoration(
-        color: Colors.black38,
+        color: PlutoDefaultSettings.gridBorderColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withOpacity(0.15),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: const Offset(3, 3), // changes position of shadow
+            offset: reverse == true
+                ? const Offset(-3, -3)
+                : const Offset(3, 3), // changes position of shadow
           ),
         ],
       ),

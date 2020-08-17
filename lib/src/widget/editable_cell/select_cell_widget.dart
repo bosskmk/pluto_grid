@@ -17,26 +17,42 @@ class SelectCellWidget extends StatefulWidget {
 
 class _SelectCellWidgetState extends State<SelectCellWidget> {
   final _textController = TextEditingController();
-  final FocusNode _keyboardFocus = FocusNode();
+
+  FocusNode _keyboardFocus;
+
+  FocusNode _textFocus;
+
   bool _isOpenedPopup = false;
 
   @override
   void initState() {
     _textController.text = widget.cell.value;
+
+    _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+
+    _textFocus = FocusNode();
+
     super.initState();
   }
 
   @override
   void dispose() {
     _textController.dispose();
+
     _keyboardFocus.dispose();
+
+    _textFocus.dispose();
+
     super.dispose();
   }
 
   void openPopup() {
+    if (widget.column.type.readOnly) {
+      return;
+    }
+
     _isOpenedPopup = true;
-    _keyboardFocus.unfocus();
-    widget.stateManager.gridFocusNode.unfocus();
+
     PlutoGridPopup(
       context: context,
       mode: PlutoMode.SelectRow,
@@ -63,6 +79,17 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
     );
   }
 
+  bool _handleKeyboardFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
+    if (event.runtimeType == RawKeyDownEvent) {
+      if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
+        if (_isOpenedPopup != true) {
+          openPopup();
+        }
+      }
+    }
+    return false;
+  }
+
   void _handleSelected(String value) {
     widget.stateManager.changedCellValue(widget.cell._key, value);
 
@@ -85,36 +112,39 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isOpenedPopup != true) {
-      FocusScope.of(context).requestFocus(_keyboardFocus);
-    }
+    _textFocus.requestFocus();
 
     return RawKeyboardListener(
       focusNode: _keyboardFocus,
-      onKey: (RawKeyEvent event) {
-        if (event.runtimeType == RawKeyDownEvent) {
-          if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
-            if (_isOpenedPopup != true) {
-              openPopup();
-            }
-          }
-        }
-      },
-      child: TextField(
-        controller: _textController,
-        readOnly: true,
-        onTap: () {
-          openPopup();
-        },
-        style: TextStyle(
-          fontSize: 18,
-        ),
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(0),
-          isDense: true,
-        ),
-        maxLines: 1,
+      child: Stack(
+        children: [
+          TextField(
+            controller: _textController,
+            focusNode: _textFocus,
+            readOnly: true,
+            onTap: openPopup,
+            style: TextStyle(
+              fontSize: 18,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(0),
+              isDense: true,
+            ),
+            maxLines: 1,
+          ),
+          Positioned(
+            top: -12,
+            right: -12,
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: Colors.black54,
+              ),
+              onPressed: openPopup,
+            ),
+          ),
+        ],
       ),
     );
   }

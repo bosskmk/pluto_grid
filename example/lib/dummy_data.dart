@@ -13,7 +13,14 @@ class DummyData {
         title: faker.food.cuisine(),
         field: i.toString(),
         type: (i) {
-          if (i == 2)
+          if (i == 0)
+            return PlutoColumnType.text(readOnly: true);
+          else if (i == 1)
+            return PlutoColumnType.text();
+          else if (i == 2)
+            return PlutoColumnType.select(['One', 'Two', 'Three'],
+                readOnly: true);
+          else if (i == 3)
             return PlutoColumnType.select(['One', 'Two', 'Three']);
           else
             return PlutoColumnType.text();
@@ -32,7 +39,9 @@ class DummyData {
 
       dummyColumns.forEach((element) {
         cells[element.field] = PlutoCell(
-          value: element.field == '2' ? 'One' : faker.food.restaurant(),
+          value: element.field == '2' || element.field == '3'
+              ? 'One'
+              : faker.food.restaurant(),
         );
       });
 

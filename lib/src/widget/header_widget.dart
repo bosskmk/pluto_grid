@@ -99,7 +99,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
             feedback: Container(
               width: widget.column.width,
               height: widget.stateManager.style.rowHeight,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
               decoration: BoxDecoration(
                 color: Colors.black26,
               ),
@@ -123,7 +123,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               child: Container(
                 width: widget.column.width,
                 height: widget.stateManager.style.rowHeight,
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
                 child: Text(
                   widget.column.title,
                   style: const TextStyle(
@@ -139,7 +139,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           ),
         ),
         Positioned(
-          top: 8,
+          top: 2,
           right: -6,
           child: GestureDetector(
             onTapDown: (TapDownDetails details) {

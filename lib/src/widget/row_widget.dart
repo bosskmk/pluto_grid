@@ -50,12 +50,12 @@ class _RowWidgetState extends State<RowWidget> {
     return Container(
       decoration: BoxDecoration(
         color: isCurrentRow
-            ? Color.fromRGBO(235, 235, 235, 100)
+            ? PlutoDefaultSettings.currentRowColor
             : Colors.white,
         border: const Border(
           bottom: const BorderSide(
             width: PlutoDefaultSettings.rowBorderWidth,
-            color: Colors.grey,
+            color: PlutoDefaultSettings.rowBorderColor,
           ),
         ),
       ),

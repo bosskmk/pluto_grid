@@ -58,19 +58,6 @@ class _CellWidgetState extends State<CellWidget> {
     }
   }
 
-  BoxDecoration _boxDecoration() {
-    if (_isCurrentCell) {
-      return BoxDecoration(
-        border: Border.all(
-          color: Colors.lightBlue,
-          width: 1,
-        ),
-      );
-    } else {
-      return BoxDecoration();
-    }
-  }
-
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
       return Text(
@@ -92,6 +79,7 @@ class _CellWidgetState extends State<CellWidget> {
         return TextCellWidget(
           stateManager: widget.stateManager,
           cell: widget.cell,
+          column: widget.column,
         );
     }
   }
@@ -112,13 +100,62 @@ class _CellWidgetState extends State<CellWidget> {
           widget.stateManager.handleOnSelectedRow();
         }
       },
-      child: Container(
+      child: _BackgroundColorWidget(
+        readOnly: widget.column.type.readOnly,
+        child: _buildCell(),
         width: widget.width,
         height: widget.height,
-        padding: const EdgeInsets.all(20),
-        decoration: _boxDecoration(),
-        child: _buildCell(),
+        isCurrentCell: _isCurrentCell,
+        isEditing: _isEditing,
       ),
+    );
+  }
+}
+
+class _BackgroundColorWidget extends StatelessWidget {
+  final bool readOnly;
+  final Widget child;
+  final double width;
+  final double height;
+  final bool isCurrentCell;
+  final bool isEditing;
+
+  _BackgroundColorWidget({
+    this.readOnly,
+    this.child,
+    this.width,
+    this.height,
+    this.isCurrentCell,
+    this.isEditing,
+  });
+
+  Color _color() {
+    return isEditing == true && readOnly != true ? Colors.white : null;
+  }
+
+  BoxDecoration _boxDecoration() {
+    if (isCurrentCell) {
+      return BoxDecoration(
+        color: _color(),
+        border: Border.all(
+          color: PlutoDefaultSettings.currentCellBorderColor,
+          width: 1,
+        ),
+      );
+    } else {
+      return BoxDecoration();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      width: width,
+      height: height,
+      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      decoration: _boxDecoration(),
+      child: child,
     );
   }
 }
