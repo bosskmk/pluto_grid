@@ -132,15 +132,6 @@ class PlutoStateManager extends ChangeNotifier {
 
   PlutoLayout get layout => _layout;
 
-  /// LayoutBuilder 가 build 될 때 화면 사이즈 정보 갱신
-  void setLayout(BoxConstraints size) {
-    _layout = PlutoLayout(
-      maxWidth: size.maxWidth,
-      maxHeight: size.maxHeight,
-      showFixedColumn: isShowFixedColumn(size.maxWidth),
-    );
-  }
-
   /// 현재 선택 된 셀의 컬럼
   PlutoColumn get currentColumn {
     if (currentColumnField == null) {
@@ -163,19 +154,6 @@ class PlutoStateManager extends ChangeNotifier {
 
   PlutoCell get currentCell => _currentCell;
 
-  /// 현재 선택 된 셀을 변경
-  void setCurrentCell(PlutoCell cell, int rowIdx) {
-    if (_currentCell != null && _currentCell._key == cell._key) {
-      return;
-    }
-    _currentCell = cell;
-    _isEditing = false;
-
-    if (rowIdx != null) _currentRowIdx = rowIdx;
-
-    notifyListeners();
-  }
-
   /// 현재 선택 된 셀의 Row index
   int _currentRowIdx;
 
@@ -187,6 +165,36 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     return _rows[_currentRowIdx];
+  }
+
+  /// 현재 셀의 편집 상태
+  bool _isEditing = false;
+
+  bool get isEditing => _isEditing;
+
+
+  /// 현재 선택 된 셀을 변경
+  void setCurrentCell(PlutoCell cell, int rowIdx) {
+    if (_currentCell != null && _currentCell._key == cell._key) {
+      return;
+    }
+
+    _currentCell = cell;
+
+    setEditing(false);
+
+    if (rowIdx != null) _currentRowIdx = rowIdx;
+
+    notifyListeners();
+  }
+
+  /// LayoutBuilder 가 build 될 때 화면 사이즈 정보 갱신
+  void setLayout(BoxConstraints size) {
+    _layout = PlutoLayout(
+      maxWidth: size.maxWidth,
+      maxHeight: size.maxHeight,
+      showFixedColumn: isShowFixedColumn(size.maxWidth),
+    );
   }
 
   /// currentRowIdx 를 업데이트
@@ -210,11 +218,6 @@ class PlutoStateManager extends ChangeNotifier {
     return;
   }
 
-  /// 현재 셀의 편집 상태
-  bool _isEditing = false;
-
-  bool get isEditing => _isEditing;
-
   /// 현재 셀의 편집 상태를 변경
   void setEditing(bool flag) {
     if (mode.isSelectRow) {
@@ -224,7 +227,9 @@ class PlutoStateManager extends ChangeNotifier {
     if (_currentCell == null || _isEditing == flag) {
       return;
     }
+
     _isEditing = flag;
+
     notifyListeners();
   }
 
@@ -546,7 +551,11 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changedCellValue(GlobalKey cellKey, String value) {
+  /// 셀 값 변경
+  ///
+  /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
+  void changedCellValue(GlobalKey cellKey, String value,
+      {bool callOnChangedEvent = true,}) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
       columnIdx < columnIndexes.length;
@@ -570,18 +579,20 @@ class PlutoStateManager extends ChangeNotifier {
 
           _rows[rowIdx].cells[field].value = value;
 
-          if (oldValue != value) {
-            if (_onChanged != null) {
-              _onChanged(PlutoOnChangedEvent(
-                columnIdx: columnIdx,
-                rowIdx: rowIdx,
-                value: value,
-                oldValue: oldValue,
-              ));
-            }
-
-            notifyListeners();
+          if (oldValue == value) {
+            return;
           }
+
+          if (callOnChangedEvent == true && _onChanged != null) {
+            _onChanged(PlutoOnChangedEvent(
+              columnIdx: columnIdx,
+              rowIdx: rowIdx,
+              value: value,
+              oldValue: oldValue,
+            ));
+          }
+
+          notifyListeners();
 
           return;
         }

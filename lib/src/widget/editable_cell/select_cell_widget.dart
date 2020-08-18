@@ -81,7 +81,8 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
 
   bool _handleKeyboardFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
     if (event.runtimeType == RawKeyDownEvent) {
-      if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
+      if (event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId ||
+          event.logicalKey.keyLabel != null) {
         if (_isOpenedPopup != true) {
           openPopup();
         }
@@ -91,7 +92,11 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
   }
 
   void _handleSelected(String value) {
+    widget.stateManager.moveCurrentCell(MoveDirection.Down);
+
     widget.stateManager.changedCellValue(widget.cell._key, value);
+
+    widget.stateManager.setEditing(true);
 
     try {
       _textController.text = value;

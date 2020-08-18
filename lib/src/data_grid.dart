@@ -196,6 +196,12 @@ class _PlutoGridState extends State<PlutoGrid> {
         }
         stateManager.toggleEditing();
         return true;
+      } else if (event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId) {
+        // F2
+        if (!stateManager.isEditing) {
+          stateManager.setEditing(true);
+        }
+        return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId) {
         // Tab
         final saveIsEditing = stateManager._isEditing;
@@ -206,7 +212,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         }
         stateManager.setEditing(saveIsEditing);
         return true;
-      } else if(event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
+      } else if (event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
         // ESC
         if (stateManager.isEditing) {
           stateManager.setEditing(false);
