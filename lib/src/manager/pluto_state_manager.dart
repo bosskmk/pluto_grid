@@ -172,6 +172,10 @@ class PlutoStateManager extends ChangeNotifier {
 
   bool get isEditing => _isEditing;
 
+  dynamic _cellValueBeforeEditing;
+
+  dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
+
 
   /// 현재 선택 된 셀을 변경
   void setCurrentCell(PlutoCell cell, int rowIdx) {
@@ -226,6 +230,10 @@ class PlutoStateManager extends ChangeNotifier {
 
     if (_currentCell == null || _isEditing == flag) {
       return;
+    }
+
+    if (flag == true) {
+      _cellValueBeforeEditing = currentCell.value;
     }
 
     _isEditing = flag;

@@ -165,19 +165,23 @@ class _PlutoGridState extends State<PlutoGrid> {
       if (event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
         // 왼쪽
         stateManager.moveCurrentCell(MoveDirection.Left);
+
         return true;
       } else if (event.logicalKey.keyId ==
           LogicalKeyboardKey.arrowRight.keyId) {
         // 오른쪽
         stateManager.moveCurrentCell(MoveDirection.Right);
+
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId) {
         // 위
         stateManager.moveCurrentCell(MoveDirection.Up);
+
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
         // 아래
         stateManager.moveCurrentCell(MoveDirection.Down);
+
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
         // 엔터
@@ -185,6 +189,7 @@ class _PlutoGridState extends State<PlutoGrid> {
           widget.onSelectedRow(PlutoOnSelectedEvent(
             row: stateManager.currentRow,
           ));
+
           return true;
         }
         if (stateManager.isEditing) {
@@ -197,7 +202,7 @@ class _PlutoGridState extends State<PlutoGrid> {
               lastChildContext.widget is EditableText) {
             gridFocusNode.unfocus();
             developer.log('TODO',
-                name: 'data_grid', error: '한글 입력 시 엔터 두번 오류.');
+                name: 'data_grid', error: 'Web 에서 한글 입력 시 엔터 두번 오류.');
           }
 
           if (event.isShiftPressed) {
@@ -206,22 +211,27 @@ class _PlutoGridState extends State<PlutoGrid> {
             stateManager.moveCurrentCell(MoveDirection.Down);
           }
         }
+
         stateManager.toggleEditing();
+
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId) {
         // F2
         if (!stateManager.isEditing) {
           stateManager.setEditing(true);
         }
+
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId) {
         // Tab
         final saveIsEditing = stateManager._isEditing;
+
         if (event.isShiftPressed) {
           stateManager.moveCurrentCell(MoveDirection.Left, force: true);
         } else {
           stateManager.moveCurrentCell(MoveDirection.Right, force: true);
         }
+
         stateManager.setEditing(saveIsEditing);
         return true;
       } else if (event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
@@ -229,15 +239,27 @@ class _PlutoGridState extends State<PlutoGrid> {
         if (stateManager.isEditing) {
           stateManager.setEditing(false);
         }
+
+        if (focusNode.children.last.context.widget is EditableText) {
+          (focusNode.children.last.context.widget as EditableText)
+              .controller
+              .text = stateManager.cellValueBeforeEditing;
+
+          stateManager.changedCellValue(stateManager.currentCell._key,
+              stateManager.cellValueBeforeEditing);
+        }
+
         return true;
       } else if (event.logicalKey.keyLabel != null) {
         // 문자
         if (stateManager.isEditing != true &&
             stateManager.currentCell != null) {
           stateManager.setEditing(true);
+
           stateManager.changedCellValue(
               stateManager.currentCell._key, event.logicalKey.keyLabel);
         }
+
         return true;
       }
     }
