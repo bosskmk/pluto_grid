@@ -19,7 +19,11 @@ class RowWidget extends StatefulWidget {
 }
 
 class _RowWidgetState extends State<RowWidget> {
-  bool isCurrentRow;
+  bool _isCurrentRow;
+
+  bool _isSelecting;
+
+  PlutoCellPosition _selectingPosition;
 
   @override
   void dispose() {
@@ -30,7 +34,11 @@ class _RowWidgetState extends State<RowWidget> {
 
   @override
   void initState() {
-    isCurrentRow = widget.stateManager.currentRowIdx == widget.rowIdx;
+    _isCurrentRow = widget.stateManager.currentRowIdx == widget.rowIdx;
+
+    _isSelecting = widget.stateManager.isSelecting;
+
+    _selectingPosition = widget.stateManager.currentSelectingPosition;
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -38,9 +46,13 @@ class _RowWidgetState extends State<RowWidget> {
   }
 
   void changeStateListener() {
-    if (isCurrentRow != (widget.stateManager.currentRowIdx == widget.rowIdx)) {
+    if (_isCurrentRow != (widget.stateManager.currentRowIdx == widget.rowIdx) ||
+        _isSelecting != widget.stateManager.isSelecting ||
+        _selectingPosition != widget.stateManager.currentSelectingPosition) {
       setState(() {
-        isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
+        _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
+        _isSelecting = widget.stateManager.isSelecting;
+        _selectingPosition = widget.stateManager.currentSelectingPosition;
       });
     }
   }
@@ -49,7 +61,7 @@ class _RowWidgetState extends State<RowWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: isCurrentRow
+        color: _isCurrentRow && (!_isSelecting && _selectingPosition == null)
             ? PlutoDefaultSettings.currentRowColor
             : Colors.white,
         border: const Border(

@@ -284,7 +284,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (ctx, size) {
+    return LayoutBuilder(key: stateManager.gridKey, builder: (ctx, size) {
       setLayout(size);
 
       FocusScope.of(ctx).requestFocus(gridFocusNode);
@@ -292,10 +292,11 @@ class _PlutoGridState extends State<PlutoGrid> {
       return RawKeyboardListener(
         focusNode: stateManager.gridFocusNode,
         child: Container(
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
           decoration: BoxDecoration(
             border: Border.all(
               color: PlutoDefaultSettings.gridBorderColor,
+              width: PlutoDefaultSettings.gridBorderWidth,
             ),
           ),
           child: Stack(
@@ -382,9 +383,6 @@ class PlutoDefaultSettings {
   /// 최소 컬럼 넓이
   static const double minColumnWidth = 80.0;
 
-  /// Row border width
-  static const double rowBorderWidth = 1.0;
-
   /// Fixed 컬럼 구분 선(ShadowLine) 크기
   static const double shadowLineSize = 3.0;
 
@@ -392,8 +390,17 @@ class PlutoDefaultSettings {
   static const double totalShadowLineWidth =
       PlutoDefaultSettings.shadowLineSize * 2;
 
+  /// Grid - padding
+  static const double gridPadding = 2.0;
+
+  /// Grid - border width
+  static const double gridBorderWidth = 1.0;
+
   /// Grid - border color : 그리드 전체 border
   static const Color gridBorderColor = Color.fromRGBO(161, 165, 174, 100);
+
+  /// Row - border width
+  static const double rowBorderWidth = 1.0;
 
   /// Row - box color : 선택 상태의 Row
   static const Color currentRowColor = Color.fromRGBO(220, 245, 255, 100);

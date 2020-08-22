@@ -21,14 +21,31 @@ class CellWidget extends StatefulWidget {
   _CellWidgetState createState() => _CellWidgetState();
 }
 
-class _CellWidgetState extends State<CellWidget> {
+class _CellWidgetState extends State<CellWidget>
+    with AutomaticKeepAliveClientMixin {
   bool _isCurrentCell;
 
   bool _isEditing;
 
+  bool _isSelectedCell;
+
+  PlutoCellPosition _selectingPosition;
+
+  final _selectionSubject = ReplaySubject<Function()>();
+
+  final _scrollSubject = ReplaySubject<Function()>();
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void dispose() {
     widget.stateManager.removeListener(changeStateListener);
+
+    _selectionSubject.close();
+
+    _scrollSubject.close();
+
     super.dispose();
   }
 
@@ -38,7 +55,19 @@ class _CellWidgetState extends State<CellWidget> {
 
     _isEditing = widget.stateManager.isEditing;
 
+    _isSelectedCell = _getIsSelectedCell();
+
+    _selectingPosition = widget.stateManager.currentSelectingPosition;
+
     widget.stateManager.addListener(changeStateListener);
+
+    _selectionSubject.debounceTime(Duration(milliseconds: 4)).listen((event) {
+      event();
+    });
+
+    _scrollSubject.throttleTime(Duration(milliseconds: 800)).listen((event) {
+      event();
+    });
 
     super.initState();
   }
@@ -49,13 +78,122 @@ class _CellWidgetState extends State<CellWidget> {
 
     final bool changedIsEditing = widget.stateManager.isEditing;
 
+    final bool changedIsSelectedCell = _getIsSelectedCell();
+
+    final PlutoCellPosition changedSelectingPosition =
+        widget.stateManager.currentSelectingPosition;
+
     if (_isCurrentCell != changedIsCurrentCell ||
-        _isEditing != changedIsEditing) {
+        _isEditing != changedIsEditing ||
+        _isSelectedCell != changedIsSelectedCell ||
+        _selectingPosition != changedSelectingPosition) {
       setState(() {
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
+        _isSelectedCell = changedIsSelectedCell;
+        _selectingPosition = changedSelectingPosition;
       });
     }
+  }
+
+  bool _getIsSelectedCell() {
+    if (widget.stateManager.isCurrentCell(widget.cell) == true) {
+      return false;
+    }
+
+    if (widget.stateManager.currentSelectingPosition == null) {
+      return false;
+    }
+
+    PlutoCellPosition currentCellPosition =
+        widget.stateManager.currentCellPosition;
+
+    final bool inRangeOfRows = min(currentCellPosition.rowIdx,
+                widget.stateManager.currentSelectingPosition.rowIdx) <=
+            widget.rowIdx &&
+        widget.rowIdx <=
+            max(currentCellPosition.rowIdx,
+                widget.stateManager.currentSelectingPosition.rowIdx);
+
+    if (inRangeOfRows == false) {
+      return false;
+    }
+
+    int columnIdx;
+
+    final _columnIndexes = widget.stateManager.columnIndexesByShowFixed();
+
+    for (var i = 0; i < _columnIndexes.length; i += 1) {
+      if (widget.stateManager.columns[_columnIndexes[i]].field ==
+          widget.column.field) {
+        columnIdx = i;
+        break;
+      }
+    }
+
+    if (columnIdx == null) {
+      return false;
+    }
+
+    final bool inRangeOfColumns = min(currentCellPosition.columnIdx,
+                widget.stateManager.currentSelectingPosition.columnIdx) <=
+            columnIdx &&
+        columnIdx <=
+            max(currentCellPosition.columnIdx,
+                widget.stateManager.currentSelectingPosition.columnIdx);
+
+    if (inRangeOfColumns == false) {
+      return false;
+    }
+
+    return true;
+  }
+
+  bool _needMovingScroll(Offset selectingOffset, MoveDirection move) {
+    switch (move) {
+      case MoveDirection.Left:
+        var leftFixedColumnWidth = widget.stateManager.layout.showFixedColumn
+            ? widget.stateManager.leftFixedColumnsWidth
+            : 0;
+        return selectingOffset.dx - 80 <
+            widget.stateManager.gridGlobalOffset.dx +
+                PlutoDefaultSettings.gridPadding +
+                PlutoDefaultSettings.gridBorderWidth +
+                leftFixedColumnWidth;
+      case MoveDirection.Right:
+        var rightFixedColumnWidth = widget.stateManager.layout.showFixedColumn
+            ? widget.stateManager.rightFixedColumnsWidth
+            : 0;
+        return selectingOffset.dx + 80 >
+            (widget.stateManager.gridGlobalOffset.dx +
+                    widget.stateManager.layout.maxWidth) -
+                rightFixedColumnWidth;
+      case MoveDirection.Up:
+        return selectingOffset.dy - 80 <
+            widget.stateManager.gridGlobalOffset.dy +
+                PlutoDefaultSettings.rowHeight +
+                PlutoDefaultSettings.gridBorderWidth +
+                PlutoDefaultSettings.rowBorderWidth;
+      case MoveDirection.Down:
+        return selectingOffset.dy + 80 > widget.stateManager.layout.maxHeight;
+    }
+
+    return false;
+  }
+
+  void _scrollForDraggableSelection(MoveDirection move) {
+    if (move == null) {
+      return;
+    }
+
+    final LinkedScrollControllerGroup scroll = move.horizontal
+        ? widget.stateManager.scroll.horizontal
+        : widget.stateManager.scroll.vertical;
+
+    final double offset = move.isLeft || move.isUp ? -200 : 200;
+
+    scroll.animateTo(scroll.offset + offset,
+        curve: Curves.ease, duration: Duration(milliseconds: 800));
   }
 
   Widget _buildCell() {
@@ -86,6 +224,8 @@ class _CellWidgetState extends State<CellWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
@@ -100,6 +240,40 @@ class _CellWidgetState extends State<CellWidget> {
           widget.stateManager.handleOnSelectedRow();
         }
       },
+      onLongPressStart: (LongPressStartDetails details) {
+        if (_isCurrentCell && _isEditing != true) {
+          widget.stateManager.setSelecting(true);
+        }
+      },
+      onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
+        if (_isCurrentCell && _isEditing != true) {
+          _selectionSubject.add(() {
+            widget.stateManager
+                .setCurrentSelectingPosition(details.globalPosition);
+          });
+
+          _scrollSubject.add(() {
+            if (_needMovingScroll(details.globalPosition, MoveDirection.Left)) {
+              _scrollForDraggableSelection(MoveDirection.Left);
+            } else if (_needMovingScroll(
+                details.globalPosition, MoveDirection.Right)) {
+              _scrollForDraggableSelection(MoveDirection.Right);
+            }
+
+            if (_needMovingScroll(details.globalPosition, MoveDirection.Up)) {
+              _scrollForDraggableSelection(MoveDirection.Up);
+            } else if (_needMovingScroll(
+                details.globalPosition, MoveDirection.Down)) {
+              _scrollForDraggableSelection(MoveDirection.Down);
+            }
+          });
+        }
+      },
+      onLongPressEnd: (LongPressEndDetails details) {
+        if (_isCurrentCell && _isEditing != true) {
+          widget.stateManager.setSelecting(false);
+        }
+      },
       child: _BackgroundColorWidget(
         readOnly: widget.column.type.readOnly,
         child: _buildCell(),
@@ -107,6 +281,7 @@ class _CellWidgetState extends State<CellWidget> {
         height: widget.height,
         isCurrentCell: _isCurrentCell,
         isEditing: _isEditing,
+        isSelectedCell: _isSelectedCell,
       ),
     );
   }
@@ -119,6 +294,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   final double height;
   final bool isCurrentCell;
   final bool isEditing;
+  final bool isSelectedCell;
 
   _BackgroundColorWidget({
     this.readOnly,
@@ -127,6 +303,7 @@ class _BackgroundColorWidget extends StatelessWidget {
     this.height,
     this.isCurrentCell,
     this.isEditing,
+    this.isSelectedCell,
   });
 
   Color _color() {
@@ -137,6 +314,14 @@ class _BackgroundColorWidget extends StatelessWidget {
     if (isCurrentCell) {
       return BoxDecoration(
         color: _color(),
+        border: Border.all(
+          color: PlutoDefaultSettings.currentCellBorderColor,
+          width: 1,
+        ),
+      );
+    } else if (isSelectedCell) {
+      return BoxDecoration(
+        color: PlutoDefaultSettings.currentRowColor,
         border: Border.all(
           color: PlutoDefaultSettings.currentCellBorderColor,
           width: 1,

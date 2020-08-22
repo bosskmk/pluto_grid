@@ -29,6 +29,10 @@ class PlutoStateManager extends ChangeNotifier {
 
   final PlutoOnSelectedEventCallback _onSelected;
 
+  final GlobalKey _gridKey;
+
+  GlobalKey get gridKey => _gridKey;
+
   PlutoStateManager({
     @required List<PlutoColumn> columns,
     @required List<PlutoRow> rows,
@@ -45,7 +49,8 @@ class PlutoStateManager extends ChangeNotifier {
         this._style = style ?? PlutoStyle(),
         this._mode = mode,
         this._onChanged = onChangedEventCallback,
-        this._onSelected = onSelectedEventCallback;
+        this._onSelected = onSelectedEventCallback,
+        this._gridKey = GlobalKey();
 
   /// 전체 컬럼의 인덱스 리스트
   List<int> get columnIndexes => _columns.asMap().keys.toList();
@@ -149,10 +154,40 @@ class PlutoStateManager extends ChangeNotifier {
       ?.first
       ?.key;
 
+  Offset _gridGlobalOffset;
+
+  /// 그리드의 global offset
+  Offset get gridGlobalOffset {
+    if (_gridGlobalOffset != null) {
+      return _gridGlobalOffset;
+    }
+
+    final RenderBox gridRenderBox = _gridKey.currentContext?.findRenderObject();
+
+    if (gridRenderBox == null) {
+      return null;
+    }
+
+    _gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);
+
+    return _gridGlobalOffset;
+  }
+
   /// 현재 선택 된 셀
   PlutoCell _currentCell;
 
   PlutoCell get currentCell => _currentCell;
+
+  /// 현재 선택 된 셀의 위치 값
+  PlutoCellPosition get currentCellPosition {
+    if (_currentCell == null) {
+      return null;
+    }
+
+    final columnIndexes = columnIndexesByShowFixed();
+
+    return cellPositionByCellKey(_currentCell._key, columnIndexes);
+  }
 
   /// 현재 선택 된 셀의 Row index
   int _currentRowIdx;
@@ -172,10 +207,20 @@ class PlutoStateManager extends ChangeNotifier {
 
   bool get isEditing => _isEditing;
 
+  /// 셀 선택 모드
+  bool _isSelecting = false;
+
+  bool get isSelecting => _isSelecting;
+
+  /// 셀 선택 현재 위치
+  PlutoCellPosition _currentSelectingPosition;
+
+  PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
+
+  /// 수정 전 셀 값
   dynamic _cellValueBeforeEditing;
 
   dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
-
 
   /// 현재 선택 된 셀을 변경
   void setCurrentCell(PlutoCell cell, int rowIdx) {
@@ -184,6 +229,8 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     _currentCell = cell;
+
+    _currentSelectingPosition = null;
 
     setEditing(false);
 
@@ -199,6 +246,8 @@ class PlutoStateManager extends ChangeNotifier {
       maxHeight: size.maxHeight,
       showFixedColumn: isShowFixedColumn(size.maxWidth),
     );
+
+    _gridGlobalOffset = null;
   }
 
   /// currentRowIdx 를 업데이트
@@ -237,6 +286,74 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     _isEditing = flag;
+
+    notifyListeners();
+  }
+
+  void setSelecting(bool flag) {
+    if (mode.isSelectRow) {
+      return;
+    }
+
+    if (_currentCell == null || _isSelecting == flag) {
+      return;
+    }
+
+    _isSelecting = flag;
+
+    notifyListeners();
+  }
+
+  void setCurrentSelectingPosition(Offset offset) {
+    if (_currentCell == null) {
+      return;
+    }
+
+    final double gridBodyOffsetDy = gridGlobalOffset.dy +
+        PlutoDefaultSettings.rowHeight +
+        PlutoDefaultSettings.gridBorderWidth +
+        PlutoDefaultSettings.rowBorderWidth;
+
+    double currentCellOffsetDy = (currentRowIdx *
+            (PlutoDefaultSettings.rowHeight +
+                PlutoDefaultSettings.rowBorderWidth)) +
+        gridBodyOffsetDy - _scroll.vertical.offset;
+
+    if (gridBodyOffsetDy > offset.dy) {
+      return;
+    }
+
+    int rowIdx = (((currentCellOffsetDy - offset.dy) /
+                    (PlutoDefaultSettings.rowHeight +
+                        PlutoDefaultSettings.rowBorderWidth))
+                .ceil() -
+            currentRowIdx)
+        .abs();
+
+    int columnIdx;
+
+    double currentWidth = 0.0;
+    currentWidth += gridGlobalOffset.dx;
+    currentWidth += PlutoDefaultSettings.gridPadding;
+    currentWidth += PlutoDefaultSettings.gridBorderWidth;
+
+    final _columnIndexes = columnIndexesByShowFixed();
+
+    for (var i = 0; i < _columnIndexes.length; i += 1) {
+      currentWidth += _columns[_columnIndexes[i]].width;
+
+      if (currentWidth > offset.dx + _scroll.horizontal.offset) {
+        columnIdx = i;
+        break;
+      }
+    }
+
+    if (columnIdx == null) {
+      return;
+    }
+
+    _currentSelectingPosition =
+        PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     notifyListeners();
   }

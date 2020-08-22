@@ -29,7 +29,7 @@ class PlutoColumn {
   }) : this._key = GlobalKey();
 
   /// Column key
-  Key _key;
+  GlobalKey _key;
 }
 
 enum PlutoColumnFixed {

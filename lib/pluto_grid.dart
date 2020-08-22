@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:rxdart/rxdart.dart';
 
 part './src/data_grid.dart';
 part './src/data_grid_popup.dart';
