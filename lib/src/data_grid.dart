@@ -245,18 +245,47 @@ class _PlutoGridState extends State<PlutoGrid> {
               .controller
               .text = stateManager.cellValueBeforeEditing;
 
-          stateManager.changedCellValue(stateManager.currentCell._key,
+          stateManager.changeCellValue(stateManager.currentCell._key,
               stateManager.cellValueBeforeEditing);
         }
 
         return true;
       } else if (event.logicalKey.keyLabel != null) {
+        // Control + C
+        if (event.isControlPressed &&
+            event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId) {
+          if (stateManager.currentSelectingPosition != null) {
+            Clipboard.setData(
+                new ClipboardData(text: stateManager.currentSelectingText));
+          } else if (stateManager.currentCell != null) {
+            Clipboard.setData(
+                new ClipboardData(text: stateManager.currentCell.value));
+          }
+
+          return true;
+        }
+
+        // Control + V
+        if (stateManager.currentCell != null) {
+          if (event.isControlPressed &&
+              event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId) {
+            Clipboard.getData('text/plain').then((value) {
+              List<List<String>> textList =
+                  ClipboardTransformation.stringToList(value.text);
+
+              stateManager.pasteCellValue(textList);
+            });
+
+            return true;
+          }
+        }
+
         // 문자
         if (stateManager.isEditing != true &&
             stateManager.currentCell != null) {
           stateManager.setEditing(true);
 
-          stateManager.changedCellValue(
+          stateManager.changeCellValue(
               stateManager.currentCell._key, event.logicalKey.keyLabel);
         }
 
@@ -284,89 +313,91 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(key: stateManager.gridKey, builder: (ctx, size) {
-      setLayout(size);
+    return LayoutBuilder(
+        key: stateManager.gridKey,
+        builder: (ctx, size) {
+          setLayout(size);
 
-      FocusScope.of(ctx).requestFocus(gridFocusNode);
+          FocusScope.of(ctx).requestFocus(gridFocusNode);
 
-      return RawKeyboardListener(
-        focusNode: stateManager.gridFocusNode,
-        child: Container(
-          padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: PlutoDefaultSettings.gridBorderColor,
-              width: PlutoDefaultSettings.gridBorderWidth,
+          return RawKeyboardListener(
+            focusNode: stateManager.gridFocusNode,
+            child: Container(
+              padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: PlutoDefaultSettings.gridBorderColor,
+                  width: PlutoDefaultSettings.gridBorderWidth,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
+                    Positioned.fill(
+                      left: 0,
+                      child: LeftFixedHeaders(stateManager),
+                    ),
+                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
+                    Positioned.fill(
+                      top: stateManager.style.rowHeight,
+                      left: 0,
+                      child: LeftFixedRows(stateManager),
+                    ),
+                  Positioned.fill(
+                    top: 0,
+                    left: leftFixedColumnWidth,
+                    right: rightFixedColumnWidth,
+                    child: BodyHeaders(stateManager),
+                  ),
+                  Positioned.fill(
+                    top: stateManager.style.rowHeight,
+                    left: leftFixedColumnWidth,
+                    right: rightFixedColumnWidth,
+                    child: BodyRows(stateManager),
+                  ),
+                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                    Positioned.fill(
+                      top: 0,
+                      left: size.maxWidth -
+                          rightFixedColumnWidth -
+                          PlutoDefaultSettings.totalShadowLineWidth,
+                      child: RightFixedHeaders(stateManager),
+                    ),
+                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                    Positioned.fill(
+                      top: stateManager.style.rowHeight,
+                      left: size.maxWidth -
+                          rightFixedColumnWidth -
+                          PlutoDefaultSettings.totalShadowLineWidth,
+                      child: RightFixedRows(stateManager),
+                    ),
+                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: leftFixedColumnWidth,
+                      child: ShadowLine(axis: Axis.vertical),
+                    ),
+                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: size.maxWidth -
+                          rightFixedColumnWidth -
+                          PlutoDefaultSettings.totalShadowLineWidth,
+                      child: ShadowLine(axis: Axis.vertical, reverse: true),
+                    ),
+                  Positioned(
+                    top: stateManager.style.rowHeight,
+                    left: 0,
+                    right: 0,
+                    child: ShadowLine(axis: Axis.horizontal),
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: Stack(
-            children: [
-              if (showFixedColumn == true && leftFixedColumnWidth > 0)
-                Positioned.fill(
-                  left: 0,
-                  child: LeftFixedHeaders(stateManager),
-                ),
-              if (showFixedColumn == true && leftFixedColumnWidth > 0)
-                Positioned.fill(
-                  top: stateManager.style.rowHeight,
-                  left: 0,
-                  child: LeftFixedRows(stateManager),
-                ),
-              Positioned.fill(
-                top: 0,
-                left: leftFixedColumnWidth,
-                right: rightFixedColumnWidth,
-                child: BodyHeaders(stateManager),
-              ),
-              Positioned.fill(
-                top: stateManager.style.rowHeight,
-                left: leftFixedColumnWidth,
-                right: rightFixedColumnWidth,
-                child: BodyRows(stateManager),
-              ),
-              if (showFixedColumn == true && rightFixedColumnWidth > 0)
-                Positioned.fill(
-                  top: 0,
-                  left: size.maxWidth -
-                      rightFixedColumnWidth -
-                      PlutoDefaultSettings.totalShadowLineWidth,
-                  child: RightFixedHeaders(stateManager),
-                ),
-              if (showFixedColumn == true && rightFixedColumnWidth > 0)
-                Positioned.fill(
-                  top: stateManager.style.rowHeight,
-                  left: size.maxWidth -
-                      rightFixedColumnWidth -
-                      PlutoDefaultSettings.totalShadowLineWidth,
-                  child: RightFixedRows(stateManager),
-                ),
-              if (showFixedColumn == true && leftFixedColumnWidth > 0)
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: leftFixedColumnWidth,
-                  child: ShadowLine(axis: Axis.vertical),
-                ),
-              if (showFixedColumn == true && rightFixedColumnWidth > 0)
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: size.maxWidth -
-                      rightFixedColumnWidth -
-                      PlutoDefaultSettings.totalShadowLineWidth,
-                  child: ShadowLine(axis: Axis.vertical, reverse: true),
-                ),
-              Positioned(
-                top: stateManager.style.rowHeight,
-                left: 0,
-                right: 0,
-                child: ShadowLine(axis: Axis.horizontal),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+          );
+        });
   }
 }
 
@@ -389,6 +420,12 @@ class PlutoDefaultSettings {
   /// Fixed 컬럼 구분 선 넓이 합계
   static const double totalShadowLineWidth =
       PlutoDefaultSettings.shadowLineSize * 2;
+
+  /// 멀티 선택 시 가장자리에서 해당 값 만큼 가까운 경우 스크롤
+  static const double offsetScrollingFromEdge = 80.0;
+
+  /// 멀티 선택 시 가장자리에서 한번에 스크롤 되는 크기
+  static const double offsetScrollingFromEdgeAtOnce = 200.0;
 
   /// Grid - padding
   static const double gridPadding = 2.0;

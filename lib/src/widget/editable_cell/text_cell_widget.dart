@@ -56,7 +56,7 @@ class _TextCellWidgetState extends State<TextCellWidget> {
 
   void _changeValue() {
     widget.stateManager
-        .changedCellValue(widget.cell._key, _textController.text);
+        .changeCellValue(widget.cell._key, _textController.text);
   }
 
   @override

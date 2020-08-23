@@ -23,6 +23,8 @@ class CellWidget extends StatefulWidget {
 
 class _CellWidgetState extends State<CellWidget>
     with AutomaticKeepAliveClientMixin {
+  String _cellValue;
+
   bool _isCurrentCell;
 
   bool _isEditing;
@@ -51,6 +53,8 @@ class _CellWidgetState extends State<CellWidget>
 
   @override
   void initState() {
+    _cellValue = widget.cell.value;
+
     _isCurrentCell = widget.stateManager.isCurrentCell(widget.cell);
 
     _isEditing = widget.stateManager.isEditing;
@@ -73,6 +77,9 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   void changeStateListener() {
+    final String changedCellValue = widget
+        .stateManager.rows[widget.rowIdx].cells[widget.column.field].value;
+
     final bool changedIsCurrentCell =
         widget.stateManager.isCurrentCell(widget.cell);
 
@@ -83,11 +90,13 @@ class _CellWidgetState extends State<CellWidget>
     final PlutoCellPosition changedSelectingPosition =
         widget.stateManager.currentSelectingPosition;
 
-    if (_isCurrentCell != changedIsCurrentCell ||
+    if (_cellValue != changedCellValue ||
+        _isCurrentCell != changedIsCurrentCell ||
         _isEditing != changedIsEditing ||
         _isSelectedCell != changedIsSelectedCell ||
         _selectingPosition != changedSelectingPosition) {
       setState(() {
+        _cellValue = changedCellValue;
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
         _isSelectedCell = changedIsSelectedCell;
@@ -155,27 +164,35 @@ class _CellWidgetState extends State<CellWidget>
         var leftFixedColumnWidth = widget.stateManager.layout.showFixedColumn
             ? widget.stateManager.leftFixedColumnsWidth
             : 0;
-        return selectingOffset.dx - 80 <
+
+        return selectingOffset.dx <
             widget.stateManager.gridGlobalOffset.dx +
                 PlutoDefaultSettings.gridPadding +
                 PlutoDefaultSettings.gridBorderWidth +
-                leftFixedColumnWidth;
+                leftFixedColumnWidth +
+                PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Right:
         var rightFixedColumnWidth = widget.stateManager.layout.showFixedColumn
             ? widget.stateManager.rightFixedColumnsWidth
             : 0;
-        return selectingOffset.dx + 80 >
+
+        return selectingOffset.dx >
             (widget.stateManager.gridGlobalOffset.dx +
                     widget.stateManager.layout.maxWidth) -
-                rightFixedColumnWidth;
+                rightFixedColumnWidth -
+                PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Up:
-        return selectingOffset.dy - 80 <
+        return selectingOffset.dy <
             widget.stateManager.gridGlobalOffset.dy +
                 PlutoDefaultSettings.rowHeight +
                 PlutoDefaultSettings.gridBorderWidth +
-                PlutoDefaultSettings.rowBorderWidth;
+                PlutoDefaultSettings.rowBorderWidth +
+                PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Down:
-        return selectingOffset.dy + 80 > widget.stateManager.layout.maxHeight;
+        return selectingOffset.dy >
+            widget.stateManager.gridGlobalOffset.dy +
+                widget.stateManager.layout.maxHeight -
+                PlutoDefaultSettings.offsetScrollingFromEdge;
     }
 
     return false;
@@ -190,7 +207,9 @@ class _CellWidgetState extends State<CellWidget>
         ? widget.stateManager.scroll.horizontal
         : widget.stateManager.scroll.vertical;
 
-    final double offset = move.isLeft || move.isUp ? -200 : 200;
+    final double offset = move.isLeft || move.isUp
+        ? -PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce
+        : PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce;
 
     scroll.animateTo(scroll.offset + offset,
         curve: Curves.ease, duration: Duration(milliseconds: 800));
@@ -199,7 +218,7 @@ class _CellWidgetState extends State<CellWidget>
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
       return Text(
-        widget.cell.value,
+        _cellValue,
         overflow: TextOverflow.ellipsis,
       );
     }

@@ -94,7 +94,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
   void _handleSelected(String value) {
     widget.stateManager.moveCurrentCell(MoveDirection.Down);
 
-    widget.stateManager.changedCellValue(widget.cell._key, value);
+    widget.stateManager.changeCellValue(widget.cell._key, value);
 
     widget.stateManager.setEditing(true);
 

@@ -207,15 +207,48 @@ class PlutoStateManager extends ChangeNotifier {
 
   bool get isEditing => _isEditing;
 
-  /// 셀 선택 모드
+  /// 멀티 선택 상태
   bool _isSelecting = false;
 
   bool get isSelecting => _isSelecting;
 
-  /// 셀 선택 현재 위치
+  /// 멀티 선택 셀의 현재 위치
   PlutoCellPosition _currentSelectingPosition;
 
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
+
+  /// 멀티 선택 된 셀들의 값
+  String get currentSelectingText {
+    List<String> textList = [];
+
+    int columnStartIdx =
+        min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int rowStartIdx =
+        min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    int columnEndIdx =
+        max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int rowEndIdx =
+        max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    final _columnIndexes = columnIndexesByShowFixed();
+
+    for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      List<String> columnText = [];
+
+      for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
+        final String field = _columns[_columnIndexes[j]].field;
+
+        columnText.add(_rows[i].cells[field].value);
+      }
+
+      textList.add(columnText.join('\t'));
+    }
+
+    return textList.join('\n');
+  }
 
   /// 수정 전 셀 값
   dynamic _cellValueBeforeEditing;
@@ -248,27 +281,6 @@ class PlutoStateManager extends ChangeNotifier {
     );
 
     _gridGlobalOffset = null;
-  }
-
-  /// currentRowIdx 를 업데이트
-  /// - rows 의 위치가 정렬 등으로 바뀔 때 호출
-  void updateCurrentRowIdx(GlobalKey cellKey) {
-    if (cellKey == null) {
-      return;
-    }
-
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
-
-        if (_rows[rowIdx].cells[field]._key == cellKey) {
-          _currentRowIdx = rowIdx;
-        }
-      }
-    }
-    return;
   }
 
   /// 현재 셀의 편집 상태를 변경
@@ -317,7 +329,8 @@ class PlutoStateManager extends ChangeNotifier {
     double currentCellOffsetDy = (currentRowIdx *
             (PlutoDefaultSettings.rowHeight +
                 PlutoDefaultSettings.rowBorderWidth)) +
-        gridBodyOffsetDy - _scroll.vertical.offset;
+        gridBodyOffsetDy -
+        _scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
       return;
@@ -356,6 +369,27 @@ class PlutoStateManager extends ChangeNotifier {
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     notifyListeners();
+  }
+
+  /// currentRowIdx 를 업데이트
+  /// - rows 의 위치가 정렬 등으로 바뀔 때 호출
+  void updateCurrentRowIdx(GlobalKey cellKey) {
+    if (cellKey == null) {
+      return;
+    }
+
+    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+      for (var columnIdx = 0;
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
+        final field = _columns[columnIndexes[columnIdx]].field;
+
+        if (_rows[rowIdx].cells[field]._key == cellKey) {
+          _currentRowIdx = rowIdx;
+        }
+      }
+    }
+    return;
   }
 
   /// 현재 셀의 편집 상태를 토글
@@ -676,10 +710,88 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 셀에 붙여넣기
+  void pasteCellValue(List<List<String>> textList) {
+    if (currentCellPosition == null) {
+      return;
+    }
+
+    int columnStartIdx;
+
+    int rowStartIdx;
+
+    int columnEndIdx;
+
+    int rowEndIdx;
+
+    if (_currentSelectingPosition == null) {
+      // 셀 선택이 없는 경우 : 현재 셀을 기준으로 순서대로 붙여 넣기
+      columnStartIdx = currentCellPosition.columnIdx;
+
+      rowStartIdx = currentCellPosition.rowIdx;
+
+      columnEndIdx = currentCellPosition.columnIdx +
+          textList.first.length;
+
+      rowEndIdx = currentCellPosition.rowIdx + textList.length;
+    } else {
+      // 셀 선택이 있는 경우 : 선택 된 셀 범위에서 순서대로 붙여 넣기
+      columnStartIdx = min(
+          currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+
+      rowStartIdx = min(
+          currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+
+      columnEndIdx = max(
+          currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx) +
+          1;
+
+      rowEndIdx = max(
+          currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx) + 1;
+    }
+
+    final _columnIndexes = columnIndexesByShowFixed();
+
+    int textRowIdx = 0;
+
+    for (var rowIdx = rowStartIdx; rowIdx < rowEndIdx; rowIdx += 1) {
+      int textColumnIdx = 0;
+
+      if (rowIdx >= _rows.length) {
+        break;
+      }
+
+      if (textRowIdx > textList.length - 1) {
+        textRowIdx = 0;
+      }
+
+      for (var columnIdx = columnStartIdx; columnIdx < columnEndIdx;
+      columnIdx += 1) {
+        if (columnIdx >= _columnIndexes.length) {
+          break;
+        }
+
+        if (textColumnIdx > textList.first.length - 1) {
+          textColumnIdx = 0;
+        }
+
+        changeCellValue(
+            _rows[rowIdx].cells[_columns[_columnIndexes[columnIdx]].field]
+                ._key,
+            textList[textRowIdx][textColumnIdx]);
+
+        ++textColumnIdx;
+      }
+      ++textRowIdx;
+    }
+
+    notifyListeners();
+  }
+
   /// 셀 값 변경
   ///
   /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
-  void changedCellValue(GlobalKey cellKey, String value,
+  void changeCellValue(GlobalKey cellKey, String value,
       {bool callOnChangedEvent = true,}) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
