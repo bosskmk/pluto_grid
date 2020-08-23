@@ -77,9 +77,6 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   void changeStateListener() {
-    final String changedCellValue = widget
-        .stateManager.rows[widget.rowIdx].cells[widget.column.field].value;
-
     final bool changedIsCurrentCell =
         widget.stateManager.isCurrentCell(widget.cell);
 
@@ -90,13 +87,26 @@ class _CellWidgetState extends State<CellWidget>
     final PlutoCellPosition changedSelectingPosition =
         widget.stateManager.currentSelectingPosition;
 
-    if (_cellValue != changedCellValue ||
+    bool checkCellValue = widget.stateManager._checkCellValue;
+
+    String changedCellValue;
+
+    if (checkCellValue) {
+      // 키보드로 셀 이동을 빠르게 할 때 이 부분에서 느려진다.
+      // 키보드 이동을 제외한 값 변경의 확인이 필요한 부분에서만 호출.
+      changedCellValue = widget
+          .stateManager.rows[widget.rowIdx].cells[widget.column.field].value;
+    }
+
+    if ((checkCellValue && _cellValue != changedCellValue) ||
         _isCurrentCell != changedIsCurrentCell ||
         _isEditing != changedIsEditing ||
         _isSelectedCell != changedIsSelectedCell ||
         _selectingPosition != changedSelectingPosition) {
       setState(() {
-        _cellValue = changedCellValue;
+        if (checkCellValue) {
+          _cellValue = changedCellValue;
+        }
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
         _isSelectedCell = changedIsSelectedCell;

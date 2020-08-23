@@ -255,11 +255,16 @@ class PlutoStateManager extends ChangeNotifier {
 
   dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
 
+  /// [CellWidget] 에서 cell 값 변경 확인 여부
+  bool _checkCellValue = true;
+
   /// 현재 선택 된 셀을 변경
   void setCurrentCell(PlutoCell cell, int rowIdx) {
     if (_currentCell != null && _currentCell._key == cell._key) {
       return;
     }
+
+    _checkCellValue = false;
 
     _currentCell = cell;
 
@@ -270,6 +275,8 @@ class PlutoStateManager extends ChangeNotifier {
     if (rowIdx != null) _currentRowIdx = rowIdx;
 
     notifyListeners();
+
+    _checkCellValue = true;
   }
 
   /// LayoutBuilder 가 build 될 때 화면 사이즈 정보 갱신
@@ -289,6 +296,8 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
+    _checkCellValue = false;
+
     if (_currentCell == null || _isEditing == flag) {
       return;
     }
@@ -300,6 +309,8 @@ class PlutoStateManager extends ChangeNotifier {
     _isEditing = flag;
 
     notifyListeners();
+
+    _checkCellValue = true;
   }
 
   void setSelecting(bool flag) {
@@ -307,19 +318,26 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
+    _checkCellValue = false;
+
     if (_currentCell == null || _isSelecting == flag) {
+      _checkCellValue = true;
       return;
     }
 
     _isSelecting = flag;
 
     notifyListeners();
+
+    _checkCellValue = true;
   }
 
   void setCurrentSelectingPosition(Offset offset) {
     if (_currentCell == null) {
       return;
     }
+
+    _checkCellValue = false;
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
         PlutoDefaultSettings.rowHeight +
@@ -333,6 +351,7 @@ class PlutoStateManager extends ChangeNotifier {
         _scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
+      _checkCellValue = true;
       return;
     }
 
@@ -362,6 +381,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     if (columnIdx == null) {
+      _checkCellValue = true;
       return;
     }
 
@@ -369,6 +389,8 @@ class PlutoStateManager extends ChangeNotifier {
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     notifyListeners();
+
+    _checkCellValue = true;
   }
 
   /// currentRowIdx 를 업데이트
@@ -550,6 +572,8 @@ class PlutoStateManager extends ChangeNotifier {
   }) {
     if (_currentCell == null) return;
 
+    _checkCellValue = false;
+
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {
       // Select 타입의 컬럼은 편집 상태라도 좌우로 이동 가능
@@ -557,7 +581,10 @@ class PlutoStateManager extends ChangeNotifier {
       // 수정 불가 컬럼은 편집 상태라도 좌우로 이동 가능
       else if (currentColumn?.type?.readOnly == true) {}
       // 그 밖의 수정 상태에서 좌우 이동 불가능
-      else return;
+      else {
+        _checkCellValue = true;
+        return;
+      }
     }
     // @formatter:on
 
@@ -566,6 +593,7 @@ class PlutoStateManager extends ChangeNotifier {
     cellPositionByCellKey(_currentCell._key, columnIndexes);
 
     if (canNotMoveCell(cellPosition, direction)) {
+      _checkCellValue = true;
       return;
     }
 
@@ -583,6 +611,7 @@ class PlutoStateManager extends ChangeNotifier {
     } else if (direction.vertical) {
       moveScrollByRow(direction, cellPosition.rowIdx);
     }
+    _checkCellValue = true;
     return;
   }
 
