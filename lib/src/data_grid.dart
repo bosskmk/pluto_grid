@@ -161,6 +161,13 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   bool handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
+    if (event.runtimeType == RawKeyDownEvent ||
+        event.runtimeType == RawKeyUpEvent) {
+      stateManager.setKeyPressed(PlutoKeyPressed(
+        shift: event.isShiftPressed,
+      ));
+    }
+
     if (event.runtimeType == RawKeyDownEvent) {
       if (event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
         // 왼쪽

@@ -258,6 +258,11 @@ class PlutoStateManager extends ChangeNotifier {
   /// [CellWidget] 에서 cell 값 변경 확인 여부
   bool _checkCellValue = true;
 
+  /// 눌려진 키
+  PlutoKeyPressed _keyPressed = PlutoKeyPressed();
+
+  PlutoKeyPressed get keyPressed => _keyPressed;
+
   /// 현재 선택 된 셀을 변경
   void setCurrentCell(
     PlutoCell cell,
@@ -343,7 +348,17 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
-  void setCurrentSelectingPosition(Offset offset) {
+  void setCurrentSelectingPosition({
+    int columnIdx,
+    int rowIdx,
+  }) {
+    _currentSelectingPosition =
+        PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
+
+    notifyListeners();
+  }
+
+  void setCurrentSelectingPositionWithOffset(Offset offset) {
     if (_currentCell == null) {
       return;
     }
@@ -396,12 +411,13 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
-    _currentSelectingPosition =
-        PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
-
-    notifyListeners();
+    setCurrentSelectingPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     _checkCellValue = true;
+  }
+
+  void setKeyPressed(PlutoKeyPressed keyPressed) {
+    _keyPressed = keyPressed;
   }
 
   /// currentRowIdx 를 업데이트
@@ -541,6 +557,48 @@ class PlutoStateManager extends ChangeNotifier {
   ) {
     // 고정 컬럼이 보여지는 상태에서 이동 할 컬럼이 고정 컬럼인 경우 스크롤 불필요
     return !(_layout.showFixedColumn == true && columnToMove.fixed.isFixed);
+  }
+
+  bool canNotChangeCellValue({
+    PlutoColumn column,
+    dynamic newValue,
+    dynamic oldValue,
+  }) {
+    return !canChangeCellValue(
+      column: column,
+      newValue: newValue,
+      oldValue: oldValue,
+    );
+  }
+
+  /// 수정이 필요한 셀인지 여부
+  bool canChangeCellValue({
+    PlutoColumn column,
+    dynamic newValue,
+    dynamic oldValue,
+  }) {
+    if (currentColumn.type.readOnly) {
+      return false;
+    }
+
+    if (newValue == oldValue) {
+      return false;
+    }
+
+    return true;
+  }
+
+  dynamic filteredCellValue({
+    PlutoColumn column,
+    dynamic newValue,
+    dynamic oldValue,
+  }) {
+    if (column.type.name.isSelect &&
+        !column.type.selectItems.contains(newValue)) {
+      newValue = oldValue;
+    }
+
+    return newValue;
   }
 
   /// 현재 셀에서 해당 방향으로 이동 하려는 셀의 인덱스 위치
@@ -816,10 +874,37 @@ class PlutoStateManager extends ChangeNotifier {
           textColumnIdx = 0;
         }
 
-        changeCellValue(
-            _rows[rowIdx].cells[_columns[_columnIndexes[columnIdx]].field]
-                ._key,
-            textList[textRowIdx][textColumnIdx], notify: false);
+        final String field = _columns[_columnIndexes[columnIdx]].field;
+
+        final currentColumn = _columns[columnIndexes[columnIdx]];
+
+        dynamic newValue = textList[textRowIdx][textColumnIdx];
+
+        final oldValue = _rows[rowIdx].cells[field].value;
+
+        newValue = filteredCellValue(
+          column: currentColumn,
+          newValue: newValue,
+          oldValue: oldValue,
+        );
+
+        if (canNotChangeCellValue(
+          column: currentColumn,
+          newValue: newValue,
+          oldValue: oldValue,
+        )) {
+          ++textColumnIdx;
+          continue;
+        }
+
+        _rows[rowIdx].cells[field].value = newValue;
+
+        _onChanged(PlutoOnChangedEvent(
+          columnIdx: columnIdx,
+          rowIdx: rowIdx,
+          value: newValue,
+          oldValue: oldValue,
+        ));
 
         ++textColumnIdx;
       }
@@ -832,7 +917,7 @@ class PlutoStateManager extends ChangeNotifier {
   /// 셀 값 변경
   ///
   /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
-  void changeCellValue(GlobalKey cellKey, String value, {
+  void changeCellValue(GlobalKey cellKey, dynamic value, {
     bool callOnChangedEvent = true,
     bool notify = true,
   }) {
@@ -844,23 +929,23 @@ class PlutoStateManager extends ChangeNotifier {
         if (_rows[rowIdx].cells[field]._key == cellKey) {
           final currentColumn = _columns[columnIndexes[columnIdx]];
 
-          // 읽기 전용 컬럼인 경우 값 변경 불가
-          if (currentColumn.type.readOnly) {
-            return;
-          }
-
           final oldValue = _rows[rowIdx].cells[field].value;
 
-          if (currentColumn.type.name.isSelect &&
-              !currentColumn.type.selectItems.contains(value)) {
-            value = oldValue;
+          value = filteredCellValue(
+            column: currentColumn,
+            newValue: value,
+            oldValue: oldValue,
+          );
+
+          if (canNotChangeCellValue(
+            column: currentColumn,
+            newValue: value,
+            oldValue: oldValue,
+          )) {
+            return;
           }
 
           _rows[rowIdx].cells[field].value = value;
-
-          if (oldValue == value) {
-            return;
-          }
 
           if (callOnChangedEvent == true && _onChanged != null) {
             _onChanged(PlutoOnChangedEvent(
@@ -975,5 +1060,13 @@ class PlutoCellPosition {
   PlutoCellPosition({
     this.columnIdx,
     this.rowIdx,
+  });
+}
+
+class PlutoKeyPressed {
+  bool shift;
+
+  PlutoKeyPressed({
+    this.shift = false,
   });
 }

@@ -301,6 +301,21 @@ class _CellWidgetState extends State<CellWidget>
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
+        if (widget.stateManager.keyPressed.shift &&
+            widget.stateManager.currentCell != null) {
+          final int columnIdx = widget.stateManager.columns
+              .asMap()
+              .entries
+              .firstWhere(
+                  (element) => element.value.field == widget.column.field)
+              .key;
+
+          widget.stateManager.setCurrentSelectingPosition(
+              columnIdx: columnIdx, rowIdx: widget.rowIdx);
+
+          return;
+        }
+
         if (_isCurrentCell && _isEditing != true) {
           widget.stateManager.setEditing(true);
         } else {
@@ -321,7 +336,7 @@ class _CellWidgetState extends State<CellWidget>
         if (_isCurrentCell && _isEditing != true) {
           _selectionSubject.add(() {
             widget.stateManager
-                .setCurrentSelectingPosition(details.globalPosition);
+                .setCurrentSelectingPositionWithOffset(details.globalPosition);
           });
 
           _scrollSubject.add(() {

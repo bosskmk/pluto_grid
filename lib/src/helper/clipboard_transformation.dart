@@ -3,7 +3,7 @@ part of pluto_grid;
 class ClipboardTransformation {
   static List<List<String>> stringToList(String text) {
     return text
-        .split('\n')
+        .split(RegExp('\n|\r\n'))
         .map((text) => text.split('\t'))
         .toList();
   }
