@@ -64,31 +64,41 @@ class _PlutoGridState extends State<PlutoGrid> {
   ScrollController bodyHeadersHorizontalScroll;
   ScrollController bodyRowsHorizontalScroll;
 
-  PlutoStateManager stateManager;
-
   double leftFixedColumnWidth;
   double bodyColumnWidth;
   double rightFixedColumnWidth;
   bool showFixedColumn;
 
+  List<Function()> disposeList = [];
+
+  PlutoStateManager stateManager;
+  PlutoKeyManager keyManager;
+
   @override
   void dispose() {
-    gridFocusNode.dispose();
-
-    leftFixedRowsVerticalScroll.dispose();
-    bodyRowsVerticalScroll.dispose();
-    rightRowsVerticalScroll.dispose();
-
-    bodyHeadersHorizontalScroll.dispose();
-    bodyRowsHorizontalScroll.dispose();
-
-    stateManager.removeListener(changeStateListener);
+    disposeList.forEach((dispose) {
+      dispose();
+    });
 
     super.dispose();
   }
 
   @override
   void initState() {
+    initProperties();
+
+    initStateManager();
+
+    initKeyManager();
+
+    if (widget.mode.isSelectRow) {
+      initSelectRowMode();
+    }
+
+    super.initState();
+  }
+
+  void initProperties() {
     applySortIdxIntoRows();
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
@@ -100,6 +110,20 @@ class _PlutoGridState extends State<PlutoGrid> {
     bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
 
+    // Dispose
+    disposeList.add(() {
+      gridFocusNode.dispose();
+
+      leftFixedRowsVerticalScroll.dispose();
+      bodyRowsVerticalScroll.dispose();
+      rightRowsVerticalScroll.dispose();
+
+      bodyHeadersHorizontalScroll.dispose();
+      bodyRowsHorizontalScroll.dispose();
+    });
+  }
+
+  void initStateManager() {
     stateManager = PlutoStateManager(
       columns: widget.columns,
       rows: widget.rows,
@@ -124,16 +148,32 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     stateManager.addListener(changeStateListener);
 
-    // 셀 선택 모드 시작시 첫 셀을 선택
-    if (widget.mode.isSelectRow) {
-      stateManager.setCurrentCell(
-          widget.rows.first.cells.entries.first.value, 0);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        stateManager.gridFocusNode.requestFocus();
-      });
-    }
+    // Dispose
+    disposeList.add(() {
+      stateManager.removeListener(changeStateListener);
+    });
+  }
 
-    super.initState();
+  void initKeyManager() {
+    keyManager = PlutoKeyManager(
+      stateManager: stateManager,
+    );
+
+    keyManager.init();
+
+    // Dispose
+    disposeList.add(() {
+      keyManager.dispose();
+    });
+  }
+
+  void initSelectRowMode() {
+    // 첫 셀 자동 선택
+    stateManager.setCurrentCell(widget.rows.first.cells.entries.first.value, 0);
+    // 포커스
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      stateManager.gridFocusNode.requestFocus();
+    });
   }
 
   void applySortIdxIntoRows() {
@@ -159,144 +199,11 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   bool handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    if (event.runtimeType == RawKeyDownEvent ||
-        event.runtimeType == RawKeyUpEvent) {
-      stateManager.setKeyPressed(PlutoKeyPressed(
-        shift: event.isShiftPressed,
-      ));
-    }
+    keyManager.subject.add(KeyManagerEvent(
+      focusNode: focusNode,
+      event: event,
+    ));
 
-    if (event.runtimeType == RawKeyDownEvent) {
-      if (event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId) {
-        // 왼쪽
-        stateManager.moveCurrentCell(MoveDirection.Left);
-
-        return true;
-      } else if (event.logicalKey.keyId ==
-          LogicalKeyboardKey.arrowRight.keyId) {
-        // 오른쪽
-        stateManager.moveCurrentCell(MoveDirection.Right);
-
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId) {
-        // 위
-        stateManager.moveCurrentCell(MoveDirection.Up);
-
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
-        // 아래
-        stateManager.moveCurrentCell(MoveDirection.Down);
-
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId) {
-        // 엔터
-        if (widget.mode.isSelectRow) {
-          widget.onSelectedRow(PlutoOnSelectedEvent(
-            row: stateManager.currentRow,
-          ));
-
-          return true;
-        }
-        if (stateManager.isEditing) {
-          // 한글을 마지막으로 입력한 상태에서 포커스 변경 없이 키 이벤트 발생하면 두번 발생
-          // web 에서만 문제. 버그인거 같음. 고쳐지면 아래 코드 삭제.
-          final lastChildContext = focusNode.children.last.context;
-          if (kIsWeb &&
-              lastChildContext is StatefulElement &&
-              lastChildContext?.dirty != true &&
-              lastChildContext.widget is EditableText) {
-            gridFocusNode.unfocus();
-            developer.log('TODO',
-                name: 'data_grid', error: 'Web 에서 한글 입력 시 엔터 두번 오류.');
-          }
-
-          if (event.isShiftPressed) {
-            stateManager.moveCurrentCell(MoveDirection.Up);
-          } else {
-            stateManager.moveCurrentCell(MoveDirection.Down);
-          }
-        }
-
-        stateManager.toggleEditing();
-
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId) {
-        // F2
-        if (!stateManager.isEditing) {
-          stateManager.setEditing(true);
-        }
-
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId) {
-        // Tab
-        final saveIsEditing = stateManager._isEditing;
-
-        if (event.isShiftPressed) {
-          stateManager.moveCurrentCell(MoveDirection.Left, force: true);
-        } else {
-          stateManager.moveCurrentCell(MoveDirection.Right, force: true);
-        }
-
-        stateManager.setEditing(saveIsEditing);
-        return true;
-      } else if (event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId) {
-        // ESC
-        if (stateManager.isEditing) {
-          stateManager.setEditing(false);
-        }
-
-        if (focusNode.children.last.context.widget is EditableText) {
-          (focusNode.children.last.context.widget as EditableText)
-              .controller
-              .text = stateManager.cellValueBeforeEditing;
-
-          stateManager.changeCellValue(stateManager.currentCell._key,
-              stateManager.cellValueBeforeEditing);
-        }
-
-        return true;
-      } else if (event.logicalKey.keyLabel != null) {
-        // Control + C
-        if (event.isControlPressed &&
-            event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId) {
-          if (stateManager.currentSelectingPosition != null) {
-            Clipboard.setData(
-                new ClipboardData(text: stateManager.currentSelectingText));
-          } else if (stateManager.currentCell != null) {
-            Clipboard.setData(
-                new ClipboardData(text: stateManager.currentCell.value));
-          }
-
-          return true;
-        }
-
-        // Control + V
-        if (stateManager.currentCell != null) {
-          if (event.isControlPressed &&
-              event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId) {
-            Clipboard.getData('text/plain').then((value) {
-              List<List<String>> textList =
-                  ClipboardTransformation.stringToList(value.text);
-
-              stateManager.pasteCellValue(textList);
-            });
-
-            return true;
-          }
-        }
-
-        // 문자
-        if (stateManager.isEditing != true &&
-            stateManager.currentCell != null) {
-          stateManager.setEditing(true);
-
-          stateManager.changeCellValue(
-              stateManager.currentCell._key, event.logicalKey.keyLabel);
-        }
-
-        return true;
-      }
-    }
     return true;
   }
 

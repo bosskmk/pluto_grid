@@ -23,6 +23,8 @@ part './src/helper/clipboard_transformation.dart';
 
 part './src/manager/pluto_state_manager.dart';
 
+part './src/manager/pluto_key_manager.dart';
+
 part './src/model/pluto_cell.dart';
 
 part './src/model/pluto_column.dart';

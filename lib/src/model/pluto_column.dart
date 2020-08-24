@@ -124,13 +124,13 @@ enum _PlutoColumnTypeName {
 }
 
 extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
-  bool get isText {
-    return this == _PlutoColumnTypeName.Text;
-  }
-
-  bool get isNumber {
-    return this == _PlutoColumnTypeName.Number;
-  }
+//  bool get isText {
+//    return this == _PlutoColumnTypeName.Text;
+//  }
+//
+//  bool get isNumber {
+//    return this == _PlutoColumnTypeName.Number;
+//  }
 
   bool get isSelect {
     return this == _PlutoColumnTypeName.Select;
