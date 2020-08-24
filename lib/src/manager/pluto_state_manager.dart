@@ -577,7 +577,7 @@ class PlutoStateManager extends ChangeNotifier {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (currentColumn.type.readOnly) {
+    if (column.type.readOnly) {
       return false;
     }
 
