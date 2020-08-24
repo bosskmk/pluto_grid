@@ -35,13 +35,25 @@ extension KeyManagerEventExtention on KeyManagerEvent {
 
   bool get isCharacter => this.event.logicalKey.keyLabel != null;
 
-  bool get isCtrlC =>
-      this.event.isControlPressed &&
-      this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+  bool get isCtrlC {
+    if (Platform.isMacOS) {
+      return this.event.isMetaPressed &&
+          this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+    } else {
+      return this.event.isControlPressed &&
+          this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+    }
+  }
 
-  bool get isCtrlV =>
-      this.event.isControlPressed &&
-      this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+  bool get isCtrlV {
+    if (Platform.isMacOS) {
+      return this.event.isMetaPressed &&
+          this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+    } else {
+      return this.event.isControlPressed &&
+          this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+    }
+  }
 }
 
 class PlutoKeyManager {
