@@ -259,7 +259,11 @@ class PlutoStateManager extends ChangeNotifier {
   bool _checkCellValue = true;
 
   /// 현재 선택 된 셀을 변경
-  void setCurrentCell(PlutoCell cell, int rowIdx) {
+  void setCurrentCell(
+    PlutoCell cell,
+    int rowIdx, {
+    bool notify = true,
+  }) {
     if (_currentCell != null && _currentCell._key == cell._key) {
       return;
     }
@@ -270,11 +274,13 @@ class PlutoStateManager extends ChangeNotifier {
 
     _currentSelectingPosition = null;
 
-    setEditing(false);
+    setEditing(false, notify: false);
 
     if (rowIdx != null) _currentRowIdx = rowIdx;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
 
     _checkCellValue = true;
   }
@@ -291,7 +297,10 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// 현재 셀의 편집 상태를 변경
-  void setEditing(bool flag) {
+  void setEditing(
+    bool flag, {
+    bool notify = true,
+  }) {
     if (mode.isSelectRow) {
       return;
     }
@@ -308,7 +317,9 @@ class PlutoStateManager extends ChangeNotifier {
 
     _isEditing = flag;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
 
     _checkCellValue = true;
   }
@@ -569,6 +580,7 @@ class PlutoStateManager extends ChangeNotifier {
   void moveCurrentCell(
     MoveDirection direction, {
     bool force = false,
+    bool notify = true,
   }) {
     if (_currentCell == null) return;
 
@@ -604,7 +616,7 @@ class PlutoStateManager extends ChangeNotifier {
     );
 
     setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field],
-        toMove.rowIdx);
+        toMove.rowIdx, notify: notify);
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition.columnIdx);
@@ -807,7 +819,7 @@ class PlutoStateManager extends ChangeNotifier {
         changeCellValue(
             _rows[rowIdx].cells[_columns[_columnIndexes[columnIdx]].field]
                 ._key,
-            textList[textRowIdx][textColumnIdx]);
+            textList[textRowIdx][textColumnIdx], notify: false);
 
         ++textColumnIdx;
       }
@@ -820,11 +832,12 @@ class PlutoStateManager extends ChangeNotifier {
   /// 셀 값 변경
   ///
   /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
-  void changeCellValue(GlobalKey cellKey, String value,
-      {bool callOnChangedEvent = true,}) {
+  void changeCellValue(GlobalKey cellKey, String value, {
+    bool callOnChangedEvent = true,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
+      for (var columnIdx = 0; columnIdx < columnIndexes.length;
       columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
@@ -858,7 +871,9 @@ class PlutoStateManager extends ChangeNotifier {
             ));
           }
 
-          notifyListeners();
+          if (notify) {
+            notifyListeners();
+          }
 
           return;
         }
@@ -866,10 +881,22 @@ class PlutoStateManager extends ChangeNotifier {
     }
   }
 
+  /// Select 모드에서 Row 선택 후 이벤트 발생.
   void handleOnSelectedRow() {
     if (_mode.isSelectRow == true && _onSelected != null) {
       _onSelected(PlutoOnSelectedEvent(row: currentRow));
     }
+  }
+
+  /// Select dialog 에서 선택 후 dialog 가 닫히고 난 후 동작.
+  void handleAfterSelectingRow(PlutoCell cell, String value) {
+    moveCurrentCell(MoveDirection.Down, notify: false);
+
+    changeCellValue(cell._key, value, notify: false);
+
+    setEditing(true, notify: false);
+
+    notifyListeners();
   }
 
   /// 셀이 현재 선택 된 셀인지 여부

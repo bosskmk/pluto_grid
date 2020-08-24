@@ -37,8 +37,21 @@ class _CellWidgetState extends State<CellWidget>
 
   final _scrollSubject = ReplaySubject<Function()>();
 
+  bool _keepAlive = false;
+
+  KeepAliveHandle _keepAliveHandle;
+
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _keepAlive;
+
+  @protected
+  void updateKeepAlive() {
+    if (wantKeepAlive) {
+      if (_keepAliveHandle == null) _ensureKeepAlive();
+    } else {
+      if (_keepAliveHandle != null) _releaseKeepAlive();
+    }
+  }
 
   @override
   void dispose() {
@@ -73,6 +86,8 @@ class _CellWidgetState extends State<CellWidget>
       event();
     });
 
+    _resetKeepAlive();
+
     super.initState();
   }
 
@@ -100,18 +115,46 @@ class _CellWidgetState extends State<CellWidget>
 
     if ((checkCellValue && _cellValue != changedCellValue) ||
         _isCurrentCell != changedIsCurrentCell ||
-        _isEditing != changedIsEditing ||
+        (_isCurrentCell && _isEditing != changedIsEditing) ||
         _isSelectedCell != changedIsSelectedCell ||
         _selectingPosition != changedSelectingPosition) {
       setState(() {
         if (checkCellValue) {
           _cellValue = changedCellValue;
         }
+
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
         _isSelectedCell = changedIsSelectedCell;
         _selectingPosition = changedSelectingPosition;
+
+        _resetKeepAlive();
       });
+    }
+  }
+
+  void _ensureKeepAlive() {
+    assert(_keepAliveHandle == null);
+    _keepAliveHandle = KeepAliveHandle();
+    KeepAliveNotification(_keepAliveHandle).dispatch(context);
+  }
+
+  void _releaseKeepAlive() {
+    _keepAliveHandle.release();
+    _keepAliveHandle = null;
+  }
+
+  void _resetKeepAlive() {
+    if (!widget.stateManager.mode.isNormal) {
+      return;
+    }
+
+    final bool resetKeepAlive = _isCurrentCell;
+
+    if (_keepAlive != resetKeepAlive) {
+      _keepAlive = resetKeepAlive;
+
+      updateKeepAlive();
     }
   }
 

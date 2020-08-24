@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dummyData = DummyData(10, 30);
+  final dummyData = DummyData(10, 10000);
 
   @override
   Widget build(BuildContext context) {
