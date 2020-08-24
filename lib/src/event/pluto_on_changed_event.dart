@@ -4,13 +4,17 @@ typedef PlutoOnChangedEventCallback = void Function(PlutoOnChangedEvent event);
 
 class PlutoOnChangedEvent {
   final int columnIdx;
+  final PlutoColumn column;
   final int rowIdx;
+  final PlutoRow row;
   final String value;
   final String oldValue;
 
   PlutoOnChangedEvent({
     this.columnIdx,
+    this.column,
     this.rowIdx,
+    this.row,
     this.value,
     this.oldValue,
   });

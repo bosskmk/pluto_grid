@@ -901,7 +901,9 @@ class PlutoStateManager extends ChangeNotifier {
 
         _onChanged(PlutoOnChangedEvent(
           columnIdx: columnIdx,
+          column: currentColumn,
           rowIdx: rowIdx,
+          row: _rows[rowIdx],
           value: newValue,
           oldValue: oldValue,
         ));
@@ -950,7 +952,9 @@ class PlutoStateManager extends ChangeNotifier {
           if (callOnChangedEvent == true && _onChanged != null) {
             _onChanged(PlutoOnChangedEvent(
               columnIdx: columnIdx,
+              column: currentColumn,
               rowIdx: rowIdx,
+              row: _rows[rowIdx],
               value: value,
               oldValue: oldValue,
             ));
