@@ -674,7 +674,8 @@ class PlutoStateManager extends ChangeNotifier {
     );
 
     setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field],
-        toMove.rowIdx, notify: notify);
+        toMove.rowIdx,
+        notify: notify);
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition.columnIdx);
@@ -687,12 +688,10 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// offset 으로 direction 뱡향으로 스크롤
   void scrollByDirection(MoveDirection direction, double offset) {
-    if (direction.isLeft && offset < _scroll.horizontal.offset ||
-        direction.isRight && offset > _scroll.horizontal.offset) {
-      _scroll.horizontal.jumpTo(offset);
-    } else if (direction.isUp && offset < _scroll.vertical.offset ||
-        direction.isDown && offset > _scroll.vertical.offset) {
+    if (direction.vertical) {
       _scroll.vertical.jumpTo(offset);
+    } else {
+      _scroll.horizontal.jumpTo(offset);
     }
   }
 
@@ -702,15 +701,30 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
-    final double offset = direction.isUp
-        ? ((rowIdx - 1) *
-        (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth))
-        : ((rowIdx + 3) *
-        (_style.rowHeight + PlutoDefaultSettings.rowBorderWidth)) +
-        5 -
-        (_layout.maxHeight);
+    final double rowSize = _style.rowHeight +
+        PlutoDefaultSettings.rowBorderWidth;
 
-    scrollByDirection(direction, offset);
+    final double gridOffset = PlutoDefaultSettings.gridPadding +
+        PlutoDefaultSettings.shadowLineSize;
+
+    final double screenOffset =
+        _scroll.vertical.offset + _layout.maxHeight - rowSize - gridOffset;
+
+    double offsetToMove =
+    direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
+
+    final bool inScrollStart = _scroll.vertical.offset <= offsetToMove;
+
+    final bool inScrollEnd = offsetToMove + rowSize <= screenOffset;
+
+    if (inScrollStart && inScrollEnd) {
+      return;
+    } else if (inScrollEnd == false) {
+      offsetToMove =
+          _scroll.vertical.offset + offsetToMove + rowSize - screenOffset;
+    }
+
+    scrollByDirection(direction, offsetToMove);
   }
 
   /// 해당 Column 으로 가로축 스크롤
@@ -729,23 +743,41 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
-    // 우측 이동의 경우 스크롤 위치를 셀의 우측 끝에 맞추기 위해 컬럼을 한칸 더 이동하여 계산.
-    if (direction.isRight) columnIdx++;
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
-    double offset = layout.showFixedColumn == true
+    double offsetToMove = layout.showFixedColumn == true
         ? bodyColumnsWidthAtColumnIdx(
         columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
+    final double screenOffset = _layout.showFixedColumn == true
+        ? _layout.maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
+        : _layout.maxWidth;
+
     if (direction.isRight) {
-      final double screenOffset = _layout.showFixedColumn == true
-          ? _layout.maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
-          : _layout.maxWidth;
-      offset -= screenOffset;
-      offset += 6;
+      if (offsetToMove > _scroll.horizontal.offset) {
+        offsetToMove -= screenOffset;
+        offsetToMove += PlutoDefaultSettings.totalShadowLineWidth;
+        offsetToMove += columnToMove.width;
+
+        if (offsetToMove < _scroll.horizontal.offset) {
+          return;
+        }
+      }
+    } else {
+      final offsetToNeed = offsetToMove +
+          columnToMove.width +
+          PlutoDefaultSettings.totalShadowLineWidth;
+
+      final currentOffset = screenOffset + _scroll.horizontal.offset;
+
+      if (offsetToNeed > currentOffset) {
+        offsetToMove = _scroll.horizontal.offset + offsetToNeed - currentOffset;
+      } else if (offsetToMove > _scroll.horizontal.offset) {
+        return;
+      }
     }
 
-    scrollByDirection(direction, offset);
+    scrollByDirection(direction, offsetToMove);
   }
 
   /// 컬럼 위치를 변경
@@ -829,8 +861,7 @@ class PlutoStateManager extends ChangeNotifier {
 
       rowStartIdx = currentCellPosition.rowIdx;
 
-      columnEndIdx = currentCellPosition.columnIdx +
-          textList.first.length;
+      columnEndIdx = currentCellPosition.columnIdx + textList.first.length;
 
       rowEndIdx = currentCellPosition.rowIdx + textList.length;
     } else {
@@ -838,15 +869,15 @@ class PlutoStateManager extends ChangeNotifier {
       columnStartIdx = min(
           currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
 
-      rowStartIdx = min(
-          currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+      rowStartIdx =
+          min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
-      columnEndIdx = max(
-          currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx) +
+      columnEndIdx = max(currentCellPosition.columnIdx,
+          _currentSelectingPosition.columnIdx) +
           1;
 
-      rowEndIdx = max(
-          currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx) + 1;
+      rowEndIdx =
+          max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx) + 1;
     }
 
     final _columnIndexes = columnIndexesByShowFixed();
@@ -864,7 +895,8 @@ class PlutoStateManager extends ChangeNotifier {
         textRowIdx = 0;
       }
 
-      for (var columnIdx = columnStartIdx; columnIdx < columnEndIdx;
+      for (var columnIdx = columnStartIdx;
+      columnIdx < columnEndIdx;
       columnIdx += 1) {
         if (columnIdx >= _columnIndexes.length) {
           break;
@@ -919,12 +951,14 @@ class PlutoStateManager extends ChangeNotifier {
   /// 셀 값 변경
   ///
   /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
-  void changeCellValue(GlobalKey cellKey, dynamic value, {
-    bool callOnChangedEvent = true,
-    bool notify = true,
-  }) {
+  void changeCellValue(GlobalKey cellKey,
+      dynamic value, {
+        bool callOnChangedEvent = true,
+        bool notify = true,
+      }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0; columnIdx < columnIndexes.length;
+      for (var columnIdx = 0;
+      columnIdx < columnIndexes.length;
       columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 

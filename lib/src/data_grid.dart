@@ -6,7 +6,6 @@ part of '../pluto_grid.dart';
 /// select_cell_widget 시작 시 기본 값 선택 처리
 /// number column type 추가
 /// 날짜 선택 column type 추가
-/// 셀 이동 시 스크롤 오류 수정 (셀이 보이지 않는 상태에서 이동 될 때 스크롤 안됨)
 /// 컬럼 검색 추가
 /// 페이지 up, down 추가 (키 이벤트)
 /// 페이지 네비게이션 추가 (UI)
