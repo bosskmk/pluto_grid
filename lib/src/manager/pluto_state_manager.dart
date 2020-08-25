@@ -782,33 +782,71 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 컬럼 위치를 변경
   void moveColumn(GlobalKey columnKey, double offset) {
-    // todo : 우측 고정 2개 상태에서 body 스크롤 좌측 끝으로 하고 우측 고정 컬럼 끼리 이동 시 오류
-    double currentOffset = 0.0 - _scroll.horizontal.offset;
+    final List<int> _columnIndexes =
+    _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+
+    Function findColumnIndex = (int i) {
+      if (_columns[_columnIndexes[i]]._key == columnKey) {
+        return _columnIndexes[i];
+      }
+      return null;
+    };
+
+    Function findIndexToMove = () {
+      final double minLeft = _layout.showFixedColumn
+          ? leftFixedColumnsWidth
+          : 0;
+
+      final double minRight = _layout.showFixedColumn ? _layout.maxWidth -
+          rightFixedColumnsWidth : _layout.maxWidth;
+
+      double currentOffset = 0.0;
+
+      int startIndexToMove = 0;
+
+      if (minRight < offset) {
+        currentOffset = minRight;
+        startIndexToMove = _columns.length - rightFixedColumns.length;
+      } else if (minLeft < offset) {
+        currentOffset -= _scroll.horizontal.offset;
+      }
+
+      return (int i) {
+        if (i == startIndexToMove) {
+          if (currentOffset < offset &&
+              offset < currentOffset +
+                  _columns[_columnIndexes[startIndexToMove]].width) {
+            return _columnIndexes[startIndexToMove];
+          }
+
+          currentOffset += _columns[_columnIndexes[startIndexToMove]].width;
+          ++startIndexToMove;
+        }
+
+        return null;
+      };
+    }();
 
     int columnIndex;
     int indexToMove;
 
-    final List<int> _columnIndexes =
-    _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
-
     for (var i = 0; i < _columnIndexes.length; i += 1) {
-      if (currentOffset < offset &&
-          offset < currentOffset + _columns[_columnIndexes[i]].width) {
-        indexToMove = _columnIndexes[i];
+      if (columnIndex == null) {
+        columnIndex = findColumnIndex(i);
       }
 
-      currentOffset += _columns[_columnIndexes[i]].width;
-
-      if (_columns[_columnIndexes[i]]._key == columnKey) {
-        columnIndex = _columnIndexes[i];
+      if (indexToMove == null) {
+        indexToMove = findIndexToMove(i);
       }
+
 
       if (indexToMove != null && columnIndex != null) {
         break;
       }
     }
 
-    if (columnIndex == indexToMove || indexToMove == null) {
+    if (columnIndex == indexToMove || columnIndex == null ||
+        indexToMove == null) {
       return;
     }
 
