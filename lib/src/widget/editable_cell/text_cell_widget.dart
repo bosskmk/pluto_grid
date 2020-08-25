@@ -78,7 +78,7 @@ class _TextCellWidgetState extends State<TextCellWidget> {
       },
       onTap: () => _selection(),
       style: TextStyle(
-        fontSize: 18,
+        fontSize: PlutoDefaultSettings.cellFontSize,
       ),
       decoration: const InputDecoration(
         border: InputBorder.none,

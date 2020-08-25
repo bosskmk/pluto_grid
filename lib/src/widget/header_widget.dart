@@ -1,6 +1,10 @@
 part of '../../pluto_grid.dart';
 
-enum MenuItem { FixedLeft, FixedRight }
+enum MenuItem {
+  FixedLeft,
+  FixedRight,
+  AutoSize,
+}
 
 class HeaderWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
@@ -69,6 +73,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 ? const Text('고정 해제')
                 : const Text('우측 고정'),
           ),
+        PopupMenuItem(
+          value: MenuItem.AutoSize,
+          child: const Text('자동 넓이'),
+        ),
       ],
     );
 
@@ -80,6 +88,39 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       case MenuItem.FixedRight:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
+        break;
+      case MenuItem.AutoSize:
+        final maxValue =
+            widget.stateManager.rows.fold('', (previousValue, element) {
+          final value = element.cells.entries
+              .firstWhere((element) => element.key == widget.column.field)
+              .value
+              .value;
+
+          if (previousValue.length < value.length) {
+            return value;
+          }
+          return previousValue;
+        });
+
+        // 가상으로 렌더링 후 사이즈 가져오기
+        // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
+        TextStyle textStyle = TextStyle(
+          fontSize: PlutoDefaultSettings.cellFontSize,
+        );
+
+        TextSpan ts = new TextSpan(style: textStyle, text: maxValue);
+        TextPainter tp = new TextPainter(
+          text: ts,
+          textDirection: TextDirection.ltr,
+        );
+        tp.layout();
+
+        widget.stateManager.resizeColumn(
+            widget.column._key,
+            tp.width -
+                widget.column.width +
+                (PlutoDefaultSettings.cellPadding * 2) + 10);
         break;
     }
   }
@@ -108,8 +149,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 style: const TextStyle(
                   color: Colors.black,
                   decoration: TextDecoration.none,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontSize: PlutoDefaultSettings.headerFontSize,
+                  fontWeight: PlutoDefaultSettings.headerFontWeight,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -127,8 +168,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 child: Text(
                   widget.column.title,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontSize: PlutoDefaultSettings.headerFontSize,
+                    fontWeight: PlutoDefaultSettings.headerFontWeight,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

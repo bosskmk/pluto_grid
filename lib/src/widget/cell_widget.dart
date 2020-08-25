@@ -393,14 +393,20 @@ class _BackgroundColorWidget extends StatelessWidget {
     this.isSelectedCell,
   });
 
-  Color _color() {
-    return isEditing == true && readOnly != true ? Colors.white : null;
+  Color _boxColor() {
+    if (isEditing != true) {
+      return null;
+    }
+
+    return readOnly == true
+        ? PlutoDefaultSettings.currentReadOnlyCellColor
+        : PlutoDefaultSettings.currentEditingCellColor;
   }
 
   BoxDecoration _boxDecoration() {
     if (isCurrentCell) {
       return BoxDecoration(
-        color: _color(),
+        color: _boxColor(),
         border: Border.all(
           color: PlutoDefaultSettings.currentCellBorderColor,
           width: 1,

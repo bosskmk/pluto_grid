@@ -1,0 +1,1 @@
+rmdir /q /s "%LocalAppData%\.dartServer\.analysis-driver"
