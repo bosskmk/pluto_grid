@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../../pluto_grid.dart';
 
 class PlutoColumn {
   /// 화면에 표시 할 제목 입니다.

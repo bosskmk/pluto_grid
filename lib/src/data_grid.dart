@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../pluto_grid.dart';
 
 /// [Todo list]
 /// 컬럼 정렬 시 rowIdx 설명 추가 (rowIdx 는 보이는 상태에서의 rowIdx)

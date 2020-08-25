@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../pluto_grid.dart';
 
 class PlutoGridPopup {
   final BuildContext context;

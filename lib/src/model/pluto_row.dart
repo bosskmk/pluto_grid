@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../../pluto_grid.dart';
 
 class PlutoRow {
   /// 행의 셀 리스트

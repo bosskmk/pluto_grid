@@ -1,4 +1,5 @@
-part of pluto_grid;
+part of '../../pluto_grid.dart';
+
 
 typedef PlutoOnChangedEventCallback = void Function(PlutoOnChangedEvent event);
 

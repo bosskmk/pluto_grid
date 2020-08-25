@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../../pluto_grid.dart';
 
 class BodyHeaders extends StatefulWidget {
   final PlutoStateManager stateManager;

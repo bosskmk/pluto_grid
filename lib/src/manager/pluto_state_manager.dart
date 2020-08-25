@@ -1,4 +1,4 @@
-part of pluto_grid;
+part of '../../pluto_grid.dart';
 
 class PlutoStateManager extends ChangeNotifier {
   List<PlutoColumn> _columns;
