@@ -56,6 +56,16 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
     PlutoGridPopup(
       context: context,
       mode: PlutoMode.SelectRow,
+      onLoaded: (PlutoOnLoadedEvent event) {
+        final i = widget.column.type.selectItems.indexOf(widget.cell.value);
+
+        if (i < 0) {
+          return;
+        }
+
+        event.stateManager.setCurrentCell(
+            event.stateManager.rows[i].cells.entries.first.value, i);
+      },
       onSelectedRow: (row) {
         if (row != null) {
           _handleSelected(row.cells.entries.first.value.value);

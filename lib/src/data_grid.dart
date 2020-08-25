@@ -3,7 +3,6 @@ part of '../pluto_grid.dart';
 /// [Todo list]
 /// 컬럼 정렬 시 rowIdx 설명 추가 (rowIdx 는 보이는 상태에서의 rowIdx)
 /// row selection 추가
-/// select_cell_widget 시작 시 기본 값 선택 처리
 /// number column type 추가
 /// 날짜 선택 column type 추가
 /// 컬럼 검색 추가
@@ -26,6 +25,7 @@ class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
   final PlutoMode mode;
+  final PlutoOnLoadedEventCallback onLoaded;
   final PlutoOnChangedEventCallback onChanged;
   final PlutoOnSelectedEventCallback onSelectedRow;
 
@@ -33,6 +33,7 @@ class PlutoGrid extends StatefulWidget {
     Key key,
     @required this.columns,
     @required this.rows,
+    this.onLoaded,
     this.onChanged,
   })  : this.mode = PlutoMode.Normal,
         this.onSelectedRow = null,
@@ -42,6 +43,7 @@ class PlutoGrid extends StatefulWidget {
     Key key,
     @required this.columns,
     @required this.rows,
+    this.onLoaded,
     this.onChanged,
     this.onSelectedRow,
     @required this.mode,
@@ -90,9 +92,9 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     initKeyManager();
 
-    if (widget.mode.isSelectRow) {
-      initSelectRowMode();
-    }
+    initOnLoadedEvent();
+
+    initSelectRowMode();
 
     super.initState();
   }
@@ -166,11 +168,30 @@ class _PlutoGridState extends State<PlutoGrid> {
     });
   }
 
-  void initSelectRowMode() {
-    // 첫 셀 자동 선택
-    stateManager.setCurrentCell(widget.rows.first.cells.entries.first.value, 0);
-    // 포커스
+  void initOnLoadedEvent() {
+    if (widget.onLoaded == null) {
+      return;
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onLoaded(PlutoOnLoadedEvent(
+        stateManager: stateManager,
+      ));
+    });
+  }
+
+  void initSelectRowMode() {
+    if (widget.mode.isSelectRow != true) {
+      return;
+    }
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (stateManager.currentCell == null) {
+        stateManager.setCurrentCell(
+            widget.rows.first.cells.entries.first.value, 0);
+      }
+
       stateManager.gridFocusNode.requestFocus();
     });
   }
