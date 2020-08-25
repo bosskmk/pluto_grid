@@ -422,7 +422,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// currentRowIdx 를 업데이트
   /// - rows 의 위치가 정렬 등으로 바뀔 때 호출
-  void updateCurrentRowIdx(GlobalKey cellKey) {
+  void updateCurrentRowIdx(Key cellKey) {
     if (cellKey == null) {
       return;
     }
@@ -445,7 +445,7 @@ class PlutoStateManager extends ChangeNotifier {
   void toggleEditing() => setEditing(!(_isEditing == true));
 
   /// 컬럼의 고정 여부를 토글
-  void toggleFixedColumn(GlobalKey columnKey, PlutoColumnFixed fixed) {
+  void toggleFixedColumn(Key columnKey, PlutoColumnFixed fixed) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
         _columns[i].fixed =
@@ -457,7 +457,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// 컬럼 정렬 토글
-  void toggleSortColumn(GlobalKey columnKey) {
+  void toggleSortColumn(Key columnKey) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
         final field = _columns[i].field;
@@ -516,7 +516,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// 해당 컬럼 인덱스에서 셀의 인덱스 위치
   PlutoCellPosition cellPositionByCellKey(
-      GlobalKey cellKey, List<int> columnIndexes) {
+      Key cellKey, List<int> columnIndexes) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
           columnIdx < columnIndexes.length;
@@ -781,7 +781,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// 컬럼 위치를 변경
-  void moveColumn(GlobalKey columnKey, double offset) {
+  void moveColumn(Key columnKey, double offset) {
     final List<int> _columnIndexes =
     _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
 
@@ -864,7 +864,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// 컬럼 사이즈를 변경
-  void resizeColumn(GlobalKey columnKey, double offset) {
+  void resizeColumn(Key columnKey, double offset) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
         final setWidth = _columns[i].width + offset;
@@ -989,7 +989,7 @@ class PlutoStateManager extends ChangeNotifier {
   /// 셀 값 변경
   ///
   /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
-  void changeCellValue(GlobalKey cellKey,
+  void changeCellValue(Key cellKey,
       dynamic value, {
         bool callOnChangedEvent = true,
         bool notify = true,

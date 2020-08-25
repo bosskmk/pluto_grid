@@ -10,8 +10,8 @@ class PlutoRow {
   PlutoRow({
     @required this.cells,
     this.sortIdx,
-  }) : this._key = GlobalKey();
+  }) : this._key = UniqueKey();
 
   /// Row key
-  GlobalKey _key;
+  Key _key;
 }

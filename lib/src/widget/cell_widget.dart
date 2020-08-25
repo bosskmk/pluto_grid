@@ -9,13 +9,14 @@ class CellWidget extends StatefulWidget {
   final int rowIdx;
 
   CellWidget({
+    Key key,
     this.stateManager,
     this.cell,
     this.width,
     this.height,
     this.column,
     this.rowIdx,
-  }) : super(key: cell._key);
+  }) : super(key: key);
 
   @override
   _CellWidgetState createState() => _CellWidgetState();

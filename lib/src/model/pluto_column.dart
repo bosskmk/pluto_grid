@@ -26,10 +26,10 @@ class PlutoColumn {
     this.width = PlutoDefaultSettings.columnWidth,
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
-  }) : this._key = GlobalKey();
+  }) : this._key = UniqueKey();
 
   /// Column key
-  GlobalKey _key;
+  Key _key;
 }
 
 enum PlutoColumnFixed {

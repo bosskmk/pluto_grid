@@ -1,25 +1,5 @@
 part of '../pluto_grid.dart';
 
-/// [Todo list]
-/// 컬럼 정렬 시 rowIdx 설명 추가 (rowIdx 는 보이는 상태에서의 rowIdx)
-/// row selection 추가
-/// number column type 추가
-/// 날짜 선택 column type 추가
-/// 컬럼 검색 추가
-/// 페이지 up, down 추가 (키 이벤트)
-/// 페이지 네비게이션 추가 (UI)
-
-enum PlutoMode {
-  Normal,
-  SelectRow,
-}
-
-extension PlutoModeExtension on PlutoMode {
-  bool get isNormal => this == PlutoMode.Normal;
-
-  bool get isSelectRow => this == PlutoMode.SelectRow;
-}
-
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
@@ -329,6 +309,17 @@ class _PlutoGridState extends State<PlutoGrid> {
           );
         });
   }
+}
+
+enum PlutoMode {
+  Normal,
+  SelectRow,
+}
+
+extension PlutoModeExtension on PlutoMode {
+  bool get isNormal => this == PlutoMode.Normal;
+
+  bool get isSelectRow => this == PlutoMode.SelectRow;
 }
 
 class PlutoDefaultSettings {

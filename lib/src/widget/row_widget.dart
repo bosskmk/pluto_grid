@@ -74,10 +74,9 @@ class _RowWidgetState extends State<RowWidget> {
       child: Row(
         children: widget.columns.map((column) {
           return CellWidget(
+            key: widget.row.cells[column.field]._key,
             stateManager: widget.stateManager,
-            cell: widget.row.cells.entries
-                .firstWhere((entry) => entry.key == column.field)
-                .value,
+            cell: widget.row.cells[column.field],
             width: column.width,
             height: widget.stateManager.style.rowHeight,
             column: column,
