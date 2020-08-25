@@ -105,22 +105,20 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
         // 가상으로 렌더링 후 사이즈 가져오기
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-        TextStyle textStyle = TextStyle(
-          fontSize: PlutoDefaultSettings.cellFontSize,
-        );
-
-        TextSpan ts = new TextSpan(style: textStyle, text: maxValue);
-        TextPainter tp = new TextPainter(
-          text: ts,
+        TextSpan textSpan = new TextSpan(
+            style: PlutoDefaultSettings.cellTextStyle, text: maxValue);
+        TextPainter textPainter = new TextPainter(
+          text: textSpan,
           textDirection: TextDirection.ltr,
         );
-        tp.layout();
+        textPainter.layout();
 
         widget.stateManager.resizeColumn(
             widget.column._key,
-            tp.width -
+            textPainter.width -
                 widget.column.width +
-                (PlutoDefaultSettings.cellPadding * 2) + 10);
+                (PlutoDefaultSettings.cellPadding * 2) +
+                10);
         break;
     }
   }
@@ -146,12 +144,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ),
               child: Text(
                 widget.column.title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  fontSize: PlutoDefaultSettings.headerFontSize,
-                  fontWeight: PlutoDefaultSettings.headerFontWeight,
-                ),
+                style: PlutoDefaultSettings.headerTextStyle,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 softWrap: false,
@@ -167,10 +160,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
                 child: Text(
                   widget.column.title,
-                  style: const TextStyle(
-                    fontSize: PlutoDefaultSettings.headerFontSize,
-                    fontWeight: PlutoDefaultSettings.headerFontWeight,
-                  ),
+                  style: PlutoDefaultSettings.headerTextStyle,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   softWrap: false,

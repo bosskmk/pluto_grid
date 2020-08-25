@@ -134,9 +134,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
             focusNode: _textFocus,
             readOnly: true,
             onTap: openPopup,
-            style: TextStyle(
-              fontSize: PlutoDefaultSettings.cellFontSize,
-            ),
+            style: PlutoDefaultSettings.cellTextStyle,
             decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(0),

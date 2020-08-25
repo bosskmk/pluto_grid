@@ -366,11 +366,13 @@ class PlutoDefaultSettings {
   /// Grid - border color : 그리드 전체 border
   static const Color gridBorderColor = Color.fromRGBO(161, 165, 174, 100);
 
-  /// Header - font size
-  static const double headerFontSize = 14;
-
-  /// Header - font weight
-  static const FontWeight headerFontWeight = FontWeight.w600;
+  /// Header - text style
+  static const TextStyle headerTextStyle = const TextStyle(
+    color: Colors.black,
+    decoration: TextDecoration.none,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  );
 
   /// Row - border width
   static const double rowBorderWidth = 1.0;
@@ -387,8 +389,10 @@ class PlutoDefaultSettings {
   /// Cell - border color : 선택 상태의 셀
   static const Color currentCellBorderColor = Colors.lightBlue;
 
-  /// Cell - font size
-  static const double cellFontSize = 14;
+  /// Cell - text style
+  static const TextStyle cellTextStyle = TextStyle(
+    fontSize: 14,
+  );
 
   /// Cell - current editing cell color
   static const Color currentEditingCellColor = Colors.white;
