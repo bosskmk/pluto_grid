@@ -1,37 +1,54 @@
 part of '../../pluto_grid.dart';
 
 class PlutoStateManager extends ChangeNotifier {
+  /// [columns]
+  ///
+  /// Columns provided at grid start.
+  List<PlutoColumn> get columns => [..._columns];
   List<PlutoColumn> _columns;
 
-  List<PlutoColumn> get columns => [..._columns];
-
+  /// [rows]
+  ///
+  /// Rows provided at grid start.
+  List<PlutoRow> get rows => [..._rows];
   List<PlutoRow> _rows;
 
-  List<PlutoRow> get rows => [..._rows];
-
+  /// [gridFocusNode]
+  ///
+  /// FocusNode to control keyboard input.
+  FocusNode get gridFocusNode => _gridFocusNode;
   FocusNode _gridFocusNode;
 
-  FocusNode get gridFocusNode => _gridFocusNode;
-
+  /// [scroll]
+  ///
+  /// Controller to control the scrolling of the grid.
+  PlutoScrollController get scroll => _scroll;
   PlutoScrollController _scroll;
 
-  PlutoScrollController get scroll => _scroll;
-
+  /// [style]
+  ///
+  /// Grid style information.
+  PlutoStyle get style => _style;
   PlutoStyle _style;
 
-  PlutoStyle get style => _style;
-
+  /// [mode]
+  ///
+  /// Grid mode.
+  PlutoMode get mode => _mode;
   PlutoMode _mode;
 
-  PlutoMode get mode => _mode;
-
-  final PlutoOnChangedEventCallback _onChanged;
-
-  final PlutoOnSelectedEventCallback _onSelected;
-
+  /// [gridKey]
+  ///
+  /// GlobalKey
+  GlobalKey get gridKey => _gridKey;
   final GlobalKey _gridKey;
 
-  GlobalKey get gridKey => _gridKey;
+  /// Event callback fired when cell value changes.
+  final PlutoOnChangedEventCallback _onChanged;
+
+  /// Event callback that occurs when a row is selected
+  /// when the grid mode is selectRow.
+  final PlutoOnSelectedEventCallback _onSelected;
 
   PlutoStateManager({
     @required List<PlutoColumn> columns,
@@ -52,10 +69,15 @@ class PlutoStateManager extends ChangeNotifier {
         this._onSelected = onSelectedEventCallback,
         this._gridKey = GlobalKey();
 
-  /// 전체 컬럼의 인덱스 리스트
+  /// [columnIndexes]
+  ///
+  /// Column index list.
   List<int> get columnIndexes => _columns.asMap().keys.toList();
 
-  /// fixed 컬럼이 있는 경우 넓이가 좁을 때 fixed 컬럼의 순서를 유지하는 전체 컬럼의 인덱스 리스트
+  /// [columnIndexesForShowFixed]
+  ///
+  /// List of column indexes in which the sequence is maintained
+  /// while the Fixed column is visible.
   List<int> get columnIndexesForShowFixed {
     return [
       ...leftFixedColumnIndexes,
@@ -64,17 +86,23 @@ class PlutoStateManager extends ChangeNotifier {
     ];
   }
 
-  /// 전체 컬럼의 넓이
+  /// [columnsWidth]
+  ///
+  /// Width of the entire column.
   double get columnsWidth {
     return _columns.fold(0, (double value, element) => value + element.width);
   }
 
-  /// 왼쪽 고정 컬럼
+  /// [leftFixedColumns]
+  ///
+  /// Left fixed columns.
   List<PlutoColumn> get leftFixedColumns {
     return _columns.where((e) => e.fixed.isLeft).toList();
   }
 
-  /// 왼쪽 고정 컬럼의 인덱스 리스트
+  /// [leftFixedColumnIndexes]
+  ///
+  /// Left fixed column Index List.
   List<int> get leftFixedColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isLeft) {
@@ -84,18 +112,24 @@ class PlutoStateManager extends ChangeNotifier {
     }).toList();
   }
 
-  /// 왼쪽 고정 컬럼의 넓이
+  /// [leftFixedColumnsWidth]
+  ///
+  /// Width of the left fixed column.
   double get leftFixedColumnsWidth {
     return leftFixedColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
-  /// 오른쪽 고정 컬럼
+  /// [rightFixedColumns]
+  ///
+  /// Right fixed columns.
   List<PlutoColumn> get rightFixedColumns {
     return _columns.where((e) => e.fixed.isRight).toList();
   }
 
-  /// 오른쪽 컬럼 인덱스 리스트
+  /// [rightFixedColumnIndexes]
+  ///
+  /// Right fixed column Index List.
   List<int> get rightFixedColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isRight) {
@@ -105,18 +139,24 @@ class PlutoStateManager extends ChangeNotifier {
     }).toList();
   }
 
-  /// 오른쪽 고정 컬럼의 넓이
+  /// [rightFixedColumnsWidth]
+  ///
+  /// Width of the right fixed column.
   double get rightFixedColumnsWidth {
     return rightFixedColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
-  /// body 컬럼
+  /// [bodyColumns]
+  ///
+  /// Body columns.
   List<PlutoColumn> get bodyColumns {
     return _columns.where((e) => e.fixed.isNone).toList();
   }
 
-  /// body 컬럼 인덱스 리스트
+  /// [bodyColumnIndexes]
+  ///
+  /// Body column Index List.
   List<int> get bodyColumnIndexes {
     return bodyColumns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isNone) {
@@ -126,18 +166,23 @@ class PlutoStateManager extends ChangeNotifier {
     }).toList();
   }
 
-  /// body 컬럼의 넓이
+  /// [bodyColumnsWidth]
+  ///
+  /// Width of the body column.
   double get bodyColumnsWidth {
     return bodyColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
-  /// 화면 사이즈와 고정 컬럼 출력 여부
+  /// [layout]
+  ///
+  /// Screen size, fixed column visibility.
+  PlutoLayout get layout => _layout;
   PlutoLayout _layout;
 
-  PlutoLayout get layout => _layout;
-
-  /// 현재 선택 된 셀의 컬럼
+  /// [currentColumn]
+  ///
+  /// Column of currently selected cell.
   PlutoColumn get currentColumn {
     if (currentColumnField == null) {
       return null;
@@ -148,15 +193,17 @@ class PlutoStateManager extends ChangeNotifier {
         ?.first;
   }
 
-  /// 현재 선택 된 셀의 컬럼 field 이름
+  /// [currentColumnField]
+  ///
+  /// Column field name of currently selected cell.
   String get currentColumnField => currentRow.cells.entries
       .where((entry) => entry.value._key == _currentCell?._key)
       ?.first
       ?.key;
 
-  Offset _gridGlobalOffset;
-
-  /// 그리드의 global offset
+  /// [gridGlobalOffset]
+  ///
+  /// Global offset of Grid.
   Offset get gridGlobalOffset {
     if (_gridGlobalOffset != null) {
       return _gridGlobalOffset;
@@ -173,12 +220,17 @@ class PlutoStateManager extends ChangeNotifier {
     return _gridGlobalOffset;
   }
 
-  /// 현재 선택 된 셀
+  Offset _gridGlobalOffset;
+
+  /// [currentCell]
+  ///
+  /// currently selected cell.
+  PlutoCell get currentCell => _currentCell;
   PlutoCell _currentCell;
 
-  PlutoCell get currentCell => _currentCell;
-
-  /// 현재 선택 된 셀의 위치 값
+  /// [currentCellPosition]
+  ///
+  /// The position index value of the currently selected cell.
   PlutoCellPosition get currentCellPosition {
     if (_currentCell == null) {
       return null;
@@ -189,11 +241,15 @@ class PlutoStateManager extends ChangeNotifier {
     return cellPositionByCellKey(_currentCell._key, columnIndexes);
   }
 
-  /// 현재 선택 된 셀의 Row index
+  /// [currentRowIdx]
+  ///
+  /// Row index of currently selected cell.
+  int get currentRowIdx => _currentRowIdx;
   int _currentRowIdx;
 
-  int get currentRowIdx => _currentRowIdx;
-
+  /// [currentRow]
+  ///
+  /// Row of currently selected cell.
   PlutoRow get currentRow {
     if (_currentRowIdx == null) {
       return null;
@@ -202,22 +258,30 @@ class PlutoStateManager extends ChangeNotifier {
     return _rows[_currentRowIdx];
   }
 
-  /// 현재 셀의 편집 상태
+  /// [isEditing]
+  ///
+  /// Editing status of the current.
+  bool get isEditing => _isEditing;
   bool _isEditing = false;
 
-  bool get isEditing => _isEditing;
-
-  /// 멀티 선택 상태
+  /// [isSelecting]
+  ///
+  /// Multi-selection state.
+  bool get isSelecting => _isSelecting;
   bool _isSelecting = false;
 
-  bool get isSelecting => _isSelecting;
-
-  /// 멀티 선택 셀의 현재 위치
   PlutoCellPosition _currentSelectingPosition;
 
+  /// [currentSelectingPosition]
+  ///
+  /// Current position of multi-select cell.
+  /// Calculate the currently selected cell and its multi-selection range.
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
 
-  /// 멀티 선택 된 셀들의 값
+  /// [currentSelectingText]
+  ///
+  /// String of multi-selected cells.
+  /// Preserves the structure of the cells selected by the tabs and the enter key.
   String get currentSelectingText {
     List<String> textList = [];
 
@@ -250,20 +314,22 @@ class PlutoStateManager extends ChangeNotifier {
     return textList.join('\n');
   }
 
-  /// 수정 전 셀 값
+  /// [cellValueBeforeEditing]
+  ///
+  /// pre-modification cell value
+  dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
   dynamic _cellValueBeforeEditing;
 
-  dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
-
-  /// [CellWidget] 에서 cell 값 변경 확인 여부
-  bool _checkCellValue = true;
-
-  /// 눌려진 키
+  /// [keyPressed]
+  ///
+  /// Currently pressed key
+  PlutoKeyPressed get keyPressed => _keyPressed;
   PlutoKeyPressed _keyPressed = PlutoKeyPressed();
 
-  PlutoKeyPressed get keyPressed => _keyPressed;
+  /// True, check the change of value when moving cells.
+  bool _checkCellValue = true;
 
-  /// 현재 선택 된 셀을 변경
+  /// Change the selected cell.
   void setCurrentCell(
     PlutoCell cell,
     int rowIdx, {
@@ -290,7 +356,7 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
-  /// LayoutBuilder 가 build 될 때 화면 사이즈 정보 갱신
+  /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size) {
     _layout = PlutoLayout(
       maxWidth: size.maxWidth,
@@ -301,7 +367,7 @@ class PlutoStateManager extends ChangeNotifier {
     _gridGlobalOffset = null;
   }
 
-  /// 현재 셀의 편집 상태를 변경
+  /// Change the editing status of the current cell.
   void setEditing(
     bool flag, {
     bool notify = true,
@@ -329,6 +395,7 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
+  /// Change Multi-Select Status.
   void setSelecting(bool flag) {
     if (mode.isSelectRow) {
       return;
@@ -348,6 +415,7 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
+  /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
     int columnIdx,
     int rowIdx,
@@ -358,6 +426,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPositionWithOffset(Offset offset) {
     if (_currentCell == null) {
       return;
@@ -416,12 +485,12 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
+  /// Set the current pressed key state.
   void setKeyPressed(PlutoKeyPressed keyPressed) {
     _keyPressed = keyPressed;
   }
 
-  /// currentRowIdx 를 업데이트
-  /// - rows 의 위치가 정렬 등으로 바뀔 때 호출
+  /// Update RowIdx to Current Cell.
   void updateCurrentRowIdx(Key cellKey) {
     if (cellKey == null) {
       return;
@@ -441,10 +510,10 @@ class PlutoStateManager extends ChangeNotifier {
     return;
   }
 
-  /// 현재 셀의 편집 상태를 토글
+  /// Toggle the editing status of the current cell.
   void toggleEditing() => setEditing(!(_isEditing == true));
 
-  /// 컬럼의 고정 여부를 토글
+  /// Toggle whether the column is fixed or not.
   void toggleFixedColumn(Key columnKey, PlutoColumnFixed fixed) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
@@ -456,7 +525,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 컬럼 정렬 토글
+  /// Toggle column sorting.
   void toggleSortColumn(Key columnKey) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
@@ -489,7 +558,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 전체 컬럼의 인덱스 위치까지의 넓이
+  /// Column width to index location based on full column.
   double columnsWidthAtColumnIdx(int columnIdx) {
     double width = 0.0;
     columnIndexes.getRange(0, columnIdx).forEach((idx) {
@@ -498,7 +567,7 @@ class PlutoStateManager extends ChangeNotifier {
     return width;
   }
 
-  /// body 컬럼의 인덱스 까지의 넓이
+  /// Column width to index location based on Body column
   double bodyColumnsWidthAtColumnIdx(int columnIdx) {
     double width = 0.0;
     bodyColumnIndexes.getRange(0, columnIdx).forEach((idx) {
@@ -507,12 +576,12 @@ class PlutoStateManager extends ChangeNotifier {
     return width;
   }
 
-  /// 고정 컬럼 여부에 따른 컬럼 인덱스 리스트
+  /// Column Index List by Fixed Column
   List<int> columnIndexesByShowFixed() {
     return _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
   }
 
-  /// 해당 컬럼 인덱스에서 셀의 인덱스 위치
+  /// Index position of cell in a column
   PlutoCellPosition cellPositionByCellKey(
       Key cellKey, List<int> columnIndexes) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
@@ -528,11 +597,7 @@ class PlutoStateManager extends ChangeNotifier {
     throw Exception('CellKey was not found in the list.');
   }
 
-  /// 셀의 위치에서 해당 뱡향으로 이동 가능 한 여부
-  bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
-    return !canMoveCell(cellPosition, direction);
-  }
-
+  /// Whether it is possible to move in the [direction] from [cellPosition].
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
     switch (direction) {
       case MoveDirection.Left:
@@ -548,7 +613,11 @@ class PlutoStateManager extends ChangeNotifier {
     throw Exception('MoveDirection case was not handled.');
   }
 
-  /// 움직이려는 셀의 위치로 스크롤이 이동 할 수 있는지 여부
+  bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
+    return !canMoveCell(cellPosition, direction);
+  }
+
+  /// Whether the cell can be scrolled when moving.
   bool canHorizontalCellScrollByDirection(
     MoveDirection direction,
     PlutoColumn columnToMove,
@@ -557,19 +626,7 @@ class PlutoStateManager extends ChangeNotifier {
     return !(_layout.showFixedColumn == true && columnToMove.fixed.isFixed);
   }
 
-  bool canNotChangeCellValue({
-    PlutoColumn column,
-    dynamic newValue,
-    dynamic oldValue,
-  }) {
-    return !canChangeCellValue(
-      column: column,
-      newValue: newValue,
-      oldValue: oldValue,
-    );
-  }
-
-  /// 수정이 필요한 셀인지 여부
+  /// Whether the cell is in a mutable state
   bool canChangeCellValue({
     PlutoColumn column,
     dynamic newValue,
@@ -586,6 +643,19 @@ class PlutoStateManager extends ChangeNotifier {
     return true;
   }
 
+  bool canNotChangeCellValue({
+    PlutoColumn column,
+    dynamic newValue,
+    dynamic oldValue,
+  }) {
+    return !canChangeCellValue(
+      column: column,
+      newValue: newValue,
+      oldValue: oldValue,
+    );
+  }
+
+  /// Filter on cell value change
   dynamic filteredCellValue({
     PlutoColumn column,
     dynamic newValue,
@@ -599,8 +669,12 @@ class PlutoStateManager extends ChangeNotifier {
     return newValue;
   }
 
-  /// 현재 셀에서 해당 방향으로 이동 하려는 셀의 인덱스 위치
-  /// columnIndexes : 현재 셀이 위치하고 있는 컬럼(leftFixed, body)
+  /// The index position of the cell to move in that direction in the current cell.
+  ///
+  /// [columnIndexes] : Provided differently depending on the current cell location
+  /// - [leftFixedColumnIndexes]
+  /// - [bodyColumnIndexes]
+  /// - [rightFixedColumnIndexes]
   PlutoCellPosition cellPositionToMove(
     PlutoCellPosition cellPosition,
     MoveDirection direction,
@@ -631,8 +705,8 @@ class PlutoStateManager extends ChangeNotifier {
     throw Exception('MoveDirection case was not handled.');
   }
 
-  /// 현재 셀을 direction 방향의 셀로 변경하고 스크롤을 이동 시킴
-  /// [force] true : 편집상태에서 탭키로 좌우 이동 허용
+  /// Change the current cell to the cell in the [direction] and move the scroll
+  /// [force] true : Allow left and right movement with tab key in editing state.
   void moveCurrentCell(
     MoveDirection direction, {
     bool force = false,
@@ -684,7 +758,8 @@ class PlutoStateManager extends ChangeNotifier {
     return;
   }
 
-  /// offset 으로 direction 뱡향으로 스크롤
+  /// [direction] Scroll direction
+  /// [offset] Scroll position
   void scrollByDirection(MoveDirection direction, double offset) {
     if (direction.vertical) {
       _scroll.vertical.jumpTo(offset);
@@ -693,7 +768,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
   }
 
-  /// 해당 Row 로 세로축 스크롤
+  /// Scroll to [rowIdx] position.
   void moveScrollByRow(MoveDirection direction, int rowIdx) {
     if (!direction.vertical) {
       return;
@@ -725,7 +800,7 @@ class PlutoStateManager extends ChangeNotifier {
     scrollByDirection(direction, offsetToMove);
   }
 
-  /// 해당 Column 으로 가로축 스크롤
+  /// Scroll to [columnIdx] position.
   void moveScrollByColumn(MoveDirection direction, int columnIdx) {
     if (!direction.horizontal) {
       return;
@@ -778,7 +853,7 @@ class PlutoStateManager extends ChangeNotifier {
     scrollByDirection(direction, offsetToMove);
   }
 
-  /// 컬럼 위치를 변경
+  /// Change column position.
   void moveColumn(Key columnKey, double offset) {
     final List<int> _columnIndexes =
     _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
@@ -861,7 +936,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 컬럼 사이즈를 변경
+  /// Change column size
   void resizeColumn(Key columnKey, double offset) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
@@ -877,7 +952,7 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 셀에 붙여넣기
+  /// Paste based on current cell
   void pasteCellValue(List<List<String>> textList) {
     if (currentCellPosition == null) {
       return;
@@ -985,9 +1060,9 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 셀 값 변경
+  /// Change cell value
   ///
-  /// [callOnChangedEvent] PlutoOnChangedEventCallback 콜백을 발생 시킨다.
+  /// [callOnChangedEvent] triggers a [PlutoOnChangedEventCallback] callback.
   void changeCellValue(Key cellKey,
       dynamic value, {
         bool callOnChangedEvent = true,
@@ -1042,6 +1117,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
   }
 
+  /// Cast the value according to the column type.
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
     if (column.type.name.isNumber && value.runtimeType != num) {
       return num.tryParse(value.toString()) ?? 0;
@@ -1050,14 +1126,15 @@ class PlutoStateManager extends ChangeNotifier {
     return value;
   }
 
-  /// Select 모드에서 Row 선택 후 이벤트 발생.
+  /// Event occurred after selecting Row in Select mode.
   void handleOnSelectedRow() {
     if (_mode.isSelectRow == true && _onSelected != null) {
       _onSelected(PlutoOnSelectedEvent(row: currentRow));
     }
   }
 
-  /// Select dialog 에서 선택 후 dialog 가 닫히고 난 후 동작.
+  /// The action that is selected in the Select dialog
+  /// and processed after the dialog is closed.
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
     moveCurrentCell(MoveDirection.Down, notify: false);
 
@@ -1068,12 +1145,12 @@ class PlutoStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 셀이 현재 선택 된 셀인지 여부
+  /// Whether the cell is the currently selected cell.
   bool isCurrentCell(PlutoCell cell) {
     return _currentCell != null && _currentCell._key == cell._key;
   }
 
-  /// 화면 넓이에서 fixed 컬럼이 보여질지 여부
+  /// Whether a fixed column is displayed in the screen width.
   bool isShowFixedColumn(double maxWidth) {
     final bool hasFixedColumn =
         leftFixedColumns.length > 0 || rightFixedColumns.length > 0;

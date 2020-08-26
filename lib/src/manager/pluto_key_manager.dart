@@ -115,16 +115,16 @@ class PlutoKeyManager {
     if (stateManager.isEditing) {
       // 한글을 마지막으로 입력한 상태에서 포커스 변경 없이 키 이벤트 발생하면 두번 발생
       // web 에서만 문제. 버그인거 같음. 고쳐지면 아래 코드 삭제.
-      // final lastChildContext = keyManagerEvent.focusNode.children.last.context;
-      //
-      // if (kIsWeb &&
-      //     lastChildContext is StatefulElement &&
-      //     lastChildContext?.dirty != true &&
-      //     lastChildContext.widget is EditableText) {
-      //   stateManager.gridFocusNode.unfocus();
-      //   developer.log('TODO',
-      //       name: 'data_grid', error: 'Web 에서 한글 입력 시 엔터 두번 오류.');
-      // }
+      final lastChildContext = keyManagerEvent.focusNode.children.last.context;
+
+      if (kIsWeb &&
+          lastChildContext is StatefulElement &&
+          lastChildContext?.dirty != true &&
+          lastChildContext.widget is EditableText) {
+        stateManager.gridFocusNode.unfocus();
+        developer.log('TODO',
+            name: 'data_grid', error: 'Web 에서 한글 입력 시 엔터 두번 오류.');
+      }
 
       if (keyManagerEvent.event.isShiftPressed) {
         stateManager.moveCurrentCell(MoveDirection.Up);
