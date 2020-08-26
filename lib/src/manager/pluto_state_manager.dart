@@ -241,7 +241,7 @@ class PlutoStateManager extends ChangeNotifier {
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
         final String field = _columns[_columnIndexes[j]].field;
 
-        columnText.add(_rows[i].cells[field].value);
+        columnText.add(_rows[i].cells[field].value.toString());
       }
 
       textList.add(columnText.join('\t'));
@@ -464,15 +464,13 @@ class PlutoStateManager extends ChangeNotifier {
         if (_columns[i].sort.isNone) {
           _columns[i].sort = PlutoColumnSort.Ascending;
 
-          _rows.sort((a, b) => a.cells[field].value
-              .toString()
-              .compareTo(b.cells[field].value.toString()));
+          _rows.sort(
+              (a, b) => a.cells[field].value.compareTo(b.cells[field].value));
         } else if (_columns[i].sort.isAscending) {
           _columns[i].sort = PlutoColumnSort.Descending;
 
-          _rows.sort((b, a) => a.cells[field].value
-              .toString()
-              .compareTo(b.cells[field].value.toString()));
+          _rows.sort(
+              (b, a) => a.cells[field].value.compareTo(b.cells[field].value));
         } else {
           _columns[i].sort = PlutoColumnSort.None;
 
@@ -581,7 +579,7 @@ class PlutoStateManager extends ChangeNotifier {
       return false;
     }
 
-    if (newValue == oldValue) {
+    if (newValue.toString() == oldValue.toString()) {
       return false;
     }
 
@@ -950,7 +948,7 @@ class PlutoStateManager extends ChangeNotifier {
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
-        final oldValue = _rows[rowIdx].cells[field].value;
+        final dynamic oldValue = _rows[rowIdx].cells[field].value;
 
         newValue = filteredCellValue(
           column: currentColumn,
@@ -967,7 +965,8 @@ class PlutoStateManager extends ChangeNotifier {
           continue;
         }
 
-        _rows[rowIdx].cells[field].value = newValue;
+        _rows[rowIdx].cells[field].value = newValue =
+            castValueByColumnType(newValue, currentColumn);
 
         _onChanged(PlutoOnChangedEvent(
           columnIdx: columnIdx,
@@ -1003,7 +1002,7 @@ class PlutoStateManager extends ChangeNotifier {
         if (_rows[rowIdx].cells[field]._key == cellKey) {
           final currentColumn = _columns[columnIndexes[columnIdx]];
 
-          final oldValue = _rows[rowIdx].cells[field].value;
+          final dynamic oldValue = _rows[rowIdx].cells[field].value;
 
           value = filteredCellValue(
             column: currentColumn,
@@ -1019,7 +1018,8 @@ class PlutoStateManager extends ChangeNotifier {
             return;
           }
 
-          _rows[rowIdx].cells[field].value = value;
+          _rows[rowIdx].cells[field].value = value =
+              castValueByColumnType(value, currentColumn);
 
           if (callOnChangedEvent == true && _onChanged != null) {
             _onChanged(PlutoOnChangedEvent(
@@ -1042,6 +1042,14 @@ class PlutoStateManager extends ChangeNotifier {
     }
   }
 
+  dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
+    if (column.type.name.isNumber && value.runtimeType != num) {
+      return num.tryParse(value.toString()) ?? 0;
+    }
+
+    return value;
+  }
+
   /// Select 모드에서 Row 선택 후 이벤트 발생.
   void handleOnSelectedRow() {
     if (_mode.isSelectRow == true && _onSelected != null) {
@@ -1050,7 +1058,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// Select dialog 에서 선택 후 dialog 가 닫히고 난 후 동작.
-  void handleAfterSelectingRow(PlutoCell cell, String value) {
+  void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
     moveCurrentCell(MoveDirection.Down, notify: false);
 
     changeCellValue(cell._key, value, notify: false);

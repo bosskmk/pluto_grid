@@ -50,7 +50,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
       itemCount: _rows.length,
       itemBuilder: (ctx, i) {
         return RowWidget(
-          key: ValueKey('right_fixed_row_$i'),
+          key: ValueKey('right_fixed_row_${_rows[i]._key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
           row: _rows[i],

@@ -24,7 +24,7 @@ class CellWidget extends StatefulWidget {
 
 class _CellWidgetState extends State<CellWidget>
     with AutomaticKeepAliveClientMixin {
-  String _cellValue;
+  dynamic _cellValue;
 
   bool _isCurrentCell;
 
@@ -105,7 +105,7 @@ class _CellWidgetState extends State<CellWidget>
 
     bool checkCellValue = widget.stateManager._checkCellValue;
 
-    String changedCellValue;
+    dynamic changedCellValue;
 
     if (checkCellValue) {
       // 키보드로 셀 이동을 빠르게 할 때 이 부분에서 느려진다.
@@ -272,7 +272,9 @@ class _CellWidgetState extends State<CellWidget>
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
       return Text(
-        _cellValue,
+        widget.column.type.name.isNumber
+            ? widget.column.type.numberFormat(_cellValue)
+            : _cellValue.toString(),
         overflow: TextOverflow.ellipsis,
       );
     }
@@ -285,6 +287,11 @@ class _CellWidgetState extends State<CellWidget>
           column: widget.column,
         );
       case _PlutoColumnTypeName.Number:
+        return NumberCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+          column: widget.column,
+        );
       case _PlutoColumnTypeName.Text:
       default:
         return TextCellWidget(
@@ -436,5 +443,17 @@ class _BackgroundColorWidget extends StatelessWidget {
       decoration: _boxDecoration(),
       child: child,
     );
+  }
+}
+
+enum _CellEditingStatus {
+  INIT,
+  CHANGED,
+  UPDATED,
+}
+
+extension _CellEditingStatusExtension on _CellEditingStatus {
+  bool get isChanged {
+    return _CellEditingStatus.CHANGED == this;
   }
 }

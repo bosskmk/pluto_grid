@@ -14,4 +14,6 @@ class PlutoRow {
 
   /// Row key
   Key _key;
+
+  Key get key => _key;
 }

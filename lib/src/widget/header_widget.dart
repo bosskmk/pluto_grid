@@ -90,17 +90,17 @@ class _HeaderWidgetState extends State<HeaderWidget> {
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
         break;
       case MenuItem.AutoSize:
-        final maxValue =
+        final String maxValue =
             widget.stateManager.rows.fold('', (previousValue, element) {
           final value = element.cells.entries
               .firstWhere((element) => element.key == widget.column.field)
               .value
               .value;
 
-          if (previousValue.length < value.length) {
-            return value;
+          if (previousValue.toString().length < value.toString().length) {
+            return value.toString();
           }
-          return previousValue;
+          return previousValue.toString();
         });
 
         // 가상으로 렌더링 후 사이즈 가져오기

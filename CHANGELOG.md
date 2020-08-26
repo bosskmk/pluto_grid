@@ -1,3 +1,7 @@
+## [0.1.1] - 2020. 8. 26
+
+* Column type : Add number type cell.
+
 ## [0.1.0] - 2020. 8. 26
 
 * Column fixation : Columns can be fixed to the left or right of the grid.

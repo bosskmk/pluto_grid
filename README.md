@@ -1,8 +1,8 @@
-## PlutoGrid for flutter - v0.1.0
+## PlutoGrid for flutter - v0.1.1
 
-PlutoGrid, a data grid, is being developed with the goal of running on all platforms supported by Flutter.
+PlutoGrid is datagrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
 
-> Currently, under development, there are plans to distribute to pub.dev.
+> It is not, yet a step to use in production.
 
 ### Features  
 * Column fixation : Columns can be fixed to the left or right of the grid.
@@ -10,6 +10,7 @@ PlutoGrid, a data grid, is being developed with the goal of running on all platf
 * Column sort : Sort the list by clicking on the column heading.
 * Column width : Change the column width by dragging the icon to the right of the column title.
 * Column action : Click the icon to the right of the column title, you can control the column with the column action menu.
+* Column type : Text, Number, Select.
 * Multi selection : By long tapping or clicking and moving.
 * Copy & paste : Ctrl(macos : Meta) + C or V.
 * Select Row Popup : Same as the grid, a selection popup that can be used when selecting an item from a list.
@@ -18,7 +19,7 @@ PlutoGrid, a data grid, is being developed with the goal of running on all platf
 ### Demo
 [Demo Web](https://bosskmk.github.io/build/web/index.html)
 
-### Preview
+### Screenshots
 
 ![PlutoGrid Image](https://bosskmk.github.io/images/pluto_grid_img1.jpg)
 
@@ -53,7 +54,7 @@ List<PlutoColumn> columns = [
   PlutoColumn(
     title: 'rightFixedColumn',
     field: 'column5',
-    type: PlutoColumnType.text(),
+    type: PlutoColumnType.number(),
     fixed: PlutoColumnFixed.Right,
   ),
 ];
@@ -64,7 +65,7 @@ List<PlutoRow> rows = [
       'column1': PlutoCell(value: 'column1 value'),
       'column3': PlutoCell(value: 'column3 value'),
       'column4': PlutoCell(value: 'One'),
-      'column5': PlutoCell(value: 'column5 value'),
+      'column5': PlutoCell(value: 1234),
     }, 
   ),
   PlutoRow(
@@ -73,7 +74,7 @@ List<PlutoRow> rows = [
       'column2': PlutoCell(value: 'column2 value'),
       'column3': PlutoCell(value: 'column3 value'),
       'column4': PlutoCell(value: 'Two'),
-      'column5': PlutoCell(value: 'column5 value'),
+      'column5': PlutoCell(value: 12345),
     }, 
   ),
   PlutoRow(
@@ -82,7 +83,7 @@ List<PlutoRow> rows = [
       'column2': PlutoCell(value: 'column2 value'),
       'column3': PlutoCell(value: 'column3 value'),
       'column4': PlutoCell(value: 'Three'),
-      'column5': PlutoCell(value: 'column5 value'),
+      'column5': PlutoCell(value: 123456),
     }, 
   ),
 ];
@@ -104,6 +105,9 @@ Create a grid with the data created above.
           onChanged: (PlutoOnChangedEvent event) {
             print(event);
           },
+          onLoaded: (PlutoOnLoadedEvent event) {
+            print(event);
+          }
         ),
       ),
     );
@@ -112,7 +116,7 @@ Create a grid with the data created above.
 
 ### Coming soon
 
-* Column types (Number, Date, DateTime...)
+* Column types (Date, DateTime...)
 * Column filtering
 * Row selection
 * Multi column sorting

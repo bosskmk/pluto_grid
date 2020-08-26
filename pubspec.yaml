@@ -1,6 +1,6 @@
 name: pluto_grid
-description: PlutoGrid is data grid for flutter.
-version: 0.1.0
+description: PlutoGrid is datagrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
+version: 0.1.1
 homepage: https://bosskmk.github.io
 
 environment:
@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.16.1
   rxdart: ^0.24.1
   linked_scroll_controller: ^0.1.2
 

@@ -30,6 +30,8 @@ class PlutoColumn {
 
   /// Column key
   Key _key;
+
+  Key get key => _key;
 }
 
 enum PlutoColumnFixed {
@@ -99,6 +101,9 @@ class PlutoColumnType {
   /// 숫자 컬럼으로 설정 합니다.
   PlutoColumnType.number({
     this.readOnly = false,
+    this.format = "#,###",
+    this.negative = true,
+    this.applyFormatOnInit = true,
   }) : this.name = _PlutoColumnTypeName.Number;
 
   /// 선택 목록을 제공하여 선택 컬럼으로 설정 합니다.
@@ -113,8 +118,28 @@ class PlutoColumnType {
 
   bool readOnly;
 
+  String format;
+
+  bool negative;
+
+  bool applyFormatOnInit;
+
   /// Select 컬럼인 경우 선택 할 목록 입니다.
   List<dynamic> selectItems;
+
+  String numberFormat(value) {
+    final f = intl.NumberFormat(format);
+    double num =
+        double.tryParse(value.toString().replaceAll(f.symbols.GROUP_SEP, '')) ??
+            0;
+    return f.format(num);
+  }
+
+  int decimalRange() {
+    final int dotIndex = format.indexOf('.');
+
+    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  }
 }
 
 enum _PlutoColumnTypeName {
@@ -128,9 +153,9 @@ extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
 //    return this == _PlutoColumnTypeName.Text;
 //  }
 //
-//  bool get isNumber {
-//    return this == _PlutoColumnTypeName.Number;
-//  }
+  bool get isNumber {
+    return this == _PlutoColumnTypeName.Number;
+  }
 
   bool get isSelect {
     return this == _PlutoColumnTypeName.Select;

@@ -26,7 +26,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
 
   @override
   void initState() {
-    _textController.text = widget.cell.value;
+    _textController.text = widget.cell.value.toString();
 
     _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
 
@@ -101,11 +101,11 @@ class _SelectCellWidgetState extends State<SelectCellWidget> {
     return false;
   }
 
-  void _handleSelected(String value) {
+  void _handleSelected(dynamic value) {
     widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
     try {
-      _textController.text = value;
+      _textController.text = value.toString();
     } catch (e) {
       /**
        * Popup 이 열릴 때 TextField 가 닫히면서

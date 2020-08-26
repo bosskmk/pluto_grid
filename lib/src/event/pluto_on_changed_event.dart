@@ -7,8 +7,8 @@ class PlutoOnChangedEvent {
   final PlutoColumn column;
   final int rowIdx;
   final PlutoRow row;
-  final String value;
-  final String oldValue;
+  final dynamic value;
+  final dynamic oldValue;
 
   PlutoOnChangedEvent({
     this.columnIdx,

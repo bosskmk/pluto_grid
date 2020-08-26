@@ -9,4 +9,6 @@ class PlutoCell {
   }) : this._key = UniqueKey();
 
   Key _key;
+
+  Key get key => _key;
 }

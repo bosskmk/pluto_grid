@@ -79,7 +79,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initProperties() {
-    applySortIdxIntoRows();
+    applyColumnRowOnInit();
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
@@ -174,13 +174,35 @@ class _PlutoGridState extends State<PlutoGrid> {
     });
   }
 
-  void applySortIdxIntoRows() {
+  void applyColumnRowOnInit() {
+    List<PlutoColumn> applyFormatOnInit = widget.columns
+        .where((element) =>
+            element.type.name.isNumber && element.type.applyFormatOnInit)
+        .toList(growable: false);
+
+    final bool hasApplyFormatOnInit = applyFormatOnInit.length > 0;
+
+    final bool hasSortIdx =
+        widget.rows.length > 0 && widget.rows.first.sortIdx != null;
+
+    if (hasApplyFormatOnInit == false && hasSortIdx == true) {
+      return;
+    }
+
     // 컬럼 정렬 시 기본 정렬을 위한 값
-    for (var i = 0; i < widget.rows.length; i += 1) {
-      if (widget.rows[i].sortIdx != null) {
-        break;
+    for (var rowIdx = 0; rowIdx < widget.rows.length; rowIdx += 1) {
+      if (hasApplyFormatOnInit) {
+        applyFormatOnInit.forEach((element) {
+          widget.rows[rowIdx].cells[element.field].value = num.parse(element
+              .type
+              .numberFormat(widget.rows[rowIdx].cells[element.field].value)
+              .replaceAll(',', ''));
+        });
       }
-      widget.rows[i].sortIdx = i;
+
+      if (hasSortIdx == false) {
+        widget.rows[rowIdx].sortIdx = rowIdx;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 part of '../../../pluto_grid.dart';
 
-class TextCellWidget extends StatefulWidget {
+class TextCellWidget extends StatefulWidget implements _TextBaseMixinImpl {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -15,87 +15,16 @@ class TextCellWidget extends StatefulWidget {
   _TextCellWidgetState createState() => _TextCellWidgetState();
 }
 
-class _TextCellWidgetState extends State<TextCellWidget> {
-  final _textController = TextEditingController();
-  final FocusNode _cellFocus = FocusNode();
-
-  _CellEditingStatus _cellEditingStatus;
-
+class _TextCellWidgetState extends State<TextCellWidget>
+    with _TextBaseMixin<TextCellWidget> {
   @override
-  void dispose() {
-    _textController.dispose();
-    _cellFocus.dispose();
-
-    /**
-     * 텍스트 입력 상태에서 셀 이동을 하는 경우 변경 된 값을 저장.
-     * 엔터를 입력하지 않으면 onEditingComplete 가 호출 되지 않아 값이 저장 되지 않음.
-     */
-    if (_cellEditingStatus.isChanged) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _changeValue();
-      });
-    }
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _textController.text = widget.cell.value;
-    _cellEditingStatus = _CellEditingStatus.INIT;
-
-    super.initState();
-  }
-
-  void _selection() {
-    _textController.selection = TextSelection(
-      baseOffset: 0,
-      extentOffset: _textController.value.text.length,
-    );
-  }
-
-  void _changeValue() {
-    widget.stateManager
-        .changeCellValue(widget.cell._key, _textController.text);
-  }
 
   @override
   Widget build(BuildContext context) {
     _cellFocus.requestFocus();
 
-    return TextField(
-      focusNode: _cellFocus,
-      controller: _textController,
-      readOnly: widget.column.type.readOnly,
-      onChanged: (String value) {
-        _cellEditingStatus = _CellEditingStatus.CHANGED;
-      },
-      onEditingComplete: () {
-        _cellEditingStatus = _CellEditingStatus.UPDATED;
-        _cellFocus.unfocus();
-        widget.stateManager.gridFocusNode.requestFocus();
-        _changeValue();
-      },
-      onTap: () => _selection(),
-      style: PlutoDefaultSettings.cellTextStyle,
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.all(0),
-        isDense: true,
-      ),
-      maxLines: 1,
+    return _buildTextField(
+      keyboardType: TextInputType.text,
     );
-  }
-}
-
-enum _CellEditingStatus {
-  INIT,
-  CHANGED,
-  UPDATED,
-}
-
-extension _CellEditingStatusExtension on _CellEditingStatus {
-  bool get isChanged {
-    return _CellEditingStatus.CHANGED == this;
   }
 }

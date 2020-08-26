@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,7 +49,11 @@ part './src/ui/right_fixed_rows.dart';
 
 part './src/widget/cell_widget.dart';
 
+part './src/widget/editable_cell/number_cell_widget.dart';
+
 part './src/widget/editable_cell/select_cell_widget.dart';
+
+part './src/widget/editable_cell/text_base_mixin.dart';
 
 part './src/widget/editable_cell/text_cell_widget.dart';
 
