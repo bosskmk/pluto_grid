@@ -19,6 +19,9 @@ PlutoGrid is datagrid for flutter. It is developed with Windows, Web first. Ther
 ### Demo
 [Demo Web](https://bosskmk.github.io/build/web/index.html)
 
+### Installation
+[pub.dev](https://pub.dev/packages/pluto_grid)
+
 ### Screenshots
 
 ![PlutoGrid Image](https://bosskmk.github.io/images/pluto_grid_img1.jpg)

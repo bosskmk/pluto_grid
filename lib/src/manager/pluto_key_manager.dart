@@ -36,23 +36,13 @@ extension KeyManagerEventExtention on KeyManagerEvent {
   bool get isCharacter => this.event.logicalKey.keyLabel != null;
 
   bool get isCtrlC {
-    if (!kIsWeb && Platform.isMacOS) {
-      return this.event.isMetaPressed &&
-          this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
-    } else {
-      return this.event.isControlPressed &&
-          this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
-    }
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
   }
 
   bool get isCtrlV {
-    if (!kIsWeb && Platform.isMacOS) {
-      return this.event.isMetaPressed &&
-          this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
-    } else {
-      return this.event.isControlPressed &&
-          this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
-    }
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
   }
 }
 
