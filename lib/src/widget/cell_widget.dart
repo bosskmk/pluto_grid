@@ -331,12 +331,12 @@ class _CellWidgetState extends State<CellWidget>
         }
       },
       onLongPressStart: (LongPressStartDetails details) {
-        if (_isCurrentCell && _isEditing != true) {
+        if (_isCurrentCell) {
           widget.stateManager.setSelecting(true);
         }
       },
       onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
-        if (_isCurrentCell && _isEditing != true) {
+        if (_isCurrentCell) {
           _selectionSubject.add(() {
             widget.stateManager
                 .setCurrentSelectingPositionWithOffset(details.globalPosition);
@@ -360,7 +360,7 @@ class _CellWidgetState extends State<CellWidget>
         }
       },
       onLongPressEnd: (LongPressEndDetails details) {
-        if (_isCurrentCell && _isEditing != true) {
+        if (_isCurrentCell) {
           widget.stateManager.setSelecting(false);
         }
       },

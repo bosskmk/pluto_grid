@@ -1,3 +1,8 @@
+## [0.1.3] - 
+
+* Multi-selection is canceled when clicking the current cell in the multi-selection state.
+* Even when the cell is in the modified state, long tab to enter the multi-select mode.
+
 ## [0.1.2] - 2020. 8. 27
 
 * Fix bug : Error not working properly according to fixed columns when selecting multiple cells.

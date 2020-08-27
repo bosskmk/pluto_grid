@@ -387,6 +387,8 @@ class PlutoStateManager extends ChangeNotifier {
 
     _isEditing = flag;
 
+    _currentSelectingPosition = null;
+
     if (notify) {
       notifyListeners();
     }
@@ -408,6 +410,10 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     _isSelecting = flag;
+
+    if (_isEditing == true) {
+      setEditing(false, notify: false);
+    }
 
     notifyListeners();
 
