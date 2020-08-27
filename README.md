@@ -17,7 +17,7 @@ PlutoGrid is a dataGrid for flutter. It is developed with Windows, Web first. Th
 * Keyboard support : Arrow keys, Enter(Shift + Enter), Tab(Shift +Tab), Esc...
 
 ### Demo
-[Demo Web](https://bosskmk.github.io/build/web/index.html)
+[Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
 
 ### Installation
 [pub.dev](https://pub.dev/packages/pluto_grid)
