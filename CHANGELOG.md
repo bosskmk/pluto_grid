@@ -1,3 +1,8 @@
+## [0.1.2] - 2020. 8. 27
+
+* Fix bug : Error not working properly according to fixed columns when selecting multiple cells.
+* Multi selection with KeyBoard : Multi selection with Shift and arrow keys.
+
 ## [0.1.1] - 2020. 8. 26
 
 * Column type : Add number type cell.

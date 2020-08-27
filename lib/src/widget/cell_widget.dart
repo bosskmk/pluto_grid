@@ -184,10 +184,10 @@ class _CellWidgetState extends State<CellWidget>
 
     int columnIdx;
 
-    final _columnIndexes = widget.stateManager.columnIndexesByShowFixed();
+    final columnIndexes = widget.stateManager.columnIndexesByShowFixed();
 
-    for (var i = 0; i < _columnIndexes.length; i += 1) {
-      if (widget.stateManager.columns[_columnIndexes[i]].field ==
+    for (var i = 0; i < columnIndexes.length; i += 1) {
+      if (widget.stateManager.columns[columnIndexes[i]].field ==
           widget.column.field) {
         columnIdx = i;
         break;
@@ -311,12 +311,7 @@ class _CellWidgetState extends State<CellWidget>
       onTapDown: (TapDownDetails details) {
         if (widget.stateManager.keyPressed.shift &&
             widget.stateManager.currentCell != null) {
-          final int columnIdx = widget.stateManager.columns
-              .asMap()
-              .entries
-              .firstWhere(
-                  (element) => element.value.field == widget.column.field)
-              .key;
+          final int columnIdx = widget.stateManager.columnIndex(widget.column);
 
           widget.stateManager.setCurrentSelectingPosition(
               columnIdx: columnIdx, rowIdx: widget.rowIdx);

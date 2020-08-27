@@ -1,51 +1,5 @@
 part of '../../pluto_grid.dart';
 
-class KeyManagerEvent {
-  FocusNode focusNode;
-  RawKeyEvent event;
-
-  KeyManagerEvent({
-    this.focusNode,
-    this.event,
-  });
-}
-
-extension KeyManagerEventExtention on KeyManagerEvent {
-  bool get isLeft =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
-
-  bool get isRight =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
-
-  bool get isUp =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
-
-  bool get isDown =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
-
-  bool get isEsc =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
-
-  bool get isEnter =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
-
-  bool get isTab => this.event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
-
-  bool get isF2 => this.event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
-
-  bool get isCharacter => this.event.logicalKey.keyLabel != null;
-
-  bool get isCtrlC {
-    return (this.event.isMetaPressed || this.event.isControlPressed) &&
-        this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
-  }
-
-  bool get isCtrlV {
-    return (this.event.isMetaPressed || this.event.isControlPressed) &&
-        this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
-  }
-}
-
 class PlutoKeyManager {
   PlutoStateManager stateManager;
 
@@ -72,20 +26,14 @@ class PlutoKeyManager {
     }
 
     if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
-      if (keyManagerEvent.isLeft) {
-        stateManager.moveCurrentCell(MoveDirection.Left);
-      } else if (keyManagerEvent.isRight) {
-        stateManager.moveCurrentCell(MoveDirection.Right);
-      } else if (keyManagerEvent.isUp) {
-        stateManager.moveCurrentCell(MoveDirection.Up);
-      } else if (keyManagerEvent.isDown) {
-        stateManager.moveCurrentCell(MoveDirection.Down);
-      } else if (keyManagerEvent.isEsc) {
-        _handleEsc(keyManagerEvent);
+      if (keyManagerEvent.isMoving) {
+        _handleMoving(keyManagerEvent);
       } else if (keyManagerEvent.isEnter) {
         _handleEnter(keyManagerEvent);
       } else if (keyManagerEvent.isTab) {
         _handleTab(keyManagerEvent);
+      } else if (keyManagerEvent.isEsc) {
+        _handleEsc(keyManagerEvent);
       } else if (keyManagerEvent.isF2) {
         if (!stateManager.isEditing) {
           stateManager.setEditing(true);
@@ -99,6 +47,28 @@ class PlutoKeyManager {
           _handleCharacter(keyManagerEvent);
         }
       }
+    }
+  }
+
+  void _handleMoving(KeyManagerEvent keyManagerEvent) {
+    MoveDirection moveDirection;
+
+    if (keyManagerEvent.isLeft) {
+      moveDirection = MoveDirection.Left;
+    } else if (keyManagerEvent.isRight) {
+      moveDirection = MoveDirection.Right;
+    } else if (keyManagerEvent.isUp) {
+      moveDirection = MoveDirection.Up;
+    } else if (keyManagerEvent.isDown) {
+      moveDirection = MoveDirection.Down;
+    } else {
+      return;
+    }
+
+    if (keyManagerEvent.event.isShiftPressed) {
+      stateManager.moveSelectingCell(moveDirection);
+    } else {
+      stateManager.moveCurrentCell(moveDirection);
     }
   }
 
@@ -194,5 +164,57 @@ class PlutoKeyManager {
       stateManager.changeCellValue(stateManager.currentCell._key,
           keyManagerEvent.event.logicalKey.keyLabel);
     }
+  }
+}
+
+class KeyManagerEvent {
+  FocusNode focusNode;
+  RawKeyEvent event;
+
+  KeyManagerEvent({
+    this.focusNode,
+    this.event,
+  });
+}
+
+extension KeyManagerEventExtention on KeyManagerEvent {
+  bool get isMoving => this.isHorizontal || this.isVertical;
+
+  bool get isHorizontal => this.isLeft || this.isRight;
+
+  bool get isVertical => this.isUp || this.isDown;
+
+  bool get isLeft =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
+
+  bool get isRight =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
+
+  bool get isUp =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
+
+  bool get isDown =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
+
+  bool get isEsc =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
+
+  bool get isEnter =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
+
+  bool get isTab => this.event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
+
+  bool get isF2 => this.event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
+
+  bool get isCharacter => this.event.logicalKey.keyLabel != null;
+
+  bool get isCtrlC {
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+  }
+
+  bool get isCtrlV {
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
   }
 }

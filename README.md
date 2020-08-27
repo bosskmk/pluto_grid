@@ -1,8 +1,8 @@
-## PlutoGrid for flutter - v0.1.1
+## PlutoGrid for flutter - v0.1.2
 
-PlutoGrid is datagrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
+PlutoGrid is a dataGrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
 
-> It is not, yet a step to use in production.
+> It is still in the development stage. Not recommended for use in production.
 
 ### Features  
 * Column fixation : Columns can be fixed to the left or right of the grid.
@@ -11,7 +11,7 @@ PlutoGrid is datagrid for flutter. It is developed with Windows, Web first. Ther
 * Column width : Change the column width by dragging the icon to the right of the column title.
 * Column action : Click the icon to the right of the column title, you can control the column with the column action menu.
 * Column type : Text, Number, Select.
-* Multi selection : By long tapping or clicking and moving.
+* Multi selection : By long tapping or clicking and moving. (or Shift + ArrowKey)
 * Copy & paste : Ctrl(macos : Meta) + C or V.
 * Select Row Popup : Same as the grid, a selection popup that can be used when selecting an item from a list.
 * Keyboard support : Arrow keys, Enter(Shift + Enter), Tab(Shift +Tab), Esc...

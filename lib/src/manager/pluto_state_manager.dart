@@ -270,13 +270,12 @@ class PlutoStateManager extends ChangeNotifier {
   bool get isSelecting => _isSelecting;
   bool _isSelecting = false;
 
-  PlutoCellPosition _currentSelectingPosition;
-
   /// [currentSelectingPosition]
   ///
   /// Current position of multi-select cell.
   /// Calculate the currently selected cell and its multi-selection range.
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
+  PlutoCellPosition _currentSelectingPosition;
 
   /// [currentSelectingText]
   ///
@@ -297,13 +296,13 @@ class PlutoStateManager extends ChangeNotifier {
     int rowEndIdx =
         max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
-    final _columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFixed();
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       List<String> columnText = [];
 
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = _columns[_columnIndexes[j]].field;
+        final String field = _columns[columnIndexes[j]].field;
 
         columnText.add(_rows[i].cells[field].value.toString());
       }
@@ -464,10 +463,10 @@ class PlutoStateManager extends ChangeNotifier {
     currentWidth += PlutoDefaultSettings.gridPadding;
     currentWidth += PlutoDefaultSettings.gridBorderWidth;
 
-    final _columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFixed();
 
-    for (var i = 0; i < _columnIndexes.length; i += 1) {
-      currentWidth += _columns[_columnIndexes[i]].width;
+    for (var i = 0; i < columnIndexes.length; i += 1) {
+      currentWidth += _columns[columnIndexes[i]].width;
 
       if (currentWidth > offset.dx + _scroll.horizontal.offset) {
         columnIdx = i;
@@ -595,6 +594,22 @@ class PlutoStateManager extends ChangeNotifier {
       }
     }
     throw Exception('CellKey was not found in the list.');
+  }
+
+  /// Index of [column] in [columns]
+  ///
+  /// Depending on the state of the fixed column, the column order index
+  /// must be referenced with the columnIndexesByShowFixed function.
+  int columnIndex(PlutoColumn column) {
+    final columnIndexes = columnIndexesByShowFixed();
+
+    for (var i = 0; i < columnIndexes.length; i += 1) {
+      if (_columns[columnIndexes[i]].field == column.field) {
+        return i;
+      }
+    }
+
+    return null;
   }
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
@@ -758,6 +773,29 @@ class PlutoStateManager extends ChangeNotifier {
     return;
   }
 
+  void moveSelectingCell(MoveDirection direction) {
+    final PlutoCellPosition cellPosition = currentSelectingPosition ??
+        currentCellPosition;
+
+    if (canNotMoveCell(cellPosition, direction)) {
+      _checkCellValue = true;
+      return;
+    }
+
+    setCurrentSelectingPosition(
+      columnIdx: cellPosition.columnIdx +
+          (direction.horizontal ? direction.offset : 0),
+      rowIdx: cellPosition.rowIdx +
+          (direction.vertical ? direction.offset : 0),
+    );
+
+    if (direction.horizontal) {
+      moveScrollByColumn(direction, cellPosition.columnIdx);
+    } else {
+      moveScrollByRow(direction, cellPosition.rowIdx);
+    }
+  }
+
   /// [direction] Scroll direction
   /// [offset] Scroll position
   void scrollByDirection(MoveDirection direction, double offset) {
@@ -855,12 +893,11 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Change column position.
   void moveColumn(Key columnKey, double offset) {
-    final List<int> _columnIndexes =
-    _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+    final List<int> columnIndexes = columnIndexesByShowFixed();
 
     Function findColumnIndex = (int i) {
-      if (_columns[_columnIndexes[i]]._key == columnKey) {
-        return _columnIndexes[i];
+      if (_columns[columnIndexes[i]]._key == columnKey) {
+        return columnIndexes[i];
       }
       return null;
     };
@@ -888,11 +925,11 @@ class PlutoStateManager extends ChangeNotifier {
         if (i == startIndexToMove) {
           if (currentOffset < offset &&
               offset < currentOffset +
-                  _columns[_columnIndexes[startIndexToMove]].width) {
-            return _columnIndexes[startIndexToMove];
+                  _columns[columnIndexes[startIndexToMove]].width) {
+            return columnIndexes[startIndexToMove];
           }
 
-          currentOffset += _columns[_columnIndexes[startIndexToMove]].width;
+          currentOffset += _columns[columnIndexes[startIndexToMove]].width;
           ++startIndexToMove;
         }
 
@@ -903,7 +940,7 @@ class PlutoStateManager extends ChangeNotifier {
     int columnIndex;
     int indexToMove;
 
-    for (var i = 0; i < _columnIndexes.length; i += 1) {
+    for (var i = 0; i < columnIndexes.length; i += 1) {
       if (columnIndex == null) {
         columnIndex = findColumnIndex(i);
       }
@@ -991,7 +1028,7 @@ class PlutoStateManager extends ChangeNotifier {
           max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx) + 1;
     }
 
-    final _columnIndexes = columnIndexesByShowFixed();
+    final List<int> columnIndexes = columnIndexesByShowFixed();
 
     int textRowIdx = 0;
 
@@ -1009,7 +1046,7 @@ class PlutoStateManager extends ChangeNotifier {
       for (var columnIdx = columnStartIdx;
       columnIdx < columnEndIdx;
       columnIdx += 1) {
-        if (columnIdx >= _columnIndexes.length) {
+        if (columnIdx >= columnIndexes.length) {
           break;
         }
 
@@ -1017,13 +1054,13 @@ class PlutoStateManager extends ChangeNotifier {
           textColumnIdx = 0;
         }
 
-        final String field = _columns[_columnIndexes[columnIdx]].field;
-
         final currentColumn = _columns[columnIndexes[columnIdx]];
+
+        final currentRow = _rows[rowIdx].cells[currentColumn.field];
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
-        final dynamic oldValue = _rows[rowIdx].cells[field].value;
+        final dynamic oldValue = currentRow.value;
 
         newValue = filteredCellValue(
           column: currentColumn,
@@ -1040,11 +1077,11 @@ class PlutoStateManager extends ChangeNotifier {
           continue;
         }
 
-        _rows[rowIdx].cells[field].value = newValue =
+        currentRow.value = newValue =
             castValueByColumnType(newValue, currentColumn);
 
         _onChanged(PlutoOnChangedEvent(
-          columnIdx: columnIdx,
+          columnIdx: columnIndexes[columnIdx],
           column: currentColumn,
           rowIdx: rowIdx,
           row: _rows[rowIdx],
