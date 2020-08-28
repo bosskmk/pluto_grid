@@ -196,7 +196,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    // 컬럼 정렬 시 기본 정렬을 위한 값
+    // Value for basic sorting when sorting columns
     for (var rowIdx = 0; rowIdx < widget.rows.length; rowIdx += 1) {
       if (hasApplyFormatOnInit) {
         applyFormatOnInit.forEach((element) {
@@ -358,29 +358,30 @@ extension PlutoModeExtension on PlutoMode {
 }
 
 class PlutoDefaultSettings {
-  /// 고정 컬럼이 있는 경우 body 의 최소 넓이 (값 보다 작으면 fixed 컬럼이 풀림)
+  /// If there is a fixed column, the minimum width of the body
+  /// (if it is less than the value, the fixed column is released)
   static const double bodyMinWidth = 200.0;
 
-  /// 기본 행 높이
+  /// Default row height
   static const double rowHeight = 45.0;
 
-  /// 기본 컬럼 넓이
+  /// Default column width
   static const double columnWidth = 200.0;
 
-  /// 최소 컬럼 넓이
+  /// Column width
   static const double minColumnWidth = 80.0;
 
-  /// Fixed 컬럼 구분 선(ShadowLine) 크기
+  /// Fixed column division line (ShadowLine) size
   static const double shadowLineSize = 3.0;
 
-  /// Fixed 컬럼 구분 선 넓이 합계
+  /// Sum of fixed column division line width
   static const double totalShadowLineWidth =
       PlutoDefaultSettings.shadowLineSize * 2;
 
-  /// 멀티 선택 시 가장자리에서 해당 값 만큼 가까운 경우 스크롤
+  /// Scroll when multi-selection is as close as that value from the edge
   static const double offsetScrollingFromEdge = 80.0;
 
-  /// 멀티 선택 시 가장자리에서 한번에 스크롤 되는 크기
+  /// Size that scrolls from the edge at once when selecting multiple
   static const double offsetScrollingFromEdgeAtOnce = 200.0;
 
   /// Grid - padding
@@ -392,7 +393,7 @@ class PlutoDefaultSettings {
   static const double gridInnerSpacing =
       (gridPadding * 2) + (gridBorderWidth * 2);
 
-  /// Grid - border color : 그리드 전체 border
+  /// Grid - grid border color
   static const Color gridBorderColor = Color.fromRGBO(161, 165, 174, 100);
 
   /// Header - text style
@@ -406,7 +407,7 @@ class PlutoDefaultSettings {
   /// Row - border width
   static const double rowBorderWidth = 1.0;
 
-  /// Row - box color : 선택 상태의 Row
+  /// Row - box color : Row in selected state
   static const Color currentRowColor = Color.fromRGBO(220, 245, 255, 100);
 
   /// Row - border color
@@ -415,7 +416,7 @@ class PlutoDefaultSettings {
   /// Cell - padding
   static const double cellPadding = 10;
 
-  /// Cell - border color : 선택 상태의 셀
+  /// Cell - border color : Cell in selected state
   static const Color currentCellBorderColor = Colors.lightBlue;
 
   /// Cell - fontSize

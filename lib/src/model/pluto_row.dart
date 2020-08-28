@@ -1,10 +1,11 @@
 part of '../../pluto_grid.dart';
 
 class PlutoRow {
-  /// 행의 셀 리스트
+  /// List of row
   Map<String, PlutoCell> cells;
 
-  /// 컬럼 정렬 시 기본 정렬 순서를 유지 하기 위한 값
+  /// Value to maintain the default sort order when sorting columns.
+  /// If there is no value, it is automatically set when loading the grid.
   int sortIdx;
 
   PlutoRow({

@@ -1284,15 +1284,15 @@ class PlutoStyle {
 }
 
 class PlutoLayout {
-  /// 화면 최대 넓이
+  /// Screen width
   double maxWidth;
 
-  /// 화면 최대 높이
+  /// Screen height
   double maxHeight;
 
-  /// 화면 사이즈에 따른 고정 컬럼 적용 여부
-  /// true : 고정 컬럼이 있는 경우 고정 컬럼이 노출
-  /// false : 고정 컬럼이 있지만 화면이 좁은 경우 일반 컬럼으로 노출
+  /// Whether to apply a fixed column according to the screen size.
+  /// true : If there is a fixed column, the fixed column is exposed.
+  /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
   bool showFixedColumn;
 
   PlutoLayout({

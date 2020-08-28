@@ -1,22 +1,22 @@
 part of '../../pluto_grid.dart';
 
 class PlutoColumn {
-  /// 화면에 표시 할 제목 입니다.
+  /// A title to be displayed on the screen.
   String title;
 
-  /// 컬럼에 연결 될 row 의 Field 이름을 지정 합니다.
+  /// Specifies the field name of the row to be connected to the column.
   String field;
 
-  /// 컬럼의 넓이를 고정 합니다.
+  /// Set the width of the column.
   double width;
 
-  /// 컬럼을 좌,우측으로 고정 입니다.
+  /// Fix the column to the left and right.
   PlutoColumnFixed fixed;
 
-  /// 컬럼 정렬을 설정 합니다.
+  /// Set column sorting.
   PlutoColumnSort sort;
 
-  /// 컬럼 종류를 설정 합니다.
+  /// Set the column type.
   PlutoColumnType type;
 
   PlutoColumn({
@@ -93,12 +93,20 @@ extension PlutoColumnSortExtension on PlutoColumnSort {
 }
 
 class PlutoColumnType {
-  /// 문자열 컬럼으로 설정 합니다.
+  /// Set as a string column.
   PlutoColumnType.text({
     this.readOnly = false,
   }) : this.name = _PlutoColumnTypeName.Text;
 
-  /// 숫자 컬럼으로 설정 합니다.
+  /// Set to numeric column.
+  ///
+  /// [format]
+  /// '#,###' (Comma every three digits)
+  /// '#,###.###' (Allow three decimal places)
+  ///
+  /// [negative] Allow negative numbers
+  ///
+  /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   PlutoColumnType.number({
     this.readOnly = false,
     this.format = '#,###',
@@ -106,13 +114,22 @@ class PlutoColumnType {
     this.applyFormatOnInit = true,
   }) : this.name = _PlutoColumnTypeName.Number;
 
-  /// 선택 목록을 제공하여 선택 컬럼으로 설정 합니다.
+  /// Provides a selection list and sets it as a selection column.
   PlutoColumnType.select(
     List<dynamic> items, {
     this.readOnly = false,
   })  : this.name = _PlutoColumnTypeName.Select,
         this.selectItems = items;
 
+  /// Set as a date column.
+  ///
+  /// [startDate] Range start date (If there is no value, Can select the date without limit)
+  ///
+  /// [endDate] Range end date
+  ///
+  /// [format] 'yyyy-MM-dd' (2020-01-01)
+  ///
+  /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   PlutoColumnType.datetime({
     this.startDate,
     this.endDate,
@@ -121,7 +138,7 @@ class PlutoColumnType {
     this.applyFormatOnInit = true,
   }) : this.name = _PlutoColumnTypeName.Datetime;
 
-  /// 컬럼 종류의 이름 입니다.
+  /// Name of the column type.
   _PlutoColumnTypeName name;
 
   bool readOnly;
@@ -136,7 +153,7 @@ class PlutoColumnType {
 
   DateTime endDate;
 
-  /// Select 컬럼인 경우 선택 할 목록 입니다.
+  /// In case of Select column, it is a list to select.
   List<dynamic> selectItems;
 
   String numberFormat(value) {

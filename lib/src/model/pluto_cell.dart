@@ -1,7 +1,7 @@
 part of '../../pluto_grid.dart';
 
 class PlutoCell {
-  /// 셀의 값
+  /// Value of cell
   dynamic value;
 
   PlutoCell({

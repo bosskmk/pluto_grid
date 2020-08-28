@@ -1,7 +1,8 @@
-## [0.1.3] - 
+## [0.1.3] - 2020. 8. 28
 
 * Multi-selection is canceled when clicking the current cell in the multi-selection state.
 * Even when the cell is in the modified state, long tab to enter the multi-select mode.
+* Added column type for date.(datetime will be soon)
 
 ## [0.1.2] - 2020. 8. 27
 

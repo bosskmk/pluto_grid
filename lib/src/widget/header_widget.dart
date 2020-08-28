@@ -63,19 +63,19 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         PopupMenuItem(
           value: MenuItem.FixedLeft,
           child: widget.column.fixed.isFixed == true
-              ? const Text('고정 해제')
-              : const Text('좌측 고정'),
+              ? const Text('Unfix')
+              : const Text('ToLeft'),
         ),
         if (widget.column.fixed.isFixed != true)
           PopupMenuItem(
             value: MenuItem.FixedRight,
             child: widget.column.fixed.isFixed == true
-                ? const Text('고정 해제')
-                : const Text('우측 고정'),
+                ? const Text('Unfix')
+                : const Text('ToRight'),
           ),
         PopupMenuItem(
           value: MenuItem.AutoSize,
-          child: const Text('자동 넓이'),
+          child: const Text('AutoSize'),
         ),
       ],
     );
