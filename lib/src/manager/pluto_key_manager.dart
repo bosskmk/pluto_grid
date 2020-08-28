@@ -119,6 +119,13 @@ class PlutoKeyManager {
   }
 
   void _handleEsc(KeyManagerEvent keyManagerEvent) {
+    if (stateManager.mode.isSelectRow) {
+      stateManager._onSelected(PlutoOnSelectedEvent(
+        row: null,
+      ));
+      return;
+    }
+
     if (stateManager.isEditing) {
       stateManager.setEditing(false);
     }

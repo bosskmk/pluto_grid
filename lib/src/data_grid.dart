@@ -141,6 +141,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     keyManager.init();
 
+    stateManager.setKeyManager(keyManager);
+
     // Dispose
     disposeList.add(() {
       keyManager.dispose();
@@ -165,7 +167,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (stateManager.currentCell == null) {
+      if (stateManager.currentCell == null && widget.rows.length > 0) {
         stateManager.setCurrentCell(
             widget.rows.first.cells.entries.first.value, 0);
       }
@@ -175,10 +177,15 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void applyColumnRowOnInit() {
-    List<PlutoColumn> applyFormatOnInit = widget.columns
-        .where((element) =>
-            element.type.name.isNumber && element.type.applyFormatOnInit)
-        .toList(growable: false);
+    List<PlutoColumn> applyFormatOnInit = widget.columns.where((element) {
+      if (element.type.name.isNumber && element.type.applyFormatOnInit) {
+        return true;
+      } else if (element.type.name.isDatetime &&
+          element.type.applyFormatOnInit) {
+        return true;
+      }
+      return false;
+    }).toList(growable: false);
 
     final bool hasApplyFormatOnInit = applyFormatOnInit.length > 0;
 
@@ -193,10 +200,16 @@ class _PlutoGridState extends State<PlutoGrid> {
     for (var rowIdx = 0; rowIdx < widget.rows.length; rowIdx += 1) {
       if (hasApplyFormatOnInit) {
         applyFormatOnInit.forEach((element) {
-          widget.rows[rowIdx].cells[element.field].value = num.parse(element
-              .type
-              .numberFormat(widget.rows[rowIdx].cells[element.field].value)
-              .replaceAll(',', ''));
+          if (element.type.name.isNumber) {
+            widget.rows[rowIdx].cells[element.field].value = num.parse(element
+                .type
+                .numberFormat(widget.rows[rowIdx].cells[element.field].value)
+                .replaceAll(',', ''));
+          } else if (element.type.name.isDatetime) {
+            widget.rows[rowIdx].cells[element.field].value =
+                intl.DateFormat(element.type.format).format(DateTime.parse(
+                    widget.rows[rowIdx].cells[element.field].value));
+          }
         });
       }
 
@@ -376,6 +389,9 @@ class PlutoDefaultSettings {
   /// Grid - border width
   static const double gridBorderWidth = 1.0;
 
+  static const double gridInnerSpacing =
+      (gridPadding * 2) + (gridBorderWidth * 2);
+
   /// Grid - border color : 그리드 전체 border
   static const Color gridBorderColor = Color.fromRGBO(161, 165, 174, 100);
 
@@ -402,9 +418,12 @@ class PlutoDefaultSettings {
   /// Cell - border color : 선택 상태의 셀
   static const Color currentCellBorderColor = Colors.lightBlue;
 
+  /// Cell - fontSize
+  static const double cellFontSize = 14;
+
   /// Cell - text style
   static const TextStyle cellTextStyle = TextStyle(
-    fontSize: 14,
+    fontSize: cellFontSize,
   );
 
   /// Cell - current editing cell color
@@ -412,5 +431,5 @@ class PlutoDefaultSettings {
 
   /// Cell - current read only cell color
   static const Color currentReadOnlyCellColor =
-      Color.fromRGBO(242, 242, 242, 100);
+      Color.fromRGBO(196, 199, 204, 100);
 }

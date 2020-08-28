@@ -26,27 +26,26 @@ class PlutoGridPopup {
   Future<void> open() async {
     PlutoRow selectedRow = await showDialog<PlutoRow>(
         context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: const Text('Select'),
-            children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Container(
-                  width: width ?? 500,
-                  height: height ?? 600,
+        builder: (BuildContext ctx) {
+          return Dialog(
+            child: LayoutBuilder(
+              builder: (ctx, size) {
+                return Container(
+                  width: (width ?? size.maxWidth) +
+                      PlutoDefaultSettings.gridInnerSpacing,
+                  height: height ?? size.maxHeight,
                   child: PlutoGrid.popup(
                     columns: columns,
                     rows: rows,
                     mode: mode,
                     onLoaded: onLoaded,
                     onSelectedRow: (PlutoOnSelectedEvent event) {
-                      Navigator.pop(context, event.row);
+                      Navigator.pop(ctx, event.row);
                     },
                   ),
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           );
         });
     if (onSelectedRow != null) {

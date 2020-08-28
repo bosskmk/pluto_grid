@@ -1,5 +1,6 @@
 library pluto_grid;
 
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
@@ -21,6 +22,8 @@ part './src/event/pluto_on_loaded_event.dart';
 part './src/event/pluto_on_selected_event.dart';
 
 part './src/helper/move_direction.dart';
+
+part './src/helper/datetime_helper.dart';
 
 part './src/helper/clipboard_transformation.dart';
 
@@ -48,7 +51,11 @@ part './src/ui/right_fixed_rows.dart';
 
 part './src/widget/cell_widget.dart';
 
+part './src/widget/editable_cell/datetime_cell_widget.dart';
+
 part './src/widget/editable_cell/number_cell_widget.dart';
+
+part './src/widget/editable_cell/popup_base_mixin.dart';
 
 part './src/widget/editable_cell/select_cell_widget.dart';
 

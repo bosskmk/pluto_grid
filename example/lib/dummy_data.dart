@@ -26,6 +26,8 @@ class DummyData {
           else if (i == 5)
             return PlutoColumnType.select(['One', 'Two', 'Three'],
                 readOnly: true);
+          else if (i == 6)
+            return PlutoColumnType.datetime();
           else
             return PlutoColumnType.text();
         }(i),
@@ -36,6 +38,8 @@ class DummyData {
         }(i),
       );
     }).toList();
+
+    int days = 0;
 
     dummyRows =
         List<int>.generate(rowLength, (index) => ++index).map((rowIndex) {
@@ -48,6 +52,8 @@ class DummyData {
               return faker.randomGenerator.decimal(scale: 1000000000);
             else if (element.field == '4' || element.field == '5')
               return 'One';
+            else if (element.field == '6')
+              return DateTime.now().add(Duration(days: ++days)).toString();
             else
               return faker.food.restaurant();
           }(element),

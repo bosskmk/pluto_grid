@@ -101,7 +101,7 @@ class PlutoColumnType {
   /// 숫자 컬럼으로 설정 합니다.
   PlutoColumnType.number({
     this.readOnly = false,
-    this.format = "#,###",
+    this.format = '#,###',
     this.negative = true,
     this.applyFormatOnInit = true,
   }) : this.name = _PlutoColumnTypeName.Number;
@@ -113,6 +113,14 @@ class PlutoColumnType {
   })  : this.name = _PlutoColumnTypeName.Select,
         this.selectItems = items;
 
+  PlutoColumnType.datetime({
+    this.startDate,
+    this.endDate,
+    this.readOnly = false,
+    this.format = 'yyyy-MM-dd',
+    this.applyFormatOnInit = true,
+  }) : this.name = _PlutoColumnTypeName.Datetime;
+
   /// 컬럼 종류의 이름 입니다.
   _PlutoColumnTypeName name;
 
@@ -123,6 +131,10 @@ class PlutoColumnType {
   bool negative;
 
   bool applyFormatOnInit;
+
+  DateTime startDate;
+
+  DateTime endDate;
 
   /// Select 컬럼인 경우 선택 할 목록 입니다.
   List<dynamic> selectItems;
@@ -146,6 +158,7 @@ enum _PlutoColumnTypeName {
   Text,
   Number,
   Select,
+  Datetime,
 }
 
 extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
@@ -159,5 +172,9 @@ extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
 
   bool get isSelect {
     return this == _PlutoColumnTypeName.Select;
+  }
+
+  bool get isDatetime {
+    return this == _PlutoColumnTypeName.Datetime;
   }
 }
