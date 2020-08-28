@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'dummy_data.dart';
+import 'dummy_data/development.dart';
+// import 'dummy_data/quick_start.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,6 @@ class MyApp extends StatelessWidget {
       title: 'PlutoGrid Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
     );
@@ -39,8 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoGrid(
-          columns: dummyData.dummyColumns, // or dummyData.dummyColumns,
-          rows: dummyData.dummyRows, // or dummyData.dummyRows,
+          columns: dummyData.columns,
+          rows: dummyData.rows,
           onChanged: (PlutoOnChangedEvent event) {
             print(event);
           },

@@ -2,13 +2,13 @@ import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DummyData {
-  List<PlutoColumn> dummyColumns;
-  List<PlutoRow> dummyRows;
+  List<PlutoColumn> columns;
+  List<PlutoRow> rows;
 
   DummyData(int columnLength, int rowLength) {
     var faker = new Faker();
 
-    dummyColumns = List<int>.generate(columnLength, (index) => index).map((i) {
+    columns = List<int>.generate(columnLength, (index) => index).map((i) {
       return PlutoColumn(
         title: faker.food.cuisine(),
         field: i.toString(),
@@ -41,11 +41,11 @@ class DummyData {
 
     int days = 0;
 
-    dummyRows =
+    rows =
         List<int>.generate(rowLength, (index) => ++index).map((rowIndex) {
       final cells = Map<String, PlutoCell>();
 
-      dummyColumns.forEach((element) {
+      columns.forEach((element) {
         cells[element.field] = PlutoCell(
           value: (element) {
             if (element.field == '0' || element.field == '1')
