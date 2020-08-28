@@ -782,13 +782,13 @@ class PlutoStateManager extends ChangeNotifier {
 
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {
-      // Select 타입의 컬럼은 편집 상태라도 좌우로 이동 가능
+      // Select type column can be moved left or right even in edit state
       if (currentColumn?.type?.name?.isSelect == true) {}
-      // Datetime 타입의 컬럼은 편집 상태라도 좌우로 이동 가능
+      // Datetime type column can be moved left or right even in edit state
       else if (currentColumn?.type?.name?.isDatetime == true) {}
-      // 수정 불가 컬럼은 편집 상태라도 좌우로 이동 가능
+      // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.type?.readOnly == true) {}
-      // 그 밖의 수정 상태에서 좌우 이동 불가능
+      // Unable to move left and right in other modified states
       else {
         _checkCellValue = true;
         return;
@@ -1055,7 +1055,7 @@ class PlutoStateManager extends ChangeNotifier {
     int rowEndIdx;
 
     if (_currentSelectingPosition == null) {
-      // 셀 선택이 없는 경우 : 현재 셀을 기준으로 순서대로 붙여 넣기
+      // No cell selection : Paste in order based on the current cell
       columnStartIdx = currentCellPosition.columnIdx;
 
       rowStartIdx = currentCellPosition.rowIdx;
@@ -1064,7 +1064,7 @@ class PlutoStateManager extends ChangeNotifier {
 
       rowEndIdx = currentCellPosition.rowIdx + textList.length;
     } else {
-      // 셀 선택이 있는 경우 : 선택 된 셀 범위에서 순서대로 붙여 넣기
+      // If there are selected cells : Paste in order from selected cell range
       columnStartIdx = min(
           currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
 

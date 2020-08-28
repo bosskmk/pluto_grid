@@ -24,8 +24,8 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
     _cellFocus.dispose();
 
     /**
-     * 텍스트 입력 상태에서 셀 이동을 하는 경우 변경 된 값을 저장.
-     * 엔터를 입력하지 않으면 onEditingComplete 가 호출 되지 않아 값이 저장 되지 않음.
+     * Saves the changed value when moving a cell while text is being input.
+     * if user do not press enter key, onEditingComplete is not called and the value is not saved.
      */
     if (_cellEditingStatus.isChanged) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

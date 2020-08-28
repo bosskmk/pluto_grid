@@ -111,16 +111,14 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       _textController.text = value.toString();
     } catch (e) {
       /**
-       * Popup 이 열릴 때 TextField 가 닫히면서
-       * _textController 가 dispose 되어
-       * Popup 에서 _handleSelected 를 호출 할 때
-       * _textController 에러.
+       * When the Popup is opened, the TextField is closed
+       * _textController is dispose
+       * When calling _handleSelected in Popup
+       * _textController error.
        *
-       * Popup 이 닫힐 때 TextField 가 닫히지 않고 유지되고 있으면 오류 없음.
-       *
-       * TODO : 위젯 구조를 변경...
+       * TODO : Change widget structure...
        */
-      developer.log('TODO', name: 'dropdown_cell', error: e.toString());
+      developer.log('TODO', name: 'popup_base_mixin', error: e.toString());
     }
   }
 

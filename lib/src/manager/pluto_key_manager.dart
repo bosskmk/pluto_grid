@@ -73,7 +73,7 @@ class PlutoKeyManager {
   }
 
   void _handleEnter(KeyManagerEvent keyManagerEvent) {
-    // SelectRow 모드인 경우 현재 Row 를 onSelected 콜백에 전달.
+    // In SelectRow mode, the current Row is passed to the onSelected callback.
     if (stateManager.mode.isSelectRow) {
       stateManager._onSelected(PlutoOnSelectedEvent(
         row: stateManager.currentRow,
@@ -81,10 +81,10 @@ class PlutoKeyManager {
       return;
     }
 
-    // 셀 수정 상태에서 엔터키 입력 시 아래 또는 위 셀로 이동.
+    // Moves to the lower or upper cell when pressing the Enter key while editing the cell.
     if (stateManager.isEditing) {
-      // 한글을 마지막으로 입력한 상태에서 포커스 변경 없이 키 이벤트 발생하면 두번 발생
-      // web 에서만 문제. 버그인거 같음. 고쳐지면 아래 코드 삭제.
+      // Occurs twice when a key event occurs without change of focus in the state of last inputting Korean
+      // Only problem on the web. Looks like a bug. If fixed, delete the code below.
       final lastChildContext = keyManagerEvent.focusNode.children.last.context;
 
       if (kIsWeb &&
@@ -93,7 +93,7 @@ class PlutoKeyManager {
           lastChildContext.widget is EditableText) {
         stateManager.gridFocusNode.unfocus();
         developer.log('TODO',
-            name: 'data_grid', error: 'Web 에서 한글 입력 시 엔터 두번 오류.');
+            name: 'data_grid', error: 'Enter twice when entering Korean on the web.');
       }
 
       if (keyManagerEvent.event.isShiftPressed) {

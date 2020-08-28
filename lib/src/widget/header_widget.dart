@@ -50,11 +50,13 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    // todo : 아래 GestureDetector 의 onTapDown 이벤트가 클릭을 빨리하면 동작하지 않아 null
+    // The below GestureDetector's onTapDown event doesn't work if you click quickly, so it's null
     if (position == null) {
       return;
     }
+
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
     final MenuItem selectedMenu = await showMenu<MenuItem>(
       context: context,
       position: RelativeRect.fromRect(
@@ -103,7 +105,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           return previousValue.toString();
         });
 
-        // 가상으로 렌더링 후 사이즈 가져오기
+        // Get size after rendering virtually
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
         TextSpan textSpan = new TextSpan(
             style: PlutoDefaultSettings.cellTextStyle, text: maxValue);
