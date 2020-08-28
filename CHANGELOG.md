@@ -1,3 +1,7 @@
+## [0.1.4] - 2020. 8. 29
+
+* fixed column bug. [#1](https://github.com/bosskmk/pluto_grid/issues/1)
+
 ## [0.1.3] - 2020. 8. 28
 
 * Multi-selection is canceled when clicking the current cell in the multi-selection state.

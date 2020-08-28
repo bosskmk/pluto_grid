@@ -127,7 +127,8 @@ void main() {
     //     find.descendant(of: firstCell, matching: find.byType(TextField)),
     //     'cell value4');
     // (2)
-    stateManager.changeCellValue(stateManager.currentCell.key, 'header0 value 4');
+    stateManager.changeCellValue(
+        stateManager.currentCell.key, 'header0 value 4');
 
     // 다음 행으로 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
@@ -158,9 +159,9 @@ void main() {
     expect(rows[2].cells['header0'].value, 'header0 value 2');
   });
 
-  testWidgets('0,4번 컬림이 고정 된 상태에서'
-      '2번 컬럼 고정 후 방향키 이동시 정상적으로 이동 되어야 한다.',
-      (WidgetTester tester) async {
+  testWidgets(
+      '0,4번 컬림이 고정 된 상태에서'
+      '2번 컬럼 고정 후 방향키 이동시 정상적으로 이동 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = [
       ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
@@ -232,5 +233,77 @@ void main() {
 
     // 우측 고정 컬럼 바로 전 컬럼인 Body 의 마지막 컬럼 셀 값 확인
     expect(stateManager.currentCell.value, 'headerB2 value 0');
+  });
+
+  testWidgets(
+      'WHEN Fixed one column on the right when there are no fixed columns in the grid.'
+      'THEN showFixedColumn changes to true and the column is moved to the right and should disappear from its original position.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ...ColumnHelper.textColumn('header', count: 10),
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // when
+    // first cell of first column
+    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+
+    // select first cell
+    await tester.tap(
+        find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
+
+    // Check first cell value of first column
+    expect(stateManager.currentCell.value, 'header0 value 0');
+
+    // Check showFixedColumn before fixing column.
+    expect(stateManager.layout.showFixedColumn, false);
+
+    // Fix the 3rd column
+    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
+
+    // Await re-build by toggleFixedColumn
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    // Check showFixedColumn after fixing column.
+    expect(stateManager.layout.showFixedColumn, true);
+
+    // Move current cell position to 3rd column (0 -> 1 -> 2)
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+
+    // Check currentColumn
+    expect(stateManager.currentColumn.title, isNot('header2'));
+    expect(stateManager.currentColumn.title, 'header3');
+
+    // Move current cell position to 10rd column (2 -> 9)
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+
+    // Check currentColumn
+    expect(stateManager.currentColumn.title, 'header2');
   });
 }

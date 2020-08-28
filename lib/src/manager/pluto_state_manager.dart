@@ -182,7 +182,7 @@ class PlutoStateManager extends ChangeNotifier {
   ///
   /// Screen size, fixed column visibility.
   PlutoLayout get layout => _layout;
-  PlutoLayout _layout;
+  PlutoLayout _layout = PlutoLayout();
 
   /// [currentColumn]
   ///
@@ -370,13 +370,21 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size) {
-    _layout = PlutoLayout(
-      maxWidth: size.maxWidth,
-      maxHeight: size.maxHeight,
-      showFixedColumn: isShowFixedColumn(size.maxWidth),
-    );
+    final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
+
+    final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
+
+    _layout.maxWidth = size.maxWidth;
+    _layout.maxHeight = size.maxHeight;
+    _layout.showFixedColumn = _isShowFixedColumn;
 
     _gridGlobalOffset = null;
+
+    if (notify) {
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        notifyListeners();
+      });
+    }
   }
 
   /// Change the editing status of the current cell.
