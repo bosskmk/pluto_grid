@@ -381,7 +381,7 @@ class PlutoStateManager extends ChangeNotifier {
     _gridGlobalOffset = null;
 
     if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
       });
     }
@@ -516,13 +516,11 @@ class PlutoStateManager extends ChangeNotifier {
     _keyPressed = keyPressed;
   }
 
-  void addRows(
-      List<PlutoRow> rows, {
-        insertBefore: false,
-      }) {
-    if (insertBefore) {
-      _rows.insertAll(0, rows);
+  void prependRows(List<PlutoRow> rows) {
+    _rows.insertAll(0, rows);
 
+    /// Update currentRowIdx
+    if (_currentRowIdx != null) {
       _currentRowIdx = rows.length + _currentRowIdx;
 
       final double rowSize =
@@ -531,9 +529,13 @@ class PlutoStateManager extends ChangeNotifier {
       double offsetToMove = rows.length * rowSize;
 
       scrollByDirection(MoveDirection.Up, offsetToMove);
-    } else {
-      _rows.addAll(rows);
     }
+
+    notifyListeners();
+  }
+
+  void appendRows(List<PlutoRow> rows) {
+    _rows.addAll(rows);
 
     notifyListeners();
   }

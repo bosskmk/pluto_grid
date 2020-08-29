@@ -79,13 +79,12 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
       if (keyManagerEvent.isUp) {
         if (popupStateManager.currentRowIdx == 0) {
-          popupStateManager.addRows(_getMoreRows(insertBefore: true),
-              insertBefore: true);
+          popupStateManager.prependRows(_getMoreRows(insertBefore: true));
           return false;
         }
       } else if (keyManagerEvent.isDown) {
         if (popupStateManager.currentRowIdx == popupStateManager.rows.length) {
-          popupStateManager.addRows(_getMoreRows());
+          popupStateManager.appendRows(_getMoreRows());
           return false;
         }
       }
@@ -96,12 +95,11 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
   void _handleScroll() {
     if (widget.column.type.startDate == null &&
         popupStateManager.scroll.vertical.offset == 0) {
-      popupStateManager.addRows(_getMoreRows(insertBefore: true),
-          insertBefore: true);
+      popupStateManager.prependRows(_getMoreRows(insertBefore: true));
     } else if (widget.column.type.endDate == null &&
         popupStateManager.scroll.bodyRowsVertical.position.maxScrollExtent ==
             popupStateManager.scroll.vertical.offset) {
-      popupStateManager.addRows(_getMoreRows());
+      popupStateManager.appendRows(_getMoreRows());
     }
   }
 
