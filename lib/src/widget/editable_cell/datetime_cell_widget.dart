@@ -28,6 +28,8 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     color: Colors.black54,
   );
 
+  String fieldOnSelected;
+
   StreamSubscription<KeyManagerEvent> keyManagerStream;
 
   @override
@@ -45,6 +47,8 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   @override
   void initState() {
+    fieldOnSelected = 'date';
+
     popupColumns = _buildColumns();
 
     final defaultDate = DateTime.tryParse(widget.cell.value) ?? DateTime.now();

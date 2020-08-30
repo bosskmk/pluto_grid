@@ -332,8 +332,8 @@ class _CellWidgetState extends State<CellWidget>
         }
       },
       onTapUp: (TapUpDetails details) {
-        if (widget.stateManager.mode.isSelectRow) {
-          widget.stateManager.handleOnSelectedRow();
+        if (widget.stateManager.mode.isSelect) {
+          widget.stateManager.handleOnSelected();
         }
       },
       onLongPressStart: (LongPressStartDetails details) {

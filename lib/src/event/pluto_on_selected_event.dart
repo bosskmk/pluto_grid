@@ -5,8 +5,10 @@ typedef PlutoOnSelectedEventCallback = void Function(
 
 class PlutoOnSelectedEvent {
   final PlutoRow row;
+  final PlutoCell cell;
 
   PlutoOnSelectedEvent({
     this.row,
+    this.cell,
   });
 }

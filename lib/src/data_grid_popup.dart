@@ -6,7 +6,7 @@ class PlutoGridPopup {
   final List<PlutoRow> rows;
   final PlutoMode mode;
   final PlutoOnLoadedEventCallback onLoaded;
-  final void Function(PlutoRow row) onSelectedRow;
+  final PlutoOnSelectedEventCallback onSelected;
   final double width;
   final double height;
 
@@ -16,7 +16,7 @@ class PlutoGridPopup {
     this.rows,
     this.mode,
     this.onLoaded,
-    this.onSelectedRow,
+    this.onSelected,
     this.width,
     this.height,
   }) {
@@ -24,7 +24,7 @@ class PlutoGridPopup {
   }
 
   Future<void> open() async {
-    PlutoRow selectedRow = await showDialog<PlutoRow>(
+    PlutoOnSelectedEvent selected = await showDialog<PlutoOnSelectedEvent>(
         context: context,
         builder: (BuildContext ctx) {
           return Dialog(
@@ -39,8 +39,8 @@ class PlutoGridPopup {
                     rows: rows,
                     mode: mode,
                     onLoaded: onLoaded,
-                    onSelectedRow: (PlutoOnSelectedEvent event) {
-                      Navigator.pop(ctx, event.row);
+                    onSelected: (PlutoOnSelectedEvent event) {
+                      Navigator.pop(ctx, event);
                     },
                   ),
                 );
@@ -48,8 +48,8 @@ class PlutoGridPopup {
             ),
           );
         });
-    if (onSelectedRow != null) {
-      onSelectedRow(selectedRow);
+    if (onSelected != null) {
+      onSelected(selected);
     }
   }
 }

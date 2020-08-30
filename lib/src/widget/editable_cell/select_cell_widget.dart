@@ -26,8 +26,12 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
     color: Colors.black54,
   );
 
+  String fieldOnSelected;
+
   @override
   void initState() {
+    fieldOnSelected  = widget.column.title;
+
     popupColumns = [
       PlutoColumn(
         title: widget.column.title,

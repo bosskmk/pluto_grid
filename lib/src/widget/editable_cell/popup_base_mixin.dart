@@ -18,6 +18,8 @@ abstract class _PopupImpl {
   List<PlutoRow> popupRows;
 
   Icon icon;
+
+  String fieldOnSelected;
 }
 
 mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
@@ -62,9 +64,9 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
     PlutoGridPopup(
       context: context,
-      mode: PlutoMode.SelectRow,
+      mode: PlutoMode.Select,
       onLoaded: _onLoaded,
-      onSelectedRow: _onSelectedRow,
+      onSelected: _onSelected,
       columns: popupColumns,
       rows: popupRows,
       width: popupColumns.fold(0, (previous, column) {
@@ -97,11 +99,23 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     }
   }
 
-  void _onSelectedRow(PlutoRow row) {
-    if (row != null) {
-      _handleSelected(row.cells.entries.first.value.value);
-    }
+  void _onSelected(PlutoOnSelectedEvent event) {
     _isOpenedPopup = false;
+
+    if (event == null) {
+      return;
+    }
+
+    dynamic selectedValue;
+
+    if (fieldOnSelected != null &&
+        event.row.cells.containsKey(fieldOnSelected)) {
+      selectedValue = event.row.cells[fieldOnSelected].value;
+    } else {
+      selectedValue = event.cell.value;
+    }
+
+    _handleSelected(selectedValue);
   }
 
   void _handleSelected(dynamic value) {

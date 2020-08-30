@@ -393,7 +393,7 @@ class PlutoStateManager extends ChangeNotifier {
     bool flag, {
     bool notify = true,
   }) {
-    if (mode.isSelectRow) {
+    if (mode.isSelect) {
       return;
     }
 
@@ -420,7 +420,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Change Multi-Select Status.
   void setSelecting(bool flag) {
-    if (mode.isSelectRow) {
+    if (mode.isSelect) {
       return;
     }
 
@@ -1230,9 +1230,9 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// Event occurred after selecting Row in Select mode.
-  void handleOnSelectedRow() {
-    if (_mode.isSelectRow == true && _onSelected != null) {
-      _onSelected(PlutoOnSelectedEvent(row: currentRow));
+  void handleOnSelected() {
+    if (_mode.isSelect == true && _onSelected != null) {
+      _onSelected(PlutoOnSelectedEvent(row: currentRow, cell: currentCell));
     }
   }
 
