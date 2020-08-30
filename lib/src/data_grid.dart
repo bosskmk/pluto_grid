@@ -362,9 +362,6 @@ class PlutoDefaultSettings {
   /// (if it is less than the value, the fixed column is released)
   static const double bodyMinWidth = 200.0;
 
-  /// Default row height
-  static const double rowHeight = 45.0;
-
   /// Default column width
   static const double columnWidth = 200.0;
 
@@ -403,6 +400,9 @@ class PlutoDefaultSettings {
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );
+
+  /// Row - Default row height
+  static const double rowHeight = 45.0;
 
   /// Row - border width
   static const double rowBorderWidth = 1.0;

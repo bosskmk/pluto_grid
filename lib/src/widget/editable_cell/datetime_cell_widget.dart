@@ -28,8 +28,6 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     color: Colors.black54,
   );
 
-  String fieldOnSelected;
-
   StreamSubscription<KeyManagerEvent> keyManagerStream;
 
   @override
@@ -47,7 +45,8 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   @override
   void initState() {
-    fieldOnSelected = 'date';
+    popupHeight = 6 * (PlutoDefaultSettings.rowHeight +
+        PlutoDefaultSettings.rowBorderWidth);
 
     popupColumns = _buildColumns();
 
@@ -144,7 +143,10 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
         key: (e) => e,
         value: (e) {
           final DateTime day = days.removeAt(0);
-          return PlutoCell(value: day.day, originalValue: day);
+          return PlutoCell(
+              value: day.day,
+              originalValue:
+                  intl.DateFormat(widget.column.type.format).format(day));
         },
       );
 
@@ -158,15 +160,15 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     int firstDays = 1;
     int lastDays = 30;
 
-    DateTime defaultDate =
-        popupStateManager.rows.last.cells.entries.last.value.originalValue;
+    DateTime defaultDate = DateTime.parse(
+        popupStateManager.rows.last.cells.entries.last.value.originalValue);
 
     if (insertBefore) {
       firstDays = -30;
       lastDays = -1;
 
-      defaultDate =
-          popupStateManager.rows.first.cells.entries.first.value.originalValue;
+      defaultDate = DateTime.parse(
+          popupStateManager.rows.first.cells.entries.first.value.originalValue);
     }
 
     final startDate = widget.column.type.startDate ??

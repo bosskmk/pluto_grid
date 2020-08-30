@@ -18,8 +18,6 @@ abstract class _PopupImpl {
   List<PlutoRow> popupRows;
 
   Icon icon;
-
-  String fieldOnSelected;
 }
 
 mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
@@ -31,6 +29,10 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
   FocusNode _textFocus;
 
   bool _isOpenedPopup = false;
+
+  String fieldOnSelected;
+
+  double popupHeight;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       width: popupColumns.fold(0, (previous, column) {
         return previous + column.width;
       }),
+      height: popupHeight,
     );
   }
 
@@ -89,12 +92,26 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   void _onLoaded(PlutoOnLoadedEvent event) {
     for (var i = 0; i < popupRows.length; i += 1) {
-      if (popupRows[i].cells.entries.first.value.value == widget.cell.value) {
-        event.stateManager.setCurrentCell(
-            event.stateManager.rows[i].cells.entries.first.value, i);
+      if (fieldOnSelected == null) {
+        for (var entry in popupRows[i].cells.entries) {
+          if (popupRows[i].cells[entry.key].originalValue ==
+              widget.cell.originalValue) {
+            event.stateManager
+                .setCurrentCell(event.stateManager.rows[i].cells[entry.key], i);
 
-        event.stateManager.moveScrollByRow(MoveDirection.Up, i + 1);
-        return;
+            event.stateManager.moveScrollByRow(MoveDirection.Up, i + 1 + 2);
+            return;
+          }
+        }
+      } else {
+        if (popupRows[i].cells[fieldOnSelected].originalValue ==
+            widget.cell.originalValue) {
+          event.stateManager.setCurrentCell(
+              event.stateManager.rows[i].cells[fieldOnSelected], i);
+
+          event.stateManager.moveScrollByRow(MoveDirection.Up, i + 1 + 2);
+          return;
+        }
       }
     }
   }
@@ -110,9 +127,9 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
     if (fieldOnSelected != null &&
         event.row.cells.containsKey(fieldOnSelected)) {
-      selectedValue = event.row.cells[fieldOnSelected].value;
+      selectedValue = event.row.cells[fieldOnSelected].originalValue;
     } else {
-      selectedValue = event.cell.value;
+      selectedValue = event.cell.originalValue;
     }
 
     _handleSelected(selectedValue);
