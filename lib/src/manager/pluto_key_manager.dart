@@ -94,7 +94,8 @@ class PlutoKeyManager {
           lastChildContext.widget is EditableText) {
         stateManager.gridFocusNode.unfocus();
         developer.log('TODO',
-            name: 'data_grid', error: 'Enter twice when entering Korean on the web.');
+            name: 'data_grid',
+            error: 'Enter twice when entering Korean on the web.');
       }
 
       if (keyManagerEvent.event.isShiftPressed) {

@@ -799,11 +799,14 @@ class PlutoStateManager extends ChangeNotifier {
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
-      if (currentColumn?.type?.name?.isSelect == true) {}
+      if (currentColumn?.type?.name?.isSelect == true) {
+      }
       // Datetime type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.name?.isDatetime == true) {}
+      else if (currentColumn?.type?.name?.isDatetime == true) {
+      }
       // Read only type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.readOnly == true) {}
+      else if (currentColumn?.type?.readOnly == true) {
+      }
       // Unable to move left and right in other modified states
       else {
         _checkCellValue = true;
@@ -814,7 +817,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     final columnIndexes = columnIndexesByShowFixed();
     final cellPosition =
-    cellPositionByCellKey(_currentCell._key, columnIndexes);
+        cellPositionByCellKey(_currentCell._key, columnIndexes);
 
     if (canNotMoveCell(cellPosition, direction)) {
       _checkCellValue = true;
@@ -888,7 +891,7 @@ class PlutoStateManager extends ChangeNotifier {
         _scroll.vertical.offset + _layout.offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
-    direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
+        direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
 
     final bool inScrollStart = _scroll.vertical.offset <= offsetToMove;
 
@@ -911,7 +914,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     final PlutoColumn columnToMove =
-    _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
+        _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -923,7 +926,7 @@ class PlutoStateManager extends ChangeNotifier {
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
     double offsetToMove = layout.showFixedColumn == true
         ? bodyColumnsWidthAtColumnIdx(
-        columnIdx + direction.offset - leftFixedColumnIndexes.length)
+            columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
     final double screenOffset = _layout.showFixedColumn == true
@@ -970,7 +973,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     Function findIndexToMove = () {
       final double minLeft =
-      _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
+          _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
 
       final double minRight = _layout.showFixedColumn
           ? _layout.maxWidth - rightFixedColumnsWidth
@@ -1088,7 +1091,7 @@ class PlutoStateManager extends ChangeNotifier {
           min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
       columnEndIdx = max(currentCellPosition.columnIdx,
-          _currentSelectingPosition.columnIdx) +
+              _currentSelectingPosition.columnIdx) +
           1;
 
       rowEndIdx =
@@ -1111,8 +1114,8 @@ class PlutoStateManager extends ChangeNotifier {
       }
 
       for (var columnIdx = columnStartIdx;
-      columnIdx < columnEndIdx;
-      columnIdx += 1) {
+          columnIdx < columnEndIdx;
+          columnIdx += 1) {
         if (columnIdx >= columnIndexes.length) {
           break;
         }
@@ -1167,15 +1170,16 @@ class PlutoStateManager extends ChangeNotifier {
   /// Change cell value
   ///
   /// [callOnChangedEvent] triggers a [PlutoOnChangedEventCallback] callback.
-  void changeCellValue(Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool notify = true,
-      }) {
+  void changeCellValue(
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {
