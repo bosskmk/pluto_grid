@@ -45,8 +45,13 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   @override
   void initState() {
-    popupHeight = 6 * (PlutoDefaultSettings.rowHeight +
-        PlutoDefaultSettings.rowBorderWidth);
+    popupHeight = 6 *
+            (PlutoDefaultSettings.rowHeight +
+                PlutoDefaultSettings.rowBorderWidth) +
+        PlutoDefaultSettings.shadowLineSize +
+        PlutoDefaultSettings.gridInnerSpacing;
+
+    offsetOfScrollRowIdx = 2;
 
     popupColumns = _buildColumns();
 

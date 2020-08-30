@@ -34,6 +34,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   double popupHeight;
 
+  int offsetOfScrollRowIdx = 0;
+
   @override
   void initState() {
     _textController = TextEditingController()
@@ -99,7 +101,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             event.stateManager
                 .setCurrentCell(event.stateManager.rows[i].cells[entry.key], i);
 
-            event.stateManager.moveScrollByRow(MoveDirection.Up, i + 1 + 2);
+            event.stateManager.moveScrollByRow(
+                MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
             return;
           }
         }
@@ -109,7 +112,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           event.stateManager.setCurrentCell(
               event.stateManager.rows[i].cells[fieldOnSelected], i);
 
-          event.stateManager.moveScrollByRow(MoveDirection.Up, i + 1 + 2);
+          event.stateManager
+              .moveScrollByRow(MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
           return;
         }
       }
@@ -125,11 +129,14 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
     dynamic selectedValue;
 
-    if (fieldOnSelected != null &&
+    if (event.row != null &&
+        fieldOnSelected != null &&
         event.row.cells.containsKey(fieldOnSelected)) {
       selectedValue = event.row.cells[fieldOnSelected].originalValue;
-    } else {
+    } else if (event.cell != null) {
       selectedValue = event.cell.originalValue;
+    } else {
+      return;
     }
 
     _handleSelected(selectedValue);

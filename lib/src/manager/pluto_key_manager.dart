@@ -77,6 +77,7 @@ class PlutoKeyManager {
     if (stateManager.mode.isSelect) {
       stateManager._onSelected(PlutoOnSelectedEvent(
         row: stateManager.currentRow,
+        cell: stateManager.currentCell,
       ));
       return;
     }
@@ -122,6 +123,7 @@ class PlutoKeyManager {
     if (stateManager.mode.isSelect) {
       stateManager._onSelected(PlutoOnSelectedEvent(
         row: null,
+        cell: null,
       ));
       return;
     }
