@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v0.1.3
+## PlutoGrid for flutter - v0.1.5
 
 PlutoGrid is a dataGrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
 
@@ -24,9 +24,11 @@ PlutoGrid is a dataGrid for flutter. It is developed with Windows, Web first. Th
 
 ### Screenshots
 
-![PlutoGrid Image](https://bosskmk.github.io/images/pluto_grid_img1.jpg)
+![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image1.jpg)
 
-![PlutoGrid Image](https://bosskmk.github.io/images/pluto_grid_img2.jpg)
+![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image2.jpg)
+
+![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image3.jpg)
 
 ### Usage
 Generate the data to be used in the grid.

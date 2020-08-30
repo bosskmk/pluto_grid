@@ -187,8 +187,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         if (widget.column.enableContextMenu)
           Positioned(
-            top: 2,
-            right: -6,
+            top: -3,
+            right: -12,
             child: GestureDetector(
               onTapDown: (TapDownDetails details) {
                 _tapDownPosition = details.globalPosition;

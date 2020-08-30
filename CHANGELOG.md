@@ -1,3 +1,7 @@
+## [0.1.5] - 2020. 8. 31
+
+* Change UI for datetime popup.
+
 ## [0.1.4] - 2020. 8. 29
 
 * fixed column bug. [#1](https://github.com/bosskmk/pluto_grid/issues/1)
