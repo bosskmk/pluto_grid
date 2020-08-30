@@ -71,6 +71,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// [keyManager]
   PlutoKeyManager _keyManager;
+
   PlutoKeyManager get keyManager => _keyManager;
 
   /// [columnIndexes]
@@ -578,28 +579,32 @@ class PlutoStateManager extends ChangeNotifier {
   /// Toggle column sorting.
   void toggleSortColumn(Key columnKey) {
     for (var i = 0; i < _columns.length; i += 1) {
-      if (_columns[i]._key == columnKey) {
-        final field = _columns[i].field;
-        if (_columns[i].sort.isNone) {
-          _columns[i].sort = PlutoColumnSort.Ascending;
+      PlutoColumn column = _columns[i];
+
+      if (column._key == columnKey) {
+        final field = column.field;
+
+        if (column.sort.isNone) {
+          column.sort = PlutoColumnSort.Ascending;
 
           _rows.sort(
               (a, b) => a.cells[field].value.compareTo(b.cells[field].value));
-        } else if (_columns[i].sort.isAscending) {
-          _columns[i].sort = PlutoColumnSort.Descending;
+        } else if (column.sort.isAscending) {
+          column.sort = PlutoColumnSort.Descending;
 
           _rows.sort(
               (b, a) => a.cells[field].value.compareTo(b.cells[field].value));
         } else {
-          _columns[i].sort = PlutoColumnSort.None;
+          column.sort = PlutoColumnSort.None;
 
           _rows.sort((a, b) {
             if (a.sortIdx == null || b.sortIdx == null) return 0;
+
             return a.sortIdx.compareTo(b.sortIdx);
           });
         }
       } else {
-        _columns[i].sort = PlutoColumnSort.None;
+        column.sort = PlutoColumnSort.None;
       }
     }
 

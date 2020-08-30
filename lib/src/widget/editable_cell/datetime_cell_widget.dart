@@ -19,9 +19,9 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     with _PopupBaseMixin<DatetimeCellWidget> {
   PlutoStateManager popupStateManager;
 
-  List<PlutoColumn> popupColumns;
+  List<PlutoColumn> popupColumns = [];
 
-  List<PlutoRow> popupRows;
+  List<PlutoRow> popupRows = [];
 
   Icon icon = Icon(
     Icons.date_range,
@@ -49,12 +49,17 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
     final defaultDate = DateTime.tryParse(widget.cell.value) ?? DateTime.now();
 
-    popupRows = DatetimeHelper.getDaysInBetween(
-      widget.column.type.startDate ?? defaultDate.add(Duration(days: -30)),
-      widget.column.type.endDate ?? defaultDate.add(Duration(days: 30)),
-    ).map((day) {
-      return _buildRow(day);
-    }).toList();
+    final startDate = widget.column.type.startDate ??
+        DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -30)));
+    final endDate = widget.column.type.endDate ??
+        DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 30)));
+
+    final List<DateTime> days = DatetimeHelper.getDaysInBetween(
+      startDate,
+      endDate,
+    );
+
+    popupRows = _buildRows(days);
 
     super.initState();
   }
@@ -83,7 +88,8 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
           return false;
         }
       } else if (keyManagerEvent.isDown) {
-        if (popupStateManager.currentRowIdx == popupStateManager.rows.length) {
+        if (popupStateManager.currentRowIdx ==
+            popupStateManager.rows.length - 1) {
           popupStateManager.appendRows(_getMoreRows());
           return false;
         }
@@ -105,50 +111,73 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   List<PlutoColumn> _buildColumns() {
     return [
-      PlutoColumn(
-        title: 'date',
-        field: 'date',
+      ['Su', '7'],
+      ['Mo', '1'],
+      ['Tu', '2'],
+      ['We', '3'],
+      ['Th', '4'],
+      ['Fr', '5'],
+      ['Sa', '6'],
+    ].map((e) {
+      return PlutoColumn(
+        title: e[0],
+        field: e[1],
         type: PlutoColumnType.text(readOnly: true),
-      ),
-      PlutoColumn(
-        title: 'weekday',
-        field: 'weekday',
-        type: PlutoColumnType.text(readOnly: true),
-      ),
-    ];
+        width: 45,
+        enableDraggable: false,
+        enableSorting: false,
+        enableContextMenu: false,
+      );
+    }).toList(growable: false);
   }
 
-  PlutoRow _buildRow(dynamic day) {
-    return PlutoRow(
-      cells: {
-        'date': PlutoCell(value: day),
-        'weekday': PlutoCell(
-          value: intl.DateFormat('EEEE').format(DateTime.parse(day)),
-        ),
-      },
-    );
+  List<PlutoRow> _buildRows(List<DateTime> days) {
+    List<PlutoRow> rows = [];
+
+    while (days.length > 0) {
+      final Map<String, PlutoCell> cells = Map.fromIterable(
+        ['7', '1', '2', '3', '4', '5', '6'],
+        key: (e) => e,
+        value: (e) {
+          final DateTime day = days.removeAt(0);
+          return PlutoCell(value: day.day, originalValue: day);
+        },
+      );
+
+      rows.add(PlutoRow(cells: cells));
+    }
+
+    return rows;
   }
 
   List<PlutoRow> _getMoreRows({bool insertBefore = false}) {
     int firstDays = 1;
     int lastDays = 30;
 
-    String defaultDate =
-        popupStateManager.rows.last.cells.entries.first.value.value;
+    DateTime defaultDate =
+        popupStateManager.rows.last.cells.entries.last.value.originalValue;
 
     if (insertBefore) {
       firstDays = -30;
       lastDays = -1;
 
       defaultDate =
-          popupStateManager.rows.first.cells.entries.first.value.value;
+          popupStateManager.rows.first.cells.entries.first.value.originalValue;
     }
 
-    return DatetimeHelper.getDaysInBetween(
-      DateTime.parse(defaultDate).add(Duration(days: firstDays)),
-      DateTime.parse(defaultDate).add(Duration(days: lastDays)),
-    ).map((day) {
-      return _buildRow(day);
-    }).toList();
+    final startDate = widget.column.type.startDate ??
+        DatetimeHelper.moveToFirstWeekday(
+            defaultDate.add(Duration(days: firstDays)));
+
+    final endDate = widget.column.type.endDate ??
+        DatetimeHelper.moveToLastWeekday(
+            defaultDate.add(Duration(days: lastDays)));
+
+    final List<DateTime> days = DatetimeHelper.getDaysInBetween(
+      startDate,
+      endDate,
+    );
+
+    return _buildRows(days);
   }
 }

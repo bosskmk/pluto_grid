@@ -19,6 +19,12 @@ class PlutoColumn {
   /// Set the column type.
   PlutoColumnType type;
 
+  bool enableDraggable;
+
+  bool enableSorting;
+
+  bool enableContextMenu;
+
   PlutoColumn({
     @required this.title,
     @required this.field,
@@ -26,6 +32,9 @@ class PlutoColumn {
     this.width = PlutoDefaultSettings.columnWidth,
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
+    this.enableDraggable = true,
+    this.enableSorting = true,
+    this.enableContextMenu = true,
   }) : this._key = UniqueKey();
 
   /// Column key

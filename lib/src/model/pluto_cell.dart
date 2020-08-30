@@ -4,8 +4,11 @@ class PlutoCell {
   /// Value of cell
   dynamic value;
 
+  dynamic originalValue;
+
   PlutoCell({
     this.value,
+    this.originalValue,
   }) : this._key = UniqueKey();
 
   Key _key;

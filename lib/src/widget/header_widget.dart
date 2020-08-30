@@ -125,6 +125,55 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     }
   }
 
+  Widget _buildDraggable(Widget child) {
+    return Draggable(
+      onDragEnd: (dragDetails) {
+        widget.stateManager
+            .moveColumn(widget.column._key, dragDetails.offset.dx);
+      },
+      feedback: Container(
+        width: widget.column.width,
+        height: widget.stateManager.style.rowHeight,
+        padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+        decoration: BoxDecoration(
+          color: Colors.black26,
+        ),
+        child: Text(
+          widget.column.title,
+          style: PlutoDefaultSettings.headerTextStyle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildHeader() {
+    Widget _header = Container(
+      width: widget.column.width,
+      height: widget.stateManager.style.rowHeight,
+      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      child: Text(
+        widget.column.title,
+        style: PlutoDefaultSettings.headerTextStyle,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        softWrap: false,
+      ),
+    );
+
+    return widget.column.enableSorting
+        ? InkWell(
+            onTap: () {
+              widget.stateManager.toggleSortColumn(widget.column._key);
+            },
+            child: _header,
+          )
+        : _header;
+  }
+
   @override
   Widget build(BuildContext context) {
     Offset _currentPosition;
@@ -132,71 +181,37 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     return Stack(
       children: [
         Positioned(
-          child: Draggable(
-            onDragEnd: (dragDetails) {
-              widget.stateManager
-                  .moveColumn(widget.column._key, dragDetails.offset.dx);
-            },
-            feedback: Container(
-              width: widget.column.width,
-              height: widget.stateManager.style.rowHeight,
-              padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
-              decoration: BoxDecoration(
-                color: Colors.black26,
-              ),
-              child: Text(
-                widget.column.title,
-                style: PlutoDefaultSettings.headerTextStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                softWrap: false,
-              ),
-            ),
-            child: InkWell(
-              onTap: () {
-                widget.stateManager.toggleSortColumn(widget.column._key);
+          child: widget.column.enableDraggable
+              ? _buildDraggable(_buildHeader())
+              : _buildHeader(),
+        ),
+        if (widget.column.enableContextMenu)
+          Positioned(
+            top: 2,
+            right: -6,
+            child: GestureDetector(
+              onTapDown: (TapDownDetails details) {
+                _tapDownPosition = details.globalPosition;
               },
-              child: Container(
-                width: widget.column.width,
-                height: widget.stateManager.style.rowHeight,
-                padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
-                child: Text(
-                  widget.column.title,
-                  style: PlutoDefaultSettings.headerTextStyle,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  softWrap: false,
+              onHorizontalDragUpdate: (DragUpdateDetails details) {
+                _currentPosition = details.localPosition;
+              },
+              onHorizontalDragEnd: (DragEndDetails details) {
+                widget.stateManager
+                    .resizeColumn(widget.column._key, _currentPosition.dx - 20);
+              },
+              child: Transform.rotate(
+                angle: 90 * pi / 180,
+                child: IconButton(
+                  icon: HeaderIcon(widget.column.sort),
+                  iconSize: 18,
+                  onPressed: () {
+                    _showContextMenu(context, _tapDownPosition);
+                  },
                 ),
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: 2,
-          right: -6,
-          child: GestureDetector(
-            onTapDown: (TapDownDetails details) {
-              _tapDownPosition = details.globalPosition;
-            },
-            onHorizontalDragUpdate: (DragUpdateDetails details) {
-              _currentPosition = details.localPosition;
-            },
-            onHorizontalDragEnd: (DragEndDetails details) {
-              widget.stateManager
-                  .resizeColumn(widget.column._key, _currentPosition.dx - 20);
-            },
-            child: Transform.rotate(
-              angle: 90 * pi / 180,
-              child: IconButton(
-                icon: HeaderIcon(widget.column.sort),
-                iconSize: 18,
-                onPressed: () {
-                  _showContextMenu(context, _tapDownPosition);
-                },
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
