@@ -370,7 +370,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size) {
+  void setLayout(BoxConstraints size, double footerHeight) {
     final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
 
     final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
@@ -378,6 +378,7 @@ class PlutoStateManager extends ChangeNotifier {
     _layout.maxWidth = size.maxWidth;
     _layout.maxHeight = size.maxHeight;
     _layout.showFixedColumn = _isShowFixedColumn;
+    _layout.footerHeight = footerHeight;
 
     _gridGlobalOffset = null;
 
@@ -884,7 +885,7 @@ class PlutoStateManager extends ChangeNotifier {
         PlutoDefaultSettings.gridPadding + PlutoDefaultSettings.shadowLineSize;
 
     final double screenOffset =
-        _scroll.vertical.offset + _layout.maxHeight - rowSize - gridOffset;
+        _scroll.vertical.offset + _layout.offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
     direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
@@ -1305,6 +1306,8 @@ class PlutoLayout {
   /// Screen height
   double maxHeight;
 
+  double footerHeight;
+
   /// Whether to apply a fixed column according to the screen size.
   /// true : If there is a fixed column, the fixed column is exposed.
   /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
@@ -1314,7 +1317,10 @@ class PlutoLayout {
     this.maxWidth,
     this.maxHeight,
     this.showFixedColumn,
+    this.footerHeight,
   });
+
+  double get offsetHeight => maxHeight - footerHeight;
 }
 
 class PlutoCellPosition {

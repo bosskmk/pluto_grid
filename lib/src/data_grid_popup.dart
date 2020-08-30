@@ -9,6 +9,7 @@ class PlutoGridPopup {
   final PlutoOnSelectedEventCallback onSelected;
   final double width;
   final double height;
+  final CreateFooterCallBack createFooter;
 
   PlutoGridPopup({
     this.context,
@@ -19,6 +20,7 @@ class PlutoGridPopup {
     this.onSelected,
     this.width,
     this.height,
+    this.createFooter,
   }) {
     this.open();
   }
@@ -42,6 +44,7 @@ class PlutoGridPopup {
                     onSelected: (PlutoOnSelectedEvent event) {
                       Navigator.pop(ctx, event);
                     },
+                    createFooter: createFooter,
                   ),
                 );
               },

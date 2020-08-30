@@ -1,5 +1,7 @@
 part of '../pluto_grid.dart';
 
+typedef CreateFooterCallBack = Widget Function(PlutoStateManager stateManager);
+
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
@@ -7,6 +9,7 @@ class PlutoGrid extends StatefulWidget {
   final PlutoOnLoadedEventCallback onLoaded;
   final PlutoOnChangedEventCallback onChanged;
   final PlutoOnSelectedEventCallback onSelected;
+  final CreateFooterCallBack createFooter;
 
   const PlutoGrid({
     Key key,
@@ -14,6 +17,7 @@ class PlutoGrid extends StatefulWidget {
     @required this.rows,
     this.onLoaded,
     this.onChanged,
+    this.createFooter,
   })  : this.mode = PlutoMode.Normal,
         this.onSelected = null,
         super(key: key);
@@ -25,6 +29,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.createFooter,
     @required this.mode,
   }) : super(key: key);
 
@@ -48,6 +53,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double bodyColumnWidth;
   double rightFixedColumnWidth;
   bool showFixedColumn;
+  double footerHeight;
 
   List<Function()> disposeList = [];
 
@@ -89,6 +95,9 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
+
+    footerHeight =
+        widget.createFooter == null ? 0 : PlutoDefaultSettings.rowHeight;
 
     // Dispose
     disposeList.add(() {
@@ -241,7 +250,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void setLayout(BoxConstraints size) {
-    stateManager.setLayout(size);
+    stateManager.setLayout(size, footerHeight);
 
     showFixedColumn = stateManager.layout.showFixedColumn;
 
@@ -286,6 +295,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     Positioned.fill(
                       top: stateManager.style.rowHeight,
                       left: 0,
+                      bottom: footerHeight,
                       child: LeftFixedRows(stateManager),
                     ),
                   Positioned.fill(
@@ -298,6 +308,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     top: stateManager.style.rowHeight,
                     left: leftFixedColumnWidth,
                     right: rightFixedColumnWidth,
+                    bottom: footerHeight,
                     child: BodyRows(stateManager),
                   ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
@@ -314,22 +325,23 @@ class _PlutoGridState extends State<PlutoGrid> {
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
+                      bottom: footerHeight,
                       child: RightFixedRows(stateManager),
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned(
                       top: 0,
-                      bottom: 0,
                       left: leftFixedColumnWidth,
+                      bottom: footerHeight,
                       child: ShadowLine(axis: Axis.vertical),
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned(
                       top: 0,
-                      bottom: 0,
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
+                      bottom: footerHeight,
                       child: ShadowLine(axis: Axis.vertical, reverse: true),
                     ),
                   Positioned(
@@ -338,6 +350,18 @@ class _PlutoGridState extends State<PlutoGrid> {
                     right: 0,
                     child: ShadowLine(axis: Axis.horizontal),
                   ),
+                  if (widget.createFooter != null)
+                    Positioned(
+                      bottom: footerHeight,
+                      left: 0,
+                      right: 0,
+                      child: ShadowLine(axis: Axis.horizontal, reverse: true),
+                    ),
+                  if (widget.createFooter != null)
+                    Positioned.fill(
+                      top: size.maxHeight - footerHeight,
+                      child: widget.createFooter(stateManager),
+                    ),
                 ],
               ),
             ),

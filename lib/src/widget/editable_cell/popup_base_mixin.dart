@@ -36,6 +36,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   int offsetOfScrollRowIdx = 0;
 
+  CreateFooterCallBack createFooter;
+
   @override
   void initState() {
     _textController = TextEditingController()
@@ -77,6 +79,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
         return previous + column.width;
       }),
       height: popupHeight,
+      createFooter: createFooter,
     );
   }
 

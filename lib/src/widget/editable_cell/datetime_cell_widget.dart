@@ -59,6 +59,7 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
     final startDate = widget.column.type.startDate ??
         DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -30)));
+
     final endDate = widget.column.type.endDate ??
         DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 30)));
 
@@ -68,6 +69,9 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     );
 
     popupRows = _buildRows(days);
+
+    createFooter =
+        (PlutoStateManager stateManager) => _Footer(stateManager: stateManager);
 
     super.initState();
   }
@@ -147,7 +151,16 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
         ['7', '1', '2', '3', '4', '5', '6'],
         key: (e) => e,
         value: (e) {
+          if (days.length < 1) {
+            return PlutoCell(value: '');
+          }
+
+          if (days.first.weekday.toString() != e) {
+            return PlutoCell(value: '');
+          }
+
           final DateTime day = days.removeAt(0);
+
           return PlutoCell(
               value: day.day,
               originalValue:
@@ -162,27 +175,50 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
   }
 
   List<PlutoRow> _getMoreRows({bool insertBefore = false}) {
-    int firstDays = 1;
-    int lastDays = 30;
+    int firstDays;
+    int lastDays;
 
-    DateTime defaultDate = DateTime.parse(
-        popupStateManager.rows.last.cells.entries.last.value.originalValue);
+    DateTime defaultDate;
 
     if (insertBefore) {
       firstDays = -30;
       lastDays = -1;
 
-      defaultDate = DateTime.parse(
-          popupStateManager.rows.first.cells.entries.first.value.originalValue);
+      defaultDate = DateTime.tryParse(popupStateManager
+              .rows.first.cells.entries.first.value.originalValue) ??
+          null;
+
+      if (defaultDate == null) {
+        return [];
+      }
+
+      if (widget.column.type.startDate != null &&
+          defaultDate.isBefore(widget.column.type.startDate)) {
+        defaultDate = widget.column.type.startDate;
+      }
+    } else {
+      firstDays = 1;
+      lastDays = 30;
+
+      defaultDate = DateTime.tryParse(popupStateManager
+              .rows.last.cells.entries.last.value.originalValue) ??
+          null;
+
+      if (defaultDate == null) {
+        return [];
+      }
+
+      if (widget.column.type.endDate != null &&
+          defaultDate.isAfter(widget.column.type.endDate)) {
+        defaultDate = widget.column.type.endDate;
+      }
     }
 
-    final startDate = widget.column.type.startDate ??
-        DatetimeHelper.moveToFirstWeekday(
-            defaultDate.add(Duration(days: firstDays)));
+    final startDate = DatetimeHelper.moveToFirstWeekday(
+        defaultDate.add(Duration(days: firstDays)));
 
-    final endDate = widget.column.type.endDate ??
-        DatetimeHelper.moveToLastWeekday(
-            defaultDate.add(Duration(days: lastDays)));
+    final endDate = DatetimeHelper.moveToLastWeekday(
+        defaultDate.add(Duration(days: lastDays)));
 
     final List<DateTime> days = DatetimeHelper.getDaysInBetween(
       startDate,
@@ -190,5 +226,73 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     );
 
     return _buildRows(days);
+  }
+}
+
+class _Footer extends StatefulWidget {
+  final PlutoStateManager stateManager;
+
+  _Footer({this.stateManager});
+
+  @override
+  _FooterState createState() => _FooterState();
+}
+
+class _FooterState extends State<_Footer> {
+  PlutoCell currentCell;
+
+  @override
+  void dispose() {
+    widget.stateManager.removeListener(changeStateListener);
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    widget.stateManager.addListener(changeStateListener);
+
+    super.initState();
+  }
+
+  void changeStateListener() {
+    if (identical(currentCell, widget.stateManager.currentCell) == false) {
+      setState(() {
+        currentCell = widget.stateManager.currentCell;
+      });
+    }
+  }
+
+  String get year {
+    if (currentCell == null || currentCell.originalValue.isEmpty) {
+      return '';
+    }
+
+    return intl.DateFormat('yyyy')
+        .format(DateTime.parse(currentCell.originalValue));
+  }
+
+  String get month {
+    if (currentCell == null || currentCell.originalValue.isEmpty) {
+      return '';
+    }
+
+    return intl.DateFormat('MM')
+        .format(DateTime.parse(currentCell.originalValue));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(0),
+      child: Text(
+        '$year-$month',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }

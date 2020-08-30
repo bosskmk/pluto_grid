@@ -245,7 +245,7 @@ class _CellWidgetState extends State<CellWidget>
       case MoveDirection.Down:
         return selectingOffset.dy >
             widget.stateManager.gridGlobalOffset.dy +
-                widget.stateManager.layout.maxHeight -
+                widget.stateManager.layout.offsetHeight -
                 PlutoDefaultSettings.offsetScrollingFromEdge;
     }
 
@@ -325,15 +325,18 @@ class _CellWidgetState extends State<CellWidget>
           return;
         }
 
-        if (_isCurrentCell && _isEditing != true) {
-          widget.stateManager.setEditing(true);
-        } else {
-          widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
-        }
-      },
-      onTapUp: (TapUpDetails details) {
         if (widget.stateManager.mode.isSelect) {
-          widget.stateManager.handleOnSelected();
+          if (_isCurrentCell) {
+            widget.stateManager.handleOnSelected();
+          } else {
+            widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+          }
+        } else {
+          if (_isCurrentCell && _isEditing != true) {
+            widget.stateManager.setEditing(true);
+          } else {
+            widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+          }
         }
       },
       onLongPressStart: (LongPressStartDetails details) {
