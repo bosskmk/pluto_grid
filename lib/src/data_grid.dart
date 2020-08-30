@@ -6,7 +6,7 @@ class PlutoGrid extends StatefulWidget {
   final PlutoMode mode;
   final PlutoOnLoadedEventCallback onLoaded;
   final PlutoOnChangedEventCallback onChanged;
-  final PlutoOnSelectedEventCallback onSelectedRow;
+  final PlutoOnSelectedEventCallback onSelected;
 
   const PlutoGrid({
     Key key,
@@ -15,7 +15,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
   })  : this.mode = PlutoMode.Normal,
-        this.onSelectedRow = null,
+        this.onSelected = null,
         super(key: key);
 
   const PlutoGrid.popup({
@@ -24,7 +24,7 @@ class PlutoGrid extends StatefulWidget {
     @required this.rows,
     this.onLoaded,
     this.onChanged,
-    this.onSelectedRow,
+    this.onSelected,
     @required this.mode,
   }) : super(key: key);
 
@@ -73,7 +73,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     initOnLoadedEvent();
 
-    initSelectRowMode();
+    initSelectMode();
 
     super.initState();
   }
@@ -119,7 +119,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       ),
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
-      onSelectedEventCallback: widget.onSelectedRow,
+      onSelectedEventCallback: widget.onSelected,
     );
 
     leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
@@ -161,8 +161,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     });
   }
 
-  void initSelectRowMode() {
-    if (widget.mode.isSelectRow != true) {
+  void initSelectMode() {
+    if (widget.mode.isSelect != true) {
       return;
     }
 
@@ -348,13 +348,13 @@ class _PlutoGridState extends State<PlutoGrid> {
 
 enum PlutoMode {
   Normal,
-  SelectRow,
+  Select,
 }
 
 extension PlutoModeExtension on PlutoMode {
   bool get isNormal => this == PlutoMode.Normal;
 
-  bool get isSelectRow => this == PlutoMode.SelectRow;
+  bool get isSelect => this == PlutoMode.Select;
 }
 
 class PlutoDefaultSettings {
