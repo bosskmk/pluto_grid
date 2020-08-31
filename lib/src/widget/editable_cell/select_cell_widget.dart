@@ -28,9 +28,8 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
   @override
   void initState() {
-    popupHeight = (widget.column.type.selectItems.length + 1) *
-            (PlutoDefaultSettings.rowHeight +
-                PlutoDefaultSettings.rowBorderWidth) +
+    popupHeight = ((widget.column.type.selectItems.length + 1) *
+            PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
 

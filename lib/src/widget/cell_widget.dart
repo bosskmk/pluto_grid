@@ -238,9 +238,8 @@ class _CellWidgetState extends State<CellWidget>
       case MoveDirection.Up:
         return selectingOffset.dy <
             widget.stateManager.gridGlobalOffset.dy +
-                PlutoDefaultSettings.rowHeight +
                 PlutoDefaultSettings.gridBorderWidth +
-                PlutoDefaultSettings.rowBorderWidth +
+                PlutoDefaultSettings.rowTotalHeight +
                 PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Down:
         return selectingOffset.dy >

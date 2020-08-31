@@ -11,8 +11,6 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-
-    when(stateManager.style).thenReturn(PlutoStyle());
   });
 
   testWidgets('title 이 출력 되어야 한다.', (WidgetTester tester) async {

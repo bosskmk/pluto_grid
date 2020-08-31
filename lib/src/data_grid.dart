@@ -97,7 +97,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
 
     footerHeight =
-        widget.createFooter == null ? 0 : PlutoDefaultSettings.rowHeight;
+        widget.createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
 
     // Dispose
     disposeList.add(() {
@@ -293,7 +293,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: stateManager.style.rowHeight,
+                      top: PlutoDefaultSettings.rowTotalHeight,
                       left: 0,
                       bottom: footerHeight,
                       child: LeftFixedRows(stateManager),
@@ -305,7 +305,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     child: BodyHeaders(stateManager),
                   ),
                   Positioned.fill(
-                    top: stateManager.style.rowHeight,
+                    top: PlutoDefaultSettings.rowTotalHeight,
                     left: leftFixedColumnWidth,
                     right: rightFixedColumnWidth,
                     bottom: footerHeight,
@@ -321,7 +321,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: stateManager.style.rowHeight,
+                      top: PlutoDefaultSettings.rowTotalHeight,
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
@@ -345,21 +345,26 @@ class _PlutoGridState extends State<PlutoGrid> {
                       child: ShadowLine(axis: Axis.vertical, reverse: true),
                     ),
                   Positioned(
-                    top: stateManager.style.rowHeight,
+                    top: PlutoDefaultSettings.rowTotalHeight,
                     left: 0,
                     right: 0,
                     child: ShadowLine(axis: Axis.horizontal),
                   ),
                   if (widget.createFooter != null)
                     Positioned(
-                      bottom: footerHeight,
+                      top: size.maxHeight -
+                          footerHeight -
+                          PlutoDefaultSettings.totalShadowLineWidth,
                       left: 0,
                       right: 0,
                       child: ShadowLine(axis: Axis.horizontal, reverse: true),
                     ),
                   if (widget.createFooter != null)
                     Positioned.fill(
-                      top: size.maxHeight - footerHeight,
+                      top: size.maxHeight -
+                          footerHeight -
+                          PlutoDefaultSettings.totalShadowLineWidth,
+                      bottom: 0,
                       child: widget.createFooter(stateManager),
                     ),
                 ],
@@ -430,6 +435,9 @@ class PlutoDefaultSettings {
 
   /// Row - border width
   static const double rowBorderWidth = 1.0;
+
+  /// Row - total height
+  static const double rowTotalHeight = rowHeight + rowBorderWidth;
 
   /// Row - box color : Row in selected state
   static const Color currentRowColor = Color.fromRGBO(220, 245, 255, 100);

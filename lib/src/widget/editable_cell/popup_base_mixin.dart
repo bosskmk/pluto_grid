@@ -30,12 +30,19 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   bool _isOpenedPopup = false;
 
+  /// If a column field name is specified,
+  /// the value of the field is returned even if another cell is selected.
+  ///
+  /// If the column field name is not specified,
+  /// the value of the selected cell is returned.
   String fieldOnSelected;
 
   double popupHeight;
 
   int offsetOfScrollRowIdx = 0;
 
+  /// Callback function that returns Footer to be inserted at the bottom of the popup
+  /// Implement a callback function that takes [PlutoStateManager] as a parameter.
   CreateFooterCallBack createFooter;
 
   @override

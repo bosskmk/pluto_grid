@@ -25,12 +25,6 @@ class PlutoStateManager extends ChangeNotifier {
   PlutoScrollController get scroll => _scroll;
   PlutoScrollController _scroll;
 
-  /// [style]
-  ///
-  /// Grid style information.
-  PlutoStyle get style => _style;
-  PlutoStyle _style;
-
   /// [mode]
   ///
   /// Grid mode.
@@ -55,7 +49,6 @@ class PlutoStateManager extends ChangeNotifier {
     @required List<PlutoRow> rows,
     @required FocusNode gridFocusNode,
     @required PlutoScrollController scroll,
-    PlutoStyle style,
     PlutoMode mode,
     PlutoOnChangedEventCallback onChangedEventCallback,
     PlutoOnSelectedEventCallback onSelectedEventCallback,
@@ -63,7 +56,6 @@ class PlutoStateManager extends ChangeNotifier {
         this._rows = rows,
         this._gridFocusNode = gridFocusNode,
         this._scroll = scroll,
-        this._style = style ?? PlutoStyle(),
         this._mode = mode,
         this._onChanged = onChangedEventCallback,
         this._onSelected = onSelectedEventCallback,
@@ -463,15 +455,13 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = false;
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
-        PlutoDefaultSettings.rowHeight +
         PlutoDefaultSettings.gridBorderWidth +
-        PlutoDefaultSettings.rowBorderWidth;
+        PlutoDefaultSettings.rowTotalHeight;
 
-    double currentCellOffsetDy = (currentRowIdx *
-            (PlutoDefaultSettings.rowHeight +
-                PlutoDefaultSettings.rowBorderWidth)) +
-        gridBodyOffsetDy -
-        _scroll.vertical.offset;
+    double currentCellOffsetDy =
+        (currentRowIdx * PlutoDefaultSettings.rowTotalHeight) +
+            gridBodyOffsetDy -
+            _scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
       _checkCellValue = true;
@@ -479,8 +469,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     int rowIdx = (((currentCellOffsetDy - offset.dy) /
-                    (PlutoDefaultSettings.rowHeight +
-                        PlutoDefaultSettings.rowBorderWidth))
+                    PlutoDefaultSettings.rowTotalHeight)
                 .ceil() -
             currentRowIdx)
         .abs();
@@ -525,10 +514,7 @@ class PlutoStateManager extends ChangeNotifier {
     if (_currentRowIdx != null) {
       _currentRowIdx = rows.length + _currentRowIdx;
 
-      final double rowSize =
-          _style.rowHeight + PlutoDefaultSettings.rowBorderWidth;
-
-      double offsetToMove = rows.length * rowSize;
+      double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 
       scrollByDirection(MoveDirection.Up, offsetToMove);
     }
@@ -878,8 +864,7 @@ class PlutoStateManager extends ChangeNotifier {
       return;
     }
 
-    final double rowSize =
-        _style.rowHeight + PlutoDefaultSettings.rowBorderWidth;
+    final double rowSize = PlutoDefaultSettings.rowTotalHeight;
 
     final double gridOffset =
         PlutoDefaultSettings.gridPadding + PlutoDefaultSettings.shadowLineSize;
@@ -1263,7 +1248,7 @@ class PlutoStateManager extends ChangeNotifier {
         maxWidth >
             (leftFixedColumnsWidth +
                 rightFixedColumnsWidth +
-                _style.bodyMinWidth +
+                PlutoDefaultSettings.bodyMinWidth +
                 PlutoDefaultSettings.totalShadowLineWidth);
   }
 }
@@ -1286,16 +1271,6 @@ class PlutoScrollController {
     this.horizontal,
     this.bodyHeadersHorizontal,
     this.bodyRowsHorizontal,
-  });
-}
-
-class PlutoStyle {
-  double bodyMinWidth;
-  double rowHeight;
-
-  PlutoStyle({
-    this.bodyMinWidth = PlutoDefaultSettings.bodyMinWidth,
-    this.rowHeight = PlutoDefaultSettings.rowHeight,
   });
 }
 

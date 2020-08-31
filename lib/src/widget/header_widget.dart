@@ -133,7 +133,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       },
       feedback: Container(
         width: widget.column.width,
-        height: widget.stateManager.style.rowHeight,
+        height: PlutoDefaultSettings.rowHeight,
         padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
         decoration: BoxDecoration(
           color: Colors.black26,
@@ -153,7 +153,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   Widget _buildHeader() {
     Widget _header = Container(
       width: widget.column.width,
-      height: widget.stateManager.style.rowHeight,
+      height: PlutoDefaultSettings.rowHeight,
       padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
       child: Text(
         widget.column.title,

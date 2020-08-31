@@ -78,7 +78,7 @@ class _RowWidgetState extends State<RowWidget> {
             stateManager: widget.stateManager,
             cell: widget.row.cells[column.field],
             width: column.width,
-            height: widget.stateManager.style.rowHeight,
+            height: PlutoDefaultSettings.rowHeight,
             column: column,
             rowIdx: widget.rowIdx,
           );

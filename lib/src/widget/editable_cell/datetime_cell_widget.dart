@@ -45,9 +45,7 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   @override
   void initState() {
-    popupHeight = 6 *
-            (PlutoDefaultSettings.rowHeight +
-                PlutoDefaultSettings.rowBorderWidth) +
+    popupHeight = (6 * PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
 
@@ -284,7 +282,9 @@ class _FooterState extends State<_Footer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(0),
+      height: PlutoDefaultSettings.rowTotalHeight,
+      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      alignment: Alignment.center,
       child: Text(
         '$year-$month',
         style: TextStyle(

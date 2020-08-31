@@ -70,6 +70,7 @@ class _BodyRowsState extends State<BodyRows> {
             controller: widget.stateManager.scroll.bodyRowsVertical,
             scrollDirection: Axis.vertical,
             itemCount: _rows.length,
+            itemExtent: PlutoDefaultSettings.rowTotalHeight,
             itemBuilder: (ctx, i) {
               return RowWidget(
                 key: ValueKey('body_row_${_rows[i]._key}'),

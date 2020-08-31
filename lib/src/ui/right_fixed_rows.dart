@@ -48,6 +48,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
       controller: widget.stateManager.scroll.rightRowsVerticalScroll,
       scrollDirection: Axis.vertical,
       itemCount: _rows.length,
+      itemExtent: PlutoDefaultSettings.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return RowWidget(
           key: ValueKey('right_fixed_row_${_rows[i]._key}'),
