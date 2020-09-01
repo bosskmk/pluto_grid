@@ -13,6 +13,8 @@ import 'package:rxdart/rxdart.dart';
 
 part './src/data_grid.dart';
 
+part './src/data_dual_grid.dart';
+
 part './src/data_grid_popup.dart';
 
 part './src/event/pluto_on_changed_event.dart';

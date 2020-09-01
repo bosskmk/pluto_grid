@@ -67,9 +67,20 @@ class PlutoKeyManager {
 
     if (keyManagerEvent.event.isShiftPressed) {
       stateManager.moveSelectingCell(moveDirection);
-    } else {
-      stateManager.moveCurrentCell(moveDirection);
+      return;
     }
+
+    if (keyManagerEvent.event.isControlPressed) {
+      return;
+    }
+
+    if (stateManager.currentCell == null) {
+      stateManager.setCurrentCell(
+          stateManager.rows.first.cells.entries.first.value, 0);
+      return;
+    }
+
+    stateManager.moveCurrentCell(moveDirection);
   }
 
   void _handleEnter(KeyManagerEvent keyManagerEvent) {
@@ -94,7 +105,8 @@ class PlutoKeyManager {
           lastChildContext.widget is EditableText) {
         stateManager.gridFocusNode.unfocus();
         developer.log('TODO',
-            name: 'data_grid', error: 'Enter twice when entering Korean on the web.');
+            name: 'data_grid',
+            error: 'Enter twice when entering Korean on the web.');
       }
 
       if (keyManagerEvent.event.isShiftPressed) {
@@ -225,5 +237,15 @@ extension KeyManagerEventExtention on KeyManagerEvent {
   bool get isCtrlV {
     return (this.event.isMetaPressed || this.event.isControlPressed) &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+  }
+
+  bool get isCtrlLeft {
+    return (this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
+  }
+
+  bool get isCtrlRight {
+    return (this.event.isControlPressed) &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
   }
 }

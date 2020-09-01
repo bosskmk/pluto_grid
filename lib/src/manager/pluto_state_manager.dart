@@ -946,6 +946,8 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Change column position.
   void moveColumn(Key columnKey, double offset) {
+    offset -= gridGlobalOffset.dx;
+
     final List<int> columnIndexes = columnIndexesByShowFixed();
 
     Function findColumnIndex = (int i) {

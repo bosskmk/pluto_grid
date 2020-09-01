@@ -197,8 +197,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     List<PlutoColumn> applyFormatOnInit = widget.columns.where((element) {
       if (element.type.name.isNumber && element.type.applyFormatOnInit) {
         return true;
-      } else if (element.type.name.isDate &&
-          element.type.applyFormatOnInit) {
+      } else if (element.type.name.isDate && element.type.applyFormatOnInit) {
         return true;
       }
       return false;
