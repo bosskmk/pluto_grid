@@ -27,7 +27,7 @@ class DummyData {
             return PlutoColumnType.select(['One', 'Two', 'Three'],
                 readOnly: true);
           else if (i == 6)
-            return PlutoColumnType.datetime();
+            return PlutoColumnType.date();
           else
             return PlutoColumnType.text();
         }(i),

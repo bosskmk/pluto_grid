@@ -139,13 +139,13 @@ class PlutoColumnType {
   /// [format] 'yyyy-MM-dd' (2020-01-01)
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
-  PlutoColumnType.datetime({
+  PlutoColumnType.date({
     this.startDate,
     this.endDate,
     this.readOnly = false,
     this.format = 'yyyy-MM-dd',
     this.applyFormatOnInit = true,
-  }) : this.name = _PlutoColumnTypeName.Datetime;
+  }) : this.name = _PlutoColumnTypeName.Date;
 
   /// Name of the column type.
   _PlutoColumnTypeName name;
@@ -184,7 +184,7 @@ enum _PlutoColumnTypeName {
   Text,
   Number,
   Select,
-  Datetime,
+  Date,
 }
 
 extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
@@ -200,7 +200,7 @@ extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
     return this == _PlutoColumnTypeName.Select;
   }
 
-  bool get isDatetime {
-    return this == _PlutoColumnTypeName.Datetime;
+  bool get isDate {
+    return this == _PlutoColumnTypeName.Date;
   }
 }

@@ -51,7 +51,7 @@ part './src/ui/right_fixed_rows.dart';
 
 part './src/widget/cell_widget.dart';
 
-part './src/widget/editable_cell/datetime_cell_widget.dart';
+part './src/widget/editable_cell/date_cell_widget.dart';
 
 part './src/widget/editable_cell/number_cell_widget.dart';
 

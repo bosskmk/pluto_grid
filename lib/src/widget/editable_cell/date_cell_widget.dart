@@ -1,22 +1,22 @@
 part of '../../../pluto_grid.dart';
 
-class DatetimeCellWidget extends StatefulWidget implements _PopupBaseMixinImpl {
+class DateCellWidget extends StatefulWidget implements _PopupBaseMixinImpl {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
-  DatetimeCellWidget({
+  DateCellWidget({
     this.stateManager,
     this.cell,
     this.column,
   });
 
   @override
-  _DatetimeCellWidgetState createState() => _DatetimeCellWidgetState();
+  _DateCellWidgetState createState() => _DateCellWidgetState();
 }
 
-class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
-    with _PopupBaseMixin<DatetimeCellWidget> {
+class _DateCellWidgetState extends State<DateCellWidget>
+    with _PopupBaseMixin<DateCellWidget> {
   PlutoStateManager popupStateManager;
 
   List<PlutoColumn> popupColumns = [];
@@ -90,22 +90,22 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
     super._onLoaded(event);
   }
 
-  bool _handleGridFocusOnKey(KeyManagerEvent keyManagerEvent) {
+  void _handleGridFocusOnKey(KeyManagerEvent keyManagerEvent) {
     if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
       if (keyManagerEvent.isUp) {
         if (popupStateManager.currentRowIdx == 0) {
           popupStateManager.prependRows(_getMoreRows(insertBefore: true));
-          return false;
+          return;
         }
       } else if (keyManagerEvent.isDown) {
         if (popupStateManager.currentRowIdx ==
             popupStateManager.rows.length - 1) {
           popupStateManager.appendRows(_getMoreRows());
-          return false;
+          return;
         }
       }
     }
-    return false;
+    return;
   }
 
   void _handleScroll() {

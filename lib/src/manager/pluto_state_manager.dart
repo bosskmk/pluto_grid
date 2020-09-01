@@ -723,7 +723,7 @@ class PlutoStateManager extends ChangeNotifier {
     if (column.type.name.isSelect &&
         !column.type.selectItems.contains(newValue)) {
       newValue = oldValue;
-    } else if (column.type.name.isDatetime) {
+    } else if (column.type.name.isDate) {
       final parseNewValue = DateTime.tryParse(newValue);
 
       if (parseNewValue == null) {
@@ -788,7 +788,7 @@ class PlutoStateManager extends ChangeNotifier {
       // Select type column can be moved left or right even in edit state
       if (currentColumn?.type?.name?.isSelect == true) {}
       // Datetime type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.name?.isDatetime == true) {}
+      else if (currentColumn?.type?.name?.isDate == true) {}
       // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.type?.readOnly == true) {}
       // Unable to move left and right in other modified states

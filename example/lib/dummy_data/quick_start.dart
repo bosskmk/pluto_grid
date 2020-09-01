@@ -28,7 +28,7 @@ class DummyData {
       PlutoColumn(
         title: 'datetime column',
         field: 'datetime_field',
-        type: PlutoColumnType.datetime(),
+        type: PlutoColumnType.date(),
       ),
     ];
 

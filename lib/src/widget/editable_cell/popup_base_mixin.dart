@@ -88,7 +88,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       rows: popupRows,
       width: popupColumns.fold(0, (previous, column) {
         return previous + column.width;
-      }),
+      }) + 1,
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,

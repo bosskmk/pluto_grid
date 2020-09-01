@@ -291,8 +291,8 @@ class _CellWidgetState extends State<CellWidget>
           cell: widget.cell,
           column: widget.column,
         );
-      case _PlutoColumnTypeName.Datetime:
-        return DatetimeCellWidget(
+      case _PlutoColumnTypeName.Date:
+        return DateCellWidget(
           stateManager: widget.stateManager,
           cell: widget.cell,
           column: widget.column,

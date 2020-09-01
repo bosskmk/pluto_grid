@@ -59,7 +59,7 @@ List<PlutoColumn> columns = [
   PlutoColumn(
     title: 'dateColumn',
     field: 'dateColumn',
-    type: PlutoColumnType.datetime(),
+    type: PlutoColumnType.date(),
   ),
   PlutoColumn(
     title: 'rightFixedColumn',

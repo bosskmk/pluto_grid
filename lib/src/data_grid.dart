@@ -102,7 +102,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
 
     headerHeight =
-    widget.createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+        widget.createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
 
     footerHeight =
         widget.createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
@@ -197,7 +197,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     List<PlutoColumn> applyFormatOnInit = widget.columns.where((element) {
       if (element.type.name.isNumber && element.type.applyFormatOnInit) {
         return true;
-      } else if (element.type.name.isDatetime &&
+      } else if (element.type.name.isDate &&
           element.type.applyFormatOnInit) {
         return true;
       }
@@ -222,7 +222,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                 .type
                 .numberFormat(widget.rows[rowIdx].cells[element.field].value)
                 .replaceAll(',', ''));
-          } else if (element.type.name.isDatetime) {
+          } else if (element.type.name.isDate) {
             widget.rows[rowIdx].cells[element.field].value =
                 intl.DateFormat(element.type.format).format(DateTime.parse(
                     widget.rows[rowIdx].cells[element.field].value));
@@ -297,7 +297,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                   if (widget.createHeader != null)
                     Positioned.fill(
                       top: 0,
-                      bottom: size.maxHeight - PlutoDefaultSettings.rowTotalHeight,
+                      bottom:
+                          size.maxHeight - PlutoDefaultSettings.rowTotalHeight,
                       child: widget.createHeader(stateManager),
                     ),
                   if (widget.createHeader != null)
