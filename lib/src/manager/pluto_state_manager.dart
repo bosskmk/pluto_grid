@@ -457,6 +457,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
         PlutoDefaultSettings.gridBorderWidth +
+        layout.headerHeight +
         PlutoDefaultSettings.rowTotalHeight;
 
     double currentCellOffsetDy =

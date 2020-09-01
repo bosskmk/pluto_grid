@@ -306,4 +306,95 @@ void main() {
     // Check currentColumn
     expect(stateManager.currentColumn.title, 'header2');
   });
+
+  testWidgets(
+      'WHEN selecting a specific cell without grid header'
+      'THEN That cell should be selected.', (WidgetTester tester) async {
+    // given
+    final columns = [
+      ...ColumnHelper.textColumn('header', count: 10),
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // when
+    // first cell of first column
+    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+
+    // select first cell
+    await tester.tap(
+        find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
+
+    Offset selectedCellOffset =
+        tester.getCenter(find.byKey(rows[7].cells['header5'].key));
+
+    stateManager.setCurrentSelectingPositionWithOffset(selectedCellOffset);
+
+    // then
+    expect(stateManager.currentSelectingPosition.rowIdx, 7);
+    expect(stateManager.currentSelectingPosition.columnIdx, 5);
+  });
+
+  testWidgets(
+      'WHEN selecting a specific cell with grid header'
+      'THEN That cell should be selected.', (WidgetTester tester) async {
+    // given
+    final columns = [
+      ...ColumnHelper.textColumn('header', count: 10),
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+              createHeader: (stateManager) => Text('grid header'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // when
+    // first cell of first column
+    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+
+    // select first cell
+    await tester.tap(
+        find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
+
+    Offset selectedCellOffset =
+        tester.getCenter(find.byKey(rows[5].cells['header3'].key));
+
+    stateManager.setCurrentSelectingPositionWithOffset(selectedCellOffset);
+
+    // then
+    expect(stateManager.currentSelectingPosition.rowIdx, 5);
+    expect(stateManager.currentSelectingPosition.columnIdx, 3);
+  });
 }
