@@ -362,7 +362,7 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size, double footerHeight) {
+  void setLayout(BoxConstraints size, double headerHeight, double footerHeight) {
     final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
 
     final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
@@ -370,6 +370,7 @@ class PlutoStateManager extends ChangeNotifier {
     _layout.maxWidth = size.maxWidth;
     _layout.maxHeight = size.maxHeight;
     _layout.showFixedColumn = _isShowFixedColumn;
+    _layout.headerHeight = headerHeight;
     _layout.footerHeight = footerHeight;
 
     _gridGlobalOffset = null;
@@ -1281,6 +1282,10 @@ class PlutoLayout {
   /// Screen height
   double maxHeight;
 
+  /// grid header height
+  double headerHeight;
+
+  /// grid footer height
   double footerHeight;
 
   /// Whether to apply a fixed column according to the screen size.
@@ -1292,10 +1297,11 @@ class PlutoLayout {
     this.maxWidth,
     this.maxHeight,
     this.showFixedColumn,
+    this.headerHeight,
     this.footerHeight,
   });
 
-  double get offsetHeight => maxHeight - footerHeight;
+  double get offsetHeight => maxHeight - headerHeight - footerHeight;
 }
 
 class PlutoCellPosition {

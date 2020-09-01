@@ -1,5 +1,6 @@
 part of '../pluto_grid.dart';
 
+typedef CreateHeaderCallBack = Widget Function(PlutoStateManager stateManager);
 typedef CreateFooterCallBack = Widget Function(PlutoStateManager stateManager);
 
 class PlutoGrid extends StatefulWidget {
@@ -9,6 +10,7 @@ class PlutoGrid extends StatefulWidget {
   final PlutoOnLoadedEventCallback onLoaded;
   final PlutoOnChangedEventCallback onChanged;
   final PlutoOnSelectedEventCallback onSelected;
+  final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
 
   const PlutoGrid({
@@ -17,6 +19,7 @@ class PlutoGrid extends StatefulWidget {
     @required this.rows,
     this.onLoaded,
     this.onChanged,
+    this.createHeader,
     this.createFooter,
   })  : this.mode = PlutoMode.Normal,
         this.onSelected = null,
@@ -29,6 +32,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.createHeader,
     this.createFooter,
     @required this.mode,
   }) : super(key: key);
@@ -53,6 +57,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double bodyColumnWidth;
   double rightFixedColumnWidth;
   bool showFixedColumn;
+  double headerHeight;
   double footerHeight;
 
   List<Function()> disposeList = [];
@@ -95,6 +100,9 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
     bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
+
+    headerHeight =
+    widget.createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
 
     footerHeight =
         widget.createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
@@ -250,7 +258,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void setLayout(BoxConstraints size) {
-    stateManager.setLayout(size, footerHeight);
+    stateManager.setLayout(size, headerHeight, footerHeight);
 
     showFixedColumn = stateManager.layout.showFixedColumn;
 
@@ -286,26 +294,40 @@ class _PlutoGridState extends State<PlutoGrid> {
               ),
               child: Stack(
                 children: [
+                  if (widget.createHeader != null)
+                    Positioned.fill(
+                      top: 0,
+                      bottom: size.maxHeight - PlutoDefaultSettings.rowTotalHeight,
+                      child: widget.createHeader(stateManager),
+                    ),
+                  if (widget.createHeader != null)
+                    Positioned(
+                      top: PlutoDefaultSettings.rowTotalHeight,
+                      left: 0,
+                      right: 0,
+                      child: ShadowLine(axis: Axis.horizontal),
+                    ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
+                      top: headerHeight,
                       left: 0,
                       child: LeftFixedHeaders(stateManager),
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: PlutoDefaultSettings.rowTotalHeight,
+                      top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
                       left: 0,
                       bottom: footerHeight,
                       child: LeftFixedRows(stateManager),
                     ),
                   Positioned.fill(
-                    top: 0,
+                    top: headerHeight,
                     left: leftFixedColumnWidth,
                     right: rightFixedColumnWidth,
                     child: BodyHeaders(stateManager),
                   ),
                   Positioned.fill(
-                    top: PlutoDefaultSettings.rowTotalHeight,
+                    top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
                     left: leftFixedColumnWidth,
                     right: rightFixedColumnWidth,
                     bottom: footerHeight,
@@ -313,7 +335,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                   ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: 0,
+                      top: headerHeight,
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
@@ -321,7 +343,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: PlutoDefaultSettings.rowTotalHeight,
+                      top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
@@ -330,14 +352,14 @@ class _PlutoGridState extends State<PlutoGrid> {
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned(
-                      top: 0,
+                      top: headerHeight,
                       left: leftFixedColumnWidth,
                       bottom: footerHeight,
                       child: ShadowLine(axis: Axis.vertical),
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned(
-                      top: 0,
+                      top: headerHeight,
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
@@ -345,7 +367,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                       child: ShadowLine(axis: Axis.vertical, reverse: true),
                     ),
                   Positioned(
-                    top: PlutoDefaultSettings.rowTotalHeight,
+                    top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
                     left: 0,
                     right: 0,
                     child: ShadowLine(axis: Axis.horizontal),

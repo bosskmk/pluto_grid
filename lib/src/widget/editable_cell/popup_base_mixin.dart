@@ -41,6 +41,10 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   int offsetOfScrollRowIdx = 0;
 
+  /// Callback function that returns Header to be inserted at the top of the popup
+  /// Implement a callback function that takes [PlutoStateManager] as a parameter.
+  CreateHeaderCallBack createHeader;
+
   /// Callback function that returns Footer to be inserted at the bottom of the popup
   /// Implement a callback function that takes [PlutoStateManager] as a parameter.
   CreateFooterCallBack createFooter;
@@ -86,6 +90,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
         return previous + column.width;
       }),
       height: popupHeight,
+      createHeader: createHeader,
       createFooter: createFooter,
     );
   }

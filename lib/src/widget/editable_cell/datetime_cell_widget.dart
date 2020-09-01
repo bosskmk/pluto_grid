@@ -45,11 +45,11 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
   @override
   void initState() {
-    popupHeight = (6 * PlutoDefaultSettings.rowTotalHeight) +
+    popupHeight = (8 * PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
 
-    offsetOfScrollRowIdx = 2;
+    offsetOfScrollRowIdx = 3;
 
     popupColumns = _buildColumns();
 
@@ -68,8 +68,8 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
 
     popupRows = _buildRows(days);
 
-    createFooter =
-        (PlutoStateManager stateManager) => _Footer(stateManager: stateManager);
+    createHeader =
+        (PlutoStateManager stateManager) => _Header(stateManager: stateManager);
 
     super.initState();
   }
@@ -227,16 +227,16 @@ class _DatetimeCellWidgetState extends State<DatetimeCellWidget>
   }
 }
 
-class _Footer extends StatefulWidget {
+class _Header extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  _Footer({this.stateManager});
+  _Header({this.stateManager});
 
   @override
-  _FooterState createState() => _FooterState();
+  _HeaderState createState() => _HeaderState();
 }
 
-class _FooterState extends State<_Footer> {
+class _HeaderState extends State<_Header> {
   PlutoCell currentCell;
 
   @override

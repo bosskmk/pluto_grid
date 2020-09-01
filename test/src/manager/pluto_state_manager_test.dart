@@ -548,7 +548,7 @@ void main() {
     );
 
     // when
-    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0);
+    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
 
     String selectColumnField = 'body1';
     stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -582,7 +582,7 @@ void main() {
     stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
     stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500), 0);
+    stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500), 0, 0);
 
     String selectColumnField = 'body2';
     stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -618,7 +618,7 @@ void main() {
     stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
     stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0);
+    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
 
     String selectColumnField = 'body2';
     stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
