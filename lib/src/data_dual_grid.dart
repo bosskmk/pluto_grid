@@ -142,18 +142,27 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           },
           onChanged: props.onChanged,
           onSelected: (PlutoOnSelectedEvent event) {
-            widget.onSelected(
-              PlutoDualOnSelectedEvent(
-                gridA: PlutoOnSelectedEvent(
-                  row: stateManagerA.currentRow,
-                  cell: stateManagerA.currentCell,
+            if (event.row == null || event.cell == null) {
+              widget.onSelected(
+                PlutoDualOnSelectedEvent(
+                  gridA: null,
+                  gridB: null,
                 ),
-                gridB: PlutoOnSelectedEvent(
-                  row: stateManagerB.currentRow,
-                  cell: stateManagerB.currentCell,
+              );
+            } else {
+              widget.onSelected(
+                PlutoDualOnSelectedEvent(
+                  gridA: PlutoOnSelectedEvent(
+                    row: stateManagerA.currentRow,
+                    cell: stateManagerA.currentCell,
+                  ),
+                  gridB: PlutoOnSelectedEvent(
+                    row: stateManagerB.currentRow,
+                    cell: stateManagerB.currentCell,
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           },
           createHeader: props.createHeader,
           createFooter: props.createFooter,

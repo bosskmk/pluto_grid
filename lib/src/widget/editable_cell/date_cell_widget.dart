@@ -69,7 +69,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
     popupRows = _buildRows(days);
 
     createHeader =
-        (PlutoStateManager stateManager) => _Header(stateManager: stateManager);
+        (PlutoStateManager stateManager) => _DateCellHeader(stateManager: stateManager);
 
     super.initState();
   }
@@ -227,16 +227,16 @@ class _DateCellWidgetState extends State<DateCellWidget>
   }
 }
 
-class _Header extends StatefulWidget {
+class _DateCellHeader extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  _Header({this.stateManager});
+  _DateCellHeader({this.stateManager});
 
   @override
-  _HeaderState createState() => _HeaderState();
+  _DateCellHeaderState createState() => _DateCellHeaderState();
 }
 
-class _HeaderState extends State<_Header> {
+class _DateCellHeaderState extends State<_DateCellHeader> {
   PlutoCell currentCell;
 
   @override
