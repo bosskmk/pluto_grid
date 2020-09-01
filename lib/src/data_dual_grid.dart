@@ -1,5 +1,18 @@
 part of '../pluto_grid.dart';
 
+typedef PlutoDualOnSelectedEventCallback = void Function(
+    PlutoDualOnSelectedEvent event);
+
+class PlutoDualOnSelectedEvent {
+  PlutoOnSelectedEvent gridA;
+  PlutoOnSelectedEvent gridB;
+
+  PlutoDualOnSelectedEvent({
+    this.gridA,
+    this.gridB,
+  });
+}
+
 class PlutoDualGridProps {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
@@ -21,8 +34,15 @@ class PlutoDualGridProps {
 class PlutoDualGrid extends StatefulWidget {
   final PlutoDualGridProps gridPropsA;
   final PlutoDualGridProps gridPropsB;
+  final PlutoMode mode;
+  final PlutoDualOnSelectedEventCallback onSelected;
 
-  PlutoDualGrid(this.gridPropsA, this.gridPropsB);
+  PlutoDualGrid({
+    this.gridPropsA,
+    this.gridPropsB,
+    this.mode,
+    this.onSelected,
+  });
 
   @override
   _PlutoDualGridState createState() => _PlutoDualGridState();
@@ -36,6 +56,9 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 
   FocusScopeNode _currentFocusNode;
   bool _isFocusA;
+
+  PlutoStateManager stateManagerA;
+  PlutoStateManager stateManagerB;
 
   @override
   void dispose() {
@@ -76,6 +99,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 
   Widget _buildGrid({
     PlutoDualGridProps props,
+    PlutoMode mode,
     FocusNode focusNode,
     bool canRequestFocus,
     BoxConstraints size,
@@ -86,10 +110,17 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
       canRequestFocus: canRequestFocus,
       child: SizedBox(
         width: size.maxWidth / 2,
-        child: PlutoGrid(
+        child: PlutoGrid.popup(
           columns: props.columns,
           rows: props.rows,
+          mode: mode,
           onLoaded: (PlutoOnLoadedEvent event) {
+            if (isGridA) {
+              stateManagerA = event.stateManager;
+            } else {
+              stateManagerB = event.stateManager;
+            }
+
             event.stateManager.addListener(() {
               _changeFocusSubject.add(isGridA);
             });
@@ -110,6 +141,20 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
             }
           },
           onChanged: props.onChanged,
+          onSelected: (PlutoOnSelectedEvent event) {
+            widget.onSelected(
+              PlutoDualOnSelectedEvent(
+                gridA: PlutoOnSelectedEvent(
+                  row: stateManagerA.currentRow,
+                  cell: stateManagerA.currentCell,
+                ),
+                gridB: PlutoOnSelectedEvent(
+                  row: stateManagerB.currentRow,
+                  cell: stateManagerB.currentCell,
+                ),
+              ),
+            );
+          },
           createHeader: props.createHeader,
           createFooter: props.createFooter,
         ),
@@ -129,6 +174,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
         children: [
           _buildGrid(
             props: widget.gridPropsA,
+            mode: widget.mode,
             focusNode: _focusNodeA,
             canRequestFocus: _isFocusA,
             size: size,
@@ -136,6 +182,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           ),
           _buildGrid(
             props: widget.gridPropsB,
+            mode: widget.mode,
             focusNode: _focusNodeB,
             canRequestFocus: !_isFocusA,
             size: size,

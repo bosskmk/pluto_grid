@@ -147,6 +147,10 @@ class PlutoColumnType {
     this.applyFormatOnInit = true,
   }) : this.name = _PlutoColumnTypeName.Date;
 
+  PlutoColumnType.time({
+    this.readOnly = false,
+  }) : this.name = _PlutoColumnTypeName.Time;
+
   /// Name of the column type.
   _PlutoColumnTypeName name;
 
@@ -185,6 +189,7 @@ enum _PlutoColumnTypeName {
   Number,
   Select,
   Date,
+  Time,
 }
 
 extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
@@ -202,5 +207,9 @@ extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
 
   bool get isDate {
     return this == _PlutoColumnTypeName.Date;
+  }
+
+  bool get isTime {
+    return this == _PlutoColumnTypeName.Time;
   }
 }

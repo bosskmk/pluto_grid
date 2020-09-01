@@ -732,6 +732,12 @@ class PlutoStateManager extends ChangeNotifier {
       } else {
         newValue = intl.DateFormat(column.type.format).format(parseNewValue);
       }
+    } else if (column.type.name.isTime) {
+      final time = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
+
+      if (!time.hasMatch(newValue)) {
+        newValue = oldValue;
+      }
     }
 
     return newValue;
@@ -788,8 +794,10 @@ class PlutoStateManager extends ChangeNotifier {
     if (!force && _isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
       if (currentColumn?.type?.name?.isSelect == true) {}
-      // Datetime type column can be moved left or right even in edit state
+      // Date type column can be moved left or right even in edit state
       else if (currentColumn?.type?.name?.isDate == true) {}
+      // Time type column can be moved left or right even in edit state
+      else if (currentColumn?.type?.name?.isTime == true) {}
       // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.type?.readOnly == true) {}
       // Unable to move left and right in other modified states

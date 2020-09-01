@@ -297,6 +297,12 @@ class _CellWidgetState extends State<CellWidget>
           cell: widget.cell,
           column: widget.column,
         );
+      case _PlutoColumnTypeName.Time:
+        return TimeCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+          column: widget.column,
+        );
       case _PlutoColumnTypeName.Text:
       default:
         return TextCellWidget(

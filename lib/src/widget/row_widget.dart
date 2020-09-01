@@ -61,7 +61,9 @@ class _RowWidgetState extends State<RowWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _isCurrentRow && (!_isSelecting && _selectingPosition == null)
+        color: _isCurrentRow &&
+                (!_isSelecting && _selectingPosition == null) &&
+                widget.stateManager.gridFocusNode.hasFocus
             ? PlutoDefaultSettings.currentRowColor
             : Colors.white,
         border: const Border(

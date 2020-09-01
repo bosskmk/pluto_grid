@@ -22,14 +22,14 @@ class _PlutoDualState extends State<PlutoDual> {
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoDualGrid(
-          PlutoDualGridProps(
+          gridPropsA: PlutoDualGridProps(
             columns: dummyDataA.columns,
             rows: dummyDataA.rows,
             onChanged: (PlutoOnChangedEvent event) {
               print(event);
             },
           ),
-          PlutoDualGridProps(
+          gridPropsB: PlutoDualGridProps(
             columns: dummyDataB.columns,
             rows: dummyDataB.rows,
             onChanged: (PlutoOnChangedEvent event) {

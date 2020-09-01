@@ -11,9 +11,11 @@ import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:rxdart/rxdart.dart';
 
-part './src/data_grid.dart';
-
 part './src/data_dual_grid.dart';
+
+part './src/data_dual_grid_popup.dart';
+
+part './src/data_grid.dart';
 
 part './src/data_grid_popup.dart';
 
@@ -64,6 +66,8 @@ part './src/widget/editable_cell/select_cell_widget.dart';
 part './src/widget/editable_cell/text_base_mixin.dart';
 
 part './src/widget/editable_cell/text_cell_widget.dart';
+
+part './src/widget/editable_cell/time_cell_widget.dart';
 
 part './src/widget/header_widget.dart';
 

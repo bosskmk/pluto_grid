@@ -28,6 +28,8 @@ class DummyData {
                 readOnly: true);
           else if (i == 6)
             return PlutoColumnType.date();
+          else if (i == 7)
+            return PlutoColumnType.time();
           else
             return PlutoColumnType.text();
         }(i),
@@ -54,6 +56,8 @@ class DummyData {
               return 'One';
             else if (element.field == '6')
               return DateTime.now().add(Duration(days: ++days)).toString();
+            else if (element.field == '7')
+              return '00:00';
             else
               return faker.food.restaurant();
           }(element),
