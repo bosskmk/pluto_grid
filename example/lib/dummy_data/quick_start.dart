@@ -26,9 +26,15 @@ class DummyData {
       ),
       /// Datetime Column definition
       PlutoColumn(
-        title: 'datetime column',
-        field: 'datetime_field',
+        title: 'date column',
+        field: 'date_field',
         type: PlutoColumnType.date(),
+      ),
+      /// Time Column definition
+      PlutoColumn(
+        title: 'time column',
+        field: 'time_field',
+        type: PlutoColumnType.time(),
       ),
     ];
 
@@ -38,7 +44,8 @@ class DummyData {
           'text_field': PlutoCell(value: 'Text cell value1'),
           'number_field': PlutoCell(value: 2020),
           'select_field': PlutoCell(value: 'item1'),
-          'datetime_field': PlutoCell(value: '2020-08-06'),
+          'date_field': PlutoCell(value: '2020-08-06'),
+          'time_field': PlutoCell(value: '12:30'),
         },
       ),
       PlutoRow(
@@ -46,7 +53,8 @@ class DummyData {
           'text_field': PlutoCell(value: 'Text cell value2'),
           'number_field': PlutoCell(value: 2021),
           'select_field': PlutoCell(value: 'item2'),
-          'datetime_field': PlutoCell(value: '2020-08-07'),
+          'date_field': PlutoCell(value: '2020-08-07'),
+          'time_field': PlutoCell(value: '18:45'),
         },
       ),
       PlutoRow(
@@ -54,7 +62,8 @@ class DummyData {
           'text_field': PlutoCell(value: 'Text cell value3'),
           'number_field': PlutoCell(value: 2022),
           'select_field': PlutoCell(value: 'item3'),
-          'datetime_field': PlutoCell(value: '2020-08-08'),
+          'date_field': PlutoCell(value: '2020-08-08'),
+          'time_field': PlutoCell(value: '23:59'),
         },
       ),
     ];

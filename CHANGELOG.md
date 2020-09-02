@@ -1,6 +1,10 @@
-## [0.1.6] - 
+## [0.1.6] - 2020. 9. 2
 
 * Change datetime column type to date.
+* Fix selecting cell bug.
+* Add dual mode grid.
+* Add time type column.
+* Update Demo.
 
 ## [0.1.5] - 2020. 8. 31
 

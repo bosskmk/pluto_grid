@@ -1,23 +1,19 @@
+import 'package:example/widget/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'dummy_data/development.dart';
+import '../dummy_data/development.dart';
 
-class PlutoNormal extends StatefulWidget {
-  @override
-  _PlutoNormalState createState() => _PlutoNormalState();
-}
-
-class _PlutoNormalState extends State<PlutoNormal> {
-  final dummyData = DummyData(10, 100);
+class NormalGridScreen extends StatelessWidget {
+  static const routeName = 'normal-grid';
 
   @override
   Widget build(BuildContext context) {
+    final dummyData = DummyData(10, 100);
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('PlutoGrid Demo'),
-      ),
+      appBar: AppBar(title: Text('PlutoGrid - Normal'),),
+      drawer: MainDrawer(),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoGrid(
