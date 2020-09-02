@@ -32,13 +32,13 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             title: Text('Normal Grid Demo'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, NormalGridScreen.routeName);
+              Navigator.popAndPushNamed(context, NormalGridScreen.routeName);
             },
           ),
           ListTile(
             title: Text('Dual Grid Demo'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, DualGridScreen.routeName);
+              Navigator.popAndPushNamed(context, DualGridScreen.routeName);
             },
           ),
         ],

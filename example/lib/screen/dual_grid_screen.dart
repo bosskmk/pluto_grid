@@ -14,7 +14,6 @@ class DualGridScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('PlutoGrid - Dual'),),
-      drawer: MainDrawer(),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoDualGrid(

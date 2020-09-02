@@ -13,7 +13,6 @@ class NormalGridScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('PlutoGrid - Normal'),),
-      drawer: MainDrawer(),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoGrid(
