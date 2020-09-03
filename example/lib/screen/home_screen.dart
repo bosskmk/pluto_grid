@@ -167,7 +167,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           RaisedButton(
                             color: Colors.white,
-                            onPressed: () => Navigator.pushReplacementNamed(
+                            onPressed: () => Navigator.pushNamed(
                                 context, NormalGridScreen.routeName),
                             child: Text(
                               'Normal Grid',
@@ -177,7 +177,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           RaisedButton(
                             color: Colors.white,
-                            onPressed: () => Navigator.pushReplacementNamed(
+                            onPressed: () => Navigator.pushNamed(
                                 context, DualGridScreen.routeName),
                             child: Text(
                               'Dual Grid',
