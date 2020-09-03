@@ -1,0 +1,48 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - uses: nelonoel/branch-name@v1
+    # Setup the flutter environment.
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'master' # 'dev', 'alpha', default to: 'stable'
+        flutter-version: '1.21.0-9.0.pre' # flutter-version: '1.12.x' # you can also specify exact version of flutter
+
+    - run: flutter pub get
+
+    - run: flutter test
+
+    - name: Clean test directory
+      run: rm -rf *
+      working-directory: ./test
+
+    - name: Clean tool directory
+      run: rm -rf *
+      working-directory: ./tool
+
+    - run: dartfmt -w .
+
+    - name: publish
+      uses: sakebook/actions-flutter-pub-publisher@v1.3.1
+      with:
+        credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
+
+    - run: TAG=$(echo $BRANCH_NAME | awk '{ split($0, arr,"/"); printf("%s", arr[1]) }')
+
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "$TAG"
+        git tag "$TAG"
+        git push
