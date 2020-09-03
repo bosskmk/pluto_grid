@@ -64,6 +64,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   PlutoStateManager stateManager;
   PlutoKeyManager keyManager;
+  PlutoEventManager eventManager;
 
   @override
   void dispose() {
@@ -81,6 +82,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     initStateManager();
 
     initKeyManager();
+
+    initEventManager();
 
     initOnLoadedEvent();
 
@@ -163,6 +166,21 @@ class _PlutoGridState extends State<PlutoGrid> {
     // Dispose
     disposeList.add(() {
       keyManager.dispose();
+    });
+  }
+
+  void initEventManager() {
+    eventManager = PlutoEventManager(
+      stateManager: stateManager,
+    );
+
+    eventManager.init();
+
+    stateManager.setEventManager(eventManager);
+
+    // Dispose
+    disposeList.add(() {
+      eventManager.dispose();
     });
   }
 

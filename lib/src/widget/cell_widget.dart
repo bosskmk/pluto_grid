@@ -34,9 +34,9 @@ class _CellWidgetState extends State<CellWidget>
 
   PlutoCellPosition _selectingPosition;
 
-  final _selectionSubject = ReplaySubject<Function()>();
+  final _selectionSubject = PublishSubject<Function()>();
 
-  final _scrollSubject = ReplaySubject<Function()>();
+  final _scrollSubject = PublishSubject<Function()>();
 
   bool _keepAlive = false;
 

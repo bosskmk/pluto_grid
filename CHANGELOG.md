@@ -1,3 +1,8 @@
+## [0.1.7] - in development
+
+* Change the way to move between grids in dual grid mode. When moving the arrow keys, the focus moves when reaching the left and right ends.
+* Update Demo.
+
 ## [0.1.6] - 2020. 9. 2
 
 * Change datetime column type to date.

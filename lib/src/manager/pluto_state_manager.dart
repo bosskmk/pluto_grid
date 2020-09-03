@@ -66,6 +66,11 @@ class PlutoStateManager extends ChangeNotifier {
 
   PlutoKeyManager get keyManager => _keyManager;
 
+  /// [eventManager]
+  PlutoEventManager _eventManager;
+
+  PlutoEventManager get eventManager => _eventManager;
+
   /// [columnIndexes]
   ///
   /// Column index list.
@@ -334,6 +339,10 @@ class PlutoStateManager extends ChangeNotifier {
     _keyManager = keyManager;
   }
 
+  void setEventManager(PlutoEventManager eventManager) {
+    _eventManager = eventManager;
+  }
+
   /// Change the selected cell.
   void setCurrentCell(
     PlutoCell cell,
@@ -362,7 +371,8 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size, double headerHeight, double footerHeight) {
+  void setLayout(
+      BoxConstraints size, double headerHeight, double footerHeight) {
     final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
 
     final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
@@ -659,18 +669,35 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
+    bool _canMoveCell;
+
     switch (direction) {
       case MoveDirection.Left:
-        return cellPosition.columnIdx > 0;
+        _canMoveCell = cellPosition.columnIdx > 0;
+        break;
       case MoveDirection.Right:
-        return cellPosition.columnIdx <
+        _canMoveCell = cellPosition.columnIdx <
             _rows[cellPosition.rowIdx].cells.length - 1;
+        break;
       case MoveDirection.Up:
-        return cellPosition.rowIdx > 0;
+        _canMoveCell = cellPosition.rowIdx > 0;
+        break;
       case MoveDirection.Down:
-        return cellPosition.rowIdx < _rows.length - 1;
+        _canMoveCell = cellPosition.rowIdx < _rows.length - 1;
+        break;
     }
-    throw Exception('MoveDirection case was not handled.');
+
+    assert(_canMoveCell != null);
+
+    _eventManager.subject.add(
+      PlutoCanMoveCellEvent(
+        cellPosition: cellPosition,
+        direction: direction,
+        canMoveCell: _canMoveCell,
+      ),
+    );
+
+    return _canMoveCell;
   }
 
   bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {

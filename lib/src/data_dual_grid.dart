@@ -52,7 +52,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
   final FocusScopeNode _focusNodeA = FocusScopeNode();
   final FocusScopeNode _focusNodeB = FocusScopeNode();
 
-  final _changeFocusSubject = ReplaySubject<bool>();
+  final _subjectForFocusOnGridA = PublishSubject<bool>();
 
   FocusScopeNode _currentFocusNode;
   bool _isFocusA;
@@ -65,7 +65,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
     _focusNodeA.dispose();
     _focusNodeB.dispose();
 
-    _changeFocusSubject.close();
+    _subjectForFocusOnGridA.close();
 
     super.dispose();
   }
@@ -74,7 +74,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
   void initState() {
     _handleChangeFocusNode(true);
 
-    _changeFocusSubject
+    _subjectForFocusOnGridA
         .debounceTime(Duration(milliseconds: 4))
         .listen(_handleChangeFocusNode);
 
@@ -114,35 +114,44 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           columns: props.columns,
           rows: props.rows,
           mode: mode,
-          onLoaded: (PlutoOnLoadedEvent event) {
+          onLoaded: (PlutoOnLoadedEvent onLoadedEvent) {
             if (isGridA) {
-              stateManagerA = event.stateManager;
+              stateManagerA = onLoadedEvent.stateManager;
             } else {
-              stateManagerB = event.stateManager;
+              stateManagerB = onLoadedEvent.stateManager;
             }
 
-            event.stateManager.addListener(() {
-              _changeFocusSubject.add(isGridA);
+            onLoadedEvent.stateManager.addListener(() {
+              _subjectForFocusOnGridA.add(isGridA);
             });
 
-            event.stateManager.keyManager.subject.stream
-                .listen((KeyManagerEvent keyManagerEvent) {
-              if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
-                if (keyManagerEvent.isCtrlLeft) {
-                  _changeFocusSubject.add(true);
-                } else if (keyManagerEvent.isCtrlRight) {
-                  _changeFocusSubject.add(false);
+            onLoadedEvent.stateManager.eventManager.subject.stream
+                .listen((PlutoEvent plutoEvent) {
+              if (plutoEvent is PlutoCanMoveCellEvent) {
+                if (plutoEvent.canMoveCell == true) {
+                  return;
+                }
+
+                // Focus cannot be changed during cell selection.
+                if (onLoadedEvent.stateManager.keyPressed.shift) {
+                  return;
+                }
+
+                if (isGridA == true && plutoEvent.direction.isRight) {
+                  _subjectForFocusOnGridA.add(false);
+                } else if (isGridA != true && plutoEvent.direction.isLeft) {
+                  _subjectForFocusOnGridA.add(true);
                 }
               }
             });
 
             if (props.onLoaded != null) {
-              props.onLoaded(event);
+              props.onLoaded(onLoadedEvent);
             }
           },
           onChanged: props.onChanged,
-          onSelected: (PlutoOnSelectedEvent event) {
-            if (event.row == null || event.cell == null) {
+          onSelected: (PlutoOnSelectedEvent onSelectedEvent) {
+            if (onSelectedEvent.row == null || onSelectedEvent.cell == null) {
               widget.onSelected(
                 PlutoDualOnSelectedEvent(
                   gridA: null,

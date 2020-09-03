@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       initialRoute:
           kReleaseMode
               ? HomeScreen.routeName
-              : NormalGridScreen.routeName,
+              : DualGridScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         NormalGridScreen.routeName: (context) => NormalGridScreen(),

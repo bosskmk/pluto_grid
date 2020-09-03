@@ -19,6 +19,8 @@ part './src/data_grid.dart';
 
 part './src/data_grid_popup.dart';
 
+part './src/event/pluto_event.dart';
+
 part './src/event/pluto_on_changed_event.dart';
 
 part './src/event/pluto_on_loaded_event.dart';
@@ -30,6 +32,8 @@ part './src/helper/move_direction.dart';
 part './src/helper/datetime_helper.dart';
 
 part './src/helper/clipboard_transformation.dart';
+
+part './src/manager/pluto_event_manager.dart';
 
 part './src/manager/pluto_state_manager.dart';
 
