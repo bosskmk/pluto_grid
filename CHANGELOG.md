@@ -1,3 +1,7 @@
+## [0.1.8] - 2020. 9. 3
+
+* BugFix : RawKeyEvent's logicalKey.keyLabel return value changed from null to "".
+
 ## [0.1.7] - 2020. 9. 3
 
 * Change the way to move between grids in dual grid mode. When moving the arrow keys, the focus moves when reaching the left and right ends.

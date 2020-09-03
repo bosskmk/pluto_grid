@@ -91,7 +91,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
   }
 
   void _handleGridFocusOnKey(KeyManagerEvent keyManagerEvent) {
-    if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
+    if (keyManagerEvent.isKeyDownEvent) {
       if (keyManagerEvent.isUp) {
         if (popupStateManager.currentRowIdx == 0) {
           popupStateManager.prependRows(_getMoreRows(insertBefore: true));

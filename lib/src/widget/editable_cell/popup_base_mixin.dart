@@ -87,8 +87,9 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       columns: popupColumns,
       rows: popupRows,
       width: popupColumns.fold(0, (previous, column) {
-        return previous + column.width;
-      }) + 1,
+            return previous + column.width;
+          }) +
+          1,
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,
@@ -96,9 +97,13 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
   }
 
   bool _handleKeyboardFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    if (event.runtimeType == RawKeyDownEvent) {
-      if (event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId ||
-          event.logicalKey.keyLabel != null) {
+    KeyManagerEvent keyManagerEvent = KeyManagerEvent(
+      focusNode: focusNode,
+      event: event,
+    );
+
+    if (keyManagerEvent.isKeyDownEvent) {
+      if (keyManagerEvent.isF2 || keyManagerEvent.isCharacter) {
         if (_isOpenedPopup != true) {
           openPopup();
         }

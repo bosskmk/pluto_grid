@@ -18,14 +18,13 @@ class PlutoKeyManager {
   }
 
   void _handler(KeyManagerEvent keyManagerEvent) {
-    if (keyManagerEvent.event.runtimeType == RawKeyDownEvent ||
-        keyManagerEvent.event.runtimeType == RawKeyUpEvent) {
+    if (keyManagerEvent.isKeyDownEvent || keyManagerEvent.isKeyUpEvent) {
       stateManager.setKeyPressed(PlutoKeyPressed(
         shift: keyManagerEvent.event.isShiftPressed,
       ));
     }
 
-    if (keyManagerEvent.event.runtimeType == RawKeyDownEvent) {
+    if (keyManagerEvent.isKeyDownEvent) {
       if (keyManagerEvent.isMoving) {
         _handleMoving(keyManagerEvent);
       } else if (keyManagerEvent.isEnter) {
@@ -195,6 +194,10 @@ class KeyManagerEvent {
 }
 
 extension KeyManagerEventExtention on KeyManagerEvent {
+  bool get isKeyDownEvent => this.event.runtimeType == RawKeyDownEvent;
+
+  bool get isKeyUpEvent => this.event.runtimeType == RawKeyUpEvent;
+
   bool get isMoving => this.isHorizontal || this.isVertical;
 
   bool get isHorizontal => this.isLeft || this.isRight;
@@ -223,7 +226,9 @@ extension KeyManagerEventExtention on KeyManagerEvent {
 
   bool get isF2 => this.event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
 
-  bool get isCharacter => this.event.logicalKey.keyLabel != null;
+  bool get isCharacter =>
+      this.event.logicalKey.keyLabel != null &&
+      this.event.logicalKey.keyLabel.isNotEmpty;
 
   bool get isCtrlC {
     return (this.event.isMetaPressed || this.event.isControlPressed) &&
