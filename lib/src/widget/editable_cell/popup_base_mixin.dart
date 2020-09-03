@@ -193,6 +193,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             controller: _textController,
             focusNode: _textFocus,
             readOnly: true,
+            textInputAction: TextInputAction.none,
             onTap: openPopup,
             style: PlutoDefaultSettings.cellTextStyle,
             decoration: const InputDecoration(
