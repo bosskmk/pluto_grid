@@ -48,4 +48,4 @@ jobs:
         git add .
         git commit -m "$BRANCH_NAME"
         git tag "$BRANCH_NAME"
-        git push
+        git push origin "$BRANCH_NAME"
