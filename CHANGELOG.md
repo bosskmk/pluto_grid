@@ -1,4 +1,4 @@
-## [0.1.7] - in development
+## [0.1.7] - 2020. 9. 3
 
 * Change the way to move between grids in dual grid mode. When moving the arrow keys, the focus moves when reaching the left and right ends.
 * Update Demo.
