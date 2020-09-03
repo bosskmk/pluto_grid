@@ -70,7 +70,8 @@ class PlutoKeyManager {
       return;
     }
 
-    if (keyManagerEvent.event.isControlPressed) {
+    if (keyManagerEvent.event.isMetaPressed ||
+        keyManagerEvent.event.isControlPressed) {
       return;
     }
 
@@ -240,12 +241,12 @@ extension KeyManagerEventExtention on KeyManagerEvent {
   }
 
   bool get isCtrlLeft {
-    return (this.event.isControlPressed) &&
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
   }
 
   bool get isCtrlRight {
-    return (this.event.isControlPressed) &&
+    return (this.event.isMetaPressed || this.event.isControlPressed) &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
   }
 }
