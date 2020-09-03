@@ -127,16 +127,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 
             onLoadedEvent.stateManager.eventManager.subject.stream
                 .listen((PlutoEvent plutoEvent) {
-              if (plutoEvent is PlutoCanMoveCellEvent) {
-                if (plutoEvent.canMoveCell == true) {
-                  return;
-                }
-
-                // Focus cannot be changed during cell selection.
-                if (onLoadedEvent.stateManager.keyPressed.shift) {
-                  return;
-                }
-
+              if (plutoEvent is PlutoCannotMoveCurrentCellEvent) {
                 if (isGridA == true && plutoEvent.direction.isRight) {
                   _subjectForFocusOnGridA.add(false);
                 } else if (isGridA != true && plutoEvent.direction.isLeft) {

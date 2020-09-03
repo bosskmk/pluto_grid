@@ -689,14 +689,6 @@ class PlutoStateManager extends ChangeNotifier {
 
     assert(_canMoveCell != null);
 
-    _eventManager.subject.add(
-      PlutoCanMoveCellEvent(
-        cellPosition: cellPosition,
-        direction: direction,
-        canMoveCell: _canMoveCell,
-      ),
-    );
-
     return _canMoveCell;
   }
 
@@ -840,7 +832,15 @@ class PlutoStateManager extends ChangeNotifier {
     cellPositionByCellKey(_currentCell._key, columnIndexes);
 
     if (canNotMoveCell(cellPosition, direction)) {
+      _eventManager.subject.add(
+        PlutoCannotMoveCurrentCellEvent(
+          cellPosition: cellPosition,
+          direction: direction,
+        ),
+      );
+
       _checkCellValue = true;
+
       return;
     }
 
