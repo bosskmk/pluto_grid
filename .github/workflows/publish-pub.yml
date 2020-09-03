@@ -9,40 +9,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
+    # Without this, there are no files in the directory.
     - uses: actions/checkout@v2
+
+    # getting for branch name
     - uses: nelonoel/branch-name@v1
-    # Setup the flutter environment.
+
+    # using flutter
     - uses: subosito/flutter-action@v1
-      with:
-        channel: 'master' # 'dev', 'alpha', default to: 'stable'
-        flutter-version: '1.21.0-9.0.pre' # flutter-version: '1.12.x' # you can also specify exact version of flutter
-
+    - run: flutter channel master
+    - run: flutter upgrade
+    - run: dart --version
+    - run: flutter --version
     - run: flutter pub get
-
     - run: flutter test
 
-    - name: Clean test directory
-      run: rm -rf *
-      working-directory: ./test
+    # delete unnecessary directories
+    - run: |
+        rm -rf ./test
+        rm -rf ./tool
 
-    - name: Clean tool directory
-      run: rm -rf *
-      working-directory: ./tool
-
+    # formatting
     - run: dartfmt -w .
 
+    # publish to pub.dev
     - name: publish
       uses: sakebook/actions-flutter-pub-publisher@v1.3.1
       with:
         credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
+        flutter_package: true
+        skip_test: true
+        dry_run: false
 
-    - run: TAG=$(echo $BRANCH_NAME | awk '{ split($0, arr,"/"); printf("%s", arr[1]) }')
-
+    # tagging version
     - run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
-        git commit -m "$TAG"
-        git tag "$TAG"
+        git commit -m "$BRANCH_NAME"
+        git tag "$BRANCH_NAME"
         git push
