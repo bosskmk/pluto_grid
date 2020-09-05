@@ -740,18 +740,19 @@ class PlutoStateManager extends ChangeNotifier {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column.type.name.isSelect &&
-        !column.type.selectItems.contains(newValue)) {
+    if (column.type.isSelect &&
+        column.type.select.items.contains(newValue) != true) {
       newValue = oldValue;
-    } else if (column.type.name.isDate) {
+    } else if (column.type.isDate) {
       final parseNewValue = DateTime.tryParse(newValue);
 
       if (parseNewValue == null) {
         newValue = oldValue;
       } else {
-        newValue = intl.DateFormat(column.type.format).format(parseNewValue);
+        newValue =
+            intl.DateFormat(column.type.date.format).format(parseNewValue);
       }
-    } else if (column.type.name.isTime) {
+    } else if (column.type.isTime) {
       final time = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
 
       if (!time.hasMatch(newValue)) {
@@ -812,11 +813,11 @@ class PlutoStateManager extends ChangeNotifier {
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
-      if (currentColumn?.type?.name?.isSelect == true) {}
+      if (currentColumn?.type?.isSelect == true) {}
       // Date type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.name?.isDate == true) {}
+      else if (currentColumn?.type?.isDate == true) {}
       // Time type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.name?.isTime == true) {}
+      else if (currentColumn?.type?.isTime == true) {}
       // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.type?.readOnly == true) {}
       // Unable to move left and right in other modified states
@@ -1247,7 +1248,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Cast the value according to the column type.
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
-    if (column.type.name.isNumber && value.runtimeType != num) {
+    if (column.type.isNumber && value.runtimeType != num) {
       return num.tryParse(value.toString()) ?? 0;
     }
 

@@ -32,8 +32,8 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
   @override
   void dispose() {
-    if (widget.column.type.startDate == null ||
-        widget.column.type.endDate == null) {
+    if (widget.column.type.date.startDate == null ||
+        widget.column.type.date.endDate == null) {
       popupStateManager?.scroll?.vertical
           ?.removeOffsetChangedListener(_handleScroll);
     }
@@ -55,10 +55,10 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
     final defaultDate = DateTime.tryParse(widget.cell.value) ?? DateTime.now();
 
-    final startDate = widget.column.type.startDate ??
+    final startDate = widget.column.type.date.startDate ??
         DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -30)));
 
-    final endDate = widget.column.type.endDate ??
+    final endDate = widget.column.type.date.endDate ??
         DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 30)));
 
     final List<DateTime> days = DatetimeHelper.getDaysInBetween(
@@ -78,8 +78,8 @@ class _DateCellWidgetState extends State<DateCellWidget>
   void _onLoaded(PlutoOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
-    if (widget.column.type.startDate == null ||
-        widget.column.type.endDate == null) {
+    if (widget.column.type.date.startDate == null ||
+        widget.column.type.date.endDate == null) {
       event.stateManager.scroll.vertical
           .addOffsetChangedListener(_handleScroll);
     }
@@ -109,10 +109,10 @@ class _DateCellWidgetState extends State<DateCellWidget>
   }
 
   void _handleScroll() {
-    if (widget.column.type.startDate == null &&
+    if (widget.column.type.date.startDate == null &&
         popupStateManager.scroll.vertical.offset == 0) {
       popupStateManager.prependRows(_getMoreRows(insertBefore: true));
-    } else if (widget.column.type.endDate == null &&
+    } else if (widget.column.type.date.endDate == null &&
         popupStateManager.scroll.bodyRowsVertical.position.maxScrollExtent ==
             popupStateManager.scroll.vertical.offset) {
       popupStateManager.appendRows(_getMoreRows());
@@ -162,7 +162,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
           return PlutoCell(
               value: day.day,
               originalValue:
-                  intl.DateFormat(widget.column.type.format).format(day));
+                  intl.DateFormat(widget.column.type.date.format).format(day));
         },
       );
 
@@ -190,9 +190,9 @@ class _DateCellWidgetState extends State<DateCellWidget>
         return [];
       }
 
-      if (widget.column.type.startDate != null &&
-          defaultDate.isBefore(widget.column.type.startDate)) {
-        defaultDate = widget.column.type.startDate;
+      if (widget.column.type.date.startDate != null &&
+          defaultDate.isBefore(widget.column.type.date.startDate)) {
+        defaultDate = widget.column.type.date.startDate;
       }
     } else {
       firstDays = 1;
@@ -206,9 +206,9 @@ class _DateCellWidgetState extends State<DateCellWidget>
         return [];
       }
 
-      if (widget.column.type.endDate != null &&
-          defaultDate.isAfter(widget.column.type.endDate)) {
-        defaultDate = widget.column.type.endDate;
+      if (widget.column.type.date.endDate != null &&
+          defaultDate.isAfter(widget.column.type.date.endDate)) {
+        defaultDate = widget.column.type.date.endDate;
       }
     }
 

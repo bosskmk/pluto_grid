@@ -49,7 +49,7 @@ enum PlutoColumnFixed {
   Right,
 }
 
-extension PlutoColumnFixedExtension on PlutoColumnFixed {
+extension _PlutoColumnFixedExtension on PlutoColumnFixed {
   bool get isNone {
     return this == null || this == PlutoColumnFixed.None;
   }
@@ -73,7 +73,7 @@ enum PlutoColumnSort {
   Descending,
 }
 
-extension PlutoColumnSortExtension on PlutoColumnSort {
+extension _PlutoColumnSortExtension on PlutoColumnSort {
   bool get isNone {
     return this == null || this == PlutoColumnSort.None;
   }
@@ -101,11 +101,15 @@ extension PlutoColumnSortExtension on PlutoColumnSort {
   }
 }
 
-class PlutoColumnType {
+abstract class PlutoColumnType {
+  bool readOnly;
+
   /// Set as a string column.
-  PlutoColumnType.text({
-    this.readOnly = false,
-  }) : this.name = _PlutoColumnTypeName.Text;
+  factory PlutoColumnType.text({
+    bool readOnly = false,
+  }) {
+    return _PlutoColumnTypeText(readOnly: readOnly);
+  }
 
   /// Set to numeric column.
   ///
@@ -116,19 +120,30 @@ class PlutoColumnType {
   /// [negative] Allow negative numbers
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
-  PlutoColumnType.number({
-    this.readOnly = false,
-    this.format = '#,###',
-    this.negative = true,
-    this.applyFormatOnInit = true,
-  }) : this.name = _PlutoColumnTypeName.Number;
+  factory PlutoColumnType.number({
+    readOnly = false,
+    negative = true,
+    format = '#,###',
+    applyFormatOnInit = true,
+  }) {
+    return _PlutoColumnTypeNumber(
+      readOnly: readOnly,
+      format: format,
+      negative: negative,
+      applyFormatOnInit: applyFormatOnInit,
+    );
+  }
 
   /// Provides a selection list and sets it as a selection column.
-  PlutoColumnType.select(
+  factory PlutoColumnType.select(
     List<dynamic> items, {
-    this.readOnly = false,
-  })  : this.name = _PlutoColumnTypeName.Select,
-        this.selectItems = items;
+    readOnly = false,
+  }) {
+    return _PlutoColumnTypeSelect(
+      readOnly: readOnly,
+      items: items,
+    );
+  }
 
   /// Set as a date column.
   ///
@@ -139,41 +154,122 @@ class PlutoColumnType {
   /// [format] 'yyyy-MM-dd' (2020-01-01)
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
-  PlutoColumnType.date({
-    this.startDate,
-    this.endDate,
-    this.readOnly = false,
-    this.format = 'yyyy-MM-dd',
-    this.applyFormatOnInit = true,
-  }) : this.name = _PlutoColumnTypeName.Date;
+  factory PlutoColumnType.date({
+    readOnly = false,
+    startDate,
+    endDate,
+    format = 'yyyy-MM-dd',
+    applyFormatOnInit = true,
+  }) {
+    return _PlutoColumnTypeDate(
+      readOnly: readOnly,
+      startDate: startDate,
+      endDate: endDate,
+      format: format,
+      applyFormatOnInit: applyFormatOnInit,
+    );
+  }
 
-  PlutoColumnType.time({
-    this.readOnly = false,
-  }) : this.name = _PlutoColumnTypeName.Time;
+  factory PlutoColumnType.time({
+    readOnly = false,
+  }) {
+    return _PlutoColumnTypeTime(readOnly: readOnly);
+  }
 
-  /// Name of the column type.
-  _PlutoColumnTypeName name;
+  bool isValid(dynamic value);
+}
 
+extension _PlutoColumnTypeExtension on PlutoColumnType {
+  bool get isText => this is _PlutoColumnTypeText;
+
+  bool get isNumber => this is _PlutoColumnTypeNumber;
+
+  bool get isSelect => this is _PlutoColumnTypeSelect;
+
+  bool get isDate => this is _PlutoColumnTypeDate;
+
+  bool get isTime => this is _PlutoColumnTypeTime;
+
+  _PlutoColumnTypeText get text {
+    return this is _PlutoColumnTypeText ? this : throw TypeError();
+  }
+
+  _PlutoColumnTypeNumber get number {
+    return this is _PlutoColumnTypeNumber ? this : throw TypeError();
+  }
+
+  _PlutoColumnTypeSelect get select {
+    return this is _PlutoColumnTypeSelect ? this : throw TypeError();
+  }
+
+  _PlutoColumnTypeDate get date {
+    return this is _PlutoColumnTypeDate ? this : throw TypeError();
+  }
+
+  _PlutoColumnTypeTime get time {
+    return this is _PlutoColumnTypeTime ? this : throw TypeError();
+  }
+
+  bool get hasFormat => this is _PlutoColumnTypeHasFormat;
+
+  bool get applyFormatOnInit =>
+      hasFormat ? (this as _PlutoColumnTypeHasFormat).applyFormatOnInit : false;
+
+  dynamic applyFormat(dynamic value) => hasFormat
+      ? (this as _PlutoColumnTypeHasFormat).applyFormat(value)
+      : value;
+}
+
+class _PlutoColumnTypeText implements PlutoColumnType {
   bool readOnly;
 
-  String format;
+  _PlutoColumnTypeText({this.readOnly});
+
+  bool isValid(dynamic value) {
+    return value is String || value is num;
+  }
+}
+
+class _PlutoColumnTypeNumber
+    implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+  bool readOnly;
 
   bool negative;
 
+  String format;
+
   bool applyFormatOnInit;
 
-  DateTime startDate;
+  _PlutoColumnTypeNumber({
+    this.readOnly,
+    this.negative,
+    this.format,
+    this.applyFormatOnInit,
+  });
 
-  DateTime endDate;
+  bool isValid(dynamic value) {
+    if (value is! num) {
+      return false;
+    }
 
-  /// In case of Select column, it is a list to select.
-  List<dynamic> selectItems;
+    if (negative == false && value < 0) {
+      return false;
+    }
 
-  String numberFormat(value) {
+    return true;
+  }
+
+  String applyFormat(value) {
     final f = intl.NumberFormat(format);
+
     double num =
         double.tryParse(value.toString().replaceAll(f.symbols.GROUP_SEP, '')) ??
             0;
+
+    if (negative == false && num < 0) {
+      num = 0;
+    }
+
     return f.format(num);
   }
 
@@ -184,32 +280,84 @@ class PlutoColumnType {
   }
 }
 
-enum _PlutoColumnTypeName {
-  Text,
-  Number,
-  Select,
-  Date,
-  Time,
+class _PlutoColumnTypeSelect implements PlutoColumnType {
+  bool readOnly;
+
+  List<dynamic> items;
+
+  _PlutoColumnTypeSelect({
+    this.readOnly,
+    this.items,
+  });
+
+  bool isValid(dynamic value) => items.contains(value) == true;
 }
 
-extension _PlutoColumnTypeNameExtension on _PlutoColumnTypeName {
-//  bool get isText {
-//    return this == _PlutoColumnTypeName.Text;
-//  }
-//
-  bool get isNumber {
-    return this == _PlutoColumnTypeName.Number;
+class _PlutoColumnTypeDate
+    implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+  bool readOnly;
+
+  DateTime startDate;
+
+  DateTime endDate;
+
+  String format;
+
+  bool applyFormatOnInit;
+
+  _PlutoColumnTypeDate({
+    this.readOnly,
+    this.startDate,
+    this.endDate,
+    this.format,
+    this.applyFormatOnInit,
+  });
+
+  bool isValid(dynamic value) {
+    final parsedDate = DateTime.tryParse(value);
+
+    if (parsedDate == null) {
+      return false;
+    }
+
+    if (startDate != null && parsedDate.isBefore(parsedDate)) {
+      return false;
+    }
+
+    if (endDate != null && parsedDate.isAfter(parsedDate)) {
+      return false;
+    }
+
+    return true;
   }
 
-  bool get isSelect {
-    return this == _PlutoColumnTypeName.Select;
-  }
+  String applyFormat(value) {
+    final parseValue = DateTime.tryParse(value);
 
-  bool get isDate {
-    return this == _PlutoColumnTypeName.Date;
-  }
+    if (parseValue == null) {
+      return null;
+    }
 
-  bool get isTime {
-    return this == _PlutoColumnTypeName.Time;
+    return intl.DateFormat(format).format(DateTime.parse(value));
   }
+}
+
+class _PlutoColumnTypeTime implements PlutoColumnType {
+  bool readOnly;
+
+  _PlutoColumnTypeTime({
+    this.readOnly,
+  });
+
+  bool isValid(dynamic value) {
+    return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$').hasMatch(value);
+  }
+}
+
+abstract class _PlutoColumnTypeHasFormat {
+  String format;
+
+  bool applyFormatOnInit;
+
+  dynamic applyFormat(dynamic value);
 }

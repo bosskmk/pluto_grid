@@ -397,4 +397,292 @@ void main() {
     expect(stateManager.currentSelectingPosition.rowIdx, 5);
     expect(stateManager.currentSelectingPosition.columnIdx, 3);
   });
+
+  group('applyColumnRowOnInit', () {
+    testWidgets(
+        'number column'
+        'WHEN applyFormatOnInit value of Column is true(default value)'
+        'THEN cell value of the column should be changed to format.',
+        (WidgetTester tester) async {
+      // given
+      final columns = [
+        PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.number(),
+        ),
+      ];
+
+      final rows = [
+        PlutoRow(cells: {'header': PlutoCell(value: 'not a number')}),
+        PlutoRow(cells: {'header': PlutoCell(value: 12)}),
+        PlutoRow(cells: {'header': PlutoCell(value: '12')}),
+        PlutoRow(cells: {'header': PlutoCell(value: -10)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].cells['header'].value, 0);
+      expect(stateManager.rows[1].cells['header'].value, 12);
+      expect(stateManager.rows[2].cells['header'].value, 12);
+      expect(stateManager.rows[3].cells['header'].value, -10);
+      expect(stateManager.rows[4].cells['header'].value, 1234567);
+      expect(stateManager.rows[5].cells['header'].value, 12);
+    });
+
+    testWidgets(
+        'number column'
+        'WHEN applyFormatOnInit value of Column is false'
+        'THEN cell value of the column should not be changed to format.',
+        (WidgetTester tester) async {
+      // given
+      final columns = [
+        PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.number(applyFormatOnInit: false),
+        ),
+      ];
+
+      final rows = [
+        PlutoRow(cells: {'header': PlutoCell(value: 'not a number')}),
+        PlutoRow(cells: {'header': PlutoCell(value: 12)}),
+        PlutoRow(cells: {'header': PlutoCell(value: '12')}),
+        PlutoRow(cells: {'header': PlutoCell(value: -10)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].cells['header'].value, 'not a number');
+      expect(stateManager.rows[1].cells['header'].value, 12);
+      expect(stateManager.rows[2].cells['header'].value, '12');
+      expect(stateManager.rows[3].cells['header'].value, -10);
+      expect(stateManager.rows[4].cells['header'].value, 1234567);
+      expect(stateManager.rows[5].cells['header'].value, 12.12345);
+    });
+
+    testWidgets(
+        'number column'
+        'WHEN format allows prime numbers'
+        'THEN cell value should be displayed as a decimal number according to the number of digits in the format.',
+        (WidgetTester tester) async {
+      // given
+      final columns = [
+        PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.number(format: '#,###.#####'),
+        ),
+      ];
+
+      final rows = [
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567.1234)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567.12345)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 1234567.123456)}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].cells['header'].value, 1234567);
+      expect(stateManager.rows[1].cells['header'].value, 1234567.1234);
+      expect(stateManager.rows[2].cells['header'].value, 1234567.12345);
+      expect(stateManager.rows[3].cells['header'].value, 1234567.12346);
+    });
+
+    testWidgets(
+        'number column'
+        'WHEN negative is false'
+        'THEN negative numbers should not be displayed in the cell value.',
+        (WidgetTester tester) async {
+      // given
+      final columns = [
+        PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.number(negative: false),
+        ),
+      ];
+
+      final rows = [
+        PlutoRow(cells: {'header': PlutoCell(value: 12345)}),
+        PlutoRow(cells: {'header': PlutoCell(value: -12345)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 333.333)}),
+        PlutoRow(cells: {'header': PlutoCell(value: -333.333)}),
+        PlutoRow(cells: {'header': PlutoCell(value: 0)}),
+        PlutoRow(cells: {'header': PlutoCell(value: -0)}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].cells['header'].value, 12345);
+      expect(stateManager.rows[1].cells['header'].value, 0);
+      expect(stateManager.rows[2].cells['header'].value, 333);
+      expect(stateManager.rows[3].cells['header'].value, 0);
+      expect(stateManager.rows[4].cells['header'].value, 0);
+      expect(stateManager.rows[5].cells['header'].value, 0);
+    });
+
+    testWidgets(
+        'WHEN Row does not have sortIdx'
+        'THEN sortIdx must be set in Row', (WidgetTester tester) async {
+      // given
+      final columns = [
+        ...ColumnHelper.textColumn('header', count: 1),
+      ];
+      final rows = [
+        PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+                createHeader: (stateManager) => Text('grid header'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].sortIdx, 0);
+      expect(stateManager.rows[1].sortIdx, 1);
+      expect(stateManager.rows[2].sortIdx, 2);
+      expect(stateManager.rows[3].sortIdx, 3);
+      expect(stateManager.rows[4].sortIdx, 4);
+    });
+
+    testWidgets(
+        'WHEN Row has sortIdx'
+        'THEN sortIdx is not changed', (WidgetTester tester) async {
+      // given
+      final columns = [
+        ...ColumnHelper.textColumn('header', count: 1),
+      ];
+      final rows = [
+        PlutoRow(sortIdx: 5, cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(sortIdx: 6, cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(sortIdx: 7, cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(sortIdx: 8, cells: {'header0': PlutoCell(value: 'value')}),
+        PlutoRow(sortIdx: 9, cells: {'header0': PlutoCell(value: 'value')}),
+      ];
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+                createHeader: (stateManager) => Text('grid header'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // then
+      expect(stateManager.rows[0].sortIdx, 5);
+      expect(stateManager.rows[1].sortIdx, 6);
+      expect(stateManager.rows[2].sortIdx, 7);
+      expect(stateManager.rows[3].sortIdx, 8);
+      expect(stateManager.rows[4].sortIdx, 9);
+    });
+  });
 }

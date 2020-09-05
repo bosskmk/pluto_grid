@@ -212,14 +212,9 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void applyColumnRowOnInit() {
-    List<PlutoColumn> applyFormatOnInit = widget.columns.where((element) {
-      if (element.type.name.isNumber && element.type.applyFormatOnInit) {
-        return true;
-      } else if (element.type.name.isDate && element.type.applyFormatOnInit) {
-        return true;
-      }
-      return false;
-    }).toList(growable: false);
+    List<PlutoColumn> applyFormatOnInit = widget.columns
+        .where((element) => element.type.applyFormatOnInit)
+        .toList(growable: false);
 
     final bool hasApplyFormatOnInit = applyFormatOnInit.length > 0;
 
@@ -230,19 +225,16 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    // Value for basic sorting when sorting columns
     for (var rowIdx = 0; rowIdx < widget.rows.length; rowIdx += 1) {
       if (hasApplyFormatOnInit) {
         applyFormatOnInit.forEach((element) {
-          if (element.type.name.isNumber) {
-            widget.rows[rowIdx].cells[element.field].value = num.parse(element
-                .type
-                .numberFormat(widget.rows[rowIdx].cells[element.field].value)
-                .replaceAll(',', ''));
-          } else if (element.type.name.isDate) {
-            widget.rows[rowIdx].cells[element.field].value =
-                intl.DateFormat(element.type.format).format(DateTime.parse(
-                    widget.rows[rowIdx].cells[element.field].value));
+          widget.rows[rowIdx].cells[element.field].value = element.type
+              .applyFormat(widget.rows[rowIdx].cells[element.field].value);
+
+          if (element.type.isNumber) {
+            widget.rows[rowIdx].cells[element.field].value = num.tryParse(widget
+                .rows[rowIdx].cells[element.field].value
+                .replaceAll(',', '')) ?? 0;
           }
         });
       }

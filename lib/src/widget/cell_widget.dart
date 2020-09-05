@@ -271,46 +271,46 @@ class _CellWidgetState extends State<CellWidget>
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
       return Text(
-        widget.column.type.name.isNumber
-            ? widget.column.type.numberFormat(_cellValue)
+        widget.column.type.isNumber
+            ? widget.column.type.number.applyFormat(_cellValue)
             : _cellValue.toString(),
         overflow: TextOverflow.ellipsis,
       );
     }
 
-    switch (widget.column.type.name) {
-      case _PlutoColumnTypeName.Select:
-        return SelectCellWidget(
-          stateManager: widget.stateManager,
-          cell: widget.cell,
-          column: widget.column,
-        );
-      case _PlutoColumnTypeName.Number:
-        return NumberCellWidget(
-          stateManager: widget.stateManager,
-          cell: widget.cell,
-          column: widget.column,
-        );
-      case _PlutoColumnTypeName.Date:
-        return DateCellWidget(
-          stateManager: widget.stateManager,
-          cell: widget.cell,
-          column: widget.column,
-        );
-      case _PlutoColumnTypeName.Time:
-        return TimeCellWidget(
-          stateManager: widget.stateManager,
-          cell: widget.cell,
-          column: widget.column,
-        );
-      case _PlutoColumnTypeName.Text:
-      default:
-        return TextCellWidget(
-          stateManager: widget.stateManager,
-          cell: widget.cell,
-          column: widget.column,
-        );
+    if (widget.column.type.isSelect) {
+      return SelectCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
+    } else if (widget.column.type.isNumber) {
+      return NumberCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
+    } else if (widget.column.type.isDate) {
+      return DateCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
+    } else if (widget.column.type.isTime) {
+      return TimeCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
+    } else if (widget.column.type.isText) {
+      return TextCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
     }
+
+    throw ('Type not implemented.');
   }
 
   @override

@@ -6,7 +6,7 @@ import '../../helper/column_helper.dart';
 import '../../helper/row_helper.dart';
 
 void main() {
-  group('columns', () {
+  group('column', () {
     testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',
         (WidgetTester tester) async {
       // given
@@ -309,441 +309,657 @@ void main() {
       // then
       expect(result, 240);
     });
-  });
 
-  testWidgets('bodyColumns - body 컬럼 리스트만 리턴 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: [
-        ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
-        ...ColumnHelper.textColumn('body', count: 3),
-        ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
-      ],
-      rows: null,
-      gridFocusNode: null,
-      scroll: null,
-    );
+    testWidgets('bodyColumns - body 컬럼 리스트만 리턴 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [
+          ...ColumnHelper.textColumn('left',
+              count: 3, fixed: PlutoColumnFixed.Left),
+          ...ColumnHelper.textColumn('body', count: 3),
+          ...ColumnHelper.textColumn('right',
+              count: 3, fixed: PlutoColumnFixed.Right),
+        ],
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    // when
-    final List<PlutoColumn> result = stateManager.bodyColumns;
+      // when
+      final List<PlutoColumn> result = stateManager.bodyColumns;
 
-    // then
-    expect(result.length, 3);
-    expect(result[0].title, 'body0');
-    expect(result[1].title, 'body1');
-    expect(result[2].title, 'body2');
-  });
+      // then
+      expect(result.length, 3);
+      expect(result[0].title, 'body0');
+      expect(result[1].title, 'body1');
+      expect(result[2].title, 'body2');
+    });
 
-  testWidgets('bodyColumnIndexes - body 컬럼 인덱스 리스트만 리턴 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: [
-        ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
-        ...ColumnHelper.textColumn('body', count: 3),
-        ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
-      ],
-      rows: null,
-      gridFocusNode: null,
-      scroll: null,
-    );
+    testWidgets('bodyColumnIndexes - body 컬럼 인덱스 리스트만 리턴 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [
+          ...ColumnHelper.textColumn('left',
+              count: 3, fixed: PlutoColumnFixed.Left),
+          ...ColumnHelper.textColumn('body', count: 3),
+          ...ColumnHelper.textColumn('right',
+              count: 3, fixed: PlutoColumnFixed.Right),
+        ],
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    // when
-    final List<int> result = stateManager.bodyColumnIndexes;
+      // when
+      final List<int> result = stateManager.bodyColumnIndexes;
 
-    // then
-    expect(result.length, 3);
-    expect(result[0], 3);
-    expect(result[1], 4);
-    expect(result[2], 5);
-  });
+      // then
+      expect(result.length, 3);
+      expect(result[0], 3);
+      expect(result[1], 4);
+      expect(result[2], 5);
+    });
 
-  testWidgets('bodyColumnsWidth - body 컬럼 넓이 합계를 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: [
+    testWidgets('bodyColumnsWidth - body 컬럼 넓이 합계를 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [
+          ...ColumnHelper.textColumn('left',
+              count: 3, fixed: PlutoColumnFixed.Left),
+          ...ColumnHelper.textColumn('body', count: 3, width: 150),
+          ...ColumnHelper.textColumn('right',
+              count: 3, fixed: PlutoColumnFixed.Right),
+        ],
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      final double result = stateManager.bodyColumnsWidth;
+
+      // then
+      expect(result, 450);
+    });
+
+    testWidgets('currentColumn - currentColumnField 값이 없는 경우 null 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [
+          ...ColumnHelper.textColumn('left',
+              count: 3, fixed: PlutoColumnFixed.Left),
+          ...ColumnHelper.textColumn('body', count: 3, width: 150),
+          ...ColumnHelper.textColumn('right',
+              count: 3, fixed: PlutoColumnFixed.Right),
+        ],
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      PlutoColumn currentColumn = stateManager.currentColumn;
+
+      // when
+      expect(currentColumn, null);
+    });
+
+    testWidgets(
+        'currentColumn - currentCell 이 선택 된 경우 currentColumn 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
             count: 3, fixed: PlutoColumnFixed.Left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
             count: 3, fixed: PlutoColumnFixed.Right),
-      ],
-      rows: null,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      ];
 
-    // when
-    final double result = stateManager.bodyColumnsWidth;
+      List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    // then
-    expect(result, 450);
-  });
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-  testWidgets('currentColumn - currentColumnField 값이 없는 경우 null 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: [
+      // when
+      String selectColumnField = 'body2';
+      stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
+
+      PlutoColumn currentColumn = stateManager.currentColumn;
+
+      // when
+      expect(currentColumn, isNot(null));
+      expect(currentColumn.field, selectColumnField);
+      expect(currentColumn.width, 150);
+    });
+
+    testWidgets('currentColumnField - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
             count: 3, fixed: PlutoColumnFixed.Left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
             count: 3, fixed: PlutoColumnFixed.Right),
-      ],
-      rows: null,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      ];
 
-    // when
-    PlutoColumn currentColumn = stateManager.currentColumn;
+      List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    // when
-    expect(currentColumn, null);
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      String currentColumnField = stateManager.currentColumnField;
+
+      // when
+      expect(currentColumnField, null);
+    });
+
+    testWidgets(
+        'currentColumnField - currentCell 이 선택 된 경우 선택 된 컬럼의 field 를 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      String selectColumnField = 'body1';
+      stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
+
+      String currentColumnField = stateManager.currentColumnField;
+
+      // when
+      expect(currentColumnField, isNot(null));
+      expect(currentColumnField, selectColumnField);
+    });
   });
 
-  testWidgets('currentColumn - currentCell 이 선택 된 경우 currentColumn 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+  group('cell', () {
+    testWidgets(
+        'currentCellPosition - currentCell 이 선택되지 않은 경우 null 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    // when
-    String selectColumnField = 'body2';
-    stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
+      // when
+      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
 
-    PlutoColumn currentColumn = stateManager.currentColumn;
+      // when
+      expect(currentCellPosition, null);
+    });
 
-    // when
-    expect(currentColumn, isNot(null));
-    expect(currentColumn.field, selectColumnField);
-    expect(currentColumn.width, 150);
+    testWidgets('currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
+
+      String selectColumnField = 'body1';
+      stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+
+      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+
+      // when
+      expect(currentCellPosition, isNot(null));
+      expect(currentCellPosition.rowIdx, 5);
+      expect(currentCellPosition.columnIdx, 4);
+    });
+
+    testWidgets(
+        'currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.'
+        '컬럼 고정 상태가 바뀌고, body 최소 넓이가 작은 경우', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 300, maxHeight: 500), 0, 0);
+
+      String selectColumnField = 'body2';
+      stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+
+      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+
+      // when
+      expect(currentCellPosition, isNot(null));
+      expect(currentCellPosition.rowIdx, 5);
+      // 3번 째 컬럼을 왼쪽으로 옴겨 첫번 째 컬럼이 되었지만 그리드 최소 넓이가 300으로
+      // 충분하지 않아 고정 컬럼이 풀리고 원래 순서대로 노출 된다.
+      expect(currentCellPosition.columnIdx, 2);
+    });
+
+    testWidgets(
+        'currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.'
+        '컬럼 고정 상태가 바뀌고, body 최소 넓이가 충분한 경우', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
+
+      String selectColumnField = 'body2';
+      stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+
+      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+
+      // when
+      expect(currentCellPosition, isNot(null));
+      expect(currentCellPosition.rowIdx, 5);
+      // 3번 째 컬럼을 왼쪽으로 고정 후 넓이가 충분하여 첫번 째 컬럼이 된다.
+      expect(currentCellPosition.columnIdx, 0);
+    });
   });
 
-  testWidgets('currentColumnField - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+  group('row', () {
+    testWidgets('currentRowIdx - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    // when
-    String currentColumnField = stateManager.currentColumnField;
+      // when
+      int currentRowIdx = stateManager.currentRowIdx;
 
-    // when
-    expect(currentColumnField, null);
+      // when
+      expect(currentRowIdx, null);
+    });
+
+    testWidgets(
+        'currentRowIdx - currentCell 이 선택 된 경우 선택 된 셀의 rowIdx 를 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      String selectColumnField = 'right1';
+      stateManager.setCurrentCell(rows[7].cells[selectColumnField], 7);
+
+      int currentRowIdx = stateManager.currentRowIdx;
+
+      // when
+      expect(currentRowIdx, 7);
+    });
+
+    testWidgets('currentRow - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      PlutoRow currentRow = stateManager.currentRow;
+
+      // when
+      expect(currentRow, null);
+    });
+
+    testWidgets('currentRow - currentCell 이 선택 된 경우 선택 된 row 를 리턴해야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('left',
+            count: 3, fixed: PlutoColumnFixed.Left),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn('right',
+            count: 3, fixed: PlutoColumnFixed.Right),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      String selectColumnField = 'left1';
+      stateManager.setCurrentCell(rows[3].cells[selectColumnField], 3);
+
+      PlutoRow currentRow = stateManager.currentRow;
+
+      // when
+      expect(currentRow, isNot(null));
+      expect(currentRow.key, rows[3].key);
+    });
   });
 
-  testWidgets(
-      'currentColumnField - currentCell 이 선택 된 경우 선택 된 컬럼의 field 를 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+  group('filteredCellValue', () {
+    testWidgets(
+        'select column'
+        'WHEN newValue is not contained in select items'
+        'THEN the return value should be oldValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = 'four';
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      const String oldValue = 'one';
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.select(['one', 'two', 'three']),
+      );
 
-    // when
-    String selectColumnField = 'body1';
-    stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    String currentColumnField = stateManager.currentColumnField;
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-    // when
-    expect(currentColumnField, isNot(null));
-    expect(currentColumnField, selectColumnField);
-  });
+      // then
+      expect(filteredValue, oldValue);
+    });
 
-  testWidgets('currentCellPosition - currentCell 이 선택되지 않은 경우 null 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+    testWidgets(
+        'select column'
+        'WHEN newValue is contained in select items'
+        'THEN the return value should be newValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = 'four';
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      const String oldValue = 'one';
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.select(['one', 'two', 'three', 'four']),
+      );
 
-    // when
-    PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    // when
-    expect(currentCellPosition, null);
-  });
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-  testWidgets('currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+      // then
+      expect(filteredValue, newValue);
+    });
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+    testWidgets(
+        'date column'
+        'WHEN newValue is not parsed to DateTime'
+        'THEN the return value should be oldValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = 'not date';
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      const String oldValue = '2020-01-01';
 
-    // when
-    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.date(),
+      );
 
-    String selectColumnField = 'body1';
-    stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-    // when
-    expect(currentCellPosition, isNot(null));
-    expect(currentCellPosition.rowIdx, 5);
-    expect(currentCellPosition.columnIdx, 4);
-  });
+      // then
+      expect(filteredValue, oldValue);
+    });
 
-  testWidgets(
-      'currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.'
-      '컬럼 고정 상태가 바뀌고, body 최소 넓이가 작은 경우', (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('body', count: 10, width: 150),
-    ];
+    testWidgets(
+        'date column'
+        'WHEN newValue is parsed to DateTime'
+        'THEN the return value should be newValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = '2020-12-12';
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      const String oldValue = '2020-01-01';
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.date(),
+      );
 
-    // when
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-    stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500), 0, 0);
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-    String selectColumnField = 'body2';
-    stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+      // then
+      expect(filteredValue, newValue);
+    });
 
-    PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+    testWidgets(
+        'time column'
+        'WHEN newValue is not in 00:00 format'
+        'THEN the return value should be oldValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = 'not 00:00';
 
-    // when
-    expect(currentCellPosition, isNot(null));
-    expect(currentCellPosition.rowIdx, 5);
-    // 3번 째 컬럼을 왼쪽으로 옴겨 첫번 째 컬럼이 되었지만 그리드 최소 넓이가 300으로
-    // 충분하지 않아 고정 컬럼이 풀리고 원래 순서대로 노출 된다.
-    expect(currentCellPosition.columnIdx, 2);
-  });
+      const String oldValue = '23:59';
 
-  testWidgets(
-      'currentCellPosition - currentCell 이 선택된 경우 선택 된 위치를 리턴해야 한다.'
-      '컬럼 고정 상태가 바뀌고, body 최소 넓이가 충분한 경우', (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('body', count: 10, width: 150),
-    ];
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.time(),
+      );
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-    // when
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-    stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      // then
+      expect(filteredValue, oldValue);
+    });
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500), 0, 0);
+    testWidgets(
+        'time column'
+        'WHEN newValue is in the 00:00 format'
+        'THEN the return value should be newValue.',
+        (WidgetTester tester) async {
+      // given
+      const String newValue = '12:59';
 
-    String selectColumnField = 'body2';
-    stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
+      const String oldValue = '23:59';
 
-    PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoColumn column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.time(),
+      );
 
-    // when
-    expect(currentCellPosition, isNot(null));
-    expect(currentCellPosition.rowIdx, 5);
-    // 3번 째 컬럼을 왼쪽으로 고정 후 넓이가 충분하여 첫번 째 컬럼이 된다.
-    expect(currentCellPosition.columnIdx, 0);
-  });
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: null,
+      );
 
-  testWidgets('currentRowIdx - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
+      // when
+      final String filteredValue = stateManager.filteredCellValue(
+        column: column,
+        newValue: newValue,
+        oldValue: oldValue,
+      );
 
-    List<PlutoRow> rows = RowHelper.count(10, columns);
-
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
-
-    // when
-    int currentRowIdx = stateManager.currentRowIdx;
-
-    // when
-    expect(currentRowIdx, null);
-  });
-
-  testWidgets('currentRowIdx - currentCell 이 선택 된 경우 선택 된 셀의 rowIdx 를 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
-
-    List<PlutoRow> rows = RowHelper.count(10, columns);
-
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
-
-    // when
-    String selectColumnField = 'right1';
-    stateManager.setCurrentCell(rows[7].cells[selectColumnField], 7);
-
-    int currentRowIdx = stateManager.currentRowIdx;
-
-    // when
-    expect(currentRowIdx, 7);
-  });
-
-  testWidgets('currentRow - currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
-
-    List<PlutoRow> rows = RowHelper.count(10, columns);
-
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
-
-    // when
-    PlutoRow currentRow = stateManager.currentRow;
-
-    // when
-    expect(currentRow, null);
-  });
-
-  testWidgets('currentRow - currentCell 이 선택 된 경우 선택 된 row 를 리턴해야 한다.',
-      (WidgetTester tester) async {
-    // given
-    List<PlutoColumn> columns = [
-      ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
-      ...ColumnHelper.textColumn('body', count: 3, width: 150),
-      ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
-    ];
-
-    List<PlutoRow> rows = RowHelper.count(10, columns);
-
-    PlutoStateManager stateManager = PlutoStateManager(
-      columns: columns,
-      rows: rows,
-      gridFocusNode: null,
-      scroll: null,
-    );
-
-    // when
-    String selectColumnField = 'left1';
-    stateManager.setCurrentCell(rows[3].cells[selectColumnField], 3);
-
-    PlutoRow currentRow = stateManager.currentRow;
-
-    // when
-    expect(currentRow, isNot(null));
-    expect(currentRow.key, rows[3].key);
+      // then
+      expect(filteredValue, newValue);
+    });
   });
 }

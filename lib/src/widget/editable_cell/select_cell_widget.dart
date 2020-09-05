@@ -28,7 +28,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
   @override
   void initState() {
-    popupHeight = ((widget.column.type.selectItems.length + 1) *
+    popupHeight = ((widget.column.type.select.items.length + 1) *
             PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
@@ -43,7 +43,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
       )
     ];
 
-    popupRows = widget.column.type.selectItems.map((dynamic item) {
+    popupRows = widget.column.type.select.items.map((dynamic item) {
       return PlutoRow(
         cells: {
           widget.column.title: PlutoCell(value: item),
