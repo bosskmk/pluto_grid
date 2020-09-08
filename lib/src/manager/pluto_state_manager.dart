@@ -277,6 +277,10 @@ class PlutoStateManager extends ChangeNotifier {
   bool get isSelecting => _isSelecting;
   bool _isSelecting = false;
 
+  /// [selectingMode]
+  PlutoSelectingMode get selectingMode => _selectingMode;
+  PlutoSelectingMode _selectingMode = PlutoSelectingMode.Square;
+
   /// [currentSelectingPosition]
   ///
   /// Current position of multi-select cell.
@@ -446,15 +450,28 @@ class PlutoStateManager extends ChangeNotifier {
     _checkCellValue = true;
   }
 
+  void setSelectingMode(PlutoSelectingMode mode) {
+    if (_selectingMode == mode) {
+      return;
+    }
+
+    _selectingMode = mode;
+
+    notifyListeners();
+  }
+
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
     int columnIdx,
     int rowIdx,
+    bool notify = true,
   }) {
     _currentSelectingPosition =
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   /// Sets the position of a multi-selected cell.
@@ -529,6 +546,15 @@ class PlutoStateManager extends ChangeNotifier {
       double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 
       scrollByDirection(MoveDirection.Up, offsetToMove);
+    }
+
+    /// Update currentSelectingPosition
+    if (_currentSelectingPosition != null) {
+      setCurrentSelectingPosition(
+        columnIdx: _currentSelectingPosition.columnIdx,
+        rowIdx: rows.length + _currentSelectingPosition.rowIdx,
+        notify: false,
+      );
     }
 
     notifyListeners();
@@ -1279,6 +1305,94 @@ class PlutoStateManager extends ChangeNotifier {
     return _currentCell != null && _currentCell._key == cell._key;
   }
 
+  // todo : code cleanup
+  /// Whether the cell is the currently multi selected cell.
+  bool isSelectedCell(PlutoCell cell, PlutoColumn column, int rowIdx) {
+    if (isCurrentCell(cell) == true) {
+      return false;
+    }
+
+    if (_currentSelectingPosition == null) {
+      return false;
+    }
+
+    if (_selectingMode.isSquare) {
+      final bool inRangeOfRows = min(currentCellPosition.rowIdx,
+          _currentSelectingPosition.rowIdx) <=
+          rowIdx &&
+          rowIdx <=
+              max(currentCellPosition.rowIdx,
+                  _currentSelectingPosition.rowIdx);
+
+      if (inRangeOfRows == false) {
+        return false;
+      }
+
+      final int columnIdx = columnIndex(column);
+
+      if (columnIdx == null) {
+        return false;
+      }
+
+      final bool inRangeOfColumns = min(currentCellPosition.columnIdx,
+          currentSelectingPosition.columnIdx) <=
+          columnIdx &&
+          columnIdx <=
+              max(currentCellPosition.columnIdx,
+                  currentSelectingPosition.columnIdx);
+
+      if (inRangeOfColumns == false) {
+        return false;
+      }
+
+      return true;
+    } else if (_selectingMode.isHorizontal) {
+      int startRowIdx = min(currentCellPosition.rowIdx,
+          _currentSelectingPosition.rowIdx);
+
+      int endRowIdx = max(currentCellPosition.rowIdx,
+          _currentSelectingPosition.rowIdx);
+
+      final int columnIdx = columnIndex(column);
+
+      if (columnIdx == null) {
+        return false;
+      }
+
+      int startColumnIdx;
+
+      int endColumnIdx;
+
+      if (currentCellPosition.rowIdx < _currentSelectingPosition.rowIdx) {
+        startColumnIdx = currentCellPosition.columnIdx;
+        endColumnIdx = _currentSelectingPosition.columnIdx;
+      } else
+      if (currentCellPosition.rowIdx > _currentSelectingPosition.rowIdx) {
+        startColumnIdx = _currentSelectingPosition.columnIdx;
+        endColumnIdx = currentCellPosition.columnIdx;
+      } else {
+        startColumnIdx = min(
+            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+        endColumnIdx = max(
+            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+      }
+
+      if (rowIdx == startRowIdx && startRowIdx == endRowIdx) {
+        return !(columnIdx < startColumnIdx || columnIdx > endColumnIdx);
+      } else if (rowIdx == startRowIdx && columnIdx >= startColumnIdx) {
+        return true;
+      } else if (rowIdx == endRowIdx && columnIdx <= endColumnIdx) {
+        return true;
+      } else if (rowIdx > startRowIdx && rowIdx < endRowIdx) {
+        return true;
+      }
+
+      return false;
+    } else {
+      throw('selectingMode is not handled');
+    }
+  }
+
   /// Whether a fixed column is displayed in the screen width.
   bool isShowFixedColumn(double maxWidth) {
     final bool hasFixedColumn =
@@ -1359,4 +1473,15 @@ class PlutoKeyPressed {
   PlutoKeyPressed({
     this.shift = false,
   });
+}
+
+enum PlutoSelectingMode {
+  Square,
+  Horizontal,
+}
+
+extension PlutoSelectingModeExtension on PlutoSelectingMode {
+  bool get isSquare => this == PlutoSelectingMode.Square;
+
+  bool get isHorizontal => this == PlutoSelectingMode.Horizontal;
 }

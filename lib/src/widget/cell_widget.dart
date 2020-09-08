@@ -160,56 +160,8 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   bool _getIsSelectedCell() {
-    if (widget.stateManager.isCurrentCell(widget.cell) == true) {
-      return false;
-    }
-
-    if (widget.stateManager.currentSelectingPosition == null) {
-      return false;
-    }
-
-    PlutoCellPosition currentCellPosition =
-        widget.stateManager.currentCellPosition;
-
-    final bool inRangeOfRows = min(currentCellPosition.rowIdx,
-                widget.stateManager.currentSelectingPosition.rowIdx) <=
-            widget.rowIdx &&
-        widget.rowIdx <=
-            max(currentCellPosition.rowIdx,
-                widget.stateManager.currentSelectingPosition.rowIdx);
-
-    if (inRangeOfRows == false) {
-      return false;
-    }
-
-    int columnIdx;
-
-    final columnIndexes = widget.stateManager.columnIndexesByShowFixed();
-
-    for (var i = 0; i < columnIndexes.length; i += 1) {
-      if (widget.stateManager.columns[columnIndexes[i]].field ==
-          widget.column.field) {
-        columnIdx = i;
-        break;
-      }
-    }
-
-    if (columnIdx == null) {
-      return false;
-    }
-
-    final bool inRangeOfColumns = min(currentCellPosition.columnIdx,
-                widget.stateManager.currentSelectingPosition.columnIdx) <=
-            columnIdx &&
-        columnIdx <=
-            max(currentCellPosition.columnIdx,
-                widget.stateManager.currentSelectingPosition.columnIdx);
-
-    if (inRangeOfColumns == false) {
-      return false;
-    }
-
-    return true;
+    return widget.stateManager
+        .isSelectedCell(widget.cell, widget.column, widget.rowIdx);
   }
 
   bool _needMovingScroll(Offset selectingOffset, MoveDirection move) {
