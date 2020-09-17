@@ -68,8 +68,8 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
     popupRows = _buildRows(days);
 
-    createHeader =
-        (PlutoStateManager stateManager) => _DateCellHeader(stateManager: stateManager);
+    createHeader = (PlutoStateManager stateManager) =>
+        _DateCellHeader(stateManager: stateManager);
 
     super.initState();
   }

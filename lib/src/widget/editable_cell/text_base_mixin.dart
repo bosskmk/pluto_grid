@@ -45,8 +45,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
   }
 
   void _changeValue() {
-    widget.stateManager
-        .changeCellValue(widget.cell._key, _textController.text);
+    widget.stateManager.changeCellValue(widget.cell._key, _textController.text);
   }
 
   void _handleOnChanged(String value) {
