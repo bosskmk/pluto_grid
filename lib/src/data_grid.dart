@@ -233,8 +233,9 @@ class _PlutoGridState extends State<PlutoGrid> {
 
           if (element.type.isNumber) {
             widget.rows[rowIdx].cells[element.field].value = num.tryParse(widget
-                .rows[rowIdx].cells[element.field].value
-                .replaceAll(',', '')) ?? 0;
+                    .rows[rowIdx].cells[element.field].value
+                    .replaceAll(',', '')) ??
+                0;
           }
         });
       }

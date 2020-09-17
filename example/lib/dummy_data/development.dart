@@ -43,8 +43,7 @@ class DummyData {
 
     int days = 0;
 
-    rows =
-        List<int>.generate(rowLength, (index) => ++index).map((rowIndex) {
+    rows = List<int>.generate(rowLength, (index) => ++index).map((rowIndex) {
       final cells = Map<String, PlutoCell>();
 
       columns.forEach((element) {

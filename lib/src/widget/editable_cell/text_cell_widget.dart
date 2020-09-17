@@ -18,7 +18,6 @@ class TextCellWidget extends StatefulWidget implements _TextBaseMixinImpl {
 class _TextCellWidgetState extends State<TextCellWidget>
     with _TextBaseMixin<TextCellWidget> {
   @override
-
   @override
   Widget build(BuildContext context) {
     _cellFocus.requestFocus();

@@ -843,13 +843,17 @@ class PlutoStateManager extends ChangeNotifier {
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
-      if (currentColumn?.type?.isSelect == true) {}
+      if (currentColumn?.type?.isSelect == true) {
+      }
       // Date type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.isDate == true) {}
+      else if (currentColumn?.type?.isDate == true) {
+      }
       // Time type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.isTime == true) {}
+      else if (currentColumn?.type?.isTime == true) {
+      }
       // Read only type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.readOnly == true) {}
+      else if (currentColumn?.type?.readOnly == true) {
+      }
       // Unable to move left and right in other modified states
       else {
         _checkCellValue = true;
@@ -860,7 +864,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     final columnIndexes = columnIndexesByShowFixed();
     final cellPosition =
-    cellPositionByCellKey(_currentCell._key, columnIndexes);
+        cellPositionByCellKey(_currentCell._key, columnIndexes);
 
     if (canNotMoveCell(cellPosition, direction)) {
       _eventManager.subject.add(
@@ -941,7 +945,7 @@ class PlutoStateManager extends ChangeNotifier {
         _scroll.vertical.offset + _layout.offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
-    direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
+        direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
 
     final bool inScrollStart = _scroll.vertical.offset <= offsetToMove;
 
@@ -964,7 +968,7 @@ class PlutoStateManager extends ChangeNotifier {
     }
 
     final PlutoColumn columnToMove =
-    _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
+        _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -976,7 +980,7 @@ class PlutoStateManager extends ChangeNotifier {
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
     double offsetToMove = layout.showFixedColumn == true
         ? bodyColumnsWidthAtColumnIdx(
-        columnIdx + direction.offset - leftFixedColumnIndexes.length)
+            columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
     final double screenOffset = _layout.showFixedColumn == true
@@ -1025,7 +1029,7 @@ class PlutoStateManager extends ChangeNotifier {
 
     Function findIndexToMove = () {
       final double minLeft =
-      _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
+          _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
 
       final double minRight = _layout.showFixedColumn
           ? _layout.maxWidth - rightFixedColumnsWidth
@@ -1143,7 +1147,7 @@ class PlutoStateManager extends ChangeNotifier {
           min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
       columnEndIdx = max(currentCellPosition.columnIdx,
-          _currentSelectingPosition.columnIdx) +
+              _currentSelectingPosition.columnIdx) +
           1;
 
       rowEndIdx =
@@ -1166,8 +1170,8 @@ class PlutoStateManager extends ChangeNotifier {
       }
 
       for (var columnIdx = columnStartIdx;
-      columnIdx < columnEndIdx;
-      columnIdx += 1) {
+          columnIdx < columnEndIdx;
+          columnIdx += 1) {
         if (columnIdx >= columnIndexes.length) {
           break;
         }
@@ -1222,15 +1226,16 @@ class PlutoStateManager extends ChangeNotifier {
   /// Change cell value
   ///
   /// [callOnChangedEvent] triggers a [PlutoOnChangedEventCallback] callback.
-  void changeCellValue(Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool notify = true,
-      }) {
+  void changeCellValue(
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {
@@ -1326,11 +1331,10 @@ class PlutoStateManager extends ChangeNotifier {
 
     if (_selectingMode.isSquare) {
       final bool inRangeOfRows = min(currentCellPosition.rowIdx,
-          _currentSelectingPosition.rowIdx) <=
-          rowIdx &&
+                  _currentSelectingPosition.rowIdx) <=
+              rowIdx &&
           rowIdx <=
-              max(currentCellPosition.rowIdx,
-                  _currentSelectingPosition.rowIdx);
+              max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
       if (inRangeOfRows == false) {
         return false;
@@ -1343,8 +1347,8 @@ class PlutoStateManager extends ChangeNotifier {
       }
 
       final bool inRangeOfColumns = min(currentCellPosition.columnIdx,
-          currentSelectingPosition.columnIdx) <=
-          columnIdx &&
+                  currentSelectingPosition.columnIdx) <=
+              columnIdx &&
           columnIdx <=
               max(currentCellPosition.columnIdx,
                   currentSelectingPosition.columnIdx);
@@ -1355,11 +1359,11 @@ class PlutoStateManager extends ChangeNotifier {
 
       return true;
     } else if (_selectingMode.isHorizontal) {
-      int startRowIdx = min(currentCellPosition.rowIdx,
-          _currentSelectingPosition.rowIdx);
+      int startRowIdx =
+          min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
-      int endRowIdx = max(currentCellPosition.rowIdx,
-          _currentSelectingPosition.rowIdx);
+      int endRowIdx =
+          max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
       final int columnIdx = columnIndex(column);
 
@@ -1374,8 +1378,8 @@ class PlutoStateManager extends ChangeNotifier {
       if (currentCellPosition.rowIdx < _currentSelectingPosition.rowIdx) {
         startColumnIdx = currentCellPosition.columnIdx;
         endColumnIdx = _currentSelectingPosition.columnIdx;
-      } else
-      if (currentCellPosition.rowIdx > _currentSelectingPosition.rowIdx) {
+      } else if (currentCellPosition.rowIdx >
+          _currentSelectingPosition.rowIdx) {
         startColumnIdx = _currentSelectingPosition.columnIdx;
         endColumnIdx = currentCellPosition.columnIdx;
       } else {
@@ -1397,7 +1401,7 @@ class PlutoStateManager extends ChangeNotifier {
 
       return false;
     } else {
-      throw('selectingMode is not handled');
+      throw ('selectingMode is not handled');
     }
   }
 
