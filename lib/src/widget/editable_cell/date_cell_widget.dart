@@ -78,7 +78,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
   void _onLoaded(PlutoOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
-    popupStateManager.setSelectingMode(PlutoSelectingMode.Horizontal);
+    popupStateManager.setSelectingMode(PlutoSelectingMode.None);
 
     if (widget.column.type.date.startDate == null ||
         widget.column.type.date.endDate == null) {

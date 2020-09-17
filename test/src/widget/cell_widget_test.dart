@@ -28,6 +28,7 @@ void main() {
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(false);
+    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.isEditing).thenReturn(false);
 
     await tester.pumpWidget(

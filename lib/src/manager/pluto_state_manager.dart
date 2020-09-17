@@ -428,7 +428,7 @@ class PlutoStateManager extends ChangeNotifier {
 
   /// Change Multi-Select Status.
   void setSelecting(bool flag) {
-    if (mode.isSelect) {
+    if (_selectingMode.isNone) {
       return;
     }
 
@@ -466,6 +466,10 @@ class PlutoStateManager extends ChangeNotifier {
     int rowIdx,
     bool notify = true,
   }) {
+    if (_selectingMode.isNone) {
+      return;
+    }
+
     _currentSelectingPosition =
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
@@ -1308,6 +1312,10 @@ class PlutoStateManager extends ChangeNotifier {
   // todo : code cleanup
   /// Whether the cell is the currently multi selected cell.
   bool isSelectedCell(PlutoCell cell, PlutoColumn column, int rowIdx) {
+    if (_selectingMode.isNone) {
+      return false;
+    }
+
     if (isCurrentCell(cell) == true) {
       return false;
     }
@@ -1478,10 +1486,13 @@ class PlutoKeyPressed {
 enum PlutoSelectingMode {
   Square,
   Horizontal,
+  None,
 }
 
 extension PlutoSelectingModeExtension on PlutoSelectingMode {
   bool get isSquare => this == PlutoSelectingMode.Square;
 
   bool get isHorizontal => this == PlutoSelectingMode.Horizontal;
+
+  bool get isNone => this == PlutoSelectingMode.None;
 }

@@ -53,4 +53,11 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
     super.initState();
   }
+
+  @override
+  void _onLoaded(PlutoOnLoadedEvent event) {
+    event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+
+    super._onLoaded(event);
+  }
 }

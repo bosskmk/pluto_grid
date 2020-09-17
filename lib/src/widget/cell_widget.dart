@@ -165,6 +165,10 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   bool _needMovingScroll(Offset selectingOffset, MoveDirection move) {
+    if (widget.stateManager.selectingMode.isNone) {
+      return false;
+    }
+
     switch (move) {
       case MoveDirection.Left:
         var leftFixedColumnWidth = widget.stateManager.layout.showFixedColumn
@@ -272,7 +276,8 @@ class _CellWidgetState extends State<CellWidget>
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
-        if (widget.stateManager.keyPressed.shift &&
+        if (!widget.stateManager.selectingMode.isNone &&
+            widget.stateManager.keyPressed.shift &&
             widget.stateManager.currentCell != null) {
           final int columnIdx = widget.stateManager.columnIndex(widget.column);
 

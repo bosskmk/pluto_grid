@@ -73,6 +73,8 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+
           for (var i = 0; i < event.stateManager.rows.length; i += 1) {
             if (event.stateManager.rows[i].cells['hour'].originalValue ==
                 cellHour) {
@@ -106,6 +108,8 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+
           for (var i = 0; i < event.stateManager.rows.length; i += 1) {
             if (event.stateManager.rows[i].cells['minute'].originalValue ==
                 cellMinute) {
