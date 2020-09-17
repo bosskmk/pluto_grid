@@ -1,3 +1,9 @@
+## [0.1.9] - 2020. 9. 17
+
+* Add None Selecting mode for states that do not require multi-selection.
+* Add selecting-mode for selecting date range.
+* Difference in Enter key in TextField when using RawKeyboardListener overlapping.  [https://github.com/flutter/flutter/issues/65170](https://github.com/flutter/flutter/issues/65170)
+
 ## [0.1.8] - 2020. 9. 3
 
 * BugFix : RawKeyEvent's logicalKey.keyLabel return value changed from null to "".
