@@ -1,3 +1,8 @@
+## [0.1.10] - 2020. 9. 17
+
+* Add removing row.
+* Add example for adding and removing row.
+
 ## [0.1.9] - 2020. 9. 17
 
 * Add None Selecting mode for states that do not require multi-selection.

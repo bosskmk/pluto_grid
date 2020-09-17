@@ -2,6 +2,9 @@ part of '../../pluto_grid.dart';
 
 typedef PlutoOnChangedEventCallback = void Function(PlutoOnChangedEvent event);
 
+/// Caution
+///
+/// [columnIdx] and [rowIdx] are values in the currently displayed state.
 class PlutoOnChangedEvent {
   final int columnIdx;
   final PlutoColumn column;

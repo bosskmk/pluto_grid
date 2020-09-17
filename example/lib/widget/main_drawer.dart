@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screen/add_and_remove_screen.dart';
 import '../screen/dual_grid_screen.dart';
 import '../screen/home_screen.dart';
 import '../screen/normal_grid_screen.dart';
@@ -30,15 +31,21 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Normal Grid Demo'),
+            title: Text('Normal Grid'),
             onTap: () {
               Navigator.popAndPushNamed(context, NormalGridScreen.routeName);
             },
           ),
           ListTile(
-            title: Text('Dual Grid Demo'),
+            title: Text('Dual Grid'),
             onTap: () {
               Navigator.popAndPushNamed(context, DualGridScreen.routeName);
+            },
+          ),
+          ListTile(
+            title: Text('Add and Remove'),
+            onTap: () {
+              Navigator.popAndPushNamed(context, AddAndRemoveScreen.routeName);
             },
           ),
         ],

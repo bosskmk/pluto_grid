@@ -540,8 +540,44 @@ class PlutoStateManager extends ChangeNotifier {
     _keyPressed = keyPressed;
   }
 
+  List<PlutoRow> setSortIdxOfRows(
+    List<PlutoRow> rows, {
+    bool increase = true,
+    int start = 0,
+  }) {
+    int sortIdx = start;
+
+    return rows.map((row) {
+      row.sortIdx = sortIdx;
+
+      sortIdx = increase ? ++sortIdx : --sortIdx;
+
+      return row;
+    }).toList(growable: false);
+  }
+
+  void resetCurrentState({ notify = true }) {
+    _currentRowIdx = null;
+    _currentCell = null;
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
   void prependRows(List<PlutoRow> rows) {
-    _rows.insertAll(0, rows);
+    final start =
+        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(min) - 1 : 0;
+
+    _rows.insertAll(
+      0,
+      setSortIdxOfRows(
+        rows,
+        increase: false,
+        start: start,
+      ),
+    );
 
     /// Update currentRowIdx
     if (_currentRowIdx != null) {
@@ -565,9 +601,33 @@ class PlutoStateManager extends ChangeNotifier {
   }
 
   void appendRows(List<PlutoRow> rows) {
-    _rows.addAll(rows);
+    final start =
+        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(max) + 1 : 0;
+
+    _rows.addAll(
+      setSortIdxOfRows(
+        rows,
+        start: start,
+      ),
+    );
 
     notifyListeners();
+  }
+
+  void removeCurrentRow() {
+    if (_currentRowIdx == null) {
+      return;
+    }
+
+    _checkCellValue = false;
+
+    _rows.removeAt(_currentRowIdx);
+
+    resetCurrentState(notify: false);
+
+    notifyListeners();
+
+    _checkCellValue = true;
   }
 
   /// Update RowIdx to Current Cell.
