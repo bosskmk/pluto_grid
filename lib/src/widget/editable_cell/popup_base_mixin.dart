@@ -187,7 +187,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     return RawKeyboardListener(
       focusNode: _keyboardFocus,
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: [
           TextField(
             controller: _textController,
