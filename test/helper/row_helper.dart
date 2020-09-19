@@ -13,6 +13,6 @@ class RowHelper {
                     PlutoCell(value: '${column.field} value $rowIdx'),
               ),
             ))
-        .toList(growable: false);
+        .toList();
   }
 }

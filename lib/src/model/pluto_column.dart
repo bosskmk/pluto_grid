@@ -82,23 +82,23 @@ extension _PlutoColumnSortExtension on PlutoColumnSort {
     return this == PlutoColumnSort.Ascending;
   }
 
-  // bool get isDescending {
-  //   return this == PlutoColumnSort.Descending;
-  // }
+  bool get isDescending {
+    return this == PlutoColumnSort.Descending;
+  }
 
-  // String toShortString() {
-  //   return this.toString().split('.').last;
-  // }
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
 
-  // PlutoColumnSort fromString(String value) {
-  //   if (value == PlutoColumnSort.Ascending.toShortString()) {
-  //     return PlutoColumnSort.Ascending;
-  //   } else if (value == PlutoColumnSort.Descending.toShortString()) {
-  //     return PlutoColumnSort.Descending;
-  //   } else {
-  //     return PlutoColumnSort.None;
-  //   }
-  // }
+  PlutoColumnSort fromString(String value) {
+    if (value == PlutoColumnSort.Ascending.toShortString()) {
+      return PlutoColumnSort.Ascending;
+    } else if (value == PlutoColumnSort.Descending.toShortString()) {
+      return PlutoColumnSort.Descending;
+    } else {
+      return PlutoColumnSort.None;
+    }
+  }
 }
 
 abstract class PlutoColumnType {

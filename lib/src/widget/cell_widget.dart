@@ -79,11 +79,15 @@ class _CellWidgetState extends State<CellWidget>
 
     widget.stateManager.addListener(changeStateListener);
 
-    _selectionSubject.debounceTime(Duration(milliseconds: 4)).listen((event) {
+    _selectionSubject.stream
+        .debounceTime(Duration(milliseconds: 4))
+        .listen((event) {
       event();
     });
 
-    _scrollSubject.throttleTime(Duration(milliseconds: 800)).listen((event) {
+    _scrollSubject.stream
+        .throttleTime(Duration(milliseconds: 800))
+        .listen((event) {
       event();
     });
 
@@ -103,7 +107,7 @@ class _CellWidgetState extends State<CellWidget>
     final PlutoCellPosition changedSelectingPosition =
         widget.stateManager.currentSelectingPosition;
 
-    bool checkCellValue = widget.stateManager._checkCellValue;
+    bool checkCellValue = widget.stateManager.checkCellValue;
 
     dynamic changedCellValue;
 

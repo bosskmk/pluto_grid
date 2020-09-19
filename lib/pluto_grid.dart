@@ -33,6 +33,22 @@ part './src/helper/datetime_helper.dart';
 
 part './src/helper/clipboard_transformation.dart';
 
+part './src/manager/state/cell_state.dart';
+
+part './src/manager/state/column_state.dart';
+
+part './src/manager/state/editing_state.dart';
+
+part './src/manager/state/grid_state.dart';
+
+part './src/manager/state/keyboard_state.dart';
+
+part './src/manager/state/row_state.dart';
+
+part './src/manager/state/scroll_state.dart';
+
+part './src/manager/state/selecting_state.dart';
+
 part './src/manager/pluto_event_manager.dart';
 
 part './src/manager/pluto_state_manager.dart';
