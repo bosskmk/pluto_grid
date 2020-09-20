@@ -25,6 +25,8 @@ abstract class IRowState {
 
   void removeCurrentRow();
 
+  void removeRows(List<PlutoRow> rows);
+
   /// Update RowIdx to Current Cell.
   void updateCurrentRowIdx(Key cellKey);
 }
@@ -126,6 +128,18 @@ mixin RowState implements IPlutoState {
     _rows.removeAt(_currentRowIdx);
 
     resetCurrentState(notify: false);
+
+    notifyListeners(checkCellValue: false);
+  }
+
+  void removeRows(List<PlutoRow> rows) {
+    if (rows == null || rows.length < 1) {
+      return;
+    }
+
+    final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
+
+    _rows.removeWhere((row) => removeKeys.contains(row.key));
 
     notifyListeners(checkCellValue: false);
   }

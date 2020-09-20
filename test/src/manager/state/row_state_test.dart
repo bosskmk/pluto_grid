@@ -345,6 +345,87 @@ main() {
     });
   });
 
+  group('removeRows', () {
+    testWidgets('Should not be removed rows, when rows parameter is null.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.removeRows(null);
+
+      // then
+      expect(stateManager.rows.length, 5);
+    });
+
+    testWidgets('Should be removed rows, when rows parameter is not null.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      final deleteRows = [rows[0], rows[1]];
+
+      stateManager.removeRows(deleteRows);
+
+      // then
+      final deleteRowKeys =
+          deleteRows.map((e) => e.key).toList(growable: false);
+
+      expect(stateManager.rows.length, 3);
+      expect(deleteRowKeys.contains(stateManager.rows[0].key), false);
+      expect(deleteRowKeys.contains(stateManager.rows[1].key), false);
+      expect(deleteRowKeys.contains(stateManager.rows[2].key), false);
+    });
+
+    testWidgets('Should be removed all rows',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      final deleteRows = [...rows];
+
+      stateManager.removeRows(deleteRows);
+
+      // then
+      expect(stateManager.rows.length, 0);
+    });
+  });
+
   group('updateCurrentRowIdx', () {
     testWidgets('When cellKey is passed, the _currentRowIdx value must be set.',
         (WidgetTester tester) async {
