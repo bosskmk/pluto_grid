@@ -17,7 +17,7 @@ abstract class ICellState {
   void withoutCheckCellValue(Function() callback);
 
   /// Index position of cell in a column
-  PlutoCellPosition cellPositionByCellKey(Key cellKey, List<int> columnIndexes);
+  PlutoCellPosition cellPositionByCellKey(Key cellKey);
 
   /// Change the selected cell.
   void setCurrentCell(
@@ -69,9 +69,7 @@ mixin CellState implements IPlutoState {
       return null;
     }
 
-    final columnIndexes = columnIndexesByShowFixed();
-
-    return cellPositionByCellKey(_currentCell._key, columnIndexes);
+    return cellPositionByCellKey(_currentCell._key);
   }
 
   void withoutCheckCellValue(Function() callback) {
@@ -82,8 +80,11 @@ mixin CellState implements IPlutoState {
     _checkCellValue = true;
   }
 
-  PlutoCellPosition cellPositionByCellKey(
-      Key cellKey, List<int> columnIndexes) {
+  PlutoCellPosition cellPositionByCellKey(Key cellKey) {
+    assert(cellKey != null);
+
+    final columnIndexes = columnIndexesByShowFixed();
+
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
           columnIdx < columnIndexes.length;
@@ -94,6 +95,7 @@ mixin CellState implements IPlutoState {
         }
       }
     }
+
     throw Exception('CellKey was not found in the list.');
   }
 
@@ -129,27 +131,19 @@ mixin CellState implements IPlutoState {
   }
 
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
-    bool _canMoveCell;
-
     switch (direction) {
       case MoveDirection.Left:
-        _canMoveCell = cellPosition.columnIdx > 0;
-        break;
+        return cellPosition.columnIdx > 0;
       case MoveDirection.Right:
-        _canMoveCell = cellPosition.columnIdx <
+        return cellPosition.columnIdx <
             _rows[cellPosition.rowIdx].cells.length - 1;
-        break;
       case MoveDirection.Up:
-        _canMoveCell = cellPosition.rowIdx > 0;
-        break;
+        return cellPosition.rowIdx > 0;
       case MoveDirection.Down:
-        _canMoveCell = cellPosition.rowIdx < _rows.length - 1;
-        break;
+        return cellPosition.rowIdx < _rows.length - 1;
     }
 
-    assert(_canMoveCell != null);
-
-    return _canMoveCell;
+    throw Exception('Not handled MoveDirection');
   }
 
   bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {

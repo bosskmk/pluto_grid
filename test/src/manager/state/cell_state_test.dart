@@ -144,6 +144,115 @@ main() {
     });
   });
 
+  group('cellPositionByCellKey', () {
+    testWidgets('should be caused AssertionError', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      // then
+      expect(() {
+        stateManager.cellPositionByCellKey(null);
+      }, throwsA(isA<AssertionError>()));
+    });
+
+    testWidgets('should be caused Exception', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.setLayout(
+          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+
+      // when
+      final Key nonExistsKey = UniqueKey();
+
+      // then
+      expect(() {
+        stateManager.cellPositionByCellKey(nonExistsKey);
+      }, throwsException);
+    });
+
+    testWidgets('should be returned cellPosition columnIdx: 0, rowIdx 0',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.setLayout(
+          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+
+      // when
+      final Key cellKey = rows.first.cells['body0'].key;
+
+      final cellPosition = stateManager.cellPositionByCellKey(cellKey);
+
+      // then
+      expect(cellPosition.columnIdx, 0);
+      expect(cellPosition.rowIdx, 0);
+    });
+
+    testWidgets('should be returned cellPosition columnIdx: 3, rowIdx 7',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.setLayout(
+          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+
+      // when
+      final Key cellKey = rows[7].cells['body3'].key;
+
+      final cellPosition = stateManager.cellPositionByCellKey(cellKey);
+
+      // then
+      expect(cellPosition.columnIdx, 3);
+      expect(cellPosition.rowIdx, 7);
+    });
+  });
+
   group('filteredCellValue', () {
     testWidgets(
         'select column'

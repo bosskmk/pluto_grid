@@ -92,7 +92,8 @@ mixin EditingState implements IPlutoState {
         // No cell selection : Paste in order based on the current cell
         columnStartIdx = currentCellPosition.columnIdx;
 
-        columnEndIdx = currentCellPosition.columnIdx + textList.first.length - 1;
+        columnEndIdx =
+            currentCellPosition.columnIdx + textList.first.length - 1;
 
         rowStartIdx = currentCellPosition.rowIdx;
 
@@ -102,8 +103,8 @@ mixin EditingState implements IPlutoState {
         columnStartIdx = min(
             currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
 
-        columnEndIdx = max(currentCellPosition.columnIdx,
-                _currentSelectingPosition.columnIdx);
+        columnEndIdx = max(
+            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
 
         rowStartIdx =
             min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
@@ -214,14 +215,16 @@ mixin EditingState implements IPlutoState {
         currentRow.value =
             newValue = castValueByColumnType(newValue, currentColumn);
 
-        _onChanged(PlutoOnChangedEvent(
-          columnIdx: columnIndexes[columnIdx],
-          column: currentColumn,
-          rowIdx: rowIdx,
-          row: _rows[rowIdx],
-          value: newValue,
-          oldValue: oldValue,
-        ));
+        if (_onChanged != null) {
+          _onChanged(PlutoOnChangedEvent(
+            columnIdx: columnIndexes[columnIdx],
+            column: currentColumn,
+            rowIdx: rowIdx,
+            row: _rows[rowIdx],
+            value: newValue,
+            oldValue: oldValue,
+          ));
+        }
 
         ++textColumnIdx;
       }

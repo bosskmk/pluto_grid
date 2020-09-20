@@ -10,24 +10,18 @@ abstract class IKeyboardState {
   void setKeyPressed(PlutoKeyPressed keyPressed);
 
   /// The index position of the cell to move in that direction in the current cell.
-  ///
-  /// [columnIndexes] : Provided differently depending on the current cell location
-  /// - [leftFixedColumnIndexes]
-  /// - [bodyColumnIndexes]
-  /// - [rightFixedColumnIndexes]
   PlutoCellPosition cellPositionToMove(
-      PlutoCellPosition cellPosition,
-      MoveDirection direction,
-      List<int> columnIndexes,
-      );
+    PlutoCellPosition cellPosition,
+    MoveDirection direction,
+  );
 
   /// Change the current cell to the cell in the [direction] and move the scroll
   /// [force] true : Allow left and right movement with tab key in editing state.
   void moveCurrentCell(
-      MoveDirection direction, {
-        bool force = false,
-        bool notify = true,
-      });
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  });
 
   void moveSelectingCell(MoveDirection direction);
 }
@@ -42,10 +36,11 @@ mixin KeyboardState implements IPlutoState {
   }
 
   PlutoCellPosition cellPositionToMove(
-      PlutoCellPosition cellPosition,
-      MoveDirection direction,
-      List<int> columnIndexes,
-      ) {
+    PlutoCellPosition cellPosition,
+    MoveDirection direction,
+  ) {
+    final columnIndexes = columnIndexesByShowFixed();
+
     switch (direction) {
       case MoveDirection.Left:
         return PlutoCellPosition(
@@ -72,10 +67,10 @@ mixin KeyboardState implements IPlutoState {
   }
 
   void moveCurrentCell(
-      MoveDirection direction, {
-        bool force = false,
-        bool notify = true,
-      }) {
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  }) {
     if (_currentCell == null) return;
 
     // @formatter:off
@@ -95,10 +90,7 @@ mixin KeyboardState implements IPlutoState {
     }
     // @formatter:on
 
-    final columnIndexes = columnIndexesByShowFixed();
-
-    final cellPosition =
-    cellPositionByCellKey(_currentCell._key, columnIndexes);
+    final cellPosition = cellPositionByCellKey(_currentCell._key);
 
     if (canNotMoveCell(cellPosition, direction)) {
       _eventManager.subject.add(
@@ -114,7 +106,6 @@ mixin KeyboardState implements IPlutoState {
     final toMove = cellPositionToMove(
       cellPosition,
       direction,
-      columnIndexes,
     );
 
     setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field],
