@@ -1,3 +1,4 @@
+import 'package:example/dummy_data/development.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -36,28 +37,21 @@ class __CrudGridState extends State<_CrudGrid> {
 
   PlutoStateManager stateManager;
 
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
+
   @override
   void initState() {
-    columns = [
-      PlutoColumn(
-        title: 'text',
-        field: 'text',
-        type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
-        title: 'number',
-        field: 'number',
-        type: PlutoColumnType.number(),
-      ),
-    ];
+    final dummyRows = DummyData(10, 20);
 
-    rows = [];
+    columns = dummyRows.columns;
+
+    rows = dummyRows.rows;
 
     super.initState();
   }
 
   void message(context, String text) {
-    widget.scaffoldKey.currentState.hideCurrentSnackBar();
+    widget.scaffoldKey.currentState.removeCurrentSnackBar();
 
     final snackBar = SnackBar(
       content: Text(text),
@@ -66,17 +60,29 @@ class __CrudGridState extends State<_CrudGrid> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void handleAddButton() {
+  void handleAddRowButton() {
     stateManager.appendRows([
-      PlutoRow(cells: {
-        'text': PlutoCell(value: ''),
-        'number': PlutoCell(value: 0),
-      }),
+      DummyData.rowByColumns(columns),
     ]);
   }
 
-  void handleRemoveButton() {
+  void handleRemoveCurrentRowButton() {
     stateManager.removeCurrentRow();
+  }
+
+  void handleRemoveSelectedRowsButton() {
+    stateManager.removeRows(stateManager.currentSelectingRows);
+  }
+
+  void setGridSelectingMode(PlutoSelectingMode mode) {
+    if (gridSelectingMode == mode) {
+      return;
+    }
+
+    setState(() {
+      gridSelectingMode = mode;
+      stateManager.setSelectingMode(mode);
+    });
   }
 
   @override
@@ -85,17 +91,46 @@ class __CrudGridState extends State<_CrudGrid> {
       padding: const EdgeInsets.all(30),
       child: Column(
         children: [
-          Row(
-            children: [
-              FlatButton(
-                child: Text('Add Row'),
-                onPressed: handleAddButton,
-              ),
-              FlatButton(
-                child: Text('Remove Current Row'),
-                onPressed: handleRemoveButton,
-              ),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FlatButton(
+                  child: Text('Add Row'),
+                  onPressed: handleAddRowButton,
+                ),
+                FlatButton(
+                  child: Text('Remove Current Row'),
+                  onPressed: handleRemoveCurrentRowButton,
+                ),
+                FlatButton(
+                  child: Text('Remove Selected Rows'),
+                  onPressed: handleRemoveSelectedRowsButton,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: gridSelectingMode,
+                    items: PlutoStateManager.selectingModes
+                        .map<DropdownMenuItem<PlutoSelectingMode>>(
+                            (PlutoSelectingMode item) {
+                      final color =
+                          gridSelectingMode == item ? Colors.blue : null;
+
+                      return DropdownMenuItem<PlutoSelectingMode>(
+                        value: item,
+                        child: Text(
+                          item.toShortString(),
+                          style: TextStyle(color: color),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (PlutoSelectingMode mode) {
+                      setGridSelectingMode(mode);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: PlutoGrid(
@@ -106,6 +141,7 @@ class __CrudGridState extends State<_CrudGrid> {
               },
               onLoaded: (PlutoOnLoadedEvent event) {
                 stateManager = event.stateManager;
+                stateManager.setSelectingMode(gridSelectingMode);
               },
             ),
           ),

@@ -41,32 +41,38 @@ class DummyData {
       );
     }).toList();
 
-    int days = 0;
+    rows = rowsByColumns(length: rowLength, columns: columns);
+  }
 
-    rows =
-        List<int>.generate(rowLength, (index) => ++index).map((rowIndex) {
-      final cells = Map<String, PlutoCell>();
+  static List<PlutoRow> rowsByColumns({int length, List<PlutoColumn> columns}) {
+    return List<int>.generate(length, (index) => ++index).map((rowIndex) {
+      return rowByColumns(columns);
+    }).toList();
+  }
 
-      columns.forEach((element) {
-        cells[element.field] = PlutoCell(
-          value: (element) {
-            if (element.field == '0' || element.field == '1')
-              return faker.randomGenerator.decimal(scale: 1000000000);
-            else if (element.field == '4' || element.field == '5')
-              return 'One';
-            else if (element.field == '6')
-              return DateTime.now().add(Duration(days: ++days)).toString();
-            else if (element.field == '7')
-              return '00:00';
-            else
-              return faker.food.restaurant();
-          }(element),
-        );
-      });
+  static PlutoRow rowByColumns(List<PlutoColumn> columns) {
+    final cells = Map<String, PlutoCell>();
 
-      return PlutoRow(
-        cells: cells,
+    columns.forEach((PlutoColumn column) {
+      cells[column.field] = PlutoCell(
+        value: (PlutoColumn element) {
+          if (element.type.isNumber)
+            return faker.randomGenerator.decimal(scale: 1000000000);
+          else if (element.type.isSelect)
+            return element.type.select.items.first;
+          else if (element.type.isDate)
+            return DateTime.now()
+                .add(Duration(
+                    days: faker.randomGenerator.integer(365, min: -365)))
+                .toString();
+          else if (element.type.isTime)
+            return '00:00';
+          else
+            return faker.food.restaurant();
+        }(column),
       );
-    }).toList(growable: false);
+    });
+
+    return PlutoRow(cells: cells);
   }
 }

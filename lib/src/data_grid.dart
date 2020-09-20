@@ -93,7 +93,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initProperties() {
-    applyColumnRowOnInit();
+    initializeColumnRow();
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
@@ -212,38 +212,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     });
   }
 
-  void applyColumnRowOnInit() {
-    List<PlutoColumn> applyFormatOnInit = widget.columns
-        .where((element) => element.type.applyFormatOnInit)
-        .toList(growable: false);
-
-    final bool hasApplyFormatOnInit = applyFormatOnInit.length > 0;
-
-    final bool hasSortIdx =
-        widget.rows.length > 0 && widget.rows.first.sortIdx != null;
-
-    if (hasApplyFormatOnInit == false && hasSortIdx == true) {
-      return;
-    }
-
-    for (var rowIdx = 0; rowIdx < widget.rows.length; rowIdx += 1) {
-      if (hasApplyFormatOnInit) {
-        applyFormatOnInit.forEach((element) {
-          widget.rows[rowIdx].cells[element.field].value = element.type
-              .applyFormat(widget.rows[rowIdx].cells[element.field].value);
-
-          if (element.type.isNumber) {
-            widget.rows[rowIdx].cells[element.field].value = num.tryParse(widget
-                .rows[rowIdx].cells[element.field].value
-                .replaceAll(',', '')) ?? 0;
-          }
-        });
-      }
-
-      if (hasSortIdx == false) {
-        widget.rows[rowIdx].sortIdx = rowIdx;
-      }
-    }
+  void initializeColumnRow() {
+    PlutoStateManager.initializeRows(widget.columns, widget.rows);
   }
 
   void changeStateListener() {

@@ -6,10 +6,10 @@ import '../dummy_data/development.dart';
 class NormalGridScreen extends StatelessWidget {
   static const routeName = 'normal-grid';
 
+  final dummyData = DummyData(10, 100);
+
   @override
   Widget build(BuildContext context) {
-    final dummyData = DummyData(10, 100);
-
     return Scaffold(
       appBar: AppBar(title: Text('PlutoGrid - Normal'),),
       body: Container(

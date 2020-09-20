@@ -49,7 +49,7 @@ enum PlutoColumnFixed {
   Right,
 }
 
-extension _PlutoColumnFixedExtension on PlutoColumnFixed {
+extension PlutoColumnFixedExtension on PlutoColumnFixed {
   bool get isNone {
     return this == null || this == PlutoColumnFixed.None;
   }
@@ -73,7 +73,7 @@ enum PlutoColumnSort {
   Descending,
 }
 
-extension _PlutoColumnSortExtension on PlutoColumnSort {
+extension PlutoColumnSortExtension on PlutoColumnSort {
   bool get isNone {
     return this == null || this == PlutoColumnSort.None;
   }
@@ -108,7 +108,7 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.text({
     bool readOnly = false,
   }) {
-    return _PlutoColumnTypeText(readOnly: readOnly);
+    return PlutoColumnTypeText(readOnly: readOnly);
   }
 
   /// Set to numeric column.
@@ -126,7 +126,7 @@ abstract class PlutoColumnType {
     format = '#,###',
     applyFormatOnInit = true,
   }) {
-    return _PlutoColumnTypeNumber(
+    return PlutoColumnTypeNumber(
       readOnly: readOnly,
       format: format,
       negative: negative,
@@ -139,7 +139,7 @@ abstract class PlutoColumnType {
     List<dynamic> items, {
     readOnly = false,
   }) {
-    return _PlutoColumnTypeSelect(
+    return PlutoColumnTypeSelect(
       readOnly: readOnly,
       items: items,
     );
@@ -161,7 +161,7 @@ abstract class PlutoColumnType {
     format = 'yyyy-MM-dd',
     applyFormatOnInit = true,
   }) {
-    return _PlutoColumnTypeDate(
+    return PlutoColumnTypeDate(
       readOnly: readOnly,
       startDate: startDate,
       endDate: endDate,
@@ -173,41 +173,41 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.time({
     readOnly = false,
   }) {
-    return _PlutoColumnTypeTime(readOnly: readOnly);
+    return PlutoColumnTypeTime(readOnly: readOnly);
   }
 
   bool isValid(dynamic value);
 }
 
-extension _PlutoColumnTypeExtension on PlutoColumnType {
-  bool get isText => this is _PlutoColumnTypeText;
+extension PlutoColumnTypeExtension on PlutoColumnType {
+  bool get isText => this is PlutoColumnTypeText;
 
-  bool get isNumber => this is _PlutoColumnTypeNumber;
+  bool get isNumber => this is PlutoColumnTypeNumber;
 
-  bool get isSelect => this is _PlutoColumnTypeSelect;
+  bool get isSelect => this is PlutoColumnTypeSelect;
 
-  bool get isDate => this is _PlutoColumnTypeDate;
+  bool get isDate => this is PlutoColumnTypeDate;
 
-  bool get isTime => this is _PlutoColumnTypeTime;
+  bool get isTime => this is PlutoColumnTypeTime;
 
-  _PlutoColumnTypeText get text {
-    return this is _PlutoColumnTypeText ? this : throw TypeError();
+  PlutoColumnTypeText get text {
+    return this is PlutoColumnTypeText ? this : throw TypeError();
   }
 
-  _PlutoColumnTypeNumber get number {
-    return this is _PlutoColumnTypeNumber ? this : throw TypeError();
+  PlutoColumnTypeNumber get number {
+    return this is PlutoColumnTypeNumber ? this : throw TypeError();
   }
 
-  _PlutoColumnTypeSelect get select {
-    return this is _PlutoColumnTypeSelect ? this : throw TypeError();
+  PlutoColumnTypeSelect get select {
+    return this is PlutoColumnTypeSelect ? this : throw TypeError();
   }
 
-  _PlutoColumnTypeDate get date {
-    return this is _PlutoColumnTypeDate ? this : throw TypeError();
+  PlutoColumnTypeDate get date {
+    return this is PlutoColumnTypeDate ? this : throw TypeError();
   }
 
-  _PlutoColumnTypeTime get time {
-    return this is _PlutoColumnTypeTime ? this : throw TypeError();
+  PlutoColumnTypeTime get time {
+    return this is PlutoColumnTypeTime ? this : throw TypeError();
   }
 
   bool get hasFormat => this is _PlutoColumnTypeHasFormat;
@@ -220,17 +220,17 @@ extension _PlutoColumnTypeExtension on PlutoColumnType {
       : value;
 }
 
-class _PlutoColumnTypeText implements PlutoColumnType {
+class PlutoColumnTypeText implements PlutoColumnType {
   bool readOnly;
 
-  _PlutoColumnTypeText({this.readOnly});
+  PlutoColumnTypeText({this.readOnly});
 
   bool isValid(dynamic value) {
     return value is String || value is num;
   }
 }
 
-class _PlutoColumnTypeNumber
+class PlutoColumnTypeNumber
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
   bool readOnly;
 
@@ -240,7 +240,7 @@ class _PlutoColumnTypeNumber
 
   bool applyFormatOnInit;
 
-  _PlutoColumnTypeNumber({
+  PlutoColumnTypeNumber({
     this.readOnly,
     this.negative,
     this.format,
@@ -280,12 +280,12 @@ class _PlutoColumnTypeNumber
   }
 }
 
-class _PlutoColumnTypeSelect implements PlutoColumnType {
+class PlutoColumnTypeSelect implements PlutoColumnType {
   bool readOnly;
 
   List<dynamic> items;
 
-  _PlutoColumnTypeSelect({
+  PlutoColumnTypeSelect({
     this.readOnly,
     this.items,
   });
@@ -293,7 +293,7 @@ class _PlutoColumnTypeSelect implements PlutoColumnType {
   bool isValid(dynamic value) => items.contains(value) == true;
 }
 
-class _PlutoColumnTypeDate
+class PlutoColumnTypeDate
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
   bool readOnly;
 
@@ -305,7 +305,7 @@ class _PlutoColumnTypeDate
 
   bool applyFormatOnInit;
 
-  _PlutoColumnTypeDate({
+  PlutoColumnTypeDate({
     this.readOnly,
     this.startDate,
     this.endDate,
@@ -342,10 +342,10 @@ class _PlutoColumnTypeDate
   }
 }
 
-class _PlutoColumnTypeTime implements PlutoColumnType {
+class PlutoColumnTypeTime implements PlutoColumnType {
   bool readOnly;
 
-  _PlutoColumnTypeTime({
+  PlutoColumnTypeTime({
     this.readOnly,
   });
 

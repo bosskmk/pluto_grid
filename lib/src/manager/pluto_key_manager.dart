@@ -20,7 +20,8 @@ class PlutoKeyManager {
   void _handler(KeyManagerEvent keyManagerEvent) {
     if (keyManagerEvent.isKeyDownEvent || keyManagerEvent.isKeyUpEvent) {
       stateManager.setKeyPressed(PlutoKeyPressed(
-        shift: keyManagerEvent.event.isShiftPressed,
+        shift: keyManagerEvent.isShiftPressed,
+        ctrl: keyManagerEvent.isCtrlPressed,
       ));
     }
 
@@ -231,12 +232,20 @@ extension KeyManagerEventExtention on KeyManagerEvent {
       this.event.logicalKey.keyLabel.isNotEmpty;
 
   bool get isCtrlC {
-    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+    return this.isCtrlPressed &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
   }
 
   bool get isCtrlV {
-    return (this.event.isMetaPressed || this.event.isControlPressed) &&
+    return this.isCtrlPressed &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+  }
+
+  bool get isShiftPressed {
+    return this.event.isShiftPressed;
+  }
+
+  bool get isCtrlPressed {
+    return this.event.isMetaPressed || this.event.isControlPressed;
   }
 }
