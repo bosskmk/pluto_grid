@@ -21,6 +21,8 @@ class RowWidget extends StatefulWidget {
 class _RowWidgetState extends State<RowWidget> {
   bool _isCurrentRow;
 
+  bool _isSelectedRow;
+
   bool _isSelecting;
 
   PlutoCellPosition _selectingPosition;
@@ -36,6 +38,8 @@ class _RowWidgetState extends State<RowWidget> {
   void initState() {
     _isCurrentRow = widget.stateManager.currentRowIdx == widget.rowIdx;
 
+    _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
+
     _isSelecting = widget.stateManager.isSelecting;
 
     _selectingPosition = widget.stateManager.currentSelectingPosition;
@@ -47,25 +51,49 @@ class _RowWidgetState extends State<RowWidget> {
 
   void changeStateListener() {
     if (_isCurrentRow != (widget.stateManager.currentRowIdx == widget.rowIdx) ||
+        _isSelectedRow != widget.stateManager.isSelectedRow(widget.row.key) ||
         _isSelecting != widget.stateManager.isSelecting ||
         _selectingPosition != widget.stateManager.currentSelectingPosition) {
       setState(() {
         _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
+        _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
         _isSelecting = widget.stateManager.isSelecting;
         _selectingPosition = widget.stateManager.currentSelectingPosition;
       });
     }
   }
 
+  Color rowColor() {
+    if (!widget.stateManager.gridFocusNode.hasFocus) {
+      return Colors.white;
+    }
+
+    final bool checkCurrentRow =
+        _isCurrentRow && (!_isSelecting && _selectingPosition == null);
+
+    final bool checkSelectedRow =
+        widget.stateManager.isSelectedRow(widget.row.key);
+
+    if (!checkCurrentRow && !checkSelectedRow) {
+      return Colors.white;
+    }
+
+    if (widget.stateManager.selectingMode.isRow) {
+      return checkSelectedRow
+          ? PlutoDefaultSettings.currentRowColor
+          : Colors.white;
+    }
+
+    return checkCurrentRow
+        ? PlutoDefaultSettings.currentRowColor
+        : Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _isCurrentRow &&
-                (!_isSelecting && _selectingPosition == null) &&
-                widget.stateManager.gridFocusNode.hasFocus
-            ? PlutoDefaultSettings.currentRowColor
-            : Colors.white,
+        color: rowColor(),
         border: const Border(
           bottom: const BorderSide(
             width: PlutoDefaultSettings.rowBorderWidth,

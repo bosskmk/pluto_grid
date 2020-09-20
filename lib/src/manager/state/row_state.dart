@@ -72,14 +72,14 @@ mixin RowState implements IPlutoState {
     final start =
         _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(min) - 1 : 0;
 
-    _rows.insertAll(
-      0,
-      setSortIdxOfRows(
-        rows,
-        increase: false,
-        start: start,
-      ),
+    PlutoStateManager.initializeRows(
+      _columns,
+      rows,
+      increase: false,
+      start: start,
     );
+
+    _rows.insertAll(0, rows);
 
     /// Update currentRowIdx
     if (_currentRowIdx != null) {
@@ -110,12 +110,13 @@ mixin RowState implements IPlutoState {
     final start =
         _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(max) + 1 : 0;
 
-    _rows.addAll(
-      setSortIdxOfRows(
-        rows,
-        start: start,
-      ),
+    PlutoStateManager.initializeRows(
+      _columns,
+      rows,
+      start: start,
     );
+
+    _rows.addAll(rows);
 
     notifyListeners();
   }
@@ -138,6 +139,11 @@ mixin RowState implements IPlutoState {
     }
 
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
+
+    if (_currentRowIdx != null &&
+        removeKeys.contains(_rows[_currentRowIdx].key)) {
+      resetCurrentState(notify: false);
+    }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 

@@ -17,14 +17,14 @@ abstract class ICellState {
   void withoutCheckCellValue(Function() callback);
 
   /// Index position of cell in a column
-  PlutoCellPosition cellPositionByCellKey(Key cellKey,
-      List<int> columnIndexes);
+  PlutoCellPosition cellPositionByCellKey(Key cellKey, List<int> columnIndexes);
 
   /// Change the selected cell.
-  void setCurrentCell(PlutoCell cell,
-      int rowIdx, {
-        bool notify = true,
-      });
+  void setCurrentCell(
+    PlutoCell cell,
+    int rowIdx, {
+    bool notify = true,
+  });
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction);
@@ -82,12 +82,12 @@ mixin CellState implements IPlutoState {
     _checkCellValue = true;
   }
 
-  PlutoCellPosition cellPositionByCellKey(Key cellKey,
-      List<int> columnIndexes) {
+  PlutoCellPosition cellPositionByCellKey(
+      Key cellKey, List<int> columnIndexes) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
         if (_rows[rowIdx].cells[field]._key == cellKey) {
           return PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
@@ -97,11 +97,15 @@ mixin CellState implements IPlutoState {
     throw Exception('CellKey was not found in the list.');
   }
 
-  void setCurrentCell(PlutoCell cell,
-      int rowIdx, {
-        bool notify = true,
-      }) {
-    if (cell == null) {
+  void setCurrentCell(
+    PlutoCell cell,
+    int rowIdx, {
+    bool notify = true,
+  }) {
+    if (cell == null ||
+        rowIdx == null ||
+        rowIdx < 0 ||
+        rowIdx > _rows.length - 1) {
       return;
     }
 
@@ -113,9 +117,11 @@ mixin CellState implements IPlutoState {
 
     _currentSelectingPosition = null;
 
-    setEditing(false, notify: false);
+    _currentRowIdx = rowIdx;
 
-    if (rowIdx != null) _currentRowIdx = rowIdx;
+    _currentSelectingRows = [];
+
+    setEditing(false, notify: false);
 
     if (notify) {
       notifyListeners(checkCellValue: false);

@@ -13,9 +13,9 @@ abstract class IEditingState {
 
   /// Change the editing status of the current cell.
   void setEditing(
-      bool flag, {
-        bool notify = true,
-      });
+    bool flag, {
+    bool notify = true,
+  });
 
   /// Toggle the editing status of the current cell.
   void toggleEditing();
@@ -29,11 +29,11 @@ abstract class IEditingState {
   /// Change cell value
   /// [callOnChangedEvent] triggers a [PlutoOnChangedEventCallback] callback.
   void changeCellValue(
-      Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool notify = true,
-      });
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool notify = true,
+  });
 }
 
 mixin EditingState implements IPlutoState {
@@ -46,9 +46,9 @@ mixin EditingState implements IPlutoState {
   dynamic _cellValueBeforeEditing;
 
   void setEditing(
-      bool flag, {
-        bool notify = true,
-      }) {
+    bool flag, {
+    bool notify = true,
+  }) {
     if (mode.isSelect) {
       return;
     }
@@ -77,47 +77,99 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
-    int columnStartIdx;
-
-    int rowStartIdx;
-
-    int columnEndIdx;
-
-    int rowEndIdx;
-
-    if (_currentSelectingPosition == null) {
-      // No cell selection : Paste in order based on the current cell
-      columnStartIdx = currentCellPosition.columnIdx;
-
-      rowStartIdx = currentCellPosition.rowIdx;
-
-      columnEndIdx = currentCellPosition.columnIdx + textList.first.length;
-
-      rowEndIdx = currentCellPosition.rowIdx + textList.length;
+    if (_selectingMode.isRow && _currentSelectingRows.length > 0) {
+      _pasteCellValueIntoSelectingRows(textList: textList);
     } else {
-      // If there are selected cells : Paste in order from selected cell range
-      columnStartIdx = min(
-          currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+      int columnStartIdx;
 
-      rowStartIdx =
-          min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+      int columnEndIdx;
 
-      columnEndIdx = max(currentCellPosition.columnIdx,
-          _currentSelectingPosition.columnIdx) +
-          1;
+      int rowStartIdx;
 
-      rowEndIdx =
-          max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx) + 1;
+      int rowEndIdx;
+
+      if (_currentSelectingPosition == null) {
+        // No cell selection : Paste in order based on the current cell
+        columnStartIdx = currentCellPosition.columnIdx;
+
+        columnEndIdx = currentCellPosition.columnIdx + textList.first.length - 1;
+
+        rowStartIdx = currentCellPosition.rowIdx;
+
+        rowEndIdx = currentCellPosition.rowIdx + textList.length - 1;
+      } else {
+        // If there are selected cells : Paste in order from selected cell range
+        columnStartIdx = min(
+            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+
+        columnEndIdx = max(currentCellPosition.columnIdx,
+                _currentSelectingPosition.columnIdx);
+
+        rowStartIdx =
+            min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+
+        rowEndIdx =
+            max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+      }
+
+      _pasteCellValueInOrder(
+        textList: textList,
+        rowIdxList: [for (var i = rowStartIdx; i <= rowEndIdx; i += 1) i],
+        columnStartIdx: columnStartIdx,
+        columnEndIdx: columnEndIdx,
+      );
     }
 
+    notifyListeners();
+  }
+
+  void _pasteCellValueIntoSelectingRows({List<List<String>> textList}) {
+    int columnStartIdx = 0;
+
+    int columnEndIdx = _columns.length - 1;
+
+    final List<Key> selectingRowKeys =
+        _currentSelectingRows.map((e) => e.key).toList();
+
+    List<int> rowIdxList = [];
+
+    for (var i = 0; i < _rows.length; i += 1) {
+      final currentRowKey = _rows[i].key;
+
+      if (selectingRowKeys.contains(currentRowKey)) {
+        selectingRowKeys.removeWhere((key) => key == currentRowKey);
+        rowIdxList.add(i);
+      }
+
+      if (selectingRowKeys.length < 1) {
+        break;
+      }
+    }
+
+    _pasteCellValueInOrder(
+      textList: textList,
+      rowIdxList: rowIdxList,
+      columnStartIdx: columnStartIdx,
+      columnEndIdx: columnEndIdx,
+    );
+  }
+
+  void _pasteCellValueInOrder({
+    List<List<String>> textList,
+    List<int> rowIdxList,
+    int columnStartIdx,
+    int columnEndIdx,
+  }) {
     final List<int> columnIndexes = columnIndexesByShowFixed();
 
     int textRowIdx = 0;
 
-    for (var rowIdx = rowStartIdx; rowIdx < rowEndIdx; rowIdx += 1) {
+    for (var i = 0; i < rowIdxList.length; i += 1) {
+      final rowIdx = rowIdxList[i];
+
       int textColumnIdx = 0;
 
-      if (rowIdx >= _rows.length) {
+      if (rowIdx > _rows.length - 1) {
         break;
       }
 
@@ -126,9 +178,9 @@ mixin EditingState implements IPlutoState {
       }
 
       for (var columnIdx = columnStartIdx;
-      columnIdx < columnEndIdx;
-      columnIdx += 1) {
-        if (columnIdx >= columnIndexes.length) {
+          columnIdx <= columnEndIdx;
+          columnIdx += 1) {
+        if (columnIdx > columnIndexes.length - 1) {
           break;
         }
 
@@ -175,8 +227,6 @@ mixin EditingState implements IPlutoState {
       }
       ++textRowIdx;
     }
-
-    notifyListeners();
   }
 
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
@@ -188,15 +238,15 @@ mixin EditingState implements IPlutoState {
   }
 
   void changeCellValue(
-      Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool notify = true,
-      }) {
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {

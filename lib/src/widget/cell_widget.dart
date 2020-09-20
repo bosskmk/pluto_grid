@@ -30,6 +30,8 @@ class _CellWidgetState extends State<CellWidget>
 
   bool _isEditing;
 
+  PlutoSelectingMode _selectingMode;
+
   bool _isSelectedCell;
 
   PlutoCellPosition _selectingPosition;
@@ -73,6 +75,8 @@ class _CellWidgetState extends State<CellWidget>
 
     _isEditing = widget.stateManager.isEditing;
 
+    _selectingMode = widget.stateManager.selectingMode;
+
     _isSelectedCell = _getIsSelectedCell();
 
     _selectingPosition = widget.stateManager.currentSelectingPosition;
@@ -102,6 +106,9 @@ class _CellWidgetState extends State<CellWidget>
 
     final bool changedIsEditing = widget.stateManager.isEditing;
 
+    final PlutoSelectingMode changedSelectingMode =
+        widget.stateManager.selectingMode;
+
     final bool changedIsSelectedCell = _getIsSelectedCell();
 
     final PlutoCellPosition changedSelectingPosition =
@@ -121,6 +128,7 @@ class _CellWidgetState extends State<CellWidget>
     if ((checkCellValue && _cellValue != changedCellValue) ||
         _isCurrentCell != changedIsCurrentCell ||
         (_isCurrentCell && _isEditing != changedIsEditing) ||
+        _selectingMode != changedSelectingMode ||
         _isSelectedCell != changedIsSelectedCell ||
         _selectingPosition != changedSelectingPosition) {
       setState(() {
@@ -130,6 +138,7 @@ class _CellWidgetState extends State<CellWidget>
 
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
+        _selectingMode = changedSelectingMode;
         _isSelectedCell = changedIsSelectedCell;
         _selectingPosition = changedSelectingPosition;
 
@@ -280,13 +289,16 @@ class _CellWidgetState extends State<CellWidget>
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
-        if (!widget.stateManager.selectingMode.isNone &&
-            widget.stateManager.keyPressed.shift &&
-            widget.stateManager.currentCell != null) {
-          final int columnIdx = widget.stateManager.columnIndex(widget.column);
+        if (widget.stateManager.isSelectingInteraction()) {
+          if (widget.stateManager.keyPressed.shift) {
+            final int columnIdx =
+                widget.stateManager.columnIndex(widget.column);
 
-          widget.stateManager.setCurrentSelectingPosition(
-              columnIdx: columnIdx, rowIdx: widget.rowIdx);
+            widget.stateManager.setCurrentSelectingPosition(
+                columnIdx: columnIdx, rowIdx: widget.rowIdx);
+          } else if (widget.stateManager.keyPressed.ctrl) {
+            widget.stateManager.toggleSelectingRow(widget.rowIdx);
+          }
 
           return;
         }
@@ -308,6 +320,10 @@ class _CellWidgetState extends State<CellWidget>
       onLongPressStart: (LongPressStartDetails details) {
         if (_isCurrentCell) {
           widget.stateManager.setSelecting(true);
+
+          if (_selectingMode.isRow) {
+            widget.stateManager.toggleSelectingRow(widget.rowIdx);
+          }
         }
       },
       onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
@@ -346,6 +362,7 @@ class _CellWidgetState extends State<CellWidget>
         height: widget.height,
         isCurrentCell: _isCurrentCell,
         isEditing: _isEditing,
+        selectingMode: _selectingMode,
         isSelectedCell: _isSelectedCell,
       ),
     );
@@ -359,6 +376,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   final double height;
   final bool isCurrentCell;
   final bool isEditing;
+  final PlutoSelectingMode selectingMode;
   final bool isSelectedCell;
 
   _BackgroundColorWidget({
@@ -368,12 +386,13 @@ class _BackgroundColorWidget extends StatelessWidget {
     this.height,
     this.isCurrentCell,
     this.isEditing,
+    this.selectingMode,
     this.isSelectedCell,
   });
 
-  Color _boxColor() {
-    if (isEditing != true) {
-      return null;
+  Color _currentCellColor() {
+    if (!isEditing) {
+      return selectingMode.isRow ? PlutoDefaultSettings.currentRowColor : null;
     }
 
     return readOnly == true
@@ -384,7 +403,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   BoxDecoration _boxDecoration() {
     if (isCurrentCell) {
       return BoxDecoration(
-        color: _boxColor(),
+        color: _currentCellColor(),
         border: Border.all(
           color: PlutoDefaultSettings.currentCellBorderColor,
           width: 1,
