@@ -11,7 +11,9 @@ class NormalGridScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('PlutoGrid - Normal'),),
+      appBar: AppBar(
+        title: Text('PlutoGrid - Normal'),
+      ),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: PlutoGrid(

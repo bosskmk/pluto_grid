@@ -12,24 +12,28 @@ class DummyData {
         field: 'text_field',
         type: PlutoColumnType.text(),
       ),
+
       /// Number Column definition
       PlutoColumn(
         title: 'number column',
         field: 'number_field',
         type: PlutoColumnType.number(),
       ),
+
       /// Select Column definition
       PlutoColumn(
         title: 'select column',
         field: 'select_field',
         type: PlutoColumnType.select(['item1', 'item2', 'item3']),
       ),
+
       /// Datetime Column definition
       PlutoColumn(
         title: 'date column',
         field: 'date_field',
         type: PlutoColumnType.date(),
       ),
+
       /// Time Column definition
       PlutoColumn(
         title: 'time column',

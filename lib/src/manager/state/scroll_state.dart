@@ -12,9 +12,9 @@ abstract class IScrollState {
 
   /// Whether the cell can be scrolled when moving.
   bool canHorizontalCellScrollByDirection(
-      MoveDirection direction,
-      PlutoColumn columnToMove,
-      );
+    MoveDirection direction,
+    PlutoColumn columnToMove,
+  );
 
   /// Scroll to [rowIdx] position.
   void moveScrollByRow(MoveDirection direction, int rowIdx);
@@ -37,9 +37,9 @@ mixin ScrollState implements IPlutoState {
   }
 
   bool canHorizontalCellScrollByDirection(
-      MoveDirection direction,
-      PlutoColumn columnToMove,
-      ) {
+    MoveDirection direction,
+    PlutoColumn columnToMove,
+  ) {
     // 고정 컬럼이 보여지는 상태에서 이동 할 컬럼이 고정 컬럼인 경우 스크롤 불필요
     return !(_layout.showFixedColumn == true && columnToMove.fixed.isFixed);
   }
@@ -58,7 +58,7 @@ mixin ScrollState implements IPlutoState {
         _scroll.vertical.offset + _layout.offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
-    direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
+        direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
 
     final bool inScrollStart = _scroll.vertical.offset <= offsetToMove;
 
@@ -80,7 +80,7 @@ mixin ScrollState implements IPlutoState {
     }
 
     final PlutoColumn columnToMove =
-    _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
+        _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -92,7 +92,7 @@ mixin ScrollState implements IPlutoState {
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
     double offsetToMove = layout.showFixedColumn == true
         ? bodyColumnsWidthAtColumnIdx(
-        columnIdx + direction.offset - leftFixedColumnIndexes.length)
+            columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
     final double screenOffset = _layout.showFixedColumn == true

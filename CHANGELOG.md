@@ -1,3 +1,8 @@
+## [0.1.11] - 2020. 9. 21
+
+* Add Selecting mode for row.
+* Removing rows by selecting cells.
+
 ## [0.1.10] - 2020. 9. 17
 
 * Add removing row.

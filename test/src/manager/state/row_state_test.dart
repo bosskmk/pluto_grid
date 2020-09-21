@@ -400,8 +400,7 @@ main() {
       expect(deleteRowKeys.contains(stateManager.rows[2].key), false);
     });
 
-    testWidgets('Should be removed all rows',
-        (WidgetTester tester) async {
+    testWidgets('Should be removed all rows', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('text', count: 3, width: 150),

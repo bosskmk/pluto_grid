@@ -1,40 +1,102 @@
-## PlutoGrid for flutter - v0.1.10
+## PlutoGrid for flutter - v0.1.11
 
-PlutoGrid is a dataGrid for flutter. It is developed with Windows, Web first. There are plans to support Android and iOS as well.
+<br>
 
-> It is still in the development stage. Not recommended for use in production.
+PlutoGrid is a data grid that can be controlled by the keyboard on desktop and web.  
+Of course, it works well on Android and IOS.
+
+<br>
+
+### [Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
+> Try some simple features on the demo site.
+
+<br>
+
+### [Pub.Dev](https://pub.dev/packages/pluto_grid)
+> Check out how to install from the official distribution site.
+
+<br>
+
+### [Documentation](https://github.com/bosskmk/pluto_grid/wiki)
+> The documentation has more details.
+
+<br>
+
+### [Issue](https://github.com/bosskmk/pluto_grid/issues)
+> Report any questions or errors.
+
+<br>
 
 ### Features  
-- Column fixation : Columns can be fixed to the left or right of the grid.
-- Column shift : Change the order of the columns by dragging the column title.
-- Column sort : Sort the list by clicking on the column heading.
-- Column width : Change the column width by dragging the icon to the right of the column title.
-- Column action : Click the icon to the right of the column title, you can control the column with the column action menu.
-- Column type : Text, Number, Select, Date, Time.
-- Multi selection : By long tapping or clicking and moving. (or Shift + ArrowKey)
-- Copy & paste : Ctrl(macos : Meta) + C or V.
-- Select Row Popup : Same as the grid, a selection popup that can be used when selecting an item from a list.
-- Keyboard support : Arrow keys, Enter(Shift + Enter), Tab(Shift +Tab), Esc...
-- A dual mode : Run two grids left and right simultaneously.
-
-### Demo
-[Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
-
-### Installation
-[pub.dev](https://pub.dev/packages/pluto_grid)
-
-### Documentation
-[Github wiki](https://github.com/bosskmk/pluto_grid/wiki)
-
+- Columns
+  - Dragging the column heading moves the column left and right.
+  - Drag the icon to the right of the column heading to adjust the width of the column.
+  - Click the icon to the right of the column title to fix the column left or right or automatically adjust the width of the column.
+  - Ascending or Descending the list by clicking on a column heading.
+  - Text, number, date, time, select list type column.
+  - (To do) Filtering.
+  - (To do) Multi sorting.
+  - (To do) Hide specific columns.
+- Selection
+  - Row mode - Select rows.
+  - Square mode - Select a square area like Excel.
+  - None mode - Not selectable.
+  - (Row mode) - Select Row by Control(Meta on MacOs) + Click.
+  - (Row, Square mode) - (Shift + arrow keys) or (shift + click) or (long tapping and move) to select.
+  - (To do) - Select all rows or cells.
+- Copy and Paste
+  - Control(Meta on MacOs) + C or V
+  - If there is no selected cell, it operates based on the current cell.
+  - If there are selected Rows in Row mode, it operates based on the selected state.
+  - Works even if rows are selected irregularly in Row mode.
+- Moving
+  - Move with arrow keys.
+  - Press Enter to edit the cell or move it down.
+  - Tab key to move left and right cells.
+  - Shift + (Enter, Tap) works in the opposite direction.
+- Dual Mode
+  - Working with different grids on both sides.
+  - At the end of the grid, you can move between grids with the left and right arrow keys, or the tab key.
+- UI for Mobile
+  - (To do) - UI for convenient use on mobile.
+- Internationalization
+  - (To do) - Support a lot of languages.
+  
+<br>
+  
 ### Screenshots
 
-![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image1.jpg)
+#### With fixed columns on the left and right
+![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_image_0.1.11_1.jpg)
 
-![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image2.jpg)
+<br>
 
-![PlutoGrid Image](https://bosskmk.github.io/images/pluto_image3.jpg)
+#### Popup for select list type columns
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_image_0.1.11_2.jpg)
 
-### Usage
+<br>
+
+#### Popup for select date type columns
+![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_image_0.1.11_3.jpg)
+
+<br>
+
+#### Dual Grid
+![PlutoGrid Select Dual](https://bosskmk.github.io/images/pluto_image_0.1.11_4.jpg)
+
+<br>
+
+#### Select rows
+![PlutoGrid Selection Rows](https://bosskmk.github.io/images/pluto_image_0.1.11_5.jpg)
+
+<br>
+
+#### Select cells
+![PlutoGrid Selection Cells](https://bosskmk.github.io/images/pluto_image_0.1.11_6.jpg)
+
+<br>
+
+### Example
 Generate the data to be used in the grid.
 ```dart
 
@@ -127,11 +189,14 @@ Create a grid with the data created above.
   }
 ```
 
-### Coming soon
+<br>
 
-* Column types (DateTime)
-* Column filtering
-* Row selection
-* Multi column sorting
-* Paging
-* Control UI for mobile
+### Pluto series
+> develop packages that make it easy to develop admin pages or CMS with Flutter.
+* [PlutoGrid](https://github.com/bosskmk/pluto_grid)
+* [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
+
+<br>
+
+### License
+> MIT

@@ -46,8 +46,7 @@ abstract class IGridState {
   void resetCurrentState({notify = true});
 
   /// Update screen size information when LayoutBuilder builds.
-  void setLayout(
-      BoxConstraints size, double headerHeight, double footerHeight);
+  void setLayout(BoxConstraints size, double headerHeight, double footerHeight);
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();

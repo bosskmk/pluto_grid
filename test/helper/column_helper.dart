@@ -8,12 +8,14 @@ class ColumnHelper {
     PlutoColumnFixed fixed = PlutoColumnFixed.None,
     bool readOnly = false,
   }) {
-    return Iterable.generate(count).map((e) => PlutoColumn(
-          title: '$title$e',
-          field: '$title$e',
-          width: width,
-          fixed: fixed,
-          type: PlutoColumnType.text(readOnly: readOnly),
-        )).toList(growable: false);
+    return Iterable.generate(count)
+        .map((e) => PlutoColumn(
+              title: '$title$e',
+              field: '$title$e',
+              width: width,
+              fixed: fixed,
+              type: PlutoColumnType.text(readOnly: readOnly),
+            ))
+        .toList(growable: false);
   }
 }

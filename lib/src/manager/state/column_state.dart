@@ -169,7 +169,7 @@ mixin ColumnState implements IPlutoState {
     }
 
     return currentRow.cells.keys.firstWhere(
-            (key) => currentRow.cells[key]._key == _currentCell?._key,
+        (key) => currentRow.cells[key]._key == _currentCell?._key,
         orElse: () => null);
   }
 
@@ -193,7 +193,7 @@ mixin ColumnState implements IPlutoState {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
         _columns[i].fixed =
-        _columns[i].fixed.isFixed ? PlutoColumnFixed.None : fixed;
+            _columns[i].fixed.isFixed ? PlutoColumnFixed.None : fixed;
         break;
       }
     }
@@ -211,12 +211,12 @@ mixin ColumnState implements IPlutoState {
           column.sort = PlutoColumnSort.Ascending;
 
           _rows.sort(
-                  (a, b) => a.cells[field].value.compareTo(b.cells[field].value));
+              (a, b) => a.cells[field].value.compareTo(b.cells[field].value));
         } else if (column.sort.isAscending) {
           column.sort = PlutoColumnSort.Descending;
 
           _rows.sort(
-                  (b, a) => a.cells[field].value.compareTo(b.cells[field].value));
+              (b, a) => a.cells[field].value.compareTo(b.cells[field].value));
         } else {
           column.sort = PlutoColumnSort.None;
 
@@ -278,7 +278,7 @@ mixin ColumnState implements IPlutoState {
 
     Function findIndexToMove = () {
       final double minLeft =
-      _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
+          _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
 
       final double minRight = _layout.showFixedColumn
           ? _layout.maxWidth - rightFixedColumnsWidth

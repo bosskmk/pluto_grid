@@ -5,7 +5,6 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../mock/mock_pluto_state_manager.dart';
 
-
 void main() {
   PlutoStateManager stateManager;
 

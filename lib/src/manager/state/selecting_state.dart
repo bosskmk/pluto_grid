@@ -394,17 +394,17 @@ mixin SelectingState implements IPlutoState {
 
     List<String> rowText = [];
 
-    int columnStartIdx = min(
-        currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnStartIdx =
+        min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
-    int columnEndIdx = max(
-        currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnEndIdx =
+        max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
     int rowStartIdx =
-    min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
     int rowEndIdx =
-    max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       List<String> columnText = [];
