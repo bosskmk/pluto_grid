@@ -79,49 +79,23 @@ mixin SelectingState implements IPlutoState {
   List<PlutoRow> _currentSelectingRows = [];
 
   String get currentSelectingText {
-    List<String> textList = [];
+    final bool fromSelectingRows =
+        _selectingMode.isRow && _currentSelectingRows.length > 0;
 
-    final columnIndexes = columnIndexesByShowFixed();
+    final bool fromSelectingPosition =
+        currentCellPosition != null && currentSelectingPosition != null;
 
-    if (_selectingMode.isRow && _currentSelectingRows.length > 0) {
-      _currentSelectingRows.forEach((row) {
-        List<String> columnText = [];
+    final bool fromCurrentCell = currentCellPosition != null;
 
-        for (var i = 0; i < columnIndexes.length; i += 1) {
-          final String field = _columns[columnIndexes[i]].field;
-
-          columnText.add(row.cells[field].value.toString());
-        }
-
-        textList.add(columnText.join('\t'));
-      });
-    } else {
-      int columnStartIdx = min(
-          currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
-
-      int columnEndIdx = max(
-          currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
-
-      int rowStartIdx =
-          min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
-
-      int rowEndIdx =
-          max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
-
-      for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
-        List<String> columnText = [];
-
-        for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-          final String field = _columns[columnIndexes[j]].field;
-
-          columnText.add(_rows[i].cells[field].value.toString());
-        }
-
-        textList.add(columnText.join('\t'));
-      }
+    if (fromSelectingRows) {
+      return _selectingTextFromSelectingRows();
+    } else if (fromSelectingPosition) {
+      return _selectingTextFromSelectingPosition();
+    } else if (fromCurrentCell) {
+      return _selectingTextFromCurrentCell();
     }
 
-    return textList.join('\n');
+    return '';
   }
 
   void setSelecting(bool flag) {
@@ -393,5 +367,61 @@ mixin SelectingState implements IPlutoState {
     } else {
       throw ('selectingMode is not handled');
     }
+  }
+
+  String _selectingTextFromSelectingRows() {
+    final columnIndexes = columnIndexesByShowFixed();
+
+    List<String> rowText = [];
+
+    _currentSelectingRows.forEach((row) {
+      List<String> columnText = [];
+
+      for (var i = 0; i < columnIndexes.length; i += 1) {
+        final String field = _columns[columnIndexes[i]].field;
+
+        columnText.add(row.cells[field].value.toString());
+      }
+
+      rowText.add(columnText.join('\t'));
+    });
+
+    return rowText.join('\n');
+  }
+
+  String _selectingTextFromSelectingPosition() {
+    final columnIndexes = columnIndexesByShowFixed();
+
+    List<String> rowText = [];
+
+    int columnStartIdx = min(
+        currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int columnEndIdx = max(
+        currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int rowStartIdx =
+    min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    int rowEndIdx =
+    max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      List<String> columnText = [];
+
+      for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
+        final String field = _columns[columnIndexes[j]].field;
+
+        columnText.add(_rows[i].cells[field].value.toString());
+      }
+
+      rowText.add(columnText.join('\t'));
+    }
+
+    return rowText.join('\n');
+  }
+
+  String _selectingTextFromCurrentCell() {
+    return _currentCell.value;
   }
 }

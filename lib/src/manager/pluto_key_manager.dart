@@ -152,13 +152,8 @@ class PlutoKeyManager {
   }
 
   void _handleCtrlC(KeyManagerEvent keyManagerEvent) {
-    if (stateManager.currentSelectingPosition != null) {
-      Clipboard.setData(
-          new ClipboardData(text: stateManager.currentSelectingText));
-    } else if (stateManager.currentCell != null) {
-      Clipboard.setData(
-          new ClipboardData(text: stateManager.currentCell.value.toString()));
-    }
+    Clipboard.setData(
+        new ClipboardData(text: stateManager.currentSelectingText));
   }
 
   void _handleCtrlV(KeyManagerEvent keyManagerEvent) {
