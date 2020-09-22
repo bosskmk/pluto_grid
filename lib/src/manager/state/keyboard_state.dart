@@ -9,6 +9,8 @@ abstract class IKeyboardState {
   /// Set the current pressed key state.
   void setKeyPressed(PlutoKeyPressed keyPressed);
 
+  void resetKeyPressed();
+
   /// The index position of the cell to move in that direction in the current cell.
   PlutoCellPosition cellPositionToMove(
     PlutoCellPosition cellPosition,
@@ -33,6 +35,10 @@ mixin KeyboardState implements IPlutoState {
 
   void setKeyPressed(PlutoKeyPressed keyPressed) {
     _keyPressed = keyPressed;
+  }
+
+  void resetKeyPressed() {
+    _keyPressed = PlutoKeyPressed();
   }
 
   PlutoCellPosition cellPositionToMove(

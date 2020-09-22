@@ -63,6 +63,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   @override
   void dispose() {
+    widget.stateManager.resetKeyPressed();
+
     _textController.dispose();
 
     _keyboardFocus.dispose();
@@ -106,9 +108,11 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       if (keyManagerEvent.isF2 || keyManagerEvent.isCharacter) {
         if (_isOpenedPopup != true) {
           openPopup();
+          return true;
         }
       }
     }
+
     return false;
   }
 
