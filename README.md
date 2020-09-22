@@ -1,4 +1,6 @@
-## PlutoGrid for flutter - v0.1.11
+## PlutoGrid for flutter - v0.1.12
+
+[![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg?token=27DACY6IBE)](undefined)
 
 <br>
 
@@ -43,7 +45,7 @@ Of course, it works well on Android and IOS.
   - None mode - Not selectable.
   - (Row mode) - Select Row by Control(Meta on MacOs) + Click.
   - (Row, Square mode) - (Shift + arrow keys) or (shift + click) or (long tapping and move) to select.
-  - (To do) - Select all rows or cells.
+  - Select all rows or cells. Control(Meta on MacOs) + A.
 - Copy and Paste
   - Control(Meta on MacOs) + C or V
   - If there is no selected cell, it operates based on the current cell.

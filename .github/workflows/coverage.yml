@@ -1,4 +1,4 @@
-name: Publish to pub.dev
+name: Coverage
 
 on:
   push:

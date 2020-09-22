@@ -1,3 +1,7 @@
+## [0.1.12] - 2020. 9. 23
+
+* Select all - Control(Meta on MacOs) + A.
+
 ## [0.1.11] - 2020. 9. 21
 
 * Add Selecting mode for row.
