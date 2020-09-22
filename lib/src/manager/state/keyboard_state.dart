@@ -100,7 +100,7 @@ mixin KeyboardState implements IPlutoState {
     }
     // @formatter:on
 
-    final cellPosition = cellPositionByCellKey(_currentCell._key);
+    final cellPosition = currentCellPosition;
 
     if (canNotMoveCell(cellPosition, direction)) {
       _eventManager.subject.add(

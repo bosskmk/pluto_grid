@@ -426,7 +426,7 @@ main() {
   });
 
   group('updateCurrentRowIdx', () {
-    testWidgets('When cellKey is passed, the _currentRowIdx value must be set.',
+    testWidgets('When setCurrentCell, the _currentRowIdx value must be set.',
         (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
@@ -442,8 +442,10 @@ main() {
         scroll: null,
       );
 
+      stateManager.setCurrentCell(rows[3].cells['text1'], 3);
+
       // when
-      stateManager.updateCurrentRowIdx(rows[3].cells['text1'].key);
+      stateManager.updateCurrentRowIdx();
 
       // then
       expect(stateManager.currentRowIdx, 3);

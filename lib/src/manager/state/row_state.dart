@@ -28,7 +28,7 @@ abstract class IRowState {
   void removeRows(List<PlutoRow> rows);
 
   /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx(Key cellKey);
+  void updateCurrentRowIdx({bool notify: true});
 }
 
 mixin RowState implements IPlutoState {
@@ -150,8 +150,14 @@ mixin RowState implements IPlutoState {
     notifyListeners(checkCellValue: false);
   }
 
-  void updateCurrentRowIdx(Key cellKey) {
-    if (cellKey == null) {
+  void updateCurrentRowIdx({bool notify: true}) {
+    if (_currentCell == null) {
+      _currentRowIdx = null;
+
+      if (notify) {
+        notifyListeners(checkCellValue: false);
+      }
+
       return;
     }
 
@@ -161,11 +167,14 @@ mixin RowState implements IPlutoState {
           columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
-        if (_rows[rowIdx].cells[field]._key == cellKey) {
+        if (_rows[rowIdx].cells[field]._key == _currentCell.key) {
           _currentRowIdx = rowIdx;
         }
       }
     }
-    return;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
   }
 }

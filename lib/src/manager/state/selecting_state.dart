@@ -145,9 +145,20 @@ mixin SelectingState implements IPlutoState {
         setCurrentCell(firstCell, 0, notify: false);
 
         setCurrentSelectingPosition(
-            columnIdx: _columns.length - 1, rowIdx: _rows.length - 1);
+          columnIdx: _columns.length - 1,
+          rowIdx: _rows.length - 1,
+        );
         break;
       case PlutoSelectingMode.Row:
+        if (_currentCell == null) {
+          setCurrentCell(firstCell, 0, notify: false);
+        }
+
+        _currentSelectingPosition = PlutoCellPosition(
+          columnIdx: _columns.length - 1,
+          rowIdx: _rows.length - 1,
+        );
+
         setCurrentSelectingRowsByRange(0, _rows.length - 1);
         break;
       case PlutoSelectingMode.None:
@@ -309,7 +320,7 @@ mixin SelectingState implements IPlutoState {
       return false;
     }
 
-    if (isCurrentCell(cell) == true) {
+    if (currentCellPosition == null) {
       return false;
     }
 

@@ -197,6 +197,9 @@ mixin ColumnState implements IPlutoState {
         break;
       }
     }
+
+    updateCurrentCellPosition(notify: false);
+
     notifyListeners();
   }
 
@@ -231,7 +234,9 @@ mixin ColumnState implements IPlutoState {
       }
     }
 
-    updateCurrentRowIdx(_currentCell?._key);
+    updateCurrentRowIdx(notify: false);
+
+    updateCurrentCellPosition(notify: false);
 
     notifyListeners();
   }
@@ -344,6 +349,8 @@ mixin ColumnState implements IPlutoState {
       _columns.insert(indexToMove + 1, _columns[columnIndex]);
       _columns.removeRange(columnIndex, columnIndex + 1);
     }
+
+    updateCurrentCellPosition(notify: false);
 
     notifyListeners();
   }
