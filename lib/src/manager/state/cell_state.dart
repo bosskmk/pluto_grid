@@ -18,7 +18,7 @@ abstract class ICellState {
   /// Improves cell rendering performance.
   void withoutCheckCellValue(Function() callback);
 
-  void updateCurrentCellPosition({ bool notify: true });
+  void updateCurrentCellPosition({bool notify: true});
 
   /// Index position of cell in a column
   PlutoCellPosition cellPositionByCellKey(Key cellKey);
@@ -94,7 +94,7 @@ mixin CellState implements IPlutoState {
     _checkCellValue = true;
   }
 
-  void updateCurrentCellPosition({ bool notify: true }) {
+  void updateCurrentCellPosition({bool notify: true}) {
     if (_currentCell == null) {
       return;
     }
