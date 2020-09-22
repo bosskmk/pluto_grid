@@ -19,6 +19,8 @@ abstract class ICellState {
   /// Index position of cell in a column
   PlutoCellPosition cellPositionByCellKey(Key cellKey);
 
+  int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx);
+
   /// Change the selected cell.
   void setCurrentCell(
     PlutoCell cell,
@@ -64,13 +66,9 @@ mixin CellState implements IPlutoState {
 
   PlutoCell _currentCell;
 
-  PlutoCellPosition get currentCellPosition {
-    if (_currentCell == null) {
-      return null;
-    }
+  PlutoCellPosition get currentCellPosition => _currentCellPosition;
 
-    return cellPositionByCellKey(_currentCell._key);
-  }
+  PlutoCellPosition _currentCellPosition;
 
   void withoutCheckCellValue(Function() callback) {
     _checkCellValue = false;
@@ -83,20 +81,36 @@ mixin CellState implements IPlutoState {
   PlutoCellPosition cellPositionByCellKey(Key cellKey) {
     assert(cellKey != null);
 
-    final columnIndexes = columnIndexesByShowFixed();
-
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
-        if (_rows[rowIdx].cells[field]._key == cellKey) {
-          return PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
-        }
+      final columnIdx = columnIdxByCellKeyAndRowIdx(cellKey, rowIdx);
+
+      if (columnIdx != null) {
+        return PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
       }
     }
 
     throw Exception('CellKey was not found in the list.');
+  }
+
+  int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx) {
+    if (cellKey == null ||
+        rowIdx < 0 ||
+        _rows == null ||
+        rowIdx >= _rows.length) {
+      return null;
+    }
+
+    final columnIndexes = columnIndexesByShowFixed();
+
+    for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
+      final field = _columns[columnIndexes[columnIdx]].field;
+
+      if (_rows[rowIdx].cells[field]._key == cellKey) {
+        return columnIdx;
+      }
+    }
+
+    return null;
   }
 
   void setCurrentCell(
@@ -116,6 +130,11 @@ mixin CellState implements IPlutoState {
     }
 
     _currentCell = cell;
+
+    _currentCellPosition = PlutoCellPosition(
+      rowIdx: rowIdx,
+      columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
+    );
 
     _currentSelectingPosition = null;
 

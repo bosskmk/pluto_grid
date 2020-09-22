@@ -17,6 +17,8 @@ abstract class ISelectingState {
 
   PlutoCellPosition _currentSelectingPosition;
 
+  bool get hasCurrentSelectingPosition;
+
   /// Rows of currently selected.
   /// Only valid in [PlutoSelectingMode.Row].
   List<PlutoRow> get currentSelectingRows;
@@ -73,6 +75,8 @@ mixin SelectingState implements IPlutoState {
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
 
   PlutoCellPosition _currentSelectingPosition;
+
+  bool get hasCurrentSelectingPosition => _currentSelectingPosition != null;
 
   List<PlutoRow> get currentSelectingRows => _currentSelectingRows;
 

@@ -154,9 +154,9 @@ class PlutoLayout {
   PlutoLayout({
     this.maxWidth,
     this.maxHeight,
-    this.showFixedColumn,
-    this.headerHeight,
-    this.footerHeight,
+    this.showFixedColumn = false,
+    this.headerHeight = 0,
+    this.footerHeight = 0,
   });
 
   double get offsetHeight => maxHeight - headerHeight - footerHeight;

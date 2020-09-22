@@ -60,10 +60,12 @@ class __CrudGridState extends State<_CrudGrid> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void handleAddRowButton() {
-    stateManager.appendRows([
-      DummyData.rowByColumns(columns),
-    ]);
+  void handleAddRowButton({int count}) {
+    final List<PlutoRow> rows = count == null
+        ? [DummyData.rowByColumns(columns)]
+        : DummyData.rowsByColumns(length: count, columns: columns);
+
+    stateManager.appendRows(rows);
   }
 
   void handleRemoveCurrentRowButton() {
@@ -96,8 +98,12 @@ class __CrudGridState extends State<_CrudGrid> {
             child: Row(
               children: [
                 FlatButton(
-                  child: Text('Add Row'),
+                  child: Text('Add a Row'),
                   onPressed: handleAddRowButton,
+                ),
+                FlatButton(
+                  child: Text('Add 100 Rows'),
+                  onPressed: () => handleAddRowButton(count: 100),
                 ),
                 FlatButton(
                   child: Text('Remove Current Row'),

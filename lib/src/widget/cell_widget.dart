@@ -34,8 +34,6 @@ class _CellWidgetState extends State<CellWidget>
 
   bool _isSelectedCell;
 
-  PlutoCellPosition _selectingPosition;
-
   final _selectionSubject = PublishSubject<Function()>();
 
   final _scrollSubject = PublishSubject<Function()>();
@@ -79,8 +77,6 @@ class _CellWidgetState extends State<CellWidget>
 
     _isSelectedCell = _getIsSelectedCell();
 
-    _selectingPosition = widget.stateManager.currentSelectingPosition;
-
     widget.stateManager.addListener(changeStateListener);
 
     _selectionSubject.stream
@@ -111,9 +107,6 @@ class _CellWidgetState extends State<CellWidget>
 
     final bool changedIsSelectedCell = _getIsSelectedCell();
 
-    final PlutoCellPosition changedSelectingPosition =
-        widget.stateManager.currentSelectingPosition;
-
     bool checkCellValue = widget.stateManager.checkCellValue;
 
     dynamic changedCellValue;
@@ -129,8 +122,7 @@ class _CellWidgetState extends State<CellWidget>
         _isCurrentCell != changedIsCurrentCell ||
         (_isCurrentCell && _isEditing != changedIsEditing) ||
         _selectingMode != changedSelectingMode ||
-        _isSelectedCell != changedIsSelectedCell ||
-        _selectingPosition != changedSelectingPosition) {
+        _isSelectedCell != changedIsSelectedCell) {
       setState(() {
         if (checkCellValue) {
           _cellValue = changedCellValue;
@@ -140,7 +132,6 @@ class _CellWidgetState extends State<CellWidget>
         _isEditing = changedIsEditing;
         _selectingMode = changedSelectingMode;
         _isSelectedCell = changedIsSelectedCell;
-        _selectingPosition = changedSelectingPosition;
 
         _resetKeepAlive();
       });

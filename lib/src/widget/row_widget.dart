@@ -25,7 +25,7 @@ class _RowWidgetState extends State<RowWidget> {
 
   bool _isSelecting;
 
-  PlutoCellPosition _selectingPosition;
+  bool _hasCurrentSelectingPosition;
 
   @override
   void dispose() {
@@ -42,7 +42,8 @@ class _RowWidgetState extends State<RowWidget> {
 
     _isSelecting = widget.stateManager.isSelecting;
 
-    _selectingPosition = widget.stateManager.currentSelectingPosition;
+    _hasCurrentSelectingPosition =
+        widget.stateManager.hasCurrentSelectingPosition;
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -53,12 +54,14 @@ class _RowWidgetState extends State<RowWidget> {
     if (_isCurrentRow != (widget.stateManager.currentRowIdx == widget.rowIdx) ||
         _isSelectedRow != widget.stateManager.isSelectedRow(widget.row.key) ||
         _isSelecting != widget.stateManager.isSelecting ||
-        _selectingPosition != widget.stateManager.currentSelectingPosition) {
+        _hasCurrentSelectingPosition !=
+            widget.stateManager.hasCurrentSelectingPosition) {
       setState(() {
         _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
         _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
         _isSelecting = widget.stateManager.isSelecting;
-        _selectingPosition = widget.stateManager.currentSelectingPosition;
+        _hasCurrentSelectingPosition =
+            widget.stateManager.hasCurrentSelectingPosition;
       });
     }
   }
@@ -69,7 +72,7 @@ class _RowWidgetState extends State<RowWidget> {
     }
 
     final bool checkCurrentRow =
-        _isCurrentRow && (!_isSelecting && _selectingPosition == null);
+        _isCurrentRow && (!_isSelecting && !_hasCurrentSelectingPosition);
 
     final bool checkSelectedRow =
         widget.stateManager.isSelectedRow(widget.row.key);
