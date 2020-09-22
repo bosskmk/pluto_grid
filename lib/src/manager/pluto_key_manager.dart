@@ -43,6 +43,8 @@ class PlutoKeyManager {
           _handleCtrlC(keyManagerEvent);
         } else if (keyManagerEvent.isCtrlV) {
           _handleCtrlV(keyManagerEvent);
+        } else if (keyManagerEvent.isCtrlA) {
+          _handleCtrlA(keyManagerEvent);
         } else {
           _handleCharacter(keyManagerEvent);
         }
@@ -71,6 +73,10 @@ class PlutoKeyManager {
     }
 
     if (stateManager.currentCell == null) {
+      if (stateManager.rows == null || stateManager.rows.length < 1) {
+        return;
+      }
+
       stateManager.setCurrentCell(
           stateManager.rows.first.cells.entries.first.value, 0);
       return;
@@ -169,6 +175,14 @@ class PlutoKeyManager {
     });
   }
 
+  void _handleCtrlA(KeyManagerEvent keyManagerEvent) {
+    if (stateManager.isEditing == true) {
+      return;
+    }
+
+    stateManager.setAllCurrentSelecting();
+  }
+
   void _handleCharacter(KeyManagerEvent keyManagerEvent) {
     if (stateManager.isEditing != true && stateManager.currentCell != null) {
       stateManager.setEditing(true);
@@ -234,6 +248,11 @@ extension KeyManagerEventExtention on KeyManagerEvent {
   bool get isCtrlV {
     return this.isCtrlPressed &&
         this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+  }
+
+  bool get isCtrlA {
+    return this.isCtrlPressed &&
+        this.event.logicalKey.keyId == LogicalKeyboardKey.keyA.keyId;
   }
 
   bool get isShiftPressed {

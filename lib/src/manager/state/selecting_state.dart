@@ -134,6 +134,28 @@ mixin SelectingState implements IPlutoState {
     notifyListeners(checkCellValue: false);
   }
 
+  void setAllCurrentSelecting() {
+    if (_rows == null || _rows.length < 1) {
+      return;
+    }
+
+    switch (_selectingMode) {
+      case PlutoSelectingMode.Square:
+      case PlutoSelectingMode._Horizontal:
+        setCurrentCell(firstCell, 0, notify: false);
+
+        setCurrentSelectingPosition(
+            columnIdx: _columns.length - 1, rowIdx: _rows.length - 1);
+        break;
+      case PlutoSelectingMode.Row:
+        setCurrentSelectingRowsByRange(0, _rows.length - 1);
+        break;
+      case PlutoSelectingMode.None:
+      default:
+        break;
+    }
+  }
+
   void setCurrentSelectingPosition({
     int columnIdx,
     int rowIdx,
@@ -426,6 +448,6 @@ mixin SelectingState implements IPlutoState {
   }
 
   String _selectingTextFromCurrentCell() {
-    return _currentCell.value;
+    return _currentCell.value.toString();
   }
 }

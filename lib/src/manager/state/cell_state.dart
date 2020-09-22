@@ -12,6 +12,8 @@ abstract class ICellState {
   /// The position index value of the currently selected cell.
   PlutoCellPosition get currentCellPosition;
 
+  PlutoCell get firstCell;
+
   /// Execute the function without checking if the value has changed.
   /// Improves cell rendering performance.
   void withoutCheckCellValue(Function() callback);
@@ -69,6 +71,18 @@ mixin CellState implements IPlutoState {
   PlutoCellPosition get currentCellPosition => _currentCellPosition;
 
   PlutoCellPosition _currentCellPosition;
+
+  PlutoCell get firstCell {
+    if (_rows == null || _rows.length < 1) {
+      return null;
+    }
+
+    final columnIndexes = columnIndexesByShowFixed();
+
+    final columnField = _columns[columnIndexes.first].field;
+
+    return _rows.first.cells[columnField];
+  }
 
   void withoutCheckCellValue(Function() callback) {
     _checkCellValue = false;
