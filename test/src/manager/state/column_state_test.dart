@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -495,5 +496,207 @@ void main() {
     // when
     expect(currentColumnField, isNot(null));
     expect(currentColumnField, selectColumnField);
+  });
+
+  group('columnIndexesByShowFixed', () {
+    testWidgets(
+        '고정 컬럼이 없는 상태에서 '
+        'columnIndexes 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2]);
+    });
+
+    testWidgets(
+        '고정 컬럼이 없는 상태에서 '
+        '3번 째 컬럼을 왼쪽 고정 토글 하고 '
+        '넓이가 충분한 경우 '
+        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 5, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 500, maxHeight: 600), 0, 0);
+
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [2, 0, 1, 3, 4]);
+    });
+
+    testWidgets(
+        '고정 컬럼이 없는 상태에서 '
+        '3번 째 컬럼을 왼쪽 고정 토글 하고 '
+        '넓이가 충분하지 않은 경우 '
+        'columnIndexes 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 5, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 300, maxHeight: 600), 0, 0);
+
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
+    });
+
+    testWidgets(
+        '고정 컬럼이 있는 상태에서 '
+        '넓이가 충분한 경우 '
+        'columnIndexes 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn(
+          'left',
+          count: 1,
+          fixed: PlutoColumnFixed.Left,
+          width: 150,
+        ),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn(
+          'right',
+          count: 1,
+          fixed: PlutoColumnFixed.Right,
+          width: 150,
+        ),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 500, maxHeight: 600), 0, 0);
+
+      // when
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
+    });
+
+    testWidgets(
+        '고정 컬럼이 있는 상태에서 '
+        '고정 컬럼 하나를 토글하여 왼쪽 추가하고  '
+        '넓이가 충분한 경우 '
+        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn(
+          'left',
+          count: 1,
+          fixed: PlutoColumnFixed.Left,
+          width: 150,
+        ),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn(
+          'right',
+          count: 1,
+          fixed: PlutoColumnFixed.Right,
+          width: 150,
+        ),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 700, maxHeight: 600), 0, 0);
+
+      // when
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [0, 2, 1, 3, 4]);
+    });
+
+    testWidgets(
+        '고정 컬럼이 있는 상태에서 '
+        '고정 컬럼 하나를 토글하여 오른쪽 추가하고  '
+        '넓이가 충분한 경우 '
+        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn(
+          'left',
+          count: 1,
+          fixed: PlutoColumnFixed.Left,
+          width: 150,
+        ),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn(
+          'right',
+          count: 1,
+          fixed: PlutoColumnFixed.Right,
+          width: 150,
+        ),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 700, maxHeight: 600), 0, 0);
+
+      // when
+      // then
+      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 3, 2, 4]);
+    });
   });
 }

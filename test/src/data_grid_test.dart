@@ -685,4 +685,216 @@ void main() {
       expect(stateManager.rows[4].sortIdx, 9);
     });
   });
+
+  group('moveColumn', () {
+    testWidgets(
+        '고정 컬럼이 없는 상태에서 '
+        '0번 컬럼을 2번 컬럼으로 이동.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 100),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // when
+      stateManager.moveColumn(columns[0].key, 250);
+
+      // then
+      expect(columns[0].title, 'body1');
+      expect(columns[1].title, 'body2');
+      expect(columns[2].title, 'body0');
+    });
+
+    testWidgets(
+        '고정 컬럼이 없는 상태에서 '
+        '9번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 100),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // when
+      stateManager.moveColumn(columns[9].key, 50);
+
+      // then
+      expect(columns[0].title, 'body9');
+      expect(columns[1].title, 'body0');
+      expect(columns[2].title, 'body1');
+      expect(columns[3].title, 'body2');
+      expect(columns[4].title, 'body3');
+      expect(columns[5].title, 'body4');
+      expect(columns[6].title, 'body5');
+      expect(columns[7].title, 'body6');
+      expect(columns[8].title, 'body7');
+      expect(columns[9].title, 'body8');
+    });
+
+    testWidgets(
+        '넓이가 충분하고 '
+        '고정 컬럼이 없는 상태에서 '
+        '3번 컬럼을 고정 왼쪽 토글 하고 '
+        '5번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 100),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              width: 500,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // when
+      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      stateManager.moveColumn(columns[5].key, 50);
+      //
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // 3번 컬럼을 토글하면 컬럼 위치는 바뀌지 않고 고정 컬럼으로 상태만 바뀜.
+      // 그리고 5번 컬럼을 이동 시키면 고정 컬럼이 노출 되는 상태에서 3번 컬럼 앞으로 이동.
+      // 0, 1, 2, 5, 3, 4, 6, 7, 8, 9 상태가 됨.
+
+      // then
+      expect(columns[0].title, 'body0');
+      expect(columns[1].title, 'body1');
+      expect(columns[2].title, 'body2');
+      expect(columns[3].title, 'body5');
+      expect(columns[3].fixed, PlutoColumnFixed.Left);
+      expect(columns[4].title, 'body3');
+      expect(columns[4].fixed, PlutoColumnFixed.Left);
+      expect(columns[5].title, 'body4');
+      expect(columns[6].title, 'body6');
+      expect(columns[7].title, 'body7');
+      expect(columns[8].title, 'body8');
+      expect(columns[9].title, 'body9');
+    });
+
+    testWidgets(
+        '넓이가 충분하지 않고 '
+        '고정 컬럼이 없는 상태에서 '
+        '3번 컬럼을 고정 왼쪽 토글 하고 '
+        '5번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('body', count: 10, width: 100),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Container(
+              width: 50,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 50, maxHeight: 300), 0, 0);
+
+      // when
+      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      stateManager.setLayout(
+          BoxConstraints(maxWidth: 50, maxHeight: 300), 0, 0);
+
+      stateManager.moveColumn(columns[5].key, 50);
+      //
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // 3번 컬럼을 토글하면 컬럼 위치는 바뀌지 않고 고정 컬럼으로 상태만 바뀜.
+      // 그리고 5번 컬럼을 이동 시키면 넓이가 충분하지 않은 상태에서
+      // 왼쪽 끝에는 0번 컬럼이 위치하게 되고, 5번 컬럼이 0번 컬럼 앞으로 이동.
+      // 0번 컬럼이 고정 컬럼이 아니어서 5번도 고정 컬럼이 아니게 됨.
+
+      // then
+      expect(columns[0].title, 'body5');
+      expect(columns[0].fixed, PlutoColumnFixed.None);
+      expect(columns[1].title, 'body0');
+      expect(columns[2].title, 'body1');
+      expect(columns[3].title, 'body2');
+      expect(columns[4].title, 'body3');
+      expect(columns[4].fixed, PlutoColumnFixed.Left);
+      expect(columns[5].title, 'body4');
+      expect(columns[6].title, 'body6');
+      expect(columns[7].title, 'body7');
+      expect(columns[8].title, 'body8');
+      expect(columns[9].title, 'body9');
+    });
+  });
 }
