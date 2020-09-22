@@ -1,0 +1,31 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Without this, there are no files in the directory.
+      - uses: actions/checkout@v2
+
+      # getting for branch name
+      - uses: nelonoel/branch-name@v1
+
+      # using flutter
+      - uses: subosito/flutter-action@v1
+      - run: flutter channel master
+      - run: flutter upgrade
+      - run: dart --version
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter test --coverage
+
+      # codecov.io
+      - uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./coverage/lcov.info
