@@ -177,7 +177,9 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   @override
   Widget build(BuildContext context) {
     Offset _currentPosition;
+
     Offset _tapDownPosition;
+
     return Stack(
       children: [
         Positioned(
@@ -187,7 +189,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         if (widget.column.enableContextMenu)
           Positioned(
-            top: -3,
+            top: -2,
             right: -12,
             child: GestureDetector(
               onTapDown: (TapDownDetails details) {
@@ -200,15 +202,12 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                 widget.stateManager
                     .resizeColumn(widget.column._key, _currentPosition.dx - 20);
               },
-              child: Transform.rotate(
-                angle: 90 * pi / 180,
-                child: IconButton(
-                  icon: HeaderIcon(widget.column.sort),
-                  iconSize: 18,
-                  onPressed: () {
-                    _showContextMenu(context, _tapDownPosition);
-                  },
-                ),
+              child: IconButton(
+                icon: HeaderIcon(widget.column.sort),
+                iconSize: 18,
+                onPressed: () {
+                  _showContextMenu(context, _tapDownPosition);
+                },
               ),
             ),
           ),
@@ -226,18 +225,21 @@ class HeaderIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (sort) {
       case PlutoColumnSort.Ascending:
-        return const Icon(
-          Icons.arrow_back,
-          color: Colors.green,
+        return Transform.rotate(
+          angle: 90 * pi / 90,
+          child: const Icon(
+            Icons.sort,
+            color: Colors.green,
+          ),
         );
       case PlutoColumnSort.Descending:
         return const Icon(
-          Icons.arrow_forward,
+          Icons.sort,
           color: Colors.red,
         );
       default:
         return const Icon(
-          Icons.vertical_align_center,
+          Icons.menu,
           color: Colors.black26,
         );
     }
