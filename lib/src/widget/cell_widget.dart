@@ -290,21 +290,19 @@ class _CellWidgetState extends State<CellWidget>
           } else if (widget.stateManager.keyPressed.ctrl) {
             widget.stateManager.toggleSelectingRow(widget.rowIdx);
           }
-
-          return;
-        }
-
-        if (widget.stateManager.mode.isSelect) {
-          if (_isCurrentCell) {
-            widget.stateManager.handleOnSelected();
-          } else {
-            widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
-          }
         } else {
-          if (_isCurrentCell && _isEditing != true) {
-            widget.stateManager.setEditing(true);
+          if (widget.stateManager.mode.isSelect) {
+            if (_isCurrentCell) {
+              widget.stateManager.handleOnSelected();
+            } else {
+              widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+            }
           } else {
-            widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+            if (_isCurrentCell && _isEditing != true) {
+              widget.stateManager.setEditing(true);
+            } else {
+              widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
+            }
           }
         }
       },
