@@ -3,6 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_pluto_scroll_controller.dart';
 
 main() {
   group('currentRowIdx', () {
@@ -234,6 +235,92 @@ main() {
 
       // then
       expect(stateManager.rows.length, 5);
+    });
+
+    testWidgets(
+        'WHEN currentCell 이 있는 상태에서 '
+        'THEN '
+        'currentRowIdx 와 currentCellPosition 이 '
+        'rows 가 추가 된 만큼에 따라 업데이트 되어야 한다.', (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: MockPlutoScrollController(),
+      );
+
+      final int rowIdxBeforePrependRows = 0;
+
+      stateManager.setCurrentCell(
+          rows.first.cells['text1'], rowIdxBeforePrependRows);
+
+      expect(stateManager.currentRowIdx, rowIdxBeforePrependRows);
+
+      List<PlutoRow> newRows = RowHelper.count(5, columns);
+
+      // when
+      stateManager.prependRows(newRows);
+
+      // then
+      // 앞에 새로운 Row 가 추가 되면 현재 idx 에 추가 된 row 수량 만큼 더해 포커스를 유지.
+      final rowIdxAfterPrependRows = newRows.length + rowIdxBeforePrependRows;
+
+      expect(stateManager.currentRowIdx, rowIdxAfterPrependRows);
+
+      expect(stateManager.currentCellPosition.columnIdx, 1);
+
+      expect(stateManager.currentCellPosition.rowIdx, rowIdxAfterPrependRows);
+    });
+
+    testWidgets(
+        'WHEN _currentSelectingPosition 이 있는 상태에서 '
+        'THEN currentSelectingPosition 이 업데이트 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: MockPlutoScrollController(),
+      );
+
+      final int rowIdxBeforePrependRows = 3;
+
+      stateManager.setCurrentSelectingPosition(
+        columnIdx: 2,
+        rowIdx: rowIdxBeforePrependRows,
+      );
+
+      expect(
+        stateManager.currentSelectingPosition.rowIdx,
+        rowIdxBeforePrependRows,
+      );
+
+      List<PlutoRow> newRows = RowHelper.count(7, columns);
+
+      // when
+      stateManager.prependRows(newRows);
+
+      // then
+      expect(stateManager.currentSelectingPosition.columnIdx, 2);
+
+      expect(
+        stateManager.currentSelectingPosition.rowIdx,
+        newRows.length + rowIdxBeforePrependRows,
+      );
     });
   });
 

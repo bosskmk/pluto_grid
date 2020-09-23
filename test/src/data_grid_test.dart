@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../helper/column_helper.dart';
@@ -895,6 +896,341 @@ void main() {
       expect(columns[7].title, 'body7');
       expect(columns[8].title, 'body8');
       expect(columns[9].title, 'body9');
+    });
+
+    group('Date column', () {
+      testWidgets(
+          '날짜 선택 팝업에서 위로 한칸 이동 시 '
+          '일주일 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager;
+
+        // when
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+
+        // 셀 선택
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        expect(stateManager.isEditing, false);
+
+        // 수정 상태로 변경
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        // 수정 상태 확인
+        expect(stateManager.isEditing, true);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 날짜 입력 팝업 호출
+        await tester.tap(
+            find.descendant(of: firstCell, matching: find.byType(TextField)));
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 현재 선택 된 날짜
+        final DateTime currentDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        // 선택 된 날짜의 day 렌더링
+        Finder popupCell = find.text(DateFormat('d').format(currentDate));
+        expect(popupCell, findsOneWidget);
+
+        // 팝업에서 한칸 위로 이동
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 일주일 전 날짜 선택
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        final DateTime selectedDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        expect(currentDate.add(Duration(days: -7)), selectedDate);
+      });
+
+      testWidgets(
+          '날짜 선택 팝업에서 위로 여섯칸 이동 시 '
+          '6주 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager;
+
+        // when
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+
+        // 셀 선택
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        expect(stateManager.isEditing, false);
+
+        // 수정 상태로 변경
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        // 수정 상태 확인
+        expect(stateManager.isEditing, true);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 날짜 입력 팝업 호출
+        await tester.tap(
+            find.descendant(of: firstCell, matching: find.byType(TextField)));
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 현재 선택 된 날짜
+        final DateTime currentDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        // 선택 된 날짜의 day 렌더링
+        Finder popupCell = find.text(DateFormat('d').format(currentDate));
+        expect(popupCell, findsOneWidget);
+
+        // 팝업에서 여섯 칸 위로 이동
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 일주일 전 날짜 선택
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        final DateTime selectedDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        expect(currentDate.add(Duration(days: -(7 * 6))), selectedDate);
+      });
+
+      testWidgets(
+          '날짜 선택 팝업에서 위로 10 칸 이동 시 '
+          '10주 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager;
+
+        // when
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+
+        // 셀 선택
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        expect(stateManager.isEditing, false);
+
+        // 수정 상태로 변경
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        // 수정 상태 확인
+        expect(stateManager.isEditing, true);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 날짜 입력 팝업 호출
+        await tester.tap(
+            find.descendant(of: firstCell, matching: find.byType(TextField)));
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 현재 선택 된 날짜
+        final DateTime currentDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        // 선택 된 날짜의 day 렌더링
+        Finder popupCell = find.text(DateFormat('d').format(currentDate));
+        expect(popupCell, findsOneWidget);
+
+        // 팝업에서 10 칸 위로 이동
+        for (var i = 0; i < 10; i += 1) {
+          await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+        }
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 일주일 전 날짜 선택
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        final DateTime selectedDate =
+            DateTime.parse(stateManager.currentCell.value);
+
+        expect(currentDate.add(Duration(days: -(7 * 10))), selectedDate);
+      });
+
+      testWidgets(
+          '날짜 선택 팝업에서 아래로 10 칸 이동 시 '
+              '10주 이후 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager;
+
+        // when
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+
+        // 셀 선택
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        expect(stateManager.isEditing, false);
+
+        // 수정 상태로 변경
+        await tester.tap(find.descendant(
+            of: firstCell, matching: find.byType(GestureDetector)));
+
+        // 수정 상태 확인
+        expect(stateManager.isEditing, true);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 날짜 입력 팝업 호출
+        await tester.tap(
+            find.descendant(of: firstCell, matching: find.byType(TextField)));
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 현재 선택 된 날짜
+        final DateTime currentDate =
+        DateTime.parse(stateManager.currentCell.value);
+
+        // 선택 된 날짜의 day 렌더링
+        Finder popupCell = find.text(DateFormat('d').format(currentDate));
+        expect(popupCell, findsOneWidget);
+
+        // 팝업에서 10 칸 아래로 이동
+        for (var i = 0; i < 10; i += 1) {
+          await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+        }
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 일주일 전 날짜 선택
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        final DateTime selectedDate =
+        DateTime.parse(stateManager.currentCell.value);
+
+        expect(currentDate.add(Duration(days: 7 * 10)), selectedDate);
+      });
     });
   });
 }

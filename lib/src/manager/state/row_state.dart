@@ -82,8 +82,13 @@ mixin RowState implements IPlutoState {
     _rows.insertAll(0, rows);
 
     /// Update currentRowIdx
-    if (_currentRowIdx != null) {
+    if (currentCell != null) {
       _currentRowIdx = rows.length + _currentRowIdx;
+
+      setCurrentCellPosition(PlutoCellPosition(
+        columnIdx: currentCellPosition.columnIdx,
+        rowIdx: currentRowIdx,
+      ), notify: false);
 
       double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 

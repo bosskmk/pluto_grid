@@ -18,7 +18,12 @@ abstract class ICellState {
   /// Improves cell rendering performance.
   void withoutCheckCellValue(Function() callback);
 
-  void updateCurrentCellPosition({ bool notify: true });
+  void setCurrentCellPosition(
+    PlutoCellPosition cellPosition, {
+    bool notify: true,
+  });
+
+  void updateCurrentCellPosition({bool notify: true});
 
   /// Index position of cell in a column
   PlutoCellPosition cellPositionByCellKey(Key cellKey);
@@ -94,12 +99,30 @@ mixin CellState implements IPlutoState {
     _checkCellValue = true;
   }
 
-  void updateCurrentCellPosition({ bool notify: true }) {
+  void setCurrentCellPosition(
+    PlutoCellPosition cellPosition, {
+    bool notify: true,
+  }) {
+    if (cellPosition == null || _currentCellPosition == cellPosition) {
+      return;
+    }
+
+    _currentCellPosition = cellPosition;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
+  }
+
+  void updateCurrentCellPosition({bool notify: true}) {
     if (_currentCell == null) {
       return;
     }
 
-    _currentCellPosition = cellPositionByCellKey(_currentCell.key);
+    setCurrentCellPosition(
+      cellPositionByCellKey(_currentCell.key),
+      notify: false,
+    );
 
     if (notify) {
       notifyListeners(checkCellValue: false);

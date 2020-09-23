@@ -170,6 +170,15 @@ class PlutoCellPosition {
     this.columnIdx,
     this.rowIdx,
   });
+
+  @override
+  bool operator ==(covariant PlutoCellPosition other) {
+    return columnIdx == other.columnIdx && rowIdx == other.rowIdx;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
 }
 
 class PlutoKeyPressed {
