@@ -407,7 +407,14 @@ class _BackgroundColorWidget extends StatelessWidget {
         ),
       );
     } else {
-      return BoxDecoration();
+      return BoxDecoration(
+        border: Border(
+          right: BorderSide(
+            color: PlutoDefaultSettings.rowBorderColor,
+            width: 1.0,
+          ),
+        ),
+      );
     }
   }
 

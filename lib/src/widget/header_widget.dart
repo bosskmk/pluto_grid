@@ -155,6 +155,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       width: widget.column.width,
       height: PlutoDefaultSettings.rowHeight,
       padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(
+            color: PlutoDefaultSettings.rowBorderColor,
+            width: 1.0,
+          ),
+        ),
+      ),
       child: Text(
         widget.column.title,
         style: PlutoDefaultSettings.headerTextStyle,
@@ -190,7 +198,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         if (widget.column.enableContextMenu)
           Positioned(
             top: -2,
-            right: -12,
+            right: -5,
             child: GestureDetector(
               onTapDown: (TapDownDetails details) {
                 _tapDownPosition = details.globalPosition;
