@@ -1151,7 +1151,7 @@ void main() {
 
       testWidgets(
           '날짜 선택 팝업에서 아래로 10 칸 이동 시 '
-              '10주 이후 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
+          '10주 이후 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
         // given
         List<PlutoColumn> columns = [
           ...ColumnHelper.dateColumn('date', count: 10, width: 100),
@@ -1203,7 +1203,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-        DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value);
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -1227,10 +1227,454 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-        DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value);
 
         expect(currentDate.add(Duration(days: 7 * 10)), selectedDate);
       });
     });
+  });
+
+  testWidgets('editing 상태에서 shift + 우측 방향키 입력 시 셀이 선택 되지 않아야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    expect(stateManager.isEditing, true);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
+    expect(stateManager.currentSelectingPosition, null);
+    // 이동도 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태에서 shift + 좌측 방향키 입력 시 셀이 선택 되지 않아야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    expect(stateManager.isEditing, true);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
+    expect(stateManager.currentSelectingPosition, null);
+    // 이동도 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태에서 shift + 위쪽 방향키 입력 시 셀이 선택 되지 않아야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    expect(stateManager.isEditing, true);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
+    expect(stateManager.currentSelectingPosition, null);
+    // 이동도 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태에서 shift + 아래쪽 방향키 입력 시 셀이 선택 되지 않아야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    expect(stateManager.isEditing, true);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
+    expect(stateManager.currentSelectingPosition, null);
+    // 이동도 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태가 아니면, shift + 우측 방향키 입력 시 셀이 선택 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
+    expect(stateManager.currentSelectingPosition.columnIdx, 3);
+    expect(stateManager.currentSelectingPosition.rowIdx, 1);
+    // 현재 선택 셀은 이동 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태가 아니면, shift + 좌측 방향키 입력 시 셀이 선택 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
+    expect(stateManager.currentSelectingPosition.columnIdx, 1);
+    expect(stateManager.currentSelectingPosition.rowIdx, 1);
+    // 현재 선택 셀은 이동 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태가 아니면, shift + 위쪽 방향키 입력 시 셀이 선택 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
+    expect(stateManager.currentSelectingPosition.columnIdx, 2);
+    expect(stateManager.currentSelectingPosition.rowIdx, 0);
+    // 현재 선택 셀은 이동 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
+  });
+
+  testWidgets('editing 상태가 아니면, shift + 아래쪽 방향키 입력 시 셀이 선택 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = [
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ...ColumnHelper.textColumn('headerB', count: 3),
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+    ];
+    final rows = RowHelper.count(10, columns);
+
+    PlutoStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // 1 번 컬럼의 1번 행의 셀 선택
+    Finder currentCell = find.text('headerB1 value 1');
+
+    await tester.tap(currentCell);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+
+    // editing true
+    expect(stateManager.isEditing, false);
+
+    // 쉬프트 + 우측 키 입력
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
+    expect(stateManager.currentSelectingPosition.columnIdx, 2);
+    expect(stateManager.currentSelectingPosition.rowIdx, 2);
+    // 현재 선택 셀은 이동 되지 않아야 한다.
+    expect(stateManager.currentCellPosition.columnIdx, 2);
+    expect(stateManager.currentCellPosition.rowIdx, 1);
   });
 }

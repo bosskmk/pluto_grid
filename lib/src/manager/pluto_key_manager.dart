@@ -68,6 +68,10 @@ class PlutoKeyManager {
     }
 
     if (keyManagerEvent.event.isShiftPressed) {
+      if (stateManager.isEditing == true) {
+        return;
+      }
+
       stateManager.moveSelectingCell(moveDirection);
       return;
     }
