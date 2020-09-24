@@ -57,27 +57,43 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
 
+    final Color textColor =
+        widget.stateManager.configuration.cellTextStyle.color;
+
+    final Color backgroundColor =
+        widget.stateManager.configuration.activatedColor;
+
+    final buildTextItem = (String text) {
+      return Text(
+        text,
+        style: TextStyle(
+          color: textColor,
+        ),
+      );
+    };
+
     final MenuItem selectedMenu = await showMenu<MenuItem>(
       context: context,
+      color: backgroundColor,
       position: RelativeRect.fromRect(
           position & Size(40, 40), Offset.zero & overlay.size),
       items: [
         PopupMenuItem(
           value: MenuItem.FixedLeft,
           child: widget.column.fixed.isFixed == true
-              ? const Text('Unfix')
-              : const Text('ToLeft'),
+              ? buildTextItem('Unfix')
+              : buildTextItem('ToLeft'),
         ),
         if (widget.column.fixed.isFixed != true)
           PopupMenuItem(
             value: MenuItem.FixedRight,
             child: widget.column.fixed.isFixed == true
-                ? const Text('Unfix')
-                : const Text('ToRight'),
+                ? buildTextItem('Unfix')
+                : buildTextItem('ToRight'),
           ),
         PopupMenuItem(
           value: MenuItem.AutoSize,
-          child: const Text('AutoSize'),
+          child: buildTextItem('AutoSize'),
         ),
       ],
     );
@@ -218,7 +234,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     .resizeColumn(widget.column._key, _currentPosition.dx - 20);
               },
               child: IconButton(
-                icon: HeaderIcon(widget.column.sort),
+                icon: HeaderIcon(
+                  sort: widget.column.sort,
+                  color: widget.stateManager.configuration.iconColor,
+                ),
                 iconSize: 18,
                 onPressed: () {
                   _showContextMenu(context, _tapDownPosition);
@@ -233,8 +252,12 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
 class HeaderIcon extends StatelessWidget {
   final PlutoColumnSort sort;
+  final Color color;
 
-  HeaderIcon(this.sort);
+  HeaderIcon({
+    this.sort,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -253,9 +276,9 @@ class HeaderIcon extends StatelessWidget {
           color: Colors.red,
         );
       default:
-        return const Icon(
+        return Icon(
           Icons.menu,
-          color: Colors.black26,
+          color: color ?? Colors.black26,
         );
     }
   }

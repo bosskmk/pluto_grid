@@ -23,7 +23,6 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
   Icon icon = Icon(
     Icons.arrow_drop_down,
-    color: Colors.black54,
   );
 
   @override

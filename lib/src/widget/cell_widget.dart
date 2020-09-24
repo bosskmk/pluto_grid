@@ -234,6 +234,7 @@ class _CellWidgetState extends State<CellWidget>
         widget.column.type.isNumber
             ? widget.column.type.number.applyFormat(_cellValue)
             : _cellValue.toString(),
+        style: widget.stateManager.configuration.cellTextStyle,
         overflow: TextOverflow.ellipsis,
       );
     }

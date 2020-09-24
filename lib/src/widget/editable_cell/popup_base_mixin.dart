@@ -95,6 +95,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,
+      configuration: widget.stateManager.configuration,
     );
   }
 
@@ -212,6 +213,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             right: -12,
             child: IconButton(
               icon: icon,
+              color: widget.stateManager.configuration.iconColor,
               onPressed: openPopup,
             ),
           ),

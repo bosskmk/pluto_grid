@@ -25,7 +25,6 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
 
   Icon icon = Icon(
     Icons.access_time,
-    color: Colors.black54,
   );
 
   String get cellHour => widget.cell.value.toString().substring(0, 2);
@@ -87,6 +86,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
             }
           }
         },
+        configuration: widget.stateManager.configuration,
       ),
       gridPropsB: PlutoDualGridProps(
         columns: [
@@ -122,9 +122,10 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
             }
           }
         },
+        configuration: widget.stateManager.configuration,
       ),
       mode: PlutoMode.Select,
-      width: 268,
+      width: 276,
       height: 300,
     );
   }

@@ -68,7 +68,7 @@ class _RowWidgetState extends State<RowWidget> {
 
   Color rowColor() {
     if (!widget.stateManager.gridFocusNode.hasFocus) {
-      return Colors.white;
+      return null;
     }
 
     final bool checkCurrentRow =
@@ -78,18 +78,18 @@ class _RowWidgetState extends State<RowWidget> {
         widget.stateManager.isSelectedRow(widget.row.key);
 
     if (!checkCurrentRow && !checkSelectedRow) {
-      return Colors.white;
+      return null;
     }
 
     if (widget.stateManager.selectingMode.isRow) {
       return checkSelectedRow
           ? widget.stateManager.configuration.activatedColor
-          : Colors.white;
+          : null;
     }
 
     return checkCurrentRow
         ? widget.stateManager.configuration.activatedColor
-        : Colors.white;
+        : null;
   }
 
   @override

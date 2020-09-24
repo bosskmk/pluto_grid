@@ -25,7 +25,6 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
   Icon icon = Icon(
     Icons.date_range,
-    color: Colors.black54,
   );
 
   StreamSubscription<KeyManagerEvent> keyManagerStream;
@@ -281,6 +280,9 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
         .format(DateTime.parse(currentCell.originalValue));
   }
 
+  Color get textColor =>
+      widget.stateManager.configuration.headerTextStyle.color;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -290,6 +292,7 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
       child: Text(
         '$year-$month',
         style: TextStyle(
+          color: textColor,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
