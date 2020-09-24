@@ -11,13 +11,20 @@ import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:rxdart/rxdart.dart';
 
-part './src/data_dual_grid.dart';
+/// [PlutoConfiguration]
+part './src/pluto_configuration.dart';
 
-part './src/data_dual_grid_popup.dart';
+/// [PlutoDualGrid]
+part './src/pluto_dual_grid.dart';
 
-part './src/data_grid.dart';
+/// [PlutoDualGridPopup]
+part './src/pluto_dual_grid_popup.dart';
 
-part './src/data_grid_popup.dart';
+/// [PlutoGrid]
+part './src/pluto_grid.dart';
+
+/// [PlutoGridPopup]
+part './src/pluto_grid_popup.dart';
 
 part './src/event/pluto_event.dart';
 
@@ -27,11 +34,17 @@ part './src/event/pluto_on_loaded_event.dart';
 
 part './src/event/pluto_on_selected_event.dart';
 
-part './src/helper/move_direction.dart';
+part './src/helper/clipboard_transformation.dart';
 
 part './src/helper/datetime_helper.dart';
 
-part './src/helper/clipboard_transformation.dart';
+part './src/helper/move_direction.dart';
+
+part './src/manager/pluto_event_manager.dart';
+
+part './src/manager/pluto_key_manager.dart';
+
+part './src/manager/pluto_state_manager.dart';
 
 part './src/manager/state/cell_state.dart';
 
@@ -48,12 +61,6 @@ part './src/manager/state/row_state.dart';
 part './src/manager/state/scroll_state.dart';
 
 part './src/manager/state/selecting_state.dart';
-
-part './src/manager/pluto_event_manager.dart';
-
-part './src/manager/pluto_state_manager.dart';
-
-part './src/manager/pluto_key_manager.dart';
 
 part './src/model/pluto_cell.dart';
 
