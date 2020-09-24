@@ -116,9 +116,9 @@ class PlutoStateManager extends PlutoState {
 
 class PlutoScrollController {
   LinkedScrollControllerGroup vertical;
-  ScrollController leftFixedRowsVertical;
+  ScrollController leftRowsVertical;
   ScrollController bodyRowsVertical;
-  ScrollController rightRowsVerticalScroll;
+  ScrollController rightRowsVertical;
 
   LinkedScrollControllerGroup horizontal;
   ScrollController bodyHeadersHorizontal;
@@ -126,9 +126,9 @@ class PlutoScrollController {
 
   PlutoScrollController({
     this.vertical,
-    this.leftFixedRowsVertical,
+    this.leftRowsVertical,
     this.bodyRowsVertical,
-    this.rightRowsVerticalScroll,
+    this.rightRowsVertical,
     this.horizontal,
     this.bodyHeadersHorizontal,
     this.bodyRowsHorizontal,

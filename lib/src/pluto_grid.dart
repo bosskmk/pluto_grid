@@ -48,7 +48,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   FocusNode gridFocusNode;
 
   LinkedScrollControllerGroup verticalScroll = LinkedScrollControllerGroup();
-  ScrollController leftFixedRowsVerticalScroll;
+  ScrollController leftRowsVerticalScroll;
   ScrollController bodyRowsVerticalScroll;
   ScrollController rightRowsVerticalScroll;
 
@@ -100,8 +100,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
-    leftFixedRowsVerticalScroll = verticalScroll.addAndGet();
     bodyRowsVerticalScroll = verticalScroll.addAndGet();
+    leftRowsVerticalScroll = verticalScroll.addAndGet();
     rightRowsVerticalScroll = verticalScroll.addAndGet();
 
     bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
@@ -117,8 +117,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     disposeList.add(() {
       gridFocusNode.dispose();
 
-      leftFixedRowsVerticalScroll.dispose();
       bodyRowsVerticalScroll.dispose();
+      leftRowsVerticalScroll.dispose();
       rightRowsVerticalScroll.dispose();
 
       bodyHeadersHorizontalScroll.dispose();
@@ -133,9 +133,9 @@ class _PlutoGridState extends State<PlutoGrid> {
       gridFocusNode: gridFocusNode,
       scroll: PlutoScrollController(
         vertical: verticalScroll,
-        leftFixedRowsVertical: leftFixedRowsVerticalScroll,
+        leftRowsVertical: leftRowsVerticalScroll,
         bodyRowsVertical: bodyRowsVerticalScroll,
-        rightRowsVerticalScroll: rightRowsVerticalScroll,
+        rightRowsVertical: rightRowsVerticalScroll,
         horizontal: horizontalScroll,
         bodyHeadersHorizontal: bodyHeadersHorizontalScroll,
         bodyRowsHorizontal: bodyRowsHorizontalScroll,

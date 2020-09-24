@@ -45,7 +45,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      controller: widget.stateManager.scroll.rightRowsVerticalScroll,
+      controller: widget.stateManager.scroll.rightRowsVertical,
       scrollDirection: Axis.vertical,
       itemCount: _rows.length,
       itemExtent: PlutoDefaultSettings.rowTotalHeight,
