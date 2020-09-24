@@ -14,8 +14,12 @@ class _RightFixedRowsState extends State<RightFixedRows> {
 
   List<PlutoRow> _rows;
 
+  ScrollController scroll;
+
   @override
   void dispose() {
+    scroll.dispose();
+
     widget.stateManager.removeListener(changeStateListener);
 
     super.dispose();
@@ -26,6 +30,8 @@ class _RightFixedRowsState extends State<RightFixedRows> {
     _columns = widget.stateManager.rightFixedColumns;
 
     _rows = widget.stateManager.rows;
+
+    scroll = widget.stateManager.scroll.vertical.addAndGet();
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -45,7 +51,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      controller: widget.stateManager.scroll.rightRowsVertical,
+      controller: scroll,
       scrollDirection: Axis.vertical,
       itemCount: _rows.length,
       itemExtent: PlutoDefaultSettings.rowTotalHeight,

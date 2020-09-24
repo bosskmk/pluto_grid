@@ -23,10 +23,10 @@ class ConfigurationScreen extends StatelessWidget {
             print(event);
           },
           onLoaded: (PlutoOnLoadedEvent event) {
-            event.stateManager.setSelectingMode(PlutoSelectingMode.Row);
+            event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
           },
-          configuration: PlutoConfiguration.dark(
-            enableColumnBorder: true,
+          configuration: PlutoConfiguration(
+            enableColumnBorder: false,
           ),
         ),
       ),

@@ -11,11 +11,21 @@ class BodyRows extends StatefulWidget {
 
 class _BodyRowsState extends State<BodyRows> {
   List<PlutoColumn> _columns;
+
   List<PlutoRow> _rows;
+
   double _width;
+
+  ScrollController verticalScroll;
+
+  ScrollController horizontalScroll;
 
   @override
   void dispose() {
+    verticalScroll.dispose();
+
+    horizontalScroll.dispose();
+
     widget.stateManager.removeListener(changeStateListener);
 
     super.dispose();
@@ -28,6 +38,12 @@ class _BodyRowsState extends State<BodyRows> {
     _rows = widget.stateManager.rows;
 
     _width = getWidth();
+
+    verticalScroll = widget.stateManager.scroll.vertical.addAndGet();
+
+    horizontalScroll = widget.stateManager.scroll.horizontal.addAndGet();
+
+    widget.stateManager.scroll.setBodyRowsVertical(verticalScroll);
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -62,12 +78,12 @@ class _BodyRowsState extends State<BodyRows> {
   Widget build(BuildContext context) {
     return Scrollbar(
       child: SingleChildScrollView(
-        controller: widget.stateManager.scroll.bodyRowsHorizontal,
+        controller: horizontalScroll,
         scrollDirection: Axis.horizontal,
         child: SizedBox(
           width: _width,
           child: ListView.builder(
-            controller: widget.stateManager.scroll.bodyRowsVertical,
+            controller: verticalScroll,
             scrollDirection: Axis.vertical,
             itemCount: _rows.length,
             itemExtent: PlutoDefaultSettings.rowTotalHeight,

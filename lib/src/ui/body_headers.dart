@@ -14,8 +14,12 @@ class _BodyHeadersState extends State<BodyHeaders> {
 
   double _width;
 
+  ScrollController scroll;
+
   @override
   void dispose() {
+    scroll.dispose();
+
     widget.stateManager.removeListener(changeStateListener);
 
     super.dispose();
@@ -26,6 +30,8 @@ class _BodyHeadersState extends State<BodyHeaders> {
     _columns = getColumns();
 
     _width = getWidth();
+
+    scroll = widget.stateManager.scroll.horizontal.addAndGet();
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -62,7 +68,7 @@ class _BodyHeadersState extends State<BodyHeaders> {
     return SizedBox(
       width: _width,
       child: ListView.builder(
-        controller: widget.stateManager.scroll.bodyHeadersHorizontal,
+        controller: scroll,
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _columns.length,

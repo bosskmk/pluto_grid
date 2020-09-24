@@ -114,7 +114,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
         popupStateManager.scroll.vertical.offset == 0) {
       popupStateManager.prependRows(_getMoreRows(insertBefore: true));
     } else if (widget.column.type.date.endDate == null &&
-        popupStateManager.scroll.bodyRowsVertical.position.maxScrollExtent ==
+        popupStateManager.scroll.maxScrollVertical ==
             popupStateManager.scroll.vertical.offset) {
       popupStateManager.appendRows(_getMoreRows());
     }

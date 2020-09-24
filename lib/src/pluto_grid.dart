@@ -48,13 +48,8 @@ class _PlutoGridState extends State<PlutoGrid> {
   FocusNode gridFocusNode;
 
   LinkedScrollControllerGroup verticalScroll = LinkedScrollControllerGroup();
-  ScrollController leftRowsVerticalScroll;
-  ScrollController bodyRowsVerticalScroll;
-  ScrollController rightRowsVerticalScroll;
 
   LinkedScrollControllerGroup horizontalScroll = LinkedScrollControllerGroup();
-  ScrollController bodyHeadersHorizontalScroll;
-  ScrollController bodyRowsHorizontalScroll;
 
   double leftFixedColumnWidth;
   double bodyColumnWidth;
@@ -100,13 +95,6 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
-    bodyRowsVerticalScroll = verticalScroll.addAndGet();
-    leftRowsVerticalScroll = verticalScroll.addAndGet();
-    rightRowsVerticalScroll = verticalScroll.addAndGet();
-
-    bodyHeadersHorizontalScroll = horizontalScroll.addAndGet();
-    bodyRowsHorizontalScroll = horizontalScroll.addAndGet();
-
     headerHeight =
         widget.createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
 
@@ -116,13 +104,6 @@ class _PlutoGridState extends State<PlutoGrid> {
     // Dispose
     disposeList.add(() {
       gridFocusNode.dispose();
-
-      bodyRowsVerticalScroll.dispose();
-      leftRowsVerticalScroll.dispose();
-      rightRowsVerticalScroll.dispose();
-
-      bodyHeadersHorizontalScroll.dispose();
-      bodyRowsHorizontalScroll.dispose();
     });
   }
 
@@ -133,12 +114,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       gridFocusNode: gridFocusNode,
       scroll: PlutoScrollController(
         vertical: verticalScroll,
-        leftRowsVertical: leftRowsVerticalScroll,
-        bodyRowsVertical: bodyRowsVerticalScroll,
-        rightRowsVertical: rightRowsVerticalScroll,
         horizontal: horizontalScroll,
-        bodyHeadersHorizontal: bodyHeadersHorizontalScroll,
-        bodyRowsHorizontal: bodyRowsHorizontalScroll,
       ),
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
