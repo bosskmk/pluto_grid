@@ -61,7 +61,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         widget.stateManager.configuration.cellTextStyle.color;
 
     final Color backgroundColor =
-        widget.stateManager.configuration.activatedColor;
+        widget.stateManager.configuration.menuBackgroundColor;
 
     final buildTextItem = (String text) {
       return Text(
@@ -155,16 +155,20 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       feedback: Container(
         width: widget.column.width,
         height: PlutoDefaultSettings.rowHeight,
-        padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+        padding: const EdgeInsets.symmetric(
+            horizontal: PlutoDefaultSettings.cellPadding),
         decoration: BoxDecoration(
           color: Colors.black26,
         ),
-        child: Text(
-          widget.column.title,
-          style: widget.stateManager.configuration.headerTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          softWrap: false,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.column.title,
+            style: widget.stateManager.configuration.headerTextStyle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            softWrap: false,
+          ),
         ),
       ),
       child: child,
@@ -175,7 +179,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     Widget _header = Container(
       width: widget.column.width,
       height: PlutoDefaultSettings.rowHeight,
-      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: PlutoDefaultSettings.cellPadding),
       decoration: widget.stateManager.configuration.enableColumnBorder
           ? BoxDecoration(
               border: Border(
@@ -186,12 +191,15 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ),
             )
           : BoxDecoration(),
-      child: Text(
-        widget.column.title,
-        style: widget.stateManager.configuration.headerTextStyle,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-        softWrap: false,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          widget.column.title,
+          style: widget.stateManager.configuration.headerTextStyle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
+        ),
       ),
     );
 
@@ -209,8 +217,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   Widget build(BuildContext context) {
     Offset _currentPosition;
 
-    Offset _tapDownPosition;
-
     return Stack(
       children: [
         Positioned(
@@ -220,11 +226,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         if (widget.column.enableContextMenu)
           Positioned(
-            top: -2,
-            right: -5,
+            top: 3,
+            right: -3,
             child: GestureDetector(
-              onTapDown: (TapDownDetails details) {
-                _tapDownPosition = details.globalPosition;
+              onTapUp: (TapUpDetails details) {
+                _showContextMenu(context, details.globalPosition);
               },
               onHorizontalDragUpdate: (DragUpdateDetails details) {
                 _currentPosition = details.localPosition;
@@ -239,9 +245,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   color: widget.stateManager.configuration.iconColor,
                 ),
                 iconSize: 18,
-                onPressed: () {
-                  _showContextMenu(context, _tapDownPosition);
-                },
+                onPressed: null,
               ),
             ),
           ),

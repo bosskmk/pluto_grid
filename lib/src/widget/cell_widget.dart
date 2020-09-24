@@ -430,9 +430,13 @@ class _BackgroundColorWidget extends StatelessWidget {
       alignment: Alignment.centerLeft,
       width: width,
       height: height,
-      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: PlutoDefaultSettings.cellPadding),
       decoration: _boxDecoration(),
-      child: child,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: child,
+      ),
     );
   }
 }

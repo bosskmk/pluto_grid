@@ -287,16 +287,20 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
   Widget build(BuildContext context) {
     return Container(
       height: PlutoDefaultSettings.rowTotalHeight,
-      padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: PlutoDefaultSettings.cellPadding),
       alignment: Alignment.center,
-      child: Text(
-        '$year-$month',
-        style: TextStyle(
-          color: textColor,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          '$year-$month',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
       ),
     );
   }

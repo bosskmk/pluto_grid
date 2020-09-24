@@ -33,6 +33,9 @@ class PlutoConfiguration {
   /// Icon color. (column menu, cell of popup type)
   final Color iconColor;
 
+  /// BackgroundColor of Popup menu. (column menu)
+  final Color menuBackgroundColor;
+
   PlutoConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
@@ -53,6 +56,7 @@ class PlutoConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.black26,
+    this.menuBackgroundColor = Colors.white,
   });
 
   PlutoConfiguration.dark({
@@ -75,5 +79,6 @@ class PlutoConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.white38,
+    this.menuBackgroundColor = const Color(0xFF414141),
   });
 }

@@ -25,7 +25,7 @@ class ConfigurationScreen extends StatelessWidget {
           onLoaded: (PlutoOnLoadedEvent event) {
             event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
           },
-          configuration: PlutoConfiguration(
+          configuration: PlutoConfiguration.dark(
             enableColumnBorder: false,
           ),
         ),
