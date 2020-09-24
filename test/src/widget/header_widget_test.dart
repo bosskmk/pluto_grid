@@ -10,6 +10,7 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoStateManager();
+    when(stateManager.configuration).thenReturn(PlutoConfiguration());
   });
 
   testWidgets('title 이 출력 되어야 한다.', (WidgetTester tester) async {

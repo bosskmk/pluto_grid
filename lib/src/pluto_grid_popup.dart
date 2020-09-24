@@ -11,6 +11,7 @@ class PlutoGridPopup {
   final double height;
   final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
+  final PlutoConfiguration configuration;
 
   PlutoGridPopup({
     this.context,
@@ -23,6 +24,7 @@ class PlutoGridPopup {
     this.height,
     this.createHeader,
     this.createFooter,
+    this.configuration,
   }) {
     this.open();
   }
@@ -48,6 +50,7 @@ class PlutoGridPopup {
                     },
                     createHeader: createHeader,
                     createFooter: createFooter,
+                    configuration: configuration,
                   ),
                 );
               },

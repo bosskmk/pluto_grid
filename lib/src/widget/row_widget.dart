@@ -83,12 +83,12 @@ class _RowWidgetState extends State<RowWidget> {
 
     if (widget.stateManager.selectingMode.isRow) {
       return checkSelectedRow
-          ? PlutoDefaultSettings.currentRowColor
+          ? widget.stateManager.configuration.activatedColor
           : Colors.white;
     }
 
     return checkCurrentRow
-        ? PlutoDefaultSettings.currentRowColor
+        ? widget.stateManager.configuration.activatedColor
         : Colors.white;
   }
 
@@ -97,10 +97,10 @@ class _RowWidgetState extends State<RowWidget> {
     return Container(
       decoration: BoxDecoration(
         color: rowColor(),
-        border: const Border(
-          bottom: const BorderSide(
+        border: Border(
+          bottom: BorderSide(
             width: PlutoDefaultSettings.rowBorderWidth,
-            color: PlutoDefaultSettings.rowBorderColor,
+            color: widget.stateManager.configuration.borderColor,
           ),
         ),
       ),

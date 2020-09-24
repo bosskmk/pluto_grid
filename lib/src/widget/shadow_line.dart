@@ -3,10 +3,12 @@ part of '../../pluto_grid.dart';
 class ShadowLine extends StatelessWidget {
   final Axis axis;
   final bool reverse;
+  final Color color;
 
   const ShadowLine({
     this.axis,
     this.reverse,
+    this.color,
   });
 
   @override
@@ -15,7 +17,7 @@ class ShadowLine extends StatelessWidget {
       width: axis == Axis.vertical ? 1 : 0,
       height: axis == Axis.horizontal ? 1 : 0,
       decoration: BoxDecoration(
-        color: PlutoDefaultSettings.gridBorderColor,
+        color: color ?? Colors.black,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.15),

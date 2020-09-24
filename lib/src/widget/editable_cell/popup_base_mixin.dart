@@ -199,7 +199,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             readOnly: true,
             textInputAction: TextInputAction.none,
             onTap: openPopup,
-            style: PlutoDefaultSettings.cellTextStyle,
+            style: widget.stateManager.configuration.cellTextStyle,
             decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(0),

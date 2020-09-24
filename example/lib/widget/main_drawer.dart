@@ -1,3 +1,4 @@
+import 'package:example/screen/configuration_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screen/add_and_remove_screen.dart';
@@ -46,6 +47,12 @@ class MainDrawer extends StatelessWidget {
             title: Text('Add and Remove'),
             onTap: () {
               Navigator.popAndPushNamed(context, AddAndRemoveScreen.routeName);
+            },
+          ),
+          ListTile(
+            title: Text('Configuration'),
+            onTap: () {
+              Navigator.popAndPushNamed(context, ConfigurationScreen.routeName);
             },
           ),
         ],

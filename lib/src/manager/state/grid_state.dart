@@ -12,6 +12,10 @@ abstract class IGridState {
 
   PlutoMode _mode;
 
+  PlutoConfiguration get configuration;
+
+  PlutoConfiguration _configuration;
+
   /// Screen size, fixed column visibility.
   PlutoLayout get layout;
 
@@ -65,6 +69,10 @@ mixin GridState implements IPlutoState {
 
   PlutoMode _mode;
 
+  PlutoConfiguration get configuration => _configuration;
+
+  PlutoConfiguration _configuration;
+
   PlutoLayout get layout => _layout;
 
   PlutoLayout _layout = PlutoLayout();
@@ -72,6 +80,10 @@ mixin GridState implements IPlutoState {
   Offset get gridGlobalOffset {
     if (_gridGlobalOffset != null) {
       return _gridGlobalOffset;
+    }
+
+    if (_gridKey == null) {
+      return null;
     }
 
     final RenderBox gridRenderBox = _gridKey.currentContext?.findRenderObject();
@@ -91,30 +103,20 @@ mixin GridState implements IPlutoState {
 
   PlutoKeyManager get keyManager => _keyManager;
 
-  void setKeyManager(PlutoKeyManager keyManager) {
-    _keyManager = keyManager;
-  }
-
   PlutoEventManager _eventManager;
 
   PlutoEventManager get eventManager => _eventManager;
-
-  void setEventManager(PlutoEventManager eventManager) {
-    _eventManager = eventManager;
-  }
 
   PlutoOnChangedEventCallback _onChanged;
 
   PlutoOnSelectedEventCallback _onSelected;
 
-  void resetCurrentState({notify = true}) {
-    _currentRowIdx = null;
-    _currentCell = null;
-    _currentSelectingPosition = null;
+  void setKeyManager(PlutoKeyManager keyManager) {
+    _keyManager = keyManager;
+  }
 
-    if (notify) {
-      notifyListeners();
-    }
+  void setEventManager(PlutoEventManager eventManager) {
+    _eventManager = eventManager;
   }
 
   void setLayout(
@@ -135,6 +137,16 @@ mixin GridState implements IPlutoState {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
       });
+    }
+  }
+
+  void resetCurrentState({notify = true}) {
+    _currentRowIdx = null;
+    _currentCell = null;
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners();
     }
   }
 

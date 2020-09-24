@@ -62,7 +62,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
   TextField _buildTextField({
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
-    style = PlutoDefaultSettings.cellTextStyle,
+    TextStyle style,
     decoration = const InputDecoration(
       border: InputBorder.none,
       contentPadding: const EdgeInsets.all(0),
@@ -76,7 +76,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
       readOnly: widget.column.type.readOnly,
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
-      style: style,
+      style: style ?? widget.stateManager.configuration.cellTextStyle,
       decoration: decoration,
       maxLines: maxLines,
       keyboardType: keyboardType ?? TextInputType.text,

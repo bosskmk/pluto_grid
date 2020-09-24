@@ -1,3 +1,4 @@
+import 'package:example/screen/configuration_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute:
-          kReleaseMode ? HomeScreen.routeName : AddAndRemoveScreen.routeName,
+          kReleaseMode ? HomeScreen.routeName : ConfigurationScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         NormalGridScreen.routeName: (context) => NormalGridScreen(),
         DualGridScreen.routeName: (context) => DualGridScreen(),
         AddAndRemoveScreen.routeName: (context) => AddAndRemoveScreen(),
+        ConfigurationScreen.routeName: (context) => ConfigurationScreen(),
       },
     );
   }

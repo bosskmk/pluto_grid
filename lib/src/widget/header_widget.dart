@@ -102,17 +102,22 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           if (previousValue.toString().length < value.toString().length) {
             return value.toString();
           }
+
           return previousValue.toString();
         });
 
         // Get size after rendering virtually
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
         TextSpan textSpan = new TextSpan(
-            style: PlutoDefaultSettings.cellTextStyle, text: maxValue);
+          style: widget.stateManager.configuration.cellTextStyle,
+          text: maxValue,
+        );
+
         TextPainter textPainter = new TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
         );
+
         textPainter.layout();
 
         widget.stateManager.resizeColumn(
@@ -140,7 +145,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         child: Text(
           widget.column.title,
-          style: PlutoDefaultSettings.headerTextStyle,
+          style: widget.stateManager.configuration.headerTextStyle,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           softWrap: false,
@@ -155,17 +160,19 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       width: widget.column.width,
       height: PlutoDefaultSettings.rowHeight,
       padding: const EdgeInsets.all(PlutoDefaultSettings.cellPadding),
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(
-            color: PlutoDefaultSettings.rowBorderColor,
-            width: 1.0,
-          ),
-        ),
-      ),
+      decoration: widget.stateManager.configuration.enableColumnBorder
+          ? BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: widget.stateManager.configuration.borderColor,
+                  width: 1.0,
+                ),
+              ),
+            )
+          : BoxDecoration(),
       child: Text(
         widget.column.title,
-        style: PlutoDefaultSettings.headerTextStyle,
+        style: widget.stateManager.configuration.headerTextStyle,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         softWrap: false,

@@ -10,6 +10,7 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoStateManager();
+    when(stateManager.configuration).thenReturn(PlutoConfiguration());
   });
 
   testWidgets(

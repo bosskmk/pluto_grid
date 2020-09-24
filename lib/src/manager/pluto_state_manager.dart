@@ -47,6 +47,7 @@ class PlutoStateManager extends PlutoState {
     PlutoMode mode,
     PlutoOnChangedEventCallback onChangedEventCallback,
     PlutoOnSelectedEventCallback onSelectedEventCallback,
+    PlutoConfiguration configuration,
   }) {
     this._columns = columns;
     this._rows = rows;
@@ -55,6 +56,7 @@ class PlutoStateManager extends PlutoState {
     this._mode = mode;
     this._onChanged = onChangedEventCallback;
     this._onSelected = onSelectedEventCallback;
+    this._configuration = configuration ?? PlutoConfiguration();
     this._gridKey = GlobalKey();
   }
 
@@ -178,7 +180,6 @@ class PlutoCellPosition {
 
   @override
   int get hashCode => super.hashCode;
-
 }
 
 class PlutoKeyPressed {

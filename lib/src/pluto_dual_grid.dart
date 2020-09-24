@@ -20,6 +20,7 @@ class PlutoDualGridProps {
   final PlutoOnChangedEventCallback onChanged;
   final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
+  final PlutoConfiguration configuration;
 
   PlutoDualGridProps({
     this.columns,
@@ -28,6 +29,7 @@ class PlutoDualGridProps {
     this.onChanged,
     this.createHeader,
     this.createFooter,
+    this.configuration,
   });
 }
 
@@ -166,6 +168,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           },
           createHeader: props.createHeader,
           createFooter: props.createFooter,
+          configuration: props.configuration,
         ),
       ),
     );

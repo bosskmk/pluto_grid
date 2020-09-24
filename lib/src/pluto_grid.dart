@@ -12,6 +12,7 @@ class PlutoGrid extends StatefulWidget {
   final PlutoOnSelectedEventCallback onSelected;
   final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
+  final PlutoConfiguration configuration;
 
   const PlutoGrid({
     Key key,
@@ -21,6 +22,7 @@ class PlutoGrid extends StatefulWidget {
     this.onChanged,
     this.createHeader,
     this.createFooter,
+    this.configuration,
   })  : this.mode = PlutoMode.Normal,
         this.onSelected = null,
         super(key: key);
@@ -34,6 +36,7 @@ class PlutoGrid extends StatefulWidget {
     this.onSelected,
     this.createHeader,
     this.createFooter,
+    this.configuration,
     @required this.mode,
   }) : super(key: key);
 
@@ -140,6 +143,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
+      configuration: widget.configuration,
     );
 
     leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
@@ -268,7 +272,7 @@ class _PlutoGridState extends State<PlutoGrid> {
               padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: PlutoDefaultSettings.gridBorderColor,
+                  color: stateManager.configuration.gridBorderColor,
                   width: PlutoDefaultSettings.gridBorderWidth,
                 ),
               ),
@@ -286,7 +290,10 @@ class _PlutoGridState extends State<PlutoGrid> {
                       top: PlutoDefaultSettings.rowTotalHeight,
                       left: 0,
                       right: 0,
-                      child: ShadowLine(axis: Axis.horizontal),
+                      child: ShadowLine(
+                        axis: Axis.horizontal,
+                        color: stateManager.configuration.gridBorderColor,
+                      ),
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
@@ -336,7 +343,10 @@ class _PlutoGridState extends State<PlutoGrid> {
                       top: headerHeight,
                       left: leftFixedColumnWidth,
                       bottom: footerHeight,
-                      child: ShadowLine(axis: Axis.vertical),
+                      child: ShadowLine(
+                        axis: Axis.vertical,
+                        color: stateManager.configuration.gridBorderColor,
+                      ),
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned(
@@ -345,13 +355,20 @@ class _PlutoGridState extends State<PlutoGrid> {
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
                       bottom: footerHeight,
-                      child: ShadowLine(axis: Axis.vertical, reverse: true),
+                      child: ShadowLine(
+                        axis: Axis.vertical,
+                        reverse: true,
+                        color: stateManager.configuration.gridBorderColor,
+                      ),
                     ),
                   Positioned(
                     top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
                     left: 0,
                     right: 0,
-                    child: ShadowLine(axis: Axis.horizontal),
+                    child: ShadowLine(
+                      axis: Axis.horizontal,
+                      color: stateManager.configuration.gridBorderColor,
+                    ),
                   ),
                   if (widget.createFooter != null)
                     Positioned(
@@ -360,7 +377,11 @@ class _PlutoGridState extends State<PlutoGrid> {
                           PlutoDefaultSettings.totalShadowLineWidth,
                       left: 0,
                       right: 0,
-                      child: ShadowLine(axis: Axis.horizontal, reverse: true),
+                      child: ShadowLine(
+                        axis: Axis.horizontal,
+                        reverse: true,
+                        color: stateManager.configuration.gridBorderColor,
+                      ),
                     ),
                   if (widget.createFooter != null)
                     Positioned.fill(
@@ -422,17 +443,6 @@ class PlutoDefaultSettings {
   static const double gridInnerSpacing =
       (gridPadding * 2) + (gridBorderWidth * 2);
 
-  /// Grid - grid border color
-  static const Color gridBorderColor = Color.fromRGBO(161, 165, 174, 100);
-
-  /// Header - text style
-  static const TextStyle headerTextStyle = const TextStyle(
-    color: Colors.black,
-    decoration: TextDecoration.none,
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-  );
-
   /// Row - Default row height
   static const double rowHeight = 45.0;
 
@@ -442,30 +452,9 @@ class PlutoDefaultSettings {
   /// Row - total height
   static const double rowTotalHeight = rowHeight + rowBorderWidth;
 
-  /// Row - box color : Row in selected state
-  static const Color currentRowColor = Color.fromRGBO(220, 245, 255, 100);
-
-  /// Row - border color
-  static const Color rowBorderColor = Color.fromRGBO(221, 226, 235, 100);
-
   /// Cell - padding
   static const double cellPadding = 10;
 
-  /// Cell - border color : Cell in selected state
-  static const Color currentCellBorderColor = Colors.lightBlue;
-
   /// Cell - fontSize
   static const double cellFontSize = 14;
-
-  /// Cell - text style
-  static const TextStyle cellTextStyle = TextStyle(
-    fontSize: cellFontSize,
-  );
-
-  /// Cell - current editing cell color
-  static const Color currentEditingCellColor = Colors.white;
-
-  /// Cell - current read only cell color
-  static const Color currentReadOnlyCellColor =
-      Color.fromRGBO(196, 199, 204, 100);
 }

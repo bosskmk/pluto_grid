@@ -353,6 +353,7 @@ class _CellWidgetState extends State<CellWidget>
         isEditing: _isEditing,
         selectingMode: _selectingMode,
         isSelectedCell: _isSelectedCell,
+        configuration: widget.stateManager.configuration,
       ),
     );
   }
@@ -367,6 +368,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   final bool isEditing;
   final PlutoSelectingMode selectingMode;
   final bool isSelectedCell;
+  final PlutoConfiguration configuration;
 
   _BackgroundColorWidget({
     this.readOnly,
@@ -377,16 +379,17 @@ class _BackgroundColorWidget extends StatelessWidget {
     this.isEditing,
     this.selectingMode,
     this.isSelectedCell,
+    this.configuration,
   });
 
   Color _currentCellColor() {
     if (!isEditing) {
-      return selectingMode.isRow ? PlutoDefaultSettings.currentRowColor : null;
+      return selectingMode.isRow ? configuration.activatedColor : null;
     }
 
     return readOnly == true
-        ? PlutoDefaultSettings.currentReadOnlyCellColor
-        : PlutoDefaultSettings.currentEditingCellColor;
+        ? configuration.cellColorInReadOnlyState
+        : configuration.cellColorInEditState;
   }
 
   BoxDecoration _boxDecoration() {
@@ -394,27 +397,29 @@ class _BackgroundColorWidget extends StatelessWidget {
       return BoxDecoration(
         color: _currentCellColor(),
         border: Border.all(
-          color: PlutoDefaultSettings.currentCellBorderColor,
+          color: configuration.activatedBorderColor,
           width: 1,
         ),
       );
     } else if (isSelectedCell) {
       return BoxDecoration(
-        color: PlutoDefaultSettings.currentRowColor,
+        color: configuration.activatedColor,
         border: Border.all(
-          color: PlutoDefaultSettings.currentCellBorderColor,
+          color: configuration.activatedBorderColor,
           width: 1,
         ),
       );
     } else {
-      return BoxDecoration(
-        border: Border(
-          right: BorderSide(
-            color: PlutoDefaultSettings.rowBorderColor,
-            width: 1.0,
-          ),
-        ),
-      );
+      return configuration.enableColumnBorder
+          ? BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: configuration.borderColor,
+                  width: 1.0,
+                ),
+              ),
+            )
+          : BoxDecoration();
     }
   }
 
