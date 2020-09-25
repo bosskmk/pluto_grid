@@ -26,9 +26,9 @@ abstract class ISelectingState {
 
   void setSelectingMode(PlutoSelectingMode mode);
 
-  void clearCurrentSelectingPosition({ bool notify = true });
+  void clearCurrentSelectingPosition({bool notify = true});
 
-  void clearCurrentSelectingRows({ bool notify = true });
+  void clearCurrentSelectingRows({bool notify = true});
 
   void setAllCurrentSelecting();
 
