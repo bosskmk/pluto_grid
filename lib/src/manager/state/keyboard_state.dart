@@ -4,8 +4,6 @@ abstract class IKeyboardState {
   /// Currently pressed key
   PlutoKeyPressed get keyPressed;
 
-  PlutoKeyPressed _keyPressed;
-
   /// Set the current pressed key state.
   void setKeyPressed(PlutoKeyPressed keyPressed);
 

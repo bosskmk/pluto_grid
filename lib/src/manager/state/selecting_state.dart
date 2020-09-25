@@ -299,7 +299,7 @@ mixin SelectingState implements IPlutoState {
 
   bool isSelectingInteraction() {
     return !_selectingMode.isNone &&
-        (_keyPressed.shift || _keyPressed.ctrl) &&
+        (keyPressed.shift || keyPressed.ctrl) &&
         currentCell != null;
   }
 
