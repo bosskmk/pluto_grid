@@ -200,11 +200,11 @@ mixin CellState implements IPlutoState {
       columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
     );
 
-    _currentSelectingPosition = null;
+    clearCurrentSelectingPosition(notify: false);
 
     setCurrentRowIdx(rowIdx, notify: false);
 
-    _currentSelectingRows = [];
+    clearCurrentSelectingRows(notify: false);
 
     setEditing(false, notify: false);
 

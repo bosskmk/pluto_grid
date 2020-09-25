@@ -4,26 +4,18 @@ abstract class ISelectingState {
   /// Multi-selection state.
   bool get isSelecting;
 
-  bool _isSelecting;
-
   /// [selectingMode]
   PlutoSelectingMode get selectingMode;
-
-  PlutoSelectingMode _selectingMode;
 
   /// Current position of multi-select cell.
   /// Calculate the currently selected cell and its multi-selection range.
   PlutoCellPosition get currentSelectingPosition;
-
-  PlutoCellPosition _currentSelectingPosition;
 
   bool get hasCurrentSelectingPosition;
 
   /// Rows of currently selected.
   /// Only valid in [PlutoSelectingMode.Row].
   List<PlutoRow> get currentSelectingRows;
-
-  List<PlutoRow> _currentSelectingRows;
 
   /// String of multi-selected cells.
   /// Preserves the structure of the cells selected by the tabs and the enter key.
@@ -33,6 +25,12 @@ abstract class ISelectingState {
   void setSelecting(bool flag);
 
   void setSelectingMode(PlutoSelectingMode mode);
+
+  void clearCurrentSelectingPosition({ bool notify = true });
+
+  void clearCurrentSelectingRows({ bool notify = true });
+
+  void setAllCurrentSelecting();
 
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
@@ -132,6 +130,30 @@ mixin SelectingState implements IPlutoState {
     _selectingMode = mode;
 
     notifyListeners(checkCellValue: false);
+  }
+
+  void clearCurrentSelectingPosition({ bool notify = true }) {
+    if (_currentSelectingPosition == null) {
+      return;
+    }
+
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
+  }
+
+  void clearCurrentSelectingRows({ bool notify = true }) {
+    if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
+      return;
+    }
+
+    _currentSelectingRows = [];
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
   }
 
   void setAllCurrentSelecting() {

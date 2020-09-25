@@ -115,10 +115,10 @@ mixin RowState implements IPlutoState {
     }
 
     /// Update currentSelectingPosition
-    if (_currentSelectingPosition != null) {
+    if (currentSelectingPosition != null) {
       setCurrentSelectingPosition(
-        columnIdx: _currentSelectingPosition.columnIdx,
-        rowIdx: rows.length + _currentSelectingPosition.rowIdx,
+        columnIdx: currentSelectingPosition.columnIdx,
+        rowIdx: rows.length + currentSelectingPosition.rowIdx,
         notify: false,
       );
     }

@@ -59,7 +59,7 @@ mixin EditingState implements IPlutoState {
 
     _isEditing = flag;
 
-    _currentSelectingPosition = null;
+    clearCurrentSelectingPosition(notify: false);
 
     if (notify) {
       notifyListeners(checkCellValue: false);
@@ -73,7 +73,7 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
-    if (_selectingMode.isRow && _currentSelectingRows.length > 0) {
+    if (selectingMode.isRow && currentSelectingRows.length > 0) {
       _pasteCellValueIntoSelectingRows(textList: textList);
     } else {
       int columnStartIdx;
@@ -84,7 +84,7 @@ mixin EditingState implements IPlutoState {
 
       int rowEndIdx;
 
-      if (_currentSelectingPosition == null) {
+      if (currentSelectingPosition == null) {
         // No cell selection : Paste in order based on the current cell
         columnStartIdx = currentCellPosition.columnIdx;
 
@@ -97,16 +97,16 @@ mixin EditingState implements IPlutoState {
       } else {
         // If there are selected cells : Paste in order from selected cell range
         columnStartIdx = min(
-            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+            currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
         columnEndIdx = max(
-            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+            currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
         rowStartIdx =
-            min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+            min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
         rowEndIdx =
-            max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+            max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
       }
 
       _pasteCellValueInOrder(
@@ -126,7 +126,7 @@ mixin EditingState implements IPlutoState {
     int columnEndIdx = _columns.length - 1;
 
     final List<Key> selectingRowKeys =
-        _currentSelectingRows.map((e) => e.key).toList();
+        currentSelectingRows.map((e) => e.key).toList();
 
     List<int> rowIdxList = [];
 
