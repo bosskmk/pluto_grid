@@ -108,6 +108,7 @@ mixin ScrollState implements IPlutoState {
         offsetToMove -= screenOffset;
         offsetToMove += PlutoDefaultSettings.totalShadowLineWidth;
         offsetToMove += columnToMove.width;
+        offsetToMove += scrollOffsetByFixedColumn;
 
         if (offsetToMove < _scroll.horizontal.offset) {
           return;
@@ -122,6 +123,7 @@ mixin ScrollState implements IPlutoState {
 
       if (offsetToNeed > currentOffset) {
         offsetToMove = _scroll.horizontal.offset + offsetToNeed - currentOffset;
+        offsetToMove += scrollOffsetByFixedColumn;
       } else if (offsetToMove > _scroll.horizontal.offset) {
         return;
       }

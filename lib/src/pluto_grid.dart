@@ -312,7 +312,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                   if (_showFixedColumn && _hasLeftFixedColumns)
                     Positioned(
                       top: stateManager.headerHeight,
-                      left: _bodyLeftOffset,
+                      left: _bodyLeftOffset - 1,
                       bottom: stateManager.footerHeight,
                       child: ShadowLine(
                         axis: Axis.vertical,
@@ -322,7 +322,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                   if (_showFixedColumn && _hasRightFixedColumns)
                     Positioned(
                       top: stateManager.headerHeight,
-                      left: _rightFixedLeftOffset,
+                      left: _rightFixedLeftOffset - 1,
                       bottom: stateManager.footerHeight,
                       child: ShadowLine(
                         axis: Axis.vertical,
@@ -331,7 +331,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                       ),
                     ),
                   Positioned(
-                    top: stateManager.rowsTopOffset,
+                    top: stateManager.rowsTopOffset - 1,
                     left: 0,
                     right: 0,
                     child: ShadowLine(

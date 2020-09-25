@@ -45,6 +45,8 @@ abstract class ILayoutState {
 
   double get rightFixedLeftOffset;
 
+  double get scrollOffsetByFixedColumn;
+
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 }
@@ -109,12 +111,32 @@ mixin LayoutState implements IPlutoState {
 
   double get rowsTopOffset => headerHeight + columnHeight;
 
-  double get bodyLeftOffset => showFixedColumn ? leftFixedColumnsWidth : 0;
+  double get bodyLeftOffset {
+    return (showFixedColumn && leftFixedColumnsWidth > 0)
+        ? leftFixedColumnsWidth + 1
+        : 0;
+  }
 
-  double get bodyRightOffset => showFixedColumn ? rightFixedColumnsWidth : 0;
+  double get bodyRightOffset {
+    return (showFixedColumn && rightFixedColumnsWidth > 0)
+        ? rightFixedColumnsWidth + 1
+        : 0;
+  }
 
   double get rightFixedLeftOffset =>
-      maxWidth - bodyRightOffset - PlutoDefaultSettings.totalShadowLineWidth;
+      maxWidth -
+      bodyRightOffset -
+      PlutoDefaultSettings.totalShadowLineWidth +
+      1;
+
+  double get scrollOffsetByFixedColumn {
+    double offset = 0;
+
+    offset += leftFixedColumnsWidth > 0 ? 1 : 0;
+    offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+
+    return offset;
+  }
 
   void setLayout(BoxConstraints size) {
     final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
