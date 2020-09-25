@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v0.1.12
+## PlutoGrid for flutter - v0.1.13
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
@@ -50,7 +50,7 @@ Of course, it works well on Android and IOS.
   - Control(Meta on MacOs) + C or V
   - If there is no selected cell, it operates based on the current cell.
   - If there are selected Rows in Row mode, it operates based on the selected state.
-  - Works even if rows are selected irregularly in Row mode.
+  - Works even if rows get selected irregularly in Row mode.
 - Moving
   - Move with arrow keys.
   - Press Enter to edit the cell or move it down.
@@ -59,6 +59,9 @@ Of course, it works well on Android and IOS.
 - Dual Mode
   - Working with different grids on both sides.
   - At the end of the grid, you can move between grids with the left and right arrow keys, or the tab key.
+- Configuration
+  - Various properties can be changed.
+  - A dark mode.
 - UI for Mobile
   - (To do) - UI for convenient use on mobile.
 - Internationalization
@@ -95,6 +98,11 @@ Of course, it works well on Android and IOS.
 
 #### Select cells
 ![PlutoGrid Selection Cells](https://bosskmk.github.io/images/pluto_image_0.1.11_6.jpg)
+
+<br>
+
+#### Dark mode
+![PlutoGrid Dark mode](https://bosskmk.github.io/images/0.1.13/pluto_image_0.1.13_1.jpg)
 
 <br>
 
