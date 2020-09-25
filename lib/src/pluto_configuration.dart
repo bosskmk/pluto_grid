@@ -24,8 +24,8 @@ class PlutoConfiguration {
   /// Cell color in read-only state
   final Color cellColorInReadOnlyState;
 
-  /// Header - text style
-  final TextStyle headerTextStyle;
+  /// Column - text style
+  final TextStyle columnTextStyle;
 
   /// Cell - text style
   final TextStyle cellTextStyle;
@@ -45,7 +45,7 @@ class PlutoConfiguration {
     this.borderColor = const Color(0xFFDDE2EB),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
-    this.headerTextStyle = const TextStyle(
+    this.columnTextStyle = const TextStyle(
       color: Colors.black,
       decoration: TextDecoration.none,
       fontSize: 14,
@@ -68,7 +68,7 @@ class PlutoConfiguration {
     this.borderColor = const Color(0xFF000000),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
-    this.headerTextStyle = const TextStyle(
+    this.columnTextStyle = const TextStyle(
       color: Colors.white,
       decoration: TextDecoration.none,
       fontSize: 14,

@@ -25,7 +25,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -53,7 +53,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -83,7 +83,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -114,7 +114,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -143,7 +143,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -172,7 +172,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -181,7 +181,7 @@ void main() {
     );
 
     // then
-    final headerIcon = find.byType(HeaderIcon);
+    final headerIcon = find.byType(ColumnIcon);
 
     expect(headerIcon, findsNothing);
   });
@@ -201,7 +201,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: HeaderWidget(
+          child: ColumnWidget(
             stateManager: stateManager,
             column: column,
           ),
@@ -210,7 +210,7 @@ void main() {
     );
 
     // then
-    final headerIcon = find.byType(HeaderIcon);
+    final headerIcon = find.byType(ColumnIcon);
 
     expect(headerIcon, findsOneWidget);
   });

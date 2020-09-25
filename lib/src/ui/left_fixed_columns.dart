@@ -1,15 +1,15 @@
 part of '../../pluto_grid.dart';
 
-class RightFixedHeaders extends StatefulWidget {
+class LeftFixedColumns extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  RightFixedHeaders(this.stateManager);
+  LeftFixedColumns(this.stateManager);
 
   @override
-  _RightFixedHeadersState createState() => _RightFixedHeadersState();
+  _LeftFixedColumnsState createState() => _LeftFixedColumnsState();
 }
 
-class _RightFixedHeadersState extends State<RightFixedHeaders> {
+class _LeftFixedColumnsState extends State<LeftFixedColumns> {
   List<PlutoColumn> _columns;
   double _width;
 
@@ -21,8 +21,8 @@ class _RightFixedHeadersState extends State<RightFixedHeaders> {
 
   @override
   void initState() {
-    _columns = widget.stateManager.rightFixedColumns;
-    _width = widget.stateManager.rightFixedColumnsWidth;
+    _columns = widget.stateManager.leftFixedColumns;
+    _width = widget.stateManager.leftFixedColumnsWidth;
 
     widget.stateManager.addListener(changeStateListener);
 
@@ -30,11 +30,11 @@ class _RightFixedHeadersState extends State<RightFixedHeaders> {
   }
 
   void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.rightFixedColumns) == false ||
-        _width != widget.stateManager.rightFixedColumnsWidth) {
+    if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false ||
+        _width != widget.stateManager.leftFixedColumnsWidth) {
       setState(() {
-        _columns = widget.stateManager.rightFixedColumns;
-        _width = widget.stateManager.rightFixedColumnsWidth;
+        _columns = widget.stateManager.leftFixedColumns;
+        _width = widget.stateManager.leftFixedColumnsWidth;
       });
     }
   }
@@ -48,7 +48,7 @@ class _RightFixedHeadersState extends State<RightFixedHeaders> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _columns.length,
         itemBuilder: (ctx, i) {
-          return HeaderWidget(
+          return ColumnWidget(
             stateManager: widget.stateManager,
             column: _columns[i],
           );

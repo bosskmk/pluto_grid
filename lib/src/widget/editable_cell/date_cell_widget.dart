@@ -281,7 +281,7 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
   }
 
   Color get textColor =>
-      widget.stateManager.configuration.headerTextStyle.color;
+      widget.stateManager.configuration.columnTextStyle.color;
 
   @override
   Widget build(BuildContext context) {

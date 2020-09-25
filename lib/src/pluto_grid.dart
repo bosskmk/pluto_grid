@@ -276,7 +276,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     Positioned.fill(
                       top: headerHeight,
                       left: 0,
-                      child: LeftFixedHeaders(stateManager),
+                      child: LeftFixedColumns(stateManager),
                     ),
                   if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
@@ -289,7 +289,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     top: headerHeight,
                     left: leftFixedColumnWidth,
                     right: rightFixedColumnWidth,
-                    child: BodyHeaders(stateManager),
+                    child: BodyColumns(stateManager),
                   ),
                   Positioned.fill(
                     top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
@@ -304,7 +304,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                       left: size.maxWidth -
                           rightFixedColumnWidth -
                           PlutoDefaultSettings.totalShadowLineWidth,
-                      child: RightFixedHeaders(stateManager),
+                      child: RightFixedColumns(stateManager),
                     ),
                   if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned.fill(

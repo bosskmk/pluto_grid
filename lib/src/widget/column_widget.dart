@@ -6,20 +6,20 @@ enum MenuItem {
   AutoSize,
 }
 
-class HeaderWidget extends StatefulWidget {
+class ColumnWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
-  HeaderWidget({
+  ColumnWidget({
     @required this.stateManager,
     @required this.column,
   }) : super(key: column._key);
 
   @override
-  _HeaderWidgetState createState() => _HeaderWidgetState();
+  _ColumnWidgetState createState() => _ColumnWidgetState();
 }
 
-class _HeaderWidgetState extends State<HeaderWidget> {
+class _ColumnWidgetState extends State<ColumnWidget> {
   PlutoColumnSort _sort;
 
   @override
@@ -164,7 +164,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.column.title,
-            style: widget.stateManager.configuration.headerTextStyle,
+            style: widget.stateManager.configuration.columnTextStyle,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             softWrap: false,
@@ -175,8 +175,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     );
   }
 
-  Widget _buildHeader() {
-    Widget _header = Container(
+  Widget _buildColumn() {
+    Widget _column = Container(
       width: widget.column.width,
       height: PlutoDefaultSettings.rowHeight,
       padding: const EdgeInsets.symmetric(
@@ -195,7 +195,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         alignment: Alignment.centerLeft,
         child: Text(
           widget.column.title,
-          style: widget.stateManager.configuration.headerTextStyle,
+          style: widget.stateManager.configuration.columnTextStyle,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           softWrap: false,
@@ -208,9 +208,9 @@ class _HeaderWidgetState extends State<HeaderWidget> {
             onTap: () {
               widget.stateManager.toggleSortColumn(widget.column._key);
             },
-            child: _header,
+            child: _column,
           )
-        : _header;
+        : _column;
   }
 
   @override
@@ -221,8 +221,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       children: [
         Positioned(
           child: widget.column.enableDraggable
-              ? _buildDraggable(_buildHeader())
-              : _buildHeader(),
+              ? _buildDraggable(_buildColumn())
+              : _buildColumn(),
         ),
         if (widget.column.enableContextMenu)
           Positioned(
@@ -240,7 +240,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     .resizeColumn(widget.column._key, _currentPosition.dx - 20);
               },
               child: IconButton(
-                icon: HeaderIcon(
+                icon: ColumnIcon(
                   sort: widget.column.sort,
                   color: widget.stateManager.configuration.iconColor,
                 ),
@@ -254,11 +254,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
   }
 }
 
-class HeaderIcon extends StatelessWidget {
+class ColumnIcon extends StatelessWidget {
   final PlutoColumnSort sort;
   final Color color;
 
-  HeaderIcon({
+  ColumnIcon({
     this.sort,
     this.color,
   });

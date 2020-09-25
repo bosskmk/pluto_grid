@@ -68,15 +68,15 @@ part './src/model/pluto_column.dart';
 
 part './src/model/pluto_row.dart';
 
-part './src/ui/body_headers.dart';
+part './src/ui/body_columns.dart';
 
 part './src/ui/body_rows.dart';
 
-part './src/ui/left_fixed_headers.dart';
+part './src/ui/left_fixed_columns.dart';
 
 part './src/ui/left_fixed_rows.dart';
 
-part './src/ui/right_fixed_headers.dart';
+part './src/ui/right_fixed_columns.dart';
 
 part './src/ui/right_fixed_rows.dart';
 
@@ -96,7 +96,7 @@ part './src/widget/editable_cell/text_cell_widget.dart';
 
 part './src/widget/editable_cell/time_cell_widget.dart';
 
-part './src/widget/header_widget.dart';
+part './src/widget/column_widget.dart';
 
 part './src/widget/row_widget.dart';
 

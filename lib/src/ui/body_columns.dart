@@ -1,15 +1,15 @@
 part of '../../pluto_grid.dart';
 
-class BodyHeaders extends StatefulWidget {
+class BodyColumns extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  BodyHeaders(this.stateManager);
+  BodyColumns(this.stateManager);
 
   @override
-  _BodyHeadersState createState() => _BodyHeadersState();
+  _BodyColumnsState createState() => _BodyColumnsState();
 }
 
-class _BodyHeadersState extends State<BodyHeaders> {
+class _BodyColumnsState extends State<BodyColumns> {
   List<PlutoColumn> _columns;
 
   double _width;
@@ -73,7 +73,7 @@ class _BodyHeadersState extends State<BodyHeaders> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: _columns.length,
         itemBuilder: (ctx, i) {
-          return HeaderWidget(
+          return ColumnWidget(
             stateManager: widget.stateManager,
             column: _columns[i],
           );
