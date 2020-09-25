@@ -82,7 +82,7 @@ mixin GridState implements IPlutoState {
 
   void resetCurrentState({notify = true}) {
     _currentRowIdx = null;
-    _currentCell = null;
+    clearCurrentCell(notify: false);
     _currentSelectingPosition = null;
 
     if (notify) {

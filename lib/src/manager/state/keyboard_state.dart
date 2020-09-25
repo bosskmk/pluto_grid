@@ -77,7 +77,7 @@ mixin KeyboardState implements IPlutoState {
     bool force = false,
     bool notify = true,
   }) {
-    if (_currentCell == null) return;
+    if (currentCell == null) return;
 
     // @formatter:off
     if (!force && _isEditing && direction.horizontal) {

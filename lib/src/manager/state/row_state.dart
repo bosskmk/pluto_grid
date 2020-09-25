@@ -156,7 +156,7 @@ mixin RowState implements IPlutoState {
   }
 
   void updateCurrentRowIdx({bool notify: true}) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       _currentRowIdx = null;
 
       if (notify) {
@@ -172,7 +172,7 @@ mixin RowState implements IPlutoState {
           columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
-        if (_rows[rowIdx].cells[field]._key == _currentCell.key) {
+        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
           _currentRowIdx = rowIdx;
         }
       }

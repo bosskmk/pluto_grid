@@ -107,7 +107,7 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    if (_currentCell == null || _isSelecting == flag) {
+    if (currentCell == null || _isSelecting == flag) {
       return;
     }
 
@@ -150,7 +150,7 @@ mixin SelectingState implements IPlutoState {
         );
         break;
       case PlutoSelectingMode.Row:
-        if (_currentCell == null) {
+        if (currentCell == null) {
           setCurrentCell(firstCell, 0, notify: false);
         }
 
@@ -189,7 +189,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   void setCurrentSelectingPositionWithOffset(Offset offset) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       return;
     }
 
@@ -300,7 +300,7 @@ mixin SelectingState implements IPlutoState {
   bool isSelectingInteraction() {
     return !_selectingMode.isNone &&
         (_keyPressed.shift || _keyPressed.ctrl) &&
-        _currentCell != null;
+        currentCell != null;
   }
 
   bool isSelectedRow(Key rowKey) {
@@ -459,6 +459,6 @@ mixin SelectingState implements IPlutoState {
   }
 
   String _selectingTextFromCurrentCell() {
-    return _currentCell.value.toString();
+    return currentCell.value.toString();
   }
 }

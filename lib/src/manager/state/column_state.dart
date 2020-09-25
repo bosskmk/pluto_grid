@@ -169,7 +169,7 @@ mixin ColumnState implements IPlutoState {
     }
 
     return currentRow.cells.keys.firstWhere(
-        (key) => currentRow.cells[key]._key == _currentCell?._key,
+        (key) => currentRow.cells[key]._key == currentCell?._key,
         orElse: () => null);
   }
 

@@ -53,7 +53,7 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
-    if (_currentCell == null || _isEditing == flag) {
+    if (currentCell == null || _isEditing == flag) {
       return;
     }
 
