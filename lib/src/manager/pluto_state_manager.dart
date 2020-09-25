@@ -49,6 +49,8 @@ class PlutoStateManager extends PlutoState {
     PlutoMode mode,
     PlutoOnChangedEventCallback onChangedEventCallback,
     PlutoOnSelectedEventCallback onSelectedEventCallback,
+    CreateHeaderCallBack createHeader,
+    CreateFooterCallBack createFooter,
     PlutoConfiguration configuration,
   }) {
     this._columns = columns;
@@ -58,6 +60,8 @@ class PlutoStateManager extends PlutoState {
     this.setGridMode(mode);
     this.setOnChanged(onChangedEventCallback);
     this.setOnSelected(onSelectedEventCallback);
+    this.setCreateHeader(createHeader);
+    this.setCreateFooter(createFooter);
     this.setConfiguration(configuration);
     this.setGridKey(GlobalKey());
   }
@@ -139,35 +143,6 @@ class PlutoScrollController {
   void setBodyRowsVertical(ScrollController scrollController) {
     _bodyRowsVertical = scrollController;
   }
-}
-
-class PlutoLayout {
-  /// Screen width
-  double maxWidth;
-
-  /// Screen height
-  double maxHeight;
-
-  /// grid header height
-  double headerHeight;
-
-  /// grid footer height
-  double footerHeight;
-
-  /// Whether to apply a fixed column according to the screen size.
-  /// true : If there is a fixed column, the fixed column is exposed.
-  /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
-  bool showFixedColumn;
-
-  PlutoLayout({
-    this.maxWidth,
-    this.maxHeight,
-    this.showFixedColumn = false,
-    this.headerHeight = 0,
-    this.footerHeight = 0,
-  });
-
-  double get offsetHeight => maxHeight - headerHeight - footerHeight;
 }
 
 class PlutoCellPosition {

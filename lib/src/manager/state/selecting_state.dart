@@ -132,7 +132,7 @@ mixin SelectingState implements IPlutoState {
     notifyListeners(checkCellValue: false);
   }
 
-  void clearCurrentSelectingPosition({ bool notify = true }) {
+  void clearCurrentSelectingPosition({bool notify = true}) {
     if (_currentSelectingPosition == null) {
       return;
     }
@@ -144,7 +144,7 @@ mixin SelectingState implements IPlutoState {
     }
   }
 
-  void clearCurrentSelectingRows({ bool notify = true }) {
+  void clearCurrentSelectingRows({bool notify = true}) {
     if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
       return;
     }
@@ -217,7 +217,7 @@ mixin SelectingState implements IPlutoState {
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
         PlutoDefaultSettings.gridBorderWidth +
-        layout.headerHeight +
+        headerHeight +
         PlutoDefaultSettings.rowTotalHeight;
 
     double currentCellOffsetDy =

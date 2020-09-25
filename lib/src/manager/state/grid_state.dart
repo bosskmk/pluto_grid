@@ -21,6 +21,10 @@ abstract class IGridState {
   /// when the grid mode is selectRow.
   PlutoOnSelectedEventCallback get onSelected;
 
+  CreateHeaderCallBack get createHeader;
+
+  CreateFooterCallBack get createFooter;
+
   void setGridKey(Key key);
 
   void setKeyManager(PlutoKeyManager keyManager);
@@ -32,6 +36,10 @@ abstract class IGridState {
   void setGridMode(PlutoMode mode);
 
   void setOnChanged(PlutoOnChangedEventCallback onChanged);
+
+  void setCreateHeader(CreateHeaderCallBack createHeader);
+
+  void setCreateFooter(CreateFooterCallBack createFooter);
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
 
@@ -76,6 +84,14 @@ mixin GridState implements IPlutoState {
 
   PlutoOnSelectedEventCallback _onSelected;
 
+  CreateHeaderCallBack get createHeader => _createHeader;
+
+  CreateHeaderCallBack _createHeader;
+
+  CreateFooterCallBack get createFooter => _createFooter;
+
+  CreateFooterCallBack _createFooter;
+
   void setKeyManager(PlutoKeyManager keyManager) {
     _keyManager = keyManager;
   }
@@ -98,6 +114,14 @@ mixin GridState implements IPlutoState {
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected) {
     _onSelected = onSelected;
+  }
+
+  void setCreateHeader(CreateHeaderCallBack createHeader) {
+    _createHeader = createHeader;
+  }
+
+  void setCreateFooter(CreateFooterCallBack createFooter) {
+    _createFooter = createFooter;
   }
 
   void setConfiguration(PlutoConfiguration configuration) {

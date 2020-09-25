@@ -1,20 +1,74 @@
 part of '../../../pluto_grid.dart';
 
 abstract class ILayoutState {
-  /// Screen size, fixed column visibility.
-  PlutoLayout get layout;
+  /// Screen width
+  double get maxWidth;
+
+  /// Screen height
+  double get maxHeight;
+
+  /// grid header height
+  double get headerHeight;
+
+  /// grid footer height
+  double get footerHeight;
+
+  double get offsetHeight;
+
+  /// Whether to apply a fixed column according to the screen size.
+  /// true : If there is a fixed column, the fixed column is exposed.
+  /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
+  bool get showFixedColumn;
 
   /// Global offset of Grid.
   Offset get gridGlobalOffset;
 
+  bool get showHeader;
+
+  bool get showFooter;
+
+  bool get hasLeftFixedColumns;
+
+  bool get hasRightFixedColumns;
+
+  double get headerBottomOffset;
+
+  double get footerTopOffset;
+
+  double get columnHeight;
+
+  double get rowsTopOffset;
+
+  double get bodyLeftOffset;
+
+  double get bodyRightOffset;
+
+  double get rightFixedLeftOffset;
+
   /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size, double headerHeight, double footerHeight);
+  void setLayout(BoxConstraints size);
 }
 
 mixin LayoutState implements IPlutoState {
-  PlutoLayout get layout => _layout;
+  double get maxWidth => _maxWidth;
 
-  PlutoLayout _layout = PlutoLayout();
+  double _maxWidth;
+
+  double get maxHeight => _maxHeight;
+
+  double _maxHeight;
+
+  double get headerHeight =>
+      createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+
+  double get footerHeight =>
+      createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+
+  double get offsetHeight => maxHeight - headerHeight - footerHeight;
+
+  bool get showFixedColumn => _showFixedColumn;
+
+  bool _showFixedColumn;
 
   Offset get gridGlobalOffset {
     if (_gridGlobalOffset != null) {
@@ -38,17 +92,38 @@ mixin LayoutState implements IPlutoState {
 
   Offset _gridGlobalOffset;
 
-  void setLayout(
-      BoxConstraints size, double headerHeight, double footerHeight) {
+  bool get showHeader => headerHeight > 0;
+
+  bool get showFooter => footerHeight > 0;
+
+  bool get hasLeftFixedColumns => leftFixedColumnsWidth > 0;
+
+  bool get hasRightFixedColumns => rightFixedColumnsWidth > 0;
+
+  double get headerBottomOffset => maxHeight - headerHeight;
+
+  double get footerTopOffset =>
+      maxHeight - footerHeight - PlutoDefaultSettings.totalShadowLineWidth;
+
+  double get columnHeight => PlutoDefaultSettings.rowTotalHeight;
+
+  double get rowsTopOffset => headerHeight + columnHeight;
+
+  double get bodyLeftOffset => showFixedColumn ? leftFixedColumnsWidth : 0;
+
+  double get bodyRightOffset => showFixedColumn ? rightFixedColumnsWidth : 0;
+
+  double get rightFixedLeftOffset =>
+      maxWidth - bodyRightOffset - PlutoDefaultSettings.totalShadowLineWidth;
+
+  void setLayout(BoxConstraints size) {
     final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
 
-    final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
+    final bool notify = _showFixedColumn != _isShowFixedColumn;
 
-    _layout.maxWidth = size.maxWidth;
-    _layout.maxHeight = size.maxHeight;
-    _layout.showFixedColumn = _isShowFixedColumn;
-    _layout.headerHeight = headerHeight;
-    _layout.footerHeight = footerHeight;
+    _maxWidth = size.maxWidth;
+    _maxHeight = size.maxHeight;
+    _showFixedColumn = _isShowFixedColumn;
 
     _gridGlobalOffset = null;
 
