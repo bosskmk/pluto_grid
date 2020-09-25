@@ -13,21 +13,9 @@ class MockPlutoScrollController extends Mock implements PlutoScrollController {
   LinkedScrollControllerGroup get vertical => MockLinkedScrollControllerGroup();
 
   @override
-  ScrollController get leftRowsVertical => MockScrollController();
-
-  @override
   ScrollController get bodyRowsVertical => MockScrollController();
-
-  @override
-  ScrollController get rightRowsVertical => MockScrollController();
 
   @override
   LinkedScrollControllerGroup get horizontal =>
       MockLinkedScrollControllerGroup();
-
-  @override
-  ScrollController get bodyHeadersHorizontal => MockScrollController();
-
-  @override
-  ScrollController get bodyRowsHorizontal => MockScrollController();
 }

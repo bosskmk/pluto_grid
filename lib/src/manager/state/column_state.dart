@@ -169,12 +169,12 @@ mixin ColumnState implements IPlutoState {
     }
 
     return currentRow.cells.keys.firstWhere(
-        (key) => currentRow.cells[key]._key == _currentCell?._key,
+        (key) => currentRow.cells[key]._key == currentCell?._key,
         orElse: () => null);
   }
 
   List<int> columnIndexesByShowFixed() {
-    return _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+    return showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
   }
 
   bool isShowFixedColumn(double maxWidth) {
@@ -283,11 +283,11 @@ mixin ColumnState implements IPlutoState {
 
     Function findIndexToMove = () {
       final double minLeft =
-          _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
+          showFixedColumn ? leftFixedColumnsWidth : 0;
 
-      final double minRight = _layout.showFixedColumn
-          ? _layout.maxWidth - rightFixedColumnsWidth
-          : _layout.maxWidth;
+      final double minRight = showFixedColumn
+          ? maxWidth - rightFixedColumnsWidth
+          : maxWidth;
 
       double currentOffset = 0.0;
 
@@ -297,7 +297,7 @@ mixin ColumnState implements IPlutoState {
         currentOffset = minRight;
         startIndexToMove = _columns.length - rightFixedColumns.length;
       } else if (minLeft < offset) {
-        currentOffset -= _scroll.horizontal.offset;
+        currentOffset -= scroll.horizontal.offset;
       }
 
       return (int i) {

@@ -1,3 +1,12 @@
+## [0.1.13] - 2020. 09. 26
+
+* Change the column icon.
+* Fix a bug that the previous data wasn't created when moving up in the date selection popup.
+* enable/disable border of the between columns.
+* Add a configuration. (Dark mode or custom setting)
+* Fix a bug that the newly added fixed column doesn't scroll correctly.
+* Ignore to move cell when pressing shift + arrow left or right, in edit mode.
+
 ## [0.1.12] - 2020. 9. 23
 
 * Select all - Control(Meta on MacOs) + A.

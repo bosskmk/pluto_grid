@@ -7,8 +7,6 @@ abstract class ICellState {
   /// currently selected cell.
   PlutoCell get currentCell;
 
-  PlutoCell _currentCell;
-
   /// The position index value of the currently selected cell.
   PlutoCellPosition get currentCellPosition;
 
@@ -29,6 +27,9 @@ abstract class ICellState {
   PlutoCellPosition cellPositionByCellKey(Key cellKey);
 
   int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx);
+
+  /// set currentCell to null
+  void clearCurrentCell({ bool notify = true });
 
   /// Change the selected cell.
   void setCurrentCell(
@@ -164,6 +165,18 @@ mixin CellState implements IPlutoState {
     return null;
   }
 
+  void clearCurrentCell({ bool notify = true }) {
+    if (_currentCell == null) {
+      return;
+    }
+
+    _currentCell = null;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
+  }
+
   void setCurrentCell(
     PlutoCell cell,
     int rowIdx, {
@@ -187,11 +200,11 @@ mixin CellState implements IPlutoState {
       columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
     );
 
-    _currentSelectingPosition = null;
+    clearCurrentSelectingPosition(notify: false);
 
-    _currentRowIdx = rowIdx;
+    setCurrentRowIdx(rowIdx, notify: false);
 
-    _currentSelectingRows = [];
+    clearCurrentSelectingRows(notify: false);
 
     setEditing(false, notify: false);
 

@@ -8,10 +8,13 @@ abstract class IRowState {
   /// Row index of currently selected cell.
   int get currentRowIdx;
 
-  int _currentRowIdx;
-
   /// Row of currently selected cell.
   PlutoRow get currentRow;
+
+  /// set currentRowIdx to null
+  void clearCurrentRowIdx({ bool notify: true });
+
+  void setCurrentRowIdx(int rowIdx, { bool notify: true });
 
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
@@ -46,6 +49,22 @@ mixin RowState implements IPlutoState {
     }
 
     return _rows[_currentRowIdx];
+  }
+
+  void clearCurrentRowIdx({ bool notify: true }) {
+    setCurrentRowIdx(null, notify: notify);
+  }
+
+  void setCurrentRowIdx(int rowIdx, { bool notify: true }) {
+    if (_currentRowIdx == rowIdx) {
+      return;
+    }
+
+    _currentRowIdx = rowIdx;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
   }
 
   List<PlutoRow> setSortIdxOfRows(
@@ -96,10 +115,10 @@ mixin RowState implements IPlutoState {
     }
 
     /// Update currentSelectingPosition
-    if (_currentSelectingPosition != null) {
+    if (currentSelectingPosition != null) {
       setCurrentSelectingPosition(
-        columnIdx: _currentSelectingPosition.columnIdx,
-        rowIdx: rows.length + _currentSelectingPosition.rowIdx,
+        columnIdx: currentSelectingPosition.columnIdx,
+        rowIdx: rows.length + currentSelectingPosition.rowIdx,
         notify: false,
       );
     }
@@ -156,7 +175,7 @@ mixin RowState implements IPlutoState {
   }
 
   void updateCurrentRowIdx({bool notify: true}) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       _currentRowIdx = null;
 
       if (notify) {
@@ -172,7 +191,7 @@ mixin RowState implements IPlutoState {
           columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
-        if (_rows[rowIdx].cells[field]._key == _currentCell.key) {
+        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
           _currentRowIdx = rowIdx;
         }
       }

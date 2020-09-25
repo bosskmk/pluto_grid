@@ -51,18 +51,20 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   LinkedScrollControllerGroup horizontalScroll = LinkedScrollControllerGroup();
 
-  double leftFixedColumnWidth;
-  double bodyColumnWidth;
-  double rightFixedColumnWidth;
-  bool showFixedColumn;
-  double headerHeight;
-  double footerHeight;
+  PlutoStateManager stateManager;
+
+  PlutoKeyManager keyManager;
+
+  PlutoEventManager eventManager;
+
+  bool _showFixedColumn;
+  bool _hasLeftFixedColumns;
+  double _bodyLeftOffset;
+  double _bodyRightOffset;
+  bool _hasRightFixedColumns;
+  double _rightFixedLeftOffset;
 
   List<Function()> disposeList = [];
-
-  PlutoStateManager stateManager;
-  PlutoKeyManager keyManager;
-  PlutoEventManager eventManager;
 
   @override
   void dispose() {
@@ -95,12 +97,6 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
-    headerHeight =
-        widget.createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
-
-    footerHeight =
-        widget.createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
-
     // Dispose
     disposeList.add(() {
       gridFocusNode.dispose();
@@ -119,12 +115,10 @@ class _PlutoGridState extends State<PlutoGrid> {
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
+      createHeader: widget.createHeader,
+      createFooter: widget.createFooter,
       configuration: widget.configuration,
     );
-
-    leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
-    bodyColumnWidth = stateManager.bodyColumnsWidth;
-    rightFixedColumnWidth = stateManager.rightFixedColumnsWidth;
 
     stateManager.addListener(changeStateListener);
 
@@ -197,13 +191,14 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void changeStateListener() {
-    if (leftFixedColumnWidth != stateManager.leftFixedColumnsWidth ||
-        rightFixedColumnWidth != stateManager.rightFixedColumnsWidth ||
-        bodyColumnWidth != stateManager.bodyColumnsWidth) {
+    if (_showFixedColumn != stateManager.showFixedColumn ||
+        _hasLeftFixedColumns != stateManager.hasLeftFixedColumns ||
+        _bodyLeftOffset != stateManager.bodyLeftOffset ||
+        _bodyRightOffset != stateManager.bodyRightOffset ||
+        _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
+        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset) {
       setState(() {
-        leftFixedColumnWidth = stateManager.leftFixedColumnsWidth;
-        rightFixedColumnWidth = stateManager.rightFixedColumnsWidth;
-        bodyColumnWidth = stateManager.bodyColumnsWidth;
+        resetState();
       });
     }
   }
@@ -218,19 +213,23 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void setLayout(BoxConstraints size) {
-    stateManager.setLayout(size, headerHeight, footerHeight);
+    stateManager.setLayout(size);
 
-    showFixedColumn = stateManager.layout.showFixedColumn;
+    resetState();
+  }
 
-    leftFixedColumnWidth =
-        showFixedColumn ? stateManager.leftFixedColumnsWidth : 0;
+  void resetState() {
+    _showFixedColumn = stateManager.showFixedColumn;
 
-    rightFixedColumnWidth =
-        showFixedColumn ? stateManager.rightFixedColumnsWidth : 0;
+    _hasLeftFixedColumns = stateManager.hasLeftFixedColumns;
 
-    bodyColumnWidth = showFixedColumn
-        ? stateManager.bodyColumnsWidth
-        : stateManager.columnsWidth;
+    _bodyLeftOffset = stateManager.bodyLeftOffset;
+
+    _bodyRightOffset = stateManager.bodyRightOffset;
+
+    _hasRightFixedColumns = stateManager.hasRightFixedColumns;
+
+    _rightFixedLeftOffset = stateManager.rightFixedLeftOffset;
   }
 
   @override
@@ -255,16 +254,14 @@ class _PlutoGridState extends State<PlutoGrid> {
               ),
               child: Stack(
                 children: [
-                  if (widget.createHeader != null)
+                  if (stateManager.showHeader) ...[
                     Positioned.fill(
                       top: 0,
-                      bottom:
-                          size.maxHeight - PlutoDefaultSettings.rowTotalHeight,
+                      bottom: stateManager.headerBottomOffset,
                       child: widget.createHeader(stateManager),
                     ),
-                  if (widget.createHeader != null)
                     Positioned(
-                      top: PlutoDefaultSettings.rowTotalHeight,
+                      top: stateManager.headerHeight,
                       left: 0,
                       right: 0,
                       child: ShadowLine(
@@ -272,66 +269,61 @@ class _PlutoGridState extends State<PlutoGrid> {
                         color: stateManager.configuration.gridBorderColor,
                       ),
                     ),
-                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
+                  ],
+                  if (_showFixedColumn && _hasLeftFixedColumns) ...[
                     Positioned.fill(
-                      top: headerHeight,
+                      top: stateManager.headerHeight,
                       left: 0,
                       child: LeftFixedColumns(stateManager),
                     ),
-                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
+                      top: stateManager.rowsTopOffset,
                       left: 0,
-                      bottom: footerHeight,
+                      bottom: stateManager.footerHeight,
                       child: LeftFixedRows(stateManager),
                     ),
+                  ],
                   Positioned.fill(
-                    top: headerHeight,
-                    left: leftFixedColumnWidth,
-                    right: rightFixedColumnWidth,
+                    top: stateManager.headerHeight,
+                    left: _bodyLeftOffset,
+                    right: _bodyRightOffset,
                     child: BodyColumns(stateManager),
                   ),
                   Positioned.fill(
-                    top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
-                    left: leftFixedColumnWidth,
-                    right: rightFixedColumnWidth,
-                    bottom: footerHeight,
+                    top: stateManager.rowsTopOffset,
+                    left: _bodyLeftOffset,
+                    right: _bodyRightOffset,
+                    bottom: stateManager.footerHeight,
                     child: BodyRows(stateManager),
                   ),
-                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                  if (_showFixedColumn && _hasRightFixedColumns) ...[
                     Positioned.fill(
-                      top: headerHeight,
-                      left: size.maxWidth -
-                          rightFixedColumnWidth -
-                          PlutoDefaultSettings.totalShadowLineWidth,
+                      top: stateManager.headerHeight,
+                      left: _rightFixedLeftOffset,
                       child: RightFixedColumns(stateManager),
                     ),
-                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
                     Positioned.fill(
-                      top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
-                      left: size.maxWidth -
-                          rightFixedColumnWidth -
-                          PlutoDefaultSettings.totalShadowLineWidth,
-                      bottom: footerHeight,
+                      top: stateManager.rowsTopOffset,
+                      left: _rightFixedLeftOffset,
+                      bottom: stateManager.footerHeight,
                       child: RightFixedRows(stateManager),
                     ),
-                  if (showFixedColumn == true && leftFixedColumnWidth > 0)
+                  ],
+                  if (_showFixedColumn && _hasLeftFixedColumns)
                     Positioned(
-                      top: headerHeight,
-                      left: leftFixedColumnWidth,
-                      bottom: footerHeight,
+                      top: stateManager.headerHeight,
+                      left: _bodyLeftOffset - 1,
+                      bottom: stateManager.footerHeight,
                       child: ShadowLine(
                         axis: Axis.vertical,
                         color: stateManager.configuration.gridBorderColor,
                       ),
                     ),
-                  if (showFixedColumn == true && rightFixedColumnWidth > 0)
+                  if (_showFixedColumn && _hasRightFixedColumns)
                     Positioned(
-                      top: headerHeight,
-                      left: size.maxWidth -
-                          rightFixedColumnWidth -
-                          PlutoDefaultSettings.totalShadowLineWidth,
-                      bottom: footerHeight,
+                      top: stateManager.headerHeight,
+                      left: _rightFixedLeftOffset - 1,
+                      bottom: stateManager.footerHeight,
                       child: ShadowLine(
                         axis: Axis.vertical,
                         reverse: true,
@@ -339,7 +331,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                       ),
                     ),
                   Positioned(
-                    top: headerHeight + PlutoDefaultSettings.rowTotalHeight,
+                    top: stateManager.rowsTopOffset - 1,
                     left: 0,
                     right: 0,
                     child: ShadowLine(
@@ -347,11 +339,9 @@ class _PlutoGridState extends State<PlutoGrid> {
                       color: stateManager.configuration.gridBorderColor,
                     ),
                   ),
-                  if (widget.createFooter != null)
+                  if (stateManager.showFooter) ...[
                     Positioned(
-                      top: size.maxHeight -
-                          footerHeight -
-                          PlutoDefaultSettings.totalShadowLineWidth,
+                      top: stateManager.footerTopOffset,
                       left: 0,
                       right: 0,
                       child: ShadowLine(
@@ -360,14 +350,12 @@ class _PlutoGridState extends State<PlutoGrid> {
                         color: stateManager.configuration.gridBorderColor,
                       ),
                     ),
-                  if (widget.createFooter != null)
                     Positioned.fill(
-                      top: size.maxHeight -
-                          footerHeight -
-                          PlutoDefaultSettings.totalShadowLineWidth,
+                      top: stateManager.footerTopOffset,
                       bottom: 0,
                       child: widget.createFooter(stateManager),
                     ),
+                  ],
                 ],
               ),
             ),

@@ -28,8 +28,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -72,8 +71,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -126,8 +124,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -161,8 +158,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 300, maxWidth: 50), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -212,8 +208,7 @@ main() {
       );
 
       // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 충분
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 600), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 600));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -226,7 +221,7 @@ main() {
           ClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.layout.showFixedColumn, true);
+      expect(stateManager.showFixedColumn, true);
 
       expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
       expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
@@ -276,8 +271,7 @@ main() {
       );
 
       // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 부족
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -290,7 +284,7 @@ main() {
           ClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.layout.showFixedColumn, false);
+      expect(stateManager.showFixedColumn, false);
 
       expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
       expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
@@ -324,8 +318,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -353,8 +346,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -386,8 +378,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Square);
 
@@ -420,8 +411,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setSelectingMode(PlutoSelectingMode.Row);
 
@@ -455,8 +445,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setSelectingMode(PlutoSelectingMode.None);
 
@@ -490,8 +479,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
       // then
@@ -525,8 +513,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setCurrentCell(stateManager.firstCell, 0);
 
@@ -571,8 +558,7 @@ main() {
         scroll: null,
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxHeight: 500, maxWidth: 400), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 

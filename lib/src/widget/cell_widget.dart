@@ -175,7 +175,7 @@ class _CellWidgetState extends State<CellWidget>
 
     switch (move) {
       case MoveDirection.Left:
-        var leftFixedColumnWidth = widget.stateManager.layout.showFixedColumn
+        var leftFixedColumnWidth = widget.stateManager.showFixedColumn
             ? widget.stateManager.leftFixedColumnsWidth
             : 0;
 
@@ -186,13 +186,13 @@ class _CellWidgetState extends State<CellWidget>
                 leftFixedColumnWidth +
                 PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Right:
-        var rightFixedColumnWidth = widget.stateManager.layout.showFixedColumn
+        var rightFixedColumnWidth = widget.stateManager.showFixedColumn
             ? widget.stateManager.rightFixedColumnsWidth
             : 0;
 
         return selectingOffset.dx >
             (widget.stateManager.gridGlobalOffset.dx +
-                    widget.stateManager.layout.maxWidth) -
+                    widget.stateManager.maxWidth) -
                 rightFixedColumnWidth -
                 PlutoDefaultSettings.offsetScrollingFromEdge;
       case MoveDirection.Up:
@@ -204,7 +204,7 @@ class _CellWidgetState extends State<CellWidget>
       case MoveDirection.Down:
         return selectingOffset.dy >
             widget.stateManager.gridGlobalOffset.dy +
-                widget.stateManager.layout.offsetHeight -
+                widget.stateManager.offsetHeight -
                 PlutoDefaultSettings.offsetScrollingFromEdge;
     }
 

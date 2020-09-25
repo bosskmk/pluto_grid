@@ -6,51 +6,46 @@ abstract class IGridState {
   /// FocusNode to control keyboard input.
   FocusNode get gridFocusNode;
 
-  FocusNode _gridFocusNode;
-
   PlutoMode get mode;
-
-  PlutoMode _mode;
 
   PlutoConfiguration get configuration;
 
-  PlutoConfiguration _configuration;
-
-  /// Screen size, fixed column visibility.
-  PlutoLayout get layout;
-
-  PlutoLayout _layout;
-
-  /// Global offset of Grid.
-  Offset get gridGlobalOffset;
-
-  Offset _gridGlobalOffset;
-
-  /// [keyManager]
-  PlutoKeyManager _keyManager;
-
   PlutoKeyManager get keyManager;
-
-  void setKeyManager(PlutoKeyManager keyManager);
-
-  /// [eventManager]
-  PlutoEventManager _eventManager;
 
   PlutoEventManager get eventManager;
 
-  void setEventManager(PlutoEventManager eventManager);
-
   /// Event callback fired when cell value changes.
-  PlutoOnChangedEventCallback _onChanged;
+  PlutoOnChangedEventCallback get onChanged;
 
   /// Event callback that occurs when a row is selected
   /// when the grid mode is selectRow.
-  PlutoOnSelectedEventCallback _onSelected;
+  PlutoOnSelectedEventCallback get onSelected;
+
+  CreateHeaderCallBack get createHeader;
+
+  CreateFooterCallBack get createFooter;
+
+  void setGridKey(Key key);
+
+  void setKeyManager(PlutoKeyManager keyManager);
+
+  void setEventManager(PlutoEventManager eventManager);
+
+  void setGridFocusNode(FocusNode focusNode);
+
+  void setGridMode(PlutoMode mode);
+
+  void setOnChanged(PlutoOnChangedEventCallback onChanged);
+
+  void setCreateHeader(CreateHeaderCallBack createHeader);
+
+  void setCreateFooter(CreateFooterCallBack createFooter);
+
+  void setOnSelected(PlutoOnSelectedEventCallback onSelected);
+
+  void setConfiguration(PlutoConfiguration configuration);
 
   void resetCurrentState({notify = true});
-
-  /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size, double headerHeight, double footerHeight);
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
@@ -73,32 +68,6 @@ mixin GridState implements IPlutoState {
 
   PlutoConfiguration _configuration;
 
-  PlutoLayout get layout => _layout;
-
-  PlutoLayout _layout = PlutoLayout();
-
-  Offset get gridGlobalOffset {
-    if (_gridGlobalOffset != null) {
-      return _gridGlobalOffset;
-    }
-
-    if (_gridKey == null) {
-      return null;
-    }
-
-    final RenderBox gridRenderBox = _gridKey.currentContext?.findRenderObject();
-
-    if (gridRenderBox == null) {
-      return null;
-    }
-
-    _gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);
-
-    return _gridGlobalOffset;
-  }
-
-  Offset _gridGlobalOffset;
-
   PlutoKeyManager _keyManager;
 
   PlutoKeyManager get keyManager => _keyManager;
@@ -107,9 +76,21 @@ mixin GridState implements IPlutoState {
 
   PlutoEventManager get eventManager => _eventManager;
 
+  PlutoOnChangedEventCallback get onChanged => _onChanged;
+
   PlutoOnChangedEventCallback _onChanged;
 
+  PlutoOnSelectedEventCallback get onSelected => _onSelected;
+
   PlutoOnSelectedEventCallback _onSelected;
+
+  CreateHeaderCallBack get createHeader => _createHeader;
+
+  CreateHeaderCallBack _createHeader;
+
+  CreateFooterCallBack get createFooter => _createFooter;
+
+  CreateFooterCallBack _createFooter;
 
   void setKeyManager(PlutoKeyManager keyManager) {
     _keyManager = keyManager;
@@ -119,31 +100,44 @@ mixin GridState implements IPlutoState {
     _eventManager = eventManager;
   }
 
-  void setLayout(
-      BoxConstraints size, double headerHeight, double footerHeight) {
-    final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
+  void setGridFocusNode(FocusNode focusNode) {
+    _gridFocusNode = focusNode;
+  }
 
-    final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
+  void setGridMode(PlutoMode mode) {
+    _mode = mode;
+  }
 
-    _layout.maxWidth = size.maxWidth;
-    _layout.maxHeight = size.maxHeight;
-    _layout.showFixedColumn = _isShowFixedColumn;
-    _layout.headerHeight = headerHeight;
-    _layout.footerHeight = footerHeight;
+  void setOnChanged(PlutoOnChangedEventCallback onChanged) {
+    _onChanged = onChanged;
+  }
 
-    _gridGlobalOffset = null;
+  void setOnSelected(PlutoOnSelectedEventCallback onSelected) {
+    _onSelected = onSelected;
+  }
 
-    if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
-    }
+  void setCreateHeader(CreateHeaderCallBack createHeader) {
+    _createHeader = createHeader;
+  }
+
+  void setCreateFooter(CreateFooterCallBack createFooter) {
+    _createFooter = createFooter;
+  }
+
+  void setConfiguration(PlutoConfiguration configuration) {
+    _configuration = configuration ?? PlutoConfiguration();
+  }
+
+  void setGridKey(Key key) {
+    _gridKey = key;
   }
 
   void resetCurrentState({notify = true}) {
-    _currentRowIdx = null;
-    _currentCell = null;
-    _currentSelectingPosition = null;
+    clearCurrentRowIdx(notify: false);
+
+    clearCurrentCell(notify: false);
+
+    clearCurrentSelectingPosition(notify: false);
 
     if (notify) {
       notifyListeners();

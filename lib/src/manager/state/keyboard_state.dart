@@ -4,8 +4,6 @@ abstract class IKeyboardState {
   /// Currently pressed key
   PlutoKeyPressed get keyPressed;
 
-  PlutoKeyPressed _keyPressed;
-
   /// Set the current pressed key state.
   void setKeyPressed(PlutoKeyPressed keyPressed);
 
@@ -77,10 +75,10 @@ mixin KeyboardState implements IPlutoState {
     bool force = false,
     bool notify = true,
   }) {
-    if (_currentCell == null) return;
+    if (currentCell == null) return;
 
     // @formatter:off
-    if (!force && _isEditing && direction.horizontal) {
+    if (!force && isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
       if (currentColumn?.type?.isSelect == true) {
       }
@@ -103,7 +101,7 @@ mixin KeyboardState implements IPlutoState {
     final cellPosition = currentCellPosition;
 
     if (canNotMoveCell(cellPosition, direction)) {
-      _eventManager.subject.add(
+      eventManager.subject.add(
         PlutoCannotMoveCurrentCellEvent(
           cellPosition: cellPosition,
           direction: direction,

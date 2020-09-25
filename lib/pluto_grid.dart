@@ -56,6 +56,8 @@ part './src/manager/state/grid_state.dart';
 
 part './src/manager/state/keyboard_state.dart';
 
+part './src/manager/state/layout_state.dart';
+
 part './src/manager/state/row_state.dart';
 
 part './src/manager/state/scroll_state.dart';

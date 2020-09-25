@@ -276,7 +276,7 @@ void main() {
     expect(stateManager.currentCell.value, 'header0 value 0');
 
     // Check showFixedColumn before fixing column.
-    expect(stateManager.layout.showFixedColumn, false);
+    expect(stateManager.showFixedColumn, false);
 
     // Fix the 3rd column
     stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
@@ -285,7 +285,7 @@ void main() {
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
     // Check showFixedColumn after fixing column.
-    expect(stateManager.layout.showFixedColumn, true);
+    expect(stateManager.showFixedColumn, true);
 
     // Move current cell position to 3rd column (0 -> 1 -> 2)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -863,16 +863,14 @@ void main() {
         ),
       );
 
-      stateManager.setLayout(
-          BoxConstraints(maxWidth: 50, maxHeight: 300), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
       stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager.setLayout(
-          BoxConstraints(maxWidth: 50, maxHeight: 300), 0, 0);
+      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       stateManager.moveColumn(columns[5].key, 50);
       //

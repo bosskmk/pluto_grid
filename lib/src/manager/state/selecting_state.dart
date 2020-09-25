@@ -4,26 +4,18 @@ abstract class ISelectingState {
   /// Multi-selection state.
   bool get isSelecting;
 
-  bool _isSelecting;
-
   /// [selectingMode]
   PlutoSelectingMode get selectingMode;
-
-  PlutoSelectingMode _selectingMode;
 
   /// Current position of multi-select cell.
   /// Calculate the currently selected cell and its multi-selection range.
   PlutoCellPosition get currentSelectingPosition;
-
-  PlutoCellPosition _currentSelectingPosition;
 
   bool get hasCurrentSelectingPosition;
 
   /// Rows of currently selected.
   /// Only valid in [PlutoSelectingMode.Row].
   List<PlutoRow> get currentSelectingRows;
-
-  List<PlutoRow> _currentSelectingRows;
 
   /// String of multi-selected cells.
   /// Preserves the structure of the cells selected by the tabs and the enter key.
@@ -33,6 +25,12 @@ abstract class ISelectingState {
   void setSelecting(bool flag);
 
   void setSelectingMode(PlutoSelectingMode mode);
+
+  void clearCurrentSelectingPosition({ bool notify = true });
+
+  void clearCurrentSelectingRows({ bool notify = true });
+
+  void setAllCurrentSelecting();
 
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
@@ -107,13 +105,13 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    if (_currentCell == null || _isSelecting == flag) {
+    if (currentCell == null || _isSelecting == flag) {
       return;
     }
 
     _isSelecting = flag;
 
-    if (_isEditing == true) {
+    if (isEditing == true) {
       setEditing(false, notify: false);
     }
 
@@ -134,6 +132,30 @@ mixin SelectingState implements IPlutoState {
     notifyListeners(checkCellValue: false);
   }
 
+  void clearCurrentSelectingPosition({bool notify = true}) {
+    if (_currentSelectingPosition == null) {
+      return;
+    }
+
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
+  }
+
+  void clearCurrentSelectingRows({bool notify = true}) {
+    if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
+      return;
+    }
+
+    _currentSelectingRows = [];
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
+  }
+
   void setAllCurrentSelecting() {
     if (_rows == null || _rows.length < 1) {
       return;
@@ -150,7 +172,7 @@ mixin SelectingState implements IPlutoState {
         );
         break;
       case PlutoSelectingMode.Row:
-        if (_currentCell == null) {
+        if (currentCell == null) {
           setCurrentCell(firstCell, 0, notify: false);
         }
 
@@ -180,7 +202,7 @@ mixin SelectingState implements IPlutoState {
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     if (_selectingMode.isRow) {
-      setCurrentSelectingRowsByRange(_currentRowIdx, rowIdx, notify: false);
+      setCurrentSelectingRowsByRange(currentRowIdx, rowIdx, notify: false);
     }
 
     if (notify) {
@@ -189,19 +211,19 @@ mixin SelectingState implements IPlutoState {
   }
 
   void setCurrentSelectingPositionWithOffset(Offset offset) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       return;
     }
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
         PlutoDefaultSettings.gridBorderWidth +
-        layout.headerHeight +
+        headerHeight +
         PlutoDefaultSettings.rowTotalHeight;
 
     double currentCellOffsetDy =
         (currentRowIdx * PlutoDefaultSettings.rowTotalHeight) +
             gridBodyOffsetDy -
-            _scroll.vertical.offset;
+            scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
       return;
@@ -229,7 +251,7 @@ mixin SelectingState implements IPlutoState {
     for (var i = 0; i < columnIndexes.length; i += 1) {
       currentWidth += _columns[columnIndexes[i]].width;
 
-      if (currentWidth > offset.dx + _scroll.horizontal.offset) {
+      if (currentWidth > offset.dx + scroll.horizontal.offset) {
         columnIdx = i;
         break;
       }
@@ -299,8 +321,8 @@ mixin SelectingState implements IPlutoState {
 
   bool isSelectingInteraction() {
     return !_selectingMode.isNone &&
-        (_keyPressed.shift || _keyPressed.ctrl) &&
-        _currentCell != null;
+        (keyPressed.shift || keyPressed.ctrl) &&
+        currentCell != null;
   }
 
   bool isSelectedRow(Key rowKey) {
@@ -459,6 +481,6 @@ mixin SelectingState implements IPlutoState {
   }
 
   String _selectingTextFromCurrentCell() {
-    return _currentCell.value.toString();
+    return currentCell.value.toString();
   }
 }
