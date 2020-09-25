@@ -92,7 +92,7 @@ class PlutoKeyManager {
   void _handleEnter(KeyManagerEvent keyManagerEvent) {
     // In SelectRow mode, the current Row is passed to the onSelected callback.
     if (stateManager.mode.isSelect) {
-      stateManager._onSelected(PlutoOnSelectedEvent(
+      stateManager.onSelected(PlutoOnSelectedEvent(
         row: stateManager.currentRow,
         cell: stateManager.currentCell,
       ));
@@ -139,7 +139,7 @@ class PlutoKeyManager {
 
   void _handleEsc(KeyManagerEvent keyManagerEvent) {
     if (stateManager.mode.isSelect) {
-      stateManager._onSelected(PlutoOnSelectedEvent(
+      stateManager.onSelected(PlutoOnSelectedEvent(
         row: null,
         cell: null,
       ));

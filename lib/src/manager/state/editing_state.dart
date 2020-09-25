@@ -211,8 +211,8 @@ mixin EditingState implements IPlutoState {
         currentRow.value =
             newValue = castValueByColumnType(newValue, currentColumn);
 
-        if (_onChanged != null) {
-          _onChanged(PlutoOnChangedEvent(
+        if (onChanged != null) {
+          onChanged(PlutoOnChangedEvent(
             columnIdx: columnIndexes[columnIdx],
             column: currentColumn,
             rowIdx: rowIdx,
@@ -270,8 +270,8 @@ mixin EditingState implements IPlutoState {
           _rows[rowIdx].cells[field].value =
               value = castValueByColumnType(value, currentColumn);
 
-          if (callOnChangedEvent == true && _onChanged != null) {
-            _onChanged(PlutoOnChangedEvent(
+          if (callOnChangedEvent == true && onChanged != null) {
+            onChanged(PlutoOnChangedEvent(
               columnIdx: columnIdx,
               column: currentColumn,
               rowIdx: rowIdx,

@@ -6,36 +6,36 @@ abstract class IGridState {
   /// FocusNode to control keyboard input.
   FocusNode get gridFocusNode;
 
-  FocusNode _gridFocusNode;
-
   PlutoMode get mode;
-
-  PlutoMode _mode;
 
   PlutoConfiguration get configuration;
 
-  PlutoConfiguration _configuration;
-
-  /// [keyManager]
-  PlutoKeyManager _keyManager;
-
   PlutoKeyManager get keyManager;
-
-  void setKeyManager(PlutoKeyManager keyManager);
-
-  /// [eventManager]
-  PlutoEventManager _eventManager;
 
   PlutoEventManager get eventManager;
 
-  void setEventManager(PlutoEventManager eventManager);
-
   /// Event callback fired when cell value changes.
-  PlutoOnChangedEventCallback _onChanged;
+  PlutoOnChangedEventCallback get onChanged;
 
   /// Event callback that occurs when a row is selected
   /// when the grid mode is selectRow.
-  PlutoOnSelectedEventCallback _onSelected;
+  PlutoOnSelectedEventCallback get onSelected;
+
+  void setGridKey(Key key);
+
+  void setKeyManager(PlutoKeyManager keyManager);
+
+  void setEventManager(PlutoEventManager eventManager);
+
+  void setGridFocusNode(FocusNode focusNode);
+
+  void setGridMode(PlutoMode mode);
+
+  void setOnChanged(PlutoOnChangedEventCallback onChanged);
+
+  void setOnSelected(PlutoOnSelectedEventCallback onSelected);
+
+  void setConfiguration(PlutoConfiguration configuration);
 
   void resetCurrentState({notify = true});
 
@@ -68,7 +68,11 @@ mixin GridState implements IPlutoState {
 
   PlutoEventManager get eventManager => _eventManager;
 
+  PlutoOnChangedEventCallback get onChanged => _onChanged;
+
   PlutoOnChangedEventCallback _onChanged;
+
+  PlutoOnSelectedEventCallback get onSelected => _onSelected;
 
   PlutoOnSelectedEventCallback _onSelected;
 
@@ -78,6 +82,30 @@ mixin GridState implements IPlutoState {
 
   void setEventManager(PlutoEventManager eventManager) {
     _eventManager = eventManager;
+  }
+
+  void setGridFocusNode(FocusNode focusNode) {
+    _gridFocusNode = focusNode;
+  }
+
+  void setGridMode(PlutoMode mode) {
+    _mode = mode;
+  }
+
+  void setOnChanged(PlutoOnChangedEventCallback onChanged) {
+    _onChanged = onChanged;
+  }
+
+  void setOnSelected(PlutoOnSelectedEventCallback onSelected) {
+    _onSelected = onSelected;
+  }
+
+  void setConfiguration(PlutoConfiguration configuration) {
+    _configuration = configuration ?? PlutoConfiguration();
+  }
+
+  void setGridKey(Key key) {
+    _gridKey = key;
   }
 
   void resetCurrentState({notify = true}) {

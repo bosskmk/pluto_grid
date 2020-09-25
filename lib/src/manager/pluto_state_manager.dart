@@ -53,13 +53,13 @@ class PlutoStateManager extends PlutoState {
   }) {
     this._columns = columns;
     this._rows = rows;
-    this._gridFocusNode = gridFocusNode;
+    this.setGridFocusNode(gridFocusNode);
     this._scroll = scroll;
-    this._mode = mode;
-    this._onChanged = onChangedEventCallback;
-    this._onSelected = onSelectedEventCallback;
-    this._configuration = configuration ?? PlutoConfiguration();
-    this._gridKey = GlobalKey();
+    this.setGridMode(mode);
+    this.setOnChanged(onChangedEventCallback);
+    this.setOnSelected(onSelectedEventCallback);
+    this.setConfiguration(configuration);
+    this.setGridKey(GlobalKey());
   }
 
   static List<PlutoSelectingMode> get selectingModes =>
