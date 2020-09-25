@@ -202,7 +202,7 @@ mixin CellState implements IPlutoState {
 
     _currentSelectingPosition = null;
 
-    _currentRowIdx = rowIdx;
+    setCurrentRowIdx(rowIdx, notify: false);
 
     _currentSelectingRows = [];
 

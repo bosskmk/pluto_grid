@@ -180,7 +180,7 @@ mixin SelectingState implements IPlutoState {
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
 
     if (_selectingMode.isRow) {
-      setCurrentSelectingRowsByRange(_currentRowIdx, rowIdx, notify: false);
+      setCurrentSelectingRowsByRange(currentRowIdx, rowIdx, notify: false);
     }
 
     if (notify) {
