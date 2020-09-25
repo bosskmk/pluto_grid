@@ -41,7 +41,7 @@ mixin ScrollState implements IPlutoState {
     PlutoColumn columnToMove,
   ) {
     // 고정 컬럼이 보여지는 상태에서 이동 할 컬럼이 고정 컬럼인 경우 스크롤 불필요
-    return !(_layout.showFixedColumn == true && columnToMove.fixed.isFixed);
+    return !(layout.showFixedColumn == true && columnToMove.fixed.isFixed);
   }
 
   void moveScrollByRow(MoveDirection direction, int rowIdx) {
@@ -55,7 +55,7 @@ mixin ScrollState implements IPlutoState {
         PlutoDefaultSettings.gridPadding + PlutoDefaultSettings.shadowLineSize;
 
     final double screenOffset =
-        _scroll.vertical.offset + _layout.offsetHeight - rowSize - gridOffset;
+        _scroll.vertical.offset + layout.offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
         direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
@@ -95,9 +95,9 @@ mixin ScrollState implements IPlutoState {
             columnIdx + direction.offset - leftFixedColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
-    final double screenOffset = _layout.showFixedColumn == true
-        ? _layout.maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
-        : _layout.maxWidth;
+    final double screenOffset = layout.showFixedColumn == true
+        ? layout.maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
+        : layout.maxWidth;
 
     if (direction.isRight) {
       if (offsetToMove > _scroll.horizontal.offset) {

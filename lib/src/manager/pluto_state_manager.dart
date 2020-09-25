@@ -7,6 +7,7 @@ abstract class IPlutoState extends ChangeNotifier
         IEditingState,
         IGridState,
         IKeyboardState,
+        ILayoutState,
         IRowState,
         IScrollState,
         ISelectingState {
@@ -22,6 +23,7 @@ class PlutoState extends ChangeNotifier
         EditingState,
         GridState,
         KeyboardState,
+        LayoutState,
         RowState,
         ScrollState,
         SelectingState {

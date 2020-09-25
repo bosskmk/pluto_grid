@@ -174,7 +174,7 @@ mixin ColumnState implements IPlutoState {
   }
 
   List<int> columnIndexesByShowFixed() {
-    return _layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+    return layout.showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
   }
 
   bool isShowFixedColumn(double maxWidth) {
@@ -283,11 +283,11 @@ mixin ColumnState implements IPlutoState {
 
     Function findIndexToMove = () {
       final double minLeft =
-          _layout.showFixedColumn ? leftFixedColumnsWidth : 0;
+          layout.showFixedColumn ? leftFixedColumnsWidth : 0;
 
-      final double minRight = _layout.showFixedColumn
-          ? _layout.maxWidth - rightFixedColumnsWidth
-          : _layout.maxWidth;
+      final double minRight = layout.showFixedColumn
+          ? layout.maxWidth - rightFixedColumnsWidth
+          : layout.maxWidth;
 
       double currentOffset = 0.0;
 

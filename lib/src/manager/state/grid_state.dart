@@ -16,16 +16,6 @@ abstract class IGridState {
 
   PlutoConfiguration _configuration;
 
-  /// Screen size, fixed column visibility.
-  PlutoLayout get layout;
-
-  PlutoLayout _layout;
-
-  /// Global offset of Grid.
-  Offset get gridGlobalOffset;
-
-  Offset _gridGlobalOffset;
-
   /// [keyManager]
   PlutoKeyManager _keyManager;
 
@@ -49,9 +39,6 @@ abstract class IGridState {
 
   void resetCurrentState({notify = true});
 
-  /// Update screen size information when LayoutBuilder builds.
-  void setLayout(BoxConstraints size, double headerHeight, double footerHeight);
-
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
 }
@@ -73,32 +60,6 @@ mixin GridState implements IPlutoState {
 
   PlutoConfiguration _configuration;
 
-  PlutoLayout get layout => _layout;
-
-  PlutoLayout _layout = PlutoLayout();
-
-  Offset get gridGlobalOffset {
-    if (_gridGlobalOffset != null) {
-      return _gridGlobalOffset;
-    }
-
-    if (_gridKey == null) {
-      return null;
-    }
-
-    final RenderBox gridRenderBox = _gridKey.currentContext?.findRenderObject();
-
-    if (gridRenderBox == null) {
-      return null;
-    }
-
-    _gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);
-
-    return _gridGlobalOffset;
-  }
-
-  Offset _gridGlobalOffset;
-
   PlutoKeyManager _keyManager;
 
   PlutoKeyManager get keyManager => _keyManager;
@@ -117,27 +78,6 @@ mixin GridState implements IPlutoState {
 
   void setEventManager(PlutoEventManager eventManager) {
     _eventManager = eventManager;
-  }
-
-  void setLayout(
-      BoxConstraints size, double headerHeight, double footerHeight) {
-    final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
-
-    final bool notify = _layout.showFixedColumn != _isShowFixedColumn;
-
-    _layout.maxWidth = size.maxWidth;
-    _layout.maxHeight = size.maxHeight;
-    _layout.showFixedColumn = _isShowFixedColumn;
-    _layout.headerHeight = headerHeight;
-    _layout.footerHeight = footerHeight;
-
-    _gridGlobalOffset = null;
-
-    if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
-    }
   }
 
   void resetCurrentState({notify = true}) {
