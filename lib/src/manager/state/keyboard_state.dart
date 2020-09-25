@@ -80,7 +80,7 @@ mixin KeyboardState implements IPlutoState {
     if (currentCell == null) return;
 
     // @formatter:off
-    if (!force && _isEditing && direction.horizontal) {
+    if (!force && isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
       if (currentColumn?.type?.isSelect == true) {
       }

@@ -113,7 +113,7 @@ mixin SelectingState implements IPlutoState {
 
     _isSelecting = flag;
 
-    if (_isEditing == true) {
+    if (isEditing == true) {
       setEditing(false, notify: false);
     }
 

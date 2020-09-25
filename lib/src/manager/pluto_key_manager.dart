@@ -126,7 +126,7 @@ class PlutoKeyManager {
   }
 
   void _handleTab(KeyManagerEvent keyManagerEvent) {
-    final saveIsEditing = stateManager._isEditing;
+    final saveIsEditing = stateManager.isEditing;
 
     if (keyManagerEvent.event.isShiftPressed) {
       stateManager.moveCurrentCell(MoveDirection.Left, force: true);

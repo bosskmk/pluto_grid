@@ -4,12 +4,8 @@ abstract class IEditingState {
   /// Editing status of the current.
   bool get isEditing;
 
-  bool _isEditing;
-
   /// pre-modification cell value
   dynamic get cellValueBeforeEditing;
-
-  dynamic _cellValueBeforeEditing;
 
   /// Change the editing status of the current cell.
   void setEditing(
