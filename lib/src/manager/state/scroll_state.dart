@@ -4,7 +4,7 @@ abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
   PlutoScrollController get scroll;
 
-  PlutoScrollController _scroll;
+  void setScroll(PlutoScrollController scroll);
 
   /// [direction] Scroll direction
   /// [offset] Scroll position
@@ -27,6 +27,10 @@ mixin ScrollState implements IPlutoState {
   PlutoScrollController get scroll => _scroll;
 
   PlutoScrollController _scroll;
+
+  void setScroll(PlutoScrollController scroll) {
+    _scroll = scroll;
+  }
 
   void scrollByDirection(MoveDirection direction, double offset) {
     if (direction.vertical) {

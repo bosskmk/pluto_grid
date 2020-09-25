@@ -201,7 +201,7 @@ mixin SelectingState implements IPlutoState {
     double currentCellOffsetDy =
         (currentRowIdx * PlutoDefaultSettings.rowTotalHeight) +
             gridBodyOffsetDy -
-            _scroll.vertical.offset;
+            scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
       return;
@@ -229,7 +229,7 @@ mixin SelectingState implements IPlutoState {
     for (var i = 0; i < columnIndexes.length; i += 1) {
       currentWidth += _columns[columnIndexes[i]].width;
 
-      if (currentWidth > offset.dx + _scroll.horizontal.offset) {
+      if (currentWidth > offset.dx + scroll.horizontal.offset) {
         columnIdx = i;
         break;
       }

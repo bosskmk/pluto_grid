@@ -297,7 +297,7 @@ mixin ColumnState implements IPlutoState {
         currentOffset = minRight;
         startIndexToMove = _columns.length - rightFixedColumns.length;
       } else if (minLeft < offset) {
-        currentOffset -= _scroll.horizontal.offset;
+        currentOffset -= scroll.horizontal.offset;
       }
 
       return (int i) {

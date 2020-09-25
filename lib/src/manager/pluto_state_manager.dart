@@ -54,7 +54,7 @@ class PlutoStateManager extends PlutoState {
     this._columns = columns;
     this._rows = rows;
     this.setGridFocusNode(gridFocusNode);
-    this._scroll = scroll;
+    this.setScroll(scroll);
     this.setGridMode(mode);
     this.setOnChanged(onChangedEventCallback);
     this.setOnSelected(onSelectedEventCallback);
