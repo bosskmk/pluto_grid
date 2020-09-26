@@ -12,9 +12,9 @@ abstract class IRowState {
   PlutoRow get currentRow;
 
   /// set currentRowIdx to null
-  void clearCurrentRowIdx({ bool notify: true });
+  void clearCurrentRowIdx({bool notify: true});
 
-  void setCurrentRowIdx(int rowIdx, { bool notify: true });
+  void setCurrentRowIdx(int rowIdx, {bool notify: true});
 
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
@@ -51,11 +51,11 @@ mixin RowState implements IPlutoState {
     return _rows[_currentRowIdx];
   }
 
-  void clearCurrentRowIdx({ bool notify: true }) {
+  void clearCurrentRowIdx({bool notify: true}) {
     setCurrentRowIdx(null, notify: notify);
   }
 
-  void setCurrentRowIdx(int rowIdx, { bool notify: true }) {
+  void setCurrentRowIdx(int rowIdx, {bool notify: true}) {
     if (_currentRowIdx == rowIdx) {
       return;
     }
@@ -104,10 +104,12 @@ mixin RowState implements IPlutoState {
     if (currentCell != null) {
       _currentRowIdx = rows.length + _currentRowIdx;
 
-      setCurrentCellPosition(PlutoCellPosition(
-        columnIdx: currentCellPosition.columnIdx,
-        rowIdx: currentRowIdx,
-      ), notify: false);
+      setCurrentCellPosition(
+          PlutoCellPosition(
+            columnIdx: currentCellPosition.columnIdx,
+            rowIdx: currentRowIdx,
+          ),
+          notify: false);
 
       double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 
