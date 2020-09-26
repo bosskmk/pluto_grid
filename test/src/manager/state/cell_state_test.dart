@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 
-main() {
+void main() {
   group('currentCellPosition', () {
     testWidgets(
         'currentCellPosition - currentCell 이 선택되지 않은 경우 null 을 리턴해야 한다.',

@@ -77,6 +77,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   void initState() {
+    super.initState();
+
     initProperties();
 
     initStateManager();
@@ -88,8 +90,6 @@ class _PlutoGridState extends State<PlutoGrid> {
     initOnLoadedEvent();
 
     initSelectMode();
-
-    super.initState();
   }
 
   void initProperties() {

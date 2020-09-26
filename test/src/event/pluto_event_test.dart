@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-main() {
+void main() {
   testWidgets('PlutoCannotMoveCurrentCellEvent', (WidgetTester tester) async {
     // given
     final cellPosition = PlutoCellPosition(columnIdx: 0, rowIdx: 0);

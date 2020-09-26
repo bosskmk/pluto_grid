@@ -6,7 +6,7 @@ import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_pluto_scroll_controller.dart';
 
-main() {
+void main() {
   group('currentRowIdx', () {
     testWidgets('currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
         (WidgetTester tester) async {

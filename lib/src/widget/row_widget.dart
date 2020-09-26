@@ -36,6 +36,8 @@ class _RowWidgetState extends State<RowWidget> {
 
   @override
   void initState() {
+    super.initState();
+
     _isCurrentRow = widget.stateManager.currentRowIdx == widget.rowIdx;
 
     _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
@@ -46,8 +48,6 @@ class _RowWidgetState extends State<RowWidget> {
         widget.stateManager.hasCurrentSelectingPosition;
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

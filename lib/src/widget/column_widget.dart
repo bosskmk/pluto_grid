@@ -1,8 +1,9 @@
 part of '../../pluto_grid.dart';
 
 enum MenuItem {
-  FixedLeft,
-  FixedRight,
+  Unfix,
+  ToLeft,
+  ToRight,
   AutoSize,
 }
 
@@ -31,11 +32,11 @@ class _ColumnWidgetState extends State<ColumnWidget> {
 
   @override
   void initState() {
+    super.initState();
+
     _sort = widget.column.sort;
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {
@@ -78,19 +79,21 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       position: RelativeRect.fromRect(
           position & Size(40, 40), Offset.zero & overlay.size),
       items: [
-        PopupMenuItem(
-          value: MenuItem.FixedLeft,
-          child: widget.column.fixed.isFixed == true
-              ? buildTextItem('Unfix')
-              : buildTextItem('ToLeft'),
-        ),
-        if (widget.column.fixed.isFixed != true)
+        if (widget.column.fixed.isFixed == true)
           PopupMenuItem(
-            value: MenuItem.FixedRight,
-            child: widget.column.fixed.isFixed == true
-                ? buildTextItem('Unfix')
-                : buildTextItem('ToRight'),
+            value: MenuItem.Unfix,
+            child: buildTextItem('Unfix'),
           ),
+        if (widget.column.fixed.isFixed != true) ...[
+          PopupMenuItem(
+            value: MenuItem.ToLeft,
+            child: buildTextItem('ToLeft'),
+          ),
+          PopupMenuItem(
+            value: MenuItem.ToRight,
+            child: buildTextItem('ToRight'),
+          ),
+        ],
         PopupMenuItem(
           value: MenuItem.AutoSize,
           child: buildTextItem('AutoSize'),
@@ -99,11 +102,15 @@ class _ColumnWidgetState extends State<ColumnWidget> {
     );
 
     switch (selectedMenu) {
-      case MenuItem.FixedLeft:
+      case MenuItem.Unfix:
+        widget.stateManager
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.None);
+        break;
+      case MenuItem.ToLeft:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Left);
         break;
-      case MenuItem.FixedRight:
+      case MenuItem.ToRight:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
         break;

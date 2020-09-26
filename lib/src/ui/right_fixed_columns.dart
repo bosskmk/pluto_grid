@@ -21,12 +21,12 @@ class _RightFixedColumnsState extends State<RightFixedColumns> {
 
   @override
   void initState() {
+    super.initState();
+
     _columns = widget.stateManager.rightFixedColumns;
     _width = widget.stateManager.rightFixedColumnsWidth;
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

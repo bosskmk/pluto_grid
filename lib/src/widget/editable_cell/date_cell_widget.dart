@@ -44,6 +44,8 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
   @override
   void initState() {
+    super.initState();
+
     popupHeight = (8 * PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
@@ -69,8 +71,6 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
     createHeader = (PlutoStateManager stateManager) =>
         _DateCellHeader(stateManager: stateManager);
-
-    super.initState();
   }
 
   @override
@@ -249,9 +249,9 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
 
   @override
   void initState() {
-    widget.stateManager.addListener(changeStateListener);
-
     super.initState();
+
+    widget.stateManager.addListener(changeStateListener);
   }
 
   void changeStateListener() {
