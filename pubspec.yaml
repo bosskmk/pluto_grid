@@ -1,6 +1,6 @@
 name: pluto_grid
-description: PlutoGrid is a data grid that can be controlled by the keyboard on desktop and web. Of course, it works well on Android and IOS. (MIT License)
-version: 0.1.13
+description: PlutoGrid is a dataGrid that can be controlled by the keyboard on desktop and web. Of course, it works well on Android and IOS. (DataGrid, DataTable, Data Grid, Data Table)
+version: 0.1.14
 homepage: https://bosskmk.github.io
 repository: https://github.com/bosskmk/pluto_grid
 
