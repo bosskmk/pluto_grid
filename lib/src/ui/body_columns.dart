@@ -27,6 +27,8 @@ class _BodyColumnsState extends State<BodyColumns> {
 
   @override
   void initState() {
+    super.initState();
+
     _columns = getColumns();
 
     _width = getWidth();
@@ -34,8 +36,6 @@ class _BodyColumnsState extends State<BodyColumns> {
     scroll = widget.stateManager.scroll.horizontal.addAndGet();
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

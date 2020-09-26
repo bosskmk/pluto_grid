@@ -33,6 +33,8 @@ class _BodyRowsState extends State<BodyRows> {
 
   @override
   void initState() {
+    super.initState();
+
     _columns = getColumns();
 
     _rows = widget.stateManager.rows;
@@ -46,8 +48,6 @@ class _BodyRowsState extends State<BodyRows> {
     widget.stateManager.scroll.setBodyRowsVertical(verticalScroll);
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

@@ -27,6 +27,8 @@ class _RightFixedRowsState extends State<RightFixedRows> {
 
   @override
   void initState() {
+    super.initState();
+
     _columns = widget.stateManager.rightFixedColumns;
 
     _rows = widget.stateManager.rows;
@@ -34,8 +36,6 @@ class _RightFixedRowsState extends State<RightFixedRows> {
     scroll = widget.stateManager.scroll.vertical.addAndGet();
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

@@ -27,6 +27,8 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
 
   @override
   void initState() {
+    super.initState();
+
     _columns = widget.stateManager.leftFixedColumns;
 
     _rows = widget.stateManager.rows;
@@ -34,8 +36,6 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
     scroll = widget.stateManager.scroll.vertical.addAndGet();
 
     widget.stateManager.addListener(changeStateListener);
-
-    super.initState();
   }
 
   void changeStateListener() {

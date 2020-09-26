@@ -50,18 +50,6 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
   CreateFooterCallBack createFooter;
 
   @override
-  void initState() {
-    _textController = TextEditingController()
-      ..text = widget.cell.value.toString();
-
-    _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
-
-    _textFocus = FocusNode();
-
-    super.initState();
-  }
-
-  @override
   void dispose() {
     widget.stateManager.resetKeyPressed();
 
@@ -72,6 +60,18 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     _textFocus.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textController = TextEditingController()
+      ..text = widget.cell.value.toString();
+
+    _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+
+    _textFocus = FocusNode();
   }
 
   void openPopup() {

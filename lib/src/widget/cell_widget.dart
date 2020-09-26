@@ -67,6 +67,8 @@ class _CellWidgetState extends State<CellWidget>
 
   @override
   void initState() {
+    super.initState();
+
     _cellValue = widget.cell.value;
 
     _isCurrentCell = widget.stateManager.isCurrentCell(widget.cell);
@@ -92,8 +94,6 @@ class _CellWidgetState extends State<CellWidget>
     });
 
     _resetKeepAlive();
-
-    super.initState();
   }
 
   void changeStateListener() {

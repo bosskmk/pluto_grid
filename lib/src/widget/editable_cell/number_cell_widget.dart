@@ -23,11 +23,11 @@ class _NumberCellWidgetState extends State<NumberCellWidget>
 
   @override
   void initState() {
+    super.initState();
+
     decimalRange = widget.column.type.number.decimalRange();
 
     activatedNegative = widget.column.type.number.negative;
-
-    super.initState();
   }
 
   @override

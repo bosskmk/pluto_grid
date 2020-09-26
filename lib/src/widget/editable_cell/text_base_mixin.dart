@@ -38,10 +38,11 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
 
   @override
   void initState() {
-    _textController.text = widget.cell.value.toString();
-    _cellEditingStatus = _CellEditingStatus.INIT;
-
     super.initState();
+
+    _textController.text = widget.cell.value.toString();
+
+    _cellEditingStatus = _CellEditingStatus.INIT;
   }
 
   void _changeValue() {

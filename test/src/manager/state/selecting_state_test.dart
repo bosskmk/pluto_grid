@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 
-main() {
+void main() {
   group('currentSelectingText', () {
     testWidgets(
         'WHEN'

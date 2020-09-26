@@ -74,17 +74,21 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 
   @override
   void initState() {
+    super.initState();
+
     _handleChangeFocusNode(true);
 
     _subjectForFocusOnGridA
         .debounceTime(Duration(milliseconds: 4))
         .listen(_handleChangeFocusNode);
-
-    super.initState();
   }
 
   void _handleChangeFocusNode(bool isNodeAFocused) {
     if (_isFocusA == isNodeAFocused) {
+      return;
+    }
+
+    if (!this.mounted) {
       return;
     }
 
