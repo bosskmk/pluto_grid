@@ -1,3 +1,7 @@
+## [0.1.14] - 2020. 09. 27
+
+* Fixed cell movement error.
+
 ## [0.1.13] - 2020. 09. 26
 
 * Change the column icon.

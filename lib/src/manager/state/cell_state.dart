@@ -120,6 +120,8 @@ mixin CellState implements IPlutoState {
       return;
     }
 
+    resetShowFixedColumn(notify: false);
+
     setCurrentCellPosition(
       cellPositionByCellKey(_currentCell.key),
       notify: false,

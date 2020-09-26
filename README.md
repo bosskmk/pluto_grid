@@ -1,10 +1,10 @@
-## PlutoGrid for flutter - v0.1.13
+## PlutoGrid for flutter - v0.1.14
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
 <br>
 
-PlutoGrid is a data grid that can be controlled by the keyboard on desktop and web.  
+PlutoGrid is a dataGrid that can be controlled by the keyboard on desktop and web.  
 Of course, it works well on Android and IOS.
 
 <br>
