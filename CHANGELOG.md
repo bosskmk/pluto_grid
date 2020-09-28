@@ -1,3 +1,7 @@
+## [0.1.15] - 2020. 09. 28
+
+* Modified so that the Grid does not force focus and works properly according to the situation in which focus get received or taken away.
+
 ## [0.1.14] - 2020. 09. 27
 
 * Fixed cell movement error.

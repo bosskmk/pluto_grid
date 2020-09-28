@@ -212,7 +212,7 @@ void main() {
 
       testWidgets(
         'items 에 포함 되어 있지 않으면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeSelect selectColumn = PlutoColumnType.select([
             'A',
             'B',
@@ -228,7 +228,7 @@ void main() {
     group('isValid', () {
       testWidgets(
         '날짜 형식이 아니면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
           expect(dateColumn.isValid('Not a date'), isFalse);
         },
@@ -236,7 +236,7 @@ void main() {
 
       testWidgets(
         '날짜 형식이면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
           expect(dateColumn.isValid('2020-01-01'), isTrue);
         },
@@ -244,7 +244,7 @@ void main() {
 
       testWidgets(
         '시작일이 있는 경우 시작일 보다 작으면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -254,7 +254,7 @@ void main() {
 
       testWidgets(
         '시작일이 있는 경우 시작일과 같으면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -264,7 +264,7 @@ void main() {
 
       testWidgets(
         '시작일이 있는 경우 시작일보다 크면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -274,7 +274,7 @@ void main() {
 
       testWidgets(
         '마지막일이 있는 경우 마지막일보다 작으면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -284,7 +284,7 @@ void main() {
 
       testWidgets(
         '마지막일이 있는 경우 마지막일과 같으면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -294,7 +294,7 @@ void main() {
 
       testWidgets(
         '마지막일이 있는 경우 마지막일보다 크면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -304,7 +304,7 @@ void main() {
 
       testWidgets(
         '시작일과 마지막일이 둘다 있는 경우 범위에 있으면 true',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -315,7 +315,7 @@ void main() {
 
       testWidgets(
         '시작일과 마지막일이 둘다 있는 경우 범위보다 작으면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -326,7 +326,7 @@ void main() {
 
       testWidgets(
         '시작일과 마지막일이 둘다 있는 경우 범위보다 크면 false',
-            (WidgetTester tester) async {
+        (WidgetTester tester) async {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -343,7 +343,7 @@ void main() {
       group('isValid', () {
         testWidgets(
           '24:00 이면 false',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('24:00'), isFalse);
           },
@@ -351,7 +351,7 @@ void main() {
 
         testWidgets(
           '00:60 이면 false',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:60'), isFalse);
           },
@@ -359,7 +359,7 @@ void main() {
 
         testWidgets(
           '24:60 이면 false',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('24:60'), isFalse);
           },
@@ -367,7 +367,7 @@ void main() {
 
         testWidgets(
           '00:00 이면 true',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:00'), isTrue);
           },
@@ -375,7 +375,7 @@ void main() {
 
         testWidgets(
           '00:59 이면 true',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:59'), isTrue);
           },
@@ -383,7 +383,7 @@ void main() {
 
         testWidgets(
           '23:00 이면 true',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('23:00'), isTrue);
           },
@@ -391,7 +391,7 @@ void main() {
 
         testWidgets(
           '23:59 이면 true',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('23:59'), isTrue);
           },

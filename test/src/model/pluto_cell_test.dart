@@ -12,7 +12,7 @@ void main() {
 
   testWidgets(
     'originalValue 가 있는 경우 originalValue 을 리턴 해야 한다.',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final PlutoCell cell = PlutoCell(
         value: 'value',
         originalValue: 'original value',
@@ -25,7 +25,7 @@ void main() {
 
   testWidgets(
     'originalValue 가 없는 경우 value 를 리턴 해야 한다.',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final PlutoCell cell = PlutoCell(
         value: 'value',
       );

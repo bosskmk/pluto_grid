@@ -282,12 +282,10 @@ mixin ColumnState implements IPlutoState {
     };
 
     Function findIndexToMove = () {
-      final double minLeft =
-          showFixedColumn ? leftFixedColumnsWidth : 0;
+      final double minLeft = showFixedColumn ? leftFixedColumnsWidth : 0;
 
-      final double minRight = showFixedColumn
-          ? maxWidth - rightFixedColumnsWidth
-          : maxWidth;
+      final double minRight =
+          showFixedColumn ? maxWidth - rightFixedColumnsWidth : maxWidth;
 
       double currentOffset = 0.0;
 

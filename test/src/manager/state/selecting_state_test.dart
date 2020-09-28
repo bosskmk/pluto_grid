@@ -647,7 +647,7 @@ void main() {
 
       // when
       expect(stateManager.selectingMode.isSquare, isTrue);
-      
+
       // then
       for (var i = 0; i < rows.length; i += 1) {
         columns.forEach((column) {

@@ -92,7 +92,6 @@ void main() {
     });
 
     tapCell.test('12:29 분 선택.', (tester) async {
-
       await tester.tap(find.text('29'));
       await tester.tap(find.text('29'));
 
@@ -100,7 +99,6 @@ void main() {
     });
 
     tapCell.test('15:28 분 선택.', (tester) async {
-
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
