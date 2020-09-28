@@ -43,6 +43,14 @@ abstract class ILayoutState {
 
   double get bodyRightOffset;
 
+  double get bodyLeftScrollOffset;
+
+  double get bodyRightScrollOffset;
+
+  double get bodyUpScrollOffset;
+
+  double get bodyDownScrollOffset;
+
   double get rightFixedLeftOffset;
 
   double get scrollOffsetByFixedColumn;
@@ -51,6 +59,9 @@ abstract class ILayoutState {
   void setLayout(BoxConstraints size);
 
   void resetShowFixedColumn({bool notify: true});
+
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset);
 }
 
 mixin LayoutState implements IPlutoState {
@@ -125,6 +136,39 @@ mixin LayoutState implements IPlutoState {
         : 0;
   }
 
+  double get bodyLeftScrollOffset {
+    final double leftFixedColumnWidth =
+        showFixedColumn ? leftFixedColumnsWidth : 0;
+
+    return gridGlobalOffset.dx +
+        PlutoDefaultSettings.gridPadding +
+        PlutoDefaultSettings.gridBorderWidth +
+        leftFixedColumnWidth +
+        PlutoDefaultSettings.offsetScrollingFromEdge;
+  }
+
+  double get bodyRightScrollOffset {
+    final double rightFixedColumnWidth =
+        showFixedColumn ? rightFixedColumnsWidth : 0;
+
+    return (gridGlobalOffset.dx + maxWidth) -
+        rightFixedColumnWidth -
+        PlutoDefaultSettings.offsetScrollingFromEdge;
+  }
+
+  double get bodyUpScrollOffset {
+    return gridGlobalOffset.dy +
+        PlutoDefaultSettings.gridBorderWidth +
+        PlutoDefaultSettings.rowTotalHeight +
+        PlutoDefaultSettings.offsetScrollingFromEdge;
+  }
+
+  double get bodyDownScrollOffset {
+    return gridGlobalOffset.dy +
+        offsetHeight -
+        PlutoDefaultSettings.offsetScrollingFromEdge;
+  }
+
   double get rightFixedLeftOffset =>
       maxWidth -
       bodyRightOffset -
@@ -164,5 +208,10 @@ mixin LayoutState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset) {
+    _gridGlobalOffset = offset;
   }
 }

@@ -169,46 +169,7 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   bool _needMovingScroll(Offset selectingOffset, MoveDirection move) {
-    if (widget.stateManager.selectingMode.isNone) {
-      return false;
-    }
-
-    switch (move) {
-      case MoveDirection.Left:
-        var leftFixedColumnWidth = widget.stateManager.showFixedColumn
-            ? widget.stateManager.leftFixedColumnsWidth
-            : 0;
-
-        return selectingOffset.dx <
-            widget.stateManager.gridGlobalOffset.dx +
-                PlutoDefaultSettings.gridPadding +
-                PlutoDefaultSettings.gridBorderWidth +
-                leftFixedColumnWidth +
-                PlutoDefaultSettings.offsetScrollingFromEdge;
-      case MoveDirection.Right:
-        var rightFixedColumnWidth = widget.stateManager.showFixedColumn
-            ? widget.stateManager.rightFixedColumnsWidth
-            : 0;
-
-        return selectingOffset.dx >
-            (widget.stateManager.gridGlobalOffset.dx +
-                    widget.stateManager.maxWidth) -
-                rightFixedColumnWidth -
-                PlutoDefaultSettings.offsetScrollingFromEdge;
-      case MoveDirection.Up:
-        return selectingOffset.dy <
-            widget.stateManager.gridGlobalOffset.dy +
-                PlutoDefaultSettings.gridBorderWidth +
-                PlutoDefaultSettings.rowTotalHeight +
-                PlutoDefaultSettings.offsetScrollingFromEdge;
-      case MoveDirection.Down:
-        return selectingOffset.dy >
-            widget.stateManager.gridGlobalOffset.dy +
-                widget.stateManager.offsetHeight -
-                PlutoDefaultSettings.offsetScrollingFromEdge;
-    }
-
-    return false;
+    return widget.stateManager.needMovingScroll(selectingOffset, move);
   }
 
   void _scrollForDraggableSelection(MoveDirection move) {

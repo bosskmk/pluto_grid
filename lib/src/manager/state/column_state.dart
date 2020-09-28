@@ -365,6 +365,8 @@ mixin ColumnState implements IPlutoState {
       }
     }
 
+    resetShowFixedColumn(notify: false);
+
     notifyListeners();
   }
 }

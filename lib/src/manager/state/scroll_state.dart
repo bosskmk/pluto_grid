@@ -21,6 +21,8 @@ abstract class IScrollState {
 
   /// Scroll to [columnIdx] position.
   void moveScrollByColumn(MoveDirection direction, int columnIdx);
+
+  bool needMovingScroll(Offset offset, MoveDirection move);
 }
 
 mixin ScrollState implements IPlutoState {
@@ -130,5 +132,24 @@ mixin ScrollState implements IPlutoState {
     }
 
     scrollByDirection(direction, offsetToMove);
+  }
+
+  bool needMovingScroll(Offset offset, MoveDirection move) {
+    if (selectingMode.isNone) {
+      return false;
+    }
+
+    switch (move) {
+      case MoveDirection.Left:
+        return offset.dx < bodyLeftScrollOffset;
+      case MoveDirection.Right:
+        return offset.dx > bodyRightScrollOffset;
+      case MoveDirection.Up:
+        return offset.dy < bodyUpScrollOffset;
+      case MoveDirection.Down:
+        return offset.dy > bodyDownScrollOffset;
+    }
+
+    return false;
   }
 }
