@@ -77,12 +77,7 @@ class PlutoKeyManager {
     }
 
     if (stateManager.currentCell == null) {
-      if (stateManager.rows == null || stateManager.rows.length < 1) {
-        return;
-      }
-
-      stateManager.setCurrentCell(
-          stateManager.rows.first.cells.entries.first.value, 0);
+      stateManager.setCurrentCell(stateManager.firstCell, 0);
       return;
     }
 
@@ -126,6 +121,11 @@ class PlutoKeyManager {
   }
 
   void _handleTab(KeyManagerEvent keyManagerEvent) {
+    if (stateManager.currentCell == null) {
+      stateManager.setCurrentCell(stateManager.firstCell, 0);
+      return;
+    }
+
     final saveIsEditing = stateManager.isEditing;
 
     if (keyManagerEvent.event.isShiftPressed) {

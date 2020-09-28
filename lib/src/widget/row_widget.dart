@@ -27,6 +27,8 @@ class _RowWidgetState extends State<RowWidget> {
 
   bool _hasCurrentSelectingPosition;
 
+  bool _keepFocus;
+
   @override
   void dispose() {
     widget.stateManager.removeListener(changeStateListener);
@@ -47,6 +49,8 @@ class _RowWidgetState extends State<RowWidget> {
     _hasCurrentSelectingPosition =
         widget.stateManager.hasCurrentSelectingPosition;
 
+    _keepFocus = widget.stateManager.keepFocus;
+
     widget.stateManager.addListener(changeStateListener);
   }
 
@@ -55,22 +59,20 @@ class _RowWidgetState extends State<RowWidget> {
         _isSelectedRow != widget.stateManager.isSelectedRow(widget.row.key) ||
         _isSelecting != widget.stateManager.isSelecting ||
         _hasCurrentSelectingPosition !=
-            widget.stateManager.hasCurrentSelectingPosition) {
+            widget.stateManager.hasCurrentSelectingPosition ||
+        _keepFocus != widget.stateManager.keepFocus) {
       setState(() {
         _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
         _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
         _isSelecting = widget.stateManager.isSelecting;
         _hasCurrentSelectingPosition =
             widget.stateManager.hasCurrentSelectingPosition;
+        _keepFocus = widget.stateManager.keepFocus;
       });
     }
   }
 
   Color rowColor() {
-    if (!widget.stateManager.gridFocusNode.hasFocus) {
-      return null;
-    }
-
     final bool checkCurrentRow =
         _isCurrentRow && (!_isSelecting && !_hasCurrentSelectingPosition);
 
@@ -85,6 +87,10 @@ class _RowWidgetState extends State<RowWidget> {
       return checkSelectedRow
           ? widget.stateManager.configuration.activatedColor
           : null;
+    }
+
+    if (!widget.stateManager.hasFocus) {
+      return null;
     }
 
     return checkCurrentRow

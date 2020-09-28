@@ -87,7 +87,9 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
 
   @override
   Widget build(BuildContext context) {
-    _cellFocus.requestFocus();
+    if (widget.stateManager.keepFocus) {
+      _cellFocus.requestFocus();
+    }
 
     return _buildTextField();
   }

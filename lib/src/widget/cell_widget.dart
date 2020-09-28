@@ -281,6 +281,14 @@ class _CellWidgetState extends State<CellWidget>
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (TapDownDetails details) {
+        if (!widget.stateManager.hasFocus) {
+          widget.stateManager.setKeepFocus(true);
+
+          if (_isCurrentCell) {
+            return;
+          }
+        }
+
         if (widget.stateManager.isSelectingInteraction()) {
           if (widget.stateManager.keyPressed.shift) {
             final int columnIdx =
@@ -350,6 +358,7 @@ class _CellWidgetState extends State<CellWidget>
         child: _buildCell(),
         width: widget.width,
         height: widget.height,
+        hasFocus: widget.stateManager.hasFocus,
         isCurrentCell: _isCurrentCell,
         isEditing: _isEditing,
         selectingMode: _selectingMode,
@@ -365,6 +374,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   final Widget child;
   final double width;
   final double height;
+  final bool hasFocus;
   final bool isCurrentCell;
   final bool isEditing;
   final PlutoSelectingMode selectingMode;
@@ -376,6 +386,7 @@ class _BackgroundColorWidget extends StatelessWidget {
     this.child,
     this.width,
     this.height,
+    this.hasFocus,
     this.isCurrentCell,
     this.isEditing,
     this.selectingMode,
@@ -384,6 +395,10 @@ class _BackgroundColorWidget extends StatelessWidget {
   });
 
   Color _currentCellColor() {
+    if (!hasFocus) {
+      return null;
+    }
+
     if (!isEditing) {
       return selectingMode.isRow ? configuration.activatedColor : null;
     }

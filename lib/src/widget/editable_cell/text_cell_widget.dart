@@ -20,7 +20,9 @@ class _TextCellWidgetState extends State<TextCellWidget>
   @override
   @override
   Widget build(BuildContext context) {
-    _cellFocus.requestFocus();
+    if (widget.stateManager.keepFocus) {
+      _cellFocus.requestFocus();
+    }
 
     return _buildTextField(
       keyboardType: TextInputType.text,

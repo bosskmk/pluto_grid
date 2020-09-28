@@ -32,7 +32,9 @@ class _NumberCellWidgetState extends State<NumberCellWidget>
 
   @override
   Widget build(BuildContext context) {
-    _cellFocus.requestFocus();
+    if (widget.stateManager.keepFocus) {
+      _cellFocus.requestFocus();
+    }
 
     return _buildTextField(
       keyboardType: TextInputType.number,

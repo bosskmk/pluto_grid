@@ -25,6 +25,10 @@ abstract class IGridState {
 
   CreateFooterCallBack get createFooter;
 
+  bool get keepFocus;
+
+  bool get hasFocus;
+
   void setGridKey(Key key);
 
   void setKeyManager(PlutoKeyManager keyManager);
@@ -44,6 +48,8 @@ abstract class IGridState {
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
 
   void setConfiguration(PlutoConfiguration configuration);
+
+  void setKeepFocus(bool flag);
 
   void resetCurrentState({notify = true});
 
@@ -92,6 +98,12 @@ mixin GridState implements IPlutoState {
 
   CreateFooterCallBack _createFooter;
 
+  bool get keepFocus => _keepFocus;
+
+  bool _keepFocus = false;
+
+  bool get hasFocus => _gridFocusNode != null && _gridFocusNode.hasFocus;
+
   void setKeyManager(PlutoKeyManager keyManager) {
     _keyManager = keyManager;
   }
@@ -130,6 +142,22 @@ mixin GridState implements IPlutoState {
 
   void setGridKey(Key key) {
     _gridKey = key;
+  }
+
+  void setKeepFocus(bool flag, { bool notify: true }) {
+    if (_keepFocus == flag) {
+      return;
+    }
+
+    _keepFocus = flag;
+
+    if (_keepFocus == true) {
+      _gridFocusNode.requestFocus();
+    }
+
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
   }
 
   void resetCurrentState({notify = true}) {

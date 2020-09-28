@@ -186,6 +186,8 @@ mixin CellState implements IPlutoState {
   }) {
     if (cell == null ||
         rowIdx == null ||
+        _rows == null||
+        _rows.length < 1 ||
         rowIdx < 0 ||
         rowIdx > _rows.length - 1) {
       return;
