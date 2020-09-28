@@ -700,4 +700,86 @@ void main() {
       expect(stateManager.columnIndexesByShowFixed(), [0, 1, 3, 2, 4]);
     });
   });
+
+  testWidgets(
+    '고정 컬럼이 있고 넓이가 넓이가 충분한 경우 고정 컬럼이 보여지는 상태에서, '
+    '고정 컬럼 넓이를 넓히면 고정 컬럼이 풀려야 한다.',
+    (WidgetTester tester) async {
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn(
+          'left',
+          count: 1,
+          fixed: PlutoColumnFixed.Left,
+          width: 150,
+        ),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn(
+          'right',
+          count: 1,
+          fixed: PlutoColumnFixed.Right,
+          width: 150,
+        ),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // 150 + 200 + 150 = 최소 500 필요
+      stateManager.setLayout(BoxConstraints(maxWidth: 550, maxHeight: 600));
+
+      expect(stateManager.showFixedColumn, true);
+
+      // 최소 넓이에서 남는 50 이상 크기를 키움
+      stateManager.resizeColumn(columns.first.key, 60);
+
+      expect(stateManager.showFixedColumn, false);
+    },
+  );
+
+  testWidgets(
+    '고정 컬럼이 있지만 넓이가 좁아 고정 컬럼이 풀린 상태에서, '
+    '고정 컬럼 넓이를 줄이면 고정 컬럼이 나타나야 한다.',
+    (WidgetTester tester) async {
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn(
+          'left',
+          count: 1,
+          fixed: PlutoColumnFixed.Left,
+          width: 150,
+        ),
+        ...ColumnHelper.textColumn('body', count: 3, width: 150),
+        ...ColumnHelper.textColumn(
+          'right',
+          count: 1,
+          fixed: PlutoColumnFixed.Right,
+          width: 150,
+        ),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(10, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // 150 + 200 + 150 = 최소 500 필요
+      stateManager.setLayout(BoxConstraints(maxWidth: 450, maxHeight: 600));
+
+      expect(stateManager.showFixedColumn, false);
+
+      // 부족한 50 이상 컬럼 사이즈를 줄임
+      stateManager.resizeColumn(columns.first.key, -60);
+
+      expect(stateManager.showFixedColumn, true);
+    },
+  );
 }
