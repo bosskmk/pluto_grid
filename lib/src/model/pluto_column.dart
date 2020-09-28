@@ -320,11 +320,11 @@ class PlutoColumnTypeDate
       return false;
     }
 
-    if (startDate != null && parsedDate.isBefore(parsedDate)) {
+    if (startDate != null && parsedDate.isBefore(startDate)) {
       return false;
     }
 
-    if (endDate != null && parsedDate.isAfter(parsedDate)) {
+    if (endDate != null && parsedDate.isAfter(endDate)) {
       return false;
     }
 

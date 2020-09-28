@@ -144,7 +144,7 @@ mixin GridState implements IPlutoState {
     _gridKey = key;
   }
 
-  void setKeepFocus(bool flag, { bool notify: true }) {
+  void setKeepFocus(bool flag, {bool notify: true}) {
     if (_keepFocus == flag) {
       return;
     }

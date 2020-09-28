@@ -50,7 +50,7 @@ abstract class ILayoutState {
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
-  void resetShowFixedColumn({ bool notify: true });
+  void resetShowFixedColumn({bool notify: true});
 }
 
 mixin LayoutState implements IPlutoState {
@@ -158,7 +158,7 @@ mixin LayoutState implements IPlutoState {
     }
   }
 
-  void resetShowFixedColumn({ bool notify: true }) {
+  void resetShowFixedColumn({bool notify: true}) {
     _showFixedColumn = isShowFixedColumn(_maxWidth);
 
     if (notify) {

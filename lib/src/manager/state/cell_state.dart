@@ -29,7 +29,7 @@ abstract class ICellState {
   int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx);
 
   /// set currentCell to null
-  void clearCurrentCell({ bool notify = true });
+  void clearCurrentCell({bool notify = true});
 
   /// Change the selected cell.
   void setCurrentCell(
@@ -167,7 +167,7 @@ mixin CellState implements IPlutoState {
     return null;
   }
 
-  void clearCurrentCell({ bool notify = true }) {
+  void clearCurrentCell({bool notify = true}) {
     if (_currentCell == null) {
       return;
     }
@@ -186,7 +186,7 @@ mixin CellState implements IPlutoState {
   }) {
     if (cell == null ||
         rowIdx == null ||
-        _rows == null||
+        _rows == null ||
         _rows.length < 1 ||
         rowIdx < 0 ||
         rowIdx > _rows.length - 1) {
