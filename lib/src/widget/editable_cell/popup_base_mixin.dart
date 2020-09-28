@@ -187,7 +187,9 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
   @override
   Widget build(BuildContext context) {
-    _textFocus.requestFocus();
+    if (widget.stateManager.keepFocus) {
+      _textFocus.requestFocus();
+    }
 
     return RawKeyboardListener(
       focusNode: _keyboardFocus,

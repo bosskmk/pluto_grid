@@ -233,7 +233,6 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         ),
         if (widget.column.enableContextMenu)
           Positioned(
-            top: 3,
             right: -3,
             child: GestureDetector(
               onTapUp: (TapUpDetails details) {
@@ -246,13 +245,17 @@ class _ColumnWidgetState extends State<ColumnWidget> {
                 widget.stateManager
                     .resizeColumn(widget.column._key, _currentPosition.dx - 20);
               },
-              child: IconButton(
-                icon: ColumnIcon(
-                  sort: widget.column.sort,
-                  color: widget.stateManager.configuration.iconColor,
+              child: Container(
+                height: widget.stateManager.columnHeight,
+                alignment: Alignment.center,
+                child: IconButton(
+                  icon: ColumnIcon(
+                    sort: widget.column.sort,
+                    color: widget.stateManager.configuration.iconColor,
+                  ),
+                  iconSize: 18,
+                  onPressed: null,
                 ),
-                iconSize: 18,
-                onPressed: null,
               ),
             ),
           ),

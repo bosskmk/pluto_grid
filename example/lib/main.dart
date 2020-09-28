@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute:
-          kReleaseMode ? HomeScreen.routeName : ConfigurationScreen.routeName,
+          kReleaseMode ? HomeScreen.routeName : DualGridScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         NormalGridScreen.routeName: (context) => NormalGridScreen(),

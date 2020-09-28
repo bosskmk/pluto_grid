@@ -1762,6 +1762,28 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 2);
       },
     );
+
+    toLeftColumn1.test(
+      '탭키 이동 시 currentCellPosition 의 columnIdx 가 1 이어야 한다.',
+      (tester) async {
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+
+        expect(stateManager.currentCellPosition.columnIdx, 1);
+        expect(stateManager.currentCellPosition.rowIdx, 3);
+      },
+    );
+
+    toLeftColumn1.test(
+      '쉬프트 + 탭키 이동 시 currentCellPosition 의 columnIdx 가 그대로 0 이어야 한다.',
+      (tester) async {
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+        expect(stateManager.currentCellPosition.rowIdx, 3);
+      },
+    );
   });
 
   group('고정 컬럼이 없는 상태에서', () {
@@ -1847,6 +1869,115 @@ void main() {
 
         expect(stateManager.currentCellPosition.columnIdx, 9);
         expect(stateManager.currentCellPosition.rowIdx, 4);
+      },
+    );
+
+    toLeftColumn1.test(
+      '탭키 이동 시 currentCellPosition 의 columnIdx 가 그대로 9 이어야 한다.',
+      (tester) async {
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+
+        expect(stateManager.currentCellPosition.columnIdx, 9);
+        expect(stateManager.currentCellPosition.rowIdx, 5);
+      },
+    );
+
+    toLeftColumn1.test(
+      '쉬프트 + 탭키 이동 시 currentCellPosition 의 columnIdx 가 8 이어야 한다.',
+      (tester) async {
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+
+        expect(stateManager.currentCellPosition.columnIdx, 8);
+        expect(stateManager.currentCellPosition.rowIdx, 5);
+      },
+    );
+  });
+
+  group('ESC 키 테스트', () {
+    List<PlutoColumn> columns;
+
+    List<PlutoRow> rows;
+
+    PlutoStateManager stateManager;
+
+    final withTheCellSelected = PlutoWidgetTestHelper(
+      '0, 0 셀이 선택 된 상태에서',
+      (tester) async {
+        columns = [
+          ...ColumnHelper.textColumn('header', count: 10),
+        ];
+
+        rows = RowHelper.count(10, columns);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('header0 value 0'));
+      },
+    );
+
+    withTheCellSelected.test(
+      '그리드가 Select 모드 라면 onSelected 이벤트가 발생 되어야 한다.',
+      (tester) async {
+        stateManager.setGridMode(PlutoMode.Select);
+
+        stateManager.setOnSelected((event) {
+          expect(event.row, null);
+          expect(event.cell, null);
+        });
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      },
+    );
+
+    withTheCellSelected.test(
+      '그리드가 Select 모드가 아니고, '
+      'editing true 상태라면 editing 이 false 가 되어야 한다.',
+      (tester) async {
+        expect(stateManager.mode.isSelect, isFalse);
+
+        stateManager.setEditing(true);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+
+        expect(stateManager.isEditing, false);
+      },
+    );
+
+    withTheCellSelected.test(
+      '그리드가 Select 모드가 아니고,'
+      'Cell 값이 변경 된 상태라면 원래 셀 값으로 되돌려 져야 한다.',
+      (tester) async {
+        expect(stateManager.mode.isSelect, isFalse);
+
+        expect(stateManager.currentCell.value, 'header0 value 0');
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+
+        expect(stateManager.currentCell.value, 'a');
+
+        await tester.pumpAndSettle();
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+
+        expect(stateManager.currentCell.value, isNot('a'));
+
+        expect(stateManager.currentCell.value, 'header0 value 0');
       },
     );
   });

@@ -234,133 +234,140 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        key: stateManager.gridKey,
-        builder: (ctx, size) {
-          setLayout(size);
+    return FocusScope(
+      onFocusChange: (hasFocus) {
+        stateManager.setKeepFocus(hasFocus);
+      },
+      child: LayoutBuilder(
+          key: stateManager.gridKey,
+          builder: (ctx, size) {
+            setLayout(size);
 
-          FocusScope.of(ctx).requestFocus(gridFocusNode);
+            if (stateManager.keepFocus) {
+              FocusScope.of(ctx).requestFocus(gridFocusNode);
+            }
 
-          return RawKeyboardListener(
-            focusNode: stateManager.gridFocusNode,
-            child: Container(
-              padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
-              decoration: BoxDecoration(
-                color: stateManager.configuration.gridBackgroundColor,
-                border: Border.all(
-                  color: stateManager.configuration.gridBorderColor,
-                  width: PlutoDefaultSettings.gridBorderWidth,
+            return RawKeyboardListener(
+              focusNode: stateManager.gridFocusNode,
+              child: Container(
+                padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
+                decoration: BoxDecoration(
+                  color: stateManager.configuration.gridBackgroundColor,
+                  border: Border.all(
+                    color: stateManager.configuration.gridBorderColor,
+                    width: PlutoDefaultSettings.gridBorderWidth,
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    if (stateManager.showHeader) ...[
+                      Positioned.fill(
+                        top: 0,
+                        bottom: stateManager.headerBottomOffset,
+                        child: widget.createHeader(stateManager),
+                      ),
+                      Positioned(
+                        top: stateManager.headerHeight,
+                        left: 0,
+                        right: 0,
+                        child: ShadowLine(
+                          axis: Axis.horizontal,
+                          color: stateManager.configuration.gridBorderColor,
+                        ),
+                      ),
+                    ],
+                    if (_showFixedColumn && _hasLeftFixedColumns) ...[
+                      Positioned.fill(
+                        top: stateManager.headerHeight,
+                        left: 0,
+                        child: LeftFixedColumns(stateManager),
+                      ),
+                      Positioned.fill(
+                        top: stateManager.rowsTopOffset,
+                        left: 0,
+                        bottom: stateManager.footerHeight,
+                        child: LeftFixedRows(stateManager),
+                      ),
+                    ],
+                    Positioned.fill(
+                      top: stateManager.headerHeight,
+                      left: _bodyLeftOffset,
+                      right: _bodyRightOffset,
+                      child: BodyColumns(stateManager),
+                    ),
+                    Positioned.fill(
+                      top: stateManager.rowsTopOffset,
+                      left: _bodyLeftOffset,
+                      right: _bodyRightOffset,
+                      bottom: stateManager.footerHeight,
+                      child: BodyRows(stateManager),
+                    ),
+                    if (_showFixedColumn && _hasRightFixedColumns) ...[
+                      Positioned.fill(
+                        top: stateManager.headerHeight,
+                        left: _rightFixedLeftOffset,
+                        child: RightFixedColumns(stateManager),
+                      ),
+                      Positioned.fill(
+                        top: stateManager.rowsTopOffset,
+                        left: _rightFixedLeftOffset,
+                        bottom: stateManager.footerHeight,
+                        child: RightFixedRows(stateManager),
+                      ),
+                    ],
+                    if (_showFixedColumn && _hasLeftFixedColumns)
+                      Positioned(
+                        top: stateManager.headerHeight,
+                        left: _bodyLeftOffset - 1,
+                        bottom: stateManager.footerHeight,
+                        child: ShadowLine(
+                          axis: Axis.vertical,
+                          color: stateManager.configuration.gridBorderColor,
+                        ),
+                      ),
+                    if (_showFixedColumn && _hasRightFixedColumns)
+                      Positioned(
+                        top: stateManager.headerHeight,
+                        left: _rightFixedLeftOffset - 1,
+                        bottom: stateManager.footerHeight,
+                        child: ShadowLine(
+                          axis: Axis.vertical,
+                          reverse: true,
+                          color: stateManager.configuration.gridBorderColor,
+                        ),
+                      ),
+                    Positioned(
+                      top: stateManager.rowsTopOffset - 1,
+                      left: 0,
+                      right: 0,
+                      child: ShadowLine(
+                        axis: Axis.horizontal,
+                        color: stateManager.configuration.gridBorderColor,
+                      ),
+                    ),
+                    if (stateManager.showFooter) ...[
+                      Positioned(
+                        top: stateManager.footerTopOffset,
+                        left: 0,
+                        right: 0,
+                        child: ShadowLine(
+                          axis: Axis.horizontal,
+                          reverse: true,
+                          color: stateManager.configuration.gridBorderColor,
+                        ),
+                      ),
+                      Positioned.fill(
+                        top: stateManager.footerTopOffset,
+                        bottom: 0,
+                        child: widget.createFooter(stateManager),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-              child: Stack(
-                children: [
-                  if (stateManager.showHeader) ...[
-                    Positioned.fill(
-                      top: 0,
-                      bottom: stateManager.headerBottomOffset,
-                      child: widget.createHeader(stateManager),
-                    ),
-                    Positioned(
-                      top: stateManager.headerHeight,
-                      left: 0,
-                      right: 0,
-                      child: ShadowLine(
-                        axis: Axis.horizontal,
-                        color: stateManager.configuration.gridBorderColor,
-                      ),
-                    ),
-                  ],
-                  if (_showFixedColumn && _hasLeftFixedColumns) ...[
-                    Positioned.fill(
-                      top: stateManager.headerHeight,
-                      left: 0,
-                      child: LeftFixedColumns(stateManager),
-                    ),
-                    Positioned.fill(
-                      top: stateManager.rowsTopOffset,
-                      left: 0,
-                      bottom: stateManager.footerHeight,
-                      child: LeftFixedRows(stateManager),
-                    ),
-                  ],
-                  Positioned.fill(
-                    top: stateManager.headerHeight,
-                    left: _bodyLeftOffset,
-                    right: _bodyRightOffset,
-                    child: BodyColumns(stateManager),
-                  ),
-                  Positioned.fill(
-                    top: stateManager.rowsTopOffset,
-                    left: _bodyLeftOffset,
-                    right: _bodyRightOffset,
-                    bottom: stateManager.footerHeight,
-                    child: BodyRows(stateManager),
-                  ),
-                  if (_showFixedColumn && _hasRightFixedColumns) ...[
-                    Positioned.fill(
-                      top: stateManager.headerHeight,
-                      left: _rightFixedLeftOffset,
-                      child: RightFixedColumns(stateManager),
-                    ),
-                    Positioned.fill(
-                      top: stateManager.rowsTopOffset,
-                      left: _rightFixedLeftOffset,
-                      bottom: stateManager.footerHeight,
-                      child: RightFixedRows(stateManager),
-                    ),
-                  ],
-                  if (_showFixedColumn && _hasLeftFixedColumns)
-                    Positioned(
-                      top: stateManager.headerHeight,
-                      left: _bodyLeftOffset - 1,
-                      bottom: stateManager.footerHeight,
-                      child: ShadowLine(
-                        axis: Axis.vertical,
-                        color: stateManager.configuration.gridBorderColor,
-                      ),
-                    ),
-                  if (_showFixedColumn && _hasRightFixedColumns)
-                    Positioned(
-                      top: stateManager.headerHeight,
-                      left: _rightFixedLeftOffset - 1,
-                      bottom: stateManager.footerHeight,
-                      child: ShadowLine(
-                        axis: Axis.vertical,
-                        reverse: true,
-                        color: stateManager.configuration.gridBorderColor,
-                      ),
-                    ),
-                  Positioned(
-                    top: stateManager.rowsTopOffset - 1,
-                    left: 0,
-                    right: 0,
-                    child: ShadowLine(
-                      axis: Axis.horizontal,
-                      color: stateManager.configuration.gridBorderColor,
-                    ),
-                  ),
-                  if (stateManager.showFooter) ...[
-                    Positioned(
-                      top: stateManager.footerTopOffset,
-                      left: 0,
-                      right: 0,
-                      child: ShadowLine(
-                        axis: Axis.horizontal,
-                        reverse: true,
-                        color: stateManager.configuration.gridBorderColor,
-                      ),
-                    ),
-                    Positioned.fill(
-                      top: stateManager.footerTopOffset,
-                      bottom: 0,
-                      child: widget.createFooter(stateManager),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 }
 
