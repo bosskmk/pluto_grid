@@ -298,6 +298,47 @@ void main() {
       expect(transformedSelectingText[1][3], rows[2].cells['text2'].value);
       expect(transformedSelectingText[1][4], rows[2].cells['right0'].value);
     });
+
+    testWidgets(
+        'WHEN'
+        'selectingMode.Square'
+        'currentSelectingRows.length == 0'
+        'currentCellPosition != null'
+        'currentSelectingPosition != null'
+        'THEN'
+        'The values of the selected cells should be returned.',
+        (WidgetTester tester) async {
+      // given
+      List<PlutoColumn> columns = [
+        ...ColumnHelper.textColumn('text', count: 3, width: 150),
+      ];
+
+      List<PlutoRow> rows = RowHelper.count(5, columns);
+
+      PlutoStateManager stateManager = PlutoStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+
+      stateManager.setSelectingMode(PlutoSelectingMode.Square);
+
+      final currentCell = rows[3].cells['text1'];
+
+      stateManager.setCurrentCell(currentCell, 3);
+
+      stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 4);
+
+      // when
+      final currentSelectingText = stateManager.currentSelectingText;
+
+      // then
+      expect(currentSelectingText,
+          'text1 value 3\ttext2 value 3\ntext1 value 4\ttext2 value 4');
+    });
   });
 
   group('setSelecting', () {
@@ -464,6 +505,76 @@ void main() {
     );
   });
 
+  group('clearCurrentSelectingPosition', () {
+    testWidgets(
+      'currentSelectingPosition 이 null 이 아니라면 null 이 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        // when
+        stateManager.setCurrentCell(rows.first.cells['text1'], 0);
+
+        stateManager.setCurrentSelectingPosition(columnIdx: 0, rowIdx: 1);
+
+        expect(stateManager.currentSelectingPosition, isNot(null));
+
+        stateManager.clearCurrentSelectingPosition();
+
+        // then
+        expect(stateManager.currentSelectingPosition, null);
+      },
+    );
+  });
+
+  group('clearCurrentSelectingRows', () {
+    testWidgets(
+      'currentSelectingRows 에 값이 있다면 빈 배열로 설정 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        // when
+        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+
+        stateManager.toggleSelectingRow(1);
+
+        expect(stateManager.currentSelectingRows.length, 1);
+
+        stateManager.clearCurrentSelectingRows();
+
+        // then
+        expect(stateManager.currentSelectingRows.length, 0);
+      },
+    );
+  });
+
   group('setAllCurrentSelecting', () {
     testWidgets(
         'WHEN '
@@ -621,6 +732,83 @@ void main() {
       expect(stateManager.currentSelectingPosition, null);
       expect(stateManager.currentSelectingRows.length, 0);
     });
+  });
+
+  group('setCurrentSelectingPosition', () {
+    testWidgets(
+      'selectingMode == Row'
+      'currentRowIdx, rowIdx 로 currentSelectingRows 가 설정 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+
+        stateManager.setCurrentCell(rows[3].cells['text1'], 3);
+
+        stateManager.setCurrentSelectingPosition(columnIdx: 1, rowIdx: 4);
+
+        // then
+        // 3, 4 번 Row 선택 됨.
+        expect(stateManager.currentSelectingRows.length, 2);
+
+        final List<Key> keys =
+            stateManager.currentSelectingRows.map((e) => e.key).toList();
+
+        expect(keys.contains(rows[3].key), isTrue);
+        expect(keys.contains(rows[4].key), isTrue);
+      },
+    );
+  });
+
+  group('toggleSelectingRow', () {
+    testWidgets(
+      'selectingMode == Row, '
+      '이미 선택 된 Row 라면 다시 해제 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+
+        stateManager.toggleSelectingRow(3);
+
+        expect(stateManager.isSelectedRow(rows[3].key), true);
+
+        stateManager.toggleSelectingRow(3);
+        // then
+
+        expect(stateManager.isSelectedRow(rows[3].key), false);
+      },
+    );
   });
 
   group('isSelectedCell', () {
