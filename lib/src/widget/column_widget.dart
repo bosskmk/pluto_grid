@@ -1,12 +1,5 @@
 part of '../../pluto_grid.dart';
 
-enum MenuItem {
-  Unfix,
-  ToLeft,
-  ToRight,
-  AutoSize,
-}
-
 class ColumnWidget extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
@@ -73,7 +66,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       );
     };
 
-    final MenuItem selectedMenu = await showMenu<MenuItem>(
+    final _MenuItem selectedMenu = await showMenu<_MenuItem>(
       context: context,
       color: backgroundColor,
       position: RelativeRect.fromRect(
@@ -81,40 +74,40 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       items: [
         if (widget.column.fixed.isFixed == true)
           PopupMenuItem(
-            value: MenuItem.Unfix,
+            value: _MenuItem.Unfix,
             child: buildTextItem('Unfix'),
           ),
         if (widget.column.fixed.isFixed != true) ...[
           PopupMenuItem(
-            value: MenuItem.ToLeft,
+            value: _MenuItem.ToLeft,
             child: buildTextItem('ToLeft'),
           ),
           PopupMenuItem(
-            value: MenuItem.ToRight,
+            value: _MenuItem.ToRight,
             child: buildTextItem('ToRight'),
           ),
         ],
         PopupMenuItem(
-          value: MenuItem.AutoSize,
+          value: _MenuItem.AutoSize,
           child: buildTextItem('AutoSize'),
         ),
       ],
     );
 
     switch (selectedMenu) {
-      case MenuItem.Unfix:
+      case _MenuItem.Unfix:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.None);
         break;
-      case MenuItem.ToLeft:
+      case _MenuItem.ToLeft:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Left);
         break;
-      case MenuItem.ToRight:
+      case _MenuItem.ToRight:
         widget.stateManager
             .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
         break;
-      case MenuItem.AutoSize:
+      case _MenuItem.AutoSize:
         final String maxValue =
             widget.stateManager.rows.fold('', (previousValue, element) {
           final value = element.cells.entries
@@ -296,4 +289,11 @@ class ColumnIcon extends StatelessWidget {
         );
     }
   }
+}
+
+enum _MenuItem {
+  Unfix,
+  ToLeft,
+  ToRight,
+  AutoSize,
 }
