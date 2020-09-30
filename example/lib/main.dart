@@ -1,11 +1,8 @@
-import 'package:example/screen/configuration_screen.dart';
+import 'package:example/constants/pluto_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'screen/add_and_remove_screen.dart';
-import 'screen/dual_grid_screen.dart';
 import 'screen/home_screen.dart';
-import 'screen/normal_grid_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,15 +12,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute:
-          kReleaseMode ? HomeScreen.routeName : AddAndRemoveScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : HomeScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
-        NormalGridScreen.routeName: (context) => NormalGridScreen(),
-        DualGridScreen.routeName: (context) => DualGridScreen(),
-        AddAndRemoveScreen.routeName: (context) => AddAndRemoveScreen(),
-        ConfigurationScreen.routeName: (context) => ConfigurationScreen(),
       },
+      theme: ThemeData(
+        primaryColor: PlutoColors.primaryColor,
+        fontFamily: 'OpenSans',
+        backgroundColor: PlutoColors.backgroundColor,
+        scaffoldBackgroundColor: PlutoColors.backgroundColor,
+      ),
     );
   }
 }
