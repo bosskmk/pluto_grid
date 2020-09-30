@@ -22,9 +22,23 @@ abstract class IRowState {
     int start = 0,
   });
 
+  void prependNewRows({
+    int count = 1,
+  });
+
   void prependRows(List<PlutoRow> rows);
 
+  void appendNewRows({
+    int count = 1,
+  });
+
   void appendRows(List<PlutoRow> rows);
+
+  PlutoRow getNewRow();
+
+  List<PlutoRow> getNewRows({
+    int count = 1,
+  });
 
   void removeCurrentRow();
 
@@ -83,6 +97,12 @@ mixin RowState implements IPlutoState {
     }).toList(growable: false);
   }
 
+  void prependNewRows({
+    int count = 1,
+  }) {
+    prependRows(getNewRows(count: count));
+  }
+
   void prependRows(List<PlutoRow> rows) {
     if (rows == null || rows.length < 1) {
       return;
@@ -129,6 +149,12 @@ mixin RowState implements IPlutoState {
     notifyListeners();
   }
 
+  void appendNewRows({
+    int count = 1,
+  }) {
+    appendRows(getNewRows(count: count));
+  }
+
   void appendRows(List<PlutoRow> rows) {
     if (rows == null || rows.length < 1) {
       return;
@@ -146,6 +172,34 @@ mixin RowState implements IPlutoState {
     _rows.addAll(rows);
 
     notifyListeners();
+  }
+
+  PlutoRow getNewRow() {
+    final cells = Map<String, PlutoCell>();
+
+    _columns.forEach((PlutoColumn column) {
+      cells[column.field] = PlutoCell(
+        value: column.type.defaultValue,
+      );
+    });
+
+    return PlutoRow(cells: cells);
+  }
+
+  List<PlutoRow> getNewRows({
+    int count = 1,
+  }) {
+    List<PlutoRow> rows = [];
+
+    for (var i = 0; i < count; i += 1) {
+      rows.add(getNewRow());
+    }
+
+    if (rows.length < 1) {
+      return [];
+    }
+
+    return rows;
   }
 
   void removeCurrentRow() {

@@ -98,6 +98,63 @@ void main() {
     },
   );
 
+  group('PlutoColumnTypeText 의 defaultValue', () {
+    testWidgets(
+      'text 기본 값이 설정 되어야 한다.',
+      (WidgetTester tester) async {
+        final PlutoColumnTypeText column = PlutoColumnType.text(
+          defaultValue: 'default',
+        );
+
+        expect(column.defaultValue, 'default');
+      },
+    );
+
+    testWidgets(
+      'number 기본 값이 설정 되어야 한다.',
+          (WidgetTester tester) async {
+        final PlutoColumnTypeNumber column = PlutoColumnType.number(
+          defaultValue: 123,
+        );
+
+        expect(column.defaultValue, 123);
+      },
+    );
+
+    testWidgets(
+      'select 기본 값이 설정 되어야 한다.',
+          (WidgetTester tester) async {
+        final PlutoColumnTypeSelect column = PlutoColumnType.select(
+          ['One'], defaultValue: 'One',
+        );
+
+        expect(column.defaultValue, 'One');
+      },
+    );
+
+    testWidgets(
+      'date 기본 값이 설정 되어야 한다.',
+          (WidgetTester tester) async {
+        final PlutoColumnTypeDate column = PlutoColumnType.date(
+          defaultValue: DateTime.parse('2020-01-01'),
+        );
+
+        expect(column.defaultValue, DateTime.parse('2020-01-01'));
+      },
+    );
+
+    testWidgets(
+      'time 기본 값이 설정 되어야 한다.',
+          (WidgetTester tester) async {
+        final PlutoColumnTypeTime column = PlutoColumnType.time(
+          defaultValue: '20:30',
+        );
+
+        expect(column.defaultValue, '20:30');
+      },
+    );
+  });
+
   group(
     'PlutoColumnTypeText',
     () {

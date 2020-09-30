@@ -192,6 +192,62 @@ void main() {
     });
   });
 
+  group('prependNewRows', () {
+    testWidgets(
+      'count 기본값 1 만큼 rows 앞쪽에 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.prependNewRows();
+
+        // then
+        expect(stateManager.rows.length, 6);
+        // 원래 있던 첫번 째 Row 의 셀이 두번 째로 이동
+        expect(stateManager.rows[1].cells['text0'].value, 'text0 value 0');
+      },
+    );
+
+    testWidgets(
+      'count 5 만큼 rows 앞쪽에 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.prependNewRows(count: 5);
+
+        // then
+        expect(stateManager.rows.length, 10);
+        // 원래 있던 첫번 째 Row 의 셀이 6번 째로 이동
+        expect(stateManager.rows[5].cells['text0'].value, 'text0 value 0');
+      },
+    );
+  });
+
   group('prependRows', () {
     testWidgets('A new row must be added before the existing row.',
         (WidgetTester tester) async {
@@ -331,6 +387,72 @@ void main() {
     });
   });
 
+  group('appendNewRows', () {
+    testWidgets(
+      'count 기본값 1 만큼 rows 뒤쪽에 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.appendNewRows();
+
+        // then
+        expect(stateManager.rows.length, 6);
+        // 마지막 Row 에 추가 됨
+        expect(
+          stateManager.rows[5].cells['text0'].value,
+          columns[0].type.defaultValue,
+        );
+      },
+    );
+
+    testWidgets(
+      'count 5 만큼 rows 뒤쪽에 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        stateManager.appendNewRows(count: 5);
+
+        // then
+        expect(stateManager.rows.length, 10);
+        // 추가 된 5~9 번 셀의 기본 값
+        expect(
+          stateManager.rows[5].cells['text0'].value,
+          columns[0].type.defaultValue,
+        );
+        expect(
+          stateManager.rows[9].cells['text0'].value,
+          columns[0].type.defaultValue,
+        );
+      },
+    );
+  });
+
   group('appendRows', () {
     testWidgets('New rows must be added after the existing row.',
         (WidgetTester tester) async {
@@ -381,6 +503,114 @@ void main() {
       // then
       expect(stateManager.rows.length, 5);
     });
+  });
+
+  group('getNewRow', () {
+    testWidgets(
+      'Should be returned a row including cells filled with defaultValue of the column',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          PlutoColumn(
+            title: 'text',
+            field: 'text',
+            type: PlutoColumnType.text(defaultValue: 'default text'),
+          ),
+          PlutoColumn(
+            title: 'number',
+            field: 'number',
+            type: PlutoColumnType.number(defaultValue: 123),
+          ),
+          PlutoColumn(
+            title: 'select',
+            field: 'select',
+            type: PlutoColumnType.select(['One', 'Two'], defaultValue: 'Two'),
+          ),
+          PlutoColumn(
+            title: 'date',
+            field: 'date',
+            type: PlutoColumnType.date(
+                defaultValue: DateTime.parse('2020-09-01')),
+          ),
+          PlutoColumn(
+            title: 'time',
+            field: 'time',
+            type: PlutoColumnType.time(defaultValue: '23:59'),
+          ),
+        ];
+
+        List<PlutoRow> rows = [];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        PlutoRow newRow = stateManager.getNewRow();
+
+        // then
+        expect(newRow.cells['text'].value, 'default text');
+        expect(newRow.cells['number'].value, 123);
+        expect(newRow.cells['select'].value, 'Two');
+        expect(newRow.cells['date'].value, DateTime.parse('2020-09-01'));
+        expect(newRow.cells['time'].value, '23:59');
+      },
+    );
+  });
+
+  group('getNewRows', () {
+    testWidgets(
+      'count 기본값 1 만큼 생성 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 2),
+        ];
+
+        List<PlutoRow> rows = [];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+        // when
+        List<PlutoRow> newRows = stateManager.getNewRows();
+
+        // then
+        expect(newRows.length, 1);
+      },
+    );
+
+    testWidgets(
+      'count 3 만큼 생성 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 2),
+        ];
+
+        List<PlutoRow> rows = [];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+        // when
+        List<PlutoRow> newRows = stateManager.getNewRows(count: 3);
+
+        // then
+        expect(newRows.length, 3);
+      },
+    );
   });
 
   group('removeCurrentRow', () {
