@@ -1,4 +1,3 @@
-import 'package:example/constants/pluto_colors.dart';
 import 'package:flutter/material.dart';
 
 class PlutoGridTitle extends StatelessWidget {

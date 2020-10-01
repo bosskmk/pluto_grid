@@ -1,8 +1,9 @@
-import 'package:example/dummy_data/development.dart';
-import 'package:example/widget/pluto_example_button.dart';
-import 'package:example/widget/pluto_example_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../dummy_data/development.dart';
+import '../../widget/pluto_example_button.dart';
+import '../../widget/pluto_example_screen.dart';
 
 class CellSelectionScreen extends StatefulWidget {
   static const routeName = 'feature/cell-selection';
@@ -39,7 +40,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_selection_screen.dart',
         ),
       ],
       body: PlutoGrid(

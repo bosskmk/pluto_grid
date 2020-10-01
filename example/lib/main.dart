@@ -1,21 +1,23 @@
-import 'package:example/constants/pluto_colors.dart';
-import 'package:example/screen/feature/cell_selection_screen.dart';
-import 'package:example/screen/feature/column_moving_screen.dart';
-import 'package:example/screen/feature/column_resizing_screen.dart';
-import 'package:example/screen/feature/column_sorting_screen.dart';
-import 'package:example/screen/feature/copy_and_paste_screen.dart';
-import 'package:example/screen/feature/dark_mode_screen.dart';
-import 'package:example/screen/feature/date_type_column_screen.dart';
-import 'package:example/screen/feature/dual_mode_screen.dart';
-import 'package:example/screen/feature/moving_screen.dart';
-import 'package:example/screen/feature/number_type_column_screen.dart';
-import 'package:example/screen/feature/row_selection_screen.dart';
-import 'package:example/screen/feature/selection_type_column_screen.dart';
-import 'package:example/screen/feature/text_type_column_screen.dart';
-import 'package:example/screen/feature/time_type_column_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'constants/pluto_colors.dart';
+import 'screen/feature/add_and_remove_rows_screen.dart';
+import 'screen/feature/cell_selection_screen.dart';
+import 'screen/feature/column_moving_screen.dart';
+import 'screen/feature/column_resizing_screen.dart';
+import 'screen/feature/column_sorting_screen.dart';
+import 'screen/feature/copy_and_paste_screen.dart';
+import 'screen/feature/dark_mode_screen.dart';
+import 'screen/feature/date_type_column_screen.dart';
+import 'screen/feature/dual_mode_screen.dart';
+import 'screen/feature/grid_as_popup_screen.dart';
+import 'screen/feature/moving_screen.dart';
+import 'screen/feature/number_type_column_screen.dart';
+import 'screen/feature/row_selection_screen.dart';
+import 'screen/feature/selection_type_column_screen.dart';
+import 'screen/feature/text_type_column_screen.dart';
+import 'screen/feature/time_type_column_screen.dart';
 import 'screen/home_screen.dart';
 
 void main() {
@@ -42,7 +44,9 @@ class MyApp extends StatelessWidget {
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),
         MovingScreen.routeName: (context) => MovingScreen(),
+        AddAndRemoveRowsScreen.routeName: (context) => AddAndRemoveRowsScreen(),
         DualModeScreen.routeName: (context) => DualModeScreen(),
+        GridAsPopupScreen.routeName: (context) => GridAsPopupScreen(),
         DarkModeScreen.routeName: (context) => DarkModeScreen(),
       },
       theme: ThemeData(

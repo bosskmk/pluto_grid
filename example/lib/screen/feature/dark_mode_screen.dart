@@ -1,8 +1,9 @@
-import 'package:example/dummy_data/development.dart';
-import 'package:example/widget/pluto_example_button.dart';
-import 'package:example/widget/pluto_example_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../dummy_data/development.dart';
+import '../../widget/pluto_example_button.dart';
+import '../../widget/pluto_example_screen.dart';
 
 class DarkModeScreen extends StatefulWidget {
   static const routeName = 'feature/dark-mode';
@@ -38,7 +39,7 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dark_mode_screen.dart',
         ),
       ],
       body: PlutoGrid(

@@ -1,9 +1,10 @@
-import 'package:example/dummy_data/development.dart';
-import 'package:example/widget/pluto_example_button.dart';
-import 'package:example/widget/pluto_example_screen.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../dummy_data/development.dart';
+import '../../widget/pluto_example_button.dart';
+import '../../widget/pluto_example_screen.dart';
 
 class DualModeScreen extends StatefulWidget {
   static const routeName = 'feature/dual-mode';
@@ -112,7 +113,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dual_mode_screen.dart',
         ),
       ],
       body: PlutoDualGrid(

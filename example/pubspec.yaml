@@ -28,6 +28,7 @@ dependencies:
   faker: ^1.2.1
   url_launcher: ^5.7.2
   font_awesome_flutter: ^8.8.1
+  rainbow_color: ^0.1.1
 
 
   # The following adds the Cupertino Icons font to your application.

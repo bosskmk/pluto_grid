@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 
 import '../constants/pluto_colors.dart';
 
-class PlutoListTile extends StatelessWidget {
-  final String title;
+class PlutoContributorTile extends StatelessWidget {
+  final String name;
 
   final String description;
 
-  final Function() onTapPreview;
+  final String linkTitle;
 
-  final Function() onTapLiveDemo;
+  final Function() onTapLink;
 
-  PlutoListTile({
-    @required this.title,
+  PlutoContributorTile({
+    @required this.name,
     this.description,
-    this.onTapPreview,
-    this.onTapLiveDemo,
+    this.linkTitle,
+    this.onTapLink,
   })  : _color = Colors.white,
         _fontColor = PlutoColors.fontColor;
 
-  PlutoListTile.dark({
-    @required this.title,
+  PlutoContributorTile.invisible({
+    @required this.name,
     this.description,
-    this.onTapPreview,
-    this.onTapLiveDemo,
-  })  : _color = Colors.black87,
-        _fontColor = Colors.white70;
+    this.linkTitle,
+    this.onTapLink,
+  })  : _color = Colors.white70,
+        _fontColor = Colors.black54;
 
   final Color _color;
   final Color _fontColor;
@@ -45,7 +45,7 @@ class PlutoListTile extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: ListTile(
             title: Text(
-              title,
+              name,
               style: TextStyle(
                 fontSize: 20,
                 color: Colors.blue,
@@ -55,19 +55,14 @@ class PlutoListTile extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (onTapPreview != null || onTapLiveDemo != null)
+                if (onTapLink != null)
                   Wrap(
                     spacing: 10,
                     children: [
-                      if (onTapPreview != null)
+                      if (onTapLink != null)
                         TextButton(
-                          child: Text('Preview'),
-                          onPressed: onTapPreview,
-                        ),
-                      if (onTapLiveDemo != null)
-                        TextButton(
-                          child: Text('LiveDemo'),
-                          onPressed: onTapLiveDemo,
+                          child: Text(linkTitle ?? 'Link'),
+                          onPressed: onTapLink,
                         ),
                     ],
                   ),

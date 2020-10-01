@@ -1,7 +1,8 @@
-import 'package:example/widget/pluto_example_button.dart';
-import 'package:example/widget/pluto_example_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../widget/pluto_example_button.dart';
+import '../../widget/pluto_example_screen.dart';
 
 class ColumnSortingScreen extends StatefulWidget {
   static const routeName = 'feature/column-sorting';
@@ -68,13 +69,12 @@ class _ColumnSortingScreenState extends State<ColumnSortingScreen> {
       title: 'Column sorting',
       topTitle: 'Column sorting',
       topContents: [
-        Text(
-            'Ascending or Descending by clicking on the column heading.'),
+        Text('Ascending or Descending by clicking on the column heading.'),
       ],
       topButtons: [
         PlutoExampleButton(
           url:
-          'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/column_sorting_screen.dart',
         ),
       ],
       body: PlutoGrid(
