@@ -163,7 +163,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
           return PlutoCell(
               value: day.day,
               originalValue:
-                  intl.DateFormat(widget.column.type.date.format).format(day));
+                  intl.DateFormat('yyyy-MM-dd').format(day));
         },
       );
 
