@@ -171,7 +171,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
     try {
-      _textController.text = value.toString();
+      _textController.text = widget.stateManager.currentCell.value.toString();
     } catch (e) {
       /**
        * When the Popup is opened, the TextField is closed

@@ -1,14 +1,30 @@
 import 'dart:math';
 
-import 'package:example/screen/dual_grid_screen.dart';
-import 'package:example/screen/normal_grid_screen.dart';
-import 'package:example/widget/contributor.dart';
-import 'package:example/widget/link.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../widget/feature.dart';
-import '../widget/image_slider.dart';
-import '../widget/main_drawer.dart';
+import '../helper/launch_url.dart';
+import '../screen/feature/column_sorting_screen.dart';
+import '../screen/feature/number_type_column_screen.dart';
+import '../screen/feature/text_type_column_screen.dart';
+import '../widget/pluto_contributor_tile.dart';
+import '../widget/pluto_grid_title.dart';
+import '../widget/pluto_list_tile.dart';
+import '../widget/pluto_section.dart';
+import '../widget/pluto_text_color_animation.dart';
+import 'feature/add_and_remove_rows_screen.dart';
+import 'feature/cell_selection_screen.dart';
+import 'feature/column_moving_screen.dart';
+import 'feature/column_resizing_screen.dart';
+import 'feature/copy_and_paste_screen.dart';
+import 'feature/dark_mode_screen.dart';
+import 'feature/date_type_column_screen.dart';
+import 'feature/dual_mode_screen.dart';
+import 'feature/grid_as_popup_screen.dart';
+import 'feature/moving_screen.dart';
+import 'feature/row_selection_screen.dart';
+import 'feature/selection_type_column_screen.dart';
+import 'feature/time_type_column_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/';
@@ -16,252 +32,283 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('PlutoGrid'),
-      ),
-      drawer: MainDrawer(),
       body: LayoutBuilder(
         builder: (ctx, size) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 80,
-                ),
-                Center(
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          text: 'Pluto',
-                          style: TextStyle(
-                            fontSize: max(size.maxWidth / 18, 24),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+          return Stack(
+            children: [
+              Positioned.fill(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    gradient: new LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF2E4370),
+                        Color(0xFF33C1E8),
+                      ],
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            30,
+                            100,
+                            30,
+                            0,
                           ),
-                          children: [
-                            TextSpan(
-                              text: 'Grid',
-                              style: TextStyle(
-                                fontSize: max(size.maxWidth / 18, 24),
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black54,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: PlutoGridTitle(
+                              fontSize: max(size.maxWidth / 20, 38),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 30,
+                          ),
+                          child: PlutoTextColorAnimation(
+                            text: 'The DataGrid for Flutter.',
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Center(
+                          child: Column(
+                            children: [
+                              IconButton(
+                                icon: FaIcon(FontAwesomeIcons.link),
+                                color: Colors.white,
+                                onPressed: () {
+                                  launchUrl(
+                                      'https://pub.dev/packages/pluto_grid');
+                                },
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.cyan,
-                          borderRadius: BorderRadius.all(Radius.circular(3)),
-                        ),
-                        child: Text(
-                          'Alpha',
-                          style: TextStyle(
-                            fontSize: max(size.maxWidth / 60, 12),
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 21),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'The DataGrid for flutter.',
-                    style: TextStyle(
-                      fontSize: max(size.maxWidth / 38, 22),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                SizedBox(
-                  width: size.maxWidth,
-                  height: 550,
-                  child: ImageSlider(size),
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'PlutoGrid features.',
-                    style: TextStyle(
-                      fontSize: max(size.maxWidth / 38, 22),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  children: [
-                    Feature(
-                        'Column functions',
-                        'Columns can be aligned, moved, and fixed left and right. '
-                            'You can also adjust the width manually or automatically. '
-                            'Drag the column heading or drag the icon to the right of the column.'),
-                    Feature(
-                        'Cell types',
-                        'There are text, number, select, date, and time cell types. '
-                            'Enter or tap on the cell. '
-                            'You can also cancel the text you are writing with the ESC key.'),
-                    Feature(
-                        'Dual Grid',
-                        'You can edit the grid while moving left and right at the same time. '
-                            'You can move the grid by tapping the grid or using Control + Left or Right arrow keys. '
-                            'Among the two grids, the currently focused grid shows the background color of the row.'),
-                    Feature('All Flutter platforms supported',
-                        'The goal is to run on Android, iOS, Web, Windows, and Macos platforms supported by Flutter.'),
-                  ],
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          'Play Demo.',
-                          style: TextStyle(
-                            fontSize: max(size.maxWidth / 38, 22),
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
+                              Text(
+                                'pub.dev',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        direction: Axis.horizontal,
-                        spacing: 30,
-                        children: [
-                          RaisedButton(
-                            color: Colors.white,
-                            onPressed: () => Navigator.pushNamed(
-                                context, NormalGridScreen.routeName),
-                            child: Text(
-                              'Normal Grid',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
-                            ),
+                        PlutoSection(
+                          title: 'Features',
+                          fontColor: Colors.white,
+                          child: PlutoFeatures(),
+                          // color: Colors.white,
+                        ),
+                        PlutoSection(
+                          title: 'Contributors',
+                          fontColor: Colors.white,
+                          child: PlutoContributors(),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Center(
+                          child: Column(
+                            children: [
+                              IconButton(
+                                icon: FaIcon(FontAwesomeIcons.github),
+                                color: Colors.white,
+                                onPressed: () {
+                                  launchUrl(
+                                      'https://github.com/bosskmk/pluto_grid');
+                                },
+                              ),
+                              Text(
+                                'Github',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
                           ),
-                          RaisedButton(
-                            color: Colors.white,
-                            onPressed: () => Navigator.pushNamed(
-                                context, DualGridScreen.routeName),
-                            child: Text(
-                              'Dual Grid',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Links.',
-                    style: TextStyle(
-                      fontSize: max(size.maxWidth / 38, 22),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      decoration: TextDecoration.underline,
+                        ),
+                        SizedBox(
+                          height: 100,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 40,
-                ),
-                Wrap(
-                  alignment: WrapAlignment.start,
-                  direction: Axis.horizontal,
-                  children: [
-                    Link(
-                      title: 'Github',
-                      description:
-                          'This project is open source on github and licensed by MIT.',
-                      url: 'https://github.com/bosskmk/pluto_grid',
-                    ),
-                    Link(
-                      title: 'pub.dev',
-                      description: 'Dart official package repository.',
-                      url: 'https://pub.dev/packages/pluto_grid',
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Contributors.',
-                    style: TextStyle(
-                      fontSize: max(size.maxWidth / 38, 22),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  direction: Axis.horizontal,
-                  children: [
-                    Contributor(
-                      profile: 'assets/images/contributor_bosskmk.jpg',
-                      name: 'ManKi Kim',
-                      description: 'I\'ve been doing backend web development.',
-                      homepage: 'https://github.com/bosskmk',
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         },
+      ),
+    );
+  }
+}
+
+class PlutoFeatures extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          PlutoListTile(
+            title: 'Column moving',
+            description:
+                'Dragging the column heading left or right moves the column left and right.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnMovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Column resizing',
+            description:
+                'Dragging the icon to the right of the column title left or right changes the width of the column.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnResizingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Column sorting',
+            description:
+                'Ascending or Descending by clicking on the column heading.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnSortingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Text type column',
+            description: 'A column to enter a character value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, TextTypeColumnScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Number type column',
+            description: 'A column to enter a number value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, NumberTypeColumnScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Date type column',
+            description: 'A column to enter a date value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, DateTypeColumnScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Time type column',
+            description: 'A column to enter a time value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, TimeTypeColumnScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Selection type column',
+            description: 'A column to enter a selection value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, SelectionTypeColumnScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Row selection',
+            description:
+                'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowSelectionScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Cell selection',
+            description:
+                'In Square selection mode, Shift + tap or long tap and then move to select cells.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, CellSelectionScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Copy and Paste',
+            description:
+                'Copy and paste are operated depending on the cell and row selection status.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, CopyAndPasteScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Moving',
+            description:
+                'Change the current cell position with the arrow keys, enter key, and tab key.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, MovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Add and Remove Rows',
+            description: 'You can add or delete rows.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, AddAndRemoveRowsScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Dual mode',
+            description:
+                'Place the grid on the left and right and move or edit with the keyboard.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, DualModeScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Grid as Popup',
+            description:
+            'You can call the grid by popping up with the TextField.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, GridAsPopupScreen.routeName);
+            },
+          ),
+          PlutoListTile.dark(
+            title: 'Dark mode',
+            description: 'Change the entire theme of the grid to Dark.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, DarkModeScreen.routeName);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlutoContributors extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          PlutoContributorTile(
+            name: 'Manki Kim',
+            description: 'Backend developer in Korea.',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/bosskmk');
+            },
+          ),
+          PlutoContributorTile.invisible(
+            name: 'And you.',
+            description:
+                'Anyone can contribute, code, tests, bug reports, documentation, etc.',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/bosskmk/pluto_grid');
+            },
+          ),
+        ],
       ),
     );
   }

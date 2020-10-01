@@ -1895,6 +1895,77 @@ void main() {
     );
   });
 
+  group('Enter 키 테스트', () {
+    List<PlutoColumn> columns;
+
+    List<PlutoRow> rows;
+
+    PlutoStateManager stateManager;
+
+    final withTheCellSelected = PlutoWidgetTestHelper(
+      '3, 3 셀이 선택 된 상태에서',
+      (tester) async {
+        columns = [
+          ...ColumnHelper.textColumn('header', count: 10),
+        ];
+
+        rows = RowHelper.count(10, columns);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('header3 value 3'));
+      },
+    );
+
+    withTheCellSelected.test(
+      'editing 상태에서 shift + enter 입력 시 위 셀로 이동 되어야 한다.',
+      (tester) async {
+        stateManager.setEditing(true);
+        expect(stateManager.currentCell.value, 'header3 value 3');
+        expect(stateManager.currentCellPosition.columnIdx, 3);
+        expect(stateManager.currentCellPosition.rowIdx, 3);
+
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+        expect(stateManager.currentCell.value, 'header3 value 2');
+        expect(stateManager.currentCellPosition.columnIdx, 3);
+        expect(stateManager.currentCellPosition.rowIdx, 2);
+      },
+    );
+
+    withTheCellSelected.test(
+      'editing 상태에서 enter 입력 시 아래 셀로 이동 되어야 한다.',
+          (tester) async {
+        stateManager.setEditing(true);
+        expect(stateManager.currentCell.value, 'header3 value 3');
+        expect(stateManager.currentCellPosition.columnIdx, 3);
+        expect(stateManager.currentCellPosition.rowIdx, 3);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        expect(stateManager.currentCell.value, 'header3 value 4');
+        expect(stateManager.currentCellPosition.columnIdx, 3);
+        expect(stateManager.currentCellPosition.rowIdx, 4);
+      },
+    );
+  });
+
   group('ESC 키 테스트', () {
     List<PlutoColumn> columns;
 
@@ -1978,6 +2049,127 @@ void main() {
         expect(stateManager.currentCell.value, isNot('a'));
 
         expect(stateManager.currentCell.value, 'header0 value 0');
+      },
+    );
+  });
+
+  group('F2 키 테스트', () {
+    List<PlutoColumn> columns;
+
+    List<PlutoRow> rows;
+
+    PlutoStateManager stateManager;
+
+    final withTheCellSelected = PlutoWidgetTestHelper(
+      '0, 0 셀이 선택 된 상태에서',
+      (tester) async {
+        columns = [
+          ...ColumnHelper.textColumn('header', count: 10),
+        ];
+
+        rows = RowHelper.count(10, columns);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('header0 value 0'));
+      },
+    );
+
+    withTheCellSelected.test(
+      'F2 키 입력 시 편집 상태가 아니면 편집 상태로 변경 되어야 한다.',
+      (tester) async {
+        expect(stateManager.isEditing, false);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.f2);
+
+        expect(stateManager.isEditing, true);
+      },
+    );
+  });
+
+  group('Ctrl + A 키 테스트', () {
+    List<PlutoColumn> columns;
+
+    List<PlutoRow> rows;
+
+    PlutoStateManager stateManager;
+
+    final withTheCellSelected = PlutoWidgetTestHelper(
+      '0, 0 셀이 선택 된 상태에서',
+      (tester) async {
+        columns = [
+          ...ColumnHelper.textColumn('header', count: 10),
+        ];
+
+        rows = RowHelper.count(10, columns);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: Container(
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('header0 value 0'));
+      },
+    );
+
+    withTheCellSelected.test(
+      'editing 상태가 아니면 Ctrl + A 키 입력 시 전체 셀이 선택 되어야 한다.',
+      (tester) async {
+        expect(stateManager.selectingMode.isSquare, true);
+        expect(stateManager.isEditing, false);
+
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.control);
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
+
+        expect(stateManager.currentCellPosition.rowIdx, 0);
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+
+        expect(stateManager.currentSelectingPosition.rowIdx, 9);
+        expect(stateManager.currentSelectingPosition.columnIdx, 9);
+      },
+    );
+
+    withTheCellSelected.test(
+      'editing 상태가 맞다면 Ctrl + A 키 입력 시 셀 선택이 되지 않아야 한다.',
+      (tester) async {
+        expect(stateManager.selectingMode.isSquare, true);
+        stateManager.setEditing(true);
+        expect(stateManager.isEditing, true);
+
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.control);
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
+
+        expect(stateManager.currentCellPosition.rowIdx, 0);
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+
+        expect(stateManager.currentSelectingPosition, null);
       },
     );
   });
