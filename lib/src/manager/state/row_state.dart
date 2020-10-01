@@ -214,7 +214,10 @@ mixin RowState implements IPlutoState {
     notifyListeners(checkCellValue: false);
   }
 
-  void removeRows(List<PlutoRow> rows) {
+  void removeRows(
+    List<PlutoRow> rows, {
+    bool notify: true,
+  }) {
     if (rows == null || rows.length < 1) {
       return;
     }
@@ -228,7 +231,9 @@ mixin RowState implements IPlutoState {
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
-    notifyListeners(checkCellValue: false);
+    if (notify) {
+      notifyListeners(checkCellValue: false);
+    }
   }
 
   void updateCurrentRowIdx({bool notify: true}) {
