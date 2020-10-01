@@ -16,7 +16,7 @@ class PlutoGridTitle extends StatelessWidget {
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
-          color: PlutoColors.primaryColor,
+          color: Color(0xFF33BDE5),
         ),
         children: [
           TextSpan(
@@ -24,7 +24,7 @@ class PlutoGridTitle extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
-              color: Colors.black54,
+              color: Colors.white,
             ),
           ),
         ],

@@ -1,0 +1,102 @@
+import 'package:example/widget/pluto_example_button.dart';
+import 'package:example/widget/pluto_example_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+class NumberTypeColumnScreen extends StatefulWidget {
+  static const routeName = 'feature/number-type-column';
+
+  @override
+  _NumberTypeColumnScreenState createState() => _NumberTypeColumnScreenState();
+}
+
+class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
+  List<PlutoColumn> columns;
+
+  List<PlutoRow> rows;
+
+  @override
+  void initState() {
+    super.initState();
+
+    columns = [
+      PlutoColumn(
+        title: 'Negative true',
+        field: 'negative_true',
+        type: PlutoColumnType.number(),
+      ),
+      PlutoColumn(
+        title: 'Negative false',
+        field: 'negative_false',
+        type: PlutoColumnType.number(
+          negative: false,
+        ),
+      ),
+      PlutoColumn(
+        title: '2 decimal places',
+        field: 'two_decimal',
+        type: PlutoColumnType.number(
+          format: '#,###.##',
+        ),
+      ),
+      PlutoColumn(
+        title: '3 decimal places',
+        field: 'three_decimal',
+        type: PlutoColumnType.number(
+          format: '#,###.###',
+        ),
+      ),
+    ];
+
+    rows = [
+      PlutoRow(
+        cells: {
+          'negative_true': PlutoCell(value: -12345),
+          'negative_false': PlutoCell(value: 12345),
+          'two_decimal': PlutoCell(value: 12345.12),
+          'three_decimal': PlutoCell(value: 12345.123),
+        },
+      ),
+      PlutoRow(
+        cells: {
+          'negative_true': PlutoCell(value: -12345),
+          'negative_false': PlutoCell(value: 12345),
+          'two_decimal': PlutoCell(value: 12345.12),
+          'three_decimal': PlutoCell(value: 12345.123),
+        },
+      ),
+      PlutoRow(
+        cells: {
+          'negative_true': PlutoCell(value: -12345),
+          'negative_false': PlutoCell(value: 12345),
+          'two_decimal': PlutoCell(value: 12345.12),
+          'three_decimal': PlutoCell(value: 12345.123),
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlutoExampleScreen(
+      title: 'Number type column',
+      topTitle: 'Number type column',
+      topContents: [
+        Text('A column to enter a number value.'),
+      ],
+      topButtons: [
+        PlutoExampleButton(
+          url:
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+        ),
+      ],
+      body: PlutoGrid(
+        columns: columns,
+        rows: rows,
+        onChanged: (PlutoOnChangedEvent event) {
+          print(event);
+        },
+      ),
+    );
+  }
+}

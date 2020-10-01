@@ -1,0 +1,54 @@
+import 'package:example/dummy_data/development.dart';
+import 'package:example/widget/pluto_example_button.dart';
+import 'package:example/widget/pluto_example_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+class DarkModeScreen extends StatefulWidget {
+  static const routeName = 'feature/dark-mode';
+
+  @override
+  _DarkModeScreenState createState() => _DarkModeScreenState();
+}
+
+class _DarkModeScreenState extends State<DarkModeScreen> {
+  List<PlutoColumn> columns;
+
+  List<PlutoRow> rows;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final dummyDate = DummyData(10, 100);
+
+    columns = dummyDate.columns;
+
+    rows = dummyDate.rows;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlutoExampleScreen(
+      title: 'Dark mode',
+      topTitle: 'Dark mode',
+      topContents: [
+        Text('Change the entire theme of the grid to Dark.'),
+      ],
+      topButtons: [
+        PlutoExampleButton(
+          url:
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/home_screen.dart',
+        ),
+      ],
+      body: PlutoGrid(
+        columns: columns,
+        rows: rows,
+        onChanged: (PlutoOnChangedEvent event) {
+          print(event);
+        },
+        configuration: PlutoConfiguration.dark(),
+      ),
+    );
+  }
+}

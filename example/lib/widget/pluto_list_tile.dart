@@ -6,16 +6,28 @@ class PlutoListTile extends StatelessWidget {
 
   final String description;
 
-  final List<String> tags;
+  final Function() onTapPreview;
 
-  final Function() onTap;
+  final Function() onTapLiveDemo;
 
   PlutoListTile({
     @required this.title,
     this.description,
-    this.tags,
-    this.onTap,
-  });
+    this.onTapPreview,
+    this.onTapLiveDemo,
+  })  : _color = Colors.white,
+        _fontColor = PlutoColors.fontColor;
+
+  PlutoListTile.dark({
+    @required this.title,
+    this.description,
+    this.onTapPreview,
+    this.onTapLiveDemo,
+  })  : _color = Colors.black87,
+        _fontColor = Colors.white70;
+
+  final Color _color;
+  final Color _fontColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,53 +35,56 @@ class PlutoListTile extends StatelessWidget {
       constraints: BoxConstraints(
         minWidth: 300,
         maxWidth: 300,
+        minHeight: 180,
+        maxHeight: 180,
       ),
       child: Card(
-        child: ListTile(
-          title: Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.blue,
-              fontWeight: FontWeight.w600,
+        color: _color,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: ListTile(
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.blue,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (description != null)
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (onTapPreview != null || onTapLiveDemo != null)
+                  Wrap(
+                    spacing: 10,
+                    children: [
+                      if (onTapPreview != null)
+                        TextButton(
+                          child: Text('Preview'),
+                          onPressed: onTapPreview,
+                        ),
+                      if (onTapLiveDemo != null)
+                        TextButton(
+                          child: Text('LiveDemo'),
+                          onPressed: onTapLiveDemo,
+                        ),
+                    ],
+                  ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     description,
                     style: TextStyle(
-                      color: PlutoColors.fontColor,
-                      fontWeight: FontWeight.w500,
+                      color: _fontColor,
+                      fontWeight: FontWeight.w600,
                       height: 1.6,
                     ),
                   ),
                 ),
-              if (tags != null && tags.length > 0)
-                Wrap(
-                  spacing: 10,
-                  children: tags.map((String tag) {
-                    return Chip(
-                      avatar: CircleAvatar(
-                        backgroundColor: Colors.grey.shade800,
-                        child: Text(tag[0]),
-                      ),
-                      label: Text(tag),
-                    );
-                  }).toList(),
-                ),
-            ],
+              ],
+            ),
+            contentPadding: EdgeInsets.all(15),
           ),
-          contentPadding: EdgeInsets.all(15),
-          onTap: () {
-            if (onTap != null) {
-              onTap();
-            }
-          },
         ),
       ),
     );

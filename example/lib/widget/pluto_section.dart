@@ -21,9 +21,6 @@ class PlutoSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(30),
-      decoration: BoxDecoration(
-        color: color,
-      ),
       child: Column(
         children: [
           Padding(
