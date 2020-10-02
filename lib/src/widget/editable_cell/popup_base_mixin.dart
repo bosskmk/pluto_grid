@@ -145,8 +145,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       if (rowIdxToMove < event.stateManager.rows.length) {
         event.stateManager.moveScrollByRow(MoveDirection.Up, rowIdxToMove);
       } else {
-        event.stateManager.moveScrollByRow(
-            MoveDirection.Up, event.stateManager.rows.length);
+        event.stateManager
+            .moveScrollByRow(MoveDirection.Up, event.stateManager.rows.length);
       }
     }
   }

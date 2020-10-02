@@ -36,7 +36,8 @@ class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
       topContents: [
         Text(
             'You can fix the column by tapping ToLeft, ToRight in the dropdown menu that appears when you tap the icon to the right of the column title.'),
-        Text('If the width of the middle columns is narrow, the fixed column is released.'),
+        Text(
+            'If the width of the middle columns is narrow, the fixed column is released.'),
       ],
       topButtons: [
         PlutoExampleButton(

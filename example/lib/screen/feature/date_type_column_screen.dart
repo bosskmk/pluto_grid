@@ -58,9 +58,7 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
       PlutoColumn(
         title: 'custom',
         field: 'custom',
-        type: PlutoColumnType.date(
-          format: 'yyyy年 MM月 dd日'
-        ),
+        type: PlutoColumnType.date(format: 'yyyy年 MM月 dd日'),
       ),
     ];
 

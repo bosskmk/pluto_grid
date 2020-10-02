@@ -1951,7 +1951,7 @@ void main() {
 
     withTheCellSelected.test(
       'editing 상태에서 enter 입력 시 아래 셀로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.currentCell.value, 'header3 value 3');
         expect(stateManager.currentCellPosition.columnIdx, 3);

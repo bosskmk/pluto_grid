@@ -66,7 +66,8 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
       topTitle: 'Add and Remove Rows',
       topContents: [
         Text('You can add or delete rows.'),
-        Text('Remove selected Rows is only deleted if there is a row selected in Row mode.'),
+        Text(
+            'Remove selected Rows is only deleted if there is a row selected in Row mode.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -103,17 +104,17 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                       items: PlutoStateManager.selectingModes
                           .map<DropdownMenuItem<PlutoSelectingMode>>(
                               (PlutoSelectingMode item) {
-                            final color =
+                        final color =
                             gridSelectingMode == item ? Colors.blue : null;
 
-                            return DropdownMenuItem<PlutoSelectingMode>(
-                              value: item,
-                              child: Text(
-                                item.toShortString(),
-                                style: TextStyle(color: color),
-                              ),
-                            );
-                          }).toList(),
+                        return DropdownMenuItem<PlutoSelectingMode>(
+                          value: item,
+                          child: Text(
+                            item.toShortString(),
+                            style: TextStyle(color: color),
+                          ),
+                        );
+                      }).toList(),
                       onChanged: (PlutoSelectingMode mode) {
                         setGridSelectingMode(mode);
                       },

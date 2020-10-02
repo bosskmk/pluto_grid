@@ -107,7 +107,8 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       topTitle: 'Selection type column',
       topContents: [
         Text('A column to enter a selection value.'),
-        Text('The sorting of the Selection column is based on the order of the Select items.'),
+        Text(
+            'The sorting of the Selection column is based on the order of the Select items.'),
       ],
       topButtons: [
         PlutoExampleButton(
