@@ -540,9 +540,9 @@ void main() {
 
         testWidgets(
           '01/01/2020, 01/01/2020  인 경우 0',
-              (WidgetTester tester) async {
+          (WidgetTester tester) async {
             final PlutoColumnTypeDate column =
-            PlutoColumnType.date(format: 'MM/dd/yyyy');
+                PlutoColumnType.date(format: 'MM/dd/yyyy');
             expect(column.compare('01/01/2020', '01/01/2020'), 0);
           },
         );

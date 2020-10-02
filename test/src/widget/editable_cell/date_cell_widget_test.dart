@@ -275,7 +275,7 @@ void main() {
 
     makeDateCell('2020년 12월 01일').test(
       '왼쪽 방향키를 입력하고 엔터를 입력하면 11월 30이 선택 되어야 한다.',
-          (tester) async {
+      (tester) async {
         await tester.tap(find.byType(TextField));
 
         await tester.pumpAndSettle();

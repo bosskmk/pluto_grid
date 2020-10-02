@@ -1,7 +1,36 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+class _MockScrollController extends Mock implements ScrollController {}
+
 void main() {
+  group('selectingModes', () {
+    test('Square, Row, None 이 리턴 되야 한다.', () {
+      final selectingModes = PlutoStateManager.selectingModes;
+
+      expect(selectingModes.contains(PlutoSelectingMode.Square), isTrue);
+      expect(selectingModes.contains(PlutoSelectingMode.Row), isTrue);
+      expect(selectingModes.contains(PlutoSelectingMode.None), isTrue);
+    });
+  });
+
+  group('PlutoScrollController', () {
+    test('bodyRowsVertical', () {
+      final PlutoScrollController scrollController = PlutoScrollController();
+
+      ScrollController scroll = _MockScrollController();
+      ScrollController anotherScroll = _MockScrollController();
+
+      scrollController.setBodyRowsVertical(scroll);
+
+      expect(scrollController.bodyRowsVertical == scroll, isTrue);
+      expect(scrollController.bodyRowsVertical == anotherScroll, isFalse);
+      expect(scroll == anotherScroll, isFalse);
+    });
+  });
+
   group('PlutoCellPosition', () {
     testWidgets('null 과의 비교는 false 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
@@ -55,6 +84,16 @@ void main() {
       // then
 
       expect(compare, true);
+    });
+  });
+
+  group('PlutoSelectingMode', () {
+    test('toShortString', () {
+      expect(PlutoSelectingMode.Square.toShortString(), 'Square');
+
+      expect(PlutoSelectingMode.Row.toShortString(), 'Row');
+
+      expect(PlutoSelectingMode.None.toShortString(), 'None');
     });
   });
 }
