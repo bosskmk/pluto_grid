@@ -32,4 +32,12 @@ class DatetimeHelper {
 
     return date.add(Duration(days: moveCount));
   }
+
+  static DateTime parseOrNullWithFormat(String date, String format) {
+    try {
+      return intl.DateFormat(format).parseStrict(date);
+    } catch(e) {
+      return null;
+    }
+  }
 }
