@@ -274,13 +274,14 @@ mixin CellState implements IPlutoState {
         column.type.select.items.contains(newValue) != true) {
       newValue = oldValue;
     } else if (column.type.isDate) {
-      final parseNewValue = DateTime.tryParse(newValue);
+      try {
+        final parseNewValue =
+            intl.DateFormat(column.type.date.format).parseStrict(newValue);
 
-      if (parseNewValue == null) {
-        newValue = oldValue;
-      } else {
         newValue =
             intl.DateFormat(column.type.date.format).format(parseNewValue);
+      } catch (e) {
+        newValue = oldValue;
       }
     } else if (column.type.isTime) {
       final time = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');

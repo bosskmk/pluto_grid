@@ -125,10 +125,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
               widget.cell.originalValue) {
             event.stateManager
                 .setCurrentCell(event.stateManager.rows[i].cells[entry.key], i);
-
-            event.stateManager.moveScrollByRow(
-                MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
-            return;
+            break;
           }
         }
       } else {
@@ -136,11 +133,20 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             widget.cell.originalValue) {
           event.stateManager.setCurrentCell(
               event.stateManager.rows[i].cells[fieldOnSelected], i);
-
-          event.stateManager
-              .moveScrollByRow(MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
-          return;
+          break;
         }
+      }
+    }
+
+    if (event.stateManager.currentRowIdx != null) {
+      final rowIdxToMove =
+          event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
+
+      if (rowIdxToMove < event.stateManager.rows.length) {
+        event.stateManager.moveScrollByRow(MoveDirection.Up, rowIdxToMove);
+      } else {
+        event.stateManager.moveScrollByRow(
+            MoveDirection.Up, event.stateManager.rows.length);
       }
     }
   }

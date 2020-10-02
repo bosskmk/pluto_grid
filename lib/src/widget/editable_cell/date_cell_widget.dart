@@ -54,13 +54,15 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
     popupColumns = _buildColumns();
 
-    final defaultDate = DateTime.tryParse(widget.cell.value) ?? DateTime.now();
+    final defaultDate = DatetimeHelper.parseOrNullWithFormat(
+            widget.cell.value, widget.column.type.date.format) ??
+        DateTime.now();
 
     final startDate = widget.column.type.date.startDate ??
-        DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -30)));
+        DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -60)));
 
     final endDate = widget.column.type.date.endDate ??
-        DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 30)));
+        DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 60)));
 
     final List<DateTime> days = DatetimeHelper.getDaysInBetween(
       startDate,
@@ -163,7 +165,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
           return PlutoCell(
               value: day.day,
               originalValue:
-                  intl.DateFormat('yyyy-MM-dd').format(day));
+                  intl.DateFormat(widget.column.type.date.format).format(day));
         },
       );
 
@@ -183,9 +185,9 @@ class _DateCellWidgetState extends State<DateCellWidget>
       firstDays = -30;
       lastDays = -1;
 
-      defaultDate = DateTime.tryParse(popupStateManager
-              .rows.first.cells.entries.first.value.originalValue) ??
-          null;
+      defaultDate = DatetimeHelper.parseOrNullWithFormat(
+          popupStateManager.rows.first.cells.entries.first.value.originalValue,
+          widget.column.type.date.format);
 
       if (defaultDate == null) {
         return [];
@@ -199,9 +201,9 @@ class _DateCellWidgetState extends State<DateCellWidget>
       firstDays = 1;
       lastDays = 30;
 
-      defaultDate = DateTime.tryParse(popupStateManager
-              .rows.last.cells.entries.last.value.originalValue) ??
-          null;
+      defaultDate = DatetimeHelper.parseOrNullWithFormat(
+          popupStateManager.rows.last.cells.entries.last.value.originalValue,
+          widget.column.type.date.format);
 
       if (defaultDate == null) {
         return [];
@@ -262,22 +264,12 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
     }
   }
 
-  String get year {
+  String get currentDate {
     if (currentCell == null || currentCell.originalValue.isEmpty) {
       return '';
     }
 
-    return intl.DateFormat('yyyy')
-        .format(DateTime.parse(currentCell.originalValue));
-  }
-
-  String get month {
-    if (currentCell == null || currentCell.originalValue.isEmpty) {
-      return '';
-    }
-
-    return intl.DateFormat('MM')
-        .format(DateTime.parse(currentCell.originalValue));
+    return currentCell.originalValue;
   }
 
   Color get textColor =>
@@ -293,7 +285,7 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
       child: Align(
         alignment: Alignment.center,
         child: Text(
-          '$year-$month',
+          currentDate,
           style: TextStyle(
             color: textColor,
             fontSize: 16,
