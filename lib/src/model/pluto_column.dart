@@ -193,6 +193,8 @@ abstract class PlutoColumnType {
   }
 
   bool isValid(dynamic value);
+
+  int compare(dynamic a, dynamic b);
 }
 
 extension PlutoColumnTypeExtension on PlutoColumnType {
@@ -249,6 +251,10 @@ class PlutoColumnTypeText implements PlutoColumnType {
   bool isValid(dynamic value) {
     return value is String || value is num;
   }
+
+  int compare(dynamic a, dynamic b) {
+    return a.compareTo(b);
+  }
 }
 
 class PlutoColumnTypeNumber
@@ -281,6 +287,10 @@ class PlutoColumnTypeNumber
     }
 
     return true;
+  }
+
+  int compare(dynamic a, dynamic b) {
+    return a.compareTo(b);
   }
 
   String applyFormat(value) {
@@ -318,6 +328,14 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
   });
 
   bool isValid(dynamic value) => items.contains(value) == true;
+
+  int compare(dynamic a, dynamic b) {
+    final _a = items.indexOf(a);
+
+    final _b = items.indexOf(b);
+
+    return _a.compareTo(_b);
+  }
 }
 
 class PlutoColumnTypeDate
@@ -361,6 +379,16 @@ class PlutoColumnTypeDate
     return true;
   }
 
+  int compare(dynamic a, dynamic b) {
+    final dateFormat = intl.DateFormat(format);
+
+    final _a = dateFormat.parse(a);
+
+    final _b = dateFormat.parse(b);
+
+    return _a.compareTo(_b);
+  }
+
   String applyFormat(value) {
     final parseValue = DateTime.tryParse(value);
 
@@ -384,6 +412,10 @@ class PlutoColumnTypeTime implements PlutoColumnType {
 
   bool isValid(dynamic value) {
     return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$').hasMatch(value);
+  }
+
+  int compare(dynamic a, dynamic b) {
+    return a.compareTo(b);
   }
 }
 

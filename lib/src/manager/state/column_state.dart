@@ -213,13 +213,13 @@ mixin ColumnState implements IPlutoState {
         if (column.sort.isNone) {
           column.sort = PlutoColumnSort.Ascending;
 
-          _rows.sort(
-              (a, b) => a.cells[field].value.compareTo(b.cells[field].value));
+          _rows.sort((a, b) =>
+              column.type.compare(a.cells[field].value, b.cells[field].value));
         } else if (column.sort.isAscending) {
           column.sort = PlutoColumnSort.Descending;
 
-          _rows.sort(
-              (b, a) => a.cells[field].value.compareTo(b.cells[field].value));
+          _rows.sort((b, a) =>
+              column.type.compare(a.cells[field].value, b.cells[field].value));
         } else {
           column.sort = PlutoColumnSort.None;
 

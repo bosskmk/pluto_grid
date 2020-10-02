@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'constants/pluto_colors.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
+import 'screen/feature/column_fixing_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
 import 'screen/feature/column_sorting_screen.dart';
@@ -28,10 +29,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : DateTypeColumnScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : HomeScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
+        ColumnFixingScreen.routeName: (context) => ColumnFixingScreen(),
         ColumnResizingScreen.routeName: (context) => ColumnResizingScreen(),
         ColumnSortingScreen.routeName: (context) => ColumnSortingScreen(),
         TextTypeColumnScreen.routeName: (context) => TextTypeColumnScreen(),

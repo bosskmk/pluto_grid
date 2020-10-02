@@ -14,6 +14,7 @@ import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_rows_screen.dart';
 import 'feature/cell_selection_screen.dart';
+import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
 import 'feature/copy_and_paste_screen.dart';
@@ -162,6 +163,14 @@ class PlutoFeatures extends StatelessWidget {
                 'Dragging the column heading left or right moves the column left and right.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnMovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Column fixing',
+            description:
+            'Fix the column to the left or right.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnFixingScreen.routeName);
             },
           ),
           PlutoListTile(
