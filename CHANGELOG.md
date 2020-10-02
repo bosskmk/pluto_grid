@@ -1,4 +1,4 @@
-## [0.1.15] - 2020. 10. 2
+## [0.1.16] - 2020. 10. 2
 
 * Fixed column problem when adjusting column width.
 * When the date is MM/dd/yyyy, the initial value of the pop-up is incorrect.
