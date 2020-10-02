@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v0.1.15
+## PlutoGrid for flutter - v0.1.16
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
@@ -10,7 +10,8 @@ Of course, it works well on Android and IOS.
 <br>
 
 ### [Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
-> Try some simple features on the demo site.
+> You can try out various functions and usage methods right away.  
+> All features provide example code.
 
 <br>
 

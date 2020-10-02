@@ -1,3 +1,11 @@
+## [0.1.15] - 2020. 10. 2
+
+* Fixed column problem when adjusting column width.
+* When the date is MM/dd/yyyy, the initial value of the pop-up is incorrect.
+* When startDate, endDate are present, the initial value of the popup is not filled or scrolling fails.
+* When the date is MM/dd/yyyy, misalignment error.
+* Modify to operate the sorting criteria in the order of items in the Select Type Column.
+
 ## [0.1.15] - 2020. 09. 28
 
 * Modified so that the Grid does not force focus and works properly according to the situation in which focus get received or taken away.
