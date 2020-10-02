@@ -167,8 +167,7 @@ class PlutoFeatures extends StatelessWidget {
           ),
           PlutoListTile(
             title: 'Column fixing',
-            description:
-            'Fix the column to the left or right.',
+            description: 'Fix the column to the left or right.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnFixingScreen.routeName);
             },
@@ -274,7 +273,7 @@ class PlutoFeatures extends StatelessWidget {
           PlutoListTile(
             title: 'Grid as Popup',
             description:
-            'You can call the grid by popping up with the TextField.',
+                'You can call the grid by popping up with the TextField.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, GridAsPopupScreen.routeName);
             },
