@@ -35,18 +35,39 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
         title: 'Select B',
         field: 'select_b',
         type: PlutoColumnType.select([
-          'Apple',
-          'Orange',
-          'Banana',
+          'Mercury',
+          'Venus',
+          'Earth',
+          'Mars',
+          'Jupiter',
+          'Saturn',
+          'Uranus',
+          'Neptune',
+          'Pluto',
         ]),
       ),
       PlutoColumn(
         title: 'Select C',
         field: 'select_c',
         type: PlutoColumnType.select([
-          '1',
-          '10',
-          '100',
+          '9.01',
+          '30.02',
+          '100.001',
+        ]),
+      ),
+      PlutoColumn(
+        title: 'Select D',
+        field: 'select_d',
+        type: PlutoColumnType.select([
+          '一',
+          '二',
+          '三',
+          '四',
+          '五',
+          '六',
+          '七',
+          '八',
+          '九',
         ]),
       ),
     ];
@@ -55,22 +76,25 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoRow(
         cells: {
           'select_a': PlutoCell(value: 'One'),
-          'select_b': PlutoCell(value: 'Apple'),
-          'select_c': PlutoCell(value: '1'),
+          'select_b': PlutoCell(value: 'Saturn'),
+          'select_c': PlutoCell(value: '100.001'),
+          'select_d': PlutoCell(value: '五'),
         },
       ),
       PlutoRow(
         cells: {
           'select_a': PlutoCell(value: 'Two'),
-          'select_b': PlutoCell(value: 'Orange'),
-          'select_c': PlutoCell(value: '10'),
+          'select_b': PlutoCell(value: 'Pluto'),
+          'select_c': PlutoCell(value: '9.01'),
+          'select_d': PlutoCell(value: '八'),
         },
       ),
       PlutoRow(
         cells: {
           'select_a': PlutoCell(value: 'Three'),
-          'select_b': PlutoCell(value: 'Banana'),
-          'select_c': PlutoCell(value: '100'),
+          'select_b': PlutoCell(value: 'Mars'),
+          'select_c': PlutoCell(value: '30.02'),
+          'select_d': PlutoCell(value: '三'),
         },
       ),
     ];
@@ -83,6 +107,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       topTitle: 'Selection type column',
       topContents: [
         Text('A column to enter a selection value.'),
+        Text('The sorting of the Selection column is based on the order of the Select items.'),
       ],
       topButtons: [
         PlutoExampleButton(

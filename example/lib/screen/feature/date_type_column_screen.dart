@@ -78,7 +78,7 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
       PlutoRow(
         cells: {
           'yyyy_mm_dd': PlutoCell(value: '2020-07-01'),
-          'mm_dd_yyyy': PlutoCell(value: '2020-07-01'),
+          'mm_dd_yyyy': PlutoCell(value: '2019-07-01'),
           'with_start_date': PlutoCell(value: '2020-01-01'),
           'with_end_date': PlutoCell(value: '2020-01-01'),
           'with_both': PlutoCell(value: '2020-01-01'),

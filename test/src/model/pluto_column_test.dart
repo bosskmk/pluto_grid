@@ -112,7 +112,7 @@ void main() {
 
     testWidgets(
       'number 기본 값이 설정 되어야 한다.',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final PlutoColumnTypeNumber column = PlutoColumnType.number(
           defaultValue: 123,
         );
@@ -123,9 +123,10 @@ void main() {
 
     testWidgets(
       'select 기본 값이 설정 되어야 한다.',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final PlutoColumnTypeSelect column = PlutoColumnType.select(
-          ['One'], defaultValue: 'One',
+          ['One'],
+          defaultValue: 'One',
         );
 
         expect(column.defaultValue, 'One');
@@ -134,7 +135,7 @@ void main() {
 
     testWidgets(
       'date 기본 값이 설정 되어야 한다.',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final PlutoColumnTypeDate column = PlutoColumnType.date(
           defaultValue: DateTime.parse('2020-01-01'),
         );
@@ -145,7 +146,7 @@ void main() {
 
     testWidgets(
       'time 기본 값이 설정 되어야 한다.',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final PlutoColumnTypeTime column = PlutoColumnType.time(
           defaultValue: '20:30',
         );
@@ -212,6 +213,35 @@ void main() {
           );
         },
       );
+
+      group(
+        'compare',
+        () {
+          testWidgets(
+            '가, 나 인 경우 -1',
+            (WidgetTester tester) async {
+              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              expect(textColumn.compare('가', '나'), -1);
+            },
+          );
+
+          testWidgets(
+            '나, 가 인 경우 1',
+            (WidgetTester tester) async {
+              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              expect(textColumn.compare('나', '가'), 1);
+            },
+          );
+
+          testWidgets(
+            '가, 가 인 경우 0',
+            (WidgetTester tester) async {
+              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              expect(textColumn.compare('가', '가'), 0);
+            },
+          );
+        },
+      );
     },
   );
 
@@ -251,6 +281,35 @@ void main() {
         },
       );
     });
+
+    group(
+      'compare',
+      () {
+        testWidgets(
+          '1, 2 인 경우 -1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            expect(column.compare(1, 2), -1);
+          },
+        );
+
+        testWidgets(
+          '2, 1 인 경우 1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            expect(column.compare(2, 1), 1);
+          },
+        );
+
+        testWidgets(
+          '1, 1 인 경우 0',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            expect(column.compare(1, 1), 0);
+          },
+        );
+      },
+    );
   });
 
   group('PlutoColumnTypeSelect', () {
@@ -279,6 +338,47 @@ void main() {
         },
       );
     });
+
+    group(
+      'compare',
+      () {
+        testWidgets(
+          'Two, Three 인 경우 -1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+              'One',
+              'Two',
+              'Three',
+            ]);
+            expect(column.compare('Two', 'Three'), -1);
+          },
+        );
+
+        testWidgets(
+          'Three, Two  인 경우 1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+              'One',
+              'Two',
+              'Three',
+            ]);
+            expect(column.compare('Three', 'Two'), 1);
+          },
+        );
+
+        testWidgets(
+          'Two, Two 인 경우 0',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+              'One',
+              'Two',
+              'Three',
+            ]);
+            expect(column.compare('Two', 'Two'), 0);
+          },
+        );
+      },
+    );
   });
 
   group('PlutoColumnTypeDate', () {
@@ -392,6 +492,62 @@ void main() {
         },
       );
     });
+
+    group(
+      'compare',
+      () {
+        testWidgets(
+          '2019-12-30, 2020-01-01 인 경우 -1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            expect(column.compare('2019-12-30', '2020-01-01'), -1);
+          },
+        );
+
+        testWidgets(
+          '12/30/2019, 01/01/2020 인 경우 -1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeDate column =
+                PlutoColumnType.date(format: 'MM/dd/yyyy');
+            expect(column.compare('12/30/2019', '01/01/2020'), -1);
+          },
+        );
+
+        testWidgets(
+          '2020-01-01, 2019-12-30  인 경우 1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            expect(column.compare('2020-01-01', '2019-12-30'), 1);
+          },
+        );
+
+        testWidgets(
+          '01/01/2020, 12/30/2019  인 경우 1',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeDate column =
+                PlutoColumnType.date(format: 'MM/dd/yyyy');
+            expect(column.compare('01/01/2020', '12/30/2019'), 1);
+          },
+        );
+
+        testWidgets(
+          '2020-01-01, 2020-01-01 인 경우 0',
+          (WidgetTester tester) async {
+            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            expect(column.compare('2020-01-01', '2020-01-01'), 0);
+          },
+        );
+
+        testWidgets(
+          '01/01/2020, 01/01/2020  인 경우 0',
+              (WidgetTester tester) async {
+            final PlutoColumnTypeDate column =
+            PlutoColumnType.date(format: 'MM/dd/yyyy');
+            expect(column.compare('01/01/2020', '01/01/2020'), 0);
+          },
+        );
+      },
+    );
   });
 
   group(

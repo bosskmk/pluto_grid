@@ -63,7 +63,7 @@ class PlutoExampleScreen extends StatelessWidget {
               width: size.maxWidth,
               height: size.maxHeight,
               constraints: BoxConstraints(
-                minHeight: 600,
+                minHeight: 750,
               ),
               padding: const EdgeInsets.all(30),
               child: Column(
