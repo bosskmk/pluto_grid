@@ -156,7 +156,7 @@ mixin GridState implements IPlutoState {
     }
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 

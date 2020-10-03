@@ -62,7 +62,7 @@ mixin EditingState implements IPlutoState {
     clearCurrentSelectingPosition(notify: false);
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 

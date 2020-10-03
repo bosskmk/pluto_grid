@@ -115,7 +115,7 @@ mixin SelectingState implements IPlutoState {
       setEditing(false, notify: false);
     }
 
-    notifyListeners(checkCellValue: false);
+    notifyListeners();
   }
 
   void setSelectingMode(PlutoSelectingMode mode) {
@@ -129,7 +129,7 @@ mixin SelectingState implements IPlutoState {
 
     _selectingMode = mode;
 
-    notifyListeners(checkCellValue: false);
+    notifyListeners();
   }
 
   void clearCurrentSelectingPosition({bool notify = true}) {
@@ -140,7 +140,7 @@ mixin SelectingState implements IPlutoState {
     _currentSelectingPosition = null;
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -152,7 +152,7 @@ mixin SelectingState implements IPlutoState {
     _currentSelectingRows = [];
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -206,7 +206,7 @@ mixin SelectingState implements IPlutoState {
     }
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -280,7 +280,7 @@ mixin SelectingState implements IPlutoState {
     _currentSelectingRows = _rows.getRange(_from, _to).toList();
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -305,7 +305,7 @@ mixin SelectingState implements IPlutoState {
     }
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 

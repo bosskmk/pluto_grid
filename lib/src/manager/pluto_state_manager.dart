@@ -11,9 +11,7 @@ abstract class IPlutoState extends ChangeNotifier
         IRowState,
         IScrollState,
         ISelectingState {
-  notifyListeners({
-    bool checkCellValue = true,
-  });
+  notifyListeners();
 }
 
 class PlutoState extends ChangeNotifier
@@ -27,16 +25,8 @@ class PlutoState extends ChangeNotifier
         RowState,
         ScrollState,
         SelectingState {
-  notifyListeners({
-    bool checkCellValue = true,
-  }) {
-    if (checkCellValue) {
-      super.notifyListeners();
-    } else {
-      withoutCheckCellValue(() {
-        super.notifyListeners();
-      });
-    }
+  notifyListeners() {
+    super.notifyListeners();
   }
 }
 
