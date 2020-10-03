@@ -123,8 +123,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
         for (var entry in popupRows[i].cells.entries) {
           if (popupRows[i].cells[entry.key].originalValue ==
               widget.cell.originalValue) {
-            event.stateManager
-                .setCurrentCell(event.stateManager._rows[i].cells[entry.key], i);
+            event.stateManager.setCurrentCell(
+                event.stateManager._rows[i].cells[entry.key], i);
             break;
           }
         }

@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../helper/pluto_widget_test_helper.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
@@ -1102,5 +1104,206 @@ void main() {
     verify(stateManager.setSelecting(true));
 
     verify(stateManager.toggleSelectingRow(rowIdx));
+  });
+
+  testWidgets('longPress', (WidgetTester tester) async {
+    // given
+    final PlutoCell cell = PlutoCell(value: 'one');
+
+    final PlutoColumn column = PlutoColumn(
+      title: 'header',
+      field: 'header',
+      type: PlutoColumnType.text(),
+    );
+
+    final rowIdx = 0;
+
+    when(stateManager.isCurrentCell(any)).thenReturn(true);
+    when(stateManager.isEditing).thenReturn(false);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
+
+    when(stateManager.isSelectingInteraction()).thenReturn(false);
+    when(stateManager.needMovingScroll(any, any)).thenReturn(false);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: CellWidget(
+            stateManager: stateManager,
+            cell: cell,
+            column: column,
+            rowIdx: rowIdx,
+          ),
+        ),
+      ),
+    );
+
+    // then
+    final TestGesture gesture = await tester.startGesture(Offset(100, 18));
+
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await gesture.moveBy(const Offset(50, 0));
+
+    await gesture.up();
+
+    await tester.pump();
+
+    await tester.pumpAndSettle(Duration(milliseconds: 800));
+
+    verify(stateManager.setCurrentSelectingPositionWithOffset(any));
+
+    verify(stateManager.needMovingScroll(
+      Offset(150.0, 18.0),
+      MoveDirection.Left,
+    ));
+
+    verify(stateManager.needMovingScroll(
+      Offset(150.0, 18.0),
+      MoveDirection.Right,
+    ));
+
+    verify(stateManager.needMovingScroll(
+      Offset(150.0, 18.0),
+      MoveDirection.Up,
+    ));
+
+    verify(stateManager.needMovingScroll(
+      Offset(150.0, 18.0),
+      MoveDirection.Down,
+    ));
+  });
+
+  group('configuration', () {
+    PlutoCell cell;
+
+    PlutoColumn column;
+
+    int rowIdx;
+
+    final aCellWithConfiguration = (
+      PlutoConfiguration configuration, {
+      bool isCurrentCell = true,
+      bool isSelectedCell = false,
+      bool readOnly = false,
+    }) {
+      return PlutoWidgetTestHelper('a cell.', (tester) async {
+        when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
+        when(stateManager.isSelectedCell(any, any, any))
+            .thenReturn(isSelectedCell);
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isEditing).thenReturn(true);
+
+        cell = PlutoCell(value: 'one');
+
+        column = PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.text(
+            readOnly: readOnly,
+          ),
+        );
+
+        rowIdx = 0;
+
+        when(stateManager.configuration).thenReturn(configuration);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: CellWidget(
+                stateManager: stateManager,
+                cell: cell,
+                column: column,
+                rowIdx: rowIdx,
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle(Duration(seconds: 1));
+      });
+    };
+
+    aCellWithConfiguration(
+      PlutoConfiguration(
+        enableColumnBorder: false,
+        borderColor: Colors.deepOrange,
+      ),
+      readOnly: true,
+    ).test(
+      'if readOnly is true, should be set the color to cellColorInReadOnlyState.',
+      (tester) async {
+        expect(column.type.readOnly, true);
+
+        final target = find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Container),
+        );
+
+        final container = target.evaluate().single.widget as Container;
+
+        final BoxDecoration decoration = container.decoration;
+
+        final Color color = decoration.color;
+
+        expect(color, stateManager.configuration.cellColorInReadOnlyState);
+      },
+    );
+
+    aCellWithConfiguration(
+      PlutoConfiguration(
+        enableColumnBorder: true,
+        borderColor: Colors.deepOrange,
+      ),
+      isCurrentCell: false,
+      isSelectedCell: false,
+    ).test(
+      'if isCurrentCell, isSelectedCell are false '
+      'and enableColumnBorder is true, '
+      'should be set the border.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Container),
+        );
+
+        final container = target.evaluate().single.widget as Container;
+
+        final BoxDecoration decoration = container.decoration;
+
+        final Border border = decoration.border;
+
+        expect(border.right.color, stateManager.configuration.borderColor);
+      },
+    );
+
+    aCellWithConfiguration(
+      PlutoConfiguration(
+        enableColumnBorder: false,
+        borderColor: Colors.deepOrange,
+      ),
+      isCurrentCell: false,
+      isSelectedCell: false,
+    ).test(
+      'if isCurrentCell, isSelectedCell are false '
+      'and enableColumnBorder is false, '
+      'should not be set the border.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(GestureDetector),
+          matching: find.byType(Container),
+        );
+
+        final container = target.evaluate().single.widget as Container;
+
+        final BoxDecoration decoration = container.decoration;
+
+        final Border border = decoration.border;
+
+        expect(border, isNull);
+      },
+    );
   });
 }
