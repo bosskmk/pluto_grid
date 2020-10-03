@@ -77,7 +77,7 @@ mixin RowState implements IPlutoState {
     _currentRowIdx = rowIdx;
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -211,7 +211,7 @@ mixin RowState implements IPlutoState {
 
     resetCurrentState(notify: false);
 
-    notifyListeners(checkCellValue: false);
+    notifyListeners();
   }
 
   void removeRows(
@@ -232,7 +232,7 @@ mixin RowState implements IPlutoState {
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -241,7 +241,7 @@ mixin RowState implements IPlutoState {
       _currentRowIdx = null;
 
       if (notify) {
-        notifyListeners(checkCellValue: false);
+        notifyListeners();
       }
 
       return;
@@ -260,7 +260,7 @@ mixin RowState implements IPlutoState {
     }
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 }

@@ -86,18 +86,14 @@ mixin LayoutState implements IPlutoState {
   bool _showFixedColumn;
 
   Offset get gridGlobalOffset {
-    if (_gridGlobalOffset != null) {
-      return _gridGlobalOffset;
-    }
-
     if (gridKey == null) {
-      return null;
+      return _gridGlobalOffset;
     }
 
     final RenderBox gridRenderBox = gridKey.currentContext?.findRenderObject();
 
     if (gridRenderBox == null) {
-      return null;
+      return _gridGlobalOffset;
     }
 
     _gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);

@@ -125,7 +125,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         // Get size after rendering virtually
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
         TextSpan textSpan = new TextSpan(
-          style: widget.stateManager.configuration.cellTextStyle,
+          style: DefaultTextStyle.of(context).style,
           text: maxValue,
         );
 
@@ -157,7 +157,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         height: PlutoDefaultSettings.rowHeight,
         padding: const EdgeInsets.symmetric(
             horizontal: PlutoDefaultSettings.cellPadding),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black26,
         ),
         child: Align(

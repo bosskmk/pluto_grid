@@ -81,9 +81,7 @@ class _CellWidgetState extends State<CellWidget>
 
     widget.stateManager.addListener(changeStateListener);
 
-    _selectionSubject.stream
-        .debounceTime(Duration(milliseconds: 4))
-        .listen((event) {
+    _selectionSubject.stream.listen((event) {
       event();
     });
 
@@ -97,6 +95,10 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   void changeStateListener() {
+    if (widget.stateManager._rows.length - 1 < widget.rowIdx) {
+      return;
+    }
+
     final bool changedIsCurrentCell =
         widget.stateManager.isCurrentCell(widget.cell);
 
@@ -107,29 +109,16 @@ class _CellWidgetState extends State<CellWidget>
 
     final bool changedIsSelectedCell = _getIsSelectedCell();
 
-    bool checkCellValue = widget.stateManager.checkCellValue;
+    final dynamic changedCellValue = widget
+        .stateManager._rows[widget.rowIdx].cells[widget.column.field].value;
 
-    dynamic changedCellValue;
-
-    if (checkCellValue) {
-      // 키보드로 셀 이동을 빠르게 할 때 이 부분에서 느려진다.
-      // 키보드 이동을 제외한 값 변경의 확인이 필요한 부분에서만 호출.
-      if (widget.rowIdx < widget.stateManager.rows.length) {
-        changedCellValue = widget
-            .stateManager.rows[widget.rowIdx].cells[widget.column.field].value;
-      }
-    }
-
-    if ((checkCellValue && _cellValue != changedCellValue) ||
+    if (_cellValue != changedCellValue ||
         _isCurrentCell != changedIsCurrentCell ||
         (_isCurrentCell && _isEditing != changedIsEditing) ||
         _selectingMode != changedSelectingMode ||
         _isSelectedCell != changedIsSelectedCell) {
       setState(() {
-        if (checkCellValue) {
-          _cellValue = changedCellValue;
-        }
-
+        _cellValue = changedCellValue;
         _isCurrentCell = changedIsCurrentCell;
         _isEditing = changedIsEditing;
         _selectingMode = changedSelectingMode;

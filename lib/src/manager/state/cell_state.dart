@@ -1,9 +1,6 @@
 part of '../../../pluto_grid.dart';
 
 abstract class ICellState {
-  /// True, check the change of value when moving cells.
-  bool get checkCellValue;
-
   /// currently selected cell.
   PlutoCell get currentCell;
 
@@ -11,10 +8,6 @@ abstract class ICellState {
   PlutoCellPosition get currentCellPosition;
 
   PlutoCell get firstCell;
-
-  /// Execute the function without checking if the value has changed.
-  /// Improves cell rendering performance.
-  void withoutCheckCellValue(Function() callback);
 
   void setCurrentCellPosition(
     PlutoCellPosition cellPosition, {
@@ -68,10 +61,6 @@ abstract class ICellState {
 }
 
 mixin CellState implements IPlutoState {
-  bool get checkCellValue => _checkCellValue;
-
-  bool _checkCellValue = true;
-
   PlutoCell get currentCell => _currentCell;
 
   PlutoCell _currentCell;
@@ -92,14 +81,6 @@ mixin CellState implements IPlutoState {
     return _rows.first.cells[columnField];
   }
 
-  void withoutCheckCellValue(Function() callback) {
-    _checkCellValue = false;
-
-    callback();
-
-    _checkCellValue = true;
-  }
-
   void setCurrentCellPosition(
     PlutoCellPosition cellPosition, {
     bool notify: true,
@@ -111,7 +92,7 @@ mixin CellState implements IPlutoState {
     _currentCellPosition = cellPosition;
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -128,7 +109,7 @@ mixin CellState implements IPlutoState {
     );
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -175,7 +156,7 @@ mixin CellState implements IPlutoState {
     _currentCell = null;
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 
@@ -213,7 +194,7 @@ mixin CellState implements IPlutoState {
     setEditing(false, notify: false);
 
     if (notify) {
-      notifyListeners(checkCellValue: false);
+      notifyListeners();
     }
   }
 

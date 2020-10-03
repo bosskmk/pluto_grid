@@ -52,7 +52,7 @@ class _BodyRowsState extends State<BodyRows> {
 
   void changeStateListener() {
     if (listEquals(_columns, getColumns()) == false ||
-        listEquals(_rows, widget.stateManager.rows) == false ||
+        listEquals(_rows, widget.stateManager._rows) == false ||
         _width != getWidth()) {
       setState(() {
         _columns = getColumns();

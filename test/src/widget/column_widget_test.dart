@@ -286,7 +286,11 @@ void main() {
     });
 
     tapColumn.test('AutoSize 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
-      when(stateManager.rows).thenReturn([]);
+      when(stateManager.rows).thenReturn([
+        PlutoRow(cells: {
+          'column_field_name': PlutoCell(value: 'cell value'),
+        }),
+      ]);
 
       await tester.tap(find.text('AutoSize'));
 
@@ -405,5 +409,156 @@ void main() {
         argThat(isA<double>()),
       )).called(1);
     });
+  });
+
+  group('Drag a column', () {
+    final PlutoColumn column = PlutoColumn(
+      title: 'column title',
+      field: 'column_field_name',
+      type: PlutoColumnType.text(),
+      fixed: PlutoColumnFixed.Right,
+    );
+
+    final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: ColumnWidget(
+              stateManager: stateManager,
+              column: column,
+            ),
+          ),
+        ),
+      );
+    });
+
+    aColumn.test('should be called moveColumn. ', (tester) async {
+      await tester.drag(find.byType(Draggable), Offset(50.0, 0.0));
+
+      verify(stateManager.moveColumn(column.key, 50.0));
+    });
+  });
+
+  group('Drag a button', () {
+    final PlutoColumn column = PlutoColumn(
+      title: 'column title',
+      field: 'column_field_name',
+      type: PlutoColumnType.text(),
+    );
+
+    final dragAColumn = (Offset offset) {
+      return PlutoWidgetTestHelper('a column.', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: ColumnWidget(
+                stateManager: stateManager,
+                column: column,
+              ),
+            ),
+          ),
+        );
+
+        final columnIconGesture = find.ancestor(
+            of: find.byType(IconButton),
+            matching: find.byType(GestureDetector));
+
+        await tester.drag(columnIconGesture, offset);
+      });
+    };
+
+    /**
+     * (기본 값이 4, Positioned 위젯 right -3)
+     */
+    dragAColumn(
+      Offset(50.0, 0.0),
+    ).test(
+      'resizeColumn 이 54로 호출 되어야 한다.',
+      (tester) async {
+        verify(stateManager.resizeColumn(column.key, 54.0));
+      },
+    );
+
+    dragAColumn(
+      Offset(-50.0, 0.0),
+    ).test(
+      'resizeColumn 이 -46으로 호출 되어야 한다.',
+      (tester) async {
+        verify(stateManager.resizeColumn(column.key, -46.0));
+      },
+    );
+  });
+
+  group('configuration', () {
+    final PlutoColumn column = PlutoColumn(
+      title: 'column title',
+      field: 'column_field_name',
+      type: PlutoColumnType.text(),
+      fixed: PlutoColumnFixed.Right,
+    );
+
+    final aColumnWithConfiguration = (PlutoConfiguration configuration) {
+      return PlutoWidgetTestHelper('a column.', (tester) async {
+        when(stateManager.configuration).thenReturn(configuration);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: ColumnWidget(
+                stateManager: stateManager,
+                column: column,
+              ),
+            ),
+          ),
+        );
+      });
+    };
+
+    aColumnWithConfiguration(PlutoConfiguration(
+      enableColumnBorder: true,
+      borderColor: Colors.deepOrange,
+    )).test(
+      'if enableColumnBorder is true, should be set the border.',
+      (tester) async {
+        expect(stateManager.configuration.enableColumnBorder, true);
+
+        final target = find.descendant(
+          of: find.byType(InkWell),
+          matching: find.byType(Container),
+        );
+
+        final container = target.evaluate().single.widget as Container;
+
+        final BoxDecoration decoration = container.decoration;
+
+        final Border border = decoration.border;
+
+        expect(border.right.width, 1.0);
+        expect(border.right.color, Colors.deepOrange);
+      },
+    );
+
+    aColumnWithConfiguration(PlutoConfiguration(
+      enableColumnBorder: false,
+      borderColor: Colors.deepOrange,
+    )).test(
+      'if enableColumnBorder is false, should not be set the border.',
+      (tester) async {
+        expect(stateManager.configuration.enableColumnBorder, false);
+
+        final target = find.descendant(
+          of: find.byType(InkWell),
+          matching: find.byType(Container),
+        );
+
+        final container = target.evaluate().single.widget as Container;
+
+        final BoxDecoration decoration = container.decoration;
+
+        final Border border = decoration.border;
+
+        expect(border, null);
+      },
+    );
   });
 }
