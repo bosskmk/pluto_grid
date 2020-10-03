@@ -23,7 +23,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
 
   List<PlutoRow> popupRows = [];
 
-  Icon icon = Icon(
+  Icon icon = const Icon(
     Icons.date_range,
   );
 

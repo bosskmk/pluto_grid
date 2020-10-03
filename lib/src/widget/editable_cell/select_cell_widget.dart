@@ -21,7 +21,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
   List<PlutoRow> popupRows;
 
-  Icon icon = Icon(
+  Icon icon = const Icon(
     Icons.arrow_drop_down,
   );
 

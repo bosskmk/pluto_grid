@@ -23,7 +23,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
 
   List<PlutoRow> popupRows = [];
 
-  Icon icon = Icon(
+  Icon icon = const Icon(
     Icons.access_time,
   );
 
