@@ -81,9 +81,7 @@ class _CellWidgetState extends State<CellWidget>
 
     widget.stateManager.addListener(changeStateListener);
 
-    _selectionSubject.stream
-        .debounceTime(Duration(milliseconds: 4))
-        .listen((event) {
+    _selectionSubject.stream.listen((event) {
       event();
     });
 
