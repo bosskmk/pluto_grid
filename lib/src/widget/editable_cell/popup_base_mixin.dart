@@ -124,7 +124,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           if (popupRows[i].cells[entry.key].originalValue ==
               widget.cell.originalValue) {
             event.stateManager
-                .setCurrentCell(event.stateManager.rows[i].cells[entry.key], i);
+                .setCurrentCell(event.stateManager._rows[i].cells[entry.key], i);
             break;
           }
         }
@@ -132,7 +132,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
         if (popupRows[i].cells[fieldOnSelected].originalValue ==
             widget.cell.originalValue) {
           event.stateManager.setCurrentCell(
-              event.stateManager.rows[i].cells[fieldOnSelected], i);
+              event.stateManager._rows[i].cells[fieldOnSelected], i);
           break;
         }
       }
@@ -142,11 +142,11 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       final rowIdxToMove =
           event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
 
-      if (rowIdxToMove < event.stateManager.rows.length) {
+      if (rowIdxToMove < event.stateManager._rows.length) {
         event.stateManager.moveScrollByRow(MoveDirection.Up, rowIdxToMove);
       } else {
         event.stateManager
-            .moveScrollByRow(MoveDirection.Up, event.stateManager.rows.length);
+            .moveScrollByRow(MoveDirection.Up, event.stateManager._rows.length);
       }
     }
   }

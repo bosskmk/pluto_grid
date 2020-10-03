@@ -106,7 +106,7 @@ mixin ColumnState implements IPlutoState {
   List<int> get leftFixedColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isLeft) {
-        return [...previousValue, columns.indexOf(element)];
+        return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -124,7 +124,7 @@ mixin ColumnState implements IPlutoState {
   List<int> get rightFixedColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isRight) {
-        return [...previousValue, columns.indexOf(element)];
+        return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -142,7 +142,7 @@ mixin ColumnState implements IPlutoState {
   List<int> get bodyColumnIndexes {
     return bodyColumns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.fixed.isNone) {
-        return [...previousValue, columns.indexOf(element)];
+        return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -252,7 +252,7 @@ mixin ColumnState implements IPlutoState {
   double bodyColumnsWidthAtColumnIdx(int columnIdx) {
     double width = 0.0;
     bodyColumnIndexes.getRange(0, columnIdx).forEach((idx) {
-      width += columns[idx].width;
+      width += _columns[idx].width;
     });
     return width;
   }

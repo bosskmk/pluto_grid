@@ -40,7 +40,7 @@ class _LeftFixedRowsState extends State<LeftFixedRows> {
 
   void changeStateListener() {
     if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false ||
-        listEquals(_rows, widget.stateManager.rows) == false) {
+        listEquals(_rows, widget.stateManager._rows) == false) {
       setState(() {
         _columns = widget.stateManager.leftFixedColumns;
         _rows = widget.stateManager.rows;

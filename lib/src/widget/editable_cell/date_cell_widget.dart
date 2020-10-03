@@ -102,7 +102,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
         }
       } else if (keyManagerEvent.isDown) {
         if (popupStateManager.currentRowIdx ==
-            popupStateManager.rows.length - 1) {
+            popupStateManager._rows.length - 1) {
           popupStateManager.appendRows(_getMoreRows());
           return;
         }
@@ -186,7 +186,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
       lastDays = -1;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager.rows.first.cells.entries.first.value.originalValue,
+          popupStateManager._rows.first.cells.entries.first.value.originalValue,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -202,7 +202,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
       lastDays = 30;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager.rows.last.cells.entries.last.value.originalValue,
+          popupStateManager._rows.last.cells.entries.last.value.originalValue,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
