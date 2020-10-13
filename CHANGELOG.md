@@ -1,3 +1,8 @@
+## [0.1.17] - 2020. 10. 4
+
+* Cell selection problem. [#35](https://github.com/bosskmk/pluto_grid/issues/35)
+* Modified so that AutoSize of column operates according to default TextStyle.
+
 ## [0.1.16] - 2020. 10. 2
 
 * Fixed column problem when adjusting column width.

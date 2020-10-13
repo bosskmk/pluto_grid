@@ -227,6 +227,10 @@ mixin CellState implements IPlutoState {
       return false;
     }
 
+    if (mode.isSelect) {
+      return false;
+    }
+
     if (newValue.toString() == oldValue.toString()) {
       return false;
     }

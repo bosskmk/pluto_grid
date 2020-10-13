@@ -240,6 +240,7 @@ mixin EditingState implements IPlutoState {
     Key cellKey,
     dynamic value, {
     bool callOnChangedEvent = true,
+    bool force = false,
     bool notify = true,
   }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
@@ -259,7 +260,7 @@ mixin EditingState implements IPlutoState {
             oldValue: oldValue,
           );
 
-          if (canNotChangeCellValue(
+          if (force == false && canNotChangeCellValue(
             column: currentColumn,
             newValue: value,
             oldValue: oldValue,
