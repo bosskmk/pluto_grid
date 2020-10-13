@@ -247,6 +247,105 @@ void main() {
     });
   });
 
+  group('canChangeCellValue', () {
+    final createColumn = ({bool readonly = false}) {
+      return PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(readOnly: readonly),
+      );
+    };
+
+    test(
+      'readonly column.'
+      'should be returned false.',
+      () {
+        final normalGridAndReadonlyColumn = PlutoStateManager(
+          columns: [],
+          rows: [],
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
+          column: createColumn(readonly: true),
+          newValue: 'abc',
+          oldValue: 'ABC',
+        );
+
+        expect(result, isFalse);
+      },
+    );
+
+    test(
+      'not readonly column.'
+      'grid mode is normal.'
+      'should be returned true.',
+      () {
+        final normalGridAndReadonlyColumn = PlutoStateManager(
+          columns: [],
+          rows: [],
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
+          column: createColumn(readonly: false),
+          newValue: 'abc',
+          oldValue: 'ABC',
+        );
+
+        expect(result, isTrue);
+      },
+    );
+
+    test(
+      'not readonly column.'
+      'grid mode is select.'
+      'should be returned false.',
+      () {
+        final normalGridAndReadonlyColumn = PlutoStateManager(
+          columns: [],
+          rows: [],
+          gridFocusNode: null,
+          scroll: null,
+          mode: PlutoMode.Select,
+        );
+
+        final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
+          column: createColumn(readonly: false),
+          newValue: 'abc',
+          oldValue: 'ABC',
+        );
+
+        expect(result, isFalse);
+      },
+    );
+
+    test(
+      'not readonly column.'
+      'grid mode is normal.'
+      'but same values.'
+      'should be returned false.',
+      () {
+        final normalGridAndReadonlyColumn = PlutoStateManager(
+          columns: [],
+          rows: [],
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
+          column: createColumn(readonly: false),
+          newValue: 'abc',
+          oldValue: 'abc',
+        );
+
+        expect(result, isFalse);
+      },
+    );
+  });
+
   group('filteredCellValue', () {
     testWidgets(
         'select column'

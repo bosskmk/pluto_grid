@@ -22,6 +22,7 @@ import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
 import 'feature/dual_mode_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
+import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/selection_type_column_screen.dart';
@@ -276,6 +277,14 @@ class PlutoFeatures extends StatelessWidget {
                 'You can call the grid by popping up with the TextField.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, GridAsPopupScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Listing mode',
+            description:
+            'Listing mode to open or navigate to the Detail page.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ListingModeScreen.routeName);
             },
           ),
           PlutoListTile.dark(

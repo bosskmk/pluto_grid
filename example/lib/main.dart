@@ -13,6 +13,7 @@ import 'screen/feature/dark_mode_screen.dart';
 import 'screen/feature/date_type_column_screen.dart';
 import 'screen/feature/dual_mode_screen.dart';
 import 'screen/feature/grid_as_popup_screen.dart';
+import 'screen/feature/listing_mode_screen.dart';
 import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         AddAndRemoveRowsScreen.routeName: (context) => AddAndRemoveRowsScreen(),
         DualModeScreen.routeName: (context) => DualModeScreen(),
         GridAsPopupScreen.routeName: (context) => GridAsPopupScreen(),
+        ListingModeScreen.routeName: (context) => ListingModeScreen(),
         DarkModeScreen.routeName: (context) => DarkModeScreen(),
       },
       theme: ThemeData(
