@@ -1,3 +1,7 @@
+## [0.1.18] - 2020. 10. 16
+
+* Add valueFormatter for display of the cell value.
+
 ## [0.1.17] - 2020. 10. 4
 
 * Cell selection problem. [#35](https://github.com/bosskmk/pluto_grid/issues/35)
