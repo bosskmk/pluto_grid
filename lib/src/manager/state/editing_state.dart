@@ -260,11 +260,12 @@ mixin EditingState implements IPlutoState {
             oldValue: oldValue,
           );
 
-          if (force == false && canNotChangeCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          )) {
+          if (force == false &&
+              canNotChangeCellValue(
+                column: currentColumn,
+                newValue: value,
+                oldValue: oldValue,
+              )) {
             return;
           }
 

@@ -229,8 +229,7 @@ class PlutoFeatures extends StatelessWidget {
             title: 'Value formatter',
             description: 'Formatter for display of cell values.',
             onTapLiveDemo: () {
-              Navigator.pushNamed(
-                  context, ValueFormatterScreen.routeName);
+              Navigator.pushNamed(context, ValueFormatterScreen.routeName);
             },
           ),
           PlutoListTile(
