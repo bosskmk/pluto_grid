@@ -41,6 +41,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
         title: widget.column.title,
         field: widget.column.title,
         type: PlutoColumnType.text(readOnly: true),
+        formatter: widget.column.formatter,
       )
     ];
 

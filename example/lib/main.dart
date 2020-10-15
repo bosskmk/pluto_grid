@@ -20,6 +20,7 @@ import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
 import 'screen/feature/time_type_column_screen.dart';
+import 'screen/feature/value_formatter_screen.dart';
 import 'screen/home_screen.dart';
 
 void main() {
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         TimeTypeColumnScreen.routeName: (context) => TimeTypeColumnScreen(),
         SelectionTypeColumnScreen.routeName: (context) =>
             SelectionTypeColumnScreen(),
+        ValueFormatterScreen.routeName: (context) => ValueFormatterScreen(),
         RowSelectionScreen.routeName: (context) => RowSelectionScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),

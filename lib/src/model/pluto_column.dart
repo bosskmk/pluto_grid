@@ -1,11 +1,16 @@
 part of '../../pluto_grid.dart';
 
+typedef PlutoColumnValueFormatter = String Function(String value);
+
 class PlutoColumn {
   /// A title to be displayed on the screen.
   String title;
 
   /// Specifies the field name of the row to be connected to the column.
   String field;
+
+  /// Set the column type.
+  PlutoColumnType type;
 
   /// Set the width of the column.
   double width;
@@ -16,8 +21,8 @@ class PlutoColumn {
   /// Set column sorting.
   PlutoColumnSort sort;
 
-  /// Set the column type.
-  PlutoColumnType type;
+  /// Formatter for display of cell values.
+  PlutoColumnValueFormatter formatter;
 
   bool enableDraggable;
 
@@ -32,6 +37,7 @@ class PlutoColumn {
     this.width = PlutoDefaultSettings.columnWidth,
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
+    this.formatter,
     this.enableDraggable = true,
     this.enableSorting = true,
     this.enableContextMenu = true,
@@ -41,6 +47,22 @@ class PlutoColumn {
   Key _key;
 
   Key get key => _key;
+
+  String formattedValueForType(dynamic value) {
+    if (type.isNumber) {
+      return type.number.applyFormat(value);
+    }
+
+    return value.toString();
+  }
+
+  String formattedValueForDisplay(dynamic value) {
+    if (formatter == null) {
+      return formattedValueForType(value);
+    }
+
+    return formatter(value.toString()).toString();
+  }
 }
 
 enum PlutoColumnFixed {

@@ -612,4 +612,75 @@ void main() {
       });
     },
   );
+
+  group('formattedValueForType', () {
+    test(
+      'Number column 인 경우 12345 값이 12,345 로 포멧이 적용 되어야 한다.',
+      () {
+        final PlutoColumn column = PlutoColumn(
+          title: 'number column',
+          field: 'number_column',
+          type: PlutoColumnType.number(), // 기본 포멧 (#,###)
+        );
+
+        expect(column.formattedValueForType(12345), '12,345');
+      },
+    );
+
+    test(
+      'Number column 인 경우 12345678 값이 12,345,678 로 포멧이 적용 되어야 한다.',
+      () {
+        final PlutoColumn column = PlutoColumn(
+          title: 'number column',
+          field: 'number_column',
+          type: PlutoColumnType.number(), // 기본 포멧 (#,###)
+        );
+
+        expect(column.formattedValueForType(12345678), '12,345,678');
+      },
+    );
+
+    test(
+      'Number column 이 아닌 경우 12345 값이 12345 로 포멧이 적용 되지 않아야 한다.',
+      () {
+        final PlutoColumn column = PlutoColumn(
+          title: 'number column',
+          field: 'number_column',
+          type: PlutoColumnType.text(), // 기본 포멧 (#,###)
+        );
+
+        expect(column.formattedValueForType('12345'), '12345');
+      },
+    );
+  });
+
+  group('formattedValueForDisplay', () {
+    test(
+      'formatter 가 없는 경우 Number column 의 타입에 대한 포멧만 적용되어야 한다.',
+      () {
+        final PlutoColumn column = PlutoColumn(
+          title: 'number column',
+          field: 'number_column',
+          type: PlutoColumnType.number(), // 기본 포멧 (#,###)
+        );
+
+        expect(column.formattedValueForDisplay(12345), '12,345');
+      },
+    );
+
+    test(
+      'formatter 가 있는 경우 Number column 의 타입에 대한 포멧이 아닌 '
+      'formatter 가 적용 되어야 한다.',
+      () {
+        final PlutoColumn column = PlutoColumn(
+          title: 'number column',
+          field: 'number_column',
+          type: PlutoColumnType.number(), // 기본 포멧 (#,###)
+          formatter: (String value) => '\$ $value',
+        );
+
+        expect(column.formattedValueForDisplay(12345), '\$ 12345');
+      },
+    );
+  });
 }
