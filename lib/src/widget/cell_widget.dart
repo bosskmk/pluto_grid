@@ -183,9 +183,7 @@ class _CellWidgetState extends State<CellWidget>
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
       return Text(
-        widget.column.type.isNumber
-            ? widget.column.type.number.applyFormat(_cellValue)
-            : _cellValue.toString(),
+        widget.column.formattedValueForDisplay(_cellValue),
         style: widget.stateManager.configuration.cellTextStyle,
         overflow: TextOverflow.ellipsis,
       );

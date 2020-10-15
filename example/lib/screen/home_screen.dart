@@ -17,6 +17,7 @@ import 'feature/cell_selection_screen.dart';
 import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
+import 'feature/value_formatter_screen.dart';
 import 'feature/copy_and_paste_screen.dart';
 import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
@@ -225,6 +226,14 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Value formatter',
+            description: 'Formatter for display of cell values.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(
+                  context, ValueFormatterScreen.routeName);
+            },
+          ),
+          PlutoListTile(
             title: 'Row selection',
             description:
                 'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.',
@@ -281,8 +290,7 @@ class PlutoFeatures extends StatelessWidget {
           ),
           PlutoListTile(
             title: 'Listing mode',
-            description:
-            'Listing mode to open or navigate to the Detail page.',
+            description: 'Listing mode to open or navigate to the Detail page.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ListingModeScreen.routeName);
             },
