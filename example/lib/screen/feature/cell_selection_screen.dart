@@ -17,6 +17,8 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
 
   List<PlutoRow> rows;
 
+  PlutoStateManager stateManager;
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,47 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
     columns = dummyDate.columns;
 
     rows = dummyDate.rows;
+  }
+
+  void handleSelected() async {
+    String value = '';
+
+    stateManager.currentSelectingPositionList.forEach((element) {
+      final cellValue =
+          stateManager.rows[element.rowIdx].cells[element.field].value;
+
+      value +=
+          'rowIdx: ${element.rowIdx}, field: ${element.field}, value: $cellValue\n';
+    });
+
+    if (value.isEmpty) {
+      value = 'No cells are selected.';
+    }
+
+    await showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Dialog(
+            child: LayoutBuilder(
+              builder: (ctx, size) {
+                return Container(
+                  padding: EdgeInsets.all(15),
+                  width: 400,
+                  height: 500,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(value),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
   }
 
   @override
@@ -43,15 +86,34 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
               'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_selection_screen.dart',
         ),
       ],
-      body: PlutoGrid(
-        columns: columns,
-        rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
-          print(event);
-        },
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
-        },
+      body: Column(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FlatButton(
+                  child: Text('Show selected cells.'),
+                  onPressed: handleSelected,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onChanged: (PlutoOnChangedEvent event) {
+                print(event);
+              },
+              onLoaded: (PlutoOnLoadedEvent event) {
+                event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
+
+                stateManager = event.stateManager;
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

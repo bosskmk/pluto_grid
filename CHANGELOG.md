@@ -1,3 +1,8 @@
+## [0.1.19] - 2020. 10. 23
+
+* Add enableMoveDownAfterSelecting, enterKeyAction in PlutoConfiguration.
+* Add currentSelectingPositionList in PlutoStateManager.
+
 ## [0.1.18] - 2020. 10. 16
 
 * Add valueFormatter for display of the cell value.

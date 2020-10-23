@@ -153,6 +153,24 @@ class PlutoCellPosition {
   int get hashCode => super.hashCode;
 }
 
+class PlutoSelectingCellPosition {
+  String field;
+  int rowIdx;
+
+  PlutoSelectingCellPosition({
+    this.field,
+    this.rowIdx,
+  });
+
+  @override
+  bool operator ==(covariant PlutoSelectingCellPosition other) {
+    return field == other.field && rowIdx == other.rowIdx;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+}
+
 class PlutoKeyPressed {
   bool shift;
 
