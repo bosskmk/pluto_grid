@@ -122,6 +122,10 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
         onChanged: (PlutoOnChangedEvent event) {
           print(event);
         },
+        configuration: PlutoConfiguration(
+          // If you don't want to move to the next line after selecting the pop-up item, uncomment it.
+          // enableMoveDownAfterSelecting: false,
+        ),
       ),
     );
   }

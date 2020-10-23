@@ -310,11 +310,13 @@ mixin SelectingState implements IPlutoState {
   }
 
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
-    moveCurrentCell(MoveDirection.Down, notify: false);
-
     changeCellValue(cell._key, value, notify: false);
 
-    setEditing(true, notify: false);
+    if (configuration.enableMoveDownAfterSelecting) {
+      moveCurrentCell(MoveDirection.Down, notify: false);
+
+      setEditing(true, notify: false);
+    }
 
     notifyListeners();
   }

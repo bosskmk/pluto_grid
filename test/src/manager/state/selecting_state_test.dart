@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_pluto_scroll_controller.dart';
 
 void main() {
   group('currentSelectingText', () {
@@ -1128,5 +1130,96 @@ void main() {
         });
       }
     });
+  });
+
+  group('handleAfterSelectingRow', () {
+    testWidgets(
+      'WHEN '
+      'enableMoveDownAfterSelecting 이 false 이면 '
+      '셀 값 변경 후 다음 행으로 이동 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+          configuration: PlutoConfiguration(
+            enableMoveDownAfterSelecting: false,
+          ),
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        stateManager.setCurrentCell(rows[1].cells['text1'], 1);
+
+        stateManager.setCurrentSelectingPosition(rowIdx: 3, columnIdx: 2);
+
+        // when
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+
+        stateManager.handleAfterSelectingRow(
+          rows[1].cells['text1'],
+          'new value',
+        );
+
+        // then
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+      },
+    );
+
+    testWidgets(
+      'WHEN '
+      'enableMoveDownAfterSelecting 이 true 이면 '
+      '셀 값 변경 후 다음 행으로 이동 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final vertical = MockLinkedScrollControllerGroup();
+
+        when(vertical.offset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: PlutoScrollController(
+            vertical: vertical,
+            horizontal: MockLinkedScrollControllerGroup(),
+          ),
+          configuration: PlutoConfiguration(
+            enableMoveDownAfterSelecting: true,
+          ),
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 500, maxWidth: 400));
+
+        stateManager.setCurrentCell(rows[1].cells['text1'], 1);
+
+        stateManager.setCurrentSelectingPosition(rowIdx: 3, columnIdx: 2);
+
+        // when
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+
+        stateManager.handleAfterSelectingRow(
+          rows[1].cells['text1'],
+          'new value',
+        );
+
+        // then
+        expect(stateManager.currentCellPosition.rowIdx, 2);
+      },
+    );
   });
 }

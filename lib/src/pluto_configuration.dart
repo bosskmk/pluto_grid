@@ -4,6 +4,9 @@ class PlutoConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
 
+  /// When you select a value in the pop-up grid, it moves down.
+  final bool enableMoveDownAfterSelecting;
+
   final Color gridBackgroundColor;
 
   /// Grid border color. (Grid outline color, Fixed column division line color)
@@ -38,6 +41,7 @@ class PlutoConfiguration {
 
   PlutoConfiguration({
     this.enableColumnBorder = false,
+    this.enableMoveDownAfterSelecting = true,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -61,6 +65,7 @@ class PlutoConfiguration {
 
   PlutoConfiguration.dark({
     this.enableColumnBorder = false,
+    this.enableMoveDownAfterSelecting = true,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
