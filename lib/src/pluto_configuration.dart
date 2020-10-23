@@ -4,9 +4,6 @@ class PlutoConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
 
-  /// When you select a value in the pop-up grid, it moves down.
-  final bool enableMoveDownAfterSelecting;
-
   final Color gridBackgroundColor;
 
   /// Grid border color. (Grid outline color, Fixed column division line color)
@@ -39,9 +36,17 @@ class PlutoConfiguration {
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
 
+  /// When you select a value in the pop-up grid, it moves down.
+  final bool enableMoveDownAfterSelecting;
+
+  /// PlutoEnterKeyAction.EditingAndMoveDown : It switches to the editing state, and moves down in the editing state.
+  /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
+  /// PlutoEnterKeyAction.ToggleEditing : The editing state is toggled and cells are not moved.
+  /// PlutoEnterKeyAction.None : There is no action.
+  final PlutoEnterKeyAction enterKeyAction;
+
   PlutoConfiguration({
     this.enableColumnBorder = false,
-    this.enableMoveDownAfterSelecting = true,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -61,11 +66,12 @@ class PlutoConfiguration {
     ),
     this.iconColor = Colors.black26,
     this.menuBackgroundColor = Colors.white,
+    this.enableMoveDownAfterSelecting = true,
+    this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
   });
 
   PlutoConfiguration.dark({
     this.enableColumnBorder = false,
-    this.enableMoveDownAfterSelecting = true,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
@@ -85,5 +91,21 @@ class PlutoConfiguration {
     ),
     this.iconColor = Colors.white38,
     this.menuBackgroundColor = const Color(0xFF414141),
+    this.enableMoveDownAfterSelecting = true,
+    this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
   });
+}
+
+enum PlutoEnterKeyAction {
+  EditingAndMoveDown,
+  EditingAndMoveRight,
+  ToggleEditing,
+  None,
+}
+
+extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
+  bool get isEditingAndMoveDown => this == PlutoEnterKeyAction.EditingAndMoveDown;
+  bool get isEditingAndMoveRight => this == PlutoEnterKeyAction.EditingAndMoveRight;
+  bool get isToggleEditing => this == PlutoEnterKeyAction.ToggleEditing;
+  bool get isNone => this == null || this == PlutoEnterKeyAction.None;
 }

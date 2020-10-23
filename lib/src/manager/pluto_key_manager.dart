@@ -94,6 +94,10 @@ class PlutoKeyManager {
       return;
     }
 
+    if (stateManager.configuration.enterKeyAction.isNone) {
+      return;
+    }
+
     // Moves to the lower or upper cell when pressing the Enter key while editing the cell.
     if (stateManager.isEditing) {
       // Occurs twice when a key event occurs without change of focus in the state of last inputting Korean
@@ -110,10 +114,35 @@ class PlutoKeyManager {
             error: 'Enter twice when entering Korean on the web.');
       }
 
-      if (keyManagerEvent.event.isShiftPressed) {
-        stateManager.moveCurrentCell(MoveDirection.Up);
-      } else {
-        stateManager.moveCurrentCell(MoveDirection.Down);
+      if (stateManager.configuration.enterKeyAction.isToggleEditing) {
+      } else if (stateManager
+          .configuration.enterKeyAction.isEditingAndMoveDown) {
+        if (keyManagerEvent.event.isShiftPressed) {
+          stateManager.moveCurrentCell(
+            MoveDirection.Up,
+            notify: false,
+          );
+        } else {
+          stateManager.moveCurrentCell(
+            MoveDirection.Down,
+            notify: false,
+          );
+        }
+      } else if (stateManager
+          .configuration.enterKeyAction.isEditingAndMoveRight) {
+        if (keyManagerEvent.event.isShiftPressed) {
+          stateManager.moveCurrentCell(
+            MoveDirection.Left,
+            force: true,
+            notify: false,
+          );
+        } else {
+          stateManager.moveCurrentCell(
+            MoveDirection.Right,
+            force: true,
+            notify: false,
+          );
+        }
       }
     }
 
