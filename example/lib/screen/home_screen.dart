@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helper/launch_url.dart';
@@ -17,7 +18,6 @@ import 'feature/cell_selection_screen.dart';
 import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
-import 'feature/value_formatter_screen.dart';
 import 'feature/copy_and_paste_screen.dart';
 import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
@@ -28,6 +28,7 @@ import 'feature/moving_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/selection_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
+import 'feature/value_formatter_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/';
@@ -136,6 +137,23 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
+                          height: 50,
+                        ),
+                        Center(
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                launchUrl('https://www.buymeacoffee.com/manki');
+                              },
+                              child: Image.network(
+                                'https://cdn.buymeacoffee.com/buttons/v2/default-white.png',
+                                height: 60,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
                           height: 100,
                         ),
                       ],
@@ -229,8 +247,7 @@ class PlutoFeatures extends StatelessWidget {
             title: 'Value formatter',
             description: 'Formatter for display of cell values.',
             onTapLiveDemo: () {
-              Navigator.pushNamed(
-                  context, ValueFormatterScreen.routeName);
+              Navigator.pushNamed(context, ValueFormatterScreen.routeName);
             },
           ),
           PlutoListTile(
