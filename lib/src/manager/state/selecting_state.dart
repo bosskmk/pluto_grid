@@ -11,6 +11,16 @@ abstract class ISelectingState {
   /// Calculate the currently selected cell and its multi-selection range.
   PlutoCellPosition get currentSelectingPosition;
 
+  /// Position list of currently selected.
+  /// Only valid in [PlutoSelectingMode.Square].
+  ///
+  /// ```dart
+  /// stateManager.currentSelectingPositionList.forEach((element) {
+  ///   final cellValue = stateManager.rows[element.rowIdx].cells[element.field].value;
+  /// });
+  /// ```
+  List<PlutoSelectingCellPosition> get currentSelectingPositionList;
+
   bool get hasCurrentSelectingPosition;
 
   /// Rows of currently selected.
@@ -73,6 +83,43 @@ mixin SelectingState implements IPlutoState {
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
 
   PlutoCellPosition _currentSelectingPosition;
+
+  List<PlutoSelectingCellPosition> get currentSelectingPositionList {
+    if (!_selectingMode.isSquare ||
+        currentCellPosition == null ||
+        currentSelectingPosition == null) {
+      return [];
+    }
+
+    final columnIndexes = columnIndexesByShowFixed();
+
+    int columnStartIdx =
+    min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int columnEndIdx =
+    max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+
+    int rowStartIdx =
+    min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    int rowEndIdx =
+    max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+
+    List<PlutoSelectingCellPosition> positions = [];
+
+    for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
+        final String field = _columns[columnIndexes[j]].field;
+
+        positions.add(PlutoSelectingCellPosition(
+            rowIdx: i,
+            field: field,
+        ));
+      }
+    }
+
+    return positions;
+  }
 
   bool get hasCurrentSelectingPosition => _currentSelectingPosition != null;
 

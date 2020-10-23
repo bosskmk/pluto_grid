@@ -8,6 +8,86 @@ import '../../../helper/row_helper.dart';
 import '../../../mock/mock_pluto_scroll_controller.dart';
 
 void main() {
+  group('currentSelectingPositionList', () {
+    testWidgets(
+      'selectingMode.Row 상태에서'
+      '빈 배열을 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+
+        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+
+        stateManager.setCurrentSelectingRowsByRange(1, 2);
+
+        // when
+        final currentSelectingPositionList =
+            stateManager.currentSelectingPositionList;
+
+        // then
+        expect(currentSelectingPositionList.length, 0);
+      },
+    );
+
+    testWidgets(
+      'selectingMode.Square 상태에서'
+      '(1, 3) ~ (2, 4) 선택 시 4개의 선택 된 셀이 리턴 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+
+        stateManager.setSelectingMode(PlutoSelectingMode.Square);
+
+        final currentCell = rows[3].cells['text1'];
+
+        stateManager.setCurrentCell(currentCell, 3);
+
+        stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 4);
+
+        // when
+        final currentSelectingPositionList =
+            stateManager.currentSelectingPositionList;
+
+        // then
+        expect(currentSelectingPositionList.length, 4);
+        expect(currentSelectingPositionList[0].rowIdx, 3);
+        expect(currentSelectingPositionList[0].field, 'text1');
+        expect(currentSelectingPositionList[1].rowIdx, 3);
+        expect(currentSelectingPositionList[1].field, 'text2');
+        expect(currentSelectingPositionList[2].rowIdx, 4);
+        expect(currentSelectingPositionList[2].field, 'text1');
+        expect(currentSelectingPositionList[3].rowIdx, 4);
+        expect(currentSelectingPositionList[3].field, 'text2');
+      },
+    );
+  });
+
   group('currentSelectingText', () {
     testWidgets(
         'WHEN'
