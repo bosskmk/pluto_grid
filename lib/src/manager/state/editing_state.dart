@@ -28,6 +28,7 @@ abstract class IEditingState {
     Key cellKey,
     dynamic value, {
     bool callOnChangedEvent = true,
+    bool force = false,
     bool notify = true,
   });
 }
@@ -118,6 +119,70 @@ mixin EditingState implements IPlutoState {
     }
 
     notifyListeners();
+  }
+
+  dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
+    if (column.type.isNumber && value.runtimeType != num) {
+      return num.tryParse(value.toString()) ?? 0;
+    }
+
+    return value;
+  }
+
+  void changeCellValue(
+      Key cellKey,
+      dynamic value, {
+        bool callOnChangedEvent = true,
+        bool force = false,
+        bool notify = true,
+      }) {
+    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+      for (var columnIdx = 0;
+      columnIdx < columnIndexes.length;
+      columnIdx += 1) {
+        final field = _columns[columnIndexes[columnIdx]].field;
+
+        if (_rows[rowIdx].cells[field]._key == cellKey) {
+          final currentColumn = _columns[columnIndexes[columnIdx]];
+
+          final dynamic oldValue = _rows[rowIdx].cells[field].value;
+
+          value = filteredCellValue(
+            column: currentColumn,
+            newValue: value,
+            oldValue: oldValue,
+          );
+
+          if (force == false && canNotChangeCellValue(
+            column: currentColumn,
+            newValue: value,
+            oldValue: oldValue,
+          )) {
+            return;
+          }
+
+          _rows[rowIdx].cells[field].value =
+              value = castValueByColumnType(value, currentColumn);
+
+          if (callOnChangedEvent == true && onChanged != null) {
+            onChanged(PlutoOnChangedEvent(
+              columnIdx: columnIdx,
+              column: currentColumn,
+              rowIdx: rowIdx,
+              row: _rows[rowIdx],
+              value: value,
+              oldValue: oldValue,
+            ));
+          }
+
+          if (notify) {
+            notifyListeners();
+          }
+
+          return;
+        }
+      }
+    }
   }
 
   void _pasteCellValueIntoSelectingRows({List<List<String>> textList}) {
@@ -225,70 +290,6 @@ mixin EditingState implements IPlutoState {
         ++textColumnIdx;
       }
       ++textRowIdx;
-    }
-  }
-
-  dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
-    if (column.type.isNumber && value.runtimeType != num) {
-      return num.tryParse(value.toString()) ?? 0;
-    }
-
-    return value;
-  }
-
-  void changeCellValue(
-    Key cellKey,
-    dynamic value, {
-    bool callOnChangedEvent = true,
-    bool force = false,
-    bool notify = true,
-  }) {
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
-
-        if (_rows[rowIdx].cells[field]._key == cellKey) {
-          final currentColumn = _columns[columnIndexes[columnIdx]];
-
-          final dynamic oldValue = _rows[rowIdx].cells[field].value;
-
-          value = filteredCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          );
-
-          if (force == false && canNotChangeCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          )) {
-            return;
-          }
-
-          _rows[rowIdx].cells[field].value =
-              value = castValueByColumnType(value, currentColumn);
-
-          if (callOnChangedEvent == true && onChanged != null) {
-            onChanged(PlutoOnChangedEvent(
-              columnIdx: columnIdx,
-              column: currentColumn,
-              rowIdx: rowIdx,
-              row: _rows[rowIdx],
-              value: value,
-              oldValue: oldValue,
-            ));
-          }
-
-          if (notify) {
-            notifyListeners();
-          }
-
-          return;
-        }
-      }
     }
   }
 }
