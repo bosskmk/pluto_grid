@@ -202,14 +202,16 @@ Create a grid with the data created above.
 
 <br>
 
-<a href="https://www.buymeacoffee.com/manki" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-white.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-
-<br>
-
 ### Pluto series
 > develop packages that make it easy to develop admin pages or CMS with Flutter.
 * [PlutoGrid](https://github.com/bosskmk/pluto_grid)
 * [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
+
+<br>
+
+### Support
+
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/white_img.png)](https://www.buymeacoffee.com/manki)
 
 <br>
 

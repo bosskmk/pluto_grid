@@ -82,6 +82,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
       maxLines: maxLines,
       keyboardType: keyboardType ?? TextInputType.text,
       inputFormatters: inputFormatters ?? [],
+      textAlign: widget.column.textAlign.value,
     );
   }
 
