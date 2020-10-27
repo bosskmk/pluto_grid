@@ -104,8 +104,10 @@ enum PlutoEnterKeyAction {
 }
 
 extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
-  bool get isEditingAndMoveDown => this == PlutoEnterKeyAction.EditingAndMoveDown;
-  bool get isEditingAndMoveRight => this == PlutoEnterKeyAction.EditingAndMoveRight;
+  bool get isEditingAndMoveDown =>
+      this == PlutoEnterKeyAction.EditingAndMoveDown;
+  bool get isEditingAndMoveRight =>
+      this == PlutoEnterKeyAction.EditingAndMoveRight;
   bool get isToggleEditing => this == PlutoEnterKeyAction.ToggleEditing;
   bool get isNone => this == null || this == PlutoEnterKeyAction.None;
 }
