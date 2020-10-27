@@ -1,3 +1,7 @@
+## [0.1.20] - 2020. 10. 28
+
+* Add textAlign to column property.(PlutoColumnTextAlign.Left, or Right) [#49](https://github.com/bosskmk/pluto_grid/issues/49)
+
 ## [0.1.19] - 2020. 10. 23
 
 * Add enableMoveDownAfterSelecting, enterKeyAction in PlutoConfiguration.
