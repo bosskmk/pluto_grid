@@ -15,6 +15,9 @@ class PlutoColumn {
   /// Set the width of the column.
   double width;
 
+  /// Text alignment in Cell. (Left, Right)
+  PlutoColumnTextAlign textAlign;
+
   /// Fix the column to the left and right.
   PlutoColumnFixed fixed;
 
@@ -35,6 +38,7 @@ class PlutoColumn {
     @required this.field,
     @required this.type,
     this.width = PlutoDefaultSettings.columnWidth,
+    this.textAlign = PlutoColumnTextAlign.Left,
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
     this.formatter,
@@ -62,64 +66,6 @@ class PlutoColumn {
     }
 
     return formatter(value.toString()).toString();
-  }
-}
-
-enum PlutoColumnFixed {
-  None,
-  Left,
-  Right,
-}
-
-extension PlutoColumnFixedExtension on PlutoColumnFixed {
-  bool get isNone {
-    return this == null || this == PlutoColumnFixed.None;
-  }
-
-  bool get isLeft {
-    return this == PlutoColumnFixed.Left;
-  }
-
-  bool get isRight {
-    return this == PlutoColumnFixed.Right;
-  }
-
-  bool get isFixed {
-    return this == PlutoColumnFixed.Left || this == PlutoColumnFixed.Right;
-  }
-}
-
-enum PlutoColumnSort {
-  None,
-  Ascending,
-  Descending,
-}
-
-extension PlutoColumnSortExtension on PlutoColumnSort {
-  bool get isNone {
-    return this == null || this == PlutoColumnSort.None;
-  }
-
-  bool get isAscending {
-    return this == PlutoColumnSort.Ascending;
-  }
-
-  bool get isDescending {
-    return this == PlutoColumnSort.Descending;
-  }
-
-  String toShortString() {
-    return this.toString().split('.').last;
-  }
-
-  PlutoColumnSort fromString(String value) {
-    if (value == PlutoColumnSort.Ascending.toShortString()) {
-      return PlutoColumnSort.Ascending;
-    } else if (value == PlutoColumnSort.Descending.toShortString()) {
-      return PlutoColumnSort.Descending;
-    } else {
-      return PlutoColumnSort.None;
-    }
   }
 }
 
@@ -447,4 +393,79 @@ abstract class _PlutoColumnTypeHasFormat {
   bool applyFormatOnInit;
 
   dynamic applyFormat(dynamic value);
+}
+
+enum PlutoColumnTextAlign {
+  Left,
+  Right,
+}
+
+extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
+  TextAlign get value {
+    return this == PlutoColumnTextAlign.Right
+        ? TextAlign.right
+        : TextAlign.left;
+  }
+
+  bool get isLeft => this == null || this == PlutoColumnTextAlign.Left;
+
+  bool get isRight => this == PlutoColumnTextAlign.Right;
+}
+
+enum PlutoColumnFixed {
+  None,
+  Left,
+  Right,
+}
+
+extension PlutoColumnFixedExtension on PlutoColumnFixed {
+  bool get isNone {
+    return this == null || this == PlutoColumnFixed.None;
+  }
+
+  bool get isLeft {
+    return this == PlutoColumnFixed.Left;
+  }
+
+  bool get isRight {
+    return this == PlutoColumnFixed.Right;
+  }
+
+  bool get isFixed {
+    return this == PlutoColumnFixed.Left || this == PlutoColumnFixed.Right;
+  }
+}
+
+enum PlutoColumnSort {
+  None,
+  Ascending,
+  Descending,
+}
+
+extension PlutoColumnSortExtension on PlutoColumnSort {
+  bool get isNone {
+    return this == null || this == PlutoColumnSort.None;
+  }
+
+  bool get isAscending {
+    return this == PlutoColumnSort.Ascending;
+  }
+
+  bool get isDescending {
+    return this == PlutoColumnSort.Descending;
+  }
+
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
+
+  PlutoColumnSort fromString(String value) {
+    if (value == PlutoColumnSort.Ascending.toShortString()) {
+      return PlutoColumnSort.Ascending;
+    } else if (value == PlutoColumnSort.Descending.toShortString()) {
+      return PlutoColumnSort.Descending;
+    } else {
+      return PlutoColumnSort.None;
+    }
+  }
 }

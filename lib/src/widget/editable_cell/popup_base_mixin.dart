@@ -215,10 +215,12 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
               isDense: true,
             ),
             maxLines: 1,
+            textAlign: widget.column.textAlign.value,
           ),
           Positioned(
             top: -14,
-            right: -12,
+            right: widget.column.textAlign.isLeft ? -12 : null,
+            left: widget.column.textAlign.isRight ? -12 : null,
             child: IconButton(
               icon: icon,
               color: widget.stateManager.configuration.iconColor,

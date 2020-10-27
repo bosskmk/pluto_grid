@@ -182,10 +182,14 @@ class _CellWidgetState extends State<CellWidget>
 
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
-      return Text(
-        widget.column.formattedValueForDisplay(_cellValue),
-        style: widget.stateManager.configuration.cellTextStyle,
-        overflow: TextOverflow.ellipsis,
+      return SizedBox(
+        width: double.infinity,
+        child: Text(
+          widget.column.formattedValueForDisplay(_cellValue),
+          style: widget.stateManager.configuration.cellTextStyle,
+          overflow: TextOverflow.ellipsis,
+          textAlign: widget.column.textAlign.value,
+        ),
       );
     }
 
@@ -398,10 +402,7 @@ class _BackgroundColorWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: PlutoDefaultSettings.cellPadding),
       decoration: _boxDecoration(),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: child,
-      ),
+      child: child,
     );
   }
 }

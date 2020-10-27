@@ -1,13 +1,64 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 void main() {
   group(
+    'PlutoColumnTextAlign',
+    () {
+      test(
+        'isLeft',
+        () {
+          // given
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Left;
+          // when
+          // then
+          expect(textAlign.isLeft, isTrue);
+        },
+      );
+
+      test(
+        'isRight',
+        () {
+          // given
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Right;
+          // when
+          // then
+          expect(textAlign.isRight, isTrue);
+        },
+      );
+
+      test(
+        'value is TextAlign.left',
+        () {
+          // given
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Left;
+          // when
+          // then
+          expect(textAlign.value, TextAlign.left);
+        },
+      );
+
+      test(
+        'value is TextAlign.right',
+        () {
+          // given
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Right;
+          // when
+          // then
+          expect(textAlign.value, TextAlign.right);
+        },
+      );
+    },
+  );
+
+  group(
     'PlutoColumnSort',
     () {
-      testWidgets(
+      test(
         'isNone',
-        (WidgetTester tester) async {
+        () {
           // given
           final PlutoColumnSort columnSort = PlutoColumnSort.None;
           // when
@@ -16,9 +67,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         'isAscending',
-        (WidgetTester tester) async {
+        () {
           // given
           final PlutoColumnSort columnSort = PlutoColumnSort.Ascending;
           // when
@@ -27,9 +78,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         'isDescending',
-        (WidgetTester tester) async {
+        () {
           // given
           final PlutoColumnSort columnSort = PlutoColumnSort.Descending;
           // when
@@ -41,25 +92,25 @@ void main() {
       group(
         'toShortString',
         () {
-          testWidgets(
+          test(
             'None',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnSort columnSort = PlutoColumnSort.None;
               expect(columnSort.toShortString(), 'None');
             },
           );
 
-          testWidgets(
+          test(
             'Ascending',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnSort columnSort = PlutoColumnSort.Ascending;
               expect(columnSort.toShortString(), 'Ascending');
             },
           );
 
-          testWidgets(
+          test(
             'Descending',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnSort columnSort = PlutoColumnSort.Descending;
               expect(columnSort.toShortString(), 'Descending');
             },
@@ -70,25 +121,25 @@ void main() {
       group(
         'fromString',
         () {
-          testWidgets(
+          test(
             'None',
-            (WidgetTester tester) async {
+            () {
               expect(PlutoColumnSort.None.fromString('None'),
                   PlutoColumnSort.None);
             },
           );
 
-          testWidgets(
+          test(
             'Ascending',
-            (WidgetTester tester) async {
+            () {
               expect(PlutoColumnSort.None.fromString('Ascending'),
                   PlutoColumnSort.Ascending);
             },
           );
 
-          testWidgets(
+          test(
             'Descending',
-            (WidgetTester tester) async {
+            () {
               expect(PlutoColumnSort.None.fromString('Descending'),
                   PlutoColumnSort.Descending);
             },
@@ -99,9 +150,9 @@ void main() {
   );
 
   group('PlutoColumnTypeText 의 defaultValue', () {
-    testWidgets(
+    test(
       'text 기본 값이 설정 되어야 한다.',
-      (WidgetTester tester) async {
+      () {
         final PlutoColumnTypeText column = PlutoColumnType.text(
           defaultValue: 'default',
         );
@@ -110,9 +161,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'number 기본 값이 설정 되어야 한다.',
-      (WidgetTester tester) async {
+      () {
         final PlutoColumnTypeNumber column = PlutoColumnType.number(
           defaultValue: 123,
         );
@@ -121,9 +172,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'select 기본 값이 설정 되어야 한다.',
-      (WidgetTester tester) async {
+      () {
         final PlutoColumnTypeSelect column = PlutoColumnType.select(
           ['One'],
           defaultValue: 'One',
@@ -133,9 +184,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'date 기본 값이 설정 되어야 한다.',
-      (WidgetTester tester) async {
+      () {
         final PlutoColumnTypeDate column = PlutoColumnType.date(
           defaultValue: DateTime.parse('2020-01-01'),
         );
@@ -144,9 +195,9 @@ void main() {
       },
     );
 
-    testWidgets(
+    test(
       'time 기본 값이 설정 되어야 한다.',
-      (WidgetTester tester) async {
+      () {
         final PlutoColumnTypeTime column = PlutoColumnType.time(
           defaultValue: '20:30',
         );
@@ -159,17 +210,17 @@ void main() {
   group(
     'PlutoColumnTypeText',
     () {
-      testWidgets(
+      test(
         'text',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeText textColumn = PlutoColumnType.text();
           expect(textColumn.text, textColumn);
         },
       );
 
-      testWidgets(
+      test(
         'time',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeText textColumn = PlutoColumnType.text();
           expect(() {
             final getInvalidColumn = textColumn.time;
@@ -180,33 +231,33 @@ void main() {
       group(
         'isValid',
         () {
-          testWidgets(
+          test(
             '문자인 경우 true',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.isValid('text'), isTrue);
             },
           );
 
-          testWidgets(
+          test(
             '숫자인 경우 true',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.isValid(1234), isTrue);
             },
           );
 
-          testWidgets(
+          test(
             '공백인 경우 true',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.isValid(''), isTrue);
             },
           );
 
-          testWidgets(
+          test(
             'null 인 경우 false',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.isValid(null), isFalse);
             },
@@ -217,25 +268,25 @@ void main() {
       group(
         'compare',
         () {
-          testWidgets(
+          test(
             '가, 나 인 경우 -1',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.compare('가', '나'), -1);
             },
           );
 
-          testWidgets(
+          test(
             '나, 가 인 경우 1',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.compare('나', '가'), 1);
             },
           );
 
-          testWidgets(
+          test(
             '가, 가 인 경우 0',
-            (WidgetTester tester) async {
+            () {
               final PlutoColumnTypeText textColumn = PlutoColumnType.text();
               expect(textColumn.compare('가', '가'), 0);
             },
@@ -247,33 +298,33 @@ void main() {
 
   group('PlutoColumnTypeNumber', () {
     group('isValid', () {
-      testWidgets(
+      test(
         '문자인 경우 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
           expect(numberColumn.isValid('text'), isFalse);
         },
       );
 
-      testWidgets(
+      test(
         '123 인 경우 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
           expect(numberColumn.isValid(123), isTrue);
         },
       );
 
-      testWidgets(
+      test(
         '-123 인 경우 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
           expect(numberColumn.isValid(-123), isTrue);
         },
       );
 
-      testWidgets(
+      test(
         'negative 가 false 이고 -123 인 경우 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number(
             negative: false,
           );
@@ -285,25 +336,25 @@ void main() {
     group(
       'compare',
       () {
-        testWidgets(
+        test(
           '1, 2 인 경우 -1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeNumber column = PlutoColumnType.number();
             expect(column.compare(1, 2), -1);
           },
         );
 
-        testWidgets(
+        test(
           '2, 1 인 경우 1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeNumber column = PlutoColumnType.number();
             expect(column.compare(2, 1), 1);
           },
         );
 
-        testWidgets(
+        test(
           '1, 1 인 경우 0',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeNumber column = PlutoColumnType.number();
             expect(column.compare(1, 1), 0);
           },
@@ -314,9 +365,9 @@ void main() {
 
   group('PlutoColumnTypeSelect', () {
     group('isValid', () {
-      testWidgets(
+      test(
         'items 에 포함 되어있으면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeSelect selectColumn = PlutoColumnType.select([
             'A',
             'B',
@@ -326,9 +377,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         'items 에 포함 되어 있지 않으면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeSelect selectColumn = PlutoColumnType.select([
             'A',
             'B',
@@ -342,9 +393,9 @@ void main() {
     group(
       'compare',
       () {
-        testWidgets(
+        test(
           'Two, Three 인 경우 -1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeSelect column = PlutoColumnType.select([
               'One',
               'Two',
@@ -354,9 +405,9 @@ void main() {
           },
         );
 
-        testWidgets(
+        test(
           'Three, Two  인 경우 1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeSelect column = PlutoColumnType.select([
               'One',
               'Two',
@@ -366,9 +417,9 @@ void main() {
           },
         );
 
-        testWidgets(
+        test(
           'Two, Two 인 경우 0',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeSelect column = PlutoColumnType.select([
               'One',
               'Two',
@@ -383,25 +434,25 @@ void main() {
 
   group('PlutoColumnTypeDate', () {
     group('isValid', () {
-      testWidgets(
+      test(
         '날짜 형식이 아니면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
           expect(dateColumn.isValid('Not a date'), isFalse);
         },
       );
 
-      testWidgets(
+      test(
         '날짜 형식이면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
           expect(dateColumn.isValid('2020-01-01'), isTrue);
         },
       );
 
-      testWidgets(
+      test(
         '시작일이 있는 경우 시작일 보다 작으면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -409,9 +460,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '시작일이 있는 경우 시작일과 같으면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -419,9 +470,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '시작일이 있는 경우 시작일보다 크면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
           );
@@ -429,9 +480,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '마지막일이 있는 경우 마지막일보다 작으면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -439,9 +490,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '마지막일이 있는 경우 마지막일과 같으면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -449,9 +500,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '마지막일이 있는 경우 마지막일보다 크면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
           );
@@ -459,9 +510,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '시작일과 마지막일이 둘다 있는 경우 범위에 있으면 true',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -470,9 +521,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '시작일과 마지막일이 둘다 있는 경우 범위보다 작으면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -481,9 +532,9 @@ void main() {
         },
       );
 
-      testWidgets(
+      test(
         '시작일과 마지막일이 둘다 있는 경우 범위보다 크면 false',
-        (WidgetTester tester) async {
+        () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
@@ -496,51 +547,51 @@ void main() {
     group(
       'compare',
       () {
-        testWidgets(
+        test(
           '2019-12-30, 2020-01-01 인 경우 -1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column = PlutoColumnType.date();
             expect(column.compare('2019-12-30', '2020-01-01'), -1);
           },
         );
 
-        testWidgets(
+        test(
           '12/30/2019, 01/01/2020 인 경우 -1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column =
                 PlutoColumnType.date(format: 'MM/dd/yyyy');
             expect(column.compare('12/30/2019', '01/01/2020'), -1);
           },
         );
 
-        testWidgets(
+        test(
           '2020-01-01, 2019-12-30  인 경우 1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column = PlutoColumnType.date();
             expect(column.compare('2020-01-01', '2019-12-30'), 1);
           },
         );
 
-        testWidgets(
+        test(
           '01/01/2020, 12/30/2019  인 경우 1',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column =
                 PlutoColumnType.date(format: 'MM/dd/yyyy');
             expect(column.compare('01/01/2020', '12/30/2019'), 1);
           },
         );
 
-        testWidgets(
+        test(
           '2020-01-01, 2020-01-01 인 경우 0',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column = PlutoColumnType.date();
             expect(column.compare('2020-01-01', '2020-01-01'), 0);
           },
         );
 
-        testWidgets(
+        test(
           '01/01/2020, 01/01/2020  인 경우 0',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeDate column =
                 PlutoColumnType.date(format: 'MM/dd/yyyy');
             expect(column.compare('01/01/2020', '01/01/2020'), 0);
@@ -554,57 +605,57 @@ void main() {
     'PlutoColumnTypeTime',
     () {
       group('isValid', () {
-        testWidgets(
+        test(
           '24:00 이면 false',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('24:00'), isFalse);
           },
         );
 
-        testWidgets(
+        test(
           '00:60 이면 false',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:60'), isFalse);
           },
         );
 
-        testWidgets(
+        test(
           '24:60 이면 false',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('24:60'), isFalse);
           },
         );
 
-        testWidgets(
+        test(
           '00:00 이면 true',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:00'), isTrue);
           },
         );
 
-        testWidgets(
+        test(
           '00:59 이면 true',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('00:59'), isTrue);
           },
         );
 
-        testWidgets(
+        test(
           '23:00 이면 true',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('23:00'), isTrue);
           },
         );
 
-        testWidgets(
+        test(
           '23:59 이면 true',
-          (WidgetTester tester) async {
+          () {
             final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
             expect(timeColumn.isValid('23:59'), isTrue);
           },
