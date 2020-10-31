@@ -32,6 +32,10 @@ class PlutoKeyManager {
         _handleEnter(keyManagerEvent);
       } else if (keyManagerEvent.isTab) {
         _handleTab(keyManagerEvent);
+      } else if (keyManagerEvent.isHome || keyManagerEvent.isEnd) {
+        _handleHomeEnd(keyManagerEvent);
+      } else if (keyManagerEvent.isPageUp || keyManagerEvent.isPageDown) {
+        _handlePageUpDown(keyManagerEvent);
       } else if (keyManagerEvent.isEsc) {
         _handleEsc(keyManagerEvent);
       } else if (keyManagerEvent.isF2) {
@@ -82,6 +86,63 @@ class PlutoKeyManager {
     }
 
     stateManager.moveCurrentCell(moveDirection);
+  }
+
+  void _handleHomeEnd(KeyManagerEvent keyManagerEvent) {
+    if (keyManagerEvent.isHome) {
+      if (keyManagerEvent.isCtrlPressed) {
+        if (keyManagerEvent.isShiftPressed) {
+          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Up);
+        } else {
+          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Up);
+        }
+      } else {
+        if (keyManagerEvent.isShiftPressed) {
+          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Left);
+        } else {
+          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Left);
+        }
+      }
+    } else if (keyManagerEvent.isEnd) {
+      if (keyManagerEvent.isCtrlPressed) {
+        if (keyManagerEvent.isShiftPressed) {
+          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Down);
+        } else {
+          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Down);
+        }
+      } else {
+        if (keyManagerEvent.isShiftPressed) {
+          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Right);
+        } else {
+          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Right);
+        }
+      }
+    }
+  }
+
+  void _handlePageUpDown(KeyManagerEvent keyManagerEvent) {
+    final int moveCount =
+        (stateManager.offsetHeight / PlutoDefaultSettings.rowTotalHeight)
+            .floor();
+
+    final direction =
+        keyManagerEvent.isPageUp ? MoveDirection.Up : MoveDirection.Down;
+
+    if (keyManagerEvent.isShiftPressed) {
+      int rowIdx = stateManager.currentSelectingPosition?.rowIdx ??
+          stateManager.currentCellPosition?.rowIdx ??
+          0;
+
+      rowIdx += keyManagerEvent.isPageUp ? -moveCount : moveCount;
+
+      stateManager.moveSelectingCellByRowIdx(rowIdx, direction);
+    } else {
+      int rowIdx = stateManager.currentRowIdx;
+
+      rowIdx += keyManagerEvent.isPageUp ? -moveCount : moveCount;
+
+      stateManager.moveCurrentCellByRowIdx(rowIdx, direction);
+    }
   }
 
   void _handleEnter(KeyManagerEvent keyManagerEvent) {
@@ -266,6 +327,23 @@ extension KeyManagerEventExtention on KeyManagerEvent {
 
   bool get isDown =>
       this.event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
+
+  bool get isHome =>
+      this.event.logicalKey.keyId == LogicalKeyboardKey.home.keyId;
+
+  bool get isEnd => this.event.logicalKey.keyId == LogicalKeyboardKey.end.keyId;
+
+  bool get isPageUp {
+    // windows 에서 pageUp keyId 가 0x10700000021.
+    return this.event.logicalKey.keyId == LogicalKeyboardKey.pageUp.keyId ||
+        this.event.logicalKey.keyId == 0x10700000021;
+  }
+
+  bool get isPageDown {
+    // windows 에서 pageDown keyId 가 0x10700000022.
+    return this.event.logicalKey.keyId == LogicalKeyboardKey.pageDown.keyId ||
+        this.event.logicalKey.keyId == 0x10700000022;
+  }
 
   bool get isEsc =>
       this.event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
