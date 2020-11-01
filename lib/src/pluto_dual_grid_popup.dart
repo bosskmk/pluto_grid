@@ -6,6 +6,7 @@ class PlutoDualGridPopup {
   final PlutoDualGridProps gridPropsB;
   final PlutoMode mode;
   final PlutoDualOnSelectedEventCallback onSelected;
+  final PlutoDualGridDisplay display;
   final double width;
   final double height;
 
@@ -15,6 +16,7 @@ class PlutoDualGridPopup {
     this.gridPropsB,
     this.mode,
     this.onSelected,
+    this.display = const PlutoDualGridDisplayRatio(),
     this.width,
     this.height,
   }) {
@@ -40,6 +42,7 @@ class PlutoDualGridPopup {
                         onSelected: (PlutoDualOnSelectedEvent event) {
                           Navigator.pop(ctx, event);
                         },
+                        display: display,
                       ),
                     );
                   },

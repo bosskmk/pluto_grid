@@ -23,7 +23,43 @@ abstract class IKeyboardState {
     bool notify = true,
   });
 
+  void moveCurrentCellToEdgeOfColumns(
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  });
+
+  void moveCurrentCellToEdgeOfRows(
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  });
+
+  void moveCurrentCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
+    bool notify = true,
+  });
+
   void moveSelectingCell(MoveDirection direction);
+
+  void moveSelectingCellToEdgeOfColumns(
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  });
+
+  void moveSelectingCellToEdgeOfRows(
+    MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  });
+
+  void moveSelectingCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
+    bool notify = true,
+  });
 }
 
 mixin KeyboardState implements IPlutoState {
@@ -128,6 +164,89 @@ mixin KeyboardState implements IPlutoState {
     return;
   }
 
+  void moveCurrentCellToEdgeOfColumns(MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  }) {
+    if (!direction.horizontal) {
+      return;
+    }
+
+    if (!force && isEditing == true) {
+      return;
+    }
+
+    if (currentCell == null) {
+      return;
+    }
+
+    final columnIndexes = columnIndexesByShowFixed();
+
+    final int columnIdx =
+    direction.isLeft ? columnIndexes.first : columnIndexes.last;
+
+    final column = _columns[columnIdx];
+
+    final cellToMove = currentRow.cells[column.field];
+
+    setCurrentCell(cellToMove, currentRowIdx, notify: notify);
+
+    if (!showFixedColumn || column.fixed.isFixed != true) {
+      direction.isLeft
+          ? scroll.horizontal.jumpTo(0)
+          : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
+    }
+  }
+
+  void moveCurrentCellToEdgeOfRows(MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  }) {
+    if (!direction.vertical) {
+      return;
+    }
+
+    if (!force && isEditing == true) {
+      return;
+    }
+
+    final field = currentColumnField ?? columns.first.field;
+
+    final int rowIdx = direction.isUp ? 0 : _rows.length - 1;
+
+    final cellToMove = _rows[rowIdx].cells[field];
+
+    setCurrentCell(cellToMove, rowIdx, notify: notify);
+
+    direction.isUp
+        ? scroll.vertical.jumpTo(0)
+        : scroll.vertical.jumpTo(scroll.maxScrollVertical);
+  }
+
+  void moveCurrentCellByRowIdx(int rowIdx, MoveDirection direction, {
+    bool notify = true,
+  }) {
+    if (!direction.vertical) {
+      return;
+    }
+
+    if (rowIdx < 0) {
+      rowIdx = 0;
+    }
+
+    if (rowIdx > _rows.length - 1) {
+      rowIdx = _rows.length - 1;
+    }
+
+    final field = currentColumnField ?? _columns.first.field;
+
+    final cellToMove = _rows[rowIdx].cells[field];
+
+    setCurrentCell(cellToMove, rowIdx, notify: notify);
+
+    moveScrollByRow(direction, rowIdx - direction.offset);
+  }
+
   void moveSelectingCell(MoveDirection direction) {
     final PlutoCellPosition cellPosition =
         currentSelectingPosition ?? currentCellPosition;
@@ -147,5 +266,98 @@ mixin KeyboardState implements IPlutoState {
     } else {
       moveScrollByRow(direction, cellPosition.rowIdx);
     }
+  }
+
+  void moveSelectingCellToEdgeOfColumns(MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  }) {
+    if (!direction.horizontal) {
+      return;
+    }
+
+    if (!force && isEditing == true) {
+      return;
+    }
+
+    if (currentCell == null) {
+      return;
+    }
+
+    final int columnIdx = direction.isLeft ? 0 : _columns.length - 1;
+
+    final int rowIdx = hasCurrentSelectingPosition
+        ? currentSelectingPosition.rowIdx
+        : currentCellPosition.rowIdx;
+
+    setCurrentSelectingPosition(
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+      notify: notify,
+    );
+
+    direction.isLeft
+        ? scroll.horizontal.jumpTo(0)
+        : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
+  }
+
+  void moveSelectingCellToEdgeOfRows(MoveDirection direction, {
+    bool force = false,
+    bool notify = true,
+  }) {
+    if (!direction.vertical) {
+      return;
+    }
+
+    if (!force && isEditing == true) {
+      return;
+    }
+
+    if (currentCell == null) {
+      return;
+    }
+
+    final columnIdx = hasCurrentSelectingPosition
+        ? currentSelectingPosition.columnIdx
+        : currentCellPosition.columnIdx;
+
+    final int rowIdx = direction.isUp ? 0 : _rows.length - 1;
+
+    setCurrentSelectingPosition(
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+      notify: notify,
+    );
+
+    direction.isUp
+        ? scroll.vertical.jumpTo(0)
+        : scroll.vertical.jumpTo(scroll.maxScrollVertical);
+  }
+
+  void moveSelectingCellByRowIdx(int rowIdx, MoveDirection direction, {
+    bool notify = true,
+  }) {
+    if (rowIdx < 0) {
+      rowIdx = 0;
+    }
+
+    if (rowIdx > _rows.length - 1) {
+      rowIdx = _rows.length - 1;
+    }
+
+    if (currentCell == null) {
+      return;
+    }
+
+    int columnIdx = hasCurrentSelectingPosition
+        ? currentSelectingPosition.columnIdx
+        : currentCellPosition.columnIdx;
+
+    setCurrentSelectingPosition(
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+    );
+
+    moveScrollByRow(direction, rowIdx - direction.offset);
   }
 }

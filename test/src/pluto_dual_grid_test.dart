@@ -186,4 +186,76 @@ void main() {
       });
     },
   );
+
+  group('PlutoDualGridDisplayRatio', () {
+    test('ratio 가 0 인 경우 assert 에러', () {
+      expect(() {
+        final display = PlutoDualGridDisplayRatio(ratio: 0);
+      }, throwsA(isA<AssertionError>()));
+    });
+
+    test('ratio 가 1 인 경우 assert 에러', () {
+      expect(() {
+        final display = PlutoDualGridDisplayRatio(ratio: 1);
+      }, throwsA(isA<AssertionError>()));
+    });
+
+    test('ratio 가 0.5 인 경우 width 가 5:5', () {
+      final display = PlutoDualGridDisplayRatio(ratio: 0.5);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 100);
+      expect(display.gridBWidth(size), 100);
+    });
+
+    test('ratio 가 0.1 인 경우 width 가 1:9', () {
+      final display = PlutoDualGridDisplayRatio(ratio: 0.1);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 20);
+      expect(display.gridBWidth(size), 180);
+    });
+  });
+
+  group('PlutoDualGridDisplayFixedAndExpanded', () {
+    test('width 가 100', () {
+      final display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 100);
+      expect(display.gridBWidth(size), 100);
+    });
+
+    test('width 가 50', () {
+      final display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 50);
+      expect(display.gridBWidth(size), 150);
+    });
+  });
+
+  group('PlutoDualGridDisplayExpandedAndFixed', () {
+    test('width 가 100', () {
+      final display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 100);
+      expect(display.gridBWidth(size), 100);
+    });
+
+    test('width 가 50', () {
+      final display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
+
+      final size = BoxConstraints(maxWidth: 200);
+
+      expect(display.gridAWidth(size), 150);
+      expect(display.gridBWidth(size), 50);
+    });
+  });
 }

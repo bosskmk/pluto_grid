@@ -61,12 +61,12 @@ mixin ScrollState implements IPlutoState {
         PlutoDefaultSettings.gridPadding + PlutoDefaultSettings.shadowLineSize;
 
     final double screenOffset =
-        _scroll.vertical.offset + offsetHeight - rowSize - gridOffset;
+        _scroll.verticalOffset + offsetHeight - rowSize - gridOffset;
 
     double offsetToMove =
         direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
 
-    final bool inScrollStart = _scroll.vertical.offset <= offsetToMove;
+    final bool inScrollStart = _scroll.verticalOffset <= offsetToMove;
 
     final bool inScrollEnd = offsetToMove + rowSize <= screenOffset;
 
@@ -74,7 +74,7 @@ mixin ScrollState implements IPlutoState {
       return;
     } else if (inScrollEnd == false) {
       offsetToMove =
-          _scroll.vertical.offset + offsetToMove + rowSize - screenOffset;
+          _scroll.verticalOffset + offsetToMove + rowSize - screenOffset;
     }
 
     scrollByDirection(direction, offsetToMove);
