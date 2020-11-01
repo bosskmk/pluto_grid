@@ -8,12 +8,10 @@ class ValueFormatterScreen extends StatefulWidget {
   static const routeName = 'feature/value-formatter';
 
   @override
-  _ValueFormatterScreenState createState() =>
-      _ValueFormatterScreenState();
+  _ValueFormatterScreenState createState() => _ValueFormatterScreenState();
 }
 
-class _ValueFormatterScreenState
-    extends State<ValueFormatterScreen> {
+class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
   List<PlutoColumn> columns;
 
   List<PlutoRow> rows;

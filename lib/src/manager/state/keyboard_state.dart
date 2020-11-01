@@ -164,7 +164,8 @@ mixin KeyboardState implements IPlutoState {
     return;
   }
 
-  void moveCurrentCellToEdgeOfColumns(MoveDirection direction, {
+  void moveCurrentCellToEdgeOfColumns(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -183,7 +184,7 @@ mixin KeyboardState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFixed();
 
     final int columnIdx =
-    direction.isLeft ? columnIndexes.first : columnIndexes.last;
+        direction.isLeft ? columnIndexes.first : columnIndexes.last;
 
     final column = _columns[columnIdx];
 
@@ -198,7 +199,8 @@ mixin KeyboardState implements IPlutoState {
     }
   }
 
-  void moveCurrentCellToEdgeOfRows(MoveDirection direction, {
+  void moveCurrentCellToEdgeOfRows(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -223,7 +225,9 @@ mixin KeyboardState implements IPlutoState {
         : scroll.vertical.jumpTo(scroll.maxScrollVertical);
   }
 
-  void moveCurrentCellByRowIdx(int rowIdx, MoveDirection direction, {
+  void moveCurrentCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
     bool notify = true,
   }) {
     if (!direction.vertical) {
@@ -268,7 +272,8 @@ mixin KeyboardState implements IPlutoState {
     }
   }
 
-  void moveSelectingCellToEdgeOfColumns(MoveDirection direction, {
+  void moveSelectingCellToEdgeOfColumns(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -301,7 +306,8 @@ mixin KeyboardState implements IPlutoState {
         : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
   }
 
-  void moveSelectingCellToEdgeOfRows(MoveDirection direction, {
+  void moveSelectingCellToEdgeOfRows(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -334,7 +340,9 @@ mixin KeyboardState implements IPlutoState {
         : scroll.vertical.jumpTo(scroll.maxScrollVertical);
   }
 
-  void moveSelectingCellByRowIdx(int rowIdx, MoveDirection direction, {
+  void moveSelectingCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
     bool notify = true,
   }) {
     if (rowIdx < 0) {
