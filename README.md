@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v0.1.20
+## PlutoGrid for flutter - v0.1.21
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
@@ -57,6 +57,11 @@ Of course, it works well on Android and IOS.
   - Press Enter to edit the cell or move it down.
   - Tab key to move left and right cells.
   - Shift + (Enter, Tap) works in the opposite direction.
+  - Home(or End). Move to the first or last column.
+  - Home(or End) + Ctrl. Move to the top or bottom row.
+  - Home(or End) + Shift. as selection.
+  - Home(or End) + Shift + Ctrl. as selection.
+  - PageUp, PageDown.
 - Dual Mode
   - Working with different grids on both sides.
   - At the end of the grid, you can move between grids with the left and right arrow keys, or the tab key.

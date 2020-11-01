@@ -1,6 +1,7 @@
-## [0.1.21] - 
+## [0.1.21] - 2020. 11. 01
 
 * Add display property for the dual grid.
+* Add shortcuts. (home, end, pageUp, pageDown)
 
 ## [0.1.20] - 2020. 10. 28
 
