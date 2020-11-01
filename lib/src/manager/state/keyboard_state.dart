@@ -176,6 +176,10 @@ mixin KeyboardState implements IPlutoState {
       return;
     }
 
+    if (currentCell == null) {
+      return;
+    }
+
     final columnIndexes = columnIndexesByShowFixed();
 
     final int columnIdx =
@@ -222,6 +226,10 @@ mixin KeyboardState implements IPlutoState {
   void moveCurrentCellByRowIdx(int rowIdx, MoveDirection direction, {
     bool notify = true,
   }) {
+    if (!direction.vertical) {
+      return;
+    }
+
     if (rowIdx < 0) {
       rowIdx = 0;
     }

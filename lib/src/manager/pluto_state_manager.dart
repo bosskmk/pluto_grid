@@ -140,6 +140,10 @@ class PlutoScrollController {
     return _bodyRowsVertical.position.maxScrollExtent;
   }
 
+  double get verticalOffset => vertical.offset;
+
+  double get horizontalOffset => horizontal.offset;
+
   void setBodyRowsHorizontal(ScrollController scrollController) {
     _bodyRowsHorizontal = scrollController;
   }
