@@ -41,9 +41,11 @@ class _BodyRowsState extends State<BodyRows> {
 
     _width = getWidth();
 
-    verticalScroll = widget.stateManager.scroll.vertical.addAndGet();
-
     horizontalScroll = widget.stateManager.scroll.horizontal.addAndGet();
+
+    widget.stateManager.scroll.setBodyRowsHorizontal(horizontalScroll);
+
+    verticalScroll = widget.stateManager.scroll.vertical.addAndGet();
 
     widget.stateManager.scroll.setBodyRowsVertical(verticalScroll);
 
