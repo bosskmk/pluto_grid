@@ -1,3 +1,7 @@
+## [0.1.21] - 
+
+* Add display property for the dual grid.
+
 ## [0.1.20] - 2020. 10. 28
 
 * Add textAlign to column property.(PlutoColumnTextAlign.Left, or Right) [#49](https://github.com/bosskmk/pluto_grid/issues/49)

@@ -152,7 +152,7 @@ class PlutoDualGridDisplayRatio implements PlutoDualGridDisplay {
 
   const PlutoDualGridDisplayRatio({
     this.ratio = 0.5,
-  });
+  }) : assert(0 < ratio && ratio < 1);
 
   double gridAWidth(BoxConstraints size) => size.maxWidth * ratio;
 
