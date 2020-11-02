@@ -137,7 +137,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
         field: e[1],
         type: PlutoColumnType.text(readOnly: true),
         width: 45,
-        enableDraggable: false,
+        enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,
       );

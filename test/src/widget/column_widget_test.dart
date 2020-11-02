@@ -130,7 +130,7 @@ void main() {
       title: 'header',
       field: 'header',
       type: PlutoColumnType.text(),
-      enableDraggable: false,
+      enableColumnDrag: false,
     );
 
     // when
@@ -159,7 +159,7 @@ void main() {
       title: 'header',
       field: 'header',
       type: PlutoColumnType.text(),
-      enableDraggable: true,
+      enableColumnDrag: true,
     );
 
     // when

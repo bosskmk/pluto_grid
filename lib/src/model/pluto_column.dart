@@ -27,10 +27,13 @@ class PlutoColumn {
   /// Formatter for display of cell values.
   PlutoColumnValueFormatter formatter;
 
-  bool enableDraggable;
+  /// Change the position of the column by dragging the column title.
+  bool enableColumnDrag;
 
+  /// Sort rows by tapping on the column heading.
   bool enableSorting;
 
+  /// Displays the right icon of the column title.
   bool enableContextMenu;
 
   PlutoColumn({
@@ -42,7 +45,7 @@ class PlutoColumn {
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
     this.formatter,
-    this.enableDraggable = true,
+    this.enableColumnDrag = true,
     this.enableSorting = true,
     this.enableContextMenu = true,
   }) : this._key = UniqueKey();

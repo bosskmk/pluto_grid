@@ -220,7 +220,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
     return Stack(
       children: [
         Positioned(
-          child: widget.column.enableDraggable
+          child: widget.column.enableColumnDrag
               ? _buildDraggable(_buildColumn())
               : _buildColumn(),
         ),
