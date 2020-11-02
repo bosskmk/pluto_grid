@@ -46,7 +46,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
   }) {
     return SizedBox(
       width: width,
-      child: PlutoGrid.popup(
+      child: PlutoGrid(
         columns: props.columns,
         rows: props.rows,
         mode: mode,
