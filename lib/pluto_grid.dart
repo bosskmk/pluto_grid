@@ -84,19 +84,19 @@ part './src/ui/right_fixed_rows.dart';
 
 part './src/widget/cell_widget.dart';
 
-part './src/widget/editable_cell/date_cell_widget.dart';
+part './src/widget/cells/date_cell_widget.dart';
 
-part './src/widget/editable_cell/number_cell_widget.dart';
+part './src/widget/cells/number_cell_widget.dart';
 
-part './src/widget/editable_cell/popup_base_mixin.dart';
+part './src/widget/cells/popup_base_mixin.dart';
 
-part './src/widget/editable_cell/select_cell_widget.dart';
+part './src/widget/cells/select_cell_widget.dart';
 
-part './src/widget/editable_cell/text_base_mixin.dart';
+part './src/widget/cells/text_base_mixin.dart';
 
-part './src/widget/editable_cell/text_cell_widget.dart';
+part './src/widget/cells/text_cell_widget.dart';
 
-part './src/widget/editable_cell/time_cell_widget.dart';
+part './src/widget/cells/time_cell_widget.dart';
 
 part './src/widget/column_widget.dart';
 
