@@ -152,23 +152,17 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         widget.stateManager
             .moveColumn(widget.column._key, dragDetails.offset.dx);
       },
-      feedback: Container(
+      feedback: ShadowContainer(
         width: widget.column.width,
         height: PlutoDefaultSettings.rowHeight,
-        padding: const EdgeInsets.symmetric(
-            horizontal: PlutoDefaultSettings.cellPadding),
-        decoration: const BoxDecoration(
-          color: Colors.black26,
-        ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            widget.column.title,
-            style: widget.stateManager.configuration.columnTextStyle,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            softWrap: false,
-          ),
+        backgroundColor: widget.stateManager.configuration.gridBackgroundColor,
+        borderColor: widget.stateManager.configuration.gridBorderColor,
+        child: Text(
+          widget.column.title,
+          style: widget.stateManager.configuration.columnTextStyle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
         ),
       ),
       child: child,
@@ -284,7 +278,7 @@ class ColumnIcon extends StatelessWidget {
         );
       default:
         return Icon(
-          Icons.menu,
+          Icons.dehaze,
           color: color ?? Colors.black26,
         );
     }

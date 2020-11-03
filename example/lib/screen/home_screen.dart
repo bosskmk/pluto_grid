@@ -25,6 +25,7 @@ import 'feature/dual_mode_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
+import 'feature/row_moving_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/selection_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
@@ -256,6 +257,13 @@ class PlutoFeatures extends StatelessWidget {
                 'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowSelectionScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Row moving',
+            description: 'You can move the row by dragging it.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowMovingScreen.routeName);
             },
           ),
           PlutoListTile(

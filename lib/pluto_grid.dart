@@ -5,26 +5,13 @@ import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:rxdart/rxdart.dart';
-
-/// [PlutoConfiguration]
-part './src/pluto_configuration.dart';
-
-/// [PlutoDualGrid]
-part './src/pluto_dual_grid.dart';
-
-/// [PlutoDualGridPopup]
-part './src/pluto_dual_grid_popup.dart';
-
-/// [PlutoGrid]
-part './src/pluto_grid.dart';
-
-/// [PlutoGridPopup]
-part './src/pluto_grid_popup.dart';
+import 'package:flutter/rendering.dart';
 
 part './src/event/pluto_event.dart';
 
@@ -70,6 +57,16 @@ part './src/model/pluto_column.dart';
 
 part './src/model/pluto_row.dart';
 
+part './src/pluto_configuration.dart';
+
+part './src/pluto_dual_grid.dart';
+
+part './src/pluto_dual_grid_popup.dart';
+
+part './src/pluto_grid.dart';
+
+part './src/pluto_grid_popup.dart';
+
 part './src/ui/body_columns.dart';
 
 part './src/ui/body_rows.dart';
@@ -86,6 +83,8 @@ part './src/widget/cell_widget.dart';
 
 part './src/widget/cells/date_cell_widget.dart';
 
+part './src/widget/cells/default_cell_widget.dart';
+
 part './src/widget/cells/number_cell_widget.dart';
 
 part './src/widget/cells/popup_base_mixin.dart';
@@ -101,5 +100,7 @@ part './src/widget/cells/time_cell_widget.dart';
 part './src/widget/column_widget.dart';
 
 part './src/widget/row_widget.dart';
+
+part './src/widget/shadow_container.dart';
 
 part './src/widget/shadow_line.dart';

@@ -971,9 +971,10 @@ void main() {
   });
 
   testWidgets(
-      'WHEN 셀이 현재 셀이 아니고, 셀을 길게 탭을 하면 '
-      'THEN setSelecting, toggleSelectingRow 이 호출 되지 않는다.',
-      (WidgetTester tester) async {
+      '셀이 현재 셀이 아니고, 셀을 길게 탭을 하고 '
+      'Selecting Row 모드에서 '
+      '현재 셀로 설정 되고, '
+      'setSelecting, toggleSelectingRow 이 호출 된다.', (WidgetTester tester) async {
     // given
     final PlutoCell cell = PlutoCell(value: 'one');
 
@@ -989,6 +990,7 @@ void main() {
     when(stateManager.isEditing).thenReturn(false);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.isSelectingInteraction()).thenReturn(false);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
 
     // when
     await tester.pumpWidget(
@@ -1011,7 +1013,60 @@ void main() {
 
     await tester.longPress(gesture);
 
-    verifyNever(stateManager.setSelecting(true));
+    verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
+
+    verify(stateManager.setSelecting(true));
+
+    verify(stateManager.toggleSelectingRow(rowIdx));
+  });
+
+  testWidgets(
+      '셀이 현재 셀이 아니고, 셀을 길게 탭을 하고 '
+      'Selecting Row 모드가 아닌 상태면 '
+      '현재 셀로 설정 되고, '
+      'setSelecting 이 호출 되고 '
+      'toggleSelectingRow 이 호출 되지 않는다.', (WidgetTester tester) async {
+    // given
+    final PlutoCell cell = PlutoCell(value: 'one');
+
+    final PlutoColumn column = PlutoColumn(
+      title: 'header',
+      field: 'header',
+      type: PlutoColumnType.text(),
+    );
+
+    final rowIdx = 0;
+
+    when(stateManager.isCurrentCell(any)).thenReturn(false);
+    when(stateManager.isEditing).thenReturn(false);
+    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
+    when(stateManager.isSelectingInteraction()).thenReturn(false);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Square);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: CellWidget(
+            stateManager: stateManager,
+            cell: cell,
+            column: column,
+            rowIdx: rowIdx,
+          ),
+        ),
+      ),
+    );
+
+    // then
+    Finder gesture = find.byType(GestureDetector);
+
+    expect(gesture, findsOneWidget);
+
+    await tester.longPress(gesture);
+
+    verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
+
+    verify(stateManager.setSelecting(true));
 
     verifyNever(stateManager.toggleSelectingRow(rowIdx));
   });

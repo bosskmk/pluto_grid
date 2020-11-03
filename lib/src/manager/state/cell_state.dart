@@ -85,8 +85,12 @@ mixin CellState implements IPlutoState {
     PlutoCellPosition cellPosition, {
     bool notify: true,
   }) {
-    if (cellPosition == null || _currentCellPosition == cellPosition) {
+    if (_currentCellPosition == cellPosition) {
       return;
+    }
+
+    if (cellPosition == null) {
+      clearCurrentCell(notify: false);
     }
 
     _currentCellPosition = cellPosition;
@@ -124,7 +128,7 @@ mixin CellState implements IPlutoState {
       }
     }
 
-    throw Exception('CellKey was not found in the list.');
+    return null;
   }
 
   int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx) {

@@ -30,6 +30,9 @@ class PlutoColumn {
   /// Change the position of the column by dragging the column title.
   bool enableColumnDrag;
 
+  /// Change the position of the row by dragging the icon in the cell.
+  bool enableRowDrag;
+
   /// Sort rows by tapping on the column heading.
   bool enableSorting;
 
@@ -46,6 +49,7 @@ class PlutoColumn {
     this.sort = PlutoColumnSort.None,
     this.formatter,
     this.enableColumnDrag = true,
+    this.enableRowDrag = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
   }) : this._key = UniqueKey();

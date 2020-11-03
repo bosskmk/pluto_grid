@@ -16,6 +16,7 @@ import 'screen/feature/grid_as_popup_screen.dart';
 import 'screen/feature/listing_mode_screen.dart';
 import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
+import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : HomeScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : RowMovingScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
             SelectionTypeColumnScreen(),
         ValueFormatterScreen.routeName: (context) => ValueFormatterScreen(),
         RowSelectionScreen.routeName: (context) => RowSelectionScreen(),
+        RowMovingScreen.routeName: (context) => RowMovingScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),
         MovingScreen.routeName: (context) => MovingScreen(),

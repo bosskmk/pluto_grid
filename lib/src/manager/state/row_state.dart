@@ -44,6 +44,8 @@ abstract class IRowState {
 
   void removeRows(List<PlutoRow> rows);
 
+  void moveRows(List<PlutoRow> rows, double offset);
+
   /// Update RowIdx to Current Cell.
   void updateCurrentRowIdx({bool notify: true});
 }
@@ -234,6 +236,48 @@ mixin RowState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void moveRows(List<PlutoRow> rows, double offset) {
+    offset -= bodyTopOffset - scroll.verticalOffset;
+
+    double currentOffset = 0.0;
+
+    int indexToMove;
+
+    for (var i = 0; i < _rows.length; i += 1) {
+      if (currentOffset < offset &&
+          offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
+        indexToMove = i;
+        break;
+      }
+
+      currentOffset += PlutoDefaultSettings.rowTotalHeight;
+    }
+
+    if (indexToMove == null) {
+      return;
+    } else if (indexToMove + rows.length > _rows.length) {
+      indexToMove = _rows.length - rows.length;
+    }
+
+    rows.forEach((row) {
+      _rows.remove(row);
+    });
+
+    _rows.insertAll(indexToMove, rows);
+
+    int sortIdx = 0;
+
+    _rows.forEach((element) {
+      element.sortIdx = sortIdx++;
+    });
+
+    updateCurrentRowIdx(notify: false);
+
+    updateCurrentCellPosition(notify: false);
+
+    notifyListeners();
   }
 
   void updateCurrentRowIdx({bool notify: true}) {
