@@ -33,6 +33,9 @@ class PlutoColumn {
   /// Change the position of the row by dragging the icon in the cell.
   bool enableRowDrag;
 
+  /// A checkbox appears in the cell of the column.
+  bool enableCheckboxSelection;
+
   /// Sort rows by tapping on the column heading.
   bool enableSorting;
 
@@ -50,6 +53,7 @@ class PlutoColumn {
     this.formatter,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
+    this.enableCheckboxSelection = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
   }) : this._key = UniqueKey();

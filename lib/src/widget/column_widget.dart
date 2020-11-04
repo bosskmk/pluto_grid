@@ -187,12 +187,23 @@ class _ColumnWidgetState extends State<ColumnWidget> {
           : BoxDecoration(),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(
-          widget.column.title,
-          style: widget.stateManager.configuration.columnTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          softWrap: false,
+        child: Row(
+          children: [
+            if (widget.column.enableCheckboxSelection)
+              _CheckboxAllSelectionWidget(
+                column: widget.column,
+                stateManager: widget.stateManager,
+              ),
+            Expanded(
+              child: Text(
+                widget.column.title,
+                style: widget.stateManager.configuration.columnTextStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: false,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -282,6 +293,99 @@ class ColumnIcon extends StatelessWidget {
           color: color ?? Colors.black26,
         );
     }
+  }
+}
+
+class _CheckboxAllSelectionWidget extends StatefulWidget {
+  final PlutoColumn column;
+  final PlutoStateManager stateManager;
+
+  _CheckboxAllSelectionWidget({
+    this.column,
+    this.stateManager,
+  });
+
+  @override
+  __CheckboxAllSelectionWidgetState createState() =>
+      __CheckboxAllSelectionWidgetState();
+}
+
+class __CheckboxAllSelectionWidgetState
+    extends State<_CheckboxAllSelectionWidget> {
+  bool _checked;
+
+  bool get hasCheckedRow =>
+      widget.stateManager._rows.firstWhere(
+        (element) => element.checked,
+        orElse: () => null,
+      ) !=
+      null;
+
+  bool get hasUnCheckedRow =>
+      widget.stateManager._rows.firstWhere(
+        (element) => !element.checked,
+        orElse: () => null,
+      ) !=
+      null;
+
+  @override
+  void dispose() {
+    widget.stateManager.removeListener(changeStateListener);
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checked = hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow;
+
+    widget.stateManager.addListener(changeStateListener);
+  }
+
+  void changeStateListener() {
+    bool changedChecked =
+        hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow;
+
+    if (_checked != changedChecked) {
+      setState(() {
+        _checked = changedChecked;
+      });
+    }
+  }
+
+  void _handleOnChanged(bool changed) {
+    if (changed == _checked) {
+      return;
+    }
+
+    if (changed == null) {
+      changed = false;
+    }
+
+    if (_checked == null) {
+      changed = true;
+    }
+
+    widget.stateManager.toggleAllRowChecked(changed);
+
+    setState(() {
+      _checked = changed;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaledCheckbox(
+      value: _checked,
+      handleOnChanged: _handleOnChanged,
+      tristate: true,
+      scale: 0.86,
+      unselectedColor: widget.stateManager.configuration.iconColor,
+      activeColor: widget.stateManager.configuration.activatedBorderColor,
+      checkColor: widget.stateManager.configuration.activatedColor,
+    );
   }
 }
 

@@ -104,3 +104,5 @@ part './src/widget/row_widget.dart';
 part './src/widget/shadow_container.dart';
 
 part './src/widget/shadow_line.dart';
+
+part './src/widget/scaled_checkbox.dart';

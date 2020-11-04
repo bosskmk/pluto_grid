@@ -14,7 +14,11 @@ class PlutoRow {
   }) : this._key = UniqueKey();
 
   /// Row key
+  Key get key => _key;
+
   Key _key;
 
-  Key get key => _key;
+  bool get checked => _checked;
+
+  bool _checked = false;
 }

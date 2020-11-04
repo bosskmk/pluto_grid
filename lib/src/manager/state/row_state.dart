@@ -12,9 +12,14 @@ abstract class IRowState {
   PlutoRow get currentRow;
 
   /// set currentRowIdx to null
-  void clearCurrentRowIdx({bool notify: true});
+  void clearCurrentRowIdx({
+    bool notify: true,
+  });
 
-  void setCurrentRowIdx(int rowIdx, {bool notify: true});
+  void setCurrentRowIdx(
+    int rowIdx, {
+    bool notify: true,
+  });
 
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
@@ -47,7 +52,20 @@ abstract class IRowState {
   void moveRows(List<PlutoRow> rows, double offset);
 
   /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx({bool notify: true});
+  void updateCurrentRowIdx({
+    bool notify: true,
+  });
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  });
+
+  void toggleAllRowChecked(
+    bool flag, {
+    bool notify: true,
+  });
 }
 
 mixin RowState implements IPlutoState {
@@ -67,11 +85,16 @@ mixin RowState implements IPlutoState {
     return _rows[_currentRowIdx];
   }
 
-  void clearCurrentRowIdx({bool notify: true}) {
+  void clearCurrentRowIdx({
+    bool notify: true,
+  }) {
     setCurrentRowIdx(null, notify: notify);
   }
 
-  void setCurrentRowIdx(int rowIdx, {bool notify: true}) {
+  void setCurrentRowIdx(
+    int rowIdx, {
+    bool notify: true,
+  }) {
     if (_currentRowIdx == rowIdx) {
       return;
     }
@@ -280,7 +303,9 @@ mixin RowState implements IPlutoState {
     notifyListeners();
   }
 
-  void updateCurrentRowIdx({bool notify: true}) {
+  void updateCurrentRowIdx({
+    bool notify: true,
+  }) {
     if (currentCell == null) {
       _currentRowIdx = null;
 
@@ -302,6 +327,37 @@ mixin RowState implements IPlutoState {
         }
       }
     }
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  }) {
+    final findRow = _rows.firstWhere((element) => element.key == row.key);
+
+    if (findRow == null) {
+      return;
+    }
+
+    findRow._checked = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void toggleAllRowChecked(
+    bool flag, {
+    bool notify: true,
+  }) {
+    _rows.forEach((e) {
+      e._checked = flag == true;
+    });
 
     if (notify) {
       notifyListeners();

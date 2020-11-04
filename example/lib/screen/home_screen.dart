@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -264,6 +265,13 @@ class PlutoFeatures extends StatelessWidget {
             description: 'You can move the row by dragging it.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowMovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Row with checkbox',
+            description: 'You can select rows with checkbox.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowWithCheckboxScreen.routeName);
             },
           ),
           PlutoListTile(

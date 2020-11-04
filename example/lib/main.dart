@@ -1,3 +1,4 @@
+import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : RowMovingScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : RowWithCheckboxScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ValueFormatterScreen.routeName: (context) => ValueFormatterScreen(),
         RowSelectionScreen.routeName: (context) => RowSelectionScreen(),
         RowMovingScreen.routeName: (context) => RowMovingScreen(),
+        RowWithCheckboxScreen.routeName: (context) => RowWithCheckboxScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),
         MovingScreen.routeName: (context) => MovingScreen(),

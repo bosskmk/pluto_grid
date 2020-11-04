@@ -15,6 +15,9 @@ class PlutoConfiguration {
   /// Activated Border Color. (Current cell)
   final Color activatedBorderColor;
 
+  /// Checked Color. (Checked rows)
+  final Color checkedColor;
+
   /// Row border color. (horizontal row border, vertical column border)
   final Color borderColor;
 
@@ -51,6 +54,7 @@ class PlutoConfiguration {
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
     this.activatedBorderColor = Colors.lightBlue,
+    this.checkedColor = const Color(0x11757575),
     this.borderColor = const Color(0xFFDDE2EB),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
@@ -76,6 +80,7 @@ class PlutoConfiguration {
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
+    this.checkedColor = const Color(0x11202020),
     this.borderColor = const Color(0xFF000000),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
