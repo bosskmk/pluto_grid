@@ -80,7 +80,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             dragIcon: getDragIcon(),
             textWidget: getTextWidget(),
           ),
-        if (widget.column.enableCheckboxSelection)
+        if (widget.column.enableRowChecked)
           _CheckboxSelectionWidget(
             column: widget.column,
             row: thisRow,

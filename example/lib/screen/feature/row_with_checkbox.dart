@@ -29,7 +29,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
         field: 'column1',
         type: PlutoColumnType.text(),
         enableRowDrag: true,
-        enableCheckboxSelection: true,
+        enableRowChecked: true,
       ),
       PlutoColumn(
         title: 'column2',
@@ -63,7 +63,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       topTitle: 'Row with checkbox',
       topContents: [
         Text('You can select rows with checkbox.'),
-        Text('If you set the enableCheckboxSelection property of a column to true, a checkbox appears in the cell of that column.'),
+        Text('If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
       ],
       topButtons: [
         PlutoExampleButton(

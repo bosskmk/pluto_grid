@@ -189,7 +189,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         alignment: Alignment.centerLeft,
         child: Row(
           children: [
-            if (widget.column.enableCheckboxSelection)
+            if (widget.column.enableRowChecked)
               _CheckboxAllSelectionWidget(
                 column: widget.column,
                 stateManager: widget.stateManager,
