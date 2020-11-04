@@ -5,6 +5,10 @@ abstract class IRowState {
 
   List<PlutoRow> _rows;
 
+  List<PlutoRow> get checkedRows;
+
+  List<PlutoRow> get unCheckedRows;
+
   /// Row index of currently selected cell.
   int get currentRowIdx;
 
@@ -72,6 +76,10 @@ mixin RowState implements IPlutoState {
   List<PlutoRow> get rows => [..._rows];
 
   List<PlutoRow> _rows;
+
+  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked);
+
+  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked);
 
   int get currentRowIdx => _currentRowIdx;
 
