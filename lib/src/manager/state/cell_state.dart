@@ -159,6 +159,8 @@ mixin CellState implements IPlutoState {
 
     _currentCell = null;
 
+    _currentCellPosition = null;
+
     if (notify) {
       notifyListeners();
     }

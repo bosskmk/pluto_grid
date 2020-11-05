@@ -258,11 +258,16 @@ mixin RowState implements IPlutoState {
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
 
     if (_currentRowIdx != null &&
+        _rows.length > _currentRowIdx &&
         removeKeys.contains(_rows[_currentRowIdx].key)) {
       resetCurrentState(notify: false);
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
+
+    updateCurrentRowIdx(notify: false);
+
+    updateCurrentCellPosition(notify: false);
 
     if (notify) {
       notifyListeners();
