@@ -1297,7 +1297,7 @@ void main() {
           matching: find.byType(Container),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().first.widget as Container;
 
         final BoxDecoration decoration = container.decoration;
 
@@ -1324,7 +1324,7 @@ void main() {
           matching: find.byType(Container),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().first.widget as Container;
 
         final BoxDecoration decoration = container.decoration;
 
@@ -1351,7 +1351,7 @@ void main() {
           matching: find.byType(Container),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().first.widget as Container;
 
         final BoxDecoration decoration = container.decoration;
 

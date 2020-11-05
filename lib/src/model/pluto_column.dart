@@ -52,6 +52,11 @@ class PlutoColumn {
   /// Formatter for display of cell values.
   PlutoColumnValueFormatter formatter;
 
+  /// Apply the formatter in the editing state.
+  /// However, it is applied only when the cell is readonly
+  /// or the text cannot be directly modified, such as in the form of select popup.
+  bool applyFormatterInEditing;
+
   /// Rendering for cell widget.
   PlutoColumnRenderer renderer;
 
@@ -80,6 +85,7 @@ class PlutoColumn {
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
     this.formatter,
+    this.applyFormatterInEditing = false,
     this.renderer,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
@@ -104,11 +110,24 @@ class PlutoColumn {
   }
 
   String formattedValueForDisplay(dynamic value) {
-    if (formatter == null) {
-      return formattedValueForType(value);
+    if (formatter != null) {
+      return formatter(value.toString()).toString();
     }
 
-    return formatter(value.toString()).toString();
+    return formattedValueForType(value);
+  }
+
+  String formattedValueForDisplayInEditing(dynamic value) {
+    if (formatter != null) {
+      final bool allowFormatting =
+          type.readOnly || type.isSelect || type.isTime || type.isDate;
+
+      if (applyFormatterInEditing && allowFormatting) {
+        return formatter(value.toString()).toString();
+      }
+    }
+
+    return value.toString();
   }
 }
 
