@@ -1,14 +1,10 @@
 import 'dart:math';
 
-import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../helper/launch_url.dart';
-import '../screen/feature/column_sorting_screen.dart';
-import '../screen/feature/number_type_column_screen.dart';
-import '../screen/feature/text_type_column_screen.dart';
 import '../widget/pluto_contributor_tile.dart';
 import '../widget/pluto_grid_title.dart';
 import '../widget/pluto_list_tile.dart';
@@ -20,6 +16,7 @@ import 'feature/cell_selection_screen.dart';
 import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
+import 'feature/column_sorting_screen.dart';
 import 'feature/copy_and_paste_screen.dart';
 import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
@@ -27,9 +24,12 @@ import 'feature/dual_mode_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
+import 'feature/number_type_column_screen.dart';
 import 'feature/row_moving_screen.dart';
 import 'feature/row_selection_screen.dart';
+import 'feature/row_with_checkbox_screen.dart';
 import 'feature/selection_type_column_screen.dart';
+import 'feature/text_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
 import 'feature/value_formatter_screen.dart';
 
@@ -285,7 +285,8 @@ class PlutoFeatures extends StatelessWidget {
           ),
           PlutoListTile(
             title: 'Cell renderer',
-            description: 'You can change the widget of the cell through the renderer.',
+            description:
+                'You can change the widget of the cell through the renderer.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CellRendererScreen.routeName);
             },
