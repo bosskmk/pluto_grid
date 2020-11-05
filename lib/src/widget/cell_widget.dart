@@ -411,13 +411,20 @@ class _BackgroundColorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerLeft,
       width: width,
       height: height,
-      padding: const EdgeInsets.symmetric(
-          horizontal: PlutoDefaultSettings.cellPadding),
       decoration: _boxDecoration(),
-      child: child,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: PlutoDefaultSettings.cellPadding),
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          height: height,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(),
+          child: child,
+        ),
+      ),
     );
   }
 }

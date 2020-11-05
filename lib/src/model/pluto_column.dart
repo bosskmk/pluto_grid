@@ -2,6 +2,29 @@ part of '../../pluto_grid.dart';
 
 typedef PlutoColumnValueFormatter = String Function(String value);
 
+typedef PlutoColumnRenderer = Widget Function(
+    PlutoColumnRendererContext rendererContext);
+
+class PlutoColumnRendererContext {
+  final PlutoColumn column;
+
+  final int rowIdx;
+
+  final PlutoRow row;
+
+  final PlutoCell cell;
+
+  final PlutoStateManager stateManager;
+
+  PlutoColumnRendererContext({
+    this.column,
+    this.rowIdx,
+    this.row,
+    this.cell,
+    this.stateManager,
+  });
+}
+
 class PlutoColumn {
   /// A title to be displayed on the screen.
   String title;
@@ -15,6 +38,8 @@ class PlutoColumn {
   /// Set the width of the column.
   double width;
 
+  double minWidth;
+
   /// Text alignment in Cell. (Left, Right)
   PlutoColumnTextAlign textAlign;
 
@@ -26,6 +51,9 @@ class PlutoColumn {
 
   /// Formatter for display of cell values.
   PlutoColumnValueFormatter formatter;
+
+  /// Rendering for cell widget.
+  PlutoColumnRenderer renderer;
 
   /// Change the position of the column by dragging the column title.
   bool enableColumnDrag;
@@ -47,10 +75,12 @@ class PlutoColumn {
     @required this.field,
     @required this.type,
     this.width = PlutoDefaultSettings.columnWidth,
+    this.minWidth = PlutoDefaultSettings.minColumnWidth,
     this.textAlign = PlutoColumnTextAlign.Left,
     this.fixed = PlutoColumnFixed.None,
     this.sort = PlutoColumnSort.None,
     this.formatter,
+    this.renderer,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,
@@ -62,6 +92,8 @@ class PlutoColumn {
   Key _key;
 
   Key get key => _key;
+
+  bool get hasRenderer => this.renderer != null;
 
   String formattedValueForType(dynamic value) {
     if (type.isNumber) {

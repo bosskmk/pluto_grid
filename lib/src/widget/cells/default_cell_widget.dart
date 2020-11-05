@@ -48,16 +48,24 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     );
   }
 
-  Widget getTextWidget() {
-    return Text(
-      widget.column.formattedValueForDisplay(widget.cell.value),
-      style: widget.stateManager.configuration.cellTextStyle.copyWith(
-        decoration: TextDecoration.none,
-        fontWeight: FontWeight.normal,
-      ),
-      overflow: TextOverflow.ellipsis,
-      textAlign: widget.column.textAlign.value,
-    );
+  Widget getCellWidget() {
+    return widget.column.hasRenderer
+        ? widget.column.renderer(PlutoColumnRendererContext(
+            column: widget.column,
+            rowIdx: widget.rowIdx,
+            row: thisRow,
+            cell: widget.cell,
+            stateManager: widget.stateManager,
+          ))
+        : Text(
+            widget.column.formattedValueForDisplay(widget.cell.value),
+            style: widget.stateManager.configuration.cellTextStyle.copyWith(
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.normal,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: widget.column.textAlign.value,
+          );
   }
 
   @override
@@ -78,7 +86,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
               widget.stateManager.moveRows(rows, dragDetails.offset.dy);
             },
             dragIcon: getDragIcon(),
-            textWidget: getTextWidget(),
+            textWidget: getCellWidget(),
           ),
         if (widget.column.enableRowChecked)
           _CheckboxSelectionWidget(
@@ -87,7 +95,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             stateManager: widget.stateManager,
           ),
         Expanded(
-          child: getTextWidget(),
+          child: getCellWidget(),
         ),
       ],
     );
@@ -114,18 +122,20 @@ class _RowDragIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Draggable(
       onDragEnd: onDragEnd,
-      feedback: ShadowContainer(
-        width: column.width,
-        height: PlutoDefaultSettings.rowHeight,
-        backgroundColor: stateManager.configuration.gridBackgroundColor,
-        borderColor: stateManager.configuration.activatedBorderColor,
-        child: Row(
-          children: [
-            dragIcon,
-            Expanded(
-              child: textWidget,
-            ),
-          ],
+      feedback: Material(
+        child: ShadowContainer(
+          width: column.width,
+          height: PlutoDefaultSettings.rowHeight,
+          backgroundColor: stateManager.configuration.gridBackgroundColor,
+          borderColor: stateManager.configuration.activatedBorderColor,
+          child: Row(
+            children: [
+              dragIcon,
+              Expanded(
+                child: textWidget,
+              ),
+            ],
+          ),
         ),
       ),
       child: dragIcon,

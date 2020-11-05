@@ -355,12 +355,14 @@ mixin ColumnState implements IPlutoState {
 
   void resizeColumn(Key columnKey, double offset) {
     for (var i = 0; i < _columns.length; i += 1) {
-      if (_columns[i]._key == columnKey) {
-        final setWidth = _columns[i].width + offset;
+      final column = _columns[i];
 
-        _columns[i].width = setWidth > PlutoDefaultSettings.minColumnWidth
+      if (column._key == columnKey) {
+        final setWidth = column.width + offset;
+
+        column.width = setWidth > column.minWidth
             ? setWidth
-            : PlutoDefaultSettings.minColumnWidth;
+            : column.minWidth;
         break;
       }
     }

@@ -15,6 +15,7 @@ import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_rows_screen.dart';
+import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
@@ -280,6 +281,13 @@ class PlutoFeatures extends StatelessWidget {
                 'In Square selection mode, Shift + tap or long tap and then move to select cells.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CellSelectionScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Cell renderer',
+            description: 'You can change the widget of the cell through the renderer.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, CellRendererScreen.routeName);
             },
           ),
           PlutoListTile(

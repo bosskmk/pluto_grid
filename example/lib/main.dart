@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'constants/pluto_colors.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
+import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
 import 'screen/feature/column_fixing_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : RowWithCheckboxScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : CellRendererScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         RowMovingScreen.routeName: (context) => RowMovingScreen(),
         RowWithCheckboxScreen.routeName: (context) => RowWithCheckboxScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
+        CellRendererScreen.routeName: (context) => CellRendererScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),
         MovingScreen.routeName: (context) => MovingScreen(),
         AddAndRemoveRowsScreen.routeName: (context) => AddAndRemoveRowsScreen(),
