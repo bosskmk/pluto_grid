@@ -40,7 +40,8 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
   void initState() {
     super.initState();
 
-    _textController.text = widget.cell.value.toString();
+    _textController.text =
+        widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
     _cellEditingStatus = _CellEditingStatus.INIT;
   }

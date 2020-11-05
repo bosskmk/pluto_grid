@@ -5,29 +5,30 @@ typedef CreateFooterCallBack = Widget Function(PlutoStateManager stateManager);
 
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
+
   final List<PlutoRow> rows;
-  final PlutoMode mode;
+
   final PlutoOnLoadedEventCallback onLoaded;
+
   final PlutoOnChangedEventCallback onChanged;
+
   final PlutoOnSelectedEventCallback onSelected;
+
   final CreateHeaderCallBack createHeader;
+
   final CreateFooterCallBack createFooter;
+
   final PlutoConfiguration configuration;
 
-  const PlutoGrid({
-    Key key,
-    @required this.columns,
-    @required this.rows,
-    this.onLoaded,
-    this.onChanged,
-    this.createHeader,
-    this.createFooter,
-    this.configuration,
-  })  : this.mode = PlutoMode.Normal,
-        this.onSelected = null,
-        super(key: key);
+  /// [PlutoMode.Normal]
+  /// Normal grid with cell editing.
+  ///
+  /// [PlutoMode.Select]
+  /// Editing is not possible, and if you press enter or tap on the list,
+  /// you can receive the selected row and cell from the onSelected callback.
+  final PlutoMode mode;
 
-  const PlutoGrid.popup({
+  const PlutoGrid({
     Key key,
     @required this.columns,
     @required this.rows,
@@ -37,7 +38,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    @required this.mode,
+    this.mode = PlutoMode.Normal,
   }) : super(key: key);
 
   @override

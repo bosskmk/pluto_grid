@@ -164,7 +164,7 @@ void main() {
       }, throwsA(isA<AssertionError>()));
     });
 
-    testWidgets('should be caused Exception', (WidgetTester tester) async {
+    testWidgets('should be returned null', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 10, width: 150),
@@ -185,9 +185,7 @@ void main() {
       final Key nonExistsKey = UniqueKey();
 
       // then
-      expect(() {
-        stateManager.cellPositionByCellKey(nonExistsKey);
-      }, throwsException);
+      expect(stateManager.cellPositionByCellKey(nonExistsKey), isNull);
     });
 
     testWidgets('should be returned cellPosition columnIdx: 0, rowIdx 0',

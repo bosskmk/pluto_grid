@@ -27,6 +27,8 @@ class _RowWidgetState extends State<RowWidget> {
 
   bool _hasCurrentSelectingPosition;
 
+  bool _isCheckedRow;
+
   bool _keepFocus;
 
   @override
@@ -49,6 +51,8 @@ class _RowWidgetState extends State<RowWidget> {
     _hasCurrentSelectingPosition =
         widget.stateManager.hasCurrentSelectingPosition;
 
+    _isCheckedRow = widget.row.checked;
+
     _keepFocus = widget.stateManager.keepFocus;
 
     widget.stateManager.addListener(changeStateListener);
@@ -60,6 +64,7 @@ class _RowWidgetState extends State<RowWidget> {
         _isSelecting != widget.stateManager.isSelecting ||
         _hasCurrentSelectingPosition !=
             widget.stateManager.hasCurrentSelectingPosition ||
+        _isCheckedRow != widget.row.checked ||
         _keepFocus != widget.stateManager.keepFocus) {
       setState(() {
         _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
@@ -67,6 +72,7 @@ class _RowWidgetState extends State<RowWidget> {
         _isSelecting = widget.stateManager.isSelecting;
         _hasCurrentSelectingPosition =
             widget.stateManager.hasCurrentSelectingPosition;
+        _isCheckedRow = widget.row.checked;
         _keepFocus = widget.stateManager.keepFocus;
       });
     }
@@ -80,29 +86,31 @@ class _RowWidgetState extends State<RowWidget> {
         widget.stateManager.isSelectedRow(widget.row.key);
 
     if (!checkCurrentRow && !checkSelectedRow) {
-      return null;
+      return Colors.transparent;
     }
 
     if (widget.stateManager.selectingMode.isRow) {
       return checkSelectedRow
           ? widget.stateManager.configuration.activatedColor
-          : null;
+          : Colors.transparent;
     }
 
     if (!widget.stateManager.hasFocus) {
-      return null;
+      return Colors.transparent;
     }
 
     return checkCurrentRow
         ? widget.stateManager.configuration.activatedColor
-        : null;
+        : Colors.transparent;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: rowColor(),
+        color: _isCheckedRow
+            ? Color.alphaBlend(Color(0x11757575), rowColor())
+            : rowColor(),
         border: Border(
           bottom: BorderSide(
             width: PlutoDefaultSettings.rowBorderWidth,

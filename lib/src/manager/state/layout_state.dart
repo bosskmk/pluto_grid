@@ -39,6 +39,8 @@ abstract class ILayoutState {
 
   double get rowsTopOffset;
 
+  double get bodyTopOffset;
+
   double get bodyLeftOffset;
 
   double get bodyRightOffset;
@@ -120,6 +122,10 @@ mixin LayoutState implements IPlutoState {
 
   double get rowsTopOffset => headerHeight + columnHeight;
 
+  double get bodyTopOffset => gridGlobalOffset.dy +
+      PlutoDefaultSettings.gridBorderWidth +
+      PlutoDefaultSettings.rowTotalHeight;
+
   double get bodyLeftOffset {
     return (showFixedColumn && leftFixedColumnsWidth > 0)
         ? leftFixedColumnsWidth + 1
@@ -153,10 +159,7 @@ mixin LayoutState implements IPlutoState {
   }
 
   double get bodyUpScrollOffset {
-    return gridGlobalOffset.dy +
-        PlutoDefaultSettings.gridBorderWidth +
-        PlutoDefaultSettings.rowTotalHeight +
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+    return bodyTopOffset + PlutoDefaultSettings.offsetScrollingFromEdge;
   }
 
   double get bodyDownScrollOffset {

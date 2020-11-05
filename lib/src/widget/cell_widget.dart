@@ -182,14 +182,11 @@ class _CellWidgetState extends State<CellWidget>
 
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
-      return SizedBox(
-        width: double.infinity,
-        child: Text(
-          widget.column.formattedValueForDisplay(_cellValue),
-          style: widget.stateManager.configuration.cellTextStyle,
-          overflow: TextOverflow.ellipsis,
-          textAlign: widget.column.textAlign.value,
-        ),
+      return DefaultCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+        rowIdx: widget.rowIdx,
       );
     }
 
@@ -234,7 +231,7 @@ class _CellWidgetState extends State<CellWidget>
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTapDown: (TapDownDetails details) {
+      onTapUp: (TapUpDetails details) {
         if (!widget.stateManager.hasFocus) {
           widget.stateManager.setKeepFocus(true);
 
@@ -270,42 +267,60 @@ class _CellWidgetState extends State<CellWidget>
         }
       },
       onLongPressStart: (LongPressStartDetails details) {
-        if (_isCurrentCell) {
-          widget.stateManager.setSelecting(true);
+        if (_isCurrentCell != true) {
+          widget.stateManager.setCurrentCell(
+            widget.cell,
+            widget.rowIdx,
+            notify: false,
+          );
+        }
 
-          if (_selectingMode.isRow) {
-            widget.stateManager.toggleSelectingRow(widget.rowIdx);
-          }
+        widget.stateManager.setSelecting(true);
+
+        if (_selectingMode.isRow) {
+          widget.stateManager.toggleSelectingRow(widget.rowIdx);
         }
       },
       onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
-        if (_isCurrentCell) {
-          _selectionSubject.add(() {
-            widget.stateManager
-                .setCurrentSelectingPositionWithOffset(details.globalPosition);
-          });
-
-          _scrollSubject.add(() {
-            if (_needMovingScroll(details.globalPosition, MoveDirection.Left)) {
-              _scrollForDraggableSelection(MoveDirection.Left);
-            } else if (_needMovingScroll(
-                details.globalPosition, MoveDirection.Right)) {
-              _scrollForDraggableSelection(MoveDirection.Right);
-            }
-
-            if (_needMovingScroll(details.globalPosition, MoveDirection.Up)) {
-              _scrollForDraggableSelection(MoveDirection.Up);
-            } else if (_needMovingScroll(
-                details.globalPosition, MoveDirection.Down)) {
-              _scrollForDraggableSelection(MoveDirection.Down);
-            }
-          });
+        if (_isCurrentCell != true) {
+          widget.stateManager.setCurrentCell(
+            widget.cell,
+            widget.rowIdx,
+            notify: false,
+          );
         }
+
+        _selectionSubject.add(() {
+          widget.stateManager
+              .setCurrentSelectingPositionWithOffset(details.globalPosition);
+        });
+
+        _scrollSubject.add(() {
+          if (_needMovingScroll(details.globalPosition, MoveDirection.Left)) {
+            _scrollForDraggableSelection(MoveDirection.Left);
+          } else if (_needMovingScroll(
+              details.globalPosition, MoveDirection.Right)) {
+            _scrollForDraggableSelection(MoveDirection.Right);
+          }
+
+          if (_needMovingScroll(details.globalPosition, MoveDirection.Up)) {
+            _scrollForDraggableSelection(MoveDirection.Up);
+          } else if (_needMovingScroll(
+              details.globalPosition, MoveDirection.Down)) {
+            _scrollForDraggableSelection(MoveDirection.Down);
+          }
+        });
       },
       onLongPressEnd: (LongPressEndDetails details) {
-        if (_isCurrentCell) {
-          widget.stateManager.setSelecting(false);
+        if (_isCurrentCell != true) {
+          widget.stateManager.setCurrentCell(
+            widget.cell,
+            widget.rowIdx,
+            notify: false,
+          );
         }
+
+        widget.stateManager.setSelecting(false);
       },
       child: _BackgroundColorWidget(
         readOnly: widget.column.type.readOnly,
@@ -396,13 +411,20 @@ class _BackgroundColorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerLeft,
       width: width,
       height: height,
-      padding: const EdgeInsets.symmetric(
-          horizontal: PlutoDefaultSettings.cellPadding),
       decoration: _boxDecoration(),
-      child: child,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: PlutoDefaultSettings.cellPadding),
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          height: height,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(),
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -11,10 +11,22 @@ class PlutoRow {
   PlutoRow({
     @required this.cells,
     this.sortIdx,
-  }) : this._key = UniqueKey();
+    bool checked = false,
+  })  : this._checked = checked,
+        this._key = UniqueKey();
+
+  /// The state value that the checkbox is checked.
+  /// If the enableRowChecked value of the [PlutoColumn] property is set to true,
+  /// a check box appears in the cell of the corresponding column.
+  /// To manually change the values at runtime,
+  /// use the [PlutoStateManager.setRowChecked]
+  /// or [PlutoStateManager.toggleAllRowChecked] methods.
+  bool get checked => _checked;
+
+  bool _checked;
 
   /// Row key
-  Key _key;
-
   Key get key => _key;
+
+  Key _key;
 }

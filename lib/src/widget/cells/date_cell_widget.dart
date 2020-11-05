@@ -123,21 +123,23 @@ class _DateCellWidgetState extends State<DateCellWidget>
   }
 
   List<PlutoColumn> _buildColumns() {
+    final localeText = widget.stateManager.localeText;
+
     return [
-      ['Su', '7'],
-      ['Mo', '1'],
-      ['Tu', '2'],
-      ['We', '3'],
-      ['Th', '4'],
-      ['Fr', '5'],
-      ['Sa', '6'],
+      [localeText.sunday, '7'],
+      [localeText.monday, '1'],
+      [localeText.tuesday, '2'],
+      [localeText.wednesday, '3'],
+      [localeText.thursday, '4'],
+      [localeText.friday, '5'],
+      [localeText.saturday, '6'],
     ].map((e) {
       return PlutoColumn(
         title: e[0],
         field: e[1],
         type: PlutoColumnType.text(readOnly: true),
         width: 45,
-        enableDraggable: false,
+        enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,
       );

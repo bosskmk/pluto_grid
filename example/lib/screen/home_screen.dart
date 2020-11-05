@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,7 @@ import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_rows_screen.dart';
+import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_fixing_screen.dart';
 import 'feature/column_moving_screen.dart';
@@ -25,6 +27,7 @@ import 'feature/dual_mode_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
+import 'feature/row_moving_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/selection_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
@@ -259,11 +262,32 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Row moving',
+            description: 'You can move the row by dragging it.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowMovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Row with checkbox',
+            description: 'You can select rows with checkbox.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowWithCheckboxScreen.routeName);
+            },
+          ),
+          PlutoListTile(
             title: 'Cell selection',
             description:
                 'In Square selection mode, Shift + tap or long tap and then move to select cells.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CellSelectionScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Cell renderer',
+            description: 'You can change the widget of the cell through the renderer.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, CellRendererScreen.routeName);
             },
           ),
           PlutoListTile(

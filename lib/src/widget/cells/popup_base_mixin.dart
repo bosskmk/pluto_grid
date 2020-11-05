@@ -67,7 +67,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     super.initState();
 
     _textController = TextEditingController()
-      ..text = widget.cell.value.toString();
+      ..text =
+          widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
     _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
 
@@ -177,7 +178,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
     widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
     try {
-      _textController.text = widget.stateManager.currentCell.value.toString();
+      _textController.text = widget.column.formattedValueForDisplayInEditing(
+          widget.stateManager.currentCell.value);
     } catch (e) {
       /**
        * When the Popup is opened, the TextField is closed

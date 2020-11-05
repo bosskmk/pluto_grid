@@ -5,6 +5,10 @@ abstract class IRowState {
 
   List<PlutoRow> _rows;
 
+  List<PlutoRow> get checkedRows;
+
+  List<PlutoRow> get unCheckedRows;
+
   /// Row index of currently selected cell.
   int get currentRowIdx;
 
@@ -12,9 +16,14 @@ abstract class IRowState {
   PlutoRow get currentRow;
 
   /// set currentRowIdx to null
-  void clearCurrentRowIdx({bool notify: true});
+  void clearCurrentRowIdx({
+    bool notify: true,
+  });
 
-  void setCurrentRowIdx(int rowIdx, {bool notify: true});
+  void setCurrentRowIdx(
+    int rowIdx, {
+    bool notify: true,
+  });
 
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
@@ -44,14 +53,33 @@ abstract class IRowState {
 
   void removeRows(List<PlutoRow> rows);
 
+  void moveRows(List<PlutoRow> rows, double offset);
+
   /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx({bool notify: true});
+  void updateCurrentRowIdx({
+    bool notify: true,
+  });
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  });
+
+  void toggleAllRowChecked(
+    bool flag, {
+    bool notify: true,
+  });
 }
 
 mixin RowState implements IPlutoState {
   List<PlutoRow> get rows => [..._rows];
 
   List<PlutoRow> _rows;
+
+  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked);
+
+  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked);
 
   int get currentRowIdx => _currentRowIdx;
 
@@ -65,11 +93,16 @@ mixin RowState implements IPlutoState {
     return _rows[_currentRowIdx];
   }
 
-  void clearCurrentRowIdx({bool notify: true}) {
+  void clearCurrentRowIdx({
+    bool notify: true,
+  }) {
     setCurrentRowIdx(null, notify: notify);
   }
 
-  void setCurrentRowIdx(int rowIdx, {bool notify: true}) {
+  void setCurrentRowIdx(
+    int rowIdx, {
+    bool notify: true,
+  }) {
     if (_currentRowIdx == rowIdx) {
       return;
     }
@@ -225,18 +258,67 @@ mixin RowState implements IPlutoState {
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
 
     if (_currentRowIdx != null &&
+        _rows.length > _currentRowIdx &&
         removeKeys.contains(_rows[_currentRowIdx].key)) {
       resetCurrentState(notify: false);
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
+    updateCurrentRowIdx(notify: false);
+
+    updateCurrentCellPosition(notify: false);
+
     if (notify) {
       notifyListeners();
     }
   }
 
-  void updateCurrentRowIdx({bool notify: true}) {
+  void moveRows(List<PlutoRow> rows, double offset) {
+    offset -= bodyTopOffset - scroll.verticalOffset;
+
+    double currentOffset = 0.0;
+
+    int indexToMove;
+
+    for (var i = 0; i < _rows.length; i += 1) {
+      if (currentOffset < offset &&
+          offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
+        indexToMove = i;
+        break;
+      }
+
+      currentOffset += PlutoDefaultSettings.rowTotalHeight;
+    }
+
+    if (indexToMove == null) {
+      return;
+    } else if (indexToMove + rows.length > _rows.length) {
+      indexToMove = _rows.length - rows.length;
+    }
+
+    rows.forEach((row) {
+      _rows.remove(row);
+    });
+
+    _rows.insertAll(indexToMove, rows);
+
+    int sortIdx = 0;
+
+    _rows.forEach((element) {
+      element.sortIdx = sortIdx++;
+    });
+
+    updateCurrentRowIdx(notify: false);
+
+    updateCurrentCellPosition(notify: false);
+
+    notifyListeners();
+  }
+
+  void updateCurrentRowIdx({
+    bool notify: true,
+  }) {
     if (currentCell == null) {
       _currentRowIdx = null;
 
@@ -258,6 +340,37 @@ mixin RowState implements IPlutoState {
         }
       }
     }
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  }) {
+    final findRow = _rows.firstWhere((element) => element.key == row.key);
+
+    if (findRow == null) {
+      return;
+    }
+
+    findRow._checked = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void toggleAllRowChecked(
+    bool flag, {
+    bool notify: true,
+  }) {
+    _rows.forEach((e) {
+      e._checked = flag == true;
+    });
 
     if (notify) {
       notifyListeners();

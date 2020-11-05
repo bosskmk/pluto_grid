@@ -12,6 +12,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
   });
 
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -130,7 +131,7 @@ void main() {
       title: 'header',
       field: 'header',
       type: PlutoColumnType.text(),
-      enableDraggable: false,
+      enableColumnDrag: false,
     );
 
     // when
@@ -159,7 +160,7 @@ void main() {
       title: 'header',
       field: 'header',
       type: PlutoColumnType.text(),
-      enableDraggable: true,
+      enableColumnDrag: true,
     );
 
     // when

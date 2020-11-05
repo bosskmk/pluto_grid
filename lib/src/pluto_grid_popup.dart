@@ -40,7 +40,7 @@ class PlutoGridPopup {
                   width: (width ?? size.maxWidth) +
                       PlutoDefaultSettings.gridInnerSpacing,
                   height: height ?? size.maxHeight,
-                  child: PlutoGrid.popup(
+                  child: PlutoGrid(
                     columns: columns,
                     rows: rows,
                     mode: mode,

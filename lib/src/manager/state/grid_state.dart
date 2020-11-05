@@ -29,6 +29,8 @@ abstract class IGridState {
 
   bool get hasFocus;
 
+  PlutoGridLocaleText get localeText;
+
   void setGridKey(Key key);
 
   void setKeyManager(PlutoKeyManager keyManager);
@@ -103,6 +105,8 @@ mixin GridState implements IPlutoState {
   bool _keepFocus = false;
 
   bool get hasFocus => _gridFocusNode != null && _gridFocusNode.hasFocus;
+
+  PlutoGridLocaleText get localeText => configuration.localeText;
 
   void setKeyManager(PlutoKeyManager keyManager) {
     _keyManager = keyManager;

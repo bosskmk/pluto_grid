@@ -241,7 +241,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
               'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/listing_mode_screen.dart',
         ),
       ],
-      body: PlutoGrid.popup(
+      body: PlutoGrid(
         columns: columns,
         rows: rows,
         onChanged: (PlutoOnChangedEvent event) {

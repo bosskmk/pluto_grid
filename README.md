@@ -1,6 +1,11 @@
-## PlutoGrid for flutter - v0.1.21
+## PlutoGrid for flutter - v1.0.0-pre.1
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
+
+<br>
+
+> Work is in progress for the 1.0.0 deployment.
+> Currently the latest version is 0.1.21.
 
 <br>
 
@@ -9,7 +14,10 @@ Of course, it works well on Android and IOS.
 
 <br>
 
-### [Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
+### [Demo Web 1.0.0 - Preview](https://bosskmk.github.io/pluto_grid/build/preview/index.html)
+> You can play the demo before it is released.
+
+### [Demo Web 0.1.21 - Latest](https://bosskmk.github.io/pluto_grid/build/web/index.html)
 > You can try out various functions and usage methods right away.  
 > All features provide example code.
 
@@ -77,38 +85,38 @@ Of course, it works well on Android and IOS.
   
 ### Screenshots
 
-#### With fixed columns on the left and right
-![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_image_0.1.11_1.jpg)
+#### With fixed columns on the left and right.
+![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_1.jpg)
 
 <br>
 
-#### Popup for select list type columns
-![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_image_0.1.11_2.jpg)
+#### Popup for select list type columns.
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_2.jpg)
 
 <br>
 
-#### Popup for select date type columns
-![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_image_0.1.11_3.jpg)
+#### Popup for select date type columns.
+![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_3.jpg)
 
 <br>
 
-#### Dual Grid
-![PlutoGrid Select Dual](https://bosskmk.github.io/images/pluto_image_0.1.11_4.jpg)
+#### Cell renderer.
+![PlutoGrid Cell renderer](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_4.jpg)
 
 <br>
 
-#### Select rows
-![PlutoGrid Selection Rows](https://bosskmk.github.io/images/pluto_image_0.1.11_5.jpg)
+#### Multi select. (Cells or Rows)
+![PlutoGrid Multi select](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_5.jpg)
 
 <br>
 
-#### Select cells
-![PlutoGrid Selection Cells](https://bosskmk.github.io/images/pluto_image_0.1.11_6.jpg)
+#### Dual grid. (Moving between grids.)
+![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_6.jpg)
 
 <br>
 
-#### Dark mode
-![PlutoGrid Dark mode](https://bosskmk.github.io/images/0.1.13/pluto_image_0.1.13_1.jpg)
+#### A Dark mode.
+![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_7.jpg)
 
 <br>
 

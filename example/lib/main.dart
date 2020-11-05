@@ -1,8 +1,10 @@
+import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'constants/pluto_colors.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
+import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
 import 'screen/feature/column_fixing_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
@@ -16,6 +18,7 @@ import 'screen/feature/grid_as_popup_screen.dart';
 import 'screen/feature/listing_mode_screen.dart';
 import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
+import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
@@ -46,7 +49,10 @@ class MyApp extends StatelessWidget {
             SelectionTypeColumnScreen(),
         ValueFormatterScreen.routeName: (context) => ValueFormatterScreen(),
         RowSelectionScreen.routeName: (context) => RowSelectionScreen(),
+        RowMovingScreen.routeName: (context) => RowMovingScreen(),
+        RowWithCheckboxScreen.routeName: (context) => RowWithCheckboxScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
+        CellRendererScreen.routeName: (context) => CellRendererScreen(),
         CopyAndPasteScreen.routeName: (context) => CopyAndPasteScreen(),
         MovingScreen.routeName: (context) => MovingScreen(),
         AddAndRemoveRowsScreen.routeName: (context) => AddAndRemoveRowsScreen(),
