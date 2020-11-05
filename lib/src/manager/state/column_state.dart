@@ -360,9 +360,7 @@ mixin ColumnState implements IPlutoState {
       if (column._key == columnKey) {
         final setWidth = column.width + offset;
 
-        column.width = setWidth > column.minWidth
-            ? setWidth
-            : column.minWidth;
+        column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
         break;
       }
     }

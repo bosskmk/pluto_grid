@@ -285,7 +285,8 @@ class PlutoFeatures extends StatelessWidget {
           ),
           PlutoListTile(
             title: 'Cell renderer',
-            description: 'You can change the widget of the cell through the renderer.',
+            description:
+                'You can change the widget of the cell through the renderer.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CellRendererScreen.routeName);
             },

@@ -94,16 +94,16 @@ mixin SelectingState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFixed();
 
     int columnStartIdx =
-    min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+        min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
     int columnEndIdx =
-    max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+        max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
 
     int rowStartIdx =
-    min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
     int rowEndIdx =
-    max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
 
     List<PlutoSelectingCellPosition> positions = [];
 
@@ -112,8 +112,8 @@ mixin SelectingState implements IPlutoState {
         final String field = _columns[columnIndexes[j]].field;
 
         positions.add(PlutoSelectingCellPosition(
-            rowIdx: i,
-            field: field,
+          rowIdx: i,
+          field: field,
         ));
       }
     }
