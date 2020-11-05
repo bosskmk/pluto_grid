@@ -1,3 +1,20 @@
+## [1.0.0] - Working
+
+##### Breaking changes:
+
+* PlutoGrid.popup has been deleted.  
+  PlutoGrid.popup() has been removed.  
+  Just clear the popup and create it with PlutoGrid().
+* The column property enableDraggable has been changed to enableColumnDrag.
+
+##### Improvements: 
+
+* Column properties have been added.
+  - enableRowDrag : If set to true, an icon is create in the cell of the column, and the row can be moved by dragging it.
+  - enableRowChecked : If set to true, a check box is create in the cell of the column.
+  - renderer : You can change the displayed cell.
+  - applyFormatterInEditing : If this is set to true, the value changed by a formatter is a reflected in the editing state. However, it is only in the readonly state, or the state in which the cell value cannot be directly modified in the form of popup.
+
 ## [0.1.21] - 2020. 11. 01
 
 * Add display property for the dual grid.
