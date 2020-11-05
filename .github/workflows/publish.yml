@@ -17,7 +17,7 @@ jobs:
 
     # using flutter
     - uses: subosito/flutter-action@v1
-    - run: flutter channel master
+    - run: flutter channel dev
     - run: flutter upgrade
     - run: dart --version
     - run: flutter --version

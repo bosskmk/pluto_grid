@@ -1,4 +1,4 @@
-## [1.0.0] - Working
+## [1.0.0-pre.1] - 2020. 11. 05
 
 ##### Breaking changes:
 
