@@ -12,6 +12,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
   });
 
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {

@@ -13,6 +13,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
   });
@@ -69,9 +70,9 @@ void main() {
       await tester.tap(find.byType(TextField));
     });
 
-    tapCell.test('hour, minute 컬럼이 호출 되어야 한다.', (tester) async {
-      expect(find.text('hour'), findsOneWidget);
-      expect(find.text('minute'), findsOneWidget);
+    tapCell.test('Hour, minute 컬럼이 호출 되어야 한다.', (tester) async {
+      expect(find.text('Hour'), findsOneWidget);
+      expect(find.text('Minute'), findsOneWidget);
     });
 
     tapCell.test('12:28 분 선택.', (tester) async {

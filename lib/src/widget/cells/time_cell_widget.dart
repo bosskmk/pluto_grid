@@ -38,6 +38,8 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
 
     _isOpenedPopup = true;
 
+    final localeText = widget.stateManager.localeText;
+
     PlutoDualGridPopup(
       context: context,
       onSelected: (PlutoDualOnSelectedEvent event) {
@@ -55,7 +57,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
       gridPropsA: PlutoDualGridProps(
         columns: [
           PlutoColumn(
-            title: 'hour',
+            title: localeText.hour,
             field: 'hour',
             type: PlutoColumnType.text(readOnly: true),
             enableSorting: false,
@@ -91,7 +93,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
       gridPropsB: PlutoDualGridProps(
         columns: [
           PlutoColumn(
-            title: 'minute',
+            title: localeText.minute,
             field: 'minute',
             type: PlutoColumnType.text(readOnly: true),
             enableSorting: false,

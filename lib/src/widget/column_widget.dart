@@ -62,9 +62,23 @@ class _ColumnWidgetState extends State<ColumnWidget> {
         text,
         style: TextStyle(
           color: textColor,
+          fontSize: 13,
         ),
       );
     };
+
+    final buildMenuItem = ({
+      _MenuItem value,
+      Widget child,
+    }) {
+      return PopupMenuItem(
+        value: value,
+        child: child,
+        height: 36,
+      );
+    };
+
+    final localeText = widget.stateManager.localeText;
 
     final _MenuItem selectedMenu = await showMenu<_MenuItem>(
       context: context,
@@ -73,23 +87,24 @@ class _ColumnWidgetState extends State<ColumnWidget> {
           position & Size(40, 40), Offset.zero & overlay.size),
       items: [
         if (widget.column.fixed.isFixed == true)
-          PopupMenuItem(
+          buildMenuItem(
             value: _MenuItem.Unfix,
-            child: buildTextItem('Unfix'),
+            child: buildTextItem(localeText.unfixColumn),
           ),
         if (widget.column.fixed.isFixed != true) ...[
-          PopupMenuItem(
+          buildMenuItem(
             value: _MenuItem.ToLeft,
-            child: buildTextItem('ToLeft'),
+            child: buildTextItem(localeText.toLeftColumn),
           ),
-          PopupMenuItem(
+          buildMenuItem(
             value: _MenuItem.ToRight,
-            child: buildTextItem('ToRight'),
+            child: buildTextItem(localeText.toRightColumn),
           ),
         ],
-        PopupMenuItem(
+        PopupMenuDivider(),
+        buildMenuItem(
           value: _MenuItem.AutoSize,
-          child: buildTextItem('AutoSize'),
+          child: buildTextItem(localeText.autoSizeColumn),
         ),
       ],
     );
