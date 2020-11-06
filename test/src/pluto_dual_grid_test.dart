@@ -190,13 +190,13 @@ void main() {
   group('PlutoDualGridDisplayRatio', () {
     test('ratio 가 0 인 경우 assert 에러', () {
       expect(() {
-        final display = PlutoDualGridDisplayRatio(ratio: 0);
+        PlutoDualGridDisplayRatio(ratio: 0);
       }, throwsA(isA<AssertionError>()));
     });
 
     test('ratio 가 1 인 경우 assert 에러', () {
       expect(() {
-        final display = PlutoDualGridDisplayRatio(ratio: 1);
+        PlutoDualGridDisplayRatio(ratio: 1);
       }, throwsA(isA<AssertionError>()));
     });
 
