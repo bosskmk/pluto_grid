@@ -17,8 +17,8 @@ class ScaledCheckbox extends StatelessWidget {
 
   const ScaledCheckbox({
     Key key,
-    this.value,
-    this.handleOnChanged,
+    @required this.value,
+    @required this.handleOnChanged,
     this.tristate = false,
     this.scale = 1.0,
     this.unselectedColor = Colors.black26,

@@ -9,15 +9,22 @@ abstract class IRowState {
 
   List<PlutoRow> get unCheckedRows;
 
+  bool get hasCheckedRow;
+
+  bool get hasUnCheckedRow;
+
   /// Row index of currently selected cell.
   int get currentRowIdx;
 
   /// Row of currently selected cell.
   PlutoRow get currentRow;
 
-  /// set currentRowIdx to null
-  void clearCurrentRowIdx({
-    bool notify: true,
+  PlutoRow getRowByIdx(int rowIdx);
+
+  PlutoRow getNewRow();
+
+  List<PlutoRow> getNewRows({
+    int count = 1,
   });
 
   void setCurrentRowIdx(
@@ -29,6 +36,22 @@ abstract class IRowState {
     List<PlutoRow> rows, {
     bool increase = true,
     int start = 0,
+  });
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  });
+
+  /// set currentRowIdx to null
+  void clearCurrentRowIdx({
+    bool notify: true,
+  });
+
+  /// Update RowIdx to Current Cell.
+  void updateCurrentRowIdx({
+    bool notify: true,
   });
 
   void prependNewRows({
@@ -43,28 +66,11 @@ abstract class IRowState {
 
   void appendRows(List<PlutoRow> rows);
 
-  PlutoRow getNewRow();
-
-  List<PlutoRow> getNewRows({
-    int count = 1,
-  });
-
   void removeCurrentRow();
 
   void removeRows(List<PlutoRow> rows);
 
   void moveRows(List<PlutoRow> rows, double offset);
-
-  /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx({
-    bool notify: true,
-  });
-
-  void setRowChecked(
-    PlutoRow row,
-    bool flag, {
-    bool notify: true,
-  });
 
   void toggleAllRowChecked(
     bool flag, {
@@ -81,6 +87,20 @@ mixin RowState implements IPlutoState {
 
   List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked);
 
+  bool get hasCheckedRow =>
+      _rows.firstWhere(
+        (element) => element.checked,
+        orElse: () => null,
+      ) !=
+      null;
+
+  bool get hasUnCheckedRow =>
+      _rows.firstWhere(
+        (element) => !element.checked,
+        orElse: () => null,
+      ) !=
+      null;
+
   int get currentRowIdx => _currentRowIdx;
 
   int _currentRowIdx;
@@ -93,10 +113,40 @@ mixin RowState implements IPlutoState {
     return _rows[_currentRowIdx];
   }
 
-  void clearCurrentRowIdx({
-    bool notify: true,
+  PlutoRow getRowByIdx(int rowIdx) {
+    if (rowIdx == null || rowIdx < 0 || _rows.length - 1 < rowIdx) {
+      return null;
+    }
+
+    return _rows[rowIdx];
+  }
+
+  PlutoRow getNewRow() {
+    final cells = Map<String, PlutoCell>();
+
+    _columns.forEach((PlutoColumn column) {
+      cells[column.field] = PlutoCell(
+        value: column.type.defaultValue,
+      );
+    });
+
+    return PlutoRow(cells: cells);
+  }
+
+  List<PlutoRow> getNewRows({
+    int count = 1,
   }) {
-    setCurrentRowIdx(null, notify: notify);
+    List<PlutoRow> rows = [];
+
+    for (var i = 0; i < count; i += 1) {
+      rows.add(getNewRow());
+    }
+
+    if (rows.length < 1) {
+      return [];
+    }
+
+    return rows;
   }
 
   void setCurrentRowIdx(
@@ -128,6 +178,60 @@ mixin RowState implements IPlutoState {
 
       return row;
     }).toList(growable: false);
+  }
+
+  void setRowChecked(
+    PlutoRow row,
+    bool flag, {
+    bool notify: true,
+  }) {
+    final findRow = _rows.firstWhere((element) => element.key == row.key);
+
+    if (findRow == null) {
+      return;
+    }
+
+    findRow._checked = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void clearCurrentRowIdx({
+    bool notify: true,
+  }) {
+    setCurrentRowIdx(null, notify: notify);
+  }
+
+  void updateCurrentRowIdx({
+    bool notify: true,
+  }) {
+    if (currentCell == null) {
+      _currentRowIdx = null;
+
+      if (notify) {
+        notifyListeners();
+      }
+
+      return;
+    }
+
+    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+      for (var columnIdx = 0;
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
+        final field = _columns[columnIndexes[columnIdx]].field;
+
+        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
+          _currentRowIdx = rowIdx;
+        }
+      }
+    }
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void prependNewRows({
@@ -205,34 +309,6 @@ mixin RowState implements IPlutoState {
     _rows.addAll(rows);
 
     notifyListeners();
-  }
-
-  PlutoRow getNewRow() {
-    final cells = Map<String, PlutoCell>();
-
-    _columns.forEach((PlutoColumn column) {
-      cells[column.field] = PlutoCell(
-        value: column.type.defaultValue,
-      );
-    });
-
-    return PlutoRow(cells: cells);
-  }
-
-  List<PlutoRow> getNewRows({
-    int count = 1,
-  }) {
-    List<PlutoRow> rows = [];
-
-    for (var i = 0; i < count; i += 1) {
-      rows.add(getNewRow());
-    }
-
-    if (rows.length < 1) {
-      return [];
-    }
-
-    return rows;
   }
 
   void removeCurrentRow() {
@@ -314,54 +390,6 @@ mixin RowState implements IPlutoState {
     updateCurrentCellPosition(notify: false);
 
     notifyListeners();
-  }
-
-  void updateCurrentRowIdx({
-    bool notify: true,
-  }) {
-    if (currentCell == null) {
-      _currentRowIdx = null;
-
-      if (notify) {
-        notifyListeners();
-      }
-
-      return;
-    }
-
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
-
-        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
-          _currentRowIdx = rowIdx;
-        }
-      }
-    }
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
-  void setRowChecked(
-    PlutoRow row,
-    bool flag, {
-    bool notify: true,
-  }) {
-    final findRow = _rows.firstWhere((element) => element.key == row.key);
-
-    if (findRow == null) {
-      return;
-    }
-
-    findRow._checked = flag;
-
-    if (notify) {
-      notifyListeners();
-    }
   }
 
   void toggleAllRowChecked(

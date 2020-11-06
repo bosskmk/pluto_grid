@@ -1,4 +1,3 @@
-import 'package:example/screen/feature/row_with_checkbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +19,7 @@ import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
 import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
+import 'screen/feature/row_with_checkbox_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
 import 'screen/feature/time_type_column_screen.dart';

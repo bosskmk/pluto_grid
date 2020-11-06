@@ -223,7 +223,7 @@ void main() {
         () {
           final PlutoColumnTypeText textColumn = PlutoColumnType.text();
           expect(() {
-            final getInvalidColumn = textColumn.time;
+            textColumn.time;
           }, throwsA(isA<TypeError>()));
         },
       );

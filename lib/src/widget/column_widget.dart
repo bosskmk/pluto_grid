@@ -329,19 +329,9 @@ class __CheckboxAllSelectionWidgetState
     extends State<_CheckboxAllSelectionWidget> {
   bool _checked;
 
-  bool get hasCheckedRow =>
-      widget.stateManager._rows.firstWhere(
-        (element) => element.checked,
-        orElse: () => null,
-      ) !=
-      null;
+  bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
 
-  bool get hasUnCheckedRow =>
-      widget.stateManager._rows.firstWhere(
-        (element) => !element.checked,
-        orElse: () => null,
-      ) !=
-      null;
+  bool get hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
 
   @override
   void dispose() {
