@@ -4,7 +4,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class RowHelper {
   /// cell value format : '$columnFieldName value $rowIdx'
-  static List<PlutoRow> count(int count, List<PlutoColumn> columns) {
+  static List<PlutoRow> count(
+    int count,
+    List<PlutoColumn> columns, {
+    bool checked = false,
+  }) {
     return Iterable.generate(count)
         .map((rowIdx) => PlutoRow(
               sortIdx: rowIdx,
@@ -21,6 +25,7 @@ class RowHelper {
                   throw ('Column is not implemented.');
                 },
               ),
+              checked: checked,
             ))
         .toList();
   }

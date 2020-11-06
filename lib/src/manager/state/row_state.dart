@@ -83,9 +83,13 @@ mixin RowState implements IPlutoState {
 
   List<PlutoRow> _rows;
 
-  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked);
+  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked).toList(
+        growable: false,
+      );
 
-  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked);
+  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked).toList(
+        growable: false,
+      );
 
   bool get hasCheckedRow =>
       _rows.firstWhere(
@@ -185,7 +189,10 @@ mixin RowState implements IPlutoState {
     bool flag, {
     bool notify: true,
   }) {
-    final findRow = _rows.firstWhere((element) => element.key == row.key);
+    final findRow = _rows.firstWhere(
+      (element) => element.key == row.key,
+      orElse: () => null,
+    );
 
     if (findRow == null) {
       return;
