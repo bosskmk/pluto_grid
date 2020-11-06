@@ -18,26 +18,10 @@ class DefaultCellWidget extends StatefulWidget {
 }
 
 class _DefaultCellWidgetState extends State<DefaultCellWidget> {
-  PlutoRow get thisRow => widget.stateManager._rows[widget.rowIdx];
+  PlutoRow get thisRow => widget.stateManager.getRowByIdx(widget.rowIdx);
 
   bool get isCurrentRowSelected {
-    if (!widget.stateManager.selectingMode.isRow) {
-      return false;
-    }
-
-    if (widget.stateManager.currentSelectingRows.length < 1) {
-      return false;
-    }
-
-    final PlutoRow row = thisRow;
-
-    final PlutoRow selectedRow =
-        widget.stateManager.currentSelectingRows.firstWhere(
-      (element) => element.key == row.key,
-      orElse: () => null,
-    );
-
-    return selectedRow != null;
+    return widget.stateManager.isSelectedRow(thisRow?.key);
   }
 
   Icon getDragIcon() {
@@ -86,7 +70,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
               widget.stateManager.moveRows(rows, dragDetails.offset.dy);
             },
             dragIcon: getDragIcon(),
-            textWidget: getCellWidget(),
+            feedbackWidget: getCellWidget(),
           ),
         if (widget.column.enableRowChecked)
           _CheckboxSelectionWidget(
@@ -107,7 +91,7 @@ class _RowDragIconWidget extends StatelessWidget {
   final PlutoStateManager stateManager;
   final Function(DraggableDetails dragDetails) onDragEnd;
   final Widget dragIcon;
-  final Widget textWidget;
+  final Widget feedbackWidget;
 
   const _RowDragIconWidget({
     Key key,
@@ -115,7 +99,7 @@ class _RowDragIconWidget extends StatelessWidget {
     this.stateManager,
     this.onDragEnd,
     this.dragIcon,
-    this.textWidget,
+    this.feedbackWidget,
   }) : super(key: key);
 
   @override
@@ -132,7 +116,7 @@ class _RowDragIconWidget extends StatelessWidget {
             children: [
               dragIcon,
               Expanded(
-                child: textWidget,
+                child: feedbackWidget,
               ),
             ],
           ),

@@ -13,6 +13,8 @@ void main() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
     when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.hasCheckedRow).thenReturn(false);
+    when(stateManager.hasUnCheckedRow).thenReturn(false);
   });
 
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -233,6 +235,57 @@ void main() {
     final headerIcon = find.byType(ColumnIcon);
 
     expect(headerIcon, findsOneWidget);
+  });
+
+  group('enableRowChecked', () {
+    final buildColumn = (bool enable) {
+      final column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableRowChecked: enable,
+      );
+
+      return PlutoWidgetTestHelper('build column.', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: ColumnWidget(
+                stateManager: stateManager,
+                column: column,
+              ),
+            ),
+          ),
+        );
+      });
+    };
+
+    final columnHasNotCheckbox = buildColumn(false);
+
+    columnHasNotCheckbox.test(
+      'checkbox 위젯이 이 출력 되지 않아야 한다.',
+      (tester) async {
+        expect(find.byType(Checkbox), findsNothing);
+      },
+    );
+
+    final columnHasCheckbox = buildColumn(true);
+
+    columnHasCheckbox.test(
+      'checkbox 위젯이 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.byType(Checkbox), findsOneWidget);
+      },
+    );
+
+    columnHasCheckbox.test(
+      'checkbox 를 탭하면 toggleAllRowChecked 가 호출 되어야 한다.',
+      (tester) async {
+        await tester.tap(find.byType(Checkbox));
+
+        verify(stateManager.toggleAllRowChecked(true)).called(1);
+      },
+    );
   });
 
   group('고정 컬럼이 아닌 경우', () {
