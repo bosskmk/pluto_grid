@@ -50,6 +50,9 @@ class PlutoConfiguration {
 
   final PlutoGridLocaleText localeText;
 
+  /// Customise scrollbars for desktop usage
+  final PlutoScrollbarConfig scrollbarConfig;
+
   PlutoConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
@@ -75,6 +78,7 @@ class PlutoConfiguration {
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarConfig = const PlutoScrollbarConfig.noScroll()
   });
 
   PlutoConfiguration.dark({
@@ -102,6 +106,7 @@ class PlutoConfiguration {
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarConfig = const PlutoScrollbarConfig.noScroll()
   });
 }
 
@@ -179,4 +184,46 @@ extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
   bool get isToggleEditing => this == PlutoEnterKeyAction.ToggleEditing;
 
   bool get isNone => this == null || this == PlutoEnterKeyAction.None;
+}
+
+/// Allows to customise scrollbars "look and feel"
+/// The general feature is making vertical scrollbar draggable and therefore more useful
+/// for desktop systems. Set [draggableScrollbar] to true to achieve this behavior. Also
+/// changing [isAlwaysShown] to true is recommended for more usability at desktops
+///
+/// Unfortunately, horizontal scrollbar still will not be draggable, it seems like
+/// framework limitation
+class PlutoScrollbarConfig {
+  PlutoScrollbarConfig({
+    this.draggableScrollbar = false,
+    this.isAlwaysShown = false,
+    Radius scrollbarRadius,
+    Radius scrollbarRadiusWhileDragging,
+    double scrollbarThickness,
+    double scrollbarThicknessWhileDragging})
+      : this.scrollbarThickness = scrollbarThickness ??
+      (draggableScrollbar ? (CupertinoScrollbar.defaultThickness) : 6.0),
+        this.scrollbarRadius = scrollbarRadius ??
+            (draggableScrollbar ? (CupertinoScrollbar.defaultRadius) : null),
+        this.scrollbarThicknessWhileDragging = scrollbarThicknessWhileDragging ??
+            CupertinoScrollbar.defaultThicknessWhileDragging,
+        this.scrollbarRadiusWhileDragging =
+            scrollbarRadiusWhileDragging ?? CupertinoScrollbar.defaultRadiusWhileDragging;
+
+  const PlutoScrollbarConfig.noScroll()
+      : draggableScrollbar= false,
+        isAlwaysShown = false,
+        scrollbarRadius= CupertinoScrollbar.defaultRadius,
+        scrollbarRadiusWhileDragging= CupertinoScrollbar.defaultRadiusWhileDragging,
+        scrollbarThickness= null,
+        scrollbarThicknessWhileDragging= CupertinoScrollbar.defaultThicknessWhileDragging;
+
+  /// Force use Cupertino scrollbars regardless of target platform.
+  final bool draggableScrollbar;
+  final bool isAlwaysShown;
+
+  final double scrollbarThickness;
+  final double scrollbarThicknessWhileDragging;
+  final Radius scrollbarRadius;
+  final Radius scrollbarRadiusWhileDragging;
 }
