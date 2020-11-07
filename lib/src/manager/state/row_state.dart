@@ -54,6 +54,8 @@ abstract class IRowState {
     bool notify: true,
   });
 
+  void insertRows(int rowIdx, List<PlutoRow> rows);
+
   void prependNewRows({
     int count = 1,
   });
@@ -241,6 +243,51 @@ mixin RowState implements IPlutoState {
     }
   }
 
+  void insertRows(int rowIdx, List<PlutoRow> rows) {
+    if (rows == null || rows.isEmpty) {
+      return;
+    }
+
+    if (rowIdx < 0 || _rows.length < rowIdx) {
+      return;
+    } else if (rowIdx == 0) {
+      prependRows(rows);
+      return;
+    } else if (_rows.length == rowIdx) {
+      appendRows(rows);
+      return;
+    }
+
+    _rows.insertAll(rowIdx, rows);
+
+    PlutoStateManager.initializeRows(
+      _columns,
+      _rows,
+      forceApplySortIdx: true,
+    );
+
+    /// Update currentRowIdx
+    if (currentCell != null) {
+      updateCurrentRowIdx(notify: false);
+
+      updateCurrentCellPosition(notify: false);
+
+      // todo : whether to apply scrolling.
+    }
+
+    /// Update currentSelectingPosition
+    if (currentSelectingPosition != null &&
+        rowIdx <= currentSelectingPosition.rowIdx) {
+      setCurrentSelectingPosition(
+        columnIdx: currentSelectingPosition.columnIdx,
+        rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        notify: false,
+      );
+    }
+
+    notifyListeners();
+  }
+
   void prependNewRows({
     int count = 1,
   }) {
@@ -252,8 +299,9 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start =
-        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(min) - 1 : 0;
+    final start = _rows.length > 0
+        ? _rows.map((row) => row.sortIdx ?? 0).reduce(min) - 1
+        : 0;
 
     PlutoStateManager.initializeRows(
       _columns,
@@ -304,8 +352,9 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start =
-        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(max) + 1 : 0;
+    final start = _rows.length > 0
+        ? _rows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
+        : 0;
 
     PlutoStateManager.initializeRows(
       _columns,
