@@ -222,6 +222,12 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.widget(
+      {dynamic defaultValue,
+      @required Widget Function(dynamic value) widget}) {
+    return PlutoColumnTypeWidget(defaultValue: defaultValue, buildWidget: widget);
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -237,6 +243,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isDate => this is PlutoColumnTypeDate;
 
   bool get isTime => this is PlutoColumnTypeTime;
+
+  bool get isWidget => this is PlutoColumnTypeWidget;
 
   PlutoColumnTypeText get text {
     return this is PlutoColumnTypeText ? this : throw TypeError();
@@ -256,6 +264,10 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
 
   PlutoColumnTypeTime get time {
     return this is PlutoColumnTypeTime ? this : throw TypeError();
+  }
+
+  PlutoColumnTypeWidget get widget {
+    return this is PlutoColumnTypeWidget ? this : throw TypeError();
   }
 
   bool get hasFormat => this is _PlutoColumnTypeHasFormat;
@@ -447,6 +459,26 @@ class PlutoColumnTypeTime implements PlutoColumnType {
   int compare(dynamic a, dynamic b) {
     return a.compareTo(b);
   }
+}
+
+class PlutoColumnTypeWidget implements PlutoColumnType {
+  @override
+  dynamic defaultValue;
+
+  final Widget Function(dynamic value) buildWidget;
+
+  @override
+  bool readOnly = true;
+
+  PlutoColumnTypeWidget({this.defaultValue, @required this.buildWidget});
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return a.compareTo(b);
+  }
+
+  @override
+  bool isValid(value) => true;
 }
 
 abstract class _PlutoColumnTypeHasFormat {

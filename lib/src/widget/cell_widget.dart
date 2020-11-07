@@ -182,12 +182,20 @@ class _CellWidgetState extends State<CellWidget>
 
   Widget _buildCell() {
     if (!_isCurrentCell || !_isEditing) {
-      return DefaultCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-        rowIdx: widget.rowIdx,
-      );
+      if (widget.column.type.isWidget) {
+        return CustomCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+          column: widget.column,
+        );
+      } else {
+        return DefaultCellWidget(
+          stateManager: widget.stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          rowIdx: widget.rowIdx,
+        );
+      }
     }
 
     if (widget.column.type.isSelect) {
@@ -216,6 +224,12 @@ class _CellWidgetState extends State<CellWidget>
       );
     } else if (widget.column.type.isText) {
       return TextCellWidget(
+        stateManager: widget.stateManager,
+        cell: widget.cell,
+        column: widget.column,
+      );
+    } else if (widget.column.type.isWidget) {
+      return CustomCellWidget(
         stateManager: widget.stateManager,
         cell: widget.cell,
         column: widget.column,

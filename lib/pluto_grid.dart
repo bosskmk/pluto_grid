@@ -81,6 +81,8 @@ part './src/ui/right_fixed_rows.dart';
 
 part './src/widget/cell_widget.dart';
 
+part './src/widget/cells/custom_cell_widget.dart';
+
 part './src/widget/cells/date_cell_widget.dart';
 
 part './src/widget/cells/default_cell_widget.dart';
