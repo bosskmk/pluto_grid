@@ -160,6 +160,25 @@ class PlutoGridLocaleText {
     this.hour = '시',
     this.minute = '분',
   });
+
+  const PlutoGridLocaleText.russian({
+    // Column menu
+    this.unfixColumn = 'Открепить',
+    this.toLeftColumn = 'Закрепить слева',
+    this.toRightColumn = 'Закрепить справа',
+    this.autoSizeColumn = 'Автоматический размер',
+    // Date popup
+    this.sunday = 'Вск',
+    this.monday = 'Пн',
+    this.tuesday = 'Вт',
+    this.wednesday = 'Ср',
+    this.thursday = 'Чт',
+    this.friday = 'Пт',
+    this.saturday = 'Сб',
+    // Time column popup
+    this.hour = 'Часы',
+    this.minute = 'Минуты',
+  });
 }
 
 enum PlutoEnterKeyAction {
