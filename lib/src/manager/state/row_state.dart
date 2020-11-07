@@ -27,11 +27,6 @@ abstract class IRowState {
     int count = 1,
   });
 
-  void setCurrentRowIdx(
-    int rowIdx, {
-    bool notify: true,
-  });
-
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
     bool increase = true,
@@ -41,16 +36,6 @@ abstract class IRowState {
   void setRowChecked(
     PlutoRow row,
     bool flag, {
-    bool notify: true,
-  });
-
-  /// set currentRowIdx to null
-  void clearCurrentRowIdx({
-    bool notify: true,
-  });
-
-  /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx({
     bool notify: true,
   });
 
@@ -107,16 +92,14 @@ mixin RowState implements IPlutoState {
       ) !=
       null;
 
-  int get currentRowIdx => _currentRowIdx;
-
-  int _currentRowIdx;
+  int get currentRowIdx => currentCellPosition?.rowIdx;
 
   PlutoRow get currentRow {
-    if (_currentRowIdx == null) {
+    if (currentRowIdx == null) {
       return null;
     }
 
-    return _rows[_currentRowIdx];
+    return _rows[currentRowIdx];
   }
 
   PlutoRow getRowByIdx(int rowIdx) {
@@ -153,21 +136,6 @@ mixin RowState implements IPlutoState {
     }
 
     return rows;
-  }
-
-  void setCurrentRowIdx(
-    int rowIdx, {
-    bool notify: true,
-  }) {
-    if (_currentRowIdx == rowIdx) {
-      return;
-    }
-
-    _currentRowIdx = rowIdx;
-
-    if (notify) {
-      notifyListeners();
-    }
   }
 
   List<PlutoRow> setSortIdxOfRows(
@@ -207,42 +175,6 @@ mixin RowState implements IPlutoState {
     }
   }
 
-  void clearCurrentRowIdx({
-    bool notify: true,
-  }) {
-    setCurrentRowIdx(null, notify: notify);
-  }
-
-  void updateCurrentRowIdx({
-    bool notify: true,
-  }) {
-    if (currentCell == null) {
-      _currentRowIdx = null;
-
-      if (notify) {
-        notifyListeners();
-      }
-
-      return;
-    }
-
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
-
-        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
-          _currentRowIdx = rowIdx;
-        }
-      }
-    }
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
   void insertRows(int rowIdx, List<PlutoRow> rows) {
     if (rows == null || rows.isEmpty) {
       return;
@@ -268,8 +200,6 @@ mixin RowState implements IPlutoState {
 
     /// Update currentRowIdx
     if (currentCell != null) {
-      updateCurrentRowIdx(notify: false);
-
       updateCurrentCellPosition(notify: false);
 
       // todo : whether to apply scrolling.
@@ -314,12 +244,10 @@ mixin RowState implements IPlutoState {
 
     /// Update currentRowIdx
     if (currentCell != null) {
-      _currentRowIdx = rows.length + _currentRowIdx;
-
       setCurrentCellPosition(
         PlutoCellPosition(
           columnIdx: currentCellPosition.columnIdx,
-          rowIdx: currentRowIdx,
+          rowIdx: rows.length + currentRowIdx,
         ),
         notify: false,
       );
@@ -368,11 +296,11 @@ mixin RowState implements IPlutoState {
   }
 
   void removeCurrentRow() {
-    if (_currentRowIdx == null) {
+    if (currentRowIdx == null) {
       return;
     }
 
-    _rows.removeAt(_currentRowIdx);
+    _rows.removeAt(currentRowIdx);
 
     resetCurrentState(notify: false);
 
@@ -389,17 +317,18 @@ mixin RowState implements IPlutoState {
 
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
 
-    if (_currentRowIdx != null &&
-        _rows.length > _currentRowIdx &&
-        removeKeys.contains(_rows[_currentRowIdx].key)) {
+    if (currentRowIdx != null &&
+        _rows.length > currentRowIdx &&
+        removeKeys.contains(_rows[currentRowIdx].key)) {
       resetCurrentState(notify: false);
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
-    updateCurrentRowIdx(notify: false);
-
     updateCurrentCellPosition(notify: false);
+
+    // todo : update selectingPosition
+    // todo : update currentSelectingRows
 
     if (notify) {
       notifyListeners();
@@ -440,8 +369,6 @@ mixin RowState implements IPlutoState {
     _rows.forEach((element) {
       element.sortIdx = sortIdx++;
     });
-
-    updateCurrentRowIdx(notify: false);
 
     updateCurrentCellPosition(notify: false);
 

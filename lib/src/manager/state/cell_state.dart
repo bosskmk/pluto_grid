@@ -91,6 +91,8 @@ mixin CellState implements IPlutoState {
 
     if (cellPosition == null) {
       clearCurrentCell(notify: false);
+    } else if (_isInvalidCellPosition(cellPosition)) {
+      return;
     }
 
     _currentCellPosition = cellPosition;
@@ -193,8 +195,6 @@ mixin CellState implements IPlutoState {
 
     clearCurrentSelectingPosition(notify: false);
 
-    setCurrentRowIdx(rowIdx, notify: false);
-
     clearCurrentSelectingRows(notify: false);
 
     setEditing(false, notify: false);
@@ -287,5 +287,14 @@ mixin CellState implements IPlutoState {
 
   bool isCurrentCell(PlutoCell cell) {
     return _currentCell != null && _currentCell._key == cell._key;
+  }
+
+  bool _isInvalidCellPosition(PlutoCellPosition cellPosition) {
+    return cellPosition.columnIdx == null ||
+        cellPosition.rowIdx == null ||
+        cellPosition.columnIdx < 0 ||
+        cellPosition.rowIdx < 0 ||
+        cellPosition.columnIdx > _columns.length - 1 ||
+        cellPosition.rowIdx > _rows.length - 1;
   }
 }

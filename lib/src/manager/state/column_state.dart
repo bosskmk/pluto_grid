@@ -234,8 +234,6 @@ mixin ColumnState implements IPlutoState {
       }
     }
 
-    updateCurrentRowIdx(notify: false);
-
     updateCurrentCellPosition(notify: false);
 
     notifyListeners();

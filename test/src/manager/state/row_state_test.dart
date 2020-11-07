@@ -1154,35 +1154,6 @@ void main() {
     });
   });
 
-  group('updateCurrentRowIdx', () {
-    testWidgets('When setCurrentCell, the _currentRowIdx value must be set.',
-        (WidgetTester tester) async {
-      // given
-      List<PlutoColumn> columns = [
-        ...ColumnHelper.textColumn('text', count: 3, width: 150),
-      ];
-
-      List<PlutoRow> rows = RowHelper.count(5, columns);
-
-      PlutoStateManager stateManager = PlutoStateManager(
-        columns: columns,
-        rows: rows,
-        gridFocusNode: null,
-        scroll: null,
-      );
-
-      stateManager.setLayout(BoxConstraints());
-
-      stateManager.setCurrentCell(rows[3].cells['text1'], 3);
-
-      // when
-      stateManager.updateCurrentRowIdx();
-
-      // then
-      expect(stateManager.currentRowIdx, 3);
-    });
-  });
-
   group('moveRows', () {
     testWidgets(
       '0번 row 를 1번 row 로 이동 시키기',
