@@ -40,8 +40,7 @@ abstract class ISelectingState {
 
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
-    int columnIdx,
-    int rowIdx,
+    PlutoCellPosition cellPosition,
     bool notify = true,
   });
 
@@ -195,8 +194,10 @@ mixin SelectingState implements IPlutoState {
         setCurrentCell(firstCell, 0, notify: false);
 
         setCurrentSelectingPosition(
-          columnIdx: _columns.length - 1,
-          rowIdx: _rows.length - 1,
+          cellPosition: PlutoCellPosition(
+            columnIdx: _columns.length - 1,
+            rowIdx: _rows.length - 1,
+          ),
         );
         break;
       case PlutoSelectingMode.Row:
@@ -218,16 +219,16 @@ mixin SelectingState implements IPlutoState {
   }
 
   void setCurrentSelectingPosition({
-    int columnIdx,
-    int rowIdx,
+    PlutoCellPosition cellPosition,
     bool notify = true,
   }) {
     if (_selectingMode.isNone) {
       return;
     }
 
-    final cellPosition =
-        PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
+    if (_currentSelectingPosition == cellPosition) {
+      return;
+    }
 
     if (isInvalidCellPosition(cellPosition)) {
       return;
@@ -235,8 +236,12 @@ mixin SelectingState implements IPlutoState {
 
     _currentSelectingPosition = cellPosition;
 
-    if (_selectingMode.isRow) {
-      setCurrentSelectingRowsByRange(currentRowIdx, rowIdx, notify: false);
+    if (_currentSelectingPosition != null && _selectingMode.isRow) {
+      setCurrentSelectingRowsByRange(
+        currentRowIdx,
+        _currentSelectingPosition.rowIdx,
+        notify: false,
+      );
     }
 
     if (notify) {
@@ -258,8 +263,7 @@ mixin SelectingState implements IPlutoState {
       return;
     } else {
       setCurrentSelectingPosition(
-        columnIdx: cellPosition.columnIdx,
-        rowIdx: cellPosition.rowIdx,
+        cellPosition: cellPosition,
         notify: notify,
       );
     }
@@ -320,7 +324,12 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    setCurrentSelectingPosition(columnIdx: columnIdx, rowIdx: rowIdx);
+    setCurrentSelectingPosition(
+      cellPosition: PlutoCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
+    );
   }
 
   void setCurrentSelectingRowsByRange(int from, int to, {notify: true}) {

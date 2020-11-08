@@ -246,7 +246,11 @@ class _CellWidgetState extends State<CellWidget>
                 widget.stateManager.columnIndex(widget.column);
 
             widget.stateManager.setCurrentSelectingPosition(
-                columnIdx: columnIdx, rowIdx: widget.rowIdx);
+              cellPosition: PlutoCellPosition(
+                columnIdx: columnIdx,
+                rowIdx: widget.rowIdx,
+              ),
+            );
           } else if (widget.stateManager.keyPressed.ctrl) {
             widget.stateManager.toggleSelectingRow(widget.rowIdx);
           }

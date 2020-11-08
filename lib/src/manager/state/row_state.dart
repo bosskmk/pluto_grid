@@ -209,8 +209,10 @@ mixin RowState implements IPlutoState {
     if (currentSelectingPosition != null &&
         rowIdx <= currentSelectingPosition.rowIdx) {
       setCurrentSelectingPosition(
-        columnIdx: currentSelectingPosition.columnIdx,
-        rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        cellPosition: PlutoCellPosition(
+          columnIdx: currentSelectingPosition.columnIdx,
+          rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        ),
         notify: false,
       );
     }
@@ -260,8 +262,10 @@ mixin RowState implements IPlutoState {
     /// Update currentSelectingPosition
     if (currentSelectingPosition != null) {
       setCurrentSelectingPosition(
-        columnIdx: currentSelectingPosition.columnIdx,
-        rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        cellPosition: PlutoCellPosition(
+          columnIdx: currentSelectingPosition.columnIdx,
+          rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        ),
         notify: false,
       );
     }

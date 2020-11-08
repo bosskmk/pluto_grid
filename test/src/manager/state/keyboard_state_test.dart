@@ -387,7 +387,12 @@ void main() {
 
         expect(stateManager.isEditing, isFalse);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 0);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 2,
+            rowIdx: 0,
+          ),
+        );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 2);
@@ -439,7 +444,12 @@ void main() {
 
         expect(stateManager.isEditing, isFalse);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 0);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 2,
+            rowIdx: 0,
+          ),
+        );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 2);
@@ -585,7 +595,12 @@ void main() {
 
         expect(stateManager.isEditing, isFalse);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 3, rowIdx: 2);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 3,
+            rowIdx: 2,
+          ),
+        );
 
         expect(stateManager.currentSelectingPosition.columnIdx, 3);
         expect(stateManager.currentSelectingPosition.rowIdx, 2);
@@ -635,7 +650,7 @@ void main() {
 
     withColumnAndRows.test(
       'rowIdx 가 0 보다 작으면 0번 행이 선택 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setCurrentCell(stateManager.rows[3].cells['column3'], 3);
 
         expect(stateManager.currentCell, isNotNull);
@@ -652,7 +667,7 @@ void main() {
 
     withColumnAndRows.test(
       'rowIdx 가 0 보다 크면 마지막 행이 선택 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setCurrentCell(stateManager.rows[3].cells['column3'], 3);
 
         expect(stateManager.currentCell, isNotNull);
@@ -686,12 +701,17 @@ void main() {
 
     withColumnAndRows.test(
       '선택 된 셀이 있으면 컬럼 위치가 유지되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setCurrentCell(stateManager.rows[3].cells['column3'], 0);
 
         expect(stateManager.currentCell, isNotNull);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 5, rowIdx: 3);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 5,
+            rowIdx: 3,
+          ),
+        );
 
         expect(stateManager.currentSelectingPosition.columnIdx, 5);
         expect(stateManager.currentSelectingPosition.rowIdx, 3);

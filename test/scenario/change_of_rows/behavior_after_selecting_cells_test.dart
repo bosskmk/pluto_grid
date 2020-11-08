@@ -45,8 +45,10 @@ void main() {
                     );
 
                     stateManager.setCurrentSelectingPosition(
-                      columnIdx: columnIdxToSelect,
-                      rowIdx: rowIdxToSelect,
+                      cellPosition: PlutoCellPosition(
+                        columnIdx: columnIdxToSelect,
+                        rowIdx: rowIdxToSelect,
+                      ),
                     );
                   },
                 ),

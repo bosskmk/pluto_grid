@@ -766,8 +766,10 @@ void main() {
       final int rowIdxBeforePrependRows = 3;
 
       stateManager.setCurrentSelectingPosition(
-        columnIdx: 2,
-        rowIdx: rowIdxBeforePrependRows,
+        cellPosition: PlutoCellPosition(
+          columnIdx: 2,
+          rowIdx: rowIdxBeforePrependRows,
+        ),
       );
 
       expect(
