@@ -323,12 +323,23 @@ mixin RowState implements IPlutoState {
       resetCurrentState(notify: false);
     }
 
+    Key selectingCellKey;
+
+    if (hasCurrentSelectingPosition) {
+      selectingCellKey = _rows[currentSelectingPosition.rowIdx]
+          .cells
+          .entries
+          .elementAt(currentSelectingPosition.columnIdx)
+          .value.key;
+    }
+
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
     updateCurrentCellPosition(notify: false);
 
-    // todo : update selectingPosition
-    // todo : update currentSelectingRows
+    setCurrentSelectingPositionByCellKey(selectingCellKey, notify: false);
+
+    currentSelectingRows?.removeWhere((row) => removeKeys.contains(row.key));
 
     if (notify) {
       notifyListeners();

@@ -36,16 +36,17 @@ abstract class ISelectingState {
 
   void setSelectingMode(PlutoSelectingMode mode);
 
-  void clearCurrentSelectingPosition({bool notify = true});
-
-  void clearCurrentSelectingRows({bool notify = true});
-
   void setAllCurrentSelecting();
 
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
     int columnIdx,
     int rowIdx,
+    bool notify = true,
+  });
+
+  void setCurrentSelectingPositionByCellKey(
+    Key cellKey, {
     bool notify = true,
   });
 
@@ -57,11 +58,11 @@ abstract class ISelectingState {
   /// [to] rowIdx of [rows].
   void setCurrentSelectingRowsByRange(int from, int to);
 
-  void toggleSelectingRow(int rowIdx);
+  void clearCurrentSelectingPosition({bool notify = true});
 
-  /// The action that is selected in the Select dialog
-  /// and processed after the dialog is closed.
-  void handleAfterSelectingRow(PlutoCell cell, dynamic value);
+  void clearCurrentSelectingRows({bool notify = true});
+
+  void toggleSelectingRow(int rowIdx);
 
   bool isSelectingInteraction();
 
@@ -69,6 +70,10 @@ abstract class ISelectingState {
 
   /// Whether the cell is the currently multi selected cell.
   bool isSelectedCell(PlutoCell cell, PlutoColumn column, int rowIdx);
+
+  /// The action that is selected in the Select dialog
+  /// and processed after the dialog is closed.
+  void handleAfterSelectingRow(PlutoCell cell, dynamic value);
 }
 
 mixin SelectingState implements IPlutoState {
@@ -179,30 +184,6 @@ mixin SelectingState implements IPlutoState {
     notifyListeners();
   }
 
-  void clearCurrentSelectingPosition({bool notify = true}) {
-    if (_currentSelectingPosition == null) {
-      return;
-    }
-
-    _currentSelectingPosition = null;
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
-  void clearCurrentSelectingRows({bool notify = true}) {
-    if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
-      return;
-    }
-
-    _currentSelectingRows = [];
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
   void setAllCurrentSelecting() {
     if (_rows == null || _rows.length < 1) {
       return;
@@ -245,11 +226,42 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    _currentSelectingPosition =
+    final cellPosition =
         PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
+
+    if (isInvalidCellPosition(cellPosition)) {
+      return;
+    }
+
+    _currentSelectingPosition = cellPosition;
 
     if (_selectingMode.isRow) {
       setCurrentSelectingRowsByRange(currentRowIdx, rowIdx, notify: false);
+    }
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void setCurrentSelectingPositionByCellKey(
+    Key cellKey, {
+    bool notify = true,
+  }) {
+    if (cellKey == null) {
+      return;
+    }
+
+    final cellPosition = cellPositionByCellKey(cellKey);
+
+    if (cellPosition == null) {
+      return;
+    } else {
+      setCurrentSelectingPosition(
+        columnIdx: cellPosition.columnIdx,
+        rowIdx: cellPosition.rowIdx,
+        notify: notify,
+      );
     }
 
     if (notify) {
@@ -331,6 +343,30 @@ mixin SelectingState implements IPlutoState {
     }
   }
 
+  void clearCurrentSelectingPosition({bool notify = true}) {
+    if (_currentSelectingPosition == null) {
+      return;
+    }
+
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void clearCurrentSelectingRows({bool notify = true}) {
+    if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
+      return;
+    }
+
+    _currentSelectingRows = [];
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
   void toggleSelectingRow(int rowIdx, {notify: true}) {
     if (!_selectingMode.isRow) {
       return;
@@ -354,18 +390,6 @@ mixin SelectingState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
-  }
-
-  void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
-    changeCellValue(cell._key, value, notify: false);
-
-    if (configuration.enableMoveDownAfterSelecting) {
-      moveCurrentCell(MoveDirection.Down, notify: false);
-
-      setEditing(true, notify: false);
-    }
-
-    notifyListeners();
   }
 
   bool isSelectingInteraction() {
@@ -478,6 +502,18 @@ mixin SelectingState implements IPlutoState {
     } else {
       throw ('selectingMode is not handled');
     }
+  }
+
+  void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
+    changeCellValue(cell._key, value, notify: false);
+
+    if (configuration.enableMoveDownAfterSelecting) {
+      moveCurrentCell(MoveDirection.Down, notify: false);
+
+      setEditing(true, notify: false);
+    }
+
+    notifyListeners();
   }
 
   String _selectingTextFromSelectingRows() {
