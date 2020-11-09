@@ -113,7 +113,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = [];
+    rows = DummyData.rowsByColumns(length: 30, columns: columns);
   }
 
   void handleAddRowButton({int count}) {
