@@ -186,7 +186,12 @@ void main() {
 
       stateManager.setCurrentCell(currentCell, 2);
 
-      stateManager.setCurrentSelectingPosition(columnIdx: 6, rowIdx: 4);
+      stateManager.setCurrentSelectingPosition(
+        cellPosition: PlutoCellPosition(
+          columnIdx: 6,
+          rowIdx: 4,
+        ),
+      );
 
       // when
       stateManager.pasteCellValue([

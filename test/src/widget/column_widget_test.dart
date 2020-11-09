@@ -489,7 +489,7 @@ void main() {
     aColumn.test('should be called moveColumn. ', (tester) async {
       await tester.drag(find.byType(Draggable), Offset(50.0, 0.0));
 
-      verify(stateManager.moveColumn(column.key, 50.0));
+      verify(stateManager.moveColumn(column.key, 50.0 + (column.width / 2)));
     });
   });
 

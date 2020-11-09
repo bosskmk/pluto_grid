@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,8 @@ part './src/widget/cells/text_cell_widget.dart';
 part './src/widget/cells/time_cell_widget.dart';
 
 part './src/widget/column_widget.dart';
+
+part './src/widget/pluto_scrollbar.dart';
 
 part './src/widget/row_widget.dart';
 

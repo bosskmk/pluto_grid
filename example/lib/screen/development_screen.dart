@@ -1,24 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../dummy_data/development.dart';
-import '../../widget/pluto_example_button.dart';
-import '../../widget/pluto_example_screen.dart';
+import '../dummy_data/development.dart';
 
-class CellRendererScreen extends StatefulWidget {
-  static const routeName = 'feature/cell-renderer';
+class DevelopmentScreen extends StatefulWidget {
+  static const routeName = 'development';
 
   @override
-  _CellRendererScreenState createState() => _CellRendererScreenState();
+  _DevelopmentScreenState createState() => _DevelopmentScreenState();
 }
 
-class _CellRendererScreenState extends State<CellRendererScreen> {
+class _DevelopmentScreenState extends State<DevelopmentScreen> {
   List<PlutoColumn> columns;
 
   List<PlutoRow> rows;
 
   PlutoStateManager stateManager;
+
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
 
   @override
   void initState() {
@@ -43,7 +42,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                 onPressed: () {
                   rendererContext.stateManager.insertRows(
                     rendererContext.rowIdx,
-                    [rendererContext.stateManager.getNewRow()],
+                    rendererContext.stateManager.getNewRows(count: 3),
                   );
                 },
                 iconSize: 18,
@@ -64,7 +63,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext.row.cells[rendererContext.column.field].value,
+                  '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field].value.toString()})',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -114,23 +113,39 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 15, columns: columns);
+    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+  }
+
+  void handleAddRowButton({int count}) {
+    final List<PlutoRow> rows = count == null
+        ? [DummyData.rowByColumns(columns)]
+        : DummyData.rowsByColumns(length: count, columns: columns);
+
+    stateManager.prependRows(rows);
+  }
+
+  void handleRemoveCurrentRowButton() {
+    stateManager.removeCurrentRow();
+  }
+
+  void handleRemoveSelectedRowsButton() {
+    stateManager.removeRows(stateManager.currentSelectingRows);
+  }
+
+  void setGridSelectingMode(PlutoSelectingMode mode) {
+    if (gridSelectingMode == mode) {
+      return;
+    }
+
+    setState(() {
+      gridSelectingMode = mode;
+      stateManager.setSelectingMode(mode);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlutoExampleScreen(
-      title: 'Cell renderer',
-      topTitle: 'Cell renderer',
-      topContents: [
-        Text('You can change the widget of the cell through the renderer.'),
-      ],
-      topButtons: [
-        PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_renderer_screen.dart',
-        ),
-      ],
+    return Scaffold(
       body: PlutoGrid(
         columns: columns,
         rows: rows,
@@ -138,11 +153,31 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
-
           stateManager = event.stateManager;
+          stateManager.setSelectingMode(gridSelectingMode);
         },
-        // configuration: PlutoConfiguration.dark(),
+        createHeader: (PlutoStateManager stateManager) {
+          return SingleChildScrollView(
+            child: Container(
+              height: stateManager.headerHeight,
+              child: Row(
+                children: [
+                  FlatButton(
+                    child: Text('Add 10'),
+                    onPressed: () {
+                      handleAddRowButton(count: 10);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        configuration: PlutoConfiguration(
+          scrollbarConfig: PlutoScrollbarConfig(
+            isAlwaysShown: true,
+          ),
+        ),
       ),
     );
   }

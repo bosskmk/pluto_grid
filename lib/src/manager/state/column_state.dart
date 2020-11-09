@@ -49,6 +49,10 @@ abstract class IColumnState {
   /// Column field name of currently selected cell.
   String get currentColumnField;
 
+  bool get hasSortedColumn;
+
+  PlutoColumn get getSortedColumn;
+
   /// Column Index List by Fixed Column
   List<int> columnIndexesByShowFixed();
 
@@ -78,6 +82,12 @@ abstract class IColumnState {
 
   /// Change column size
   void resizeColumn(Key columnKey, double offset);
+
+  void sortAscending(PlutoColumn column);
+
+  void sortDescending(PlutoColumn column);
+
+  void sortBySortIdx();
 }
 
 mixin ColumnState implements IPlutoState {
@@ -173,6 +183,18 @@ mixin ColumnState implements IPlutoState {
         orElse: () => null);
   }
 
+  bool get hasSortedColumn =>
+      _columns.firstWhere(
+        (element) => !element.sort.isNone,
+        orElse: () => null,
+      ) !=
+      null;
+
+  PlutoColumn get getSortedColumn => _columns.firstWhere(
+        (element) => !element.sort.isNone,
+        orElse: () => null,
+      );
+
   List<int> columnIndexesByShowFixed() {
     return showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
   }
@@ -208,33 +230,23 @@ mixin ColumnState implements IPlutoState {
       PlutoColumn column = _columns[i];
 
       if (column._key == columnKey) {
-        final field = column.field;
-
         if (column.sort.isNone) {
           column.sort = PlutoColumnSort.Ascending;
 
-          _rows.sort((a, b) =>
-              column.type.compare(a.cells[field].value, b.cells[field].value));
+          sortAscending(column);
         } else if (column.sort.isAscending) {
           column.sort = PlutoColumnSort.Descending;
 
-          _rows.sort((b, a) =>
-              column.type.compare(a.cells[field].value, b.cells[field].value));
+          sortDescending(column);
         } else {
           column.sort = PlutoColumnSort.None;
 
-          _rows.sort((a, b) {
-            if (a.sortIdx == null || b.sortIdx == null) return 0;
-
-            return a.sortIdx.compareTo(b.sortIdx);
-          });
+          sortBySortIdx();
         }
       } else {
         column.sort = PlutoColumnSort.None;
       }
     }
-
-    updateCurrentRowIdx(notify: false);
 
     updateCurrentCellPosition(notify: false);
 
@@ -360,9 +372,7 @@ mixin ColumnState implements IPlutoState {
       if (column._key == columnKey) {
         final setWidth = column.width + offset;
 
-        column.width = setWidth > column.minWidth
-            ? setWidth
-            : column.minWidth;
+        column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
         break;
       }
     }
@@ -370,5 +380,37 @@ mixin ColumnState implements IPlutoState {
     resetShowFixedColumn(notify: false);
 
     notifyListeners();
+  }
+
+  void sortAscending(PlutoColumn column) {
+    _rows.sort(
+      (a, b) => column.type.compare(
+        a.cells[column.field].value,
+        b.cells[column.field].value,
+      ),
+    );
+  }
+
+  void sortDescending(PlutoColumn column) {
+    _rows.sort(
+      (b, a) => column.type.compare(
+        a.cells[column.field].value,
+        b.cells[column.field].value,
+      ),
+    );
+  }
+
+  void sortBySortIdx() {
+    _rows.sort((a, b) {
+      if (a.sortIdx == null || b.sortIdx == null) {
+        if (a.sortIdx == null && b.sortIdx == null) {
+          return 0;
+        }
+
+        return a.sortIdx == null ? -1 : 1;
+      }
+
+      return a.sortIdx.compareTo(b.sortIdx);
+    });
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'constants/pluto_colors.dart';
+import 'screen/development_screen.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
 import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : HomeScreen.routeName,
+      initialRoute:
+          kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
@@ -60,6 +62,8 @@ class MyApp extends StatelessWidget {
         GridAsPopupScreen.routeName: (context) => GridAsPopupScreen(),
         ListingModeScreen.routeName: (context) => ListingModeScreen(),
         DarkModeScreen.routeName: (context) => DarkModeScreen(),
+        // only development
+        DevelopmentScreen.routeName: (context) => DevelopmentScreen(),
       },
       theme: ThemeData(
         primaryColor: PlutoColors.primaryColor,

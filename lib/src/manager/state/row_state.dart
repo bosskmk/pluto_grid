@@ -27,11 +27,6 @@ abstract class IRowState {
     int count = 1,
   });
 
-  void setCurrentRowIdx(
-    int rowIdx, {
-    bool notify: true,
-  });
-
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
     bool increase = true,
@@ -44,15 +39,7 @@ abstract class IRowState {
     bool notify: true,
   });
 
-  /// set currentRowIdx to null
-  void clearCurrentRowIdx({
-    bool notify: true,
-  });
-
-  /// Update RowIdx to Current Cell.
-  void updateCurrentRowIdx({
-    bool notify: true,
-  });
+  void insertRows(int rowIdx, List<PlutoRow> rows);
 
   void prependNewRows({
     int count = 1,
@@ -83,9 +70,13 @@ mixin RowState implements IPlutoState {
 
   List<PlutoRow> _rows;
 
-  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked);
+  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked).toList(
+        growable: false,
+      );
 
-  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked);
+  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked).toList(
+        growable: false,
+      );
 
   bool get hasCheckedRow =>
       _rows.firstWhere(
@@ -101,16 +92,14 @@ mixin RowState implements IPlutoState {
       ) !=
       null;
 
-  int get currentRowIdx => _currentRowIdx;
-
-  int _currentRowIdx;
+  int get currentRowIdx => currentCellPosition?.rowIdx;
 
   PlutoRow get currentRow {
-    if (_currentRowIdx == null) {
+    if (currentRowIdx == null) {
       return null;
     }
 
-    return _rows[_currentRowIdx];
+    return _rows[currentRowIdx];
   }
 
   PlutoRow getRowByIdx(int rowIdx) {
@@ -149,21 +138,6 @@ mixin RowState implements IPlutoState {
     return rows;
   }
 
-  void setCurrentRowIdx(
-    int rowIdx, {
-    bool notify: true,
-  }) {
-    if (_currentRowIdx == rowIdx) {
-      return;
-    }
-
-    _currentRowIdx = rowIdx;
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
   List<PlutoRow> setSortIdxOfRows(
     List<PlutoRow> rows, {
     bool increase = true,
@@ -185,7 +159,10 @@ mixin RowState implements IPlutoState {
     bool flag, {
     bool notify: true,
   }) {
-    final findRow = _rows.firstWhere((element) => element.key == row.key);
+    final findRow = _rows.firstWhere(
+      (element) => element.key == row.key,
+      orElse: () => null,
+    );
 
     if (findRow == null) {
       return;
@@ -198,40 +175,67 @@ mixin RowState implements IPlutoState {
     }
   }
 
-  void clearCurrentRowIdx({
-    bool notify: true,
-  }) {
-    setCurrentRowIdx(null, notify: notify);
-  }
-
-  void updateCurrentRowIdx({
-    bool notify: true,
-  }) {
-    if (currentCell == null) {
-      _currentRowIdx = null;
-
-      if (notify) {
-        notifyListeners();
-      }
-
+  void insertRows(int rowIdx, List<PlutoRow> rows) {
+    if (rows == null || rows.isEmpty) {
       return;
     }
 
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
+    if (rowIdx < 0 || _rows.length < rowIdx) {
+      return;
+    } else if (rowIdx == 0) {
+      prependRows(rows);
+      return;
+    } else if (_rows.length == rowIdx) {
+      appendRows(rows);
+      return;
+    }
 
-        if (_rows[rowIdx].cells[field]._key == currentCell.key) {
-          _currentRowIdx = rowIdx;
+    if (hasSortedColumn) {
+      final int sortIdx = _rows[rowIdx].sortIdx;
+
+      PlutoStateManager.initializeRows(
+        _columns,
+        rows,
+        start: sortIdx,
+      );
+
+      for (var i = 0; i < _rows.length; i += 1) {
+        if (sortIdx <= _rows[i].sortIdx) {
+          _rows[i].sortIdx = _rows[i].sortIdx + rows.length;
         }
       }
+
+      _rows.insertAll(rowIdx, rows);
+    } else {
+      _rows.insertAll(rowIdx, rows);
+
+      PlutoStateManager.initializeRows(
+        _columns,
+        _rows,
+        forceApplySortIdx: true,
+      );
     }
 
-    if (notify) {
-      notifyListeners();
+    /// Update currentRowIdx
+    if (currentCell != null) {
+      updateCurrentCellPosition(notify: false);
+
+      // todo : whether to apply scrolling.
     }
+
+    /// Update currentSelectingPosition
+    if (currentSelectingPosition != null &&
+        rowIdx <= currentSelectingPosition.rowIdx) {
+      setCurrentSelectingPosition(
+        cellPosition: PlutoCellPosition(
+          columnIdx: currentSelectingPosition.columnIdx,
+          rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        ),
+        notify: false,
+      );
+    }
+
+    notifyListeners();
   }
 
   void prependNewRows({
@@ -245,13 +249,14 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start =
-        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(min) - 1 : 0;
+    final start = (_rows.length > 0
+            ? _rows.map((row) => row.sortIdx ?? 0).reduce(min)
+            : 0) -
+        rows.length;
 
     PlutoStateManager.initializeRows(
       _columns,
       rows,
-      increase: false,
       start: start,
     );
 
@@ -259,12 +264,10 @@ mixin RowState implements IPlutoState {
 
     /// Update currentRowIdx
     if (currentCell != null) {
-      _currentRowIdx = rows.length + _currentRowIdx;
-
       setCurrentCellPosition(
         PlutoCellPosition(
           columnIdx: currentCellPosition.columnIdx,
-          rowIdx: currentRowIdx,
+          rowIdx: rows.length + currentRowIdx,
         ),
         notify: false,
       );
@@ -277,8 +280,10 @@ mixin RowState implements IPlutoState {
     /// Update currentSelectingPosition
     if (currentSelectingPosition != null) {
       setCurrentSelectingPosition(
-        columnIdx: currentSelectingPosition.columnIdx,
-        rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        cellPosition: PlutoCellPosition(
+          columnIdx: currentSelectingPosition.columnIdx,
+          rowIdx: rows.length + currentSelectingPosition.rowIdx,
+        ),
         notify: false,
       );
     }
@@ -297,8 +302,9 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start =
-        _rows.length > 0 ? _rows.map((row) => row.sortIdx).reduce(max) + 1 : 0;
+    final start = _rows.length > 0
+        ? _rows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
+        : 0;
 
     PlutoStateManager.initializeRows(
       _columns,
@@ -312,11 +318,11 @@ mixin RowState implements IPlutoState {
   }
 
   void removeCurrentRow() {
-    if (_currentRowIdx == null) {
+    if (currentRowIdx == null) {
       return;
     }
 
-    _rows.removeAt(_currentRowIdx);
+    _rows.removeAt(currentRowIdx);
 
     resetCurrentState(notify: false);
 
@@ -333,17 +339,30 @@ mixin RowState implements IPlutoState {
 
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
 
-    if (_currentRowIdx != null &&
-        _rows.length > _currentRowIdx &&
-        removeKeys.contains(_rows[_currentRowIdx].key)) {
+    if (currentRowIdx != null &&
+        _rows.length > currentRowIdx &&
+        removeKeys.contains(_rows[currentRowIdx].key)) {
       resetCurrentState(notify: false);
+    }
+
+    Key selectingCellKey;
+
+    if (hasCurrentSelectingPosition) {
+      selectingCellKey = _rows[currentSelectingPosition.rowIdx]
+          .cells
+          .entries
+          .elementAt(currentSelectingPosition.columnIdx)
+          .value
+          .key;
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
 
-    updateCurrentRowIdx(notify: false);
-
     updateCurrentCellPosition(notify: false);
+
+    setCurrentSelectingPositionByCellKey(selectingCellKey, notify: false);
+
+    currentSelectingRows?.removeWhere((row) => removeKeys.contains(row.key));
 
     if (notify) {
       notifyListeners();
@@ -384,8 +403,6 @@ mixin RowState implements IPlutoState {
     _rows.forEach((element) {
       element.sortIdx = sortIdx++;
     });
-
-    updateCurrentRowIdx(notify: false);
 
     updateCurrentCellPosition(notify: false);
 

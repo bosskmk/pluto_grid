@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_on_change_listener.dart';
 
 void main() {
   group('currentCellPosition', () {
@@ -139,6 +141,153 @@ void main() {
       // 3번 째 컬럼을 왼쪽으로 고정 후 넓이가 충분하여 첫번 째 컬럼이 된다.
       expect(currentCellPosition.columnIdx, 0);
     });
+  });
+
+  group('setCurrentCellPosition', () {
+    testWidgets(
+      'cellPosition 이 currentCellPosition 과 같다면 '
+      'currentCellPosition 이 업데이트 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('body', count: 10, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        expect(stateManager.currentCellPosition, isNull);
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+        );
+
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+
+        // when
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+        );
+
+        // then
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      'cellPosition 의 columnIdx 가 currentCellPosition 의 columnIdx 와 다르면 '
+      'currentCellPosition 이 업데이트 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('body', count: 10, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        expect(stateManager.currentCellPosition, isNull);
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+        );
+
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+
+        // when
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 1, rowIdx: 1),
+        );
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 2, rowIdx: 1),
+        );
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 2, rowIdx: 2),
+        );
+
+
+        // then
+        verify(listener.onChangeVoidNoParamListener()).called(4);
+      },
+    );
+
+    testWidgets(
+      'cellPosition 의 columnIdx 가 currentCellPosition 의 columnIdx 와 다르지만 '
+      'column 의 index 범위가 아니면 '
+      'currentCellPosition 이 업데이트 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('body', count: 10, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        expect(stateManager.currentCellPosition, isNull);
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+        );
+
+        expect(stateManager.currentCellPosition.columnIdx, 0);
+        expect(stateManager.currentCellPosition.rowIdx, 1);
+
+        // when
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: -1, rowIdx: 1),
+        );
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: columns.length, rowIdx: 1),
+        );
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 1, rowIdx: -1),
+        );
+
+        stateManager.setCurrentCellPosition(
+          PlutoCellPosition(columnIdx: 1, rowIdx: rows.length),
+        );
+
+        // then
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
   });
 
   group('cellPositionByCellKey', () {
