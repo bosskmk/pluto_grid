@@ -31,10 +31,25 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
         type: PlutoColumnType.text(),
         enableRowDrag: true,
         enableRowChecked: true,
-        minWidth: 135,
+        width: 250,
+        minWidth: 175,
         renderer: (rendererContext) {
           return Row(
             children: [
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                ),
+                onPressed: () {
+                  rendererContext.stateManager.insertRows(
+                    rendererContext.rowIdx,
+                    [rendererContext.stateManager.getNewRow()],
+                  );
+                },
+                iconSize: 18,
+                color: Colors.green,
+                padding: EdgeInsets.all(0),
+              ),
               IconButton(
                 icon: Icon(
                   Icons.remove_circle_outlined,

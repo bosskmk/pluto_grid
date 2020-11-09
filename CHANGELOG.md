@@ -1,3 +1,10 @@
+## [1.0.0-pre.2] - 2020. 11. 09
+
+* Add insertRows to PlutoStateManager.
+* Remove setCurrentRowIdx, clearCurrentRowIdx, updateCurrentRowIdx from PlutoStateManager.
+* Change the parameter of setCurrentSelectingPosition in PlutoStateManager.
+* Add draggable scrollbar.
+
 ## [1.0.0-pre.1] - 2020. 11. 05
 
 ##### Breaking changes:

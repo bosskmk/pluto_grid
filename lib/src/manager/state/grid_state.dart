@@ -165,8 +165,6 @@ mixin GridState implements IPlutoState {
   }
 
   void resetCurrentState({notify = true}) {
-    clearCurrentRowIdx(notify: false);
-
     clearCurrentCell(notify: false);
 
     clearCurrentSelectingPosition(notify: false);
