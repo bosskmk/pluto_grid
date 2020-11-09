@@ -78,45 +78,46 @@ class _BodyRowsState extends State<BodyRows> {
 
   @override
   Widget build(BuildContext context) {
-    final body = SingleChildScrollView(
-      controller: horizontalScroll,
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        width: _width,
-        child: ListView.builder(
-          controller: verticalScroll,
-          scrollDirection: Axis.vertical,
-          itemCount: _rows.length,
-          itemExtent: PlutoDefaultSettings.rowTotalHeight,
-          itemBuilder: (ctx, i) {
-            return RowWidget(
-              key: ValueKey('body_row_${_rows[i]._key}'),
-              stateManager: widget.stateManager,
-              rowIdx: i,
-              row: _rows[i],
-              columns: _columns,
-            );
-          },
+    return PlutoScrollbar(
+      verticalController:
+          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+              ? verticalScroll
+              : null,
+      horizontalController:
+          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+              ? horizontalScroll
+              : null,
+      isAlwaysShown:
+          widget.stateManager.configuration.scrollbarConfig.isAlwaysShown,
+      thickness:
+          widget.stateManager.configuration.scrollbarConfig.scrollbarThickness,
+      thicknessWhileDragging: widget.stateManager.configuration.scrollbarConfig
+          .scrollbarThicknessWhileDragging,
+      radius: widget.stateManager.configuration.scrollbarConfig.scrollbarRadius,
+      radiusWhileDragging: widget.stateManager.configuration.scrollbarConfig
+          .scrollbarRadiusWhileDragging,
+      child: SingleChildScrollView(
+        controller: horizontalScroll,
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: _width,
+          child: ListView.builder(
+            controller: verticalScroll,
+            scrollDirection: Axis.vertical,
+            itemCount: _rows.length,
+            itemExtent: PlutoDefaultSettings.rowTotalHeight,
+            itemBuilder: (ctx, i) {
+              return RowWidget(
+                key: ValueKey('body_row_${_rows[i]._key}'),
+                stateManager: widget.stateManager,
+                rowIdx: i,
+                row: _rows[i],
+                columns: _columns,
+              );
+            },
+          ),
         ),
       ),
-    );
-
-    if (widget.stateManager.configuration.scrollbarConfig.draggableScrollbar) {
-      return CupertinoScrollbar(
-          child: body,
-          isAlwaysShown: widget.stateManager.configuration.scrollbarConfig.isAlwaysShown,
-          controller: verticalScroll,
-          thickness: widget.stateManager.configuration.scrollbarConfig.scrollbarThickness,
-          thicknessWhileDragging: widget
-              .stateManager.configuration.scrollbarConfig.scrollbarThicknessWhileDragging,
-          radius: widget.stateManager.configuration.scrollbarConfig.scrollbarRadius,
-          radiusWhileDragging: widget
-              .stateManager.configuration.scrollbarConfig.scrollbarRadiusWhileDragging);
-    }
-    return Scrollbar(
-      thickness: widget.stateManager.configuration.scrollbarConfig.scrollbarThickness,
-      radius: widget.stateManager.configuration.scrollbarConfig.scrollbarRadius,
-      child: body,
     );
   }
 }
