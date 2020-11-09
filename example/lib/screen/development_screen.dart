@@ -23,9 +23,95 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   void initState() {
     super.initState();
 
-    final dummyData = DummyData(10, 100);
+    columns = [
+      PlutoColumn(
+        title: 'column1',
+        field: 'column1',
+        type: PlutoColumnType.text(),
+        enableRowDrag: true,
+        enableRowChecked: true,
+        width: 250,
+        minWidth: 175,
+        renderer: (rendererContext) {
+          return Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                ),
+                onPressed: () {
+                  rendererContext.stateManager.insertRows(
+                    rendererContext.rowIdx,
+                    [rendererContext.stateManager.getNewRow()],
+                  );
+                },
+                iconSize: 18,
+                color: Colors.green,
+                padding: EdgeInsets.all(0),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.remove_circle_outlined,
+                ),
+                onPressed: () {
+                  rendererContext.stateManager
+                      .removeRows([rendererContext.row]);
+                },
+                iconSize: 18,
+                color: Colors.red,
+                padding: EdgeInsets.all(0),
+              ),
+              Expanded(
+                child: Text(
+                  rendererContext.row.cells[rendererContext.column.field].value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+      PlutoColumn(
+        title: 'column2',
+        field: 'column2',
+        type: PlutoColumnType.select(['red', 'blue', 'green']),
+        renderer: (rendererContext) {
+          Color textColor = Colors.black;
 
-    columns = dummyData.columns;
+          if (rendererContext.cell.value == 'red') {
+            textColor = Colors.red;
+          } else if (rendererContext.cell.value == 'blue') {
+            textColor = Colors.blue;
+          } else if (rendererContext.cell.value == 'green') {
+            textColor = Colors.green;
+          }
+
+          return Text(
+            rendererContext.cell.value,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        },
+      ),
+      PlutoColumn(
+        title: 'column3',
+        field: 'column3',
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'column4',
+        field: 'column4',
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'column5',
+        field: 'column5',
+        type: PlutoColumnType.text(),
+      ),
+    ];
 
     rows = [];
   }

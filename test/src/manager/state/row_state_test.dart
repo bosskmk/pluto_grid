@@ -1399,6 +1399,57 @@ void main() {
         verifyNever(listener.onChangeVoidNoParamListener());
       },
     );
+
+    testWidgets(
+      'createHeader 가 있는 상태에서 1번 row 를 0번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+          createHeader: (PlutoStateManager stateManager) => Text('header'),
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows[1].key;
+
+        // header size + column size + row 0(중간)
+        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+
+        stateManager.moveRows(
+          [rows[1]],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[0].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
   });
 
   group('toggleAllRowChecked', () {

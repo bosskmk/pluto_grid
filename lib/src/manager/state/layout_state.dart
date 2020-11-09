@@ -122,7 +122,9 @@ mixin LayoutState implements IPlutoState {
 
   double get rowsTopOffset => headerHeight + columnHeight;
 
-  double get bodyTopOffset => gridGlobalOffset.dy +
+  double get bodyTopOffset =>
+      gridGlobalOffset.dy +
+      headerHeight +
       PlutoDefaultSettings.gridBorderWidth +
       PlutoDefaultSettings.rowTotalHeight;
 
