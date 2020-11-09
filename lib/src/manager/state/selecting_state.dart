@@ -230,11 +230,8 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    if (isInvalidCellPosition(cellPosition)) {
-      return;
-    }
-
-    _currentSelectingPosition = cellPosition;
+    _currentSelectingPosition =
+        isInvalidCellPosition(cellPosition) ? null : cellPosition;
 
     if (_currentSelectingPosition != null && _selectingMode.isRow) {
       setCurrentSelectingRowsByRange(
@@ -257,20 +254,10 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    final cellPosition = cellPositionByCellKey(cellKey);
-
-    if (cellPosition == null) {
-      return;
-    } else {
-      setCurrentSelectingPosition(
-        cellPosition: cellPosition,
-        notify: notify,
-      );
-    }
-
-    if (notify) {
-      notifyListeners();
-    }
+    setCurrentSelectingPosition(
+      cellPosition: cellPositionByCellKey(cellKey),
+      notify: notify,
+    );
   }
 
   void setCurrentSelectingPositionWithOffset(Offset offset) {

@@ -15,13 +15,13 @@ void main() {
   PlutoStateManager stateManager;
 
   final buildRowsWithSelectingRows = ({
-    int countRows = 10,
+    int numberOfRows = 10,
     int from = 0,
     int to = 0,
   }) {
     // given
     final columns = ColumnHelper.textColumn('header');
-    final rows = RowHelper.count(countRows, columns);
+    final rows = RowHelper.count(numberOfRows, columns);
 
     return PlutoWidgetTestHelper(
       'build with selecting rows.',
@@ -63,7 +63,7 @@ void main() {
 
       final selectRowsFrom1To3 = () {
         return buildRowsWithSelectingRows(
-          countRows: COUNT_TOTAL_ROWS,
+          numberOfRows: COUNT_TOTAL_ROWS,
           from: FROM,
           to: TO,
         );

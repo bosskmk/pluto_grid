@@ -292,7 +292,8 @@ mixin CellState implements IPlutoState {
   }
 
   bool isInvalidCellPosition(PlutoCellPosition cellPosition) {
-    return cellPosition.columnIdx == null ||
+    return cellPosition == null ||
+        cellPosition.columnIdx == null ||
         cellPosition.rowIdx == null ||
         cellPosition.columnIdx < 0 ||
         cellPosition.rowIdx < 0 ||

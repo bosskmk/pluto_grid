@@ -15,15 +15,16 @@ void main() {
   PlutoStateManager stateManager;
 
   final buildRowsWithSelectingCells = ({
-    int countRows = 10,
+    int numberOfRows = 10,
+    int numberOfColumns = 10,
     int columnIdx = 0,
     int rowIdx = 0,
     int columnIdxToSelect = 1,
     int rowIdxToSelect = 0,
   }) {
     // given
-    final columns = ColumnHelper.textColumn('header', count: 10);
-    final rows = RowHelper.count(countRows, columns);
+    final columns = ColumnHelper.textColumn('header', count: numberOfColumns);
+    final rows = RowHelper.count(numberOfRows, columns);
 
     return PlutoWidgetTestHelper(
       'build with selecting cells.',
@@ -78,7 +79,7 @@ void main() {
 
     final selectCells = () {
       return buildRowsWithSelectingCells(
-        countRows: COUNT_TOTAL_ROWS,
+        numberOfRows: COUNT_TOTAL_ROWS,
         columnIdx: CURRENT_COLUMN_IDX,
         rowIdx: CURRENT_ROW_IDX,
         columnIdxToSelect: COLUMN_IDX_TO_SELECT,
@@ -133,6 +134,43 @@ void main() {
 
         expect(stateManager.currentSelectingPosition.columnIdx, 1);
         expect(stateManager.currentSelectingPosition.rowIdx, 1);
+      },
+    );
+  });
+
+  group('전체 셀을 선택', () {
+    const COUNT_TOTAL_ROWS = 10;
+    const COUNT_TOTAL_COLUMNS = 10;
+    const CURRENT_COLUMN_IDX = 0;
+    const CURRENT_ROW_IDX = 0;
+    const COLUMN_IDX_TO_SELECT = 9;
+    const ROW_IDX_TO_SELECT = 9;
+
+    final selectCells = () {
+      return buildRowsWithSelectingCells(
+        numberOfRows: COUNT_TOTAL_ROWS,
+        numberOfColumns: COUNT_TOTAL_COLUMNS,
+        columnIdx: CURRENT_COLUMN_IDX,
+        rowIdx: CURRENT_ROW_IDX,
+        columnIdxToSelect: COLUMN_IDX_TO_SELECT,
+        rowIdxToSelect: ROW_IDX_TO_SELECT,
+      );
+    };
+
+    selectCells().test(
+      '선택 된 행을 마지막 행부터 차례대로 삭제.',
+      (tester) async {
+        expect(stateManager.rows.length, 10);
+
+        final getLastRow = () {
+          return stateManager.rows.last;
+        };
+
+        stateManager.removeRows([getLastRow()]);
+        expect(stateManager.rows.length, 9);
+
+        stateManager.removeRows([getLastRow()]);
+        expect(stateManager.rows.length, 8);
       },
     );
   });
