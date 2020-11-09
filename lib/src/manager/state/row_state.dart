@@ -334,7 +334,8 @@ mixin RowState implements IPlutoState {
           .cells
           .entries
           .elementAt(currentSelectingPosition.columnIdx)
-          .value.key;
+          .value
+          .key;
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));
