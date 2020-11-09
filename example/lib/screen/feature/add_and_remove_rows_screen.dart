@@ -25,9 +25,9 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
   void initState() {
     super.initState();
 
-    final dummyDate = DummyData(10, 100);
+    final dummyData = DummyData(10, 100);
 
-    columns = dummyDate.columns;
+    columns = dummyData.columns;
 
     rows = [];
   }
