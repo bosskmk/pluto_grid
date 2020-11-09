@@ -164,8 +164,8 @@ class _ColumnWidgetState extends State<ColumnWidget> {
   Widget _buildDraggable(Widget child) {
     return Draggable(
       onDragEnd: (dragDetails) {
-        widget.stateManager
-            .moveColumn(widget.column._key, dragDetails.offset.dx);
+        widget.stateManager.moveColumn(widget.column._key,
+            dragDetails.offset.dx + (widget.column.width / 2));
       },
       feedback: ShadowContainer(
         width: widget.column.width,

@@ -190,13 +190,31 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    _rows.insertAll(rowIdx, rows);
+    if (hasSortedColumn) {
+      final int sortIdx = _rows[rowIdx].sortIdx;
 
-    PlutoStateManager.initializeRows(
-      _columns,
-      _rows,
-      forceApplySortIdx: true,
-    );
+      PlutoStateManager.initializeRows(
+        _columns,
+        rows,
+        start: sortIdx,
+      );
+
+      for (var i = 0; i < _rows.length; i += 1) {
+        if (sortIdx <= _rows[i].sortIdx) {
+          _rows[i].sortIdx = _rows[i].sortIdx + rows.length;
+        }
+      }
+
+      _rows.insertAll(rowIdx, rows);
+    } else {
+      _rows.insertAll(rowIdx, rows);
+
+      PlutoStateManager.initializeRows(
+        _columns,
+        _rows,
+        forceApplySortIdx: true,
+      );
+    }
 
     /// Update currentRowIdx
     if (currentCell != null) {
@@ -231,14 +249,14 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start = _rows.length > 0
-        ? _rows.map((row) => row.sortIdx ?? 0).reduce(min) - 1
-        : 0;
+    final start = (_rows.length > 0
+            ? _rows.map((row) => row.sortIdx ?? 0).reduce(min)
+            : 0) -
+        rows.length;
 
     PlutoStateManager.initializeRows(
       _columns,
       rows,
-      increase: false,
       start: start,
     );
 
@@ -334,7 +352,8 @@ mixin RowState implements IPlutoState {
           .cells
           .entries
           .elementAt(currentSelectingPosition.columnIdx)
-          .value.key;
+          .value
+          .key;
     }
 
     _rows.removeWhere((row) => removeKeys.contains(row.key));

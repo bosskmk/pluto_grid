@@ -215,23 +215,16 @@ class PlutoScrollbarConfig {
   const PlutoScrollbarConfig({
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
-    Radius scrollbarRadius,
-    Radius scrollbarRadiusWhileDragging,
-    double scrollbarThickness,
-    double scrollbarThicknessWhileDragging,
-  })  : this.scrollbarThickness =
-            scrollbarThickness ?? CupertinoScrollbar.defaultThickness,
-        this.scrollbarRadius =
-            scrollbarRadius ?? CupertinoScrollbar.defaultRadius,
-        this.scrollbarThicknessWhileDragging =
-            scrollbarThicknessWhileDragging ??
-                CupertinoScrollbar.defaultThicknessWhileDragging,
-        this.scrollbarRadiusWhileDragging = scrollbarRadiusWhileDragging ??
-            CupertinoScrollbar.defaultRadiusWhileDragging;
+    this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
+    this.scrollbarRadiusWhileDragging =
+        CupertinoScrollbar.defaultRadiusWhileDragging,
+    this.scrollbarThickness = CupertinoScrollbar.defaultThickness,
+    this.scrollbarThicknessWhileDragging =
+        CupertinoScrollbar.defaultThicknessWhileDragging,
+  });
 
   final bool draggableScrollbar;
   final bool isAlwaysShown;
-
   final double scrollbarThickness;
   final double scrollbarThicknessWhileDragging;
   final Radius scrollbarRadius;

@@ -67,7 +67,10 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
                   ? widget.stateManager.currentSelectingRows
                   : [thisRow];
 
-              widget.stateManager.moveRows(rows, dragDetails.offset.dy);
+              widget.stateManager.moveRows(
+                  rows,
+                  dragDetails.offset.dy +
+                      (PlutoDefaultSettings.rowTotalHeight / 2));
             },
             dragIcon: getDragIcon(),
             feedbackWidget: getCellWidget(),

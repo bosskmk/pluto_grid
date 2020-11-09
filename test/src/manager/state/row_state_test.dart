@@ -595,6 +595,184 @@ void main() {
     );
   });
 
+  group('insertRows', () {
+    testWidgets(
+      '삽입 할 위치가 rows 인덱스 범위가 아니면 행이 추가 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final countRows = stateManager.rows.length;
+
+        // then
+        stateManager.insertRows(-1, RowHelper.count(3, columns));
+        expect(stateManager.rows.length, countRows);
+
+        stateManager.insertRows(-2, RowHelper.count(3, columns));
+        expect(stateManager.rows.length, countRows);
+
+        stateManager.insertRows(
+          stateManager.rows.length + 1,
+          RowHelper.count(3, columns),
+        );
+        expect(stateManager.rows.length, countRows);
+      },
+    );
+
+    testWidgets(
+      '삽입 할 위치가 rows 인덱스 범위에 있으면 행이 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final countRows = stateManager.rows.length;
+
+        int countAdded = 0;
+
+        // then
+        countAdded += 3;
+        stateManager.insertRows(0, RowHelper.count(3, columns));
+        expect(stateManager.rows.length, countRows + countAdded);
+
+        countAdded += 4;
+        stateManager.insertRows(1, RowHelper.count(4, columns));
+        expect(stateManager.rows.length, countRows + countAdded);
+
+        countAdded += 5;
+        stateManager.insertRows(
+          stateManager.rows.length,
+          RowHelper.count(5, columns),
+        );
+        expect(stateManager.rows.length, countRows + countAdded);
+      },
+    );
+
+    testWidgets(
+      '컬럼 정렬 상태가 없으면 sortIdx 가 0부터 증가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final rowsToAdd = RowHelper.count(3, columns);
+
+        stateManager.insertRows(1, rowsToAdd);
+
+        expect(stateManager.rows.length, 8);
+
+        for (var i = 0; i < stateManager.rows.length; i += 1) {
+          expect(stateManager.rows[i].sortIdx, i);
+        }
+      },
+    );
+
+    testWidgets(
+      '컬럼 정렬 상태가 있으면 삽입 할 rows 의 sortIdx 는 삽입 할 위치부터 증가되고, '
+      '기존 rows 의 sortIdx 는 삽입 할 위치보다 작으면 유지되고, '
+      '삽입 할 위치보다 크면 삽입 할 rows 크기 만큼 증가 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 1, width: 150),
+        ];
+
+        List<PlutoRow> rows = [
+          PlutoRow(sortIdx: 0, cells: {
+            'text0': PlutoCell(value: '3'),
+          }),
+          PlutoRow(sortIdx: 1, cells: {
+            'text0': PlutoCell(value: '1'),
+          }),
+          PlutoRow(sortIdx: 2, cells: {
+            'text0': PlutoCell(value: '2'),
+          }),
+        ];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        stateManager.toggleSortColumn(columns.first.key);
+        expect(stateManager.hasSortedColumn, isTrue);
+        expect(stateManager.rows[0].sortIdx, 1);
+        expect(stateManager.rows[1].sortIdx, 2);
+        expect(stateManager.rows[2].sortIdx, 0);
+
+        // when
+        final rowsToAdd = [
+          PlutoRow(cells: {
+            'text0': PlutoCell(value: 'a'),
+          }),
+          PlutoRow(cells: {
+            'text0': PlutoCell(value: 'b'),
+          }),
+          PlutoRow(cells: {
+            'text0': PlutoCell(value: 'c'),
+          }),
+        ];
+
+        stateManager.insertRows(1, rowsToAdd);
+
+        expect(stateManager.rows.length, 6);
+        expect(stateManager.rows[0].sortIdx, 1);
+        expect(stateManager.rows[0].cells['text0'].value, '1');
+
+        expect(stateManager.rows[1].sortIdx, 2);
+        expect(stateManager.rows[1].cells['text0'].value, 'a');
+
+        expect(stateManager.rows[2].sortIdx, 3);
+        expect(stateManager.rows[2].cells['text0'].value, 'b');
+
+        expect(stateManager.rows[3].sortIdx, 4);
+        expect(stateManager.rows[3].cells['text0'].value, 'c');
+
+        expect(stateManager.rows[4].sortIdx, 5);
+        expect(stateManager.rows[4].cells['text0'].value, '2');
+
+        expect(stateManager.rows[5].sortIdx, 0);
+        expect(stateManager.rows[5].cells['text0'].value, '3');
+      },
+    );
+  });
+
   group('prependNewRows', () {
     testWidgets(
       'count 기본값 1 만큼 rows 앞쪽에 추가 되어야 한다.',
@@ -1397,6 +1575,57 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         verifyNever(listener.onChangeVoidNoParamListener());
+      },
+    );
+
+    testWidgets(
+      'createHeader 가 있는 상태에서 1번 row 를 0번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+          createHeader: (PlutoStateManager stateManager) => Text('header'),
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows[1].key;
+
+        // header size + column size + row 0(중간)
+        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+
+        stateManager.moveRows(
+          [rows[1]],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[0].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
   });

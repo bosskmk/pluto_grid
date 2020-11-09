@@ -23,11 +23,11 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
   void initState() {
     super.initState();
 
-    final dummyDate = DummyData(10, 100);
+    final dummyData = DummyData(10, 100);
 
-    columns = dummyDate.columns;
+    columns = dummyData.columns;
 
-    rows = dummyDate.rows;
+    rows = dummyData.rows;
   }
 
   void handleSelected() async {
