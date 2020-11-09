@@ -78,7 +78,24 @@ class _BodyRowsState extends State<BodyRows> {
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    return PlutoScrollbar(
+      verticalController:
+          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+              ? verticalScroll
+              : null,
+      horizontalController:
+          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+              ? horizontalScroll
+              : null,
+      isAlwaysShown:
+          widget.stateManager.configuration.scrollbarConfig.isAlwaysShown,
+      thickness:
+          widget.stateManager.configuration.scrollbarConfig.scrollbarThickness,
+      thicknessWhileDragging: widget.stateManager.configuration.scrollbarConfig
+          .scrollbarThicknessWhileDragging,
+      radius: widget.stateManager.configuration.scrollbarConfig.scrollbarRadius,
+      radiusWhileDragging: widget.stateManager.configuration.scrollbarConfig
+          .scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(
         controller: horizontalScroll,
         scrollDirection: Axis.horizontal,

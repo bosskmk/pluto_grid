@@ -50,6 +50,9 @@ class PlutoConfiguration {
 
   final PlutoGridLocaleText localeText;
 
+  /// Customise scrollbars for desktop usage
+  final PlutoScrollbarConfig scrollbarConfig;
+
   PlutoConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
@@ -75,6 +78,7 @@ class PlutoConfiguration {
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarConfig = const PlutoScrollbarConfig(),
   });
 
   PlutoConfiguration.dark({
@@ -102,6 +106,7 @@ class PlutoConfiguration {
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarConfig = const PlutoScrollbarConfig(),
   });
 }
 
@@ -111,6 +116,7 @@ class PlutoGridLocaleText {
   final String toLeftColumn;
   final String toRightColumn;
   final String autoSizeColumn;
+
   // Date column popup
   final String sunday;
   final String monday;
@@ -119,6 +125,7 @@ class PlutoGridLocaleText {
   final String thursday;
   final String friday;
   final String saturday;
+
   // Time column popup
   final String hour;
   final String minute;
@@ -198,4 +205,35 @@ extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
   bool get isToggleEditing => this == PlutoEnterKeyAction.ToggleEditing;
 
   bool get isNone => this == null || this == PlutoEnterKeyAction.None;
+}
+
+/// Allows to customise scrollbars "look and feel"
+/// The general feature is making vertical scrollbar draggable and therefore more useful
+/// for desktop systems. Set [draggableScrollbar] to true to achieve this behavior. Also
+/// changing [isAlwaysShown] to true is recommended for more usability at desktops.
+class PlutoScrollbarConfig {
+  const PlutoScrollbarConfig({
+    this.draggableScrollbar = true,
+    this.isAlwaysShown = false,
+    Radius scrollbarRadius,
+    Radius scrollbarRadiusWhileDragging,
+    double scrollbarThickness,
+    double scrollbarThicknessWhileDragging,
+  })  : this.scrollbarThickness =
+            scrollbarThickness ?? CupertinoScrollbar.defaultThickness,
+        this.scrollbarRadius =
+            scrollbarRadius ?? CupertinoScrollbar.defaultRadius,
+        this.scrollbarThicknessWhileDragging =
+            scrollbarThicknessWhileDragging ??
+                CupertinoScrollbar.defaultThicknessWhileDragging,
+        this.scrollbarRadiusWhileDragging = scrollbarRadiusWhileDragging ??
+            CupertinoScrollbar.defaultRadiusWhileDragging;
+
+  final bool draggableScrollbar;
+  final bool isAlwaysShown;
+
+  final double scrollbarThickness;
+  final double scrollbarThicknessWhileDragging;
+  final Radius scrollbarRadius;
+  final Radius scrollbarRadiusWhileDragging;
 }
