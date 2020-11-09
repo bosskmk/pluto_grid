@@ -68,7 +68,12 @@ void main() {
 
         stateManager.setCurrentCell(currentCell, 3);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 4);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 2,
+            rowIdx: 4,
+          ),
+        );
 
         // when
         final currentSelectingPositionList =
@@ -412,7 +417,12 @@ void main() {
 
       stateManager.setCurrentCell(currentCell, 3);
 
-      stateManager.setCurrentSelectingPosition(columnIdx: 2, rowIdx: 4);
+      stateManager.setCurrentSelectingPosition(
+        cellPosition: PlutoCellPosition(
+          columnIdx: 2,
+          rowIdx: 4,
+        ),
+      );
 
       // when
       final currentSelectingText = stateManager.currentSelectingText;
@@ -610,7 +620,12 @@ void main() {
         // when
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 0, rowIdx: 1);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 0,
+            rowIdx: 1,
+          ),
+        );
 
         expect(stateManager.currentSelectingPosition, isNot(null));
 
@@ -842,7 +857,12 @@ void main() {
 
         stateManager.setCurrentCell(rows[3].cells['text1'], 3);
 
-        stateManager.setCurrentSelectingPosition(columnIdx: 1, rowIdx: 4);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            columnIdx: 1,
+            rowIdx: 4,
+          ),
+        );
 
         // then
         // 3, 4 번 Row 선택 됨.
@@ -1140,7 +1160,12 @@ void main() {
 
       stateManager.setCurrentCell(stateManager.firstCell, 0);
 
-      stateManager.setCurrentSelectingPosition(columnIdx: 1, rowIdx: 0);
+      stateManager.setCurrentSelectingPosition(
+        cellPosition: PlutoCellPosition(
+          columnIdx: 1,
+          rowIdx: 0,
+        ),
+      );
 
       // when
       expect(stateManager.selectingMode.isSquare, isTrue);
@@ -1187,7 +1212,12 @@ void main() {
 
       stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
-      stateManager.setCurrentSelectingPosition(rowIdx: 3, columnIdx: 2);
+      stateManager.setCurrentSelectingPosition(
+        cellPosition: PlutoCellPosition(
+          rowIdx: 3,
+          columnIdx: 2,
+        ),
+      );
 
       // when
       expect(stateManager.selectingMode.isSquare, isTrue);
@@ -1239,7 +1269,12 @@ void main() {
 
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
-        stateManager.setCurrentSelectingPosition(rowIdx: 3, columnIdx: 2);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            rowIdx: 3,
+            columnIdx: 2,
+          ),
+        );
 
         // when
         expect(stateManager.currentCellPosition.rowIdx, 1);
@@ -1287,7 +1322,12 @@ void main() {
 
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
-        stateManager.setCurrentSelectingPosition(rowIdx: 3, columnIdx: 2);
+        stateManager.setCurrentSelectingPosition(
+          cellPosition: PlutoCellPosition(
+            rowIdx: 3,
+            columnIdx: 2,
+          ),
+        );
 
         // when
         expect(stateManager.currentCellPosition.rowIdx, 1);

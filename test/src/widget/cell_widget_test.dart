@@ -383,8 +383,7 @@ void main() {
     await tester.tap(gesture);
 
     verifyNever(stateManager.setCurrentSelectingPosition(
-      columnIdx: anyNamed('columnIdx'),
-      rowIdx: anyNamed('rowIdx'),
+      cellPosition: anyNamed('cellPosition'),
     ));
 
     verifyNever(stateManager.toggleSelectingRow(any));
@@ -439,8 +438,10 @@ void main() {
     await tester.tap(gesture);
 
     verify(stateManager.setCurrentSelectingPosition(
-      columnIdx: columnIdx,
-      rowIdx: rowIdx,
+      cellPosition: PlutoCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
     ));
 
     verifyNever(stateManager.toggleSelectingRow(any));
@@ -495,8 +496,7 @@ void main() {
     await tester.tap(gesture);
 
     verifyNever(stateManager.setCurrentSelectingPosition(
-      columnIdx: anyNamed('columnIdx'),
-      rowIdx: anyNamed('rowIdx'),
+      cellPosition: anyNamed('cellPosition'),
     ));
 
     verify(stateManager.toggleSelectingRow(any));

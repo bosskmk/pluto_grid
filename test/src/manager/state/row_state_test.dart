@@ -1,12 +1,244 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_on_change_listener.dart';
 import '../../../mock/mock_pluto_scroll_controller.dart';
 
 void main() {
+  group('checkedRows', () {
+    testWidgets(
+      '선택 된 행이 없는 경우 빈 List 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 3, width: 150);
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.checkedRows.toList(), []);
+      },
+    );
+
+    testWidgets(
+      '선택 된 행이 있는 경우 선택 된 List 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        final checkedRows = RowHelper.count(3, columns, checked: true);
+
+        List<PlutoRow> rows = [...checkedRows, ...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final keys =
+            stateManager.checkedRows.toList().map((e) => e.key).toList();
+
+        // then
+        expect(keys.length, 3);
+        expect(keys.contains(checkedRows[0].key), isTrue);
+        expect(keys.contains(checkedRows[1].key), isTrue);
+        expect(keys.contains(checkedRows[2].key), isTrue);
+      },
+    );
+  });
+
+  group('unCheckedRows', () {
+    testWidgets(
+      '선택 된 행이 없는 경우 모든 List 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 3, width: 150);
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.unCheckedRows.toList().length, rows.length);
+      },
+    );
+
+    testWidgets(
+      '선택 된 행이 있는 경우 선택 된 List 를 제외하고 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        final checkedRows = RowHelper.count(3, columns, checked: true);
+
+        List<PlutoRow> rows = [...checkedRows, ...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final keys =
+            stateManager.unCheckedRows.toList().map((e) => e.key).toList();
+
+        // then
+        expect(keys.length, 10);
+        expect(keys.contains(checkedRows[0].key), isFalse);
+        expect(keys.contains(checkedRows[1].key), isFalse);
+        expect(keys.contains(checkedRows[2].key), isFalse);
+      },
+    );
+  });
+
+  group('hasCheckedRow', () {
+    testWidgets(
+      '선택 된 행이 없는 경우 false 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 3, width: 150);
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.hasCheckedRow, isFalse);
+      },
+    );
+
+    testWidgets(
+      '선택 된 행이 있는 경우 true 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        final checkedRows = RowHelper.count(3, columns, checked: true);
+
+        List<PlutoRow> rows = [...checkedRows, ...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.hasCheckedRow, isTrue);
+      },
+    );
+  });
+
+  group('hasUnCheckedRow', () {
+    testWidgets(
+      '선택 된 행이 없는 경우 true 를 리턴 해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 3, width: 150);
+
+        List<PlutoRow> rows = RowHelper.count(10, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.hasUnCheckedRow, isTrue);
+      },
+    );
+
+    testWidgets(
+      '선택 되지 않은 행이 하나라도 있는 경우 true 를 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        final checkedRows = RowHelper.count(3, columns, checked: true);
+
+        final uncheckedRows = RowHelper.count(1, columns, checked: false);
+
+        List<PlutoRow> rows = [...checkedRows, ...uncheckedRows];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.hasUnCheckedRow, isTrue);
+      },
+    );
+
+    testWidgets(
+      '모든 행이 선택 된 경우 false 를 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        final checkedRows = RowHelper.count(3, columns, checked: true);
+
+        List<PlutoRow> rows = [...checkedRows];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        // then
+        expect(stateManager.hasUnCheckedRow, isFalse);
+      },
+    );
+  });
+
   group('currentRowIdx', () {
     testWidgets('currentCell 이 선택되지 않는 경우 null 을 리턴해야 한다.',
         (WidgetTester tester) async {
@@ -130,6 +362,108 @@ void main() {
     });
   });
 
+  group('getRowByIdx', () {
+    testWidgets(
+      'rowIdx 가 null 인 경우 null 을 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final found = stateManager.getRowByIdx(null);
+
+        // then
+        expect(found, isNull);
+      },
+    );
+
+    testWidgets(
+      'rowIdx 가 0보다 작은 경우 null 을 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final found = stateManager.getRowByIdx(-1);
+
+        // then
+        expect(found, isNull);
+      },
+    );
+
+    testWidgets(
+      'rowIdx 가 rows 범위보다 큰 경우 null 을 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final found = stateManager.getRowByIdx(5);
+
+        // then
+        expect(found, isNull);
+      },
+    );
+
+    testWidgets(
+      'rowIdx 가 rows 범위 안에 있는 경우 PlutoRow 를 리턴해야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        // when
+        final found = stateManager.getRowByIdx(4);
+
+        // then
+        expect(found.key, rows[4].key);
+      },
+    );
+  });
+
   group('setSortIdxOfRows', () {
     testWidgets(
         'The sortIdx value of rows should be increased from 0 and filled.',
@@ -190,6 +524,75 @@ void main() {
       expect(rowsFilledSortIdx[3].sortIdx, 1);
       expect(rowsFilledSortIdx[4].sortIdx, 0);
     });
+  });
+
+  group('setRowChecked', () {
+    testWidgets(
+      '해당 row 가 없는 경우 notifyListener 가 호출 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        stateManager.setRowChecked(PlutoRow(cells: {}), true);
+
+        // then
+        verifyNever(listener.onChangeVoidNoParamListener());
+      },
+    );
+
+    testWidgets(
+      '해당 row 가 있는 경우 notifyListener 가 호출 되고 checked 가 true 로 변경 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final row = rows.first;
+
+        stateManager.setRowChecked(row, true);
+
+        // then
+        expect(
+          stateManager.rows
+              .firstWhere((element) => element.key == row.key)
+              .checked,
+          isTrue,
+        );
+
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
   });
 
   group('prependNewRows', () {
@@ -363,8 +766,10 @@ void main() {
       final int rowIdxBeforePrependRows = 3;
 
       stateManager.setCurrentSelectingPosition(
-        columnIdx: 2,
-        rowIdx: rowIdxBeforePrependRows,
+        cellPosition: PlutoCellPosition(
+          columnIdx: 2,
+          rowIdx: rowIdxBeforePrependRows,
+        ),
       );
 
       expect(
@@ -751,32 +1156,340 @@ void main() {
     });
   });
 
-  group('updateCurrentRowIdx', () {
-    testWidgets('When setCurrentCell, the _currentRowIdx value must be set.',
-        (WidgetTester tester) async {
-      // given
-      List<PlutoColumn> columns = [
-        ...ColumnHelper.textColumn('text', count: 3, width: 150),
-      ];
+  group('moveRows', () {
+    testWidgets(
+      '0번 row 를 1번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
 
-      List<PlutoRow> rows = RowHelper.count(5, columns);
+        List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
-        columns: columns,
-        rows: rows,
-        gridFocusNode: null,
-        scroll: null,
-      );
+        final scroll = MockPlutoScrollController();
 
-      stateManager.setLayout(BoxConstraints());
+        when(scroll.verticalOffset).thenReturn(0);
 
-      stateManager.setCurrentCell(rows[3].cells['text1'], 3);
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
 
-      // when
-      stateManager.updateCurrentRowIdx();
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
 
-      // then
-      expect(stateManager.currentRowIdx, 3);
-    });
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows.first.key;
+
+        // header size + row 0 + row 1(중간)
+        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+
+        stateManager.moveRows(
+          [rows.first],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[1].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      '2번 row 를 1번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows[2].key;
+
+        // header size + row 0 + row 1(중간)
+        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+
+        stateManager.moveRows(
+          [rows[2]],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[1].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      '이동 할 index + 이동 할 row 개수가 전체 rows 길이보다 크면 마지막 행으로 이동',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows.first.key;
+
+        // header size + row0 ~ row4
+        final offset = PlutoDefaultSettings.rowTotalHeight * 5.5;
+
+        stateManager.moveRows(
+          [rows.first],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[4].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      'offset 값이 0 보다 작으면 notifyListener 가 호출 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final offset = -10.0;
+
+        stateManager.moveRows(
+          [rows.first],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        verifyNever(listener.onChangeVoidNoParamListener());
+      },
+    );
+
+    testWidgets(
+      'offset 값이 행 범위 보다 크면 notifyListener 가 호출 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        // header + row0 ~ row4 + 1
+        final offset = PlutoDefaultSettings.rowTotalHeight * 7;
+
+        stateManager.moveRows(
+          [rows.first],
+          offset,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        verifyNever(listener.onChangeVoidNoParamListener());
+      },
+    );
+  });
+
+  group('toggleAllRowChecked', () {
+    testWidgets(
+      '전체 행이 checked true 로 변경 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        List<PlutoRow> rows = [...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        stateManager.toggleAllRowChecked(true);
+
+        // then
+        expect(
+            stateManager.rows.where((element) => element.checked).length, 10);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      '전체 행이 checked false 로 변경 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        List<PlutoRow> rows = [...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        stateManager.toggleAllRowChecked(false);
+
+        // then
+        expect(
+            stateManager.rows.where((element) => !element.checked).length, 10);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      'notify 가 false 인 경우 notifyListener 가 호출 되지 않아야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns =
+            ColumnHelper.textColumn('body', count: 1, width: 150);
+
+        List<PlutoRow> rows = [...RowHelper.count(10, columns)];
+
+        PlutoStateManager stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        stateManager.toggleAllRowChecked(true, notify: false);
+
+        // then
+        expect(
+            stateManager.rows.where((element) => element.checked).length, 10);
+        verifyNever(listener.onChangeVoidNoParamListener());
+      },
+    );
   });
 }

@@ -256,9 +256,11 @@ mixin KeyboardState implements IPlutoState {
     }
 
     setCurrentSelectingPosition(
-      columnIdx: cellPosition.columnIdx +
-          (direction.horizontal ? direction.offset : 0),
-      rowIdx: cellPosition.rowIdx + (direction.vertical ? direction.offset : 0),
+      cellPosition: PlutoCellPosition(
+        columnIdx: cellPosition.columnIdx +
+            (direction.horizontal ? direction.offset : 0),
+        rowIdx: cellPosition.rowIdx + (direction.vertical ? direction.offset : 0),
+      ),
     );
 
     if (direction.horizontal) {
@@ -291,8 +293,10 @@ mixin KeyboardState implements IPlutoState {
         : currentCellPosition.rowIdx;
 
     setCurrentSelectingPosition(
-      columnIdx: columnIdx,
-      rowIdx: rowIdx,
+      cellPosition: PlutoCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
       notify: notify,
     );
 
@@ -324,8 +328,10 @@ mixin KeyboardState implements IPlutoState {
     final int rowIdx = direction.isUp ? 0 : _rows.length - 1;
 
     setCurrentSelectingPosition(
-      columnIdx: columnIdx,
-      rowIdx: rowIdx,
+      cellPosition: PlutoCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
       notify: notify,
     );
 
@@ -354,8 +360,10 @@ mixin KeyboardState implements IPlutoState {
         : currentCellPosition.columnIdx;
 
     setCurrentSelectingPosition(
-      columnIdx: columnIdx,
-      rowIdx: rowIdx,
+      cellPosition: PlutoCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
     );
 
     moveScrollByRow(direction, rowIdx - direction.offset);

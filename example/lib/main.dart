@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : HomeScreen.routeName,
+      initialRoute: kReleaseMode ? HomeScreen.routeName : CellRendererScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),

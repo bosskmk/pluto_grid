@@ -62,6 +62,7 @@ class PlutoStateManager extends PlutoState {
   static void initializeRows(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
+    bool forceApplySortIdx = false,
     bool increase = true,
     int start = 0,
   }) {
@@ -76,18 +77,19 @@ class PlutoStateManager extends PlutoState {
         .where((element) => element.type.applyFormatOnInit)
         .toList(growable: false);
 
-    final bool hasColumnsForApplyFormat = columnsForApplyFormat.length > 0;
+    final bool applyFormat = columnsForApplyFormat.length > 0;
 
-    final bool hasSortIdx = refRows.length > 0 && refRows.first.sortIdx != null;
+    final bool applySortIdx = forceApplySortIdx == true ||
+        (refRows.length > 0 && refRows.first.sortIdx == null);
 
-    if (hasColumnsForApplyFormat == false && hasSortIdx == true) {
+    if (applyFormat == false && applySortIdx == false) {
       return;
     }
 
     int sortIdx = start;
 
     for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
-      if (hasColumnsForApplyFormat) {
+      if (applyFormat) {
         columnsForApplyFormat.forEach((column) {
           refRows[rowIdx].cells[column.field].value = column.type
               .applyFormat(refRows[rowIdx].cells[column.field].value);
@@ -101,7 +103,7 @@ class PlutoStateManager extends PlutoState {
         });
       }
 
-      if (hasSortIdx == false) {
+      if (applySortIdx == true) {
         refRows[rowIdx].sortIdx = sortIdx;
 
         sortIdx = increase ? ++sortIdx : --sortIdx;
