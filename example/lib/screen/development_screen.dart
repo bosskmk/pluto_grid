@@ -42,7 +42,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 onPressed: () {
                   rendererContext.stateManager.insertRows(
                     rendererContext.rowIdx,
-                    [rendererContext.stateManager.getNewRow()],
+                    rendererContext.stateManager.getNewRows(count: 3),
                   );
                 },
                 iconSize: 18,
@@ -63,7 +63,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext.row.cells[rendererContext.column.field].value,
+                  '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field].value.toString()})',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -121,7 +121,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         ? [DummyData.rowByColumns(columns)]
         : DummyData.rowsByColumns(length: count, columns: columns);
 
-    stateManager.appendRows(rows);
+    stateManager.prependRows(rows);
   }
 
   void handleRemoveCurrentRowButton() {
