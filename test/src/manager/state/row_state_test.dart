@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
+import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
 import '../../../mock/mock_pluto_scroll_controller.dart';
@@ -360,6 +361,90 @@ void main() {
       expect(currentRow, isNot(null));
       expect(currentRow.key, rows[3].key);
     });
+  });
+
+  group('getRowIdxByOffset', () {
+    PlutoStateManager stateManager;
+
+    const ROWS_LENGTH = 10;
+
+    final buildRows = () {
+      return PlutoWidgetTestHelper('build rows', (tester) async {
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(ROWS_LENGTH, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        when(scroll.verticalOffset).thenReturn(0);
+
+        stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(BoxConstraints(
+          maxWidth: 500,
+          maxHeight: 300,
+        ));
+
+        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+      });
+    };
+
+    buildRows().test(
+      '0 번 row 보다 위인 offset 인 경우 null 을 리턴해야 한다.',
+      (tester) async {
+        final rowIdx = stateManager
+            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 0.7);
+
+        expect(rowIdx, isNull);
+      },
+    );
+
+    buildRows().test(
+      '0 번 row 의 중간 offset.',
+      (tester) async {
+        final rowIdx = stateManager
+            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 1.5);
+
+        expect(rowIdx, 0);
+      },
+    );
+
+    buildRows().test(
+      '1 번 row 의 중간 offset.',
+      (tester) async {
+        final rowIdx = stateManager
+            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 2.5);
+
+        expect(rowIdx, 1);
+      },
+    );
+
+    buildRows().test(
+      '마지막 9번 row 의 중간 offset.',
+      (tester) async {
+        final rowIdx = stateManager
+            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 10.5);
+
+        expect(rowIdx, 9);
+      },
+    );
+
+    buildRows().test(
+      '마지막 row 보다 아래 offset 을 전달 한 경우 null 을 리턴해야 한다.',
+      (tester) async {
+        final rowIdx = stateManager
+            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 11.5);
+
+        expect(rowIdx, isNull);
+      },
+    );
   });
 
   group('getRowByIdx', () {

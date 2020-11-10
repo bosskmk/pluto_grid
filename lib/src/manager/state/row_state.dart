@@ -19,6 +19,8 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow get currentRow;
 
+  int getRowIdxByOffset(double offset);
+
   PlutoRow getRowByIdx(int rowIdx);
 
   PlutoRow getNewRow();
@@ -100,6 +102,28 @@ mixin RowState implements IPlutoState {
     }
 
     return _rows[currentRowIdx];
+  }
+
+  int getRowIdxByOffset(double offset) {
+    offset -= bodyTopOffset - scroll.verticalOffset;
+
+    double currentOffset = 0.0;
+
+    int indexToMove;
+
+    final int rowsLength = _rows.length;
+
+    for (var i = 0; i < rowsLength; i += 1) {
+      if (currentOffset < offset &&
+          offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
+        indexToMove = i;
+        break;
+      }
+
+      currentOffset += PlutoDefaultSettings.rowTotalHeight;
+    }
+
+    return indexToMove;
   }
 
   PlutoRow getRowByIdx(int rowIdx) {
@@ -370,21 +394,7 @@ mixin RowState implements IPlutoState {
   }
 
   void moveRows(List<PlutoRow> rows, double offset) {
-    offset -= bodyTopOffset - scroll.verticalOffset;
-
-    double currentOffset = 0.0;
-
-    int indexToMove;
-
-    for (var i = 0; i < _rows.length; i += 1) {
-      if (currentOffset < offset &&
-          offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
-        indexToMove = i;
-        break;
-      }
-
-      currentOffset += PlutoDefaultSettings.rowTotalHeight;
-    }
+    int indexToMove = getRowIdxByOffset(offset);
 
     if (indexToMove == null) {
       return;
