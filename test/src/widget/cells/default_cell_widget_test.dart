@@ -125,28 +125,41 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: 'default cell value');
 
-    final cellWidget = PlutoWidgetTestHelper('cell widget', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: DefaultCellWidget(
-              stateManager: stateManager,
-              cell: cell,
-              column: column,
+    final cellWidget = ({
+      bool hasSortedColumn,
+    }) {
+      return PlutoWidgetTestHelper('cell widget', (tester) async {
+        when(stateManager.hasSortedColumn).thenReturn(hasSortedColumn);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: DefaultCellWidget(
+                stateManager: stateManager,
+                cell: cell,
+                column: column,
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      });
+    };
 
-    cellWidget.test(
-      'Draggable 위젯이 렌더링 되어야 한다.',
+    cellWidget(hasSortedColumn: false).test(
+      '정렬 된 컬럼이 없는 경우 Draggable 위젯이 렌더링 되어야 한다.',
       (tester) async {
         expect(find.byType(Draggable), findsOneWidget);
       },
     );
 
-    cellWidget.test(
+    cellWidget(hasSortedColumn: true).test(
+      '정렬 된 컬럼이 있는 경우 Draggable 위젯이 렌더링 되지 않아야 한다.',
+          (tester) async {
+        expect(find.byType(Draggable), findsNothing);
+      },
+    );
+
+    cellWidget(hasSortedColumn: false).test(
       'Draggable 아이콘을 드래그 하면 moveRows 가 호출 되어야 한다.',
       (tester) async {
         final offset = Offset(0.0, 100);
@@ -163,7 +176,7 @@ void main() {
       },
     );
 
-    cellWidget.test(
+    cellWidget(hasSortedColumn: false).test(
       'Draggable 아이콘을 드래그 하면 isCurrentRowSelected 이 true 인 경우'
       'currentSelectingRows 로 moveRows 가 호출 되어야 한다.',
       (tester) async {

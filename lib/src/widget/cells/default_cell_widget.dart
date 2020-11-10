@@ -18,10 +18,38 @@ class DefaultCellWidget extends StatefulWidget {
 }
 
 class _DefaultCellWidgetState extends State<DefaultCellWidget> {
+  bool _hasSortedColumn;
+
   PlutoRow get thisRow => widget.stateManager.getRowByIdx(widget.rowIdx);
 
   bool get isCurrentRowSelected {
     return widget.stateManager.isSelectedRow(thisRow?.key);
+  }
+
+  @override
+  void dispose() {
+    widget.stateManager.removeListener(changeStateListener);
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _hasSortedColumn = widget.stateManager.hasSortedColumn;
+
+    widget.stateManager.addListener(changeStateListener);
+  }
+
+  void changeStateListener() {
+    bool changeHasSortedColumn = widget.stateManager.hasSortedColumn;
+
+    if (_hasSortedColumn != changeHasSortedColumn) {
+      setState(() {
+        _hasSortedColumn = changeHasSortedColumn;
+      });
+    }
   }
 
   Icon getDragIcon() {
@@ -58,7 +86,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
       children: [
         // todo : implement scrolling by onDragUpdate
         // https://github.com/flutter/flutter/pull/68185
-        if (widget.column.enableRowDrag)
+        if (widget.column.enableRowDrag && !_hasSortedColumn)
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
