@@ -42,13 +42,16 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
               'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dark_mode_screen.dart',
         ),
       ],
-      body: PlutoGrid(
-        columns: columns,
-        rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
-          print(event);
-        },
-        configuration: PlutoConfiguration.dark(),
+      body: Theme(
+        data: ThemeData.dark(),
+        child: PlutoGrid(
+          columns: columns,
+          rows: rows,
+          onChanged: (PlutoOnChangedEvent event) {
+            print(event);
+          },
+          configuration: PlutoConfiguration.dark(),
+        ),
       ),
     );
   }

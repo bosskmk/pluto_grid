@@ -13,5 +13,22 @@ class PlutoEventManager {
     subject.close();
   }
 
-  void init() {}
+  void init() {
+    subject.stream.listen(_handler);
+  }
+
+  void addEvent(PlutoEvent event) {
+    subject.add(event);
+  }
+
+  void _handler(PlutoEvent event) {
+    if (event is PlutoDragEvent) {
+      if (event.itemType.isRows && event.dragType.isEnd) {
+        stateManager.moveRows(
+          event.dragData,
+          event.offset.dy,
+        );
+      }
+    }
+  }
 }

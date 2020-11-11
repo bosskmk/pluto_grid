@@ -18,10 +18,58 @@ class DefaultCellWidget extends StatefulWidget {
 }
 
 class _DefaultCellWidgetState extends State<DefaultCellWidget> {
+  bool _hasSortedColumn;
+
   PlutoRow get thisRow => widget.stateManager.getRowByIdx(widget.rowIdx);
 
   bool get isCurrentRowSelected {
     return widget.stateManager.isSelectedRow(thisRow?.key);
+  }
+
+  @override
+  void dispose() {
+    widget.stateManager.removeListener(changeStateListener);
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _hasSortedColumn = widget.stateManager.hasSortedColumn;
+
+    widget.stateManager.addListener(changeStateListener);
+  }
+
+  void changeStateListener() {
+    bool changeHasSortedColumn = widget.stateManager.hasSortedColumn;
+
+    if (_hasSortedColumn != changeHasSortedColumn) {
+      setState(() {
+        _hasSortedColumn = changeHasSortedColumn;
+      });
+    }
+  }
+
+  void addDragEventOfRow({
+    PlutoDragType type,
+    Offset offset,
+  }) {
+    if (offset != null) {
+      offset += Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
+    }
+
+    widget.stateManager.eventManager.addEvent(
+      PlutoDragEvent<List<PlutoRow>>(
+        offset: offset,
+        dragType: type,
+        itemType: PlutoDragItemType.Rows,
+        dragData: isCurrentRowSelected
+            ? widget.stateManager.currentSelectingRows
+            : [thisRow],
+      ),
+    );
   }
 
   Icon getDragIcon() {
@@ -56,21 +104,26 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // todo : implement scrolling by onDragUpdate
+        // todo : When onDragUpdated is added to the Draggable, remove the listener.
         // https://github.com/flutter/flutter/pull/68185
-        if (widget.column.enableRowDrag)
+        if (widget.column.enableRowDrag && !_hasSortedColumn)
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
+            onDragStarted: () {
+              addDragEventOfRow(type: PlutoDragType.Start);
+            },
+            onDragUpdated: (offset) {
+              addDragEventOfRow(
+                type: PlutoDragType.Update,
+                offset: offset,
+              );
+            },
             onDragEnd: (dragDetails) {
-              List<PlutoRow> rows = isCurrentRowSelected
-                  ? widget.stateManager.currentSelectingRows
-                  : [thisRow];
-
-              widget.stateManager.moveRows(
-                  rows,
-                  dragDetails.offset.dy +
-                      (PlutoDefaultSettings.rowTotalHeight / 2));
+              addDragEventOfRow(
+                type: PlutoDragType.End,
+                offset: dragDetails.offset,
+              );
             },
             dragIcon: getDragIcon(),
             feedbackWidget: getCellWidget(),
@@ -89,10 +142,14 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
   }
 }
 
-class _RowDragIconWidget extends StatelessWidget {
+typedef DragUpdatedCallback = Function(Offset offset);
+
+class _RowDragIconWidget extends StatefulWidget {
   final PlutoColumn column;
   final PlutoStateManager stateManager;
-  final Function(DraggableDetails dragDetails) onDragEnd;
+  final VoidCallback onDragStarted;
+  final DragUpdatedCallback onDragUpdated;
+  final DragEndCallback onDragEnd;
   final Widget dragIcon;
   final Widget feedbackWidget;
 
@@ -100,32 +157,62 @@ class _RowDragIconWidget extends StatelessWidget {
     Key key,
     this.column,
     this.stateManager,
+    this.onDragStarted,
+    this.onDragUpdated,
     this.onDragEnd,
     this.dragIcon,
     this.feedbackWidget,
   }) : super(key: key);
 
   @override
+  __RowDragIconWidgetState createState() => __RowDragIconWidgetState();
+}
+
+class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
+  GlobalKey _feedbackKey = GlobalKey();
+
+  Offset get _offsetFeedback {
+    if (_feedbackKey.currentContext == null) {
+      return null;
+    }
+
+    final RenderBox renderBoxRed =
+        _feedbackKey.currentContext.findRenderObject();
+
+    return renderBoxRed.localToGlobal(Offset.zero);
+  }
+
+  DragUpdatedCallback _onPointerMove(PointerMoveEvent _) {
+    return widget.onDragUpdated(_offsetFeedback ?? _.position);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Draggable(
-      onDragEnd: onDragEnd,
-      feedback: Material(
-        child: ShadowContainer(
-          width: column.width,
-          height: PlutoDefaultSettings.rowHeight,
-          backgroundColor: stateManager.configuration.gridBackgroundColor,
-          borderColor: stateManager.configuration.activatedBorderColor,
-          child: Row(
-            children: [
-              dragIcon,
-              Expanded(
-                child: feedbackWidget,
-              ),
-            ],
+    return Listener(
+      onPointerMove: _onPointerMove,
+      child: Draggable(
+        onDragStarted: widget.onDragStarted,
+        onDragEnd: widget.onDragEnd,
+        feedback: Material(
+          key: _feedbackKey,
+          child: ShadowContainer(
+            width: widget.column.width,
+            height: PlutoDefaultSettings.rowHeight,
+            backgroundColor:
+                widget.stateManager.configuration.gridBackgroundColor,
+            borderColor: widget.stateManager.configuration.activatedBorderColor,
+            child: Row(
+              children: [
+                widget.dragIcon,
+                Expanded(
+                  child: widget.feedbackWidget,
+                ),
+              ],
+            ),
           ),
         ),
+        child: widget.dragIcon,
       ),
-      child: dragIcon,
     );
   }
 }

@@ -25,15 +25,23 @@ class _RowWidgetState extends State<RowWidget> {
 
   bool _isSelecting;
 
-  bool _hasCurrentSelectingPosition;
-
   bool _isCheckedRow;
+
+  bool _isDragTarget;
+
+  bool _isTopOfDragTarget;
+
+  bool _isBottomOfDragTarget;
+
+  bool _hasCurrentSelectingPosition;
 
   bool _keepFocus;
 
+  List<Function()> disposeList = [];
+
   @override
   void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
+    disposeList.forEach((_dispose) => _dispose());
 
     super.dispose();
   }
@@ -48,37 +56,87 @@ class _RowWidgetState extends State<RowWidget> {
 
     _isSelecting = widget.stateManager.isSelecting;
 
+    _isCheckedRow = widget.row.checked;
+
+    _isDragTarget = false;
+
+    _isTopOfDragTarget = false;
+
+    _isBottomOfDragTarget = false;
+
     _hasCurrentSelectingPosition =
         widget.stateManager.hasCurrentSelectingPosition;
-
-    _isCheckedRow = widget.row.checked;
 
     _keepFocus = widget.stateManager.keepFocus;
 
     widget.stateManager.addListener(changeStateListener);
+
+    disposeList
+        .add(() => widget.stateManager.removeListener(changeStateListener));
+
+    disposeList.add(widget.stateManager.eventManager.subject.stream
+        .listen(handlePlutoEvent)
+        .cancel);
   }
 
   void changeStateListener() {
     if (_isCurrentRow != (widget.stateManager.currentRowIdx == widget.rowIdx) ||
         _isSelectedRow != widget.stateManager.isSelectedRow(widget.row.key) ||
         _isSelecting != widget.stateManager.isSelecting ||
+        _isCheckedRow != widget.row.checked ||
         _hasCurrentSelectingPosition !=
             widget.stateManager.hasCurrentSelectingPosition ||
-        _isCheckedRow != widget.row.checked ||
         _keepFocus != widget.stateManager.keepFocus) {
       setState(() {
         _isCurrentRow = (widget.stateManager.currentRowIdx == widget.rowIdx);
         _isSelectedRow = widget.stateManager.isSelectedRow(widget.row.key);
         _isSelecting = widget.stateManager.isSelecting;
+        _isCheckedRow = widget.row.checked;
         _hasCurrentSelectingPosition =
             widget.stateManager.hasCurrentSelectingPosition;
-        _isCheckedRow = widget.row.checked;
         _keepFocus = widget.stateManager.keepFocus;
       });
     }
   }
 
+  void handlePlutoEvent(PlutoEvent event) {
+    bool changedIsDragTarget = false;
+
+    bool changedIsTopOfDragTarget = false;
+
+    bool changedIsBottomOfDragTarget = false;
+
+    if (event is PlutoDragEvent) {
+      if (event.itemType.isRows && event.dragType.isUpdate) {
+        final _dragTargetId =
+            widget.stateManager.getRowIdxByOffset(event.offset.dy);
+
+        if (_dragTargetId != null) {
+          changedIsDragTarget = _dragTargetId <= widget.rowIdx &&
+              widget.rowIdx < _dragTargetId + event.dragData.length;
+
+          changedIsTopOfDragTarget = _dragTargetId == widget.rowIdx;
+
+          changedIsBottomOfDragTarget =
+              widget.rowIdx == _dragTargetId + event.dragData.length - 1;
+        }
+      }
+    }
+
+    if (_isDragTarget != changedIsDragTarget ||
+        _isTopOfDragTarget != changedIsTopOfDragTarget ||
+        _isBottomOfDragTarget != changedIsBottomOfDragTarget) {
+      setState(() {
+        _isDragTarget = changedIsDragTarget;
+        _isTopOfDragTarget = changedIsTopOfDragTarget;
+        _isBottomOfDragTarget = changedIsBottomOfDragTarget;
+      });
+    }
+  }
+
   Color rowColor() {
+    if (_isDragTarget) return widget.stateManager.configuration.checkedColor;
+
     final bool checkCurrentRow =
         _isCurrentRow && (!_isSelecting && !_hasCurrentSelectingPosition);
 
@@ -112,9 +170,17 @@ class _RowWidgetState extends State<RowWidget> {
             ? Color.alphaBlend(Color(0x11757575), rowColor())
             : rowColor(),
         border: Border(
+          top: _isDragTarget && _isTopOfDragTarget
+              ? BorderSide(
+                  width: PlutoDefaultSettings.rowBorderWidth,
+                  color: widget.stateManager.configuration.activatedBorderColor,
+                )
+              : BorderSide.none,
           bottom: BorderSide(
             width: PlutoDefaultSettings.rowBorderWidth,
-            color: widget.stateManager.configuration.borderColor,
+            color: _isDragTarget && _isBottomOfDragTarget
+                ? widget.stateManager.configuration.activatedBorderColor
+                : widget.stateManager.configuration.borderColor,
           ),
         ),
       ),
