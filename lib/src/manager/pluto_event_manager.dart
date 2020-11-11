@@ -26,7 +26,7 @@ class PlutoEventManager {
       if (event.itemType.isRows && event.dragType.isEnd) {
         stateManager.moveRows(
           event.dragData,
-          event.offset.dy + (PlutoDefaultSettings.rowTotalHeight / 2),
+          event.offset.dy,
         );
       }
     }

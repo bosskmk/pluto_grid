@@ -114,7 +114,7 @@ mixin RowState implements IPlutoState {
     final int rowsLength = _rows.length;
 
     for (var i = 0; i < rowsLength; i += 1) {
-      if (currentOffset < offset &&
+      if (currentOffset <= offset &&
           offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
         indexToMove = i;
         break;
