@@ -52,6 +52,22 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     }
   }
 
+  void addDragEventOfRow({
+    PlutoDragType type,
+    Offset offset,
+  }) {
+    widget.stateManager.eventManager.addEvent(
+      PlutoDragEvent<List<PlutoRow>>(
+        offset: offset,
+        dragType: type,
+        itemType: PlutoDragItemType.Rows,
+        dragData: isCurrentRowSelected
+            ? widget.stateManager.currentSelectingRows
+            : [thisRow],
+      ),
+    );
+  }
+
   Icon getDragIcon() {
     return Icon(
       Icons.drag_indicator,
@@ -90,15 +106,20 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
+            onDragStarted: () {
+              addDragEventOfRow(type: PlutoDragType.Start);
+            },
+            onPointerMove: (event) {
+              addDragEventOfRow(
+                type: PlutoDragType.Update,
+                offset: event.position,
+              );
+            },
             onDragEnd: (dragDetails) {
-              List<PlutoRow> rows = isCurrentRowSelected
-                  ? widget.stateManager.currentSelectingRows
-                  : [thisRow];
-
-              widget.stateManager.moveRows(
-                  rows,
-                  dragDetails.offset.dy +
-                      (PlutoDefaultSettings.rowTotalHeight / 2));
+              addDragEventOfRow(
+                type: PlutoDragType.End,
+                offset: dragDetails.offset,
+              );
             },
             dragIcon: getDragIcon(),
             feedbackWidget: getCellWidget(),
@@ -120,7 +141,9 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
 class _RowDragIconWidget extends StatelessWidget {
   final PlutoColumn column;
   final PlutoStateManager stateManager;
-  final Function(DraggableDetails dragDetails) onDragEnd;
+  final PointerMoveEventListener onPointerMove;
+  final VoidCallback onDragStarted;
+  final DragEndCallback onDragEnd;
   final Widget dragIcon;
   final Widget feedbackWidget;
 
@@ -128,6 +151,8 @@ class _RowDragIconWidget extends StatelessWidget {
     Key key,
     this.column,
     this.stateManager,
+    this.onPointerMove,
+    this.onDragStarted,
     this.onDragEnd,
     this.dragIcon,
     this.feedbackWidget,
@@ -135,25 +160,29 @@ class _RowDragIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
-      onDragEnd: onDragEnd,
-      feedback: Material(
-        child: ShadowContainer(
-          width: column.width,
-          height: PlutoDefaultSettings.rowHeight,
-          backgroundColor: stateManager.configuration.gridBackgroundColor,
-          borderColor: stateManager.configuration.activatedBorderColor,
-          child: Row(
-            children: [
-              dragIcon,
-              Expanded(
-                child: feedbackWidget,
-              ),
-            ],
+    return Listener(
+      onPointerMove: onPointerMove,
+      child: Draggable(
+        onDragStarted: onDragStarted,
+        onDragEnd: onDragEnd,
+        feedback: Material(
+          child: ShadowContainer(
+            width: column.width,
+            height: PlutoDefaultSettings.rowHeight,
+            backgroundColor: stateManager.configuration.gridBackgroundColor,
+            borderColor: stateManager.configuration.activatedBorderColor,
+            child: Row(
+              children: [
+                dragIcon,
+                Expanded(
+                  child: feedbackWidget,
+                ),
+              ],
+            ),
           ),
         ),
+        child: dragIcon,
       ),
-      child: dragIcon,
     );
   }
 }
