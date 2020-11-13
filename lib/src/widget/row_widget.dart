@@ -18,7 +18,8 @@ class RowWidget extends StatefulWidget {
   _RowWidgetState createState() => _RowWidgetState();
 }
 
-class _RowWidgetState extends State<RowWidget> {
+class _RowWidgetState extends State<RowWidget>
+    with AutomaticKeepAliveClientMixin {
   bool _isCurrentRow;
 
   bool _isSelectedRow;
@@ -36,6 +37,22 @@ class _RowWidgetState extends State<RowWidget> {
   bool _hasCurrentSelectingPosition;
 
   bool _keepFocus;
+
+  bool _keepAlive = false;
+
+  KeepAliveHandle _keepAliveHandle;
+
+  @override
+  bool get wantKeepAlive => _keepAlive;
+
+  @protected
+  void updateKeepAlive() {
+    if (wantKeepAlive) {
+      if (_keepAliveHandle == null) _ensureKeepAlive();
+    } else {
+      if (_keepAliveHandle != null) _releaseKeepAlive();
+    }
+  }
 
   @override
   void dispose() {
@@ -58,14 +75,18 @@ class _RowWidgetState extends State<RowWidget> {
         _isSelectedRow != widget.stateManager.isSelectedRow(widget.row.key) ||
         _isSelecting != widget.stateManager.isSelecting ||
         _isCheckedRow != widget.row.checked ||
-        _isDragTarget != widget.stateManager.isRowIdxDragTarget(widget.rowIdx) ||
-        _isTopDragTarget != widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx) ||
-        _isBottomDragTarget != widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx) ||
+        _isDragTarget !=
+            widget.stateManager.isRowIdxDragTarget(widget.rowIdx) ||
+        _isTopDragTarget !=
+            widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx) ||
+        _isBottomDragTarget !=
+            widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx) ||
         _hasCurrentSelectingPosition !=
             widget.stateManager.hasCurrentSelectingPosition ||
         _keepFocus != widget.stateManager.keepFocus) {
       setState(() {
         resetState();
+        _resetKeepAlive();
       });
     }
   }
@@ -83,7 +104,8 @@ class _RowWidgetState extends State<RowWidget> {
 
     _isTopDragTarget = widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx);
 
-    _isBottomDragTarget = widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx);
+    _isBottomDragTarget =
+        widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx);
 
     _hasCurrentSelectingPosition =
         widget.stateManager.hasCurrentSelectingPosition;
@@ -119,8 +141,36 @@ class _RowWidgetState extends State<RowWidget> {
         : Colors.transparent;
   }
 
+  void _ensureKeepAlive() {
+    assert(_keepAliveHandle == null);
+    _keepAliveHandle = KeepAliveHandle();
+    KeepAliveNotification(_keepAliveHandle).dispatch(context);
+  }
+
+  void _releaseKeepAlive() {
+    _keepAliveHandle.release();
+    _keepAliveHandle = null;
+  }
+
+  void _resetKeepAlive() {
+    if (!widget.stateManager.mode.isNormal) {
+      return;
+    }
+
+    final bool resetKeepAlive =
+        widget.stateManager.isRowBeingDragged(widget.row.key);
+
+    if (_keepAlive != resetKeepAlive) {
+      _keepAlive = resetKeepAlive;
+
+      updateKeepAlive();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Container(
       decoration: BoxDecoration(
         color: _isCheckedRow

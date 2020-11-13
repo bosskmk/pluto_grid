@@ -117,6 +117,10 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
                 type: PlutoDragType.Update,
                 offset: offset,
               );
+
+              widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+                offset: offset,
+              ));
             },
             onDragEnd: (dragDetails) {
               addDragEventOfRow(

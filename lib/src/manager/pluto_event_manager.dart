@@ -14,7 +14,14 @@ class PlutoEventManager {
   }
 
   void init() {
-    subject.stream.listen(_handler);
+    final stream =
+        subject.stream.where((event) => event is! PlutoMoveUpdateEvent);
+
+    final throttleStream = subject.stream
+        .where((event) => event is PlutoMoveUpdateEvent)
+        .throttleTime(Duration(milliseconds: 800));
+
+    MergeStream([stream, throttleStream]).listen(_handler);
   }
 
   void addEvent(PlutoEvent event) {

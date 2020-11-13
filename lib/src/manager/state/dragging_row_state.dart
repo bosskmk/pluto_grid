@@ -27,6 +27,8 @@ abstract class IDraggingRowState {
   bool isRowIdxTopDragTarget(int rowIdx);
 
   bool isRowIdxBottomDragTarget(int rowIdx);
+
+  bool isRowBeingDragged(Key rowKey);
 }
 
 mixin DraggingRowState implements IPlutoState {
@@ -98,6 +100,14 @@ mixin DraggingRowState implements IPlutoState {
   bool isRowIdxBottomDragTarget(int rowIdx) {
     return _dragTargetRowIdx != null &&
         rowIdx == _dragTargetRowIdx + _dragRows.length - 1;
+  }
+
+  bool isRowBeingDragged(Key rowKey) {
+    return _isDragging == true &&
+        dragRows != null &&
+        dragRows.firstWhere((element) => element.key == rowKey,
+                orElse: () => null) !=
+            null;
   }
 
   void _clearDraggingState() {

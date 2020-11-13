@@ -32,6 +32,8 @@ part './src/manager/event/pluto_drag_rows_event.dart';
 
 part './src/manager/event/pluto_event.dart';
 
+part './src/manager/event/pluto_move_update_event.dart';
+
 part './src/manager/pluto_event_manager.dart';
 
 part './src/manager/pluto_key_manager.dart';

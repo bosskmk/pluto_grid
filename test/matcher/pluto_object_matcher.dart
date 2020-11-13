@@ -9,6 +9,10 @@ class PlutoObjectMatcher<T> extends Matcher {
 
   @override
   bool matches(item, Map matchState) {
+    if (item is! T) {
+      return false;
+    }
+
     return rule(item);
   }
 
