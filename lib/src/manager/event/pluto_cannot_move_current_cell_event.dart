@@ -9,4 +9,8 @@ class PlutoCannotMoveCurrentCellEvent extends PlutoEvent {
     this.cellPosition,
     this.direction,
   });
+
+  void _handler(PlutoStateManager stateManager) {
+    //
+  }
 }

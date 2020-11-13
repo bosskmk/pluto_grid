@@ -4,6 +4,7 @@ abstract class IPlutoState extends ChangeNotifier
     implements
         ICellState,
         IColumnState,
+        IDraggingRowState,
         IEditingState,
         IGridState,
         IKeyboardState,
@@ -18,6 +19,7 @@ class PlutoState extends ChangeNotifier
     with
         CellState,
         ColumnState,
+        DraggingRowState,
         EditingState,
         GridState,
         KeyboardState,

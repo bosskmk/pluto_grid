@@ -165,7 +165,7 @@ void main() {
     );
 
     cellWidget(hasSortedColumn: false).test(
-      'Draggable 아이콘을 드래그 하지 않으면 PlutoDragEvent 가 호출 되지 않아야 한다.',
+      'Draggable 아이콘을 드래그 하지 않으면 PlutoDragRowsEvent 가 호출 되지 않아야 한다.',
       (tester) async {
         final row = PlutoRow(cells: {});
 
@@ -179,7 +179,7 @@ void main() {
         // It only needs to be called Update, so it is ignored.
 
         verifyNever(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate;
           })),
         ));
@@ -187,7 +187,7 @@ void main() {
     );
 
     cellWidget(hasSortedColumn: false).test(
-      'Draggable 아이콘을 드래그 하면 PlutoDragEvent 가 호출 되어야 한다.',
+      'Draggable 아이콘을 드래그 하면 PlutoDragRowsEvent 가 호출 되어야 한다.',
       (tester) async {
         final offset = Offset(0.0, 100);
 
@@ -199,31 +199,28 @@ void main() {
         await tester.drag(find.byType(Icon), offset);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
             return object.dragType.isStart &&
-                object.itemType.isRows &&
-                object.dragData.length == 1 &&
-                object.dragData.first.key == row.key;
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
           })),
         )).called(1);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
-                object.itemType.isRows &&
                 object.offset.dy > 100 &&
-                object.dragData.length == 1 &&
-                object.dragData.first.key == row.key;
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
           })),
         )).called(greaterThan(1));
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
             return object.offset.dy > 100 &&
                 object.dragType.isEnd &&
-                object.itemType.isRows &&
-                object.dragData.length == 1 &&
-                object.dragData.first.key == row.key;
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
           })),
         )).called(1);
       },
@@ -231,7 +228,7 @@ void main() {
 
     cellWidget(hasSortedColumn: false).test(
       'Draggable 아이콘을 드래그 하면 isCurrentRowSelected 이 true 인 경우'
-      'currentSelectingRows 로 PlutoDragEvent 가 호출 되어야 한다.',
+      'currentSelectingRows 로 PlutoDragRowsEvent 가 호출 되어야 한다.',
       (tester) async {
         final offset = Offset(0.0, 100);
 
@@ -248,14 +245,13 @@ void main() {
         await tester.drag(find.byType(Icon), offset);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
-                object.itemType.isRows &&
                 object.offset.dy > 100 &&
-                object.dragData.length == 3 &&
-                object.dragData[0].key == rows[0].key &&
-                object.dragData[1].key == rows[1].key &&
-                object.dragData[1].key == rows[1].key;
+                object.rows.length == 3 &&
+                object.rows[0].key == rows[0].key &&
+                object.rows[1].key == rows[1].key &&
+                object.rows[1].key == rows[1].key;
           })),
         )).called(greaterThan(1));
       },

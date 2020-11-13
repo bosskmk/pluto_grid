@@ -22,13 +22,6 @@ class PlutoEventManager {
   }
 
   void _handler(PlutoEvent event) {
-    if (event is PlutoDragEvent) {
-      if (event.itemType.isRows && event.dragType.isEnd) {
-        stateManager.moveRows(
-          event.dragData,
-          event.offset.dy,
-        );
-      }
-    }
+    event._handler(stateManager);
   }
 }

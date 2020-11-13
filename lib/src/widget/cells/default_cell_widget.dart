@@ -61,11 +61,10 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     }
 
     widget.stateManager.eventManager.addEvent(
-      PlutoDragEvent<List<PlutoRow>>(
+      PlutoDragRowsEvent(
         offset: offset,
         dragType: type,
-        itemType: PlutoDragItemType.Rows,
-        dragData: isCurrentRowSelected
+        rows: isCurrentRowSelected
             ? widget.stateManager.currentSelectingRows
             : [thisRow],
       ),

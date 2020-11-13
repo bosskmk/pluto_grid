@@ -28,7 +28,7 @@ part './src/helper/move_direction.dart';
 
 part './src/manager/event/pluto_cannot_move_current_cell_event.dart';
 
-part './src/manager/event/pluto_drag_event.dart';
+part './src/manager/event/pluto_drag_rows_event.dart';
 
 part './src/manager/event/pluto_event.dart';
 
@@ -41,6 +41,8 @@ part './src/manager/pluto_state_manager.dart';
 part './src/manager/state/cell_state.dart';
 
 part './src/manager/state/column_state.dart';
+
+part './src/manager/state/dragging_row_state.dart';
 
 part './src/manager/state/editing_state.dart';
 
