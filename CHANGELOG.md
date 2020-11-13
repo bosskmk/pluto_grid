@@ -1,3 +1,13 @@
+## [1.0.0-pre.3] - 2020. 11. 13
+
+* Fix bug, scrolling and row movement errors with createHeader present.
+* Modified to move based on half the size of the cell or row.
+* Update scrollbar status when moving with a keyboard.
+* To disable dragging of rows while columns are be sorted.
+* Add visualizations for dragging rows.
+* Modified so that onPointerMove event occurs only in drag state.
+* Applying scrolling up or down the grid when dragging a row.
+
 ## [1.0.0-pre.2] - 2020. 11. 09
 
 * Add insertRows to PlutoStateManager.
