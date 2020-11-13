@@ -61,11 +61,10 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     }
 
     widget.stateManager.eventManager.addEvent(
-      PlutoDragEvent<List<PlutoRow>>(
+      PlutoDragRowsEvent(
         offset: offset,
         dragType: type,
-        itemType: PlutoDragItemType.Rows,
-        dragData: isCurrentRowSelected
+        rows: isCurrentRowSelected
             ? widget.stateManager.currentSelectingRows
             : [thisRow],
       ),
@@ -118,6 +117,10 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
                 type: PlutoDragType.Update,
                 offset: offset,
               );
+
+              widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+                offset: offset,
+              ));
             },
             onDragEnd: (dragDetails) {
               addDragEventOfRow(
@@ -171,6 +174,8 @@ class _RowDragIconWidget extends StatefulWidget {
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
   GlobalKey _feedbackKey = GlobalKey();
 
+  bool _isDragging = false;
+
   Offset get _offsetFeedback {
     if (_feedbackKey.currentContext == null) {
       return null;
@@ -182,8 +187,22 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
     return renderBoxRed.localToGlobal(Offset.zero);
   }
 
-  DragUpdatedCallback _onPointerMove(PointerMoveEvent _) {
-    return widget.onDragUpdated(_offsetFeedback ?? _.position);
+  void _onPointerMove(PointerMoveEvent _) {
+    if (_isDragging == false) {
+      return;
+    }
+
+    widget.onDragUpdated(_offsetFeedback ?? _.position);
+  }
+
+  void _onDragStarted() {
+    _isDragging = true;
+    widget.onDragStarted();
+  }
+
+  void _onDragEnd(DraggableDetails _) {
+    _isDragging = false;
+    widget.onDragEnd(_);
   }
 
   @override
@@ -191,8 +210,8 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
     return Listener(
       onPointerMove: _onPointerMove,
       child: Draggable(
-        onDragStarted: widget.onDragStarted,
-        onDragEnd: widget.onDragEnd,
+        onDragStarted: _onDragStarted,
+        onDragEnd: _onDragEnd,
         feedback: Material(
           key: _feedbackKey,
           child: ShadowContainer(

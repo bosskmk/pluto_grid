@@ -59,11 +59,15 @@ abstract class IRowState {
 
   void removeRows(List<PlutoRow> rows);
 
-  void moveRows(List<PlutoRow> rows, double offset);
+  void moveRows(
+    List<PlutoRow> rows,
+    double offset, {
+    bool notify = true,
+  });
 
   void toggleAllRowChecked(
     bool flag, {
-    bool notify: true,
+    bool notify = true,
   });
 }
 
@@ -393,7 +397,11 @@ mixin RowState implements IPlutoState {
     }
   }
 
-  void moveRows(List<PlutoRow> rows, double offset) {
+  void moveRows(
+    List<PlutoRow> rows,
+    double offset, {
+    bool notify = true,
+  }) {
     int indexToMove = getRowIdxByOffset(offset);
 
     if (indexToMove == null) {
@@ -416,7 +424,9 @@ mixin RowState implements IPlutoState {
 
     updateCurrentCellPosition(notify: false);
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void toggleAllRowChecked(

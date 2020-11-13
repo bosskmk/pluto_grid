@@ -5,13 +5,18 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
+import '../../matcher/pluto_object_matcher.dart';
+import '../../mock/mock_pluto_event_manager.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   PlutoStateManager stateManager;
+  PlutoEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
+    eventManager = MockPlutoEventManager();
+    when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
     when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
@@ -1210,24 +1215,10 @@ void main() {
 
     verify(stateManager.setCurrentSelectingPositionWithOffset(any));
 
-    verify(stateManager.needMovingScroll(
-      Offset(150.0, 18.0),
-      MoveDirection.Left,
-    ));
-
-    verify(stateManager.needMovingScroll(
-      Offset(150.0, 18.0),
-      MoveDirection.Right,
-    ));
-
-    verify(stateManager.needMovingScroll(
-      Offset(150.0, 18.0),
-      MoveDirection.Up,
-    ));
-
-    verify(stateManager.needMovingScroll(
-      Offset(150.0, 18.0),
-      MoveDirection.Down,
+    verify(eventManager.addEvent(
+      argThat(PlutoObjectMatcher<PlutoMoveUpdateEvent>(rule: (object) {
+        return object.offset.dx == 150.0 && object.offset.dy == 18.0;
+      })),
     ));
   });
 

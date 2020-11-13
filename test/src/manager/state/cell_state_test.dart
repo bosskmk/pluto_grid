@@ -229,7 +229,6 @@ void main() {
           PlutoCellPosition(columnIdx: 2, rowIdx: 2),
         );
 
-
         // then
         verify(listener.onChangeVoidNoParamListener()).called(4);
       },

@@ -63,12 +63,13 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       topTitle: 'Row with checkbox',
       topContents: [
         Text('You can select rows with checkbox.'),
-        Text('If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
+        Text(
+            'If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
       ],
       topButtons: [
         PlutoExampleButton(
           url:
-          'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_with_checkbox_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_with_checkbox_screen.dart',
         ),
       ],
       body: PlutoGrid(

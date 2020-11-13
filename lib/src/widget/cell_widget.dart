@@ -36,8 +36,6 @@ class _CellWidgetState extends State<CellWidget>
 
   final _selectionSubject = PublishSubject<Function()>();
 
-  final _scrollSubject = PublishSubject<Function()>();
-
   bool _keepAlive = false;
 
   KeepAliveHandle _keepAliveHandle;
@@ -60,8 +58,6 @@ class _CellWidgetState extends State<CellWidget>
 
     _selectionSubject.close();
 
-    _scrollSubject.close();
-
     super.dispose();
   }
 
@@ -82,12 +78,6 @@ class _CellWidgetState extends State<CellWidget>
     widget.stateManager.addListener(changeStateListener);
 
     _selectionSubject.stream.listen((event) {
-      event();
-    });
-
-    _scrollSubject.stream
-        .throttleTime(Duration(milliseconds: 800))
-        .listen((event) {
       event();
     });
 
@@ -157,27 +147,6 @@ class _CellWidgetState extends State<CellWidget>
   bool _getIsSelectedCell() {
     return widget.stateManager
         .isSelectedCell(widget.cell, widget.column, widget.rowIdx);
-  }
-
-  bool _needMovingScroll(Offset selectingOffset, MoveDirection move) {
-    return widget.stateManager.needMovingScroll(selectingOffset, move);
-  }
-
-  void _scrollForDraggableSelection(MoveDirection move) {
-    if (move == null) {
-      return;
-    }
-
-    final LinkedScrollControllerGroup scroll = move.horizontal
-        ? widget.stateManager.scroll.horizontal
-        : widget.stateManager.scroll.vertical;
-
-    final double offset = move.isLeft || move.isUp
-        ? -PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce
-        : PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce;
-
-    scroll.animateTo(scroll.offset + offset,
-        curve: Curves.ease, duration: Duration(milliseconds: 800));
   }
 
   Widget _buildCell() {
@@ -299,21 +268,9 @@ class _CellWidgetState extends State<CellWidget>
               .setCurrentSelectingPositionWithOffset(details.globalPosition);
         });
 
-        _scrollSubject.add(() {
-          if (_needMovingScroll(details.globalPosition, MoveDirection.Left)) {
-            _scrollForDraggableSelection(MoveDirection.Left);
-          } else if (_needMovingScroll(
-              details.globalPosition, MoveDirection.Right)) {
-            _scrollForDraggableSelection(MoveDirection.Right);
-          }
-
-          if (_needMovingScroll(details.globalPosition, MoveDirection.Up)) {
-            _scrollForDraggableSelection(MoveDirection.Up);
-          } else if (_needMovingScroll(
-              details.globalPosition, MoveDirection.Down)) {
-            _scrollForDraggableSelection(MoveDirection.Down);
-          }
-        });
+        widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+          offset: details.globalPosition,
+        ));
       },
       onLongPressEnd: (LongPressEndDetails details) {
         if (_isCurrentCell != true) {

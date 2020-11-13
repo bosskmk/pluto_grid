@@ -2244,7 +2244,7 @@ void main() {
 
     withEnterKeyAction(PlutoEnterKeyAction.ToggleEditing).test(
       'PlutoEnterKeyAction.ToggleEditing 인 경우 editing 이 true 가 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(false);
         expect(stateManager.isEditing, false);
 
@@ -2258,7 +2258,7 @@ void main() {
 
     withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 아래로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2272,7 +2272,7 @@ void main() {
 
     withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 위로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2288,7 +2288,7 @@ void main() {
 
     withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 우측으로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2302,7 +2302,7 @@ void main() {
 
     withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 좌측으로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 

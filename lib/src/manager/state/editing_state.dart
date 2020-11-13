@@ -130,16 +130,16 @@ mixin EditingState implements IPlutoState {
   }
 
   void changeCellValue(
-      Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool force = false,
-        bool notify = true,
-      }) {
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool force = false,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {
@@ -153,11 +153,12 @@ mixin EditingState implements IPlutoState {
             oldValue: oldValue,
           );
 
-          if (force == false && canNotChangeCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          )) {
+          if (force == false &&
+              canNotChangeCellValue(
+                column: currentColumn,
+                newValue: value,
+                oldValue: oldValue,
+              )) {
             return;
           }
 
