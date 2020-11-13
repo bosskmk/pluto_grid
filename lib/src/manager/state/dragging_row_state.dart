@@ -32,9 +32,9 @@ abstract class IDraggingRowState {
 }
 
 mixin DraggingRowState implements IPlutoState {
-  bool get isDraggingRow => _isDragging;
+  bool get isDraggingRow => _isDraggingRow;
 
-  bool _isDragging = false;
+  bool _isDraggingRow = false;
 
   List<PlutoRow> get dragRows => _dragRows;
 
@@ -48,11 +48,11 @@ mixin DraggingRowState implements IPlutoState {
     bool flag, {
     bool notify = true,
   }) {
-    if (_isDragging == flag) {
+    if (_isDraggingRow == flag) {
       return;
     }
 
-    _isDragging = flag;
+    _isDraggingRow = flag;
 
     _clearDraggingState();
 
@@ -88,22 +88,27 @@ mixin DraggingRowState implements IPlutoState {
   }
 
   bool isRowIdxDragTarget(int rowIdx) {
-    return _dragTargetRowIdx != null &&
+    return rowIdx != null &&
+        _dragTargetRowIdx != null &&
         _dragTargetRowIdx <= rowIdx &&
         rowIdx < _dragTargetRowIdx + _dragRows.length;
   }
 
   bool isRowIdxTopDragTarget(int rowIdx) {
-    return _dragTargetRowIdx != null && _dragTargetRowIdx == rowIdx;
+    return rowIdx != null &&
+        _dragTargetRowIdx != null &&
+        _dragTargetRowIdx == rowIdx;
   }
 
   bool isRowIdxBottomDragTarget(int rowIdx) {
-    return _dragTargetRowIdx != null &&
+    return rowIdx != null &&
+        _dragTargetRowIdx != null &&
         rowIdx == _dragTargetRowIdx + _dragRows.length - 1;
   }
 
   bool isRowBeingDragged(Key rowKey) {
-    return _isDragging == true &&
+    return rowKey != null &&
+        _isDraggingRow == true &&
         dragRows != null &&
         dragRows.firstWhere((element) => element.key == rowKey,
                 orElse: () => null) !=
