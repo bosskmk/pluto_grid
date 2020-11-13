@@ -92,14 +92,14 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
-  }) : this._key = UniqueKey();
+  }) : _key = UniqueKey();
 
   /// Column key
-  Key _key;
+  final Key _key;
 
   Key get key => _key;
 
-  bool get hasRenderer => this.renderer != null;
+  bool get hasRenderer => renderer != null;
 
   String formattedValueForType(dynamic value) {
     if (type.isNumber) {
@@ -518,7 +518,7 @@ extension PlutoColumnSortExtension on PlutoColumnSort {
   }
 
   String toShortString() {
-    return this.toString().split('.').last;
+    return toString().split('.').last;
   }
 
   PlutoColumnSort fromString(String value) {

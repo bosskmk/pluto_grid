@@ -36,7 +36,7 @@ void main() {
       scroll: scrollController,
     );
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 500, maxHeight: 500));
+    stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 500));
   });
 
   group('moveCurrentCellToEdgeOfColumns', () {

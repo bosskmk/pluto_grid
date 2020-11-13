@@ -84,7 +84,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       context: context,
       color: backgroundColor,
       position: RelativeRect.fromRect(
-          position & Size(40, 40), Offset.zero & overlay.size),
+          position & const Size(40, 40), Offset.zero & overlay.size),
       items: [
         if (widget.column.fixed.isFixed == true)
           buildMenuItem(
@@ -101,7 +101,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
             child: buildTextItem(localeText.toRightColumn),
           ),
         ],
-        PopupMenuDivider(),
+        const PopupMenuDivider(),
         buildMenuItem(
           value: _MenuItem.AutoSize,
           child: buildTextItem(localeText.autoSizeColumn),
@@ -139,12 +139,12 @@ class _ColumnWidgetState extends State<ColumnWidget> {
 
         // Get size after rendering virtually
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-        TextSpan textSpan = new TextSpan(
+        TextSpan textSpan = TextSpan(
           style: DefaultTextStyle.of(context).style,
           text: maxValue,
         );
 
-        TextPainter textPainter = new TextPainter(
+        TextPainter textPainter = TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
         );
@@ -199,7 +199,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
                 ),
               ),
             )
-          : BoxDecoration(),
+          : const BoxDecoration(),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -365,9 +365,7 @@ class __CheckboxAllSelectionWidgetState
       return;
     }
 
-    if (changed == null) {
-      changed = false;
-    }
+    changed ??= false;
 
     if (_checked == null) {
       changed = true;

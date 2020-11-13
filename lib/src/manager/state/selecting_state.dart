@@ -53,15 +53,15 @@ abstract class ISelectingState {
   void setCurrentSelectingPositionWithOffset(Offset offset);
 
   /// Sets the currentSelectingRows by range.
-  /// [from] rowIdx of [rows].
-  /// [to] rowIdx of [rows].
-  void setCurrentSelectingRowsByRange(int from, int to);
+  /// [from] rowIdx of rows.
+  /// [to] rowIdx of rows.
+  void setCurrentSelectingRowsByRange(int from, int to, {bool notify = true});
 
   void clearCurrentSelectingPosition({bool notify = true});
 
   void clearCurrentSelectingRows({bool notify = true});
 
-  void toggleSelectingRow(int rowIdx);
+  void toggleSelectingRow(int rowIdx, {notify = true});
 
   bool isSelectingInteraction();
 
@@ -133,7 +133,7 @@ mixin SelectingState implements IPlutoState {
 
   String get currentSelectingText {
     final bool fromSelectingRows =
-        _selectingMode.isRow && _currentSelectingRows.length > 0;
+        _selectingMode.isRow && _currentSelectingRows.isNotEmpty;
 
     final bool fromSelectingPosition =
         currentCellPosition != null && currentSelectingPosition != null;
@@ -184,7 +184,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   void setAllCurrentSelecting() {
-    if (_rows == null || _rows.length < 1) {
+    if (_rows == null || _rows.isEmpty) {
       return;
     }
 
@@ -319,7 +319,7 @@ mixin SelectingState implements IPlutoState {
     );
   }
 
-  void setCurrentSelectingRowsByRange(int from, int to, {notify: true}) {
+  void setCurrentSelectingRowsByRange(int from, int to, {bool notify = true}) {
     if (!_selectingMode.isRow) {
       return;
     }
@@ -352,7 +352,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   void clearCurrentSelectingRows({bool notify = true}) {
-    if (_currentSelectingRows == null || _currentSelectingRows.length < 1) {
+    if (_currentSelectingRows == null || _currentSelectingRows.isEmpty) {
       return;
     }
 
@@ -363,7 +363,7 @@ mixin SelectingState implements IPlutoState {
     }
   }
 
-  void toggleSelectingRow(int rowIdx, {notify: true}) {
+  void toggleSelectingRow(int rowIdx, {notify = true}) {
     if (!_selectingMode.isRow) {
       return;
     }
@@ -397,7 +397,7 @@ mixin SelectingState implements IPlutoState {
   bool isSelectedRow(Key rowKey) {
     if (rowKey == null ||
         !_selectingMode.isRow ||
-        _currentSelectingRows.length < 1) {
+        _currentSelectingRows.isEmpty) {
       return false;
     }
 
@@ -496,7 +496,7 @@ mixin SelectingState implements IPlutoState {
     } else if (_selectingMode.isRow) {
       return false;
     } else {
-      throw ('selectingMode is not handled');
+      throw Exception('selectingMode is not handled');
     }
   }
 

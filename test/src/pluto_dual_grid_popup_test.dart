@@ -34,7 +34,7 @@ void main() {
                       ),
                     );
                   },
-                  child: Text('open grid popup'),
+                  child: const Text('open grid popup'),
                 ),
               );
             },

@@ -174,7 +174,7 @@ class _RowWidgetState extends State<RowWidget>
     return Container(
       decoration: BoxDecoration(
         color: _isCheckedRow
-            ? Color.alphaBlend(Color(0x11757575), rowColor())
+            ? Color.alphaBlend(const Color(0x11757575), rowColor())
             : rowColor(),
         border: Border(
           top: _isDragTarget && _isTopDragTarget

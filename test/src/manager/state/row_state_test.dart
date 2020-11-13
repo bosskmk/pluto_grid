@@ -288,7 +288,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints());
+      stateManager.setLayout(const BoxConstraints());
 
       // when
       String selectColumnField = 'right1';
@@ -349,7 +349,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints());
+      stateManager.setLayout(const BoxConstraints());
 
       // when
       String selectColumnField = 'left1';
@@ -387,12 +387,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
       });
     };
 
@@ -983,7 +983,7 @@ void main() {
         scroll: MockPlutoScrollController(),
       );
 
-      stateManager.setLayout(BoxConstraints());
+      stateManager.setLayout(const BoxConstraints());
 
       final int rowIdxBeforePrependRows = 0;
 
@@ -1321,7 +1321,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints());
+      stateManager.setLayout(const BoxConstraints());
 
       // when
       final currentRowKey = rows[3].key;
@@ -1441,12 +1441,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 
@@ -1491,12 +1491,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 
@@ -1541,12 +1541,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 
@@ -1591,12 +1591,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 
@@ -1637,12 +1637,12 @@ void main() {
           scroll: scroll,
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 
@@ -1682,15 +1682,15 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: scroll,
-          createHeader: (PlutoStateManager stateManager) => Text('header'),
+          createHeader: (PlutoStateManager stateManager) => const Text('header'),
         );
 
-        stateManager.setLayout(BoxConstraints(
+        stateManager.setLayout(const BoxConstraints(
           maxWidth: 500,
           maxHeight: 300,
         ));
 
-        stateManager.setGridGlobalOffset(Offset(0.0, 0.0));
+        stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
         final listener = MockOnChangeListener();
 

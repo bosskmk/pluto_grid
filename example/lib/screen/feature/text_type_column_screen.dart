@@ -61,7 +61,7 @@ class _TextTypeColumnScreenState extends State<TextTypeColumnScreen> {
       title: 'Text type column',
       topTitle: 'Text type column',
       topContents: [
-        Text('A column to enter a character value.'),
+        const Text('A column to enter a character value.'),
       ],
       topButtons: [
         PlutoExampleButton(

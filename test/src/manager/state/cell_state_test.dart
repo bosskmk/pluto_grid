@@ -58,7 +58,7 @@ void main() {
       );
 
       // when
-      stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
 
       String selectColumnField = 'body1';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -92,7 +92,7 @@ void main() {
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
       stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -128,7 +128,7 @@ void main() {
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
       stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -327,7 +327,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key nonExistsKey = UniqueKey();
@@ -352,7 +352,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key cellKey = rows.first.cells['body0'].key;
@@ -380,7 +380,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key cellKey = rows[7].cells['body3'].key;

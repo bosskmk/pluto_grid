@@ -177,15 +177,15 @@ void main() {
 
   group('isRowIdxDragTarget', () {
     const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
-    List<PlutoRow> GIVEN_DRAG_ROWS;
+    List<PlutoRow> givenDragRows;
 
     setUp(() {
-      GIVEN_DRAG_ROWS = [
+      givenDragRows = [
         rows[5],
         rows[6],
       ];
       stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
-      stateManager.setDragRows(GIVEN_DRAG_ROWS);
+      stateManager.setDragRows(givenDragRows);
     });
 
     test('rowIdx 가 null 이면 false 를 리턴해야 한다.', () {
@@ -202,7 +202,7 @@ void main() {
     test('rowIdx 가 주어진 rowIdx + dragRows.length 보다 크면 false 를 리턴해야 한다.', () {
       expect(
         stateManager.isRowIdxDragTarget(
-          GIVEN_DRAG_TARGET_ROW_IDX + GIVEN_DRAG_ROWS.length + 1,
+          GIVEN_DRAG_TARGET_ROW_IDX + givenDragRows.length + 1,
         ),
         isFalse,
       );
@@ -222,7 +222,7 @@ void main() {
         final rowIdx = GIVEN_DRAG_TARGET_ROW_IDX + 1;
 
         expect(rowIdx, greaterThan(GIVEN_DRAG_TARGET_ROW_IDX));
-        expect(rowIdx, lessThan(rowIdx + GIVEN_DRAG_ROWS.length));
+        expect(rowIdx, lessThan(rowIdx + givenDragRows.length));
 
         expect(
           stateManager.isRowIdxDragTarget(rowIdx),
@@ -234,15 +234,15 @@ void main() {
 
   group('isRowIdxTopDragTarget', () {
     const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
-    List<PlutoRow> GIVEN_DRAG_ROWS;
+    List<PlutoRow> givenDragRows;
 
     setUp(() {
-      GIVEN_DRAG_ROWS = [
+      givenDragRows = [
         rows[5],
         rows[6],
       ];
       stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
-      stateManager.setDragRows(GIVEN_DRAG_ROWS);
+      stateManager.setDragRows(givenDragRows);
     });
 
     test(
@@ -271,15 +271,15 @@ void main() {
 
   group('isRowIdxBottomDragTarget', () {
     const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
-    List<PlutoRow> GIVEN_DRAG_ROWS;
+    List<PlutoRow> givenDragRows;
 
     setUp(() {
-      GIVEN_DRAG_ROWS = [
+      givenDragRows = [
         rows[5],
         rows[6],
       ];
       stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
-      stateManager.setDragRows(GIVEN_DRAG_ROWS);
+      stateManager.setDragRows(givenDragRows);
     });
 
     test(
@@ -322,20 +322,18 @@ void main() {
 
   group('isRowBeingDragged', () {
     const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
-    List<PlutoRow> GIVEN_DRAG_ROWS;
+    List<PlutoRow> givenDragRows;
 
     final setDrag = () {
-      GIVEN_DRAG_ROWS = [
+      givenDragRows = [
         rows[5],
         rows[6],
       ];
       stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
-      stateManager.setDragRows(GIVEN_DRAG_ROWS);
+      stateManager.setDragRows(givenDragRows);
     };
 
-    setUp(() {
-      setDrag();
-    });
+    setUp(setDrag);
 
     test(
       'rowKey 가 null 이면 false 를 리턴해야 한다.',

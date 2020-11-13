@@ -427,7 +427,7 @@ void main() {
       scroll: null,
     );
 
-    stateManager.setLayout(BoxConstraints());
+    stateManager.setLayout(const BoxConstraints());
 
     // when
     String selectColumnField = 'body2';
@@ -489,7 +489,7 @@ void main() {
       scroll: null,
     );
 
-    stateManager.setLayout(BoxConstraints());
+    stateManager.setLayout(const BoxConstraints());
 
     // when
     String selectColumnField = 'body1';
@@ -520,7 +520,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints());
+      stateManager.setLayout(const BoxConstraints());
 
       // when
       // then
@@ -549,7 +549,7 @@ void main() {
       // when
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 500, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // then
       expect(stateManager.columnIndexesByShowFixed(), [2, 0, 1, 3, 4]);
@@ -577,7 +577,7 @@ void main() {
       // when
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
 
       // then
       expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
@@ -613,7 +613,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 500, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // when
       // then
@@ -653,7 +653,7 @@ void main() {
 
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
@@ -693,7 +693,7 @@ void main() {
 
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
@@ -731,7 +731,7 @@ void main() {
       );
 
       // 150 + 200 + 150 = 최소 500 필요
-      stateManager.setLayout(BoxConstraints(maxWidth: 550, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 550, maxHeight: 600));
 
       expect(stateManager.showFixedColumn, true);
 
@@ -772,7 +772,7 @@ void main() {
       );
 
       // 150 + 200 + 150 = 최소 500 필요
-      stateManager.setLayout(BoxConstraints(maxWidth: 450, maxHeight: 600));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 450, maxHeight: 600));
 
       expect(stateManager.showFixedColumn, false);
 

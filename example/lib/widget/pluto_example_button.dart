@@ -16,8 +16,8 @@ class PlutoExampleButton extends StatelessWidget {
       onPressed: () {
         launchUrl(url);
       },
-      icon: FaIcon(FontAwesomeIcons.github),
-      label: Text('Source'),
+      icon: const FaIcon(FontAwesomeIcons.github),
+      label: const Text('Source'),
     );
   }
 }

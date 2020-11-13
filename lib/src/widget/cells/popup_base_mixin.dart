@@ -213,7 +213,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             style: widget.stateManager.configuration.cellTextStyle,
             decoration: const InputDecoration(
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: EdgeInsets.all(0),
               isDense: true,
             ),
             maxLines: 1,

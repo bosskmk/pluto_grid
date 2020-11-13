@@ -26,7 +26,7 @@ class PlutoGridPopup {
     this.createFooter,
     this.configuration,
   }) {
-    this.open();
+    open();
   }
 
   Future<void> open() async {

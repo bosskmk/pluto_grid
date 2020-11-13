@@ -20,7 +20,7 @@ class PlutoDualGridPopup {
     this.width,
     this.height,
   }) {
-    this.open();
+    open();
   }
 
   Future<void> open() async {

@@ -34,7 +34,7 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
       title: 'Dark mode',
       topTitle: 'Dark mode',
       topContents: [
-        Text('Change the entire theme of the grid to Dark.'),
+        const Text('Change the entire theme of the grid to Dark.'),
       ],
       topButtons: [
         PlutoExampleButton(

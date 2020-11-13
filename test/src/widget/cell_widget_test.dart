@@ -18,7 +18,7 @@ void main() {
     eventManager = MockPlutoEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
@@ -1201,7 +1201,7 @@ void main() {
     );
 
     // then
-    final TestGesture gesture = await tester.startGesture(Offset(100, 18));
+    final TestGesture gesture = await tester.startGesture(const Offset(100, 18));
 
     await tester.pump(const Duration(milliseconds: 500));
 
@@ -1211,7 +1211,7 @@ void main() {
 
     await tester.pump();
 
-    await tester.pumpAndSettle(Duration(milliseconds: 800));
+    await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
     verify(stateManager.setCurrentSelectingPositionWithOffset(any));
 
@@ -1269,7 +1269,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle(Duration(seconds: 1));
+        await tester.pumpAndSettle(const Duration(seconds: 1));
       });
     };
 

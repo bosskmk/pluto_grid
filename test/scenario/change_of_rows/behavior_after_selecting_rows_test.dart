@@ -6,9 +6,7 @@ import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 
-/**
- * 행 선택(selectingRows) 상태 이후의 동작 테스트
- */
+/// 행 선택(selectingRows) 상태 이후의 동작 테스트
 void main() {
   final PlutoSelectingMode selectingMode = PlutoSelectingMode.Row;
 

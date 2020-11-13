@@ -4,7 +4,7 @@ class DummyData {
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
-  DummyData(int columnLength, int rowLength) {
+  DummyData() {
     columns = [
       /// Text Column definition
       PlutoColumn(

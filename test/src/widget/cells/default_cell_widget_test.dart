@@ -17,7 +17,7 @@ void main() {
     eventManager = MockPlutoEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
   });
@@ -97,7 +97,7 @@ void main() {
 
     final renderText = buildCellWidgetWithRenderer(
         (PlutoColumnRendererContext rendererContext) {
-      return Text('renderer value');
+      return const Text('renderer value');
     });
 
     renderText.test(
@@ -189,7 +189,7 @@ void main() {
     cellWidget(hasSortedColumn: false).test(
       'Draggable 아이콘을 드래그 하면 PlutoDragRowsEvent 가 호출 되어야 한다.',
       (tester) async {
-        final offset = Offset(0.0, 100);
+        final offset = const Offset(0.0, 100);
 
         final row = PlutoRow(cells: {});
 
@@ -230,7 +230,7 @@ void main() {
       'Draggable 아이콘을 드래그 하면 isCurrentRowSelected 이 true 인 경우'
       'currentSelectingRows 로 PlutoDragRowsEvent 가 호출 되어야 한다.',
       (tester) async {
-        final offset = Offset(0.0, 100);
+        final offset = const Offset(0.0, 100);
 
         final rows = [
           PlutoRow(cells: {}),

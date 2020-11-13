@@ -15,7 +15,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
@@ -44,7 +44,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -95,7 +95,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -147,7 +147,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -201,7 +201,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -255,7 +255,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -308,7 +308,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -432,7 +432,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),

@@ -36,7 +36,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           return Row(
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add_circle,
                 ),
                 onPressed: () {
@@ -47,10 +47,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 },
                 iconSize: 18,
                 color: Colors.green,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
@@ -59,7 +59,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 },
                 iconSize: 18,
                 color: Colors.red,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               Expanded(
                 child: Text(
@@ -163,7 +163,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               child: Row(
                 children: [
                   FlatButton(
-                    child: Text('Add 10'),
+                    child: const Text('Add 10'),
                     onPressed: () {
                       handleAddRowButton(count: 10);
                     },
@@ -174,7 +174,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
         configuration: PlutoConfiguration(
-          scrollbarConfig: PlutoScrollbarConfig(
+          scrollbarConfig: const PlutoScrollbarConfig(
             isAlwaysShown: true,
           ),
         ),

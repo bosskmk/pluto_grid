@@ -201,7 +201,7 @@ mixin ColumnState implements IPlutoState {
 
   bool isShowFixedColumn(double maxWidth) {
     final bool hasFixedColumn =
-        leftFixedColumns.length > 0 || rightFixedColumns.length > 0;
+        leftFixedColumns.isNotEmpty || rightFixedColumns.isNotEmpty;
 
     return hasFixedColumn &&
         maxWidth >
@@ -331,13 +331,9 @@ mixin ColumnState implements IPlutoState {
     int indexToMove;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      if (columnIndex == null) {
-        columnIndex = findColumnIndex(i);
-      }
+      columnIndex ??= findColumnIndex(i);
 
-      if (indexToMove == null) {
-        indexToMove = findIndexToMove(i);
-      }
+      indexToMove ??= findIndexToMove(i);
 
       if (indexToMove != null && columnIndex != null) {
         break;

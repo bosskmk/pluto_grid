@@ -67,7 +67,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
     TextStyle style,
     decoration = const InputDecoration(
       border: InputBorder.none,
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: EdgeInsets.all(0),
       isDense: true,
     ),
     maxLines = 1,

@@ -191,7 +191,7 @@ class _CellWidgetState extends State<CellWidget>
       );
     }
 
-    throw ('Type not implemented.');
+    throw Exception('Type not implemented.');
   }
 
   @override
@@ -365,7 +365,7 @@ class _BackgroundColorWidget extends StatelessWidget {
                 ),
               ),
             )
-          : BoxDecoration();
+          : const BoxDecoration();
     }
   }
 
@@ -382,7 +382,7 @@ class _BackgroundColorWidget extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           height: height,
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           child: child,
         ),
       ),

@@ -40,6 +40,6 @@ class PlutoMoveUpdateEvent extends PlutoEvent {
         : PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce;
 
     scroll.animateTo(scroll.offset + offset,
-        curve: Curves.ease, duration: Duration(milliseconds: 800));
+        curve: Curves.ease, duration: const Duration(milliseconds: 800));
   }
 }

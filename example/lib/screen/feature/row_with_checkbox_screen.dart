@@ -62,8 +62,8 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       title: 'Row with checkbox',
       topTitle: 'Row with checkbox',
       topContents: [
-        Text('You can select rows with checkbox.'),
-        Text(
+        const Text('You can select rows with checkbox.'),
+        const Text(
             'If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
       ],
       topButtons: [

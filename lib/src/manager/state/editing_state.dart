@@ -74,7 +74,7 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
-    if (selectingMode.isRow && currentSelectingRows.length > 0) {
+    if (selectingMode.isRow && currentSelectingRows.isNotEmpty) {
       _pasteCellValueIntoSelectingRows(textList: textList);
     } else {
       int columnStartIdx;
@@ -204,7 +204,7 @@ mixin EditingState implements IPlutoState {
         rowIdxList.add(i);
       }
 
-      if (selectingRowKeys.length < 1) {
+      if (selectingRowKeys.isEmpty) {
         break;
       }
     }

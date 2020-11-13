@@ -6,7 +6,7 @@ class DummyData {
   List<PlutoRow> rows;
 
   DummyData(int columnLength, int rowLength) {
-    var faker = new Faker();
+    var faker = const Faker();
 
     columns = List<int>.generate(columnLength, (index) => index).map((i) {
       return PlutoColumn(
@@ -51,7 +51,7 @@ class DummyData {
   }
 
   static PlutoRow rowByColumns(List<PlutoColumn> columns) {
-    final cells = Map<String, PlutoCell>();
+    final cells = <String, PlutoCell>{};
 
     columns.forEach((PlutoColumn column) {
       cells[column.field] = PlutoCell(

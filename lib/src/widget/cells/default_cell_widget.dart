@@ -57,7 +57,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     Offset offset,
   }) {
     if (offset != null) {
-      offset += Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
+      offset += const Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
     }
 
     widget.stateManager.eventManager.addEvent(
@@ -172,7 +172,7 @@ class _RowDragIconWidget extends StatefulWidget {
 }
 
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
-  GlobalKey _feedbackKey = GlobalKey();
+  final GlobalKey _feedbackKey = GlobalKey();
 
   bool _isDragging = false;
 

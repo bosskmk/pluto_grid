@@ -375,7 +375,7 @@ void main() {
               onLoaded: (PlutoOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
-              createHeader: (stateManager) => Text('grid header'),
+              createHeader: (stateManager) => const Text('grid header'),
             ),
           ),
         ),
@@ -629,7 +629,7 @@ void main() {
                 onLoaded: (PlutoOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
-                createHeader: (stateManager) => Text('grid header'),
+                createHeader: (stateManager) => const Text('grid header'),
               ),
             ),
           ),
@@ -672,7 +672,7 @@ void main() {
                 onLoaded: (PlutoOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
-                createHeader: (stateManager) => Text('grid header'),
+                createHeader: (stateManager) => const Text('grid header'),
               ),
             ),
           ),
@@ -864,14 +864,14 @@ void main() {
         ),
       );
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
       stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       stateManager.moveColumn(columns[5].key, 50);
       //
@@ -976,7 +976,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -7)), selectedDate);
+        expect(currentDate.add(const Duration(days: -7)), selectedDate);
       });
 
       testWidgets(
@@ -1062,7 +1062,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -(7 * 6))), selectedDate);
+        expect(currentDate.add(const Duration(days: -(7 * 6))), selectedDate);
       });
 
       testWidgets(
@@ -1145,7 +1145,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -(7 * 10))), selectedDate);
+        expect(currentDate.add(const Duration(days: -(7 * 10))), selectedDate);
       });
 
       testWidgets(
@@ -1228,7 +1228,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: 7 * 10)), selectedDate);
+        expect(currentDate.add(const Duration(days: 7 * 10)), selectedDate);
       });
     });
   });

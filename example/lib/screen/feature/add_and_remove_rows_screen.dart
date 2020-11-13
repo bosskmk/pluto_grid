@@ -65,8 +65,8 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
       title: 'Add and Remove Rows',
       topTitle: 'Add and Remove Rows',
       topContents: [
-        Text('You can add or delete rows.'),
-        Text(
+        const Text('You can add or delete rows.'),
+        const Text(
             'Remove selected Rows is only deleted if there is a row selected in Row mode.'),
       ],
       topButtons: [
@@ -83,19 +83,19 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
               child: Row(
                 children: [
                   FlatButton(
-                    child: Text('Add a Row'),
+                    child: const Text('Add a Row'),
                     onPressed: handleAddRowButton,
                   ),
                   FlatButton(
-                    child: Text('Add 100 Rows'),
+                    child: const Text('Add 100 Rows'),
                     onPressed: () => handleAddRowButton(count: 100),
                   ),
                   FlatButton(
-                    child: Text('Remove Current Row'),
+                    child: const Text('Remove Current Row'),
                     onPressed: handleRemoveCurrentRowButton,
                   ),
                   FlatButton(
-                    child: Text('Remove Selected Rows'),
+                    child: const Text('Remove Selected Rows'),
                     onPressed: handleRemoveSelectedRowsButton,
                   ),
                   DropdownButtonHideUnderline(

@@ -52,7 +52,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
             child: LayoutBuilder(
               builder: (ctx, size) {
                 return Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   width: 400,
                   height: 500,
                   child: SingleChildScrollView(
@@ -77,7 +77,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       title: 'Cell selection',
       topTitle: 'Cell selection',
       topContents: [
-        Text(
+        const Text(
             'In Square selection mode, Shift + tap or long tap and then move to select cells.'),
       ],
       topButtons: [
@@ -93,7 +93,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
             child: Row(
               children: [
                 FlatButton(
-                  child: Text('Show selected cells.'),
+                  child: const Text('Show selected cells.'),
                   onPressed: handleSelected,
                 ),
               ],

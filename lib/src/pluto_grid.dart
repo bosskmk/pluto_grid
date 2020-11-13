@@ -178,7 +178,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (stateManager.currentCell == null && widget.rows.length > 0) {
+      if (stateManager.currentCell == null && widget.rows.isNotEmpty) {
         stateManager.setCurrentCell(
             widget.rows.first.cells.entries.first.value, 0);
       }
@@ -198,9 +198,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         _bodyRightOffset != stateManager.bodyRightOffset ||
         _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
         _rightFixedLeftOffset != stateManager.rightFixedLeftOffset) {
-      setState(() {
-        resetState();
-      });
+      setState(resetState);
     }
   }
 

@@ -12,7 +12,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
   });
@@ -487,7 +487,7 @@ void main() {
     });
 
     aColumn.test('should be called moveColumn. ', (tester) async {
-      await tester.drag(find.byType(Draggable), Offset(50.0, 0.0));
+      await tester.drag(find.byType(Draggable), const Offset(50.0, 0.0));
 
       verify(stateManager.moveColumn(column.key, 50.0 + (column.width / 2)));
     });
@@ -525,7 +525,7 @@ void main() {
      * (기본 값이 4, Positioned 위젯 right -3)
      */
     dragAColumn(
-      Offset(50.0, 0.0),
+      const Offset(50.0, 0.0),
     ).test(
       'resizeColumn 이 54로 호출 되어야 한다.',
       (tester) async {
@@ -534,7 +534,7 @@ void main() {
     );
 
     dragAColumn(
-      Offset(-50.0, 0.0),
+      const Offset(-50.0, 0.0),
     ).test(
       'resizeColumn 이 -46으로 호출 되어야 한다.',
       (tester) async {

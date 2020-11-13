@@ -256,8 +256,7 @@ class PlutoKeyManager {
       return;
     }
 
-    Clipboard.setData(
-        new ClipboardData(text: stateManager.currentSelectingText));
+    Clipboard.setData(ClipboardData(text: stateManager.currentSelectingText));
   }
 
   void _handleCtrlV(KeyManagerEvent keyManagerEvent) {
@@ -306,79 +305,79 @@ class KeyManagerEvent {
 }
 
 extension KeyManagerEventExtention on KeyManagerEvent {
-  bool get isKeyDownEvent => this.event.runtimeType == RawKeyDownEvent;
+  bool get isKeyDownEvent => event.runtimeType == RawKeyDownEvent;
 
-  bool get isKeyUpEvent => this.event.runtimeType == RawKeyUpEvent;
+  bool get isKeyUpEvent => event.runtimeType == RawKeyUpEvent;
 
-  bool get isMoving => this.isHorizontal || this.isVertical;
+  bool get isMoving => isHorizontal || isVertical;
 
-  bool get isHorizontal => this.isLeft || this.isRight;
+  bool get isHorizontal => isLeft || isRight;
 
-  bool get isVertical => this.isUp || this.isDown;
+  bool get isVertical => isUp || isDown;
 
   bool get isLeft =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.arrowLeft.keyId;
 
   bool get isRight =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
 
   bool get isUp =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
 
   bool get isDown =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
 
   bool get isHome =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.home.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.home.keyId;
 
-  bool get isEnd => this.event.logicalKey.keyId == LogicalKeyboardKey.end.keyId;
+  bool get isEnd => event.logicalKey.keyId == LogicalKeyboardKey.end.keyId;
 
   bool get isPageUp {
     // windows 에서 pageUp keyId 가 0x10700000021.
-    return this.event.logicalKey.keyId == LogicalKeyboardKey.pageUp.keyId ||
-        this.event.logicalKey.keyId == 0x10700000021;
+    return event.logicalKey.keyId == LogicalKeyboardKey.pageUp.keyId ||
+        event.logicalKey.keyId == 0x10700000021;
   }
 
   bool get isPageDown {
     // windows 에서 pageDown keyId 가 0x10700000022.
-    return this.event.logicalKey.keyId == LogicalKeyboardKey.pageDown.keyId ||
-        this.event.logicalKey.keyId == 0x10700000022;
+    return event.logicalKey.keyId == LogicalKeyboardKey.pageDown.keyId ||
+        event.logicalKey.keyId == 0x10700000022;
   }
 
   bool get isEsc =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
 
   bool get isEnter =>
-      this.event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
 
-  bool get isTab => this.event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
+  bool get isTab => event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
 
-  bool get isF2 => this.event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
+  bool get isF2 => event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
 
   bool get isCharacter =>
-      this.event.logicalKey.keyLabel != null &&
-      this.event.logicalKey.keyLabel.isNotEmpty;
+      event.logicalKey.keyLabel != null &&
+      event.logicalKey.keyLabel.isNotEmpty;
 
   bool get isCtrlC {
-    return this.isCtrlPressed &&
-        this.event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+    return isCtrlPressed &&
+        event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
   }
 
   bool get isCtrlV {
-    return this.isCtrlPressed &&
-        this.event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+    return isCtrlPressed &&
+        event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
   }
 
   bool get isCtrlA {
-    return this.isCtrlPressed &&
-        this.event.logicalKey.keyId == LogicalKeyboardKey.keyA.keyId;
+    return isCtrlPressed &&
+        event.logicalKey.keyId == LogicalKeyboardKey.keyA.keyId;
   }
 
   bool get isShiftPressed {
-    return this.event.isShiftPressed;
+    return event.isShiftPressed;
   }
 
   bool get isCtrlPressed {
-    return this.event.isMetaPressed || this.event.isControlPressed;
+    return event.isMetaPressed || event.isControlPressed;
   }
 }
