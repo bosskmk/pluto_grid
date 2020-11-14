@@ -34,8 +34,8 @@ class DummyData {
             return PlutoColumnType.text();
         }(i),
         fixed: (i) {
-          if (i < 1) return PlutoColumnFixed.Left;
-          if (i > columnLength - 2) return PlutoColumnFixed.Right;
+          if (i < 1) return PlutoColumnFixed.left;
+          if (i > columnLength - 2) return PlutoColumnFixed.right;
           return null;
         }(i),
       );

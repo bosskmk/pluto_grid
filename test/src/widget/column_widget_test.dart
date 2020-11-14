@@ -325,7 +325,7 @@ void main() {
 
       verify(stateManager.toggleFixedColumn(
         column.key,
-        PlutoColumnFixed.Left,
+        PlutoColumnFixed.left,
       )).called(1);
     });
 
@@ -335,7 +335,7 @@ void main() {
 
       verify(stateManager.toggleFixedColumn(
         column.key,
-        PlutoColumnFixed.Right,
+        PlutoColumnFixed.right,
       )).called(1);
     });
 
@@ -360,7 +360,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.Left,
+      fixed: PlutoColumnFixed.left,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -394,7 +394,7 @@ void main() {
 
       verify(stateManager.toggleFixedColumn(
         column.key,
-        PlutoColumnFixed.None,
+        PlutoColumnFixed.none,
       )).called(1);
     });
 
@@ -415,7 +415,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.Right,
+      fixed: PlutoColumnFixed.right,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -449,7 +449,7 @@ void main() {
 
       verify(stateManager.toggleFixedColumn(
         column.key,
-        PlutoColumnFixed.None,
+        PlutoColumnFixed.none,
       )).called(1);
     });
 
@@ -470,7 +470,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.Right,
+      fixed: PlutoColumnFixed.right,
     );
 
     final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
@@ -548,7 +548,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.Right,
+      fixed: PlutoColumnFixed.right,
     );
 
     final aColumnWithConfiguration = (PlutoConfiguration configuration) {

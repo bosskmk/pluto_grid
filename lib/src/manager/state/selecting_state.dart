@@ -12,7 +12,7 @@ abstract class ISelectingState {
   PlutoCellPosition get currentSelectingPosition;
 
   /// Position list of currently selected.
-  /// Only valid in [PlutoSelectingMode.Square].
+  /// Only valid in [PlutoSelectingMode.square].
   ///
   /// ```dart
   /// stateManager.currentSelectingPositionList.forEach((element) {
@@ -24,7 +24,7 @@ abstract class ISelectingState {
   bool get hasCurrentSelectingPosition;
 
   /// Rows of currently selected.
-  /// Only valid in [PlutoSelectingMode.Row].
+  /// Only valid in [PlutoSelectingMode.row].
   List<PlutoRow> get currentSelectingRows;
 
   /// String of multi-selected cells.
@@ -82,7 +82,7 @@ mixin SelectingState implements IPlutoState {
 
   PlutoSelectingMode get selectingMode => _selectingMode;
 
-  PlutoSelectingMode _selectingMode = PlutoSelectingMode.Square;
+  PlutoSelectingMode _selectingMode = PlutoSelectingMode.square;
 
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
 
@@ -189,8 +189,8 @@ mixin SelectingState implements IPlutoState {
     }
 
     switch (_selectingMode) {
-      case PlutoSelectingMode.Square:
-      case PlutoSelectingMode._Horizontal:
+      case PlutoSelectingMode.square:
+      case PlutoSelectingMode._horizontal:
         setCurrentCell(firstCell, 0, notify: false);
 
         setCurrentSelectingPosition(
@@ -200,7 +200,7 @@ mixin SelectingState implements IPlutoState {
           ),
         );
         break;
-      case PlutoSelectingMode.Row:
+      case PlutoSelectingMode.row:
         if (currentCell == null) {
           setCurrentCell(firstCell, 0, notify: false);
         }
@@ -212,7 +212,7 @@ mixin SelectingState implements IPlutoState {
 
         setCurrentSelectingRowsByRange(0, _rows.length - 1);
         break;
-      case PlutoSelectingMode.None:
+      case PlutoSelectingMode.none:
       default:
         break;
     }
@@ -504,7 +504,7 @@ mixin SelectingState implements IPlutoState {
     changeCellValue(cell._key, value, notify: false);
 
     if (configuration.enableMoveDownAfterSelecting) {
-      moveCurrentCell(MoveDirection.Down, notify: false);
+      moveCurrentCell(MoveDirection.down, notify: false);
 
       setEditing(true, notify: false);
     }

@@ -59,7 +59,7 @@ class PlutoStateManager extends PlutoState {
   }
 
   static List<PlutoSelectingMode> get selectingModes =>
-      PlutoSelectingMode.None.items;
+      PlutoSelectingMode.none.items;
 
   static void initializeRows(
     List<PlutoColumn> refColumns,
@@ -205,29 +205,29 @@ class PlutoKeyPressed {
 }
 
 enum PlutoSelectingMode {
-  Square,
-  Row,
-  None,
+  square,
+  row,
+  none,
 
   /// using only internal
-  _Horizontal,
+  _horizontal,
 }
 
 extension PlutoSelectingModeExtension on PlutoSelectingMode {
-  bool get isSquare => this == PlutoSelectingMode.Square;
+  bool get isSquare => this == PlutoSelectingMode.square;
 
-  bool get isRow => this == PlutoSelectingMode.Row;
+  bool get isRow => this == PlutoSelectingMode.row;
 
-  bool get isNone => this == PlutoSelectingMode.None;
+  bool get isNone => this == PlutoSelectingMode.none;
 
   /// using only internal
-  bool get _isHorizontal => this == PlutoSelectingMode._Horizontal;
+  bool get _isHorizontal => this == PlutoSelectingMode._horizontal;
 
   List<PlutoSelectingMode> get items {
     return [
-      PlutoSelectingMode.Square,
-      PlutoSelectingMode.Row,
-      PlutoSelectingMode.None,
+      PlutoSelectingMode.square,
+      PlutoSelectingMode.row,
+      PlutoSelectingMode.none,
     ];
   }
 

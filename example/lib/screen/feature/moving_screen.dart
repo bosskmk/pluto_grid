@@ -53,7 +53,7 @@ class _MovingScreenState extends State<MovingScreen> {
         },
         configuration: PlutoConfiguration(
           enableMoveDownAfterSelecting: true,
-          enterKeyAction: PlutoEnterKeyAction.EditingAndMoveDown,
+          enterKeyAction: PlutoEnterKeyAction.editingAndMoveDown,
         ),
       ),
     );

@@ -37,14 +37,14 @@ void main() {
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
       ],
       rows: null,
@@ -105,14 +105,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
       ],
       rows: null,
@@ -138,14 +138,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
       ],
       rows: null,
@@ -170,7 +170,7 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         PlutoColumn(
@@ -183,7 +183,7 @@ void main() {
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
       ],
@@ -208,14 +208,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
       ],
       rows: null,
@@ -240,14 +240,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
       ],
       rows: null,
@@ -273,14 +273,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 120,
         ),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 120,
         ),
         PlutoColumn(
@@ -293,7 +293,7 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 120,
         ),
       ],
@@ -315,10 +315,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -341,10 +341,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -367,10 +367,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -390,10 +390,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -412,10 +412,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
+          count: 3, fixed: PlutoColumnFixed.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
+          count: 3, fixed: PlutoColumnFixed.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -446,10 +446,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
+          count: 3, fixed: PlutoColumnFixed.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
+          count: 3, fixed: PlutoColumnFixed.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -474,10 +474,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.Left),
+          count: 3, fixed: PlutoColumnFixed.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.Right),
+          count: 3, fixed: PlutoColumnFixed.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -547,7 +547,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
@@ -575,7 +575,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
 
@@ -592,14 +592,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 150,
         ),
       ];
@@ -630,14 +630,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 150,
         ),
       ];
@@ -651,7 +651,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
@@ -670,14 +670,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 150,
         ),
       ];
@@ -691,7 +691,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.right);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
@@ -709,14 +709,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 150,
         ),
       ];
@@ -750,14 +750,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
           width: 150,
         ),
       ];

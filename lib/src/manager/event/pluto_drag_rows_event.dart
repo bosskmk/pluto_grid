@@ -44,23 +44,23 @@ class PlutoDragRowsEvent extends PlutoEvent {
 }
 
 enum PlutoDragType {
-  Start,
-  Update,
-  End,
+  start,
+  update,
+  end,
 }
 
 extension PlutoDragTypeExtension on PlutoDragType {
-  bool get isStart => this == PlutoDragType.Start;
+  bool get isStart => this == PlutoDragType.start;
 
-  bool get isUpdate => this == PlutoDragType.Update;
+  bool get isUpdate => this == PlutoDragType.update;
 
-  bool get isEnd => this == PlutoDragType.End;
+  bool get isEnd => this == PlutoDragType.end;
 }
 
 enum PlutoDragItemType {
-  Rows,
+  rows,
 }
 
 extension PlutoDragItemExtension on PlutoDragItemType {
-  bool get isRows => this == PlutoDragItemType.Rows;
+  bool get isRows => this == PlutoDragItemType.rows;
 }

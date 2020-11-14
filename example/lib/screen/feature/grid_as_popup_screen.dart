@@ -68,7 +68,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       columns: columns,
       width: 600,
       rows: rows,
-      mode: PlutoMode.Select,
+      mode: PlutoMode.select,
       onLoaded: (PlutoOnLoadedEvent event) {
         rows.asMap().entries.forEach((element) {
           final cell = element.value.cells[selectFieldName];
@@ -76,7 +76,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
           if (cell.value.toString() == controller.text) {
             event.stateManager.setCurrentCell(cell, element.key);
             event.stateManager
-                .moveScrollByRow(MoveDirection.Up, element.key + 1);
+                .moveScrollByRow(MoveDirection.up, element.key + 1);
           }
         });
       },

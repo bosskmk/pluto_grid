@@ -215,7 +215,7 @@ mixin ColumnState implements IPlutoState {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
         _columns[i].fixed =
-            _columns[i].fixed.isFixed ? PlutoColumnFixed.None : fixed;
+            _columns[i].fixed.isFixed ? PlutoColumnFixed.none : fixed;
         break;
       }
     }
@@ -231,20 +231,20 @@ mixin ColumnState implements IPlutoState {
 
       if (column._key == columnKey) {
         if (column.sort.isNone) {
-          column.sort = PlutoColumnSort.Ascending;
+          column.sort = PlutoColumnSort.ascending;
 
           sortAscending(column);
         } else if (column.sort.isAscending) {
-          column.sort = PlutoColumnSort.Descending;
+          column.sort = PlutoColumnSort.descending;
 
           sortDescending(column);
         } else {
-          column.sort = PlutoColumnSort.None;
+          column.sort = PlutoColumnSort.none;
 
           sortBySortIdx();
         }
       } else {
-        column.sort = PlutoColumnSort.None;
+        column.sort = PlutoColumnSort.none;
       }
     }
 

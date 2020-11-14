@@ -19,7 +19,7 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
 
   PlutoStateManager stateManager;
 
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.row;
 
   @override
   void initState() {

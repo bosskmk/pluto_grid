@@ -208,14 +208,14 @@ mixin CellState implements IPlutoState {
 
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
     switch (direction) {
-      case MoveDirection.Left:
+      case MoveDirection.left:
         return cellPosition.columnIdx > 0;
-      case MoveDirection.Right:
+      case MoveDirection.right:
         return cellPosition.columnIdx <
             _rows[cellPosition.rowIdx].cells.length - 1;
-      case MoveDirection.Up:
+      case MoveDirection.up:
         return cellPosition.rowIdx > 0;
-      case MoveDirection.Down:
+      case MoveDirection.down:
         return cellPosition.rowIdx < _rows.length - 1;
     }
 

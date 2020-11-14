@@ -84,7 +84,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
     PlutoGridPopup(
       context: context,
-      mode: PlutoMode.Select,
+      mode: PlutoMode.select,
       onLoaded: _onLoaded,
       onSelected: _onSelected,
       columns: popupColumns,
@@ -144,10 +144,10 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
 
       if (rowIdxToMove < event.stateManager._rows.length) {
-        event.stateManager.moveScrollByRow(MoveDirection.Up, rowIdxToMove);
+        event.stateManager.moveScrollByRow(MoveDirection.up, rowIdxToMove);
       } else {
         event.stateManager
-            .moveScrollByRow(MoveDirection.Up, event.stateManager._rows.length);
+            .moveScrollByRow(MoveDirection.up, event.stateManager._rows.length);
       }
     }
   }

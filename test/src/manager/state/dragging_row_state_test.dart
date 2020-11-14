@@ -176,7 +176,7 @@ void main() {
   });
 
   group('isRowIdxDragTarget', () {
-    const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
+    const int givenDragTargetRowIdx = 3;
     List<PlutoRow> givenDragRows;
 
     setUp(() {
@@ -184,7 +184,7 @@ void main() {
         rows[5],
         rows[6],
       ];
-      stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
+      stateManager.setDragTargetRowIdx(givenDragTargetRowIdx);
       stateManager.setDragRows(givenDragRows);
     });
 
@@ -194,7 +194,7 @@ void main() {
 
     test('rowIdx 가 주어진 rowIdx 보다 작으면 false 를 리턴 해야 한다.', () {
       expect(
-        stateManager.isRowIdxDragTarget(GIVEN_DRAG_TARGET_ROW_IDX - 1),
+        stateManager.isRowIdxDragTarget(givenDragTargetRowIdx - 1),
         isFalse,
       );
     });
@@ -202,7 +202,7 @@ void main() {
     test('rowIdx 가 주어진 rowIdx + dragRows.length 보다 크면 false 를 리턴해야 한다.', () {
       expect(
         stateManager.isRowIdxDragTarget(
-          GIVEN_DRAG_TARGET_ROW_IDX + givenDragRows.length + 1,
+          givenDragTargetRowIdx + givenDragRows.length + 1,
         ),
         isFalse,
       );
@@ -210,7 +210,7 @@ void main() {
 
     test('rowIdx 가 주어진 rowIdx 와 같으면 true 를 리턴해야 한다.', () {
       expect(
-        stateManager.isRowIdxDragTarget(GIVEN_DRAG_TARGET_ROW_IDX),
+        stateManager.isRowIdxDragTarget(givenDragTargetRowIdx),
         isTrue,
       );
     });
@@ -219,9 +219,9 @@ void main() {
       'rowIdx 가 주어진 rowIdx 보다 크고 '
       '주어진 rowIdx + dragRows.length 보다 작으면 true 를 리턴해야 한다.',
       () {
-        final rowIdx = GIVEN_DRAG_TARGET_ROW_IDX + 1;
+        final rowIdx = givenDragTargetRowIdx + 1;
 
-        expect(rowIdx, greaterThan(GIVEN_DRAG_TARGET_ROW_IDX));
+        expect(rowIdx, greaterThan(givenDragTargetRowIdx));
         expect(rowIdx, lessThan(rowIdx + givenDragRows.length));
 
         expect(
@@ -233,7 +233,7 @@ void main() {
   });
 
   group('isRowIdxTopDragTarget', () {
-    const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
+    const int givenDragTargetRowIdx = 3;
     List<PlutoRow> givenDragRows;
 
     setUp(() {
@@ -241,7 +241,7 @@ void main() {
         rows[5],
         rows[6],
       ];
-      stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
+      stateManager.setDragTargetRowIdx(givenDragTargetRowIdx);
       stateManager.setDragRows(givenDragRows);
     });
 
@@ -270,7 +270,7 @@ void main() {
   });
 
   group('isRowIdxBottomDragTarget', () {
-    const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
+    const int givenDragTargetRowIdx = 3;
     List<PlutoRow> givenDragRows;
 
     setUp(() {
@@ -278,7 +278,7 @@ void main() {
         rows[5],
         rows[6],
       ];
-      stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
+      stateManager.setDragTargetRowIdx(givenDragTargetRowIdx);
       stateManager.setDragRows(givenDragRows);
     });
 
@@ -321,7 +321,7 @@ void main() {
   });
 
   group('isRowBeingDragged', () {
-    const int GIVEN_DRAG_TARGET_ROW_IDX = 3;
+    const int givenDragTargetRowIdx = 3;
     List<PlutoRow> givenDragRows;
 
     final setDrag = () {
@@ -329,7 +329,7 @@ void main() {
         rows[5],
         rows[6],
       ];
-      stateManager.setDragTargetRowIdx(GIVEN_DRAG_TARGET_ROW_IDX);
+      stateManager.setDragTargetRowIdx(givenDragTargetRowIdx);
       stateManager.setDragRows(givenDragRows);
     };
 

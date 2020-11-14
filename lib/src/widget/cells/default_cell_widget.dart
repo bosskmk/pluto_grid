@@ -110,11 +110,11 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             column: widget.column,
             stateManager: widget.stateManager,
             onDragStarted: () {
-              addDragEventOfRow(type: PlutoDragType.Start);
+              addDragEventOfRow(type: PlutoDragType.start);
             },
             onDragUpdated: (offset) {
               addDragEventOfRow(
-                type: PlutoDragType.Update,
+                type: PlutoDragType.update,
                 offset: offset,
               );
 
@@ -124,7 +124,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             },
             onDragEnd: (dragDetails) {
               addDragEventOfRow(
-                type: PlutoDragType.End,
+                type: PlutoDragType.end,
                 offset: dragDetails.offset,
               );
             },

@@ -60,13 +60,13 @@ class PlutoKeyManager {
     MoveDirection moveDirection;
 
     if (keyManagerEvent.isLeft) {
-      moveDirection = MoveDirection.Left;
+      moveDirection = MoveDirection.left;
     } else if (keyManagerEvent.isRight) {
-      moveDirection = MoveDirection.Right;
+      moveDirection = MoveDirection.right;
     } else if (keyManagerEvent.isUp) {
-      moveDirection = MoveDirection.Up;
+      moveDirection = MoveDirection.up;
     } else if (keyManagerEvent.isDown) {
-      moveDirection = MoveDirection.Down;
+      moveDirection = MoveDirection.down;
     } else {
       return;
     }
@@ -92,29 +92,29 @@ class PlutoKeyManager {
     if (keyManagerEvent.isHome) {
       if (keyManagerEvent.isCtrlPressed) {
         if (keyManagerEvent.isShiftPressed) {
-          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Up);
+          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.up);
         } else {
-          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Up);
+          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.up);
         }
       } else {
         if (keyManagerEvent.isShiftPressed) {
-          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Left);
+          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.left);
         } else {
-          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Left);
+          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.left);
         }
       }
     } else if (keyManagerEvent.isEnd) {
       if (keyManagerEvent.isCtrlPressed) {
         if (keyManagerEvent.isShiftPressed) {
-          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Down);
+          stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.down);
         } else {
-          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Down);
+          stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.down);
         }
       } else {
         if (keyManagerEvent.isShiftPressed) {
-          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Right);
+          stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.right);
         } else {
-          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Right);
+          stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.right);
         }
       }
     }
@@ -126,7 +126,7 @@ class PlutoKeyManager {
             .floor();
 
     final direction =
-        keyManagerEvent.isPageUp ? MoveDirection.Up : MoveDirection.Down;
+        keyManagerEvent.isPageUp ? MoveDirection.up : MoveDirection.down;
 
     if (keyManagerEvent.isShiftPressed) {
       int rowIdx = stateManager.currentSelectingPosition?.rowIdx ??
@@ -180,12 +180,12 @@ class PlutoKeyManager {
           .configuration.enterKeyAction.isEditingAndMoveDown) {
         if (keyManagerEvent.event.isShiftPressed) {
           stateManager.moveCurrentCell(
-            MoveDirection.Up,
+            MoveDirection.up,
             notify: false,
           );
         } else {
           stateManager.moveCurrentCell(
-            MoveDirection.Down,
+            MoveDirection.down,
             notify: false,
           );
         }
@@ -193,13 +193,13 @@ class PlutoKeyManager {
           .configuration.enterKeyAction.isEditingAndMoveRight) {
         if (keyManagerEvent.event.isShiftPressed) {
           stateManager.moveCurrentCell(
-            MoveDirection.Left,
+            MoveDirection.left,
             force: true,
             notify: false,
           );
         } else {
           stateManager.moveCurrentCell(
-            MoveDirection.Right,
+            MoveDirection.right,
             force: true,
             notify: false,
           );
@@ -219,9 +219,9 @@ class PlutoKeyManager {
     final saveIsEditing = stateManager.isEditing;
 
     if (keyManagerEvent.event.isShiftPressed) {
-      stateManager.moveCurrentCell(MoveDirection.Left, force: true);
+      stateManager.moveCurrentCell(MoveDirection.left, force: true);
     } else {
-      stateManager.moveCurrentCell(MoveDirection.Right, force: true);
+      stateManager.moveCurrentCell(MoveDirection.right, force: true);
     }
 
     stateManager.setEditing(saveIsEditing);

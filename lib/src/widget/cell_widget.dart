@@ -391,13 +391,13 @@ class _BackgroundColorWidget extends StatelessWidget {
 }
 
 enum _CellEditingStatus {
-  INIT,
-  CHANGED,
-  UPDATED,
+  init,
+  changed,
+  updated,
 }
 
 extension _CellEditingStatusExtension on _CellEditingStatus {
   bool get isChanged {
-    return _CellEditingStatus.CHANGED == this;
+    return _CellEditingStatus.changed == this;
   }
 }

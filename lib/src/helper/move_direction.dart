@@ -1,17 +1,17 @@
 part of '../../pluto_grid.dart';
 
 enum MoveDirection {
-  Left,
-  Right,
-  Up,
-  Down,
+  left,
+  right,
+  up,
+  down,
 }
 
 extension MoveDirectionExtension on MoveDirection {
   bool get horizontal {
     switch (this) {
-      case MoveDirection.Left:
-      case MoveDirection.Right:
+      case MoveDirection.left:
+      case MoveDirection.right:
         return true;
       default:
         return false;
@@ -20,8 +20,8 @@ extension MoveDirectionExtension on MoveDirection {
 
   bool get vertical {
     switch (this) {
-      case MoveDirection.Up:
-      case MoveDirection.Down:
+      case MoveDirection.up:
+      case MoveDirection.down:
         return true;
       default:
         return false;
@@ -30,11 +30,11 @@ extension MoveDirectionExtension on MoveDirection {
 
   int get offset {
     switch (this) {
-      case MoveDirection.Left:
-      case MoveDirection.Up:
+      case MoveDirection.left:
+      case MoveDirection.up:
         return -1;
-      case MoveDirection.Right:
-      case MoveDirection.Down:
+      case MoveDirection.right:
+      case MoveDirection.down:
         return 1;
       default:
         return 0;
@@ -42,18 +42,18 @@ extension MoveDirectionExtension on MoveDirection {
   }
 
   bool get isLeft {
-    return MoveDirection.Left == this;
+    return MoveDirection.left == this;
   }
 
   bool get isRight {
-    return MoveDirection.Right == this;
+    return MoveDirection.right == this;
   }
 
   bool get isUp {
-    return MoveDirection.Up == this;
+    return MoveDirection.up == this;
   }
 
   bool get isDown {
-    return MoveDirection.Down == this;
+    return MoveDirection.down == this;
   }
 }

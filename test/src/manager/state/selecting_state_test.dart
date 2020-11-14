@@ -29,7 +29,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -62,7 +62,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Square);
+        stateManager.setSelectingMode(PlutoSelectingMode.square);
 
         final currentCell = rows[3].cells['text1'];
 
@@ -117,7 +117,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -160,7 +160,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       stateManager.toggleSelectingRow(1);
       stateManager.toggleSelectingRow(3);
@@ -213,7 +213,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       // when
       final currentSelectingText = stateManager.currentSelectingText;
@@ -247,7 +247,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       final currentCell = rows[3].cells['text2'];
 
@@ -274,14 +274,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
       ];
 
@@ -297,7 +297,7 @@ void main() {
       // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 충분
       stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 600));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -337,14 +337,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.Left,
+          fixed: PlutoColumnFixed.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.Right,
+          fixed: PlutoColumnFixed.right,
         ),
       ];
 
@@ -360,7 +360,7 @@ void main() {
       // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 부족
       stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -411,7 +411,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Square);
+      stateManager.setSelectingMode(PlutoSelectingMode.square);
 
       final currentCell = rows[3].cells['text1'];
 
@@ -451,7 +451,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.None);
+        stateManager.setSelectingMode(PlutoSelectingMode.none);
 
         expect(stateManager.isSelecting, false);
         // when
@@ -481,7 +481,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Square);
+        stateManager.setSelectingMode(PlutoSelectingMode.square);
 
         expect(stateManager.currentCell, null);
         expect(stateManager.isSelecting, false);
@@ -512,7 +512,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         expect(stateManager.currentCell, null);
         expect(stateManager.isSelecting, false);
@@ -545,7 +545,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
 
         expect(stateManager.currentCell, isNot(null));
@@ -580,7 +580,7 @@ void main() {
 
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
         stateManager.setEditing(true);
 
@@ -658,7 +658,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         stateManager.toggleSelectingRow(1);
 
@@ -752,7 +752,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Square);
+      stateManager.setSelectingMode(PlutoSelectingMode.square);
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -785,7 +785,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -819,7 +819,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.None);
+      stateManager.setSelectingMode(PlutoSelectingMode.none);
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -853,7 +853,7 @@ void main() {
         // when
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         stateManager.setCurrentCell(rows[3].cells['text1'], 3);
 
@@ -899,7 +899,7 @@ void main() {
         // when
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         stateManager.toggleSelectingRow(3);
 
@@ -934,7 +934,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.None);
+        stateManager.setSelectingMode(PlutoSelectingMode.none);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -962,7 +962,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -991,7 +991,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
         stateManager.setKeyPressed(PlutoKeyPressed(
           shift: true,
         ));
@@ -1023,7 +1023,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
         stateManager.setKeyPressed(PlutoKeyPressed(
           ctrl: true,
         ));
@@ -1055,7 +1055,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Row);
+        stateManager.setSelectingMode(PlutoSelectingMode.row);
         stateManager.setKeyPressed(PlutoKeyPressed(
           shift: true,
         ));
@@ -1088,7 +1088,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.Square);
+        stateManager.setSelectingMode(PlutoSelectingMode.square);
         stateManager.setKeyPressed(PlutoKeyPressed(
           ctrl: true,
         ));

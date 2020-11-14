@@ -52,7 +52,7 @@ class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.square);
         },
       ),
     );

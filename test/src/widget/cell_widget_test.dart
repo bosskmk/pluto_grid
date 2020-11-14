@@ -528,7 +528,7 @@ void main() {
     when(stateManager.isSelectingInteraction()).thenReturn(true);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
+    when(stateManager.mode).thenReturn(PlutoMode.select);
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
 
@@ -579,7 +579,7 @@ void main() {
     when(stateManager.isSelectingInteraction()).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
+    when(stateManager.mode).thenReturn(PlutoMode.select);
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
 
@@ -631,7 +631,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
+    when(stateManager.mode).thenReturn(PlutoMode.select);
 
     when(stateManager.isCurrentCell(any)).thenReturn(false);
 
@@ -683,7 +683,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
+    when(stateManager.mode).thenReturn(PlutoMode.select);
 
     when(stateManager.isCurrentCell(any)).thenReturn(false);
 
@@ -736,7 +736,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
+    when(stateManager.mode).thenReturn(PlutoMode.normal);
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
 
@@ -789,7 +789,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
+    when(stateManager.mode).thenReturn(PlutoMode.normal);
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
 
@@ -841,7 +841,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
+    when(stateManager.mode).thenReturn(PlutoMode.normal);
 
     when(stateManager.isCurrentCell(any)).thenReturn(false);
 
@@ -893,7 +893,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
+    when(stateManager.mode).thenReturn(PlutoMode.normal);
 
     when(stateManager.isCurrentCell(any)).thenReturn(false);
 
@@ -946,7 +946,7 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
 
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
+    when(stateManager.mode).thenReturn(PlutoMode.normal);
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
 
@@ -996,7 +996,7 @@ void main() {
     when(stateManager.isEditing).thenReturn(false);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
 
     // when
     await tester.pumpWidget(
@@ -1047,7 +1047,7 @@ void main() {
     when(stateManager.isEditing).thenReturn(false);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
     when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Square);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.square);
 
     // when
     await tester.pumpWidget(
@@ -1137,7 +1137,7 @@ void main() {
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
     when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
 
     when(stateManager.isSelectingInteraction()).thenReturn(false);
 
@@ -1181,7 +1181,7 @@ void main() {
 
     when(stateManager.isCurrentCell(any)).thenReturn(true);
     when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
+    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
 
     when(stateManager.isSelectingInteraction()).thenReturn(false);
     when(stateManager.needMovingScroll(any, any)).thenReturn(false);

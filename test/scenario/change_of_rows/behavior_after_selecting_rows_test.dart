@@ -8,7 +8,7 @@ import '../../helper/row_helper.dart';
 
 /// 행 선택(selectingRows) 상태 이후의 동작 테스트
 void main() {
-  final PlutoSelectingMode selectingMode = PlutoSelectingMode.Row;
+  final PlutoSelectingMode selectingMode = PlutoSelectingMode.row;
 
   PlutoStateManager stateManager;
 
@@ -54,16 +54,16 @@ void main() {
   group(
     '10개 행에서 3개 행 선택. (1 ~ 3)',
     () {
-      const COUNT_TOTAL_ROWS = 10;
-      const COUNT_SELECTED_ROWS = 3;
-      const FROM = 1;
-      const TO = 3;
+      const countTotalRows = 10;
+      const countSelectedRows = 3;
+      const from = 1;
+      const to = 3;
 
       final selectRowsFrom1To3 = () {
         return buildRowsWithSelectingRows(
-          numberOfRows: COUNT_TOTAL_ROWS,
-          from: FROM,
-          to: TO,
+          numberOfRows: countTotalRows,
+          from: from,
+          to: to,
         );
       };
 
@@ -78,7 +78,7 @@ void main() {
           final selectedRows = stateManager.currentSelectingRows;
           final selectedRowKeys = selectedRows.map((e) => e.key);
 
-          expect(selectedRows.length, COUNT_SELECTED_ROWS);
+          expect(selectedRows.length, countSelectedRows);
           expect(selectedRowKeys.contains(stateManager.rows[0].key), isTrue);
           expect(selectedRowKeys.contains(stateManager.rows[1].key), isTrue);
           expect(selectedRowKeys.contains(stateManager.rows[2].key), isTrue);
@@ -93,12 +93,12 @@ void main() {
 
           stateManager.insertRows(1, [rowToRemove]);
 
-          expect(stateManager.rows.length, COUNT_TOTAL_ROWS + 1);
+          expect(stateManager.rows.length, countTotalRows + 1);
 
           final selectedRows = stateManager.currentSelectingRows;
           final selectedRowKeys = selectedRows.map((e) => e.key);
 
-          expect(selectedRows.length, COUNT_SELECTED_ROWS);
+          expect(selectedRows.length, countSelectedRows);
           expect(selectedRowKeys.contains(stateManager.rows[2].key), isTrue);
           expect(selectedRowKeys.contains(stateManager.rows[3].key), isTrue);
           expect(selectedRowKeys.contains(stateManager.rows[4].key), isTrue);

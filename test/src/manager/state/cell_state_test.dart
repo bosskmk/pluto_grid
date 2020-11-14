@@ -15,10 +15,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -42,10 +42,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -89,8 +89,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.right);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
 
@@ -125,8 +125,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.right);
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
 
@@ -455,7 +455,7 @@ void main() {
           rows: [],
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.Select,
+          mode: PlutoMode.select,
         );
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(

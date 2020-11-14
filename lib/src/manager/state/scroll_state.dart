@@ -140,13 +140,13 @@ mixin ScrollState implements IPlutoState {
     }
 
     switch (move) {
-      case MoveDirection.Left:
+      case MoveDirection.left:
         return offset.dx < bodyLeftScrollOffset;
-      case MoveDirection.Right:
+      case MoveDirection.right:
         return offset.dx > bodyRightScrollOffset;
-      case MoveDirection.Up:
+      case MoveDirection.up:
         return offset.dy < bodyUpScrollOffset;
-      case MoveDirection.Down:
+      case MoveDirection.down:
         return offset.dy > bodyDownScrollOffset;
     }
 

@@ -302,7 +302,7 @@ mixin RowState implements IPlutoState {
 
       double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 
-      scrollByDirection(MoveDirection.Up, offsetToMove);
+      scrollByDirection(MoveDirection.up, offsetToMove);
     }
 
     /// Update currentSelectingPosition

@@ -1,3 +1,10 @@
+## [1.0.0-pre.4] - 
+
+* Enable constant_identifier_names.
+  - ex) `PlutoColumnFixed.Left` > `PlutoColumnFixed.left`
+  - ex) `PlutoSelectingMode.Row` > `PlutoSelectingMode.row`
+  - All existing constants such as enum are changed.
+
 ## [1.0.0-pre.3] - 2020. 11. 13
 
 * Fix bug, scrolling and row movement errors with createHeader present.

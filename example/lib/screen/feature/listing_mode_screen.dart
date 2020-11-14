@@ -145,7 +145,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
     );
 
     stateManager.prependRows([newRow]);
-    stateManager.moveScrollByRow(MoveDirection.Up, 1);
+    stateManager.moveScrollByRow(MoveDirection.up, 1);
     stateManager.setCurrentCell(newRow.cells.entries.first.value, 0);
   }
 
@@ -253,14 +253,14 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
           removeKeyboardListener =
               stateManager.keyManager.subject.stream.listen(handleKeyboard);
 
-          stateManager.setSelectingMode(PlutoSelectingMode.None);
+          stateManager.setSelectingMode(PlutoSelectingMode.none);
         },
         onSelected: (PlutoOnSelectedEvent event) {
           if (event.row != null) {
             openDetail(event.row);
           }
         },
-        mode: PlutoMode.Select,
+        mode: PlutoMode.select,
       ),
     );
   }

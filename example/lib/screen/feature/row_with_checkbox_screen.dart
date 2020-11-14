@@ -79,7 +79,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Row);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.row);
 
           stateManager = event.stateManager;
         },

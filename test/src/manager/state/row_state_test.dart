@@ -246,10 +246,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -273,10 +273,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -307,10 +307,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -334,10 +334,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -366,7 +366,7 @@ void main() {
   group('getRowIdxByOffset', () {
     PlutoStateManager stateManager;
 
-    const ROWS_LENGTH = 10;
+    const rowsLength = 10;
 
     final buildRows = () {
       return PlutoWidgetTestHelper('build rows', (tester) async {
@@ -374,7 +374,7 @@ void main() {
           ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ];
 
-        List<PlutoRow> rows = RowHelper.count(ROWS_LENGTH, columns);
+        List<PlutoRow> rows = RowHelper.count(rowsLength, columns);
 
         final scroll = MockPlutoScrollController();
 
