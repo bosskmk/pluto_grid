@@ -10,7 +10,5 @@ class PlutoCannotMoveCurrentCellEvent extends PlutoEvent {
     this.direction,
   });
 
-  void _handler(PlutoStateManager stateManager) {
-    //
-  }
+  void _handler(PlutoStateManager stateManager) {}
 }

@@ -34,8 +34,6 @@ class _CellWidgetState extends State<CellWidget>
 
   bool _isSelectedCell;
 
-  final _selectionSubject = PublishSubject<Function()>();
-
   bool _keepAlive = false;
 
   KeepAliveHandle _keepAliveHandle;
@@ -56,8 +54,6 @@ class _CellWidgetState extends State<CellWidget>
   void dispose() {
     widget.stateManager.removeListener(changeStateListener);
 
-    _selectionSubject.close();
-
     super.dispose();
   }
 
@@ -76,10 +72,6 @@ class _CellWidgetState extends State<CellWidget>
     _isSelectedCell = _getIsSelectedCell();
 
     widget.stateManager.addListener(changeStateListener);
-
-    _selectionSubject.stream.listen((event) {
-      event();
-    });
 
     _resetKeepAlive();
   }
@@ -194,95 +186,46 @@ class _CellWidgetState extends State<CellWidget>
     throw Exception('Type not implemented.');
   }
 
+  void _addGestureEvent(PlutoGestureType gestureType, Offset offset) {
+    widget.stateManager.eventManager.addEvent(
+      PlutoCellGestureEvent(
+        gestureType: gestureType,
+        offset: offset,
+        cell: widget.cell,
+        column: widget.column,
+        rowIdx: widget.rowIdx,
+      ),
+    );
+  }
+
+  void _handleOnTapUp(TapUpDetails details) {
+    _addGestureEvent(PlutoGestureType.onTapUp, details.globalPosition);
+  }
+
+  void _handleOnLongPressStart(LongPressStartDetails details) {
+    _addGestureEvent(PlutoGestureType.onLongPressStart, details.globalPosition);
+  }
+
+  void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    _addGestureEvent(
+        PlutoGestureType.onLongPressMoveUpdate, details.globalPosition);
+  }
+
+  void _handleOnLongPressEnd(LongPressEndDetails details) {
+    _addGestureEvent(
+        PlutoGestureType.onLongPressEnd, details.globalPosition);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTapUp: (TapUpDetails details) {
-        if (!widget.stateManager.hasFocus) {
-          widget.stateManager.setKeepFocus(true);
-
-          if (_isCurrentCell) {
-            return;
-          }
-        }
-
-        if (widget.stateManager.isSelectingInteraction()) {
-          if (widget.stateManager.keyPressed.shift) {
-            final int columnIdx =
-                widget.stateManager.columnIndex(widget.column);
-
-            widget.stateManager.setCurrentSelectingPosition(
-              cellPosition: PlutoCellPosition(
-                columnIdx: columnIdx,
-                rowIdx: widget.rowIdx,
-              ),
-            );
-          } else if (widget.stateManager.keyPressed.ctrl) {
-            widget.stateManager.toggleSelectingRow(widget.rowIdx);
-          }
-        } else {
-          if (widget.stateManager.mode.isSelect) {
-            if (_isCurrentCell) {
-              widget.stateManager.handleOnSelected();
-            } else {
-              widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
-            }
-          } else {
-            if (_isCurrentCell && _isEditing != true) {
-              widget.stateManager.setEditing(true);
-            } else {
-              widget.stateManager.setCurrentCell(widget.cell, widget.rowIdx);
-            }
-          }
-        }
-      },
-      onLongPressStart: (LongPressStartDetails details) {
-        if (_isCurrentCell != true) {
-          widget.stateManager.setCurrentCell(
-            widget.cell,
-            widget.rowIdx,
-            notify: false,
-          );
-        }
-
-        widget.stateManager.setSelecting(true);
-
-        if (_selectingMode.isRow) {
-          widget.stateManager.toggleSelectingRow(widget.rowIdx);
-        }
-      },
-      onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
-        if (_isCurrentCell != true) {
-          widget.stateManager.setCurrentCell(
-            widget.cell,
-            widget.rowIdx,
-            notify: false,
-          );
-        }
-
-        _selectionSubject.add(() {
-          widget.stateManager
-              .setCurrentSelectingPositionWithOffset(details.globalPosition);
-        });
-
-        widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
-          offset: details.globalPosition,
-        ));
-      },
-      onLongPressEnd: (LongPressEndDetails details) {
-        if (_isCurrentCell != true) {
-          widget.stateManager.setCurrentCell(
-            widget.cell,
-            widget.rowIdx,
-            notify: false,
-          );
-        }
-
-        widget.stateManager.setSelecting(false);
-      },
+      onTapUp: _handleOnTapUp,
+      onLongPressStart: _handleOnLongPressStart,
+      onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
+      onLongPressEnd: _handleOnLongPressEnd,
       child: _CellContainerWidget(
         readOnly: widget.column.type.readOnly,
         child: _buildCell(),
