@@ -518,6 +518,8 @@ mixin SelectingState implements IPlutoState {
       setEditing(true, notify: false);
     }
 
+    setKeepFocus(true, notify: false);
+
     notifyListeners();
   }
 

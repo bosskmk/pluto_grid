@@ -51,7 +51,7 @@ abstract class IGridState {
 
   void setConfiguration(PlutoConfiguration configuration);
 
-  void setKeepFocus(bool flag);
+  void setKeepFocus(bool flag, {bool notify = true});
 
   void resetCurrentState({notify = true});
 

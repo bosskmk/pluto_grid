@@ -106,7 +106,8 @@ class __RowContainerWidgetState extends State<_RowContainerWidget>
             widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx) ||
         _hasCurrentSelectingPosition !=
             widget.stateManager.hasCurrentSelectingPosition ||
-        _keepFocus != widget.stateManager.keepFocus) {
+        (_isCurrentRow == true &&
+            _keepFocus != widget.stateManager.keepFocus)) {
       setState(() {
         resetState();
         _resetKeepAlive();

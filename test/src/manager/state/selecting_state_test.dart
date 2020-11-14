@@ -1258,7 +1258,7 @@ void main() {
         PlutoStateManager stateManager = PlutoStateManager(
           columns: columns,
           rows: rows,
-          gridFocusNode: null,
+          gridFocusNode: FocusNode(),
           scroll: null,
           configuration: PlutoConfiguration(
             enableMoveDownAfterSelecting: false,
@@ -1308,7 +1308,7 @@ void main() {
         PlutoStateManager stateManager = PlutoStateManager(
           columns: columns,
           rows: rows,
-          gridFocusNode: null,
+          gridFocusNode: FocusNode(),
           scroll: PlutoScrollController(
             vertical: vertical,
             horizontal: MockLinkedScrollControllerGroup(),
