@@ -81,7 +81,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
             child: LayoutBuilder(
               builder: (ctx, size) {
                 return Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   width: 400,
                   height: 500,
                   child: SingleChildScrollView(
@@ -89,13 +89,13 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Implement a screen to add a new record.'),
-                        Text('Input some text, and Press Create Button.'),
+                        const Text('Implement a screen to add a new record.'),
+                        const Text('Input some text, and Press Create Button.'),
                         TextField(
                           controller: textController,
                           autofocus: true,
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Center(
                           child: Wrap(
                             children: [
@@ -103,14 +103,14 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 onPressed: () {
                                   Navigator.pop(ctx, null);
                                 },
-                                child: Text('Cancel.'),
+                                child: const Text('Cancel.'),
                               ),
                               FlatButton(
                                 onPressed: () {
                                   print(textController.text);
                                   Navigator.pop(ctx, textController.text);
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Create.',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -145,7 +145,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
     );
 
     stateManager.prependRows([newRow]);
-    stateManager.moveScrollByRow(MoveDirection.Up, 1);
+    stateManager.moveScrollByRow(MoveDirection.up, 1);
     stateManager.setCurrentCell(newRow.cells.entries.first.value, 0);
   }
 
@@ -158,7 +158,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
             child: LayoutBuilder(
               builder: (ctx, size) {
                 return Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   width: 400,
                   height: 500,
                   child: SingleChildScrollView(
@@ -166,20 +166,20 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Implement a screen to update a record.'),
-                        Text('Input some text, and Press Update Button.'),
+                        const Text('Implement a screen to update a record.'),
+                        const Text('Input some text, and Press Update Button.'),
                         TextField(
                           controller: textController,
                           autofocus: true,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ...row.cells.entries
                             .map((e) => Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(e.value.value.toString()),
                                 ))
                             .toList(),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Center(
                           child: Wrap(
                             children: [
@@ -187,13 +187,13 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 onPressed: () {
                                   Navigator.pop(ctx, null);
                                 },
-                                child: Text('Cancel.'),
+                                child: const Text('Cancel.'),
                               ),
                               FlatButton(
                                 onPressed: () {
                                   Navigator.pop(ctx, textController.text);
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Update.',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -230,9 +230,9 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       title: 'Listing mode',
       topTitle: 'Listing mode',
       topContents: [
-        Text('Listing mode to open or navigate to the Detail page.'),
-        Text('Press Enter or tap to call up the Detail popup.'),
-        Text(
+        const Text('Listing mode to open or navigate to the Detail page.'),
+        const Text('Press Enter or tap to call up the Detail popup.'),
+        const Text(
             'Pressing the Ctrl(Meta on MacOS) + C keys can invoke a popup to enter a new record.'),
       ],
       topButtons: [
@@ -253,14 +253,14 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
           removeKeyboardListener =
               stateManager.keyManager.subject.stream.listen(handleKeyboard);
 
-          stateManager.setSelectingMode(PlutoSelectingMode.None);
+          stateManager.setSelectingMode(PlutoSelectingMode.none);
         },
         onSelected: (PlutoOnSelectedEvent event) {
           if (event.row != null) {
             openDetail(event.row);
           }
         },
-        mode: PlutoMode.Select,
+        mode: PlutoMode.select,
       ),
     );
   }

@@ -33,7 +33,7 @@ class PlutoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: 300,
         maxWidth: 300,
         minHeight: 180,
@@ -46,7 +46,7 @@ class PlutoListTile extends StatelessWidget {
           child: ListTile(
             title: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.blue,
                 fontWeight: FontWeight.w600,
@@ -61,18 +61,18 @@ class PlutoListTile extends StatelessWidget {
                     children: [
                       if (onTapPreview != null)
                         TextButton(
-                          child: Text('Preview'),
+                          child: const Text('Preview'),
                           onPressed: onTapPreview,
                         ),
                       if (onTapLiveDemo != null)
                         TextButton(
-                          child: Text('LiveDemo'),
+                          child: const Text('LiveDemo'),
                           onPressed: onTapLiveDemo,
                         ),
                     ],
                   ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     description,
                     style: TextStyle(
@@ -84,7 +84,7 @@ class PlutoListTile extends StatelessWidget {
                 ),
               ],
             ),
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
           ),
         ),
       ),

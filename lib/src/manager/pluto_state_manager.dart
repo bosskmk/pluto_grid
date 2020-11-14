@@ -45,21 +45,21 @@ class PlutoStateManager extends PlutoState {
     CreateFooterCallBack createFooter,
     PlutoConfiguration configuration,
   }) {
-    this._columns = columns;
-    this._rows = rows;
-    this.setGridFocusNode(gridFocusNode);
-    this.setScroll(scroll);
-    this.setGridMode(mode);
-    this.setOnChanged(onChangedEventCallback);
-    this.setOnSelected(onSelectedEventCallback);
-    this.setCreateHeader(createHeader);
-    this.setCreateFooter(createFooter);
-    this.setConfiguration(configuration);
-    this.setGridKey(GlobalKey());
+    _columns = columns;
+    _rows = rows;
+    setGridFocusNode(gridFocusNode);
+    setScroll(scroll);
+    setGridMode(mode);
+    setOnChanged(onChangedEventCallback);
+    setOnSelected(onSelectedEventCallback);
+    setCreateHeader(createHeader);
+    setCreateFooter(createFooter);
+    setConfiguration(configuration);
+    setGridKey(GlobalKey());
   }
 
   static List<PlutoSelectingMode> get selectingModes =>
-      PlutoSelectingMode.None.items;
+      PlutoSelectingMode.none.items;
 
   static void initializeRows(
     List<PlutoColumn> refColumns,
@@ -69,9 +69,9 @@ class PlutoStateManager extends PlutoState {
     int start = 0,
   }) {
     if (refColumns == null ||
-        refColumns.length < 1 ||
+        refColumns.isEmpty ||
         refRows == null ||
-        refRows.length < 1) {
+        refRows.isEmpty) {
       return;
     }
 
@@ -79,10 +79,10 @@ class PlutoStateManager extends PlutoState {
         .where((element) => element.type.applyFormatOnInit)
         .toList(growable: false);
 
-    final bool applyFormat = columnsForApplyFormat.length > 0;
+    final bool applyFormat = columnsForApplyFormat.isNotEmpty;
 
     final bool applySortIdx = forceApplySortIdx == true ||
-        (refRows.length > 0 && refRows.first.sortIdx == null);
+        (refRows.isNotEmpty && refRows.first.sortIdx == null);
 
     if (applyFormat == false && applySortIdx == false) {
       return;
@@ -205,33 +205,33 @@ class PlutoKeyPressed {
 }
 
 enum PlutoSelectingMode {
-  Square,
-  Row,
-  None,
+  square,
+  row,
+  none,
 
   /// using only internal
-  _Horizontal,
+  _horizontal,
 }
 
 extension PlutoSelectingModeExtension on PlutoSelectingMode {
-  bool get isSquare => this == PlutoSelectingMode.Square;
+  bool get isSquare => this == PlutoSelectingMode.square;
 
-  bool get isRow => this == PlutoSelectingMode.Row;
+  bool get isRow => this == PlutoSelectingMode.row;
 
-  bool get isNone => this == PlutoSelectingMode.None;
+  bool get isNone => this == PlutoSelectingMode.none;
 
   /// using only internal
-  bool get _isHorizontal => this == PlutoSelectingMode._Horizontal;
+  bool get _isHorizontal => this == PlutoSelectingMode._horizontal;
 
   List<PlutoSelectingMode> get items {
     return [
-      PlutoSelectingMode.Square,
-      PlutoSelectingMode.Row,
-      PlutoSelectingMode.None,
+      PlutoSelectingMode.square,
+      PlutoSelectingMode.row,
+      PlutoSelectingMode.none,
     ];
   }
 
   String toShortString() {
-    return this.toString().split('.').last;
+    return toString().split('.').last;
   }
 }

@@ -84,7 +84,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
 
     PlutoGridPopup(
       context: context,
-      mode: PlutoMode.Select,
+      mode: PlutoMode.select,
       onLoaded: _onLoaded,
       onSelected: _onSelected,
       columns: popupColumns,
@@ -144,10 +144,10 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
 
       if (rowIdxToMove < event.stateManager._rows.length) {
-        event.stateManager.moveScrollByRow(MoveDirection.Up, rowIdxToMove);
+        event.stateManager.moveScrollByRow(MoveDirection.up, rowIdxToMove);
       } else {
         event.stateManager
-            .moveScrollByRow(MoveDirection.Up, event.stateManager._rows.length);
+            .moveScrollByRow(MoveDirection.up, event.stateManager._rows.length);
       }
     }
   }
@@ -213,7 +213,7 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
             style: widget.stateManager.configuration.cellTextStyle,
             decoration: const InputDecoration(
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: EdgeInsets.all(0),
               isDense: true,
             ),
             maxLines: 1,
@@ -221,8 +221,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           ),
           Positioned(
             top: -14,
-            right: widget.column.textAlign.isLeft ? -12 : null,
-            left: widget.column.textAlign.isRight ? -12 : null,
+            right: widget.column.textAlign.isLeft ? -10 : null,
+            left: widget.column.textAlign.isRight ? -10 : null,
             child: IconButton(
               icon: icon,
               color: widget.stateManager.configuration.iconColor,

@@ -38,7 +38,7 @@ abstract class IRowState {
   void setRowChecked(
     PlutoRow row,
     bool flag, {
-    bool notify: true,
+    bool notify = true,
   });
 
   void insertRows(int rowIdx, List<PlutoRow> rows);
@@ -139,7 +139,7 @@ mixin RowState implements IPlutoState {
   }
 
   PlutoRow getNewRow() {
-    final cells = Map<String, PlutoCell>();
+    final cells = <String, PlutoCell>{};
 
     _columns.forEach((PlutoColumn column) {
       cells[column.field] = PlutoCell(
@@ -159,7 +159,7 @@ mixin RowState implements IPlutoState {
       rows.add(getNewRow());
     }
 
-    if (rows.length < 1) {
+    if (rows.isEmpty) {
       return [];
     }
 
@@ -185,7 +185,7 @@ mixin RowState implements IPlutoState {
   void setRowChecked(
     PlutoRow row,
     bool flag, {
-    bool notify: true,
+    bool notify = true,
   }) {
     final findRow = _rows.firstWhere(
       (element) => element.key == row.key,
@@ -196,7 +196,7 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    findRow._checked = flag;
+    findRow._setChecked(flag);
 
     if (notify) {
       notifyListeners();
@@ -273,11 +273,11 @@ mixin RowState implements IPlutoState {
   }
 
   void prependRows(List<PlutoRow> rows) {
-    if (rows == null || rows.length < 1) {
+    if (rows == null || rows.isEmpty) {
       return;
     }
 
-    final start = (_rows.length > 0
+    final start = (_rows.isNotEmpty
             ? _rows.map((row) => row.sortIdx ?? 0).reduce(min)
             : 0) -
         rows.length;
@@ -302,7 +302,7 @@ mixin RowState implements IPlutoState {
 
       double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
 
-      scrollByDirection(MoveDirection.Up, offsetToMove);
+      scrollByDirection(MoveDirection.up, offsetToMove);
     }
 
     /// Update currentSelectingPosition
@@ -326,11 +326,11 @@ mixin RowState implements IPlutoState {
   }
 
   void appendRows(List<PlutoRow> rows) {
-    if (rows == null || rows.length < 1) {
+    if (rows == null || rows.isEmpty) {
       return;
     }
 
-    final start = _rows.length > 0
+    final start = _rows.isNotEmpty
         ? _rows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
         : 0;
 
@@ -359,9 +359,9 @@ mixin RowState implements IPlutoState {
 
   void removeRows(
     List<PlutoRow> rows, {
-    bool notify: true,
+    bool notify = true,
   }) {
-    if (rows == null || rows.length < 1) {
+    if (rows == null || rows.isEmpty) {
       return;
     }
 
@@ -431,10 +431,10 @@ mixin RowState implements IPlutoState {
 
   void toggleAllRowChecked(
     bool flag, {
-    bool notify: true,
+    bool notify = true,
   }) {
     _rows.forEach((e) {
-      e._checked = flag == true;
+      e._setChecked(flag == true);
     });
 
     if (notify) {

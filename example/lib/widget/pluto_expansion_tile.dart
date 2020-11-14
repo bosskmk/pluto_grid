@@ -17,22 +17,22 @@ class PlutoExpansionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFFDFDFD),
+        color: const Color(0xFFFDFDFD),
         border: Border.all(
-          color: Color(0xFFA1A5AE),
+          color: const Color(0xFFA1A5AE),
         ),
       ),
       child: ExpansionTile(
         title: Text(title),
         initiallyExpanded: true,
-        childrenPadding: EdgeInsets.all(20),
+        childrenPadding: const EdgeInsets.all(20),
         expandedAlignment: Alignment.topLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (children != null) ...children,
           if (buttons != null)
             Container(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Wrap(
                 children: buttons,
               ),

@@ -56,7 +56,7 @@ class _SelectCellWidgetState extends State<SelectCellWidget>
 
   @override
   void _onLoaded(PlutoOnLoadedEvent event) {
-    event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+    event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
     super._onLoaded(event);
   }

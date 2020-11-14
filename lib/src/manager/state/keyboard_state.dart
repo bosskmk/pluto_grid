@@ -82,22 +82,22 @@ mixin KeyboardState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFixed();
 
     switch (direction) {
-      case MoveDirection.Left:
+      case MoveDirection.left:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx - 1],
           rowIdx: cellPosition.rowIdx,
         );
-      case MoveDirection.Right:
+      case MoveDirection.right:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx + 1],
           rowIdx: cellPosition.rowIdx,
         );
-      case MoveDirection.Up:
+      case MoveDirection.up:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx],
           rowIdx: cellPosition.rowIdx - 1,
         );
-      case MoveDirection.Down:
+      case MoveDirection.down:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx],
           rowIdx: cellPosition.rowIdx + 1,

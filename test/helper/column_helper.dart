@@ -5,7 +5,7 @@ class ColumnHelper {
     String title, {
     int count = 1,
     double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.None,
+    PlutoColumnFixed fixed = PlutoColumnFixed.none,
     bool readOnly = false,
   }) {
     return Iterable.generate(count)
@@ -23,7 +23,7 @@ class ColumnHelper {
     String title, {
     int count = 1,
     double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.None,
+    PlutoColumnFixed fixed = PlutoColumnFixed.none,
     bool readOnly = false,
     dynamic startDate,
     dynamic endDate,

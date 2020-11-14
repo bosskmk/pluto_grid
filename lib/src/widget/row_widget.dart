@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class RowWidget extends StatefulWidget {
+class RowWidget extends StatelessWidget {
   final PlutoStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
@@ -15,10 +15,49 @@ class RowWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _RowWidgetState createState() => _RowWidgetState();
+  Widget build(BuildContext context) {
+    return _RowContainerWidget(
+      stateManager: stateManager,
+      rowIdx: rowIdx,
+      row: row,
+      columns: columns,
+      child: Row(
+        children: columns.map((column) {
+          return CellWidget(
+            key: row.cells[column.field]._key,
+            stateManager: stateManager,
+            cell: row.cells[column.field],
+            width: column.width,
+            height: PlutoDefaultSettings.rowHeight,
+            column: column,
+            rowIdx: rowIdx,
+          );
+        }).toList(growable: false),
+      ),
+    );
+  }
 }
 
-class _RowWidgetState extends State<RowWidget>
+class _RowContainerWidget extends StatefulWidget {
+  final PlutoStateManager stateManager;
+  final int rowIdx;
+  final PlutoRow row;
+  final List<PlutoColumn> columns;
+  final Widget child;
+
+  _RowContainerWidget({
+    this.stateManager,
+    this.rowIdx,
+    this.row,
+    this.columns,
+    this.child,
+  });
+
+  @override
+  __RowContainerWidgetState createState() => __RowContainerWidgetState();
+}
+
+class __RowContainerWidgetState extends State<_RowContainerWidget>
     with AutomaticKeepAliveClientMixin {
   bool _isCurrentRow;
 
@@ -37,22 +76,6 @@ class _RowWidgetState extends State<RowWidget>
   bool _hasCurrentSelectingPosition;
 
   bool _keepFocus;
-
-  bool _keepAlive = false;
-
-  KeepAliveHandle _keepAliveHandle;
-
-  @override
-  bool get wantKeepAlive => _keepAlive;
-
-  @protected
-  void updateKeepAlive() {
-    if (wantKeepAlive) {
-      if (_keepAliveHandle == null) _ensureKeepAlive();
-    } else {
-      if (_keepAliveHandle != null) _releaseKeepAlive();
-    }
-  }
 
   @override
   void dispose() {
@@ -83,7 +106,8 @@ class _RowWidgetState extends State<RowWidget>
             widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx) ||
         _hasCurrentSelectingPosition !=
             widget.stateManager.hasCurrentSelectingPosition ||
-        _keepFocus != widget.stateManager.keepFocus) {
+        (_isCurrentRow == true &&
+            _keepFocus != widget.stateManager.keepFocus)) {
       setState(() {
         resetState();
         _resetKeepAlive();
@@ -141,6 +165,22 @@ class _RowWidgetState extends State<RowWidget>
         : Colors.transparent;
   }
 
+  bool _keepAlive = false;
+
+  KeepAliveHandle _keepAliveHandle;
+
+  @override
+  bool get wantKeepAlive => _keepAlive;
+
+  @protected
+  void updateKeepAlive() {
+    if (wantKeepAlive) {
+      if (_keepAliveHandle == null) _ensureKeepAlive();
+    } else {
+      if (_keepAliveHandle != null) _releaseKeepAlive();
+    }
+  }
+
   void _ensureKeepAlive() {
     assert(_keepAliveHandle == null);
     _keepAliveHandle = KeepAliveHandle();
@@ -174,7 +214,7 @@ class _RowWidgetState extends State<RowWidget>
     return Container(
       decoration: BoxDecoration(
         color: _isCheckedRow
-            ? Color.alphaBlend(Color(0x11757575), rowColor())
+            ? Color.alphaBlend(const Color(0x11757575), rowColor())
             : rowColor(),
         border: Border(
           top: _isDragTarget && _isTopDragTarget
@@ -191,19 +231,7 @@ class _RowWidgetState extends State<RowWidget>
           ),
         ),
       ),
-      child: Row(
-        children: widget.columns.map((column) {
-          return CellWidget(
-            key: widget.row.cells[column.field]._key,
-            stateManager: widget.stateManager,
-            cell: widget.row.cells[column.field],
-            width: column.width,
-            height: PlutoDefaultSettings.rowHeight,
-            column: column,
-            rowIdx: widget.rowIdx,
-          );
-        }).toList(growable: false),
-      ),
+      child: widget.child,
     );
   }
 }

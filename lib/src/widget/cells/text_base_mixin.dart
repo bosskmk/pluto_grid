@@ -43,7 +43,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
     _textController.text =
         widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
-    _cellEditingStatus = _CellEditingStatus.INIT;
+    _cellEditingStatus = _CellEditingStatus.init;
   }
 
   void _changeValue() {
@@ -51,11 +51,11 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
   }
 
   void _handleOnChanged(String value) {
-    _cellEditingStatus = _CellEditingStatus.CHANGED;
+    _cellEditingStatus = _CellEditingStatus.changed;
   }
 
   void _handleOnComplete() {
-    _cellEditingStatus = _CellEditingStatus.UPDATED;
+    _cellEditingStatus = _CellEditingStatus.updated;
     _cellFocus.unfocus();
     widget.stateManager.gridFocusNode.requestFocus();
     _changeValue();
@@ -67,7 +67,7 @@ mixin _TextBaseMixin<T extends _TextBaseMixinImpl> on State<T> {
     TextStyle style,
     decoration = const InputDecoration(
       border: InputBorder.none,
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: EdgeInsets.all(0),
       isDense: true,
     ),
     maxLines = 1,

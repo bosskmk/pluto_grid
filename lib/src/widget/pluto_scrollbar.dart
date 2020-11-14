@@ -101,14 +101,14 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
 
   ScrollController get _controller {
     if (_currentAxis == null) {
-      return widget.horizontalController ??
-          widget.verticalController ??
+      return widget.verticalController ??
+          widget.horizontalController ??
           PrimaryScrollController.of(context);
     }
 
-    return _currentAxis == Axis.horizontal
-        ? widget.horizontalController
-        : widget.verticalController;
+    return _currentAxis == Axis.vertical
+        ? widget.verticalController
+        : widget.horizontalController;
   }
 
   Axis _currentAxis;
@@ -185,7 +185,9 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
     WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
       if (widget.isAlwaysShown) {
         _fadeoutTimer?.cancel();
-        widget.horizontalController.position.didUpdateScrollPositionBy(0);
+        if (widget.verticalController.hasClients) {
+          widget.verticalController.position.didUpdateScrollPositionBy(0);
+        }
       }
     });
   }

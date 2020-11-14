@@ -21,15 +21,15 @@ class PlutoExampleScreen extends StatelessWidget {
 
   AlertDialog reportingDialog(BuildContext context) {
     return AlertDialog(
-      title: Text('Reporting'),
+      title: const Text('Reporting'),
       content: Container(
         width: 300,
-        child: Text(
+        child: const Text(
             'Have you found the problem? Or do you have any questions?\n(Selecting Yes will open the Github issue.)'),
       ),
       actions: [
         TextButton(
-          child: Text(
+          child: const Text(
             'No',
             style: TextStyle(
               color: Colors.deepOrange,
@@ -40,7 +40,7 @@ class PlutoExampleScreen extends StatelessWidget {
           },
         ),
         TextButton(
-          child: Text('Yes'),
+          child: const Text('Yes'),
           onPressed: () {
             launchUrl('https://github.com/bosskmk/pluto_grid/issues');
           },
@@ -62,7 +62,7 @@ class PlutoExampleScreen extends StatelessWidget {
             child: Container(
               width: size.maxWidth,
               height: size.maxHeight,
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 minHeight: 750,
               ),
               padding: const EdgeInsets.all(30),
@@ -73,7 +73,7 @@ class PlutoExampleScreen extends StatelessWidget {
                     children: topContents,
                     buttons: topButtons,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Expanded(
@@ -89,16 +89,14 @@ class PlutoExampleScreen extends StatelessWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (BuildContext context) {
-              return reportingDialog(context);
-            },
+            builder: reportingDialog,
           );
         },
-        child: FaIcon(
+        child: const FaIcon(
           FontAwesomeIcons.exclamation,
           color: Colors.white,
         ),
-        backgroundColor: Color(0xFF33BDE5),
+        backgroundColor: const Color(0xFF33BDE5),
       ),
     );
   }

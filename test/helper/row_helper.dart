@@ -22,7 +22,7 @@ class RowHelper {
                     return cellOfDateColumn(column, rowIdx);
                   }
 
-                  throw ('Column is not implemented.');
+                  throw Exception('Column is not implemented.');
                 },
               ),
               checked: checked,

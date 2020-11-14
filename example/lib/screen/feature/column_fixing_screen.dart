@@ -34,9 +34,9 @@ class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
       title: 'Column fixing',
       topTitle: 'Column fixing',
       topContents: [
-        Text(
+        const Text(
             'You can fix the column by tapping ToLeft, ToRight in the dropdown menu that appears when you tap the icon to the right of the column title.'),
-        Text(
+        const Text(
             'If the width of the middle columns is narrow, the fixed column is released.'),
       ],
       topButtons: [
@@ -52,7 +52,7 @@ class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.square);
         },
       ),
     );

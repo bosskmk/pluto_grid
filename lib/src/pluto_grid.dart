@@ -20,10 +20,10 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoConfiguration configuration;
 
-  /// [PlutoMode.Normal]
+  /// [PlutoMode.normal]
   /// Normal grid with cell editing.
   ///
-  /// [PlutoMode.Select]
+  /// [PlutoMode.select]
   /// Editing is not possible, and if you press enter or tap on the list,
   /// you can receive the selected row and cell from the onSelected callback.
   final PlutoMode mode;
@@ -38,7 +38,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    this.mode = PlutoMode.Normal,
+    this.mode = PlutoMode.normal,
   }) : super(key: key);
 
   @override
@@ -178,7 +178,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (stateManager.currentCell == null && widget.rows.length > 0) {
+      if (stateManager.currentCell == null && widget.rows.isNotEmpty) {
         stateManager.setCurrentCell(
             widget.rows.first.cells.entries.first.value, 0);
       }
@@ -198,9 +198,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         _bodyRightOffset != stateManager.bodyRightOffset ||
         _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
         _rightFixedLeftOffset != stateManager.rightFixedLeftOffset) {
-      setState(() {
-        resetState();
-      });
+      setState(resetState);
     }
   }
 
@@ -373,14 +371,14 @@ class _PlutoGridState extends State<PlutoGrid> {
 }
 
 enum PlutoMode {
-  Normal,
-  Select,
+  normal,
+  select,
 }
 
 extension PlutoModeExtension on PlutoMode {
-  bool get isNormal => this == PlutoMode.Normal;
+  bool get isNormal => this == PlutoMode.normal;
 
-  bool get isSelect => this == PlutoMode.Select;
+  bool get isSelect => this == PlutoMode.select;
 }
 
 class PlutoDefaultSettings {

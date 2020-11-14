@@ -55,12 +55,14 @@ abstract class ILayoutState {
 
   double get rightFixedLeftOffset;
 
+  double get rightBlankOffset;
+
   double get scrollOffsetByFixedColumn;
 
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
-  void resetShowFixedColumn({bool notify: true});
+  void resetShowFixedColumn({bool notify = true});
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -176,11 +178,19 @@ mixin LayoutState implements IPlutoState {
       PlutoDefaultSettings.totalShadowLineWidth +
       1;
 
+  double get rightBlankOffset =>
+      rightFixedLeftOffset -
+      leftFixedColumnsWidth -
+      bodyColumnsWidth +
+      scroll.horizontal.offset;
+
   double get scrollOffsetByFixedColumn {
     double offset = 0;
 
-    offset += leftFixedColumnsWidth > 0 ? 1 : 0;
-    offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    if (_showFixedColumn) {
+      offset += leftFixedColumnsWidth > 0 ? 1 : 0;
+      offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    }
 
     return offset;
   }
@@ -196,6 +206,8 @@ mixin LayoutState implements IPlutoState {
 
     _gridGlobalOffset = null;
 
+    updateCurrentCellPosition(notify: false);
+
     if (notify) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
@@ -203,7 +215,7 @@ mixin LayoutState implements IPlutoState {
     }
   }
 
-  void resetShowFixedColumn({bool notify: true}) {
+  void resetShowFixedColumn({bool notify = true}) {
     _showFixedColumn = isShowFixedColumn(_maxWidth);
 
     if (notify) {

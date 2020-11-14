@@ -69,12 +69,12 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
       title: 'Column resizing',
       topTitle: 'Column resizing',
       topContents: [
-        Text(
+        const Text(
             'Dragging the icon to the right of the column title left or right changes the width of the column.'),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Text(
+        const Text(
             'If you tap the icon to the right of the column title, the dropdown menu appears. And if you tap AutoSize, the width of the column is automatically changed according to the size of the cell value.'),
       ],
       topButtons: [

@@ -69,7 +69,7 @@ class _ColumnMovingScreenState extends State<ColumnMovingScreen> {
       title: 'Column moving',
       topTitle: 'Column moving',
       topContents: [
-        Text(
+        const Text(
             'You can change the column position by dragging the column title left or right.'),
       ],
       topButtons: [

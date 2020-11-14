@@ -15,7 +15,7 @@ void main() {
   setUp(() {
     stateManager = MockPlutoStateManager();
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
@@ -44,7 +44,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -95,7 +95,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -147,7 +147,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -201,7 +201,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -255,7 +255,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -308,7 +308,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -325,7 +325,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.home);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Left))
+      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.left))
           .called(1);
     });
 
@@ -336,7 +336,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Left))
+      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.left))
           .called(1);
     });
 
@@ -347,7 +347,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Up))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.up))
           .called(1);
     });
 
@@ -360,7 +360,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Up))
+      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.up))
           .called(1);
     });
 
@@ -369,7 +369,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.end);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Right))
+      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.right))
           .called(1);
     });
 
@@ -380,7 +380,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Right))
+      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.right))
           .called(1);
     });
 
@@ -391,7 +391,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Down))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.down))
           .called(1);
     });
 
@@ -404,7 +404,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Down))
+      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.down))
           .called(1);
     });
   });
@@ -432,7 +432,7 @@ void main() {
                 ));
               },
               focusNode: keyboardFocusNode,
-              child: TextField(),
+              child: const TextField(),
             ),
           ),
         ),
@@ -449,7 +449,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageUp);
 
       // then
-      verify(stateManager.moveCurrentCellByRowIdx(-5, MoveDirection.Up))
+      verify(stateManager.moveCurrentCellByRowIdx(-5, MoveDirection.up))
           .called(1);
     });
 
@@ -460,7 +460,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellByRowIdx(-5, MoveDirection.Up))
+      verify(stateManager.moveSelectingCellByRowIdx(-5, MoveDirection.up))
           .called(1);
     });
 
@@ -469,7 +469,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageDown);
 
       // then
-      verify(stateManager.moveCurrentCellByRowIdx(5, MoveDirection.Down))
+      verify(stateManager.moveCurrentCellByRowIdx(5, MoveDirection.down))
           .called(1);
     });
 
@@ -480,7 +480,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellByRowIdx(5, MoveDirection.Down))
+      verify(stateManager.moveSelectingCellByRowIdx(5, MoveDirection.down))
           .called(1);
     });
   });

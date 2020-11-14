@@ -57,7 +57,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     Offset offset,
   }) {
     if (offset != null) {
-      offset += Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
+      offset += const Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
     }
 
     widget.stateManager.eventManager.addEvent(
@@ -110,11 +110,11 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             column: widget.column,
             stateManager: widget.stateManager,
             onDragStarted: () {
-              addDragEventOfRow(type: PlutoDragType.Start);
+              addDragEventOfRow(type: PlutoDragType.start);
             },
             onDragUpdated: (offset) {
               addDragEventOfRow(
-                type: PlutoDragType.Update,
+                type: PlutoDragType.update,
                 offset: offset,
               );
 
@@ -124,7 +124,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             },
             onDragEnd: (dragDetails) {
               addDragEventOfRow(
-                type: PlutoDragType.End,
+                type: PlutoDragType.end,
                 offset: dragDetails.offset,
               );
             },
@@ -172,7 +172,7 @@ class _RowDragIconWidget extends StatefulWidget {
 }
 
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
-  GlobalKey _feedbackKey = GlobalKey();
+  final GlobalKey _feedbackKey = GlobalKey();
 
   bool _isDragging = false;
 

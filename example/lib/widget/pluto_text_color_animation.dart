@@ -26,10 +26,10 @@ class _PlutoTextColorAnimationState extends State<PlutoTextColorAnimation>
   void initState() {
     super.initState();
     controller =
-        AnimationController(duration: Duration(seconds: 5), vsync: this);
+        AnimationController(duration: const Duration(seconds: 5), vsync: this);
     _colorAnim = RainbowColorTween([
       Colors.white,
-      Color(0xFF33BDE5),
+      const Color(0xFF33BDE5),
       Colors.white,
     ]).animate(controller)
       ..addListener(() {

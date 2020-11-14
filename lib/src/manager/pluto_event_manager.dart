@@ -19,7 +19,7 @@ class PlutoEventManager {
 
     final throttleStream = subject.stream
         .where((event) => event is PlutoMoveUpdateEvent)
-        .throttleTime(Duration(milliseconds: 800));
+        .throttleTime(const Duration(milliseconds: 800));
 
     MergeStream([stream, throttleStream]).listen(_handler);
   }

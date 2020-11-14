@@ -106,8 +106,8 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       title: 'Selection type column',
       topTitle: 'Selection type column',
       topContents: [
-        Text('A column to enter a selection value.'),
-        Text(
+        const Text('A column to enter a selection value.'),
+        const Text(
             'The sorting of the Selection column is based on the order of the Select items.'),
       ],
       topButtons: [

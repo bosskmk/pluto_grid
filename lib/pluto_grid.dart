@@ -28,6 +28,8 @@ part './src/helper/move_direction.dart';
 
 part './src/manager/event/pluto_cannot_move_current_cell_event.dart';
 
+part './src/manager/event/pluto_cell_gesture_event.dart';
+
 part './src/manager/event/pluto_drag_rows_event.dart';
 
 part './src/manager/event/pluto_event.dart';

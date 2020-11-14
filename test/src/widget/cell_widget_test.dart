@@ -18,7 +18,7 @@ void main() {
     eventManager = MockPlutoEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
@@ -343,884 +343,159 @@ void main() {
   });
 
   testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'shift, ctrl 키가 눌리지 않은 상태에서 셀을 탭하면 '
-      'THEN '
-      'setCurrentSelectingPosition, toggleSelectingRow 이 호출 되지 않는다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
+    '셀을 탭하면 PlutoCellGestureEvent 이벤트가 OnTapUp 으로 호출 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoCell cell = PlutoCell(value: 'one');
 
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
+      final PlutoColumn column = PlutoColumn(
+        title: 'header',
+        field: 'header',
+        type: PlutoColumnType.text(),
+      );
 
-    final rowIdx = 0;
+      final rowIdx = 0;
 
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
+      // when
+      when(stateManager.isCurrentCell(any)).thenReturn(false);
+      when(stateManager.isEditing).thenReturn(false);
+      when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
 
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: CellWidget(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              rowIdx: rowIdx,
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    // then
-    Finder gesture = find.byType(GestureDetector);
+      Finder gesture = find.byType(GestureDetector);
 
-    expect(gesture, findsOneWidget);
+      await tester.tap(gesture);
 
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.setCurrentSelectingPosition(
-      cellPosition: anyNamed('cellPosition'),
-    ));
-
-    verifyNever(stateManager.toggleSelectingRow(any));
-  });
+      verify(eventManager.addEvent(
+        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+          return object.gestureType.isOnTapUp &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
+              object.rowIdx == rowIdx;
+        })),
+      )).called(1);
+    },
+  );
 
   testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'shift 키가 눌린 상태면 '
-      'THEN '
-      'setCurrentSelectingPosition 이 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
+    '셀을 길게 탭하면 PlutoCellGestureEvent 이벤트가 OnLongPressStart 으로 호출 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoCell cell = PlutoCell(value: 'one');
 
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
+      final PlutoColumn column = PlutoColumn(
+        title: 'header',
+        field: 'header',
+        type: PlutoColumnType.text(),
+      );
 
-    final columnIdx = 1;
-    final rowIdx = 0;
+      final rowIdx = 0;
 
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed(
-      shift: true,
-    ));
+      // when
+      when(stateManager.isCurrentCell(any)).thenReturn(false);
+      when(stateManager.isEditing).thenReturn(false);
+      when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
 
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.columnIndex(any)).thenReturn(columnIdx);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: CellWidget(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              rowIdx: rowIdx,
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    // then
-    Finder gesture = find.byType(GestureDetector);
+      Finder gesture = find.byType(GestureDetector);
 
-    expect(gesture, findsOneWidget);
+      await tester.longPress(gesture);
 
-    await tester.tap(gesture);
-
-    verify(stateManager.setCurrentSelectingPosition(
-      cellPosition: PlutoCellPosition(
-        columnIdx: columnIdx,
-        rowIdx: rowIdx,
-      ),
-    ));
-
-    verifyNever(stateManager.toggleSelectingRow(any));
-  });
+      verify(eventManager.addEvent(
+        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+          return object.gestureType.isOnLongPressStart &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
+              object.rowIdx == rowIdx;
+        })),
+      )).called(1);
+    },
+  );
 
   testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'ctrl 키가 눌린 상태면 '
-      'THEN '
-      'toggleSelectingRow 이 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
+    '셀을 길게 탭하고 이동하면 PlutoCellGestureEvent 이벤트가 '
+    'onLongPressMoveUpdate 으로 호출 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoCell cell = PlutoCell(value: 'one');
 
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
+      final PlutoColumn column = PlutoColumn(
+        title: 'header',
+        field: 'header',
+        type: PlutoColumnType.text(),
+      );
 
-    final columnIdx = 1;
-    final rowIdx = 0;
+      final rowIdx = 0;
 
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed(
-      ctrl: true,
-    ));
+      when(stateManager.isCurrentCell(any)).thenReturn(true);
+      when(stateManager.isEditing).thenReturn(false);
+      when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
 
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.columnIndex(any)).thenReturn(columnIdx);
+      when(stateManager.isSelectingInteraction()).thenReturn(false);
+      when(stateManager.needMovingScroll(any, any)).thenReturn(false);
 
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: CellWidget(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              rowIdx: rowIdx,
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    // then
-    Finder gesture = find.byType(GestureDetector);
+      // then
+      final TestGesture gesture =
+          await tester.startGesture(const Offset(100, 18));
 
-    expect(gesture, findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 500));
 
-    await tester.tap(gesture);
+      await gesture.moveBy(const Offset(50, 0));
 
-    verifyNever(stateManager.setCurrentSelectingPosition(
-      cellPosition: anyNamed('cellPosition'),
-    ));
+      await gesture.up();
 
-    verify(stateManager.toggleSelectingRow(any));
-  });
+      await tester.pump();
 
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'grid mode 가 Select 모드, isCurrentCell 이 true 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'handleOnSelected 은 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
+      await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.handleOnSelected());
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 false 고 '
-      'grid mode 가 Select 모드, isCurrentCell 이 true 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'handleOnSelected 은 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verify(stateManager.handleOnSelected());
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'grid mode 가 Select 모드, isCurrentCell 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setCurrentCell 은 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.setCurrentCell(any, any));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 false 고 '
-      'grid mode 가 Select 모드, isCurrentCell 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setCurrentCell 은 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 3;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Select);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verify(stateManager.setCurrentCell(cell, rowIdx));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'grid mode 가 Select 모드가 아니고, isCurrentCell 이 true '
-      'isEditing 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setEditing 은 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.setEditing(true));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 false 고 '
-      'grid mode 가 Select 모드가 아니고, isCurrentCell 이 true '
-      'isEditing 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setEditing 은 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verify(stateManager.setEditing(true));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'grid mode 가 Select 모드가 아니고, isCurrentCell 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setCurrentCell 은 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.setCurrentCell(any, any));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 false 고 '
-      'grid mode 가 Select 모드가 아니고, isCurrentCell 이 false 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setCurrentCell 은 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-
-    when(stateManager.isEditing).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verify(stateManager.setCurrentCell(cell, rowIdx));
-  });
-
-  testWidgets(
-      'WHEN '
-      'isSelectingInteraction 이 true 고 '
-      'grid mode 가 Select 모드가 아니고, isCurrentCell 이 true, '
-      '_isEditing 이 true 인 상태에서 '
-      '셀을 탭하면 '
-      'THEN '
-      'setCurrentCell 은 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isSelectingInteraction()).thenReturn(true);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.keyPressed).thenReturn(PlutoKeyPressed());
-
-    when(stateManager.mode).thenReturn(PlutoMode.Normal);
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-
-    when(stateManager.isEditing).thenReturn(true);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.tap(gesture);
-
-    verifyNever(stateManager.setCurrentCell(any, any));
-  });
-
-  testWidgets(
-      '셀이 현재 셀이 아니고, 셀을 길게 탭을 하고 '
-      'Selecting Row 모드에서 '
-      '현재 셀로 설정 되고, '
-      'setSelecting, toggleSelectingRow 이 호출 된다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.longPress(gesture);
-
-    verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
-
-    verify(stateManager.setSelecting(true));
-
-    verify(stateManager.toggleSelectingRow(rowIdx));
-  });
-
-  testWidgets(
-      '셀이 현재 셀이 아니고, 셀을 길게 탭을 하고 '
-      'Selecting Row 모드가 아닌 상태면 '
-      '현재 셀로 설정 되고, '
-      'setSelecting 이 호출 되고 '
-      'toggleSelectingRow 이 호출 되지 않는다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isCurrentCell(any)).thenReturn(false);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Square);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.longPress(gesture);
-
-    verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
-
-    verify(stateManager.setSelecting(true));
-
-    verifyNever(stateManager.toggleSelectingRow(rowIdx));
-  });
-
-  testWidgets(
-      'WHEN 셀이 현재 셀이고, 셀을 길게 탭을 하면 '
-      'THEN setSelecting 이 true 로 호출 되어야 한다.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.longPress(gesture);
-
-    verify(stateManager.setSelecting(true));
-  });
-
-  testWidgets(
-      'WHEN Row 선택 모드에서, 셀이 현재 셀이고, 셀을 길게 탭을 하면 '
-      'THEN setSelecting 이 true, toggleSelectingRow 이 rowIdx 로 호출 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    Finder gesture = find.byType(GestureDetector);
-
-    expect(gesture, findsOneWidget);
-
-    await tester.longPress(gesture);
-
-    verify(stateManager.setSelecting(true));
-
-    verify(stateManager.toggleSelectingRow(rowIdx));
-  });
-
-  testWidgets('longPress', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-    );
-
-    final rowIdx = 0;
-
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(false);
-    when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.Row);
-
-    when(stateManager.isSelectingInteraction()).thenReturn(false);
-    when(stateManager.needMovingScroll(any, any)).thenReturn(false);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: CellWidget(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    final TestGesture gesture = await tester.startGesture(Offset(100, 18));
-
-    await tester.pump(const Duration(milliseconds: 500));
-
-    await gesture.moveBy(const Offset(50, 0));
-
-    await gesture.up();
-
-    await tester.pump();
-
-    await tester.pumpAndSettle(Duration(milliseconds: 800));
-
-    verify(stateManager.setCurrentSelectingPositionWithOffset(any));
-
-    verify(eventManager.addEvent(
-      argThat(PlutoObjectMatcher<PlutoMoveUpdateEvent>(rule: (object) {
-        return object.offset.dx == 150.0 && object.offset.dy == 18.0;
-      })),
-    ));
-  });
+      verify(eventManager.addEvent(
+        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+          return object.gestureType.isOnLongPressMoveUpdate &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
+              object.rowIdx == rowIdx;
+        })),
+      )).called(1);
+    },
+  );
 
   group('configuration', () {
     PlutoCell cell;
@@ -1269,7 +544,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle(Duration(seconds: 1));
+        await tester.pumpAndSettle(const Duration(seconds: 1));
       });
     };
 

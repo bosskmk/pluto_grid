@@ -13,16 +13,16 @@ class PlutoMoveUpdateEvent extends PlutoEvent {
       return;
     }
 
-    if (stateManager.needMovingScroll(offset, MoveDirection.Left)) {
-      _scroll(stateManager, MoveDirection.Left);
-    } else if (stateManager.needMovingScroll(offset, MoveDirection.Right)) {
-      _scroll(stateManager, MoveDirection.Right);
+    if (stateManager.needMovingScroll(offset, MoveDirection.left)) {
+      _scroll(stateManager, MoveDirection.left);
+    } else if (stateManager.needMovingScroll(offset, MoveDirection.right)) {
+      _scroll(stateManager, MoveDirection.right);
     }
 
-    if (stateManager.needMovingScroll(offset, MoveDirection.Up)) {
-      _scroll(stateManager, MoveDirection.Up);
-    } else if (stateManager.needMovingScroll(offset, MoveDirection.Down)) {
-      _scroll(stateManager, MoveDirection.Down);
+    if (stateManager.needMovingScroll(offset, MoveDirection.up)) {
+      _scroll(stateManager, MoveDirection.up);
+    } else if (stateManager.needMovingScroll(offset, MoveDirection.down)) {
+      _scroll(stateManager, MoveDirection.down);
     }
   }
 
@@ -40,6 +40,6 @@ class PlutoMoveUpdateEvent extends PlutoEvent {
         : PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce;
 
     scroll.animateTo(scroll.offset + offset,
-        curve: Curves.ease, duration: Duration(milliseconds: 800));
+        curve: Curves.ease, duration: const Duration(milliseconds: 800));
   }
 }

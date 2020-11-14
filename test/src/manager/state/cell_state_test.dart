@@ -15,10 +15,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -42,10 +42,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -58,7 +58,7 @@ void main() {
       );
 
       // when
-      stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
 
       String selectColumnField = 'body1';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -89,10 +89,10 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.right);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -125,10 +125,10 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
-      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.Right);
+      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFixedColumn(columns[4].key, PlutoColumnFixed.right);
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 1900, maxHeight: 500));
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -327,7 +327,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key nonExistsKey = UniqueKey();
@@ -352,7 +352,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key cellKey = rows.first.cells['body0'].key;
@@ -380,7 +380,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
       final Key cellKey = rows[7].cells['body3'].key;
@@ -455,7 +455,7 @@ void main() {
           rows: [],
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.Select,
+          mode: PlutoMode.select,
         );
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(

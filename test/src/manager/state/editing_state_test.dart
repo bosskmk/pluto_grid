@@ -25,10 +25,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -40,9 +40,9 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
@@ -87,10 +87,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -102,9 +102,9 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Row);
+      stateManager.setSelectingMode(PlutoSelectingMode.row);
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
@@ -163,10 +163,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -178,9 +178,9 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.Square);
+      stateManager.setSelectingMode(PlutoSelectingMode.square);
 
-      stateManager.setLayout(BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
@@ -265,7 +265,7 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.Select,
+          mode: PlutoMode.select,
           onChangedEventCallback: mock.callback,
         );
 
@@ -298,7 +298,7 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.Select,
+          mode: PlutoMode.select,
           onChangedEventCallback: mock.callback,
         );
 

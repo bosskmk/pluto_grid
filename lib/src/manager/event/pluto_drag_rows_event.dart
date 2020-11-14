@@ -13,6 +13,12 @@ class PlutoDragRowsEvent extends PlutoEvent {
   });
 
   void _handler(PlutoStateManager stateManager) {
+    if ((!dragType.isStart && offset == null) ||
+        dragType == null ||
+        rows == null) {
+      return;
+    }
+
     if (dragType.isStart) {
       _startDrag(stateManager);
     } else if (dragType.isUpdate) {
@@ -44,23 +50,23 @@ class PlutoDragRowsEvent extends PlutoEvent {
 }
 
 enum PlutoDragType {
-  Start,
-  Update,
-  End,
+  start,
+  update,
+  end,
 }
 
 extension PlutoDragTypeExtension on PlutoDragType {
-  bool get isStart => this == PlutoDragType.Start;
+  bool get isStart => this == PlutoDragType.start;
 
-  bool get isUpdate => this == PlutoDragType.Update;
+  bool get isUpdate => this == PlutoDragType.update;
 
-  bool get isEnd => this == PlutoDragType.End;
+  bool get isEnd => this == PlutoDragType.end;
 }
 
 enum PlutoDragItemType {
-  Rows,
+  rows,
 }
 
 extension PlutoDragItemExtension on PlutoDragItemType {
-  bool get isRows => this == PlutoDragItemType.Rows;
+  bool get isRows => this == PlutoDragItemType.rows;
 }

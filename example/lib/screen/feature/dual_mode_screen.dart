@@ -107,9 +107,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
       title: 'Dual mode',
       topTitle: 'Dual mode',
       topContents: [
-        Text(
+        const Text(
             'Place the grid on the left and right and move or edit with the keyboard.'),
-        Text('Refer to the display property for the width of the grid.'),
+        const Text('Refer to the display property for the width of the grid.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -139,7 +139,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
             gridBStateManager = event.stateManager;
           },
         ),
-        display: PlutoDualGridDisplayRatio(ratio: 0.5),
+        display: const PlutoDualGridDisplayRatio(ratio: 0.5),
       ),
     );
   }
