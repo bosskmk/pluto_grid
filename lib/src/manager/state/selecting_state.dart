@@ -298,10 +298,19 @@ mixin SelectingState implements IPlutoState {
 
     final columnIndexes = columnIndexesByShowFixed();
 
-    for (var i = 0; i < columnIndexes.length; i += 1) {
-      currentWidth += _columns[columnIndexes[i]].width;
+    final _rightBlankOffset = rightBlankOffset;
+    final _horizontalScrollOffset = scroll.horizontal.offset;
 
-      if (currentWidth > offset.dx + scroll.horizontal.offset) {
+    for (var i = 0; i < columnIndexes.length; i += 1) {
+      final column = _columns[columnIndexes[i]];
+
+      currentWidth += column.width;
+
+      final rightFixedColumnOffset =
+          column.fixed.isRight && showFixedColumn ? _rightBlankOffset : 0;
+
+      if (currentWidth + rightFixedColumnOffset >
+          offset.dx + _horizontalScrollOffset) {
         columnIdx = i;
         break;
       }

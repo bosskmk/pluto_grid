@@ -55,6 +55,8 @@ abstract class ILayoutState {
 
   double get rightFixedLeftOffset;
 
+  double get rightBlankOffset;
+
   double get scrollOffsetByFixedColumn;
 
   /// Update screen size information when LayoutBuilder builds.
@@ -176,6 +178,12 @@ mixin LayoutState implements IPlutoState {
       PlutoDefaultSettings.totalShadowLineWidth +
       1;
 
+  double get rightBlankOffset =>
+      rightFixedLeftOffset -
+      leftFixedColumnsWidth -
+      bodyColumnsWidth +
+      scroll.horizontal.offset;
+
   double get scrollOffsetByFixedColumn {
     double offset = 0;
 
@@ -195,6 +203,8 @@ mixin LayoutState implements IPlutoState {
     _showFixedColumn = _isShowFixedColumn;
 
     _gridGlobalOffset = null;
+
+    updateCurrentCellPosition(notify: false);
 
     if (notify) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
