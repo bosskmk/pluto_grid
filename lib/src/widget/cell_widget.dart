@@ -283,7 +283,7 @@ class _CellWidgetState extends State<CellWidget>
 
         widget.stateManager.setSelecting(false);
       },
-      child: _BackgroundColorWidget(
+      child: _CellContainerWidget(
         readOnly: widget.column.type.readOnly,
         child: _buildCell(),
         width: widget.width,
@@ -299,7 +299,7 @@ class _CellWidgetState extends State<CellWidget>
   }
 }
 
-class _BackgroundColorWidget extends StatelessWidget {
+class _CellContainerWidget extends StatelessWidget {
   final bool readOnly;
   final Widget child;
   final double width;
@@ -311,7 +311,7 @@ class _BackgroundColorWidget extends StatelessWidget {
   final bool isSelectedCell;
   final PlutoConfiguration configuration;
 
-  _BackgroundColorWidget({
+  _CellContainerWidget({
     this.readOnly,
     this.child,
     this.width,
