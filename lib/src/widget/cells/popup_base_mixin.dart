@@ -221,8 +221,8 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
           ),
           Positioned(
             top: -14,
-            right: widget.column.textAlign.isLeft ? -12 : null,
-            left: widget.column.textAlign.isRight ? -12 : null,
+            right: widget.column.textAlign.isLeft ? -10 : null,
+            left: widget.column.textAlign.isRight ? -10 : null,
             child: IconButton(
               icon: icon,
               color: widget.stateManager.configuration.iconColor,

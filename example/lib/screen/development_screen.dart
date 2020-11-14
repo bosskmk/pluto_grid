@@ -99,12 +99,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoColumn(
         title: 'column3',
         field: 'column3',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.date(),
       ),
       PlutoColumn(
         title: 'column4',
         field: 'column4',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
