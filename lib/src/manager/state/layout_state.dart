@@ -187,8 +187,10 @@ mixin LayoutState implements IPlutoState {
   double get scrollOffsetByFixedColumn {
     double offset = 0;
 
-    offset += leftFixedColumnsWidth > 0 ? 1 : 0;
-    offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    if (_showFixedColumn) {
+      offset += leftFixedColumnsWidth > 0 ? 1 : 0;
+      offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    }
 
     return offset;
   }
