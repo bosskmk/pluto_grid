@@ -13,8 +13,8 @@ class PlutoDragRowsEvent extends PlutoEvent {
   });
 
   void _handler(PlutoStateManager stateManager) {
-    if ((!dragType.isStart && offset == null) ||
-        dragType == null ||
+    if (dragType == null ||
+        (!dragType.isStart && offset == null) ||
         rows == null) {
       return;
     }
