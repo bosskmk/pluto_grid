@@ -423,7 +423,7 @@ class PlutoColumnTypeDate
     final parseValue = DateTime.tryParse(value);
 
     if (parseValue == null) {
-      return null;
+      return '';
     }
 
     return intl.DateFormat(format).format(DateTime.parse(value));
