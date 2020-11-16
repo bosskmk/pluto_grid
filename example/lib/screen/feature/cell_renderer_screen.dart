@@ -123,7 +123,8 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       title: 'Cell renderer',
       topTitle: 'Cell renderer',
       topContents: [
-        const Text('You can change the widget of the cell through the renderer.'),
+        const Text(
+            'You can change the widget of the cell through the renderer.'),
       ],
       topButtons: [
         PlutoExampleButton(

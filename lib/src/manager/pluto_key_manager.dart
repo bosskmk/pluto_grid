@@ -321,14 +321,12 @@ extension KeyManagerEventExtention on KeyManagerEvent {
   bool get isRight =>
       event.logicalKey.keyId == LogicalKeyboardKey.arrowRight.keyId;
 
-  bool get isUp =>
-      event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
+  bool get isUp => event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId;
 
   bool get isDown =>
       event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId;
 
-  bool get isHome =>
-      event.logicalKey.keyId == LogicalKeyboardKey.home.keyId;
+  bool get isHome => event.logicalKey.keyId == LogicalKeyboardKey.home.keyId;
 
   bool get isEnd => event.logicalKey.keyId == LogicalKeyboardKey.end.keyId;
 
@@ -344,19 +342,16 @@ extension KeyManagerEventExtention on KeyManagerEvent {
         event.logicalKey.keyId == 0x10700000022;
   }
 
-  bool get isEsc =>
-      event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
+  bool get isEsc => event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
 
-  bool get isEnter =>
-      event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
+  bool get isEnter => event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
 
   bool get isTab => event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
 
   bool get isF2 => event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
 
   bool get isCharacter =>
-      event.logicalKey.keyLabel != null &&
-      event.logicalKey.keyLabel.isNotEmpty;
+      event.logicalKey.keyLabel != null && event.logicalKey.keyLabel.isNotEmpty;
 
   bool get isCtrlC {
     return isCtrlPressed &&
