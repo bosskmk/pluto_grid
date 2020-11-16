@@ -3,10 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../../matcher/pluto_object_matcher.dart';
+import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   PlutoStateManager stateManager;
+  PlutoEventManager eventManager;
 
   var eventBuilder = ({
     @required PlutoGestureType gestureType,
@@ -30,6 +33,8 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoStateManager();
+    eventManager = MockPlutoEventManager();
+    when(stateManager.eventManager).thenReturn(eventManager);
   });
 
   group('onTapUp', () {
@@ -46,7 +51,7 @@ void main() {
         when(stateManager.isCurrentCell(any)).thenReturn(true);
         clearInteractions(stateManager);
 
-        // then
+        // when
         var event = eventBuilder(gestureType: PlutoGestureType.onTapUp);
         event.handler(stateManager);
 
@@ -80,7 +85,7 @@ void main() {
         final cell = PlutoCell(value: 'value');
         final rowIdx = 1;
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -117,7 +122,7 @@ void main() {
         final cell = PlutoCell(value: 'value');
         final rowIdx = 1;
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -152,7 +157,7 @@ void main() {
         when(stateManager.columnIndex(any)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -191,7 +196,7 @@ void main() {
         when(stateManager.keyPressed).thenReturn(PlutoKeyPressed(ctrl: true));
         clearInteractions(stateManager);
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -230,7 +235,7 @@ void main() {
         when(stateManager.isCurrentCell(any)).thenReturn(true);
         clearInteractions(stateManager);
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -264,7 +269,7 @@ void main() {
         when(stateManager.isCurrentCell(any)).thenReturn(false);
         clearInteractions(stateManager);
 
-        // then
+        // when
         var event = eventBuilder(
           gestureType: PlutoGestureType.onTapUp,
           cell: cell,
@@ -276,6 +281,144 @@ void main() {
         verify(stateManager.setCurrentCell(cell, rowIdx));
         // 호출 되지 않아야 할 메소드
         verifyNever(stateManager.handleOnSelected());
+      },
+    );
+  });
+
+  group('onLongPressStart', () {
+    test(
+      'When, '
+      'isCurrentCell = false, '
+      'Then, '
+      'setCurrentCell, setSelecting 이 호출 되어야 한다.',
+      () {
+        // given
+        final cell = PlutoCell(value: 'value');
+        final rowIdx = 1;
+
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        clearInteractions(stateManager);
+
+        // when
+        var event = eventBuilder(
+          gestureType: PlutoGestureType.onLongPressStart,
+          cell: cell,
+          rowIdx: rowIdx,
+        );
+        event.handler(stateManager);
+
+        // then
+        verify(stateManager.isCurrentCell(cell));
+        verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
+        verify(stateManager.setSelecting(true));
+      },
+    );
+
+    test(
+      'When, '
+      'isCurrentCell = true, '
+      'Then, '
+      'setCurrentCell 이 호출 되지 않아야 한다.',
+      () {
+        // given
+        final cell = PlutoCell(value: 'value');
+        final rowIdx = 1;
+
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
+        clearInteractions(stateManager);
+
+        // when
+        var event = eventBuilder(
+          gestureType: PlutoGestureType.onLongPressStart,
+          cell: cell,
+          rowIdx: rowIdx,
+        );
+        event.handler(stateManager);
+
+        // then
+        verifyNever(stateManager.setCurrentCell(cell, rowIdx, notify: false));
+      },
+    );
+
+    test(
+      'When, '
+      'isCurrentCell = false, '
+      'selectingMode = Row, '
+      'Then, '
+      'toggleSelectingRow 가 호출 되어야 한다.',
+      () {
+        // given
+        final cell = PlutoCell(value: 'value');
+        final rowIdx = 1;
+
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
+        clearInteractions(stateManager);
+
+        // when
+        var event = eventBuilder(
+          gestureType: PlutoGestureType.onLongPressStart,
+          cell: cell,
+          rowIdx: rowIdx,
+        );
+        event.handler(stateManager);
+
+        // then
+        verify(stateManager.toggleSelectingRow(rowIdx));
+      },
+    );
+  });
+
+  group('onLongPressMoveUpdate', () {
+    test(
+      'setCurrentSelectingPositionWithOffset, addEvent 가 호출 되어야 한다.',
+      () {
+        // given
+        final offset = const Offset(2.0, 3.0);
+        final cell = PlutoCell(value: 'value');
+        final rowIdx = 1;
+
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
+        clearInteractions(stateManager);
+
+        // when
+        var event = eventBuilder(
+          gestureType: PlutoGestureType.onLongPressMoveUpdate,
+          offset: offset,
+          cell: cell,
+          rowIdx: rowIdx,
+        );
+        event.handler(stateManager);
+
+        // then
+        verify(stateManager.setCurrentSelectingPositionWithOffset(offset));
+        verify(eventManager.addEvent(
+            argThat(PlutoObjectMatcher<PlutoMoveUpdateEvent>(rule: (event) {
+          return event.offset == offset;
+        }))));
+      },
+    );
+  });
+
+  group('onLongPressEnd', () {
+    test(
+      'setSelecting 이 false 로 호출 되어야 한다.',
+      () {
+        // given
+        final cell = PlutoCell(value: 'value');
+        final rowIdx = 1;
+
+        // when
+        var event = eventBuilder(
+          gestureType: PlutoGestureType.onLongPressEnd,
+          cell: cell,
+          rowIdx: rowIdx,
+        );
+        event.handler(stateManager);
+
+        // then
+        verify(stateManager.setSelecting(false));
       },
     );
   });

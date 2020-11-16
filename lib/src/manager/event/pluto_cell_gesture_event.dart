@@ -55,9 +55,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   }
 
   void _onLongPressStart(PlutoStateManager stateManager) {
-    if (stateManager.isCurrentCell(cell) != true) {
-      stateManager.setCurrentCell(cell, rowIdx, notify: false);
-    }
+    _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(true);
 
@@ -67,9 +65,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   }
 
   void _onLongPressMoveUpdate(PlutoStateManager stateManager) {
-    if (stateManager.isCurrentCell(cell) != true) {
-      stateManager.setCurrentCell(cell, rowIdx, notify: false);
-    }
+    _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setCurrentSelectingPositionWithOffset(offset);
 
@@ -79,9 +75,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   }
 
   void _onLongPressEnd(PlutoStateManager stateManager) {
-    if (stateManager.isCurrentCell(cell) != true) {
-      stateManager.setCurrentCell(cell, rowIdx, notify: false);
-    }
+    _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(false);
   }
@@ -116,6 +110,16 @@ class PlutoCellGestureEvent extends PlutoEvent {
       stateManager.handleOnSelected();
     } else {
       stateManager.setCurrentCell(cell, rowIdx);
+    }
+  }
+
+  void _setCurrentCell(
+    PlutoStateManager stateManager,
+    PlutoCell cell,
+    int rowIdx,
+  ) {
+    if (stateManager.isCurrentCell(cell) != true) {
+      stateManager.setCurrentCell(cell, rowIdx, notify: false);
     }
   }
 }

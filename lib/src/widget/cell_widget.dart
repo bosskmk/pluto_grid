@@ -212,8 +212,7 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   void _handleOnLongPressEnd(LongPressEndDetails details) {
-    _addGestureEvent(
-        PlutoGestureType.onLongPressEnd, details.globalPosition);
+    _addGestureEvent(PlutoGestureType.onLongPressEnd, details.globalPosition);
   }
 
   @override
