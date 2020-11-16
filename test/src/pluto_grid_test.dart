@@ -864,14 +864,16 @@ void main() {
         ),
       );
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
       stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       stateManager.moveColumn(columns[5].key, 50);
       //

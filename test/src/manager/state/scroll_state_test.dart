@@ -31,7 +31,8 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
       stateManager.setGridGlobalOffset(Offset.zero);
     });
 

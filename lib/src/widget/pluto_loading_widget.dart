@@ -7,10 +7,10 @@ class PlutoLoadingWidget extends StatelessWidget {
   final double indicatorSize;
 
   PlutoLoadingWidget({
-    this.backgroundColor = Colors.white,
-    this.indicatorColor = Colors.black,
-    this.indicatorText = 'Loading...',
-    this.indicatorSize = 14,
+    this.backgroundColor,
+    this.indicatorColor,
+    this.indicatorText,
+    this.indicatorSize,
   });
 
   @override
@@ -21,7 +21,7 @@ class PlutoLoadingWidget extends StatelessWidget {
           child: Opacity(
             opacity: 0.7,
             child: ColoredBox(
-              color: backgroundColor,
+              color: backgroundColor ?? Colors.white,
             ),
           ),
         ),
@@ -30,14 +30,14 @@ class PlutoLoadingWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-              color: backgroundColor,
-              border: Border.all(color: indicatorColor),
+              color: backgroundColor ?? Colors.white,
+              border: Border.all(color: indicatorColor ?? Colors.black),
             ),
             child: Text(
-              indicatorText,
+              indicatorText ?? 'Loading...',
               style: TextStyle(
-                color: indicatorColor,
-                fontSize: indicatorSize,
+                color: indicatorColor ?? Colors.black,
+                fontSize: indicatorSize ?? 14,
               ),
             ),
           ),

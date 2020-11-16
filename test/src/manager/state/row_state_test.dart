@@ -1682,7 +1682,8 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: scroll,
-          createHeader: (PlutoStateManager stateManager) => const Text('header'),
+          createHeader: (PlutoStateManager stateManager) =>
+              const Text('header'),
         );
 
         stateManager.setLayout(const BoxConstraints(

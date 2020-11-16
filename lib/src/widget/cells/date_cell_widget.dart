@@ -59,10 +59,12 @@ class _DateCellWidgetState extends State<DateCellWidget>
         DateTime.now();
 
     final startDate = widget.column.type.date.startDate ??
-        DatetimeHelper.moveToFirstWeekday(defaultDate.add(const Duration(days: -60)));
+        DatetimeHelper.moveToFirstWeekday(
+            defaultDate.add(const Duration(days: -60)));
 
     final endDate = widget.column.type.date.endDate ??
-        DatetimeHelper.moveToLastWeekday(defaultDate.add(const Duration(days: 60)));
+        DatetimeHelper.moveToLastWeekday(
+            defaultDate.add(const Duration(days: 60)));
 
     final List<DateTime> days = DatetimeHelper.getDaysInBetween(
       startDate,

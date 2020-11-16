@@ -549,7 +549,8 @@ void main() {
       // when
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // then
       expect(stateManager.columnIndexesByShowFixed(), [2, 0, 1, 3, 4]);
@@ -577,7 +578,8 @@ void main() {
       // when
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
 
       // then
       expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
@@ -613,7 +615,8 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // when
       // then
@@ -653,7 +656,8 @@ void main() {
 
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
@@ -693,7 +697,8 @@ void main() {
 
       stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.right);
 
-      stateManager.setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
@@ -731,7 +736,8 @@ void main() {
       );
 
       // 150 + 200 + 150 = 최소 500 필요
-      stateManager.setLayout(const BoxConstraints(maxWidth: 550, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 550, maxHeight: 600));
 
       expect(stateManager.showFixedColumn, true);
 
@@ -772,7 +778,8 @@ void main() {
       );
 
       // 150 + 200 + 150 = 최소 500 필요
-      stateManager.setLayout(const BoxConstraints(maxWidth: 450, maxHeight: 600));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 450, maxHeight: 600));
 
       expect(stateManager.showFixedColumn, false);
 

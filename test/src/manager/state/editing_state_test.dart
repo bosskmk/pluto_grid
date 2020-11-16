@@ -42,7 +42,8 @@ void main() {
 
       stateManager.setSelectingMode(PlutoSelectingMode.row);
 
-      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager
+          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
@@ -104,7 +105,8 @@ void main() {
 
       stateManager.setSelectingMode(PlutoSelectingMode.row);
 
-      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager
+          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
@@ -180,7 +182,8 @@ void main() {
 
       stateManager.setSelectingMode(PlutoSelectingMode.square);
 
-      stateManager.setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager
+          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       final currentCell = rows[2].cells['body2'];
 
