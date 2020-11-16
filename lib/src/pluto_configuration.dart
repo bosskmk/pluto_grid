@@ -130,6 +130,9 @@ class PlutoGridLocaleText {
   final String hour;
   final String minute;
 
+  // Common
+  final String loadingText;
+
   const PlutoGridLocaleText({
     // Column menu
     this.unfixColumn = 'Unfix',
@@ -147,6 +150,8 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = 'Hour',
     this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Loading...',
   });
 
   const PlutoGridLocaleText.korean({
@@ -166,6 +171,8 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = '시',
     this.minute = '분',
+    // Common
+    this.loadingText = '로딩중...',
   });
 
   const PlutoGridLocaleText.russian({
@@ -185,6 +192,8 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = 'Часы',
     this.minute = 'Минуты',
+    // Common
+    this.loadingText = 'Загрузка...',
   });
 }
 

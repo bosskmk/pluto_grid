@@ -110,6 +110,8 @@ part './src/widget/cells/time_cell_widget.dart';
 
 part './src/widget/column_widget.dart';
 
+part './src/widget/pluto_loading_widget.dart';
+
 part './src/widget/pluto_scrollbar.dart';
 
 part './src/widget/row_widget.dart';
