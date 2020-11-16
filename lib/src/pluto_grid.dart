@@ -64,6 +64,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double _bodyRightOffset;
   bool _hasRightFixedColumns;
   double _rightFixedLeftOffset;
+  bool _showLoading;
 
   List<Function()> disposeList = [];
 
@@ -197,7 +198,8 @@ class _PlutoGridState extends State<PlutoGrid> {
         _bodyLeftOffset != stateManager.bodyLeftOffset ||
         _bodyRightOffset != stateManager.bodyRightOffset ||
         _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
-        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset) {
+        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset ||
+        _showLoading != stateManager.showLoading) {
       setState(resetState);
     }
   }
@@ -229,6 +231,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     _hasRightFixedColumns = stateManager.hasRightFixedColumns;
 
     _rightFixedLeftOffset = stateManager.rightFixedLeftOffset;
+
+    _showLoading = stateManager.showLoading;
   }
 
   @override
@@ -361,6 +365,19 @@ class _PlutoGridState extends State<PlutoGrid> {
                         child: widget.createFooter(stateManager),
                       ),
                     ],
+                    if (stateManager.showLoading)
+                      Positioned.fill(
+                        child: PlutoLoadingWidget(
+                          backgroundColor:
+                              stateManager.configuration.gridBackgroundColor,
+                          indicatorColor:
+                              stateManager.configuration.cellTextStyle.color,
+                          indicatorText:
+                              stateManager.configuration.localeText.loadingText,
+                          indicatorSize:
+                              stateManager.configuration.cellTextStyle.fontSize,
+                        ),
+                      ),
                   ],
                 ),
               ),

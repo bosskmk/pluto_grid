@@ -27,6 +27,8 @@ abstract class ILayoutState {
 
   bool get showFooter;
 
+  bool get showLoading;
+
   bool get hasLeftFixedColumns;
 
   bool get hasRightFixedColumns;
@@ -63,6 +65,8 @@ abstract class ILayoutState {
   void setLayout(BoxConstraints size);
 
   void resetShowFixedColumn({bool notify = true});
+
+  void setShowLoading(bool flag);
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -110,6 +114,10 @@ mixin LayoutState implements IPlutoState {
   bool get showHeader => headerHeight > 0;
 
   bool get showFooter => footerHeight > 0;
+
+  bool get showLoading => _showLoading == true;
+
+  bool _showLoading;
 
   bool get hasLeftFixedColumns => leftFixedColumnsWidth > 0;
 
@@ -221,6 +229,16 @@ mixin LayoutState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void setShowLoading(bool flag) {
+    if (_showLoading == flag) {
+      return;
+    }
+
+    _showLoading = flag;
+
+    notifyListeners();
   }
 
   @visibleForTesting
