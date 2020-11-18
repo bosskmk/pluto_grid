@@ -50,6 +50,10 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
+    if (currentColumn?.enableEditingMode != true) {
+      flag = false;
+    }
+
     if (currentCell == null || _isEditing == flag) {
       return;
     }

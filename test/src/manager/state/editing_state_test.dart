@@ -5,12 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
-
-class _MockOnChangedImpl {
-  callback(PlutoOnChangedEvent event) {}
-}
-
-class _MockOnChanged extends Mock implements _MockOnChangedImpl {}
+import '../../../mock/mock_on_change_listener.dart';
 
 void main() {
   group('pasteCellValue', () {
@@ -250,6 +245,157 @@ void main() {
     });
   });
 
+  group('setEditing', () {
+    MockOnChangeListener mock;
+    List<PlutoColumn> columns;
+    List<PlutoRow> rows;
+    PlutoStateManager stateManager;
+
+    Function({
+      PlutoMode mode,
+      bool enableEditingMode,
+      bool setCurrentCell,
+      bool setIsEditing,
+    }) buildState;
+
+    setUp(() {
+      buildState = ({
+        mode = PlutoMode.normal,
+        enableEditingMode = true,
+        setCurrentCell = false,
+        setIsEditing = false,
+      }) {
+        mock = MockOnChangeListener();
+
+        columns = [
+          PlutoColumn(
+            title: 'column',
+            field: 'column',
+            type: PlutoColumnType.text(),
+            enableEditingMode: enableEditingMode,
+          ),
+        ];
+
+        rows = RowHelper.count(10, columns);
+
+        stateManager = PlutoStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: null,
+          mode: mode,
+        );
+
+        stateManager.addListener(mock.onChangeVoidNoParamListener);
+
+        stateManager
+            .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+
+        if (setCurrentCell) {
+          stateManager.setCurrentCell(rows.first.cells['column'], 0);
+        }
+
+        if (setIsEditing) {
+          stateManager.setEditing(true);
+        }
+
+        clearInteractions(mock);
+      };
+    });
+
+    test(
+      'PlutoMode = select, '
+      'enableEditingMode = true, '
+      'setCurrentCell = true, '
+      'setIsEditing = false, '
+      'notifyListener 가 호출 되지 않아야 한다.',
+      () {
+        // given
+        buildState(
+          mode: PlutoMode.select,
+          enableEditingMode: true,
+          setCurrentCell: true,
+          setIsEditing: false,
+        );
+
+        // when
+        stateManager.setEditing(true);
+
+        // then
+        verifyNever(mock.onChangeVoidNoParamListener());
+      },
+    );
+
+    test(
+      'PlutoMode = normal, '
+      'enableEditingMode = true, '
+      'setCurrentCell = true, '
+      'setIsEditing = false, '
+      'notifyListener 가 호출 되어야 한다.',
+      () {
+        // given
+        buildState(
+          mode: PlutoMode.normal,
+          enableEditingMode: true,
+          setCurrentCell: true,
+          setIsEditing: false,
+        );
+
+        // when
+        stateManager.setEditing(true);
+
+        // then
+        verify(mock.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    test(
+      'PlutoMode = normal, '
+      'enableEditingMode = true, '
+      'setCurrentCell = false, '
+      'setIsEditing = false, '
+      'notifyListener 가 호출 되지 않아야 한다.',
+      () {
+        // given
+        buildState(
+          mode: PlutoMode.normal,
+          enableEditingMode: true,
+          setCurrentCell: false,
+          setIsEditing: false,
+        );
+
+        // when
+        stateManager.setEditing(true);
+
+        // then
+        verifyNever(mock.onChangeVoidNoParamListener());
+      },
+    );
+
+    test(
+      'PlutoMode = normal, '
+      'enableEditingMode = true, '
+      'setCurrentCell = true, '
+      'setIsEditing = true, '
+      'notifyListener 가 호출 되지 않아야 한다.',
+      () {
+        // given
+        buildState(
+          mode: PlutoMode.normal,
+          enableEditingMode: true,
+          setCurrentCell: true,
+          setIsEditing: true,
+        );
+
+        // when
+        stateManager.setEditing(true);
+
+        // then
+        verifyNever(mock.onChangeVoidNoParamListener());
+      },
+    );
+  });
+
   group('changeCellValue', () {
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('column', count: 3, width: 150),
@@ -261,7 +407,7 @@ void main() {
       'force 가 false(기본값) 일 때, canNotChangeCellValue 가 true 면'
       'onChanged 콜백이 호출 되지 않아야 한다.',
       () {
-        final mock = _MockOnChanged();
+        final mock = MockOnChangeListener();
 
         PlutoStateManager stateManager = PlutoStateManager(
           columns: columns,
@@ -269,7 +415,7 @@ void main() {
           gridFocusNode: null,
           scroll: null,
           mode: PlutoMode.select,
-          onChangedEventCallback: mock.callback,
+          onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
@@ -286,7 +432,7 @@ void main() {
           // force: false,
         );
 
-        verifyNever(mock.callback(any));
+        verifyNever(mock.onChangeOneParamListener(any));
       },
     );
 
@@ -294,7 +440,7 @@ void main() {
       'force 가 true 일 때, canNotChangeCellValue 가 true 라도'
       'onChanged 콜백이 호출 되어야 한다.',
       () {
-        final mock = _MockOnChanged();
+        final mock = MockOnChangeListener();
 
         PlutoStateManager stateManager = PlutoStateManager(
           columns: columns,
@@ -302,7 +448,7 @@ void main() {
           gridFocusNode: null,
           scroll: null,
           mode: PlutoMode.select,
-          onChangedEventCallback: mock.callback,
+          onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
@@ -319,7 +465,7 @@ void main() {
           force: true,
         );
 
-        verify(mock.callback(any)).called(1);
+        verify(mock.onChangeOneParamListener(any)).called(1);
       },
     );
   });

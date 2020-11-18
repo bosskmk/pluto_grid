@@ -111,6 +111,10 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
         title: 'column5',
         field: 'column5',
         type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        renderer: (rendererContext) {
+          return Image.network('https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
+        },
       ),
     ];
 

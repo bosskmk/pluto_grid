@@ -142,7 +142,9 @@ class _CellWidgetState extends State<CellWidget>
   }
 
   Widget _buildCell() {
-    if (!_isCurrentCell || !_isEditing) {
+    if (!_isCurrentCell ||
+        !_isEditing ||
+        widget.column.enableEditingMode != true) {
       return DefaultCellWidget(
         stateManager: widget.stateManager,
         cell: widget.cell,

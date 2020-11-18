@@ -400,11 +400,15 @@ void main() {
   });
 
   group('canChangeCellValue', () {
-    final createColumn = ({bool readonly = false}) {
+    final createColumn = ({
+      bool readonly = false,
+      bool enableEditingMode = true,
+    }) {
       return PlutoColumn(
         title: 'title',
         field: 'field',
         type: PlutoColumnType.text(readOnly: readonly),
+        enableEditingMode: enableEditingMode,
       );
     };
 
@@ -421,6 +425,27 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(readonly: true),
+          newValue: 'abc',
+          oldValue: 'ABC',
+        );
+
+        expect(result, isFalse);
+      },
+    );
+
+    test(
+      'enableEditingMode = false, '
+      'should be returned false.',
+      () {
+        final normalGridAndReadonlyColumn = PlutoStateManager(
+          columns: [],
+          rows: [],
+          gridFocusNode: null,
+          scroll: null,
+        );
+
+        final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
+          column: createColumn(enableEditingMode: false),
           newValue: 'abc',
           oldValue: 'ABC',
         );
