@@ -231,7 +231,7 @@ mixin CellState implements IPlutoState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column.type.readOnly) {
+    if (column.type.readOnly || column.enableEditingMode != true) {
       return false;
     }
 

@@ -497,6 +497,85 @@ void main() {
     },
   );
 
+  group('DefaultCellWidget 렌더링 조건', () {
+    PlutoCell cell;
+
+    PlutoColumn column;
+
+    int rowIdx;
+
+    final aCell = ({
+      bool isCurrentCell = true,
+      bool isEditing = false,
+      bool readOnly = false,
+      bool enableEditingMode = true,
+    }) {
+      return PlutoWidgetTestHelper('a cell.', (tester) async {
+        when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
+        when(stateManager.isEditing).thenReturn(isEditing);
+        when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
+        when(stateManager.hasFocus).thenReturn(true);
+
+        cell = PlutoCell(value: 'one');
+
+        column = PlutoColumn(
+          title: 'header',
+          field: 'header',
+          type: PlutoColumnType.text(
+            readOnly: readOnly,
+          ),
+          enableEditingMode: enableEditingMode,
+        );
+
+        rowIdx = 0;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: CellWidget(
+                stateManager: stateManager,
+                cell: cell,
+                column: column,
+                rowIdx: rowIdx,
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+      });
+    };
+
+    aCell(isCurrentCell: false).test(
+      'currentCell 이 아니면, DefaultCellWidget 이 렌더링 되어야 한다.',
+      (tester) async {
+        expect(find.byType(DefaultCellWidget), findsOneWidget);
+      },
+    );
+
+    aCell(isEditing: false).test(
+      'isEditing 이 false, DefaultCellWidget 이 렌더링 되어야 한다.',
+      (tester) async {
+        expect(find.byType(DefaultCellWidget), findsOneWidget);
+      },
+    );
+
+    aCell(enableEditingMode: false).test(
+      'enableEditingMode 이 false, DefaultCellWidget 이 렌더링 되어야 한다.',
+      (tester) async {
+        expect(find.byType(DefaultCellWidget), findsOneWidget);
+      },
+    );
+
+    aCell(isCurrentCell: true, isEditing: true, enableEditingMode: true).test(
+      'isCurrentCell, isEditing, enableEditingMode 이 true 면, '
+      'DefaultCellWidget 이 렌더링 되지 않아야 한다.',
+      (tester) async {
+        expect(find.byType(DefaultCellWidget), findsNothing);
+      },
+    );
+  });
+
   group('configuration', () {
     PlutoCell cell;
 

@@ -75,6 +75,9 @@ class PlutoColumn {
   /// Displays the right icon of the column title.
   bool enableContextMenu;
 
+  /// Entering the Enter key or tapping the cell enters the Editing mode.
+  bool enableEditingMode;
+
   PlutoColumn({
     @required this.title,
     @required this.field,
@@ -92,6 +95,7 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
+    this.enableEditingMode = true,
   }) : _key = UniqueKey();
 
   /// Column key
