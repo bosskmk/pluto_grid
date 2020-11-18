@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
 
     # getting for branch name
-    - uses: nelonoel/branch-name@v1
+    - uses: nelonoel/branch-name@v1.0.1
 
     # using flutter
     - uses: subosito/flutter-action@v1
