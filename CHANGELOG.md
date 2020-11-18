@@ -1,3 +1,7 @@
+## [1.0.0-pre.5] - 2020. 11. 18
+
+* Add enableEditingMode to PlutoColumn.
+
 ## [1.0.0-pre.4] - 2020. 11. 16
 
 * Enable constant_identifier_names.
