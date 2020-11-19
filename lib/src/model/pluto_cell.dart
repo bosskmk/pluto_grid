@@ -9,10 +9,10 @@ class PlutoCell {
   PlutoCell({
     this.value,
     dynamic originalValue,
-  })  : this._key = UniqueKey(),
-        this._originalValue = originalValue;
+  })  : _key = UniqueKey(),
+        _originalValue = originalValue;
 
-  Key _key;
+  final Key _key;
 
   Key get key => _key;
 

@@ -201,18 +201,18 @@ void main() {
     });
 
     test('ratio 가 0.5 인 경우 width 가 5:5', () {
-      final display = PlutoDualGridDisplayRatio(ratio: 0.5);
+      final display = const PlutoDualGridDisplayRatio(ratio: 0.5);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('ratio 가 0.1 인 경우 width 가 1:9', () {
-      final display = PlutoDualGridDisplayRatio(ratio: 0.1);
+      final display = const PlutoDualGridDisplayRatio(ratio: 0.1);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 20);
       expect(display.gridBWidth(size), 180);
@@ -221,18 +221,18 @@ void main() {
 
   group('PlutoDualGridDisplayFixedAndExpanded', () {
     test('width 가 100', () {
-      final display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
+      final display = const PlutoDualGridDisplayFixedAndExpanded(width: 100);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('width 가 50', () {
-      final display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
+      final display = const PlutoDualGridDisplayFixedAndExpanded(width: 50);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 50);
       expect(display.gridBWidth(size), 150);
@@ -241,18 +241,18 @@ void main() {
 
   group('PlutoDualGridDisplayExpandedAndFixed', () {
     test('width 가 100', () {
-      final display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
+      final display = const PlutoDualGridDisplayExpandedAndFixed(width: 100);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('width 가 50', () {
-      final display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
+      final display = const PlutoDualGridDisplayExpandedAndFixed(width: 50);
 
-      final size = BoxConstraints(maxWidth: 200);
+      final size = const BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 150);
       expect(display.gridBWidth(size), 50);

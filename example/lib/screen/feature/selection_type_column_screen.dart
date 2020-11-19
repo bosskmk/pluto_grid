@@ -106,8 +106,8 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       title: 'Selection type column',
       topTitle: 'Selection type column',
       topContents: [
-        Text('A column to enter a selection value.'),
-        Text(
+        const Text('A column to enter a selection value.'),
+        const Text(
             'The sorting of the Selection column is based on the order of the Select items.'),
       ],
       topButtons: [
@@ -123,9 +123,9 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
           print(event);
         },
         configuration: PlutoConfiguration(
-          // If you don't want to move to the next line after selecting the pop-up item, uncomment it.
-          // enableMoveDownAfterSelecting: false,
-        ),
+            // If you don't want to move to the next line after selecting the pop-up item, uncomment it.
+            // enableMoveDownAfterSelecting: false,
+            ),
       ),
     );
   }

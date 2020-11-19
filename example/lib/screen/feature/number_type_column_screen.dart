@@ -83,7 +83,7 @@ class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
       title: 'Number type column',
       topTitle: 'Number type column',
       topContents: [
-        Text('A column to enter a number value.'),
+        const Text('A column to enter a number value.'),
       ],
       topButtons: [
         PlutoExampleButton(

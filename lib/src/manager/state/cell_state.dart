@@ -11,10 +11,10 @@ abstract class ICellState {
 
   void setCurrentCellPosition(
     PlutoCellPosition cellPosition, {
-    bool notify: true,
+    bool notify = true,
   });
 
-  void updateCurrentCellPosition({bool notify: true});
+  void updateCurrentCellPosition({bool notify = true});
 
   /// Index position of cell in a column
   PlutoCellPosition cellPositionByCellKey(Key cellKey);
@@ -72,7 +72,7 @@ mixin CellState implements IPlutoState {
   PlutoCellPosition _currentCellPosition;
 
   PlutoCell get firstCell {
-    if (_rows == null || _rows.length < 1) {
+    if (_rows == null || _rows.isEmpty) {
       return null;
     }
 
@@ -85,7 +85,7 @@ mixin CellState implements IPlutoState {
 
   void setCurrentCellPosition(
     PlutoCellPosition cellPosition, {
-    bool notify: true,
+    bool notify = true,
   }) {
     if (_currentCellPosition == cellPosition) {
       return;
@@ -104,7 +104,7 @@ mixin CellState implements IPlutoState {
     }
   }
 
-  void updateCurrentCellPosition({bool notify: true}) {
+  void updateCurrentCellPosition({bool notify = true}) {
     if (_currentCell == null) {
       return;
     }
@@ -178,7 +178,7 @@ mixin CellState implements IPlutoState {
     if (cell == null ||
         rowIdx == null ||
         _rows == null ||
-        _rows.length < 1 ||
+        _rows.isEmpty ||
         rowIdx < 0 ||
         rowIdx > _rows.length - 1) {
       return;
@@ -208,14 +208,14 @@ mixin CellState implements IPlutoState {
 
   bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
     switch (direction) {
-      case MoveDirection.Left:
+      case MoveDirection.left:
         return cellPosition.columnIdx > 0;
-      case MoveDirection.Right:
+      case MoveDirection.right:
         return cellPosition.columnIdx <
             _rows[cellPosition.rowIdx].cells.length - 1;
-      case MoveDirection.Up:
+      case MoveDirection.up:
         return cellPosition.rowIdx > 0;
-      case MoveDirection.Down:
+      case MoveDirection.down:
         return cellPosition.rowIdx < _rows.length - 1;
     }
 
@@ -231,7 +231,7 @@ mixin CellState implements IPlutoState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column.type.readOnly) {
+    if (column.type.readOnly || column.enableEditingMode != true) {
       return false;
     }
 

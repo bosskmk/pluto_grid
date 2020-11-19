@@ -50,6 +50,10 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
+    if (currentColumn?.enableEditingMode != true) {
+      flag = false;
+    }
+
     if (currentCell == null || _isEditing == flag) {
       return;
     }
@@ -74,7 +78,7 @@ mixin EditingState implements IPlutoState {
       return;
     }
 
-    if (selectingMode.isRow && currentSelectingRows.length > 0) {
+    if (selectingMode.isRow && currentSelectingRows.isNotEmpty) {
       _pasteCellValueIntoSelectingRows(textList: textList);
     } else {
       int columnStartIdx;
@@ -130,16 +134,16 @@ mixin EditingState implements IPlutoState {
   }
 
   void changeCellValue(
-      Key cellKey,
-      dynamic value, {
-        bool callOnChangedEvent = true,
-        bool force = false,
-        bool notify = true,
-      }) {
+    Key cellKey,
+    dynamic value, {
+    bool callOnChangedEvent = true,
+    bool force = false,
+    bool notify = true,
+  }) {
     for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
       for (var columnIdx = 0;
-      columnIdx < columnIndexes.length;
-      columnIdx += 1) {
+          columnIdx < columnIndexes.length;
+          columnIdx += 1) {
         final field = _columns[columnIndexes[columnIdx]].field;
 
         if (_rows[rowIdx].cells[field]._key == cellKey) {
@@ -153,11 +157,12 @@ mixin EditingState implements IPlutoState {
             oldValue: oldValue,
           );
 
-          if (force == false && canNotChangeCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          )) {
+          if (force == false &&
+              canNotChangeCellValue(
+                column: currentColumn,
+                newValue: value,
+                oldValue: oldValue,
+              )) {
             return;
           }
 
@@ -203,7 +208,7 @@ mixin EditingState implements IPlutoState {
         rowIdxList.add(i);
       }
 
-      if (selectingRowKeys.length < 1) {
+      if (selectingRowKeys.isEmpty) {
         break;
       }
     }

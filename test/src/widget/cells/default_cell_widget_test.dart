@@ -4,15 +4,20 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
+import '../../../matcher/pluto_object_matcher.dart';
+import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   PlutoStateManager stateManager;
+  PlutoEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
+    eventManager = MockPlutoEventManager();
+    when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
-    when(stateManager.localeText).thenReturn(PlutoGridLocaleText());
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
   });
@@ -92,7 +97,7 @@ void main() {
 
     final renderText = buildCellWidgetWithRenderer(
         (PlutoColumnRendererContext rendererContext) {
-      return Text('renderer value');
+      return const Text('renderer value');
     });
 
     renderText.test(
@@ -125,31 +130,66 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: 'default cell value');
 
-    final cellWidget = PlutoWidgetTestHelper('cell widget', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: DefaultCellWidget(
-              stateManager: stateManager,
-              cell: cell,
-              column: column,
+    final cellWidget = ({
+      bool hasSortedColumn,
+    }) {
+      return PlutoWidgetTestHelper('cell widget', (tester) async {
+        when(stateManager.hasSortedColumn).thenReturn(hasSortedColumn);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: DefaultCellWidget(
+                stateManager: stateManager,
+                cell: cell,
+                column: column,
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      });
+    };
 
-    cellWidget.test(
-      'Draggable 위젯이 렌더링 되어야 한다.',
+    cellWidget(hasSortedColumn: false).test(
+      '정렬 된 컬럼이 없는 경우 Draggable 위젯이 렌더링 되어야 한다.',
       (tester) async {
         expect(find.byType(Draggable), findsOneWidget);
       },
     );
 
-    cellWidget.test(
-      'Draggable 아이콘을 드래그 하면 moveRows 가 호출 되어야 한다.',
+    cellWidget(hasSortedColumn: true).test(
+      '정렬 된 컬럼이 있는 경우 Draggable 위젯이 렌더링 되지 않아야 한다.',
       (tester) async {
-        final offset = Offset(0.0, 100);
+        expect(find.byType(Draggable), findsNothing);
+      },
+    );
+
+    cellWidget(hasSortedColumn: false).test(
+      'Draggable 아이콘을 드래그 하지 않으면 PlutoDragRowsEvent 가 호출 되지 않아야 한다.',
+      (tester) async {
+        final row = PlutoRow(cells: {});
+
+        when(stateManager.getRowByIdx(any)).thenReturn(row);
+        when(stateManager.isSelectedRow(any)).thenReturn(false);
+
+        await tester.tap(find.byType(Icon));
+        await tester.longPress(find.byType(Icon));
+
+        // tester.tap triggers onDragStarted, onDragEnd.
+        // It only needs to be called Update, so it is ignored.
+
+        verifyNever(eventManager.addEvent(
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+            return object.dragType.isUpdate;
+          })),
+        ));
+      },
+    );
+
+    cellWidget(hasSortedColumn: false).test(
+      'Draggable 아이콘을 드래그 하면 PlutoDragRowsEvent 가 호출 되어야 한다.',
+      (tester) async {
+        final offset = const Offset(0.0, 100);
 
         final row = PlutoRow(cells: {});
 
@@ -158,16 +198,39 @@ void main() {
 
         await tester.drag(find.byType(Icon), offset);
 
-        verify(stateManager.moveRows([row], argThat(greaterThan(100))))
-            .called(1);
+        verify(eventManager.addEvent(
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+            return object.dragType.isStart &&
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
+          })),
+        )).called(1);
+
+        verify(eventManager.addEvent(
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+            return object.dragType.isUpdate &&
+                object.offset.dy > 100 &&
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
+          })),
+        )).called(greaterThan(1));
+
+        verify(eventManager.addEvent(
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+            return object.offset.dy > 100 &&
+                object.dragType.isEnd &&
+                object.rows.length == 1 &&
+                object.rows.first.key == row.key;
+          })),
+        )).called(1);
       },
     );
 
-    cellWidget.test(
+    cellWidget(hasSortedColumn: false).test(
       'Draggable 아이콘을 드래그 하면 isCurrentRowSelected 이 true 인 경우'
-      'currentSelectingRows 로 moveRows 가 호출 되어야 한다.',
+      'currentSelectingRows 로 PlutoDragRowsEvent 가 호출 되어야 한다.',
       (tester) async {
-        final offset = Offset(0.0, 100);
+        final offset = const Offset(0.0, 100);
 
         final rows = [
           PlutoRow(cells: {}),
@@ -181,8 +244,16 @@ void main() {
 
         await tester.drag(find.byType(Icon), offset);
 
-        verify(stateManager.moveRows(rows, argThat(greaterThan(100))))
-            .called(1);
+        verify(eventManager.addEvent(
+          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+            return object.dragType.isUpdate &&
+                object.offset.dy > 100 &&
+                object.rows.length == 3 &&
+                object.rows[0].key == rows[0].key &&
+                object.rows[1].key == rows[1].key &&
+                object.rows[1].key == rows[1].key;
+          })),
+        )).called(greaterThan(1));
       },
     );
   });

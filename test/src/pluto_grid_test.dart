@@ -166,9 +166,9 @@ void main() {
       '2번 컬럼 고정 후 방향키 이동시 정상적으로 이동 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -192,7 +192,7 @@ void main() {
     );
 
     // 세번 째 컬럼 왼쪽 고정
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Left);
+    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
 
     // 첫번 째 컬럼의 첫번 째 셀
     Finder firstCell = find.byKey(rows.first.cells['headerL0'].key);
@@ -280,7 +280,7 @@ void main() {
     expect(stateManager.showFixedColumn, false);
 
     // Fix the 3rd column
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.Right);
+    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.right);
 
     // Await re-build by toggleFixedColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));
@@ -375,7 +375,7 @@ void main() {
               onLoaded: (PlutoOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
-              createHeader: (stateManager) => Text('grid header'),
+              createHeader: (stateManager) => const Text('grid header'),
             ),
           ),
         ),
@@ -629,7 +629,7 @@ void main() {
                 onLoaded: (PlutoOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
-                createHeader: (stateManager) => Text('grid header'),
+                createHeader: (stateManager) => const Text('grid header'),
               ),
             ),
           ),
@@ -672,7 +672,7 @@ void main() {
                 onLoaded: (PlutoOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
-                createHeader: (stateManager) => Text('grid header'),
+                createHeader: (stateManager) => const Text('grid header'),
               ),
             ),
           ),
@@ -805,7 +805,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -822,9 +822,9 @@ void main() {
       expect(columns[1].title, 'body1');
       expect(columns[2].title, 'body2');
       expect(columns[3].title, 'body5');
-      expect(columns[3].fixed, PlutoColumnFixed.Left);
+      expect(columns[3].fixed, PlutoColumnFixed.left);
       expect(columns[4].title, 'body3');
-      expect(columns[4].fixed, PlutoColumnFixed.Left);
+      expect(columns[4].fixed, PlutoColumnFixed.left);
       expect(columns[5].title, 'body4');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
@@ -864,14 +864,16 @@ void main() {
         ),
       );
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Left);
+      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 50, maxHeight: 300));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       stateManager.moveColumn(columns[5].key, 50);
       //
@@ -884,12 +886,12 @@ void main() {
 
       // then
       expect(columns[0].title, 'body5');
-      expect(columns[0].fixed, PlutoColumnFixed.None);
+      expect(columns[0].fixed, PlutoColumnFixed.none);
       expect(columns[1].title, 'body0');
       expect(columns[2].title, 'body1');
       expect(columns[3].title, 'body2');
       expect(columns[4].title, 'body3');
-      expect(columns[4].fixed, PlutoColumnFixed.Left);
+      expect(columns[4].fixed, PlutoColumnFixed.left);
       expect(columns[5].title, 'body4');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
@@ -976,7 +978,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -7)), selectedDate);
+        expect(currentDate.add(const Duration(days: -7)), selectedDate);
       });
 
       testWidgets(
@@ -1062,7 +1064,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -(7 * 6))), selectedDate);
+        expect(currentDate.add(const Duration(days: -(7 * 6))), selectedDate);
       });
 
       testWidgets(
@@ -1145,7 +1147,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: -(7 * 10))), selectedDate);
+        expect(currentDate.add(const Duration(days: -(7 * 10))), selectedDate);
       });
 
       testWidgets(
@@ -1228,7 +1230,7 @@ void main() {
         final DateTime selectedDate =
             DateTime.parse(stateManager.currentCell.value);
 
-        expect(currentDate.add(Duration(days: 7 * 10)), selectedDate);
+        expect(currentDate.add(const Duration(days: 7 * 10)), selectedDate);
       });
     });
   });
@@ -1237,9 +1239,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1295,9 +1297,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1353,9 +1355,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1411,9 +1413,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1469,9 +1471,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1522,9 +1524,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1575,9 +1577,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1628,9 +1630,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.Left).first,
+      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.Right).first,
+      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1711,7 +1713,7 @@ void main() {
 
         await tester.tap(find.text('header1 value 3'));
 
-        stateManager.toggleFixedColumn(columns[1].key, PlutoColumnFixed.Left);
+        stateManager.toggleFixedColumn(columns[1].key, PlutoColumnFixed.left);
       },
     );
 
@@ -1820,7 +1822,7 @@ void main() {
 
         await tester.tap(find.text('header3 value 5'));
 
-        stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.Right);
+        stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.right);
       },
     );
 
@@ -2005,7 +2007,7 @@ void main() {
     withTheCellSelected.test(
       '그리드가 Select 모드 라면 onSelected 이벤트가 발생 되어야 한다.',
       (tester) async {
-        stateManager.setGridMode(PlutoMode.Select);
+        stateManager.setGridMode(PlutoMode.select);
 
         stateManager.setOnSelected((event) {
           expect(event.row, null);
@@ -2215,7 +2217,7 @@ void main() {
       );
     };
 
-    withEnterKeyAction(PlutoEnterKeyAction.None).test(
+    withEnterKeyAction(PlutoEnterKeyAction.none).test(
       'PlutoEnterKeyAction.None 인 경우 기존 상태에서 아무 변화가 없어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -2228,7 +2230,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.ToggleEditing).test(
+    withEnterKeyAction(PlutoEnterKeyAction.toggleEditing).test(
       'PlutoEnterKeyAction.ToggleEditing 인 경우 editing 이 false 가 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -2242,9 +2244,9 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.ToggleEditing).test(
+    withEnterKeyAction(PlutoEnterKeyAction.toggleEditing).test(
       'PlutoEnterKeyAction.ToggleEditing 인 경우 editing 이 true 가 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(false);
         expect(stateManager.isEditing, false);
 
@@ -2256,9 +2258,9 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveDown).test(
+    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 아래로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2270,9 +2272,9 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveDown).test(
+    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 위로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2286,9 +2288,9 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveRight).test(
+    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 우측으로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 
@@ -2300,9 +2302,9 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.EditingAndMoveRight).test(
+    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 좌측으로 이동 되어야 한다.',
-          (tester) async {
+      (tester) async {
         stateManager.setEditing(true);
         expect(stateManager.isEditing, true);
 

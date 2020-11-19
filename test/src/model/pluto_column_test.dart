@@ -11,7 +11,7 @@ void main() {
         'isLeft',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Left;
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.isLeft, isTrue);
@@ -22,7 +22,7 @@ void main() {
         'isRight',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Right;
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.isRight, isTrue);
@@ -33,7 +33,7 @@ void main() {
         'value is TextAlign.left',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Left;
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.value, TextAlign.left);
@@ -44,7 +44,7 @@ void main() {
         'value is TextAlign.right',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.Right;
+          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.value, TextAlign.right);
@@ -60,7 +60,7 @@ void main() {
         'isNone',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.None;
+          final PlutoColumnSort columnSort = PlutoColumnSort.none;
           // when
           // then
           expect(columnSort.isNone, isTrue);
@@ -71,7 +71,7 @@ void main() {
         'isAscending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.Ascending;
+          final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
           // when
           // then
           expect(columnSort.isAscending, isTrue);
@@ -82,7 +82,7 @@ void main() {
         'isDescending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.Descending;
+          final PlutoColumnSort columnSort = PlutoColumnSort.descending;
           // when
           // then
           expect(columnSort.isDescending, isTrue);
@@ -95,24 +95,24 @@ void main() {
           test(
             'None',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.None;
-              expect(columnSort.toShortString(), 'None');
+              final PlutoColumnSort columnSort = PlutoColumnSort.none;
+              expect(columnSort.toShortString(), 'none');
             },
           );
 
           test(
             'Ascending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.Ascending;
-              expect(columnSort.toShortString(), 'Ascending');
+              final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
+              expect(columnSort.toShortString(), 'ascending');
             },
           );
 
           test(
             'Descending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.Descending;
-              expect(columnSort.toShortString(), 'Descending');
+              final PlutoColumnSort columnSort = PlutoColumnSort.descending;
+              expect(columnSort.toShortString(), 'descending');
             },
           );
         },
@@ -124,24 +124,24 @@ void main() {
           test(
             'None',
             () {
-              expect(PlutoColumnSort.None.fromString('None'),
-                  PlutoColumnSort.None);
+              expect(PlutoColumnSort.none.fromString('none'),
+                  PlutoColumnSort.none);
             },
           );
 
           test(
             'Ascending',
             () {
-              expect(PlutoColumnSort.None.fromString('Ascending'),
-                  PlutoColumnSort.Ascending);
+              expect(PlutoColumnSort.none.fromString('ascending'),
+                  PlutoColumnSort.ascending);
             },
           );
 
           test(
             'Descending',
             () {
-              expect(PlutoColumnSort.None.fromString('Descending'),
-                  PlutoColumnSort.Descending);
+              expect(PlutoColumnSort.none.fromString('descending'),
+                  PlutoColumnSort.descending);
             },
           );
         },

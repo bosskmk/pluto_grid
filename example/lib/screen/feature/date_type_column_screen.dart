@@ -102,7 +102,7 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
       title: 'Date type column',
       topTitle: 'Date type column',
       topContents: [
-        Text('A column to enter a date value.'),
+        const Text('A column to enter a date value.'),
       ],
       topButtons: [
         PlutoExampleButton(

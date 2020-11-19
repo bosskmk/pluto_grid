@@ -20,10 +20,10 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoConfiguration configuration;
 
-  /// [PlutoMode.Normal]
+  /// [PlutoMode.normal]
   /// Normal grid with cell editing.
   ///
-  /// [PlutoMode.Select]
+  /// [PlutoMode.select]
   /// Editing is not possible, and if you press enter or tap on the list,
   /// you can receive the selected row and cell from the onSelected callback.
   final PlutoMode mode;
@@ -38,7 +38,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    this.mode = PlutoMode.Normal,
+    this.mode = PlutoMode.normal,
   }) : super(key: key);
 
   @override
@@ -64,6 +64,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double _bodyRightOffset;
   bool _hasRightFixedColumns;
   double _rightFixedLeftOffset;
+  bool _showLoading;
 
   List<Function()> disposeList = [];
 
@@ -178,7 +179,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (stateManager.currentCell == null && widget.rows.length > 0) {
+      if (stateManager.currentCell == null && widget.rows.isNotEmpty) {
         stateManager.setCurrentCell(
             widget.rows.first.cells.entries.first.value, 0);
       }
@@ -197,10 +198,9 @@ class _PlutoGridState extends State<PlutoGrid> {
         _bodyLeftOffset != stateManager.bodyLeftOffset ||
         _bodyRightOffset != stateManager.bodyRightOffset ||
         _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
-        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset) {
-      setState(() {
-        resetState();
-      });
+        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset ||
+        _showLoading != stateManager.showLoading) {
+      setState(resetState);
     }
   }
 
@@ -231,6 +231,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     _hasRightFixedColumns = stateManager.hasRightFixedColumns;
 
     _rightFixedLeftOffset = stateManager.rightFixedLeftOffset;
+
+    _showLoading = stateManager.showLoading;
   }
 
   @override
@@ -239,148 +241,163 @@ class _PlutoGridState extends State<PlutoGrid> {
       onFocusChange: (hasFocus) {
         stateManager.setKeepFocus(hasFocus);
       },
-      child: LayoutBuilder(
-          key: stateManager.gridKey,
-          builder: (ctx, size) {
-            setLayout(size);
+      child: SafeArea(
+        child: LayoutBuilder(
+            key: stateManager.gridKey,
+            builder: (ctx, size) {
+              setLayout(size);
 
-            if (stateManager.keepFocus) {
-              FocusScope.of(ctx).requestFocus(gridFocusNode);
-            }
+              if (stateManager.keepFocus) {
+                FocusScope.of(ctx).requestFocus(gridFocusNode);
+              }
 
-            return RawKeyboardListener(
-              focusNode: stateManager.gridFocusNode,
-              child: Container(
-                padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
-                decoration: BoxDecoration(
-                  color: stateManager.configuration.gridBackgroundColor,
-                  border: Border.all(
-                    color: stateManager.configuration.gridBorderColor,
-                    width: PlutoDefaultSettings.gridBorderWidth,
+              return RawKeyboardListener(
+                focusNode: stateManager.gridFocusNode,
+                child: Container(
+                  padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
+                  decoration: BoxDecoration(
+                    color: stateManager.configuration.gridBackgroundColor,
+                    border: Border.all(
+                      color: stateManager.configuration.gridBorderColor,
+                      width: PlutoDefaultSettings.gridBorderWidth,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      if (stateManager.showHeader) ...[
+                        Positioned.fill(
+                          top: 0,
+                          bottom: stateManager.headerBottomOffset,
+                          child: widget.createHeader(stateManager),
+                        ),
+                        Positioned(
+                          top: stateManager.headerHeight,
+                          left: 0,
+                          right: 0,
+                          child: ShadowLine(
+                            axis: Axis.horizontal,
+                            color: stateManager.configuration.gridBorderColor,
+                          ),
+                        ),
+                      ],
+                      if (_showFixedColumn && _hasLeftFixedColumns) ...[
+                        Positioned.fill(
+                          top: stateManager.headerHeight,
+                          left: 0,
+                          child: LeftFixedColumns(stateManager),
+                        ),
+                        Positioned.fill(
+                          top: stateManager.rowsTopOffset,
+                          left: 0,
+                          bottom: stateManager.footerHeight,
+                          child: LeftFixedRows(stateManager),
+                        ),
+                      ],
+                      Positioned.fill(
+                        top: stateManager.headerHeight,
+                        left: _bodyLeftOffset,
+                        right: _bodyRightOffset,
+                        child: BodyColumns(stateManager),
+                      ),
+                      Positioned.fill(
+                        top: stateManager.rowsTopOffset,
+                        left: _bodyLeftOffset,
+                        right: _bodyRightOffset,
+                        bottom: stateManager.footerHeight,
+                        child: BodyRows(stateManager),
+                      ),
+                      if (_showFixedColumn && _hasRightFixedColumns) ...[
+                        Positioned.fill(
+                          top: stateManager.headerHeight,
+                          left: _rightFixedLeftOffset,
+                          child: RightFixedColumns(stateManager),
+                        ),
+                        Positioned.fill(
+                          top: stateManager.rowsTopOffset,
+                          left: _rightFixedLeftOffset,
+                          bottom: stateManager.footerHeight,
+                          child: RightFixedRows(stateManager),
+                        ),
+                      ],
+                      if (_showFixedColumn && _hasLeftFixedColumns)
+                        Positioned(
+                          top: stateManager.headerHeight,
+                          left: _bodyLeftOffset - 1,
+                          bottom: stateManager.footerHeight,
+                          child: ShadowLine(
+                            axis: Axis.vertical,
+                            color: stateManager.configuration.gridBorderColor,
+                          ),
+                        ),
+                      if (_showFixedColumn && _hasRightFixedColumns)
+                        Positioned(
+                          top: stateManager.headerHeight,
+                          left: _rightFixedLeftOffset - 1,
+                          bottom: stateManager.footerHeight,
+                          child: ShadowLine(
+                            axis: Axis.vertical,
+                            reverse: true,
+                            color: stateManager.configuration.gridBorderColor,
+                          ),
+                        ),
+                      Positioned(
+                        top: stateManager.rowsTopOffset - 1,
+                        left: 0,
+                        right: 0,
+                        child: ShadowLine(
+                          axis: Axis.horizontal,
+                          color: stateManager.configuration.gridBorderColor,
+                        ),
+                      ),
+                      if (stateManager.showFooter) ...[
+                        Positioned(
+                          top: stateManager.footerTopOffset,
+                          left: 0,
+                          right: 0,
+                          child: ShadowLine(
+                            axis: Axis.horizontal,
+                            reverse: true,
+                            color: stateManager.configuration.gridBorderColor,
+                          ),
+                        ),
+                        Positioned.fill(
+                          top: stateManager.footerTopOffset,
+                          bottom: 0,
+                          child: widget.createFooter(stateManager),
+                        ),
+                      ],
+                      if (stateManager.showLoading)
+                        Positioned.fill(
+                          child: PlutoLoadingWidget(
+                            backgroundColor:
+                                stateManager.configuration.gridBackgroundColor,
+                            indicatorColor:
+                                stateManager.configuration.cellTextStyle.color,
+                            indicatorText:
+                                stateManager.configuration.localeText.loadingText,
+                            indicatorSize:
+                                stateManager.configuration.cellTextStyle.fontSize,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-                child: Stack(
-                  children: [
-                    if (stateManager.showHeader) ...[
-                      Positioned.fill(
-                        top: 0,
-                        bottom: stateManager.headerBottomOffset,
-                        child: widget.createHeader(stateManager),
-                      ),
-                      Positioned(
-                        top: stateManager.headerHeight,
-                        left: 0,
-                        right: 0,
-                        child: ShadowLine(
-                          axis: Axis.horizontal,
-                          color: stateManager.configuration.gridBorderColor,
-                        ),
-                      ),
-                    ],
-                    if (_showFixedColumn && _hasLeftFixedColumns) ...[
-                      Positioned.fill(
-                        top: stateManager.headerHeight,
-                        left: 0,
-                        child: LeftFixedColumns(stateManager),
-                      ),
-                      Positioned.fill(
-                        top: stateManager.rowsTopOffset,
-                        left: 0,
-                        bottom: stateManager.footerHeight,
-                        child: LeftFixedRows(stateManager),
-                      ),
-                    ],
-                    Positioned.fill(
-                      top: stateManager.headerHeight,
-                      left: _bodyLeftOffset,
-                      right: _bodyRightOffset,
-                      child: BodyColumns(stateManager),
-                    ),
-                    Positioned.fill(
-                      top: stateManager.rowsTopOffset,
-                      left: _bodyLeftOffset,
-                      right: _bodyRightOffset,
-                      bottom: stateManager.footerHeight,
-                      child: BodyRows(stateManager),
-                    ),
-                    if (_showFixedColumn && _hasRightFixedColumns) ...[
-                      Positioned.fill(
-                        top: stateManager.headerHeight,
-                        left: _rightFixedLeftOffset,
-                        child: RightFixedColumns(stateManager),
-                      ),
-                      Positioned.fill(
-                        top: stateManager.rowsTopOffset,
-                        left: _rightFixedLeftOffset,
-                        bottom: stateManager.footerHeight,
-                        child: RightFixedRows(stateManager),
-                      ),
-                    ],
-                    if (_showFixedColumn && _hasLeftFixedColumns)
-                      Positioned(
-                        top: stateManager.headerHeight,
-                        left: _bodyLeftOffset - 1,
-                        bottom: stateManager.footerHeight,
-                        child: ShadowLine(
-                          axis: Axis.vertical,
-                          color: stateManager.configuration.gridBorderColor,
-                        ),
-                      ),
-                    if (_showFixedColumn && _hasRightFixedColumns)
-                      Positioned(
-                        top: stateManager.headerHeight,
-                        left: _rightFixedLeftOffset - 1,
-                        bottom: stateManager.footerHeight,
-                        child: ShadowLine(
-                          axis: Axis.vertical,
-                          reverse: true,
-                          color: stateManager.configuration.gridBorderColor,
-                        ),
-                      ),
-                    Positioned(
-                      top: stateManager.rowsTopOffset - 1,
-                      left: 0,
-                      right: 0,
-                      child: ShadowLine(
-                        axis: Axis.horizontal,
-                        color: stateManager.configuration.gridBorderColor,
-                      ),
-                    ),
-                    if (stateManager.showFooter) ...[
-                      Positioned(
-                        top: stateManager.footerTopOffset,
-                        left: 0,
-                        right: 0,
-                        child: ShadowLine(
-                          axis: Axis.horizontal,
-                          reverse: true,
-                          color: stateManager.configuration.gridBorderColor,
-                        ),
-                      ),
-                      Positioned.fill(
-                        top: stateManager.footerTopOffset,
-                        bottom: 0,
-                        child: widget.createFooter(stateManager),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 }
 
 enum PlutoMode {
-  Normal,
-  Select,
+  normal,
+  select,
 }
 
 extension PlutoModeExtension on PlutoMode {
-  bool get isNormal => this == PlutoMode.Normal;
+  bool get isNormal => this == PlutoMode.normal;
 
-  bool get isSelect => this == PlutoMode.Select;
+  bool get isSelect => this == PlutoMode.select;
 }
 
 class PlutoDefaultSettings {

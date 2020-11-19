@@ -36,14 +36,14 @@ void main() {
       scroll: scrollController,
     );
 
-    stateManager.setLayout(BoxConstraints(maxWidth: 500, maxHeight: 500));
+    stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 500));
   });
 
   group('moveCurrentCellToEdgeOfColumns', () {
     withColumnAndRows.test(
       'MoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Up);
+        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.up);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -52,7 +52,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Down);
+        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.down);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -63,7 +63,7 @@ void main() {
       (tester) async {
         expect(stateManager.currentCell, isNull);
 
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Left);
+        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -81,7 +81,7 @@ void main() {
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.Right);
+        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.right);
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -101,7 +101,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.Right,
+          MoveDirection.right,
           force: true,
         );
 
@@ -123,7 +123,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.Left,
+          MoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -144,7 +144,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.Right,
+          MoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 9);
@@ -157,7 +157,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Left);
+        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -166,7 +166,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Right);
+        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.right);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -184,7 +184,7 @@ void main() {
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.Down);
+        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.down);
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -204,7 +204,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
           force: true,
         );
 
@@ -226,7 +226,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 4);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.Up,
+          MoveDirection.up,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 7);
@@ -247,7 +247,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 4);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 7);
@@ -260,7 +260,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.Left);
+        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -269,7 +269,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.Right);
+        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.right);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -278,7 +278,7 @@ void main() {
     withColumnAndRows.test(
       'rowIdx 가 0보다 작으면 0번 행으로 이동 되어야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(-1, MoveDirection.Down);
+        stateManager.moveCurrentCellByRowIdx(-1, MoveDirection.down);
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -288,7 +288,7 @@ void main() {
     withColumnAndRows.test(
       'rowIdx 가 전체 행 인덱스보다 많으면 마지막 행으로 이동 되어야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(11, MoveDirection.Down);
+        stateManager.moveCurrentCellByRowIdx(11, MoveDirection.down);
 
         expect(stateManager.currentCellPosition.rowIdx, 9);
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -300,7 +300,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Up);
+        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.up);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -309,7 +309,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Down);
+        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -326,7 +326,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.Right);
+        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -344,7 +344,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.Right,
+          MoveDirection.right,
           force: true,
         );
 
@@ -366,7 +366,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.Left,
+          MoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -399,7 +399,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 0);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.Left,
+          MoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -423,7 +423,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.Right,
+          MoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -456,7 +456,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 0);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.Right,
+          MoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -473,7 +473,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Left);
+        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.left);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -482,7 +482,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Right);
+        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -499,7 +499,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.Down);
+        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -517,7 +517,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
           force: true,
         );
 
@@ -537,7 +537,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNull);
@@ -556,7 +556,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -577,7 +577,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.Up,
+          MoveDirection.up,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -606,7 +606,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 2);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.Down,
+          MoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -620,7 +620,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.Left);
+        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.left);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -629,7 +629,7 @@ void main() {
     withColumnAndRows.test(
       'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.Right);
+        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -642,7 +642,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.Down);
+        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -657,7 +657,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(-1, MoveDirection.Down);
+        stateManager.moveSelectingCellByRowIdx(-1, MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 3);
@@ -674,7 +674,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(11, MoveDirection.Down);
+        stateManager.moveSelectingCellByRowIdx(11, MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 3);
@@ -691,7 +691,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(3, MoveDirection.Down);
+        stateManager.moveSelectingCellByRowIdx(3, MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 0);
@@ -716,7 +716,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.columnIdx, 5);
         expect(stateManager.currentSelectingPosition.rowIdx, 3);
 
-        stateManager.moveSelectingCellByRowIdx(6, MoveDirection.Down);
+        stateManager.moveSelectingCellByRowIdx(6, MoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 5);

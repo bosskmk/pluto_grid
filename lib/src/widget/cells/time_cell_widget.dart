@@ -74,7 +74,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
           for (var i = 0; i < event.stateManager._rows.length; i += 1) {
             if (event.stateManager._rows[i].cells['hour'].originalValue ==
@@ -83,7 +83,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                   .setCurrentCell(event.stateManager._rows[i].cells['hour'], i);
 
               event.stateManager.moveScrollByRow(
-                  MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
+                  MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }
@@ -110,7 +110,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.None);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
           for (var i = 0; i < event.stateManager._rows.length; i += 1) {
             if (event.stateManager._rows[i].cells['minute'].originalValue ==
@@ -119,14 +119,14 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
                   event.stateManager._rows[i].cells['minute'], i);
 
               event.stateManager.moveScrollByRow(
-                  MoveDirection.Up, i + 1 + offsetOfScrollRowIdx);
+                  MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }
         },
         configuration: widget.stateManager.configuration,
       ),
-      mode: PlutoMode.Select,
+      mode: PlutoMode.select,
       width: 276,
       height: 300,
     );

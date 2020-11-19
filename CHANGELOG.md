@@ -1,3 +1,25 @@
+## [1.0.0-pre.5] - 2020. 11. 18
+
+* Add enableEditingMode to PlutoColumn.
+
+## [1.0.0-pre.4] - 2020. 11. 16
+
+* Enable constant_identifier_names.
+  - ex) `PlutoColumnFixed.Left` > `PlutoColumnFixed.left`
+  - ex) `PlutoSelectingMode.Row` > `PlutoSelectingMode.row`
+  - All existing constants such as enum are changed.
+* Add a loading indicator.
+
+## [1.0.0-pre.3] - 2020. 11. 13
+
+* Fix bug, scrolling and row movement errors with createHeader present.
+* Modified to move based on half the size of the cell or row.
+* Update scrollbar status when moving with a keyboard.
+* To disable dragging of rows while columns are be sorted.
+* Add visualizations for dragging rows.
+* Modified so that onPointerMove event occurs only in drag state.
+* Applying scrolling up or down the grid when dragging a row.
+
 ## [1.0.0-pre.2] - 2020. 11. 09
 
 * Add insertRows to PlutoStateManager.

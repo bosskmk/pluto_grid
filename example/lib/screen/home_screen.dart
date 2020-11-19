@@ -49,8 +49,8 @@ class HomeScreen extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: Container(
-                  decoration: new BoxDecoration(
-                    gradient: new LinearGradient(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 30,
                           ),
                           child: PlutoTextColorAnimation(
@@ -86,21 +86,21 @@ class HomeScreen extends StatelessWidget {
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         Center(
                           child: Column(
                             children: [
                               IconButton(
-                                icon: FaIcon(FontAwesomeIcons.link),
+                                icon: const FaIcon(FontAwesomeIcons.link),
                                 color: Colors.white,
                                 onPressed: () {
                                   launchUrl(
                                       'https://pub.dev/packages/pluto_grid');
                                 },
                               ),
-                              Text(
+                              const Text(
                                 'pub.dev',
                                 style: TextStyle(color: Colors.white),
                               ),
@@ -118,28 +118,28 @@ class HomeScreen extends StatelessWidget {
                           fontColor: Colors.white,
                           child: PlutoContributors(),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         Center(
                           child: Column(
                             children: [
                               IconButton(
-                                icon: FaIcon(FontAwesomeIcons.github),
+                                icon: const FaIcon(FontAwesomeIcons.github),
                                 color: Colors.white,
                                 onPressed: () {
                                   launchUrl(
                                       'https://github.com/bosskmk/pluto_grid');
                                 },
                               ),
-                              Text(
+                              const Text(
                                 'Github',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         Center(
@@ -156,7 +156,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 100,
                         ),
                       ],

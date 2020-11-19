@@ -7,7 +7,7 @@ void main() {
     'child 가 렌더링 되어야 한다.',
     (WidgetTester tester) async {
       // given
-      final child = Text('child widget');
+      final child = const Text('child widget');
 
       // when
       await tester.pumpWidget(

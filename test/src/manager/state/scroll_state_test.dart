@@ -16,10 +16,10 @@ void main() {
     setUp(() {
       columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.Left),
+            count: 3, fixed: PlutoColumnFixed.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.Right),
+            count: 3, fixed: PlutoColumnFixed.right),
       ];
 
       rows = RowHelper.count(10, columns);
@@ -31,7 +31,8 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setLayout(BoxConstraints(maxWidth: 300, maxHeight: 500));
+      stateManager
+          .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
       stateManager.setGridGlobalOffset(Offset.zero);
     });
 
@@ -39,14 +40,14 @@ void main() {
       '스크롤 할 offset.dx 값이 bodyLeftScrollOffset 보다 작으면 true'
       '하지만, selectingMode 가 None 이면 false 를 리턴해야 한다.',
       (WidgetTester tester) async {
-        stateManager.setSelectingMode(PlutoSelectingMode.None);
+        stateManager.setSelectingMode(PlutoSelectingMode.none);
 
         expect(stateManager.selectingMode.isNone, true);
 
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyLeftScrollOffset - 1, 0),
-            MoveDirection.Left,
+            MoveDirection.left,
           ),
           false,
         );
@@ -59,7 +60,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyLeftScrollOffset - 1, 0),
-            MoveDirection.Left,
+            MoveDirection.left,
           ),
           true,
         );
@@ -72,7 +73,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyLeftScrollOffset, 0),
-            MoveDirection.Left,
+            MoveDirection.left,
           ),
           false,
         );
@@ -85,7 +86,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyLeftScrollOffset + 1, 0),
-            MoveDirection.Left,
+            MoveDirection.left,
           ),
           false,
         );
@@ -96,14 +97,14 @@ void main() {
       '스크롤 할 offset.dx 값이 bodyRightScrollOffset 보다 크면 true'
       '하지만, selectingMode 가 None 이면 false 를 리턴해야 한다.',
       (WidgetTester tester) async {
-        stateManager.setSelectingMode(PlutoSelectingMode.None);
+        stateManager.setSelectingMode(PlutoSelectingMode.none);
 
         expect(stateManager.selectingMode.isNone, true);
 
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyRightScrollOffset + 1, 0),
-            MoveDirection.Right,
+            MoveDirection.right,
           ),
           false,
         );
@@ -116,7 +117,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyRightScrollOffset + 1, 0),
-            MoveDirection.Right,
+            MoveDirection.right,
           ),
           true,
         );
@@ -129,7 +130,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyRightScrollOffset, 0),
-            MoveDirection.Right,
+            MoveDirection.right,
           ),
           false,
         );
@@ -142,7 +143,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(stateManager.bodyRightScrollOffset - 1, 0),
-            MoveDirection.Right,
+            MoveDirection.right,
           ),
           false,
         );
@@ -155,7 +156,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyUpScrollOffset - 1),
-            MoveDirection.Up,
+            MoveDirection.up,
           ),
           true,
         );
@@ -168,7 +169,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyUpScrollOffset),
-            MoveDirection.Up,
+            MoveDirection.up,
           ),
           false,
         );
@@ -181,7 +182,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyUpScrollOffset + 1),
-            MoveDirection.Up,
+            MoveDirection.up,
           ),
           false,
         );
@@ -194,7 +195,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyDownScrollOffset + 1),
-            MoveDirection.Down,
+            MoveDirection.down,
           ),
           true,
         );
@@ -207,7 +208,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyDownScrollOffset),
-            MoveDirection.Down,
+            MoveDirection.down,
           ),
           false,
         );
@@ -220,7 +221,7 @@ void main() {
         expect(
           stateManager.needMovingScroll(
             Offset(0, stateManager.bodyDownScrollOffset - 1),
-            MoveDirection.Down,
+            MoveDirection.down,
           ),
           false,
         );

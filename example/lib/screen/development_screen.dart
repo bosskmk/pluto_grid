@@ -17,7 +17,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoStateManager stateManager;
 
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.Row;
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.square;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           return Row(
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add_circle,
                 ),
                 onPressed: () {
@@ -47,10 +47,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 },
                 iconSize: 18,
                 color: Colors.green,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
@@ -59,7 +59,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 },
                 iconSize: 18,
                 color: Colors.red,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               Expanded(
                 child: Text(
@@ -99,17 +99,21 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoColumn(
         title: 'column3',
         field: 'column3',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.date(),
       ),
       PlutoColumn(
         title: 'column4',
         field: 'column4',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
         field: 'column5',
         type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        renderer: (rendererContext) {
+          return Image.network('https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
+        },
       ),
     ];
 
@@ -163,7 +167,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               child: Row(
                 children: [
                   FlatButton(
-                    child: Text('Add 10'),
+                    child: const Text('Add 10'),
                     onPressed: () {
                       handleAddRowButton(count: 10);
                     },
@@ -174,7 +178,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
         configuration: PlutoConfiguration(
-          scrollbarConfig: PlutoScrollbarConfig(
+          scrollbarConfig: const PlutoScrollbarConfig(
             isAlwaysShown: true,
           ),
         ),

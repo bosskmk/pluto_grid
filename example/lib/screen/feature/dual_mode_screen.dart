@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -26,7 +28,16 @@ class _DualModeScreenState extends State<DualModeScreen> {
 
   PlutoStateManager gridBStateManager;
 
-  String currentUsername;
+  Key currentRowKey;
+
+  Timer _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -81,23 +92,36 @@ class _DualModeScreenState extends State<DualModeScreen> {
       return;
     }
 
-    if (gridAStateManager.currentRow.cells['username'].value !=
-        currentUsername) {
-      currentUsername = gridAStateManager.currentRow.cells['username'].value;
-      fetchUserActivity(currentUsername);
+    if (gridAStateManager.currentRow.key != currentRowKey) {
+      currentRowKey = gridAStateManager.currentRow.key;
+
+      gridBStateManager.setShowLoading(true);
+
+      fetchUserActivity();
     }
   }
 
-  void fetchUserActivity(String username) {
-    setState(() {
-      final rows = DummyData.rowsByColumns(
-        length: faker.randomGenerator.integer(10, min: 1),
-        columns: gridBColumns,
-      );
+  void fetchUserActivity() {
+    // This is just an example to reproduce the server load time.
+    if (_debounce?.isActive ?? false) {
+      _debounce.cancel();
+    }
 
-      gridBStateManager.removeRows(gridBStateManager.rows);
-      gridBStateManager.resetCurrentState();
-      gridBStateManager.appendRows(rows);
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        setState(() {
+          final rows = DummyData.rowsByColumns(
+            length: faker.randomGenerator.integer(10, min: 1),
+            columns: gridBColumns,
+          );
+
+          gridBStateManager.removeRows(gridBStateManager.rows);
+          gridBStateManager.resetCurrentState();
+          gridBStateManager.appendRows(rows);
+        });
+
+        gridBStateManager.setShowLoading(false);
+      });
     });
   }
 
@@ -107,9 +131,11 @@ class _DualModeScreenState extends State<DualModeScreen> {
       title: 'Dual mode',
       topTitle: 'Dual mode',
       topContents: [
-        Text(
+        const Text(
             'Place the grid on the left and right and move or edit with the keyboard.'),
-        Text('Refer to the display property for the width of the grid.'),
+        const Text('Refer to the display property for the width of the grid.'),
+        const Text(
+            'This is an example in which the right list is randomly generated whenever the current row of the left grid changes.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -138,8 +164,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
           onLoaded: (PlutoOnLoadedEvent event) {
             gridBStateManager = event.stateManager;
           },
+          configuration: PlutoConfiguration(),
         ),
-        display: PlutoDualGridDisplayRatio(ratio: 0.5),
+        display: const PlutoDualGridDisplayRatio(ratio: 0.5),
       ),
     );
   }

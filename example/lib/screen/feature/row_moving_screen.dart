@@ -61,10 +61,11 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
       title: 'Row moving',
       topTitle: 'Row moving',
       topContents: [
-        Text('You can move the row by dragging it.'),
-        Text('If enableRowDrag of the column property is set to true, an icon that can be dragged to the left of the cell value is created.'),
-        Text('You can drag the icon to move the row up and down.'),
-        Text('In Selecting Row mode, you can move all the selected rows.'),
+        const Text('You can move the row by dragging it.'),
+        const Text(
+            'If enableRowDrag of the column property is set to true, an icon that can be dragged to the left of the cell value is created.'),
+        const Text('You can drag the icon to move the row up and down.'),
+        const Text('In Selecting Row mode, you can move all the selected rows.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -79,7 +80,7 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Row);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.row);
 
           stateManager = event.stateManager;
         },

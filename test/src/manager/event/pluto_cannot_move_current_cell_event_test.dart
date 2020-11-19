@@ -6,7 +6,7 @@ void main() {
     // given
     final cellPosition = PlutoCellPosition(columnIdx: 0, rowIdx: 0);
 
-    final direction = MoveDirection.Right;
+    final direction = MoveDirection.right;
 
     // when
     final event = PlutoCannotMoveCurrentCellEvent(

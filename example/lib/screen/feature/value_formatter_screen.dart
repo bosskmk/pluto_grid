@@ -112,10 +112,10 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       title: 'Value formatter',
       topTitle: 'Value formatter',
       topContents: [
-        Text('Formatter for display of cell values.'),
-        Text(
+        const Text('Formatter for display of cell values.'),
+        const Text(
             'You can output the desired value, not the actual value, in the view state, not the edit state.'),
-        Text(
+        const Text(
             'In the case of a readonly or popup type column where text cannot be directly edited, if applyFormatterInEditing is set to true, the formatter is applied even in the editing state.'),
       ],
       topButtons: [

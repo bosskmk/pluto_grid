@@ -62,13 +62,14 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       title: 'Row with checkbox',
       topTitle: 'Row with checkbox',
       topContents: [
-        Text('You can select rows with checkbox.'),
-        Text('If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
+        const Text('You can select rows with checkbox.'),
+        const Text(
+            'If you set the enableRowChecked property of a column to true, a checkbox appears in the cell of that column.'),
       ],
       topButtons: [
         PlutoExampleButton(
           url:
-          'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_with_checkbox_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_with_checkbox_screen.dart',
         ),
       ],
       body: PlutoGrid(
@@ -78,7 +79,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Row);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.row);
 
           stateManager = event.stateManager;
         },

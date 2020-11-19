@@ -37,7 +37,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           return Row(
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add_circle,
                 ),
                 onPressed: () {
@@ -48,10 +48,10 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                 },
                 iconSize: 18,
                 color: Colors.green,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
@@ -60,7 +60,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                 },
                 iconSize: 18,
                 color: Colors.red,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
               ),
               Expanded(
                 child: Text(
@@ -111,6 +111,10 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
         title: 'column5',
         field: 'column5',
         type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        renderer: (rendererContext) {
+          return Image.network('https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
+        },
       ),
     ];
 
@@ -123,7 +127,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       title: 'Cell renderer',
       topTitle: 'Cell renderer',
       topContents: [
-        Text('You can change the widget of the cell through the renderer.'),
+        const Text('You can change the widget of the cell through the renderer.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -138,7 +142,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.Square);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.square);
 
           stateManager = event.stateManager;
         },

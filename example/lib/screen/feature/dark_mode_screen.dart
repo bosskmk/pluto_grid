@@ -34,7 +34,7 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
       title: 'Dark mode',
       topTitle: 'Dark mode',
       topContents: [
-        Text('Change the entire theme of the grid to Dark.'),
+        const Text('Change the entire theme of the grid to Dark.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -42,13 +42,16 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
               'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dark_mode_screen.dart',
         ),
       ],
-      body: PlutoGrid(
-        columns: columns,
-        rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
-          print(event);
-        },
-        configuration: PlutoConfiguration.dark(),
+      body: Theme(
+        data: ThemeData.dark(),
+        child: PlutoGrid(
+          columns: columns,
+          rows: rows,
+          onChanged: (PlutoOnChangedEvent event) {
+            print(event);
+          },
+          configuration: PlutoConfiguration.dark(),
+        ),
       ),
     );
   }

@@ -68,7 +68,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       columns: columns,
       width: 600,
       rows: rows,
-      mode: PlutoMode.Select,
+      mode: PlutoMode.select,
       onLoaded: (PlutoOnLoadedEvent event) {
         rows.asMap().entries.forEach((element) {
           final cell = element.value.cells[selectFieldName];
@@ -76,7 +76,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
           if (cell.value.toString() == controller.text) {
             event.stateManager.setCurrentCell(cell, element.key);
             event.stateManager
-                .moveScrollByRow(MoveDirection.Up, element.key + 1);
+                .moveScrollByRow(MoveDirection.up, element.key + 1);
           }
         });
       },
@@ -94,11 +94,11 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       title: 'Grid as Popup',
       topTitle: 'Grid as Popup',
       topContents: [
-        Text(
+        const Text(
             'You can call the popup with the desired data and select a value from the called list.'),
-        Text(
+        const Text(
             'Click the magnifying glass icon on the right side of the TextField to call the popup.'),
-        Text(
+        const Text(
             'And when you tap one of the list in the pop-up or press Enter key, the item is selected and the value is automatically entered.'),
       ],
       topButtons: [
@@ -113,32 +113,32 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
           TextField(
             controller: _nameController,
             decoration: InputDecoration(
-              labelText: "Select name",
-              hintText: "Select name",
+              labelText: 'Select name',
+              hintText: 'Select name',
               suffixIcon: InkWell(
                 onTap: () => openGridPopup(context, 'name'),
-                child: Icon(Icons.search),
+                child: const Icon(Icons.search),
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           TextField(
             controller: _moneyController,
             decoration: InputDecoration(
-              labelText: "Select money",
-              hintText: "Select money",
+              labelText: 'Select money',
+              hintText: 'Select money',
               suffixIcon: InkWell(
                 onTap: () => openGridPopup(context, 'money'),
-                child: Icon(Icons.search),
+                child: const Icon(Icons.search),
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),

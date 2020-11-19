@@ -6,11 +6,9 @@ import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 
-/**
- * 셀 선택 상태 이후의 동작 테스트
- */
+/// 셀 선택 상태 이후의 동작 테스트
 void main() {
-  final PlutoSelectingMode selectingMode = PlutoSelectingMode.Square;
+  final PlutoSelectingMode selectingMode = PlutoSelectingMode.square;
 
   PlutoStateManager stateManager;
 
@@ -71,19 +69,19 @@ void main() {
   };
 
   group('(0, 1) 부터 (1, 2) 셀 선택', () {
-    const COUNT_TOTAL_ROWS = 10;
-    const CURRENT_COLUMN_IDX = 0;
-    const CURRENT_ROW_IDX = 1;
-    const COLUMN_IDX_TO_SELECT = 1;
-    const ROW_IDX_TO_SELECT = 2;
+    const countTotalRows = 10;
+    const currentColumnIdx = 0;
+    const currentRowIdx = 1;
+    const columnIdxToSelect = 1;
+    const rowIdxToSelect = 2;
 
     final selectCells = () {
       return buildRowsWithSelectingCells(
-        numberOfRows: COUNT_TOTAL_ROWS,
-        columnIdx: CURRENT_COLUMN_IDX,
-        rowIdx: CURRENT_ROW_IDX,
-        columnIdxToSelect: COLUMN_IDX_TO_SELECT,
-        rowIdxToSelect: ROW_IDX_TO_SELECT,
+        numberOfRows: countTotalRows,
+        columnIdx: currentColumnIdx,
+        rowIdx: currentRowIdx,
+        columnIdxToSelect: columnIdxToSelect,
+        rowIdxToSelect: rowIdxToSelect,
       );
     };
 
@@ -92,12 +90,12 @@ void main() {
       '선택 된 셀이 (0, 2), (1, 3) 로 변경 되어야 한다.',
       (tester) async {
         // before
-        expect(stateManager.currentCellPosition.columnIdx, CURRENT_COLUMN_IDX);
-        expect(stateManager.currentCellPosition.rowIdx, CURRENT_ROW_IDX);
+        expect(stateManager.currentCellPosition.columnIdx, currentColumnIdx);
+        expect(stateManager.currentCellPosition.rowIdx, currentRowIdx);
 
-        expect(stateManager.currentSelectingPosition.columnIdx,
-            COLUMN_IDX_TO_SELECT);
-        expect(stateManager.currentSelectingPosition.rowIdx, ROW_IDX_TO_SELECT);
+        expect(
+            stateManager.currentSelectingPosition.columnIdx, columnIdxToSelect);
+        expect(stateManager.currentSelectingPosition.rowIdx, rowIdxToSelect);
 
         final rowToInsert = stateManager.getNewRow();
 
@@ -117,12 +115,12 @@ void main() {
       '선택 된 셀이 (0, 0), (1, 1) 로 변경 되어야 한다.',
       (tester) async {
         // before
-        expect(stateManager.currentCellPosition.columnIdx, CURRENT_COLUMN_IDX);
-        expect(stateManager.currentCellPosition.rowIdx, CURRENT_ROW_IDX);
+        expect(stateManager.currentCellPosition.columnIdx, currentColumnIdx);
+        expect(stateManager.currentCellPosition.rowIdx, currentRowIdx);
 
-        expect(stateManager.currentSelectingPosition.columnIdx,
-            COLUMN_IDX_TO_SELECT);
-        expect(stateManager.currentSelectingPosition.rowIdx, ROW_IDX_TO_SELECT);
+        expect(
+            stateManager.currentSelectingPosition.columnIdx, columnIdxToSelect);
+        expect(stateManager.currentSelectingPosition.rowIdx, rowIdxToSelect);
 
         final rowToDelete = stateManager.rows.first;
 
@@ -139,21 +137,21 @@ void main() {
   });
 
   group('전체 셀을 선택', () {
-    const COUNT_TOTAL_ROWS = 10;
-    const COUNT_TOTAL_COLUMNS = 10;
-    const CURRENT_COLUMN_IDX = 0;
-    const CURRENT_ROW_IDX = 0;
-    const COLUMN_IDX_TO_SELECT = 9;
-    const ROW_IDX_TO_SELECT = 9;
+    const countTotalRows = 10;
+    const countTotalColumns = 10;
+    const currentColumnIdx = 0;
+    const currentRowIdx = 0;
+    const columnIdxToSelect = 9;
+    const rowIdxToSelect = 9;
 
     final selectCells = () {
       return buildRowsWithSelectingCells(
-        numberOfRows: COUNT_TOTAL_ROWS,
-        numberOfColumns: COUNT_TOTAL_COLUMNS,
-        columnIdx: CURRENT_COLUMN_IDX,
-        rowIdx: CURRENT_ROW_IDX,
-        columnIdxToSelect: COLUMN_IDX_TO_SELECT,
-        rowIdxToSelect: ROW_IDX_TO_SELECT,
+        numberOfRows: countTotalRows,
+        numberOfColumns: countTotalColumns,
+        columnIdx: currentColumnIdx,
+        rowIdx: currentRowIdx,
+        columnIdxToSelect: columnIdxToSelect,
+        rowIdxToSelect: rowIdxToSelect,
       );
     };
 

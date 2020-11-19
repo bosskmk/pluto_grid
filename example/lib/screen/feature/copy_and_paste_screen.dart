@@ -58,7 +58,7 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
       title: 'Copy and Paste',
       topTitle: 'Copy and Paste',
       topContents: [
-        Text(
+        const Text(
             'Copy and paste are operated depending on the cell and row selection status.'),
       ],
       topButtons: [

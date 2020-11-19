@@ -76,7 +76,7 @@ class PlutoConfiguration {
     this.iconColor = Colors.black26,
     this.menuBackgroundColor = Colors.white,
     this.enableMoveDownAfterSelecting = true,
-    this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
+    this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
   });
@@ -104,7 +104,7 @@ class PlutoConfiguration {
     this.iconColor = Colors.white38,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.enableMoveDownAfterSelecting = true,
-    this.enterKeyAction = PlutoEnterKeyAction.EditingAndMoveDown,
+    this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
   });
@@ -130,6 +130,9 @@ class PlutoGridLocaleText {
   final String hour;
   final String minute;
 
+  // Common
+  final String loadingText;
+
   const PlutoGridLocaleText({
     // Column menu
     this.unfixColumn = 'Unfix',
@@ -147,6 +150,8 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = 'Hour',
     this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Loading...',
   });
 
   const PlutoGridLocaleText.korean({
@@ -166,6 +171,8 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = '시',
     this.minute = '분',
+    // Common
+    this.loadingText = '로딩중...',
   });
 
   const PlutoGridLocaleText.russian({
@@ -185,26 +192,28 @@ class PlutoGridLocaleText {
     // Time column popup
     this.hour = 'Часы',
     this.minute = 'Минуты',
+    // Common
+    this.loadingText = 'Загрузка...',
   });
 }
 
 enum PlutoEnterKeyAction {
-  EditingAndMoveDown,
-  EditingAndMoveRight,
-  ToggleEditing,
-  None,
+  editingAndMoveDown,
+  editingAndMoveRight,
+  toggleEditing,
+  none,
 }
 
 extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
   bool get isEditingAndMoveDown =>
-      this == PlutoEnterKeyAction.EditingAndMoveDown;
+      this == PlutoEnterKeyAction.editingAndMoveDown;
 
   bool get isEditingAndMoveRight =>
-      this == PlutoEnterKeyAction.EditingAndMoveRight;
+      this == PlutoEnterKeyAction.editingAndMoveRight;
 
-  bool get isToggleEditing => this == PlutoEnterKeyAction.ToggleEditing;
+  bool get isToggleEditing => this == PlutoEnterKeyAction.toggleEditing;
 
-  bool get isNone => this == null || this == PlutoEnterKeyAction.None;
+  bool get isNone => this == null || this == PlutoEnterKeyAction.none;
 }
 
 /// Allows to customise scrollbars "look and feel"

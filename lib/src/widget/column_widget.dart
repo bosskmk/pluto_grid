@@ -84,45 +84,45 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       context: context,
       color: backgroundColor,
       position: RelativeRect.fromRect(
-          position & Size(40, 40), Offset.zero & overlay.size),
+          position & const Size(40, 40), Offset.zero & overlay.size),
       items: [
         if (widget.column.fixed.isFixed == true)
           buildMenuItem(
-            value: _MenuItem.Unfix,
+            value: _MenuItem.unfix,
             child: buildTextItem(localeText.unfixColumn),
           ),
         if (widget.column.fixed.isFixed != true) ...[
           buildMenuItem(
-            value: _MenuItem.ToLeft,
+            value: _MenuItem.toLeft,
             child: buildTextItem(localeText.toLeftColumn),
           ),
           buildMenuItem(
-            value: _MenuItem.ToRight,
+            value: _MenuItem.toRight,
             child: buildTextItem(localeText.toRightColumn),
           ),
         ],
-        PopupMenuDivider(),
+        const PopupMenuDivider(),
         buildMenuItem(
-          value: _MenuItem.AutoSize,
+          value: _MenuItem.autoSize,
           child: buildTextItem(localeText.autoSizeColumn),
         ),
       ],
     );
 
     switch (selectedMenu) {
-      case _MenuItem.Unfix:
+      case _MenuItem.unfix:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.None);
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.none);
         break;
-      case _MenuItem.ToLeft:
+      case _MenuItem.toLeft:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Left);
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.left);
         break;
-      case _MenuItem.ToRight:
+      case _MenuItem.toRight:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.Right);
+            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.right);
         break;
-      case _MenuItem.AutoSize:
+      case _MenuItem.autoSize:
         final String maxValue =
             widget.stateManager.rows.fold('', (previousValue, element) {
           final value = element.cells.entries
@@ -139,12 +139,12 @@ class _ColumnWidgetState extends State<ColumnWidget> {
 
         // Get size after rendering virtually
         // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-        TextSpan textSpan = new TextSpan(
+        TextSpan textSpan = TextSpan(
           style: DefaultTextStyle.of(context).style,
           text: maxValue,
         );
 
-        TextPainter textPainter = new TextPainter(
+        TextPainter textPainter = TextPainter(
           text: textSpan,
           textDirection: TextDirection.ltr,
         );
@@ -199,7 +199,7 @@ class _ColumnWidgetState extends State<ColumnWidget> {
                 ),
               ),
             )
-          : BoxDecoration(),
+          : const BoxDecoration(),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -289,7 +289,7 @@ class ColumnIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (sort) {
-      case PlutoColumnSort.Ascending:
+      case PlutoColumnSort.ascending:
         return Transform.rotate(
           angle: 90 * pi / 90,
           child: const Icon(
@@ -297,7 +297,7 @@ class ColumnIcon extends StatelessWidget {
             color: Colors.green,
           ),
         );
-      case PlutoColumnSort.Descending:
+      case PlutoColumnSort.descending:
         return const Icon(
           Icons.sort,
           color: Colors.red,
@@ -365,9 +365,7 @@ class __CheckboxAllSelectionWidgetState
       return;
     }
 
-    if (changed == null) {
-      changed = false;
-    }
+    changed ??= false;
 
     if (_checked == null) {
       changed = true;
@@ -395,8 +393,8 @@ class __CheckboxAllSelectionWidgetState
 }
 
 enum _MenuItem {
-  Unfix,
-  ToLeft,
-  ToRight,
-  AutoSize,
+  unfix,
+  toLeft,
+  toRight,
+  autoSize,
 }

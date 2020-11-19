@@ -22,7 +22,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'left',
               count: 1,
-              fixed: PlutoColumnFixed.Left,
+              fixed: PlutoColumnFixed.left,
               width: 150,
             ),
             ...ColumnHelper.textColumn(
@@ -33,7 +33,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'right',
               count: 1,
-              fixed: PlutoColumnFixed.Right,
+              fixed: PlutoColumnFixed.right,
               width: 150,
             ),
           ];

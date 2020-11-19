@@ -82,22 +82,22 @@ mixin KeyboardState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFixed();
 
     switch (direction) {
-      case MoveDirection.Left:
+      case MoveDirection.left:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx - 1],
           rowIdx: cellPosition.rowIdx,
         );
-      case MoveDirection.Right:
+      case MoveDirection.right:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx + 1],
           rowIdx: cellPosition.rowIdx,
         );
-      case MoveDirection.Up:
+      case MoveDirection.up:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx],
           rowIdx: cellPosition.rowIdx - 1,
         );
-      case MoveDirection.Down:
+      case MoveDirection.down:
         return PlutoCellPosition(
           columnIdx: columnIndexes[cellPosition.columnIdx],
           rowIdx: cellPosition.rowIdx + 1,
@@ -164,7 +164,8 @@ mixin KeyboardState implements IPlutoState {
     return;
   }
 
-  void moveCurrentCellToEdgeOfColumns(MoveDirection direction, {
+  void moveCurrentCellToEdgeOfColumns(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -183,7 +184,7 @@ mixin KeyboardState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFixed();
 
     final int columnIdx =
-    direction.isLeft ? columnIndexes.first : columnIndexes.last;
+        direction.isLeft ? columnIndexes.first : columnIndexes.last;
 
     final column = _columns[columnIdx];
 
@@ -198,7 +199,8 @@ mixin KeyboardState implements IPlutoState {
     }
   }
 
-  void moveCurrentCellToEdgeOfRows(MoveDirection direction, {
+  void moveCurrentCellToEdgeOfRows(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -223,7 +225,9 @@ mixin KeyboardState implements IPlutoState {
         : scroll.vertical.jumpTo(scroll.maxScrollVertical);
   }
 
-  void moveCurrentCellByRowIdx(int rowIdx, MoveDirection direction, {
+  void moveCurrentCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
     bool notify = true,
   }) {
     if (!direction.vertical) {
@@ -259,7 +263,8 @@ mixin KeyboardState implements IPlutoState {
       cellPosition: PlutoCellPosition(
         columnIdx: cellPosition.columnIdx +
             (direction.horizontal ? direction.offset : 0),
-        rowIdx: cellPosition.rowIdx + (direction.vertical ? direction.offset : 0),
+        rowIdx:
+            cellPosition.rowIdx + (direction.vertical ? direction.offset : 0),
       ),
     );
 
@@ -270,7 +275,8 @@ mixin KeyboardState implements IPlutoState {
     }
   }
 
-  void moveSelectingCellToEdgeOfColumns(MoveDirection direction, {
+  void moveSelectingCellToEdgeOfColumns(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -305,7 +311,8 @@ mixin KeyboardState implements IPlutoState {
         : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
   }
 
-  void moveSelectingCellToEdgeOfRows(MoveDirection direction, {
+  void moveSelectingCellToEdgeOfRows(
+    MoveDirection direction, {
     bool force = false,
     bool notify = true,
   }) {
@@ -340,7 +347,9 @@ mixin KeyboardState implements IPlutoState {
         : scroll.vertical.jumpTo(scroll.maxScrollVertical);
   }
 
-  void moveSelectingCellByRowIdx(int rowIdx, MoveDirection direction, {
+  void moveSelectingCellByRowIdx(
+    int rowIdx,
+    MoveDirection direction, {
     bool notify = true,
   }) {
     if (rowIdx < 0) {

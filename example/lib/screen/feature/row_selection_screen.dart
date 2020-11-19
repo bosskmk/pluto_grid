@@ -50,7 +50,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
             child: LayoutBuilder(
               builder: (ctx, size) {
                 return Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   width: 400,
                   height: 500,
                   child: SingleChildScrollView(
@@ -75,7 +75,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
       title: 'Row selection',
       topTitle: 'Row selection',
       topContents: [
-        Text(
+        const Text(
             'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.'),
       ],
       topButtons: [
@@ -91,7 +91,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
             child: Row(
               children: [
                 FlatButton(
-                  child: Text('Show selected rows.'),
+                  child: const Text('Show selected rows.'),
                   onPressed: handleSelected,
                 ),
               ],
@@ -105,7 +105,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoOnLoadedEvent event) {
-                event.stateManager.setSelectingMode(PlutoSelectingMode.Row);
+                event.stateManager.setSelectingMode(PlutoSelectingMode.row);
 
                 stateManager = event.stateManager;
               },

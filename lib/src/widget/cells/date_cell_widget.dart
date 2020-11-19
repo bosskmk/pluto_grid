@@ -59,10 +59,12 @@ class _DateCellWidgetState extends State<DateCellWidget>
         DateTime.now();
 
     final startDate = widget.column.type.date.startDate ??
-        DatetimeHelper.moveToFirstWeekday(defaultDate.add(Duration(days: -60)));
+        DatetimeHelper.moveToFirstWeekday(
+            defaultDate.add(const Duration(days: -60)));
 
     final endDate = widget.column.type.date.endDate ??
-        DatetimeHelper.moveToLastWeekday(defaultDate.add(Duration(days: 60)));
+        DatetimeHelper.moveToLastWeekday(
+            defaultDate.add(const Duration(days: 60)));
 
     final List<DateTime> days = DatetimeHelper.getDaysInBetween(
       startDate,
@@ -79,7 +81,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
   void _onLoaded(PlutoOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
-    popupStateManager.setSelectingMode(PlutoSelectingMode.None);
+    popupStateManager.setSelectingMode(PlutoSelectingMode.none);
 
     if (widget.column.type.date.startDate == null ||
         widget.column.type.date.endDate == null) {
@@ -149,12 +151,12 @@ class _DateCellWidgetState extends State<DateCellWidget>
   List<PlutoRow> _buildRows(List<DateTime> days) {
     List<PlutoRow> rows = [];
 
-    while (days.length > 0) {
+    while (days.isNotEmpty) {
       final Map<String, PlutoCell> cells = Map.fromIterable(
         ['7', '1', '2', '3', '4', '5', '6'],
         key: (e) => e,
         value: (e) {
-          if (days.length < 1) {
+          if (days.isEmpty) {
             return PlutoCell(value: '');
           }
 

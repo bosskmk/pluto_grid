@@ -51,7 +51,7 @@ abstract class IGridState {
 
   void setConfiguration(PlutoConfiguration configuration);
 
-  void setKeepFocus(bool flag);
+  void setKeepFocus(bool flag, {bool notify = true});
 
   void resetCurrentState({notify = true});
 
@@ -148,7 +148,7 @@ mixin GridState implements IPlutoState {
     _gridKey = key;
   }
 
-  void setKeepFocus(bool flag, {bool notify: true}) {
+  void setKeepFocus(bool flag, {bool notify = true}) {
     if (_keepFocus == flag) {
       return;
     }

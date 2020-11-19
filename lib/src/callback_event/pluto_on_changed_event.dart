@@ -25,9 +25,9 @@ class PlutoOnChangedEvent {
   @override
   String toString() {
     String out = '[PlutoOnChangedEvent] ';
-    out += 'ColumnIndex : ${this.columnIdx}, RowIndex : ${this.rowIdx}\n';
-    out += '::: oldValue : ${this.oldValue}\n';
-    out += '::: newValue : ${this.value}';
+    out += 'ColumnIndex : $columnIdx, RowIndex : $rowIdx\n';
+    out += '::: oldValue : $oldValue\n';
+    out += '::: newValue : $value';
     return out;
   }
 }

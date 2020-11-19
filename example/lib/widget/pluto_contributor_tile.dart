@@ -33,7 +33,7 @@ class PlutoContributorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: 300,
         maxWidth: 300,
         minHeight: 180,
@@ -46,7 +46,7 @@ class PlutoContributorTile extends StatelessWidget {
           child: ListTile(
             title: Text(
               name,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.blue,
                 fontWeight: FontWeight.w600,
@@ -67,7 +67,7 @@ class PlutoContributorTile extends StatelessWidget {
                     ],
                   ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
                     description,
                     style: TextStyle(
@@ -79,7 +79,7 @@ class PlutoContributorTile extends StatelessWidget {
                 ),
               ],
             ),
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
           ),
         ),
       ),
