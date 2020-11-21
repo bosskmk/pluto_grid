@@ -195,6 +195,27 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Загрузка...',
   });
+
+  const PlutoGridLocaleText.czech({
+    // Column menu
+    this.unfixColumn = 'Uvolnit',
+    this.toLeftColumn = 'Ukotvit vlevo',
+    this.toRightColumn = 'Ukotvit vpravo',
+    this.autoSizeColumn = 'Autom. přizpůsobit',
+    // Date popup
+    this.sunday = 'Ne',
+    this.monday = 'Po',
+    this.tuesday = 'Út',
+    this.wednesday = 'St',
+    this.thursday = 'Čt',
+    this.friday = 'Pá',
+    this.saturday = 'So',
+    // Time column popup
+    this.hour = 'Hodina',
+    this.minute = 'Minuta',
+    // Common
+    this.loadingText = 'Načítání...',
+  });
 }
 
 enum PlutoEnterKeyAction {
