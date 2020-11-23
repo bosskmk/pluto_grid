@@ -1,3 +1,8 @@
+## [1.0.0-pre.6] - 2020. 11. 23
+
+* Add Czech locale.
+* Rename the Fix column to freeze column.
+
 ## [1.0.0-pre.5] - 2020. 11. 18
 
 * Add enableEditingMode to PlutoColumn.

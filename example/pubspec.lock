@@ -141,7 +141,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-pre.5"
+    version: "1.0.0-pre.6"
   rainbow_color:
     dependency: "direct main"
     description:
