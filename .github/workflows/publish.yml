@@ -37,9 +37,9 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
-        git commit -m "${ env.BRANCH_NAME }"
-        git tag "${ env.BRANCH_NAME }"
-        git push origin "${ env.BRANCH_NAME }"
+        git commit -m "$BRANCH_NAME"
+        git tag "$BRANCH_NAME"
+        git push origin "$BRANCH_NAME"
 
     # publish to pub.dev
     - name: publish
