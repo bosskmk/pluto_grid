@@ -399,8 +399,8 @@ void main() {
     buildRows().test(
       '0 번 row 보다 위인 offset 인 경우 null 을 리턴해야 한다.',
       (tester) async {
-        final rowIdx = stateManager
-            .getRowIdxByOffset(stateManager.rowTotalHeight * 0.7);
+        final rowIdx =
+            stateManager.getRowIdxByOffset(stateManager.rowTotalHeight * 0.7);
 
         expect(rowIdx, isNull);
       },
@@ -409,8 +409,8 @@ void main() {
     buildRows().test(
       '0 번 row 의 중간 offset.',
       (tester) async {
-        final rowIdx = stateManager
-            .getRowIdxByOffset(stateManager.rowTotalHeight * 1.5);
+        final rowIdx =
+            stateManager.getRowIdxByOffset(stateManager.rowTotalHeight * 1.5);
 
         expect(rowIdx, 0);
       },
@@ -419,8 +419,8 @@ void main() {
     buildRows().test(
       '1 번 row 의 중간 offset.',
       (tester) async {
-        final rowIdx = stateManager
-            .getRowIdxByOffset(stateManager.rowTotalHeight * 2.5);
+        final rowIdx =
+            stateManager.getRowIdxByOffset(stateManager.rowTotalHeight * 2.5);
 
         expect(rowIdx, 1);
       },
@@ -429,8 +429,8 @@ void main() {
     buildRows().test(
       '마지막 9번 row 의 중간 offset.',
       (tester) async {
-        final rowIdx = stateManager
-            .getRowIdxByOffset(stateManager.rowTotalHeight * 10.5);
+        final rowIdx =
+            stateManager.getRowIdxByOffset(stateManager.rowTotalHeight * 10.5);
 
         expect(rowIdx, 9);
       },
@@ -439,8 +439,8 @@ void main() {
     buildRows().test(
       '마지막 row 보다 아래 offset 을 전달 한 경우 null 을 리턴해야 한다.',
       (tester) async {
-        final rowIdx = stateManager
-            .getRowIdxByOffset(stateManager.rowTotalHeight * 11.5);
+        final rowIdx =
+            stateManager.getRowIdxByOffset(stateManager.rowTotalHeight * 11.5);
 
         expect(rowIdx, isNull);
       },

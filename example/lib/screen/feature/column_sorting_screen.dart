@@ -69,7 +69,8 @@ class _ColumnSortingScreenState extends State<ColumnSortingScreen> {
       title: 'Column sorting',
       topTitle: 'Column sorting',
       topContents: [
-        const Text('Ascending or Descending by clicking on the column heading.'),
+        const Text(
+            'Ascending or Descending by clicking on the column heading.'),
       ],
       topButtons: [
         PlutoExampleButton(

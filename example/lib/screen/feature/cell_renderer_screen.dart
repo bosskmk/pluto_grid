@@ -113,7 +113,8 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
         type: PlutoColumnType.text(),
         enableEditingMode: false,
         renderer: (rendererContext) {
-          return Image.network('https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
+          return Image.network(
+              'https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
         },
       ),
     ];
@@ -127,7 +128,8 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       title: 'Cell renderer',
       topTitle: 'Cell renderer',
       topContents: [
-        const Text('You can change the widget of the cell through the renderer.'),
+        const Text(
+            'You can change the widget of the cell through the renderer.'),
       ],
       topButtons: [
         PlutoExampleButton(

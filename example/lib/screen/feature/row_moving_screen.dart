@@ -65,7 +65,8 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
         const Text(
             'If enableRowDrag of the column property is set to true, an icon that can be dragged to the left of the cell value is created.'),
         const Text('You can drag the icon to move the row up and down.'),
-        const Text('In Selecting Row mode, you can move all the selected rows.'),
+        const Text(
+            'In Selecting Row mode, you can move all the selected rows.'),
       ],
       topButtons: [
         PlutoExampleButton(
