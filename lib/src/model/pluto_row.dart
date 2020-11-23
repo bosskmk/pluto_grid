@@ -33,4 +33,9 @@ class PlutoRow {
   Key get key => _key;
 
   final Key _key;
+
+  @visibleForTesting
+  void setChecked(bool flag) {
+    _checked = flag;
+  }
 }

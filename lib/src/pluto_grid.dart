@@ -254,7 +254,8 @@ class _PlutoGridState extends State<PlutoGrid> {
               return RawKeyboardListener(
                 focusNode: stateManager.gridFocusNode,
                 child: Container(
-                  padding: const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
+                  padding:
+                      const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
                   decoration: BoxDecoration(
                     color: stateManager.configuration.gridBackgroundColor,
                     border: Border.all(
@@ -373,10 +374,10 @@ class _PlutoGridState extends State<PlutoGrid> {
                                 stateManager.configuration.gridBackgroundColor,
                             indicatorColor:
                                 stateManager.configuration.cellTextStyle.color,
-                            indicatorText:
-                                stateManager.configuration.localeText.loadingText,
-                            indicatorSize:
-                                stateManager.configuration.cellTextStyle.fontSize,
+                            indicatorText: stateManager
+                                .configuration.localeText.loadingText,
+                            indicatorSize: stateManager
+                                .configuration.cellTextStyle.fontSize,
                           ),
                         ),
                     ],

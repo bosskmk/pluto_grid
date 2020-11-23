@@ -360,7 +360,8 @@ class PlutoContributors extends StatelessWidget {
         children: [
           PlutoContributorTile(
             name: 'Kim Manki',
-            description: 'My hobby is creating flutter packages for managers or business applications.',
+            description:
+                'My hobby is creating flutter packages for managers or business applications.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/bosskmk');
