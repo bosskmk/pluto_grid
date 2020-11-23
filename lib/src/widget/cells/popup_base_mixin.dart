@@ -96,7 +96,11 @@ mixin _PopupBaseMixin<T extends _PopupBaseMixinImpl> on State<T>
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,
-      configuration: widget.stateManager.configuration,
+      configuration: widget.column.type.isSelect
+          ? widget.stateManager.configuration
+          : widget.stateManager.configuration.copyWith(
+              rowHeight: PlutoDefaultSettings.rowHeight,
+            ),
     );
   }
 

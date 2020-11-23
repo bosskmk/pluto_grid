@@ -113,6 +113,50 @@ class PlutoConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
   });
+
+  PlutoConfiguration copyWith({
+    bool enableColumnBorder,
+    Color gridBackgroundColor,
+    Color gridBorderColor,
+    Color activatedColor,
+    Color activatedBorderColor,
+    Color checkedColor,
+    Color borderColor,
+    Color cellColorInEditState,
+    Color cellColorInReadOnlyState,
+    TextStyle columnTextStyle,
+    TextStyle cellTextStyle,
+    Color iconColor,
+    Color menuBackgroundColor,
+    double rowHeight,
+    bool enableMoveDownAfterSelecting,
+    PlutoEnterKeyAction enterKeyAction,
+    PlutoGridLocaleText localeText,
+    PlutoScrollbarConfig scrollbarConfig,
+  }) {
+    return PlutoConfiguration(
+      enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
+      gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
+      gridBorderColor: gridBorderColor ?? this.gridBorderColor,
+      activatedColor: activatedColor ?? this.activatedColor,
+      activatedBorderColor: activatedBorderColor ?? this.activatedBorderColor,
+      checkedColor: checkedColor ?? this.checkedColor,
+      borderColor: borderColor ?? this.borderColor,
+      cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
+      cellColorInReadOnlyState:
+          cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
+      columnTextStyle: columnTextStyle ?? this.columnTextStyle,
+      cellTextStyle: cellTextStyle ?? this.cellTextStyle,
+      iconColor: iconColor ?? this.iconColor,
+      menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
+      rowHeight: rowHeight ?? this.rowHeight,
+      enableMoveDownAfterSelecting:
+          enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
+      enterKeyAction: enterKeyAction ?? this.enterKeyAction,
+      localeText: localeText ?? this.localeText,
+      scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
+    );
+  }
 }
 
 class PlutoGridLocaleText {

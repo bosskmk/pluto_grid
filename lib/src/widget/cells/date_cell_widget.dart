@@ -46,7 +46,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
   void initState() {
     super.initState();
 
-    popupHeight = (8 * widget.stateManager.rowTotalHeight) +
+    popupHeight = (8 * PlutoDefaultSettings.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
 

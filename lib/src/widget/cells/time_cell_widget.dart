@@ -40,6 +40,10 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
 
     final localeText = widget.stateManager.localeText;
 
+    final configuration = widget.stateManager.configuration.copyWith(
+      rowHeight: PlutoDefaultSettings.rowHeight,
+    );
+
     PlutoDualGridPopup(
       context: context,
       onSelected: (PlutoDualOnSelectedEvent event) {
@@ -88,7 +92,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
             }
           }
         },
-        configuration: widget.stateManager.configuration,
+        configuration: configuration,
       ),
       gridPropsB: PlutoDualGridProps(
         columns: [
@@ -124,7 +128,7 @@ class _TimeCellWidgetState extends State<TimeCellWidget>
             }
           }
         },
-        configuration: widget.stateManager.configuration,
+        configuration: configuration,
       ),
       mode: PlutoMode.select,
       width: 276,
