@@ -1,4 +1,5 @@
 part of '../../pluto_grid.dart';
+// coverage : ignore-file
 
 /*
  * This widget modifies [CupertinoScrollbar] a little,
