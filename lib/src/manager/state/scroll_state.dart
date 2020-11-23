@@ -55,13 +55,13 @@ mixin ScrollState implements IPlutoState {
       return;
     }
 
-    final double rowSize = PlutoDefaultSettings.rowTotalHeight;
+    final double rowSize = rowTotalHeight;
 
     final double gridOffset =
         PlutoDefaultSettings.gridPadding + PlutoDefaultSettings.shadowLineSize;
 
     final double screenOffset =
-        _scroll.verticalOffset + offsetHeight - rowSize - gridOffset;
+        _scroll.verticalOffset + offsetHeight - columnHeight - gridOffset;
 
     double offsetToMove =
         direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;

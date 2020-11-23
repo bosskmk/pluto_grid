@@ -268,20 +268,17 @@ mixin SelectingState implements IPlutoState {
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
         PlutoDefaultSettings.gridBorderWidth +
         headerHeight +
-        PlutoDefaultSettings.rowTotalHeight;
+        columnHeight;
 
-    double currentCellOffsetDy =
-        (currentRowIdx * PlutoDefaultSettings.rowTotalHeight) +
-            gridBodyOffsetDy -
-            scroll.vertical.offset;
+    double currentCellOffsetDy = (currentRowIdx * rowTotalHeight) +
+        gridBodyOffsetDy -
+        scroll.vertical.offset;
 
     if (gridBodyOffsetDy > offset.dy) {
       return;
     }
 
-    int rowIdx = (((currentCellOffsetDy - offset.dy) /
-                    PlutoDefaultSettings.rowTotalHeight)
-                .ceil() -
+    int rowIdx = (((currentCellOffsetDy - offset.dy) / rowTotalHeight).ceil() -
             currentRowIdx)
         .abs();
 

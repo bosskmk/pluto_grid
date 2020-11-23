@@ -54,7 +54,7 @@ class _LeftFrozenRowsState extends State<LeftFrozenRows> {
       controller: scroll,
       scrollDirection: Axis.vertical,
       itemCount: _rows.length,
-      itemExtent: PlutoDefaultSettings.rowTotalHeight,
+      itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return RowWidget(
           key: ValueKey('left_frozen_row_${_rows[i]._key}'),

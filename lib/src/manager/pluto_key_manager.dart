@@ -122,7 +122,7 @@ class PlutoKeyManager {
 
   void _handlePageUpDown(KeyManagerEvent keyManagerEvent) {
     final int moveCount =
-        (stateManager.offsetHeight / PlutoDefaultSettings.rowTotalHeight)
+        (stateManager.offsetHeight / stateManager.rowTotalHeight)
             .floor();
 
     final direction =

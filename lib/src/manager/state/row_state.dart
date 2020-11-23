@@ -119,12 +119,12 @@ mixin RowState implements IPlutoState {
 
     for (var i = 0; i < rowsLength; i += 1) {
       if (currentOffset <= offset &&
-          offset < currentOffset + PlutoDefaultSettings.rowTotalHeight) {
+          offset < currentOffset + rowTotalHeight) {
         indexToMove = i;
         break;
       }
 
-      currentOffset += PlutoDefaultSettings.rowTotalHeight;
+      currentOffset += rowTotalHeight;
     }
 
     return indexToMove;
@@ -300,7 +300,7 @@ mixin RowState implements IPlutoState {
         notify: false,
       );
 
-      double offsetToMove = rows.length * PlutoDefaultSettings.rowTotalHeight;
+      double offsetToMove = rows.length * rowTotalHeight;
 
       scrollByDirection(MoveDirection.up, offsetToMove);
     }

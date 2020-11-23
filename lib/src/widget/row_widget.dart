@@ -28,7 +28,7 @@ class RowWidget extends StatelessWidget {
             stateManager: stateManager,
             cell: row.cells[column.field],
             width: column.width,
-            height: PlutoDefaultSettings.rowHeight,
+            height: stateManager.rowHeight,
             column: column,
             rowIdx: rowIdx,
           );

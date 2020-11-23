@@ -5,16 +5,23 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
+import '../../helper/row_helper.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   PlutoStateManager stateManager;
 
+  PlutoConfiguration configuration;
+
   FocusNode keyboardFocusNode;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    configuration = PlutoConfiguration();
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.rowTotalHeight).thenReturn(
+      RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
+    );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);

@@ -400,7 +400,7 @@ void main() {
       '0 번 row 보다 위인 offset 인 경우 null 을 리턴해야 한다.',
       (tester) async {
         final rowIdx = stateManager
-            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 0.7);
+            .getRowIdxByOffset(stateManager.rowTotalHeight * 0.7);
 
         expect(rowIdx, isNull);
       },
@@ -410,7 +410,7 @@ void main() {
       '0 번 row 의 중간 offset.',
       (tester) async {
         final rowIdx = stateManager
-            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 1.5);
+            .getRowIdxByOffset(stateManager.rowTotalHeight * 1.5);
 
         expect(rowIdx, 0);
       },
@@ -420,7 +420,7 @@ void main() {
       '1 번 row 의 중간 offset.',
       (tester) async {
         final rowIdx = stateManager
-            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 2.5);
+            .getRowIdxByOffset(stateManager.rowTotalHeight * 2.5);
 
         expect(rowIdx, 1);
       },
@@ -430,7 +430,7 @@ void main() {
       '마지막 9번 row 의 중간 offset.',
       (tester) async {
         final rowIdx = stateManager
-            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 10.5);
+            .getRowIdxByOffset(stateManager.rowTotalHeight * 10.5);
 
         expect(rowIdx, 9);
       },
@@ -440,7 +440,7 @@ void main() {
       '마지막 row 보다 아래 offset 을 전달 한 경우 null 을 리턴해야 한다.',
       (tester) async {
         final rowIdx = stateManager
-            .getRowIdxByOffset(PlutoDefaultSettings.rowTotalHeight * 11.5);
+            .getRowIdxByOffset(stateManager.rowTotalHeight * 11.5);
 
         expect(rowIdx, isNull);
       },
@@ -1456,7 +1456,7 @@ void main() {
         final rowKey = rows.first.key;
 
         // header size + row 0 + row 1(중간)
-        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+        final offset = stateManager.rowTotalHeight * 2.5;
 
         stateManager.moveRows(
           [rows.first],
@@ -1506,7 +1506,7 @@ void main() {
         final rowKey = rows[2].key;
 
         // header size + row 0 + row 1(중간)
-        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+        final offset = stateManager.rowTotalHeight * 2.5;
 
         stateManager.moveRows(
           [rows[2]],
@@ -1556,7 +1556,7 @@ void main() {
         final rowKey = rows.first.key;
 
         // header size + row0 ~ row4
-        final offset = PlutoDefaultSettings.rowTotalHeight * 5.5;
+        final offset = stateManager.rowTotalHeight * 5.5;
 
         stateManager.moveRows(
           [rows.first],
@@ -1650,7 +1650,7 @@ void main() {
 
         // when
         // header + row0 ~ row4 + 1
-        final offset = PlutoDefaultSettings.rowTotalHeight * 7;
+        final offset = stateManager.rowTotalHeight * 7;
 
         stateManager.moveRows(
           [rows.first],
@@ -1701,7 +1701,7 @@ void main() {
         final rowKey = rows[1].key;
 
         // header size + column size + row 0(중간)
-        final offset = PlutoDefaultSettings.rowTotalHeight * 2.5;
+        final offset = stateManager.rowTotalHeight * 2.5;
 
         stateManager.moveRows(
           [rows[1]],
