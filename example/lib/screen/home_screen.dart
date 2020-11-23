@@ -359,11 +359,19 @@ class PlutoContributors extends StatelessWidget {
         runSpacing: 10,
         children: [
           PlutoContributorTile(
-            name: 'Manki Kim',
-            description: 'Backend developer in Korea.',
+            name: 'Kim Manki',
+            description: 'My hobby is creating flutter packages for managers or business applications.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/bosskmk');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Alexey Volkov',
+            description: 'First contributor.',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/ASGAlex');
             },
           ),
           PlutoContributorTile.invisible(
