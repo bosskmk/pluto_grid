@@ -43,4 +43,8 @@ class RowHelper {
           .toString(),
     );
   }
+
+  static double resolveRowTotalHeight(double rowHeight) {
+    return rowHeight + PlutoDefaultSettings.rowBorderWidth;
+  }
 }

@@ -46,7 +46,7 @@ class _DateCellWidgetState extends State<DateCellWidget>
   void initState() {
     super.initState();
 
-    popupHeight = (8 * PlutoDefaultSettings.rowTotalHeight) +
+    popupHeight = (8 * widget.stateManager.rowTotalHeight) +
         PlutoDefaultSettings.shadowLineSize +
         PlutoDefaultSettings.gridInnerSpacing;
 
@@ -282,7 +282,7 @@ class _DateCellHeaderState extends State<_DateCellHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: PlutoDefaultSettings.rowTotalHeight,
+      height: widget.stateManager.rowTotalHeight,
       padding: const EdgeInsets.symmetric(
           horizontal: PlutoDefaultSettings.cellPadding),
       alignment: Alignment.center,

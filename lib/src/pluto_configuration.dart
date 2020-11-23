@@ -39,6 +39,9 @@ class PlutoConfiguration {
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
 
+  /// Height of a row.
+  final double rowHeight;
+
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
 
@@ -75,6 +78,7 @@ class PlutoConfiguration {
     ),
     this.iconColor = Colors.black26,
     this.menuBackgroundColor = Colors.white,
+    this.rowHeight = PlutoDefaultSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
@@ -103,6 +107,7 @@ class PlutoConfiguration {
     ),
     this.iconColor = Colors.white38,
     this.menuBackgroundColor = const Color(0xFF414141),
+    this.rowHeight = PlutoDefaultSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),

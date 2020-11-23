@@ -57,7 +57,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     Offset offset,
   }) {
     if (offset != null) {
-      offset += const Offset(0.0, (PlutoDefaultSettings.rowTotalHeight / 2));
+      offset += Offset(0.0, (widget.stateManager.rowTotalHeight / 2));
     }
 
     widget.stateManager.eventManager.addEvent(
@@ -216,7 +216,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
           key: _feedbackKey,
           child: ShadowContainer(
             width: widget.column.width,
-            height: PlutoDefaultSettings.rowHeight,
+            height: widget.stateManager.rowHeight,
             backgroundColor:
                 widget.stateManager.configuration.gridBackgroundColor,
             borderColor: widget.stateManager.configuration.activatedBorderColor,

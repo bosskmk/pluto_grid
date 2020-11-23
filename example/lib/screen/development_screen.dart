@@ -17,7 +17,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoStateManager stateManager;
 
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.square;
+  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.row;
 
   @override
   void initState() {
@@ -178,6 +178,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
         configuration: PlutoConfiguration(
+          rowHeight: 50.0,
           scrollbarConfig: const PlutoScrollbarConfig(
             isAlwaysShown: true,
           ),

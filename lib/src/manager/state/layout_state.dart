@@ -41,6 +41,10 @@ abstract class ILayoutState {
 
   double get rowsTopOffset;
 
+  double get rowHeight;
+
+  double get rowTotalHeight;
+
   double get bodyTopOffset;
 
   double get bodyLeftOffset;
@@ -128,15 +132,20 @@ mixin LayoutState implements IPlutoState {
   double get footerTopOffset =>
       maxHeight - footerHeight - PlutoDefaultSettings.totalShadowLineWidth;
 
+  // todo : set columnHeight from configuration.
   double get columnHeight => PlutoDefaultSettings.rowTotalHeight;
 
   double get rowsTopOffset => headerHeight + columnHeight;
+
+  double get rowHeight => configuration.rowHeight;
+
+  double get rowTotalHeight => rowHeight + PlutoDefaultSettings.rowBorderWidth;
 
   double get bodyTopOffset =>
       gridGlobalOffset.dy +
       headerHeight +
       PlutoDefaultSettings.gridBorderWidth +
-      PlutoDefaultSettings.rowTotalHeight;
+      columnHeight;
 
   double get bodyLeftOffset {
     return (showFrozenColumn && leftFrozenColumnsWidth > 0)
