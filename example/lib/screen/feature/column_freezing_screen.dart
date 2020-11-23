@@ -5,14 +5,14 @@ import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
 
-class ColumnFixingScreen extends StatefulWidget {
-  static const routeName = 'feature/column-fixing';
+class ColumnFreezingScreen extends StatefulWidget {
+  static const routeName = 'feature/column-freezing';
 
   @override
-  _ColumnFixingScreenState createState() => _ColumnFixingScreenState();
+  _ColumnFreezingScreenState createState() => _ColumnFreezingScreenState();
 }
 
-class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
+class _ColumnFreezingScreenState extends State<ColumnFreezingScreen> {
   List<PlutoColumn> columns;
 
   List<PlutoRow> rows;
@@ -31,18 +31,18 @@ class _ColumnFixingScreenState extends State<ColumnFixingScreen> {
   @override
   Widget build(BuildContext context) {
     return PlutoExampleScreen(
-      title: 'Column fixing',
-      topTitle: 'Column fixing',
+      title: 'Column freezing',
+      topTitle: 'Column freezing',
       topContents: [
         const Text(
-            'You can fix the column by tapping ToLeft, ToRight in the dropdown menu that appears when you tap the icon to the right of the column title.'),
+            'You can freeze the column by tapping ToLeft, ToRight in the dropdown menu that appears when you tap the icon to the right of the column title.'),
         const Text(
-            'If the width of the middle columns is narrow, the fixed column is released.'),
+            'If the width of the middle columns is narrow, the frozen column is released.'),
       ],
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/column_fixing_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/column_freezing_screen.dart',
         ),
       ],
       body: PlutoGrid(

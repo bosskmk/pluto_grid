@@ -10,29 +10,29 @@ abstract class IColumnState {
   List<int> get columnIndexes;
 
   /// List of column indexes in which the sequence is maintained
-  /// while the Fixed column is visible.
-  List<int> get columnIndexesForShowFixed;
+  /// while the frozen column is visible.
+  List<int> get columnIndexesForShowFrozen;
 
   /// Width of the entire column.
   double get columnsWidth;
 
-  /// Left fixed columns.
-  List<PlutoColumn> get leftFixedColumns;
+  /// Left frozen columns.
+  List<PlutoColumn> get leftFrozenColumns;
 
-  /// Left fixed column Index List.
-  List<int> get leftFixedColumnIndexes;
+  /// Left frozen column Index List.
+  List<int> get leftFrozenColumnIndexes;
 
-  /// Width of the left fixed column.
-  double get leftFixedColumnsWidth;
+  /// Width of the left frozen column.
+  double get leftFrozenColumnsWidth;
 
-  /// Right fixed columns.
-  List<PlutoColumn> get rightFixedColumns;
+  /// Right frozen columns.
+  List<PlutoColumn> get rightFrozenColumns;
 
-  /// Right fixed column Index List.
-  List<int> get rightFixedColumnIndexes;
+  /// Right frozen column Index List.
+  List<int> get rightFrozenColumnIndexes;
 
-  /// Width of the right fixed column.
-  double get rightFixedColumnsWidth;
+  /// Width of the right frozen column.
+  double get rightFrozenColumnsWidth;
 
   /// Body columns.
   List<PlutoColumn> get bodyColumns;
@@ -53,14 +53,14 @@ abstract class IColumnState {
 
   PlutoColumn get getSortedColumn;
 
-  /// Column Index List by Fixed Column
-  List<int> columnIndexesByShowFixed();
+  /// Column Index List by frozen Column
+  List<int> columnIndexesByShowFrozen();
 
-  /// Whether a fixed column is displayed in the screen width.
-  bool isShowFixedColumn(double maxWidth);
+  /// Whether a frozen column is displayed in the screen width.
+  bool isShowFrozenColumn(double maxWidth);
 
-  /// Toggle whether the column is fixed or not.
-  void toggleFixedColumn(Key columnKey, PlutoColumnFixed fixed);
+  /// Toggle whether the column is frozen or not.
+  void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
 
   /// Toggle column sorting.
   void toggleSortColumn(Key columnKey);
@@ -73,8 +73,8 @@ abstract class IColumnState {
 
   /// Index of [column] in [columns]
   ///
-  /// Depending on the state of the fixed column, the column order index
-  /// must be referenced with the columnIndexesByShowFixed function.
+  /// Depending on the state of the frozen column, the column order index
+  /// must be referenced with the columnIndexesByShowFrozen function.
   int columnIndex(PlutoColumn column);
 
   /// Change column position.
@@ -97,11 +97,11 @@ mixin ColumnState implements IPlutoState {
 
   List<int> get columnIndexes => _columns.asMap().keys.toList();
 
-  List<int> get columnIndexesForShowFixed {
+  List<int> get columnIndexesForShowFrozen {
     return [
-      ...leftFixedColumnIndexes,
+      ...leftFrozenColumnIndexes,
       ...bodyColumnIndexes,
-      ...rightFixedColumnIndexes
+      ...rightFrozenColumnIndexes
     ];
   }
 
@@ -109,49 +109,49 @@ mixin ColumnState implements IPlutoState {
     return _columns.fold(0, (double value, element) => value + element.width);
   }
 
-  List<PlutoColumn> get leftFixedColumns {
-    return _columns.where((e) => e.fixed.isLeft).toList();
+  List<PlutoColumn> get leftFrozenColumns {
+    return _columns.where((e) => e.frozen.isLeft).toList();
   }
 
-  List<int> get leftFixedColumnIndexes {
+  List<int> get leftFrozenColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.fixed.isLeft) {
+      if (element.frozen.isLeft) {
         return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
     }).toList();
   }
 
-  double get leftFixedColumnsWidth {
-    return leftFixedColumns.fold(
+  double get leftFrozenColumnsWidth {
+    return leftFrozenColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
-  List<PlutoColumn> get rightFixedColumns {
-    return _columns.where((e) => e.fixed.isRight).toList();
+  List<PlutoColumn> get rightFrozenColumns {
+    return _columns.where((e) => e.frozen.isRight).toList();
   }
 
-  List<int> get rightFixedColumnIndexes {
+  List<int> get rightFrozenColumnIndexes {
     return _columns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.fixed.isRight) {
+      if (element.frozen.isRight) {
         return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
     }).toList();
   }
 
-  double get rightFixedColumnsWidth {
-    return rightFixedColumns.fold(
+  double get rightFrozenColumnsWidth {
+    return rightFrozenColumns.fold(
         0, (double value, element) => value + element.width);
   }
 
   List<PlutoColumn> get bodyColumns {
-    return _columns.where((e) => e.fixed.isNone).toList();
+    return _columns.where((e) => e.frozen.isNone).toList();
   }
 
   List<int> get bodyColumnIndexes {
     return bodyColumns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.fixed.isNone) {
+      if (element.frozen.isNone) {
         return [...previousValue, _columns.indexOf(element)];
       }
       return previousValue;
@@ -195,27 +195,27 @@ mixin ColumnState implements IPlutoState {
         orElse: () => null,
       );
 
-  List<int> columnIndexesByShowFixed() {
-    return showFixedColumn ? columnIndexesForShowFixed : columnIndexes;
+  List<int> columnIndexesByShowFrozen() {
+    return showFrozenColumn ? columnIndexesForShowFrozen : columnIndexes;
   }
 
-  bool isShowFixedColumn(double maxWidth) {
-    final bool hasFixedColumn =
-        leftFixedColumns.isNotEmpty || rightFixedColumns.isNotEmpty;
+  bool isShowFrozenColumn(double maxWidth) {
+    final bool hasFrozenColumn =
+        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 
-    return hasFixedColumn &&
+    return hasFrozenColumn &&
         maxWidth >
-            (leftFixedColumnsWidth +
-                rightFixedColumnsWidth +
+            (leftFrozenColumnsWidth +
+                rightFrozenColumnsWidth +
                 PlutoDefaultSettings.bodyMinWidth +
                 PlutoDefaultSettings.totalShadowLineWidth);
   }
 
-  void toggleFixedColumn(Key columnKey, PlutoColumnFixed fixed) {
+  void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
     for (var i = 0; i < _columns.length; i += 1) {
       if (_columns[i]._key == columnKey) {
-        _columns[i].fixed =
-            _columns[i].fixed.isFixed ? PlutoColumnFixed.none : fixed;
+        _columns[i].frozen =
+            _columns[i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
         break;
       }
     }
@@ -270,7 +270,7 @@ mixin ColumnState implements IPlutoState {
   }
 
   int columnIndex(PlutoColumn column) {
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
       if (_columns[columnIndexes[i]].field == column.field) {
@@ -284,7 +284,7 @@ mixin ColumnState implements IPlutoState {
   void moveColumn(Key columnKey, double offset) {
     offset -= gridGlobalOffset.dx;
 
-    final List<int> columnIndexes = columnIndexesByShowFixed();
+    final List<int> columnIndexes = columnIndexesByShowFrozen();
 
     Function findColumnIndex = (int i) {
       if (_columns[columnIndexes[i]]._key == columnKey) {
@@ -294,10 +294,10 @@ mixin ColumnState implements IPlutoState {
     };
 
     Function findIndexToMove = () {
-      final double minLeft = showFixedColumn ? leftFixedColumnsWidth : 0;
+      final double minLeft = showFrozenColumn ? leftFrozenColumnsWidth : 0;
 
       final double minRight =
-          showFixedColumn ? maxWidth - rightFixedColumnsWidth : maxWidth;
+          showFrozenColumn ? maxWidth - rightFrozenColumnsWidth : maxWidth;
 
       double currentOffset = 0.0;
 
@@ -305,7 +305,7 @@ mixin ColumnState implements IPlutoState {
 
       if (minRight < offset) {
         currentOffset = minRight;
-        startIndexToMove = _columns.length - rightFixedColumns.length;
+        startIndexToMove = _columns.length - rightFrozenColumns.length;
       } else if (minLeft < offset) {
         currentOffset -= scroll.horizontal.offset;
       }
@@ -347,7 +347,7 @@ mixin ColumnState implements IPlutoState {
     }
 
     // 컬럼의 순서 변경
-    _columns[columnIndex].fixed = _columns[indexToMove].fixed;
+    _columns[columnIndex].frozen = _columns[indexToMove].frozen;
     if (indexToMove < columnIndex) {
       _columns.insert(indexToMove, _columns[columnIndex]);
       _columns.removeRange(columnIndex + 1, columnIndex + 2);
@@ -373,7 +373,7 @@ mixin ColumnState implements IPlutoState {
       }
     }
 
-    resetShowFixedColumn(notify: false);
+    resetShowFrozenColumn(notify: false);
 
     notifyListeners();
   }

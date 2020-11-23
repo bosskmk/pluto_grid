@@ -95,7 +95,7 @@ mixin SelectingState implements IPlutoState {
       return [];
     }
 
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     int columnStartIdx =
         min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
@@ -296,7 +296,7 @@ mixin SelectingState implements IPlutoState {
     currentWidth += PlutoDefaultSettings.gridPadding;
     currentWidth += PlutoDefaultSettings.gridBorderWidth;
 
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     final _rightBlankOffset = rightBlankOffset;
     final _horizontalScrollOffset = scroll.horizontal.offset;
@@ -306,10 +306,10 @@ mixin SelectingState implements IPlutoState {
 
       currentWidth += column.width;
 
-      final rightFixedColumnOffset =
-          column.fixed.isRight && showFixedColumn ? _rightBlankOffset : 0;
+      final rightFrozenColumnOffset =
+          column.frozen.isRight && showFrozenColumn ? _rightBlankOffset : 0;
 
-      if (currentWidth + rightFixedColumnOffset >
+      if (currentWidth + rightFrozenColumnOffset >
           offset.dx + _horizontalScrollOffset) {
         columnIdx = i;
         break;
@@ -524,7 +524,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   String _selectingTextFromSelectingRows() {
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     List<String> rowText = [];
 
@@ -544,7 +544,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   String _selectingTextFromSelectingPosition() {
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     List<String> rowText = [];
 

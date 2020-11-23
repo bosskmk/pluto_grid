@@ -5,7 +5,7 @@ class ColumnHelper {
     String title, {
     int count = 1,
     double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.none,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
   }) {
     return Iterable.generate(count)
@@ -13,7 +13,7 @@ class ColumnHelper {
               title: '$title$e',
               field: '$title$e',
               width: width,
-              fixed: fixed,
+              frozen: frozen,
               type: PlutoColumnType.text(readOnly: readOnly),
             ))
         .toList(growable: false);
@@ -23,7 +23,7 @@ class ColumnHelper {
     String title, {
     int count = 1,
     double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.none,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
     dynamic startDate,
     dynamic endDate,
@@ -35,7 +35,7 @@ class ColumnHelper {
               title: '$title$e',
               field: '$title$e',
               width: width,
-              fixed: fixed,
+              frozen: frozen,
               type: PlutoColumnType.date(
                 readOnly: readOnly,
                 startDate: startDate,

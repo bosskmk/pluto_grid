@@ -1,15 +1,15 @@
 part of '../../pluto_grid.dart';
 
-class LeftFixedColumns extends StatefulWidget {
+class LeftFrozenColumns extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  LeftFixedColumns(this.stateManager);
+  LeftFrozenColumns(this.stateManager);
 
   @override
-  _LeftFixedColumnsState createState() => _LeftFixedColumnsState();
+  _LeftFrozenColumnsState createState() => _LeftFrozenColumnsState();
 }
 
-class _LeftFixedColumnsState extends State<LeftFixedColumns> {
+class _LeftFrozenColumnsState extends State<LeftFrozenColumns> {
   List<PlutoColumn> _columns;
   double _width;
 
@@ -23,18 +23,18 @@ class _LeftFixedColumnsState extends State<LeftFixedColumns> {
   void initState() {
     super.initState();
 
-    _columns = widget.stateManager.leftFixedColumns;
-    _width = widget.stateManager.leftFixedColumnsWidth;
+    _columns = widget.stateManager.leftFrozenColumns;
+    _width = widget.stateManager.leftFrozenColumnsWidth;
 
     widget.stateManager.addListener(changeStateListener);
   }
 
   void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.leftFixedColumns) == false ||
-        _width != widget.stateManager.leftFixedColumnsWidth) {
+    if (listEquals(_columns, widget.stateManager.leftFrozenColumns) == false ||
+        _width != widget.stateManager.leftFrozenColumnsWidth) {
       setState(() {
-        _columns = widget.stateManager.leftFixedColumns;
-        _width = widget.stateManager.leftFixedColumnsWidth;
+        _columns = widget.stateManager.leftFrozenColumns;
+        _width = widget.stateManager.leftFrozenColumnsWidth;
       });
     }
   }

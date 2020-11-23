@@ -14,7 +14,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    final makeFixedColumnByMaxWidth = (String description, double maxWidth) {
+    final makeFrozenColumnByMaxWidth = (String description, double maxWidth) {
       return PlutoWidgetTestHelper(
         '고정 컬럼이 있고 $description',
         (tester) async {
@@ -22,7 +22,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'left',
               count: 1,
-              fixed: PlutoColumnFixed.left,
+              frozen: PlutoColumnFrozen.left,
               width: 150,
             ),
             ...ColumnHelper.textColumn(
@@ -33,7 +33,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'right',
               count: 1,
-              fixed: PlutoColumnFixed.right,
+              frozen: PlutoColumnFrozen.right,
               width: 150,
             ),
           ];
@@ -54,32 +54,32 @@ void main() {
       );
     };
 
-    final hasFixedColumnAndWidthEnough = makeFixedColumnByMaxWidth(
+    final hasFrozenColumnAndWidthEnough = makeFrozenColumnByMaxWidth(
       '넓이가 충분한 경우',
       600,
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyLeftOffset 값은 왼쪽 고정 컬럼 넓이 + 1 이어야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftOffset,
-          stateManager.leftFixedColumnsWidth + 1,
+          stateManager.leftFrozenColumnsWidth + 1,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyRightOffset 값은 우측 고정 컬럼 넓이 + 1 이어야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightOffset,
-          stateManager.rightFixedColumnsWidth + 1,
+          stateManager.rightFrozenColumnsWidth + 1,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되어야 한다.',
       (tester) async {
         expect(
@@ -87,30 +87,30 @@ void main() {
           stateManager.gridGlobalOffset.dx +
               PlutoDefaultSettings.gridPadding +
               PlutoDefaultSettings.gridBorderWidth +
-              stateManager.leftFixedColumnsWidth +
+              stateManager.leftFrozenColumnsWidth +
               PlutoDefaultSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되어야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
-              stateManager.rightFixedColumnsWidth -
+              stateManager.rightFrozenColumnsWidth -
               PlutoDefaultSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    final hasFixedColumnAndWidthNotEnough = makeFixedColumnByMaxWidth(
+    final hasFrozenColumnAndWidthNotEnough = makeFrozenColumnByMaxWidth(
       '넓이가 부족한 경우',
       450,
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyLeftOffset 값은 0 이어야 한다.',
       (tester) async {
         expect(
@@ -120,7 +120,7 @@ void main() {
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyRightOffset 값은 0 이어야 한다.',
       (tester) async {
         expect(
@@ -130,7 +130,7 @@ void main() {
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되지 않아야 한다.',
       (tester) async {
         expect(
@@ -138,19 +138,19 @@ void main() {
           stateManager.gridGlobalOffset.dx +
               PlutoDefaultSettings.gridPadding +
               PlutoDefaultSettings.gridBorderWidth +
-              // stateManager.leftFixedColumnsWidth +
+              // stateManager.leftFrozenColumnsWidth +
               PlutoDefaultSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되지 않아야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
-              // stateManager.rightFixedColumnsWidth -
+              // stateManager.rightFrozenColumnsWidth -
               PlutoDefaultSettings.offsetScrollingFromEdge,
         );
       },

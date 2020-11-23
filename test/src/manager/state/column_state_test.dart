@@ -28,7 +28,7 @@ void main() {
     expect(result, [0, 1, 2]);
   });
 
-  testWidgets('columnIndexesForShowFixed - 고정 컬럼 순서에 맞게 리턴 되어야 한다.',
+  testWidgets('columnIndexesForShowFrozen - 고정 컬럼 순서에 맞게 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -37,14 +37,14 @@ void main() {
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
       ],
       rows: null,
@@ -53,7 +53,7 @@ void main() {
     );
 
     // when
-    final List<int> result = stateManager.columnIndexesForShowFixed;
+    final List<int> result = stateManager.columnIndexesForShowFrozen;
 
     // then
     expect(result.length, 3);
@@ -96,7 +96,7 @@ void main() {
     expect(result, 600);
   });
 
-  testWidgets('leftFixedColumns - 왼쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
+  testWidgets('leftFrozenColumns - 왼쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -105,14 +105,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
       ],
       rows: null,
@@ -121,7 +121,7 @@ void main() {
     );
 
     // when
-    final List<PlutoColumn> result = stateManager.leftFixedColumns;
+    final List<PlutoColumn> result = stateManager.leftFrozenColumns;
 
     // then
     expect(result.length, 2);
@@ -129,7 +129,7 @@ void main() {
     expect(result[1].title, 'left2');
   });
 
-  testWidgets('leftFixedColumnIndexes - 왼쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
+  testWidgets('leftFrozenColumnIndexes - 왼쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -138,14 +138,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
       ],
       rows: null,
@@ -154,14 +154,14 @@ void main() {
     );
 
     // when
-    final List<int> result = stateManager.leftFixedColumnIndexes;
+    final List<int> result = stateManager.leftFrozenColumnIndexes;
 
     // then
     expect(result.length, 1);
     expect(result[0], 2);
   });
 
-  testWidgets('leftFixedColumnsWidth - 왼쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
+  testWidgets('leftFrozenColumnsWidth - 왼쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -170,7 +170,7 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         PlutoColumn(
@@ -183,7 +183,7 @@ void main() {
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
       ],
@@ -193,13 +193,13 @@ void main() {
     );
 
     // when
-    final double result = stateManager.leftFixedColumnsWidth;
+    final double result = stateManager.leftFrozenColumnsWidth;
 
     // then
     expect(result, 300);
   });
 
-  testWidgets('rightFixedColumns - 오른쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
+  testWidgets('rightFrozenColumns - 오른쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -208,14 +208,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ],
       rows: null,
@@ -224,14 +224,14 @@ void main() {
     );
 
     // when
-    final List<PlutoColumn> result = stateManager.rightFixedColumns;
+    final List<PlutoColumn> result = stateManager.rightFrozenColumns;
 
     // then
     expect(result.length, 1);
     expect(result[0].title, 'right1');
   });
 
-  testWidgets('rightFixedColumnIndexes - 오른쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
+  testWidgets('rightFrozenColumnIndexes - 오른쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -240,14 +240,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ],
       rows: null,
@@ -256,7 +256,7 @@ void main() {
     );
 
     // when
-    final List<int> result = stateManager.rightFixedColumnIndexes;
+    final List<int> result = stateManager.rightFrozenColumnIndexes;
 
     // then
     expect(result.length, 2);
@@ -264,7 +264,7 @@ void main() {
     expect(result[1], 2);
   });
 
-  testWidgets('rightFixedColumnsWidth - 오른쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
+  testWidgets('rightFrozenColumnsWidth - 오른쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
     PlutoStateManager stateManager = PlutoStateManager(
@@ -273,14 +273,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 120,
         ),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 120,
         ),
         PlutoColumn(
@@ -293,7 +293,7 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 120,
         ),
       ],
@@ -303,7 +303,7 @@ void main() {
     );
 
     // when
-    final double result = stateManager.rightFixedColumnsWidth;
+    final double result = stateManager.rightFrozenColumnsWidth;
 
     // then
     expect(result, 240);
@@ -315,10 +315,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -341,10 +341,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -367,10 +367,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -390,10 +390,10 @@ void main() {
     PlutoStateManager stateManager = PlutoStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ],
       rows: null,
       gridFocusNode: null,
@@ -412,10 +412,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.left),
+          count: 3, frozen: PlutoColumnFrozen.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.right),
+          count: 3, frozen: PlutoColumnFrozen.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -446,10 +446,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.left),
+          count: 3, frozen: PlutoColumnFrozen.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.right),
+          count: 3, frozen: PlutoColumnFrozen.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -474,10 +474,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, fixed: PlutoColumnFixed.left),
+          count: 3, frozen: PlutoColumnFrozen.left),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, fixed: PlutoColumnFixed.right),
+          count: 3, frozen: PlutoColumnFrozen.right),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -502,7 +502,7 @@ void main() {
     expect(currentColumnField, selectColumnField);
   });
 
-  group('columnIndexesByShowFixed', () {
+  group('columnIndexesByShowFrozen', () {
     testWidgets(
         '고정 컬럼이 없는 상태에서 '
         'columnIndexes 가 리턴 되어야 한다.', (WidgetTester tester) async {
@@ -524,14 +524,14 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2]);
+      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2]);
     });
 
     testWidgets(
         '고정 컬럼이 없는 상태에서 '
         '3번 째 컬럼을 왼쪽 고정 토글 하고 '
         '넓이가 충분한 경우 '
-        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+        'columnIndexesForShowFrozen 가 리턴 되어야 한다.', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 5, width: 150),
@@ -547,13 +547,13 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [2, 0, 1, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen(), [2, 0, 1, 3, 4]);
     });
 
     testWidgets(
@@ -576,13 +576,13 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
 
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2, 3, 4]);
     });
 
     testWidgets(
@@ -594,14 +594,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 150,
         ),
       ];
@@ -620,27 +620,27 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 2, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2, 3, 4]);
     });
 
     testWidgets(
         '고정 컬럼이 있는 상태에서 '
         '고정 컬럼 하나를 토글하여 왼쪽 추가하고  '
         '넓이가 충분한 경우 '
-        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+        'columnIndexesForShowFrozen 가 리턴 되어야 한다.', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 150,
         ),
       ];
@@ -654,34 +654,34 @@ void main() {
         scroll: null,
       );
 
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [0, 2, 1, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen(), [0, 2, 1, 3, 4]);
     });
 
     testWidgets(
         '고정 컬럼이 있는 상태에서 '
         '고정 컬럼 하나를 토글하여 오른쪽 추가하고  '
         '넓이가 충분한 경우 '
-        'columnIndexesForShowFixed 가 리턴 되어야 한다.', (WidgetTester tester) async {
+        'columnIndexesForShowFrozen 가 리턴 되어야 한다.', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 150,
         ),
       ];
@@ -695,14 +695,14 @@ void main() {
         scroll: null,
       );
 
-      stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.right);
+      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFixed(), [0, 1, 3, 2, 4]);
+      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 3, 2, 4]);
     });
   });
 
@@ -714,14 +714,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 150,
         ),
       ];
@@ -739,12 +739,12 @@ void main() {
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 550, maxHeight: 600));
 
-      expect(stateManager.showFixedColumn, true);
+      expect(stateManager.showFrozenColumn, true);
 
       // 최소 넓이에서 남는 50 이상 크기를 키움
       stateManager.resizeColumn(columns.first.key, 60);
 
-      expect(stateManager.showFixedColumn, false);
+      expect(stateManager.showFrozenColumn, false);
     },
   );
 
@@ -756,14 +756,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
           width: 150,
         ),
       ];
@@ -781,12 +781,12 @@ void main() {
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 450, maxHeight: 600));
 
-      expect(stateManager.showFixedColumn, false);
+      expect(stateManager.showFrozenColumn, false);
 
       // 부족한 50 이상 컬럼 사이즈를 줄임
       stateManager.resizeColumn(columns.first.key, -60);
 
-      expect(stateManager.showFixedColumn, true);
+      expect(stateManager.showFrozenColumn, true);
     },
   );
 }

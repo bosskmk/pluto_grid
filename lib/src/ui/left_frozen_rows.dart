@@ -1,15 +1,15 @@
 part of '../../pluto_grid.dart';
 
-class RightFixedRows extends StatefulWidget {
+class LeftFrozenRows extends StatefulWidget {
   final PlutoStateManager stateManager;
 
-  RightFixedRows(this.stateManager);
+  LeftFrozenRows(this.stateManager);
 
   @override
-  _RightFixedRowsState createState() => _RightFixedRowsState();
+  _LeftFrozenRowsState createState() => _LeftFrozenRowsState();
 }
 
-class _RightFixedRowsState extends State<RightFixedRows> {
+class _LeftFrozenRowsState extends State<LeftFrozenRows> {
   List<PlutoColumn> _columns;
 
   List<PlutoRow> _rows;
@@ -29,7 +29,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
   void initState() {
     super.initState();
 
-    _columns = widget.stateManager.rightFixedColumns;
+    _columns = widget.stateManager.leftFrozenColumns;
 
     _rows = widget.stateManager.rows;
 
@@ -39,10 +39,10 @@ class _RightFixedRowsState extends State<RightFixedRows> {
   }
 
   void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.rightFixedColumns) == false ||
+    if (listEquals(_columns, widget.stateManager.leftFrozenColumns) == false ||
         listEquals(_rows, widget.stateManager._rows) == false) {
       setState(() {
-        _columns = widget.stateManager.rightFixedColumns;
+        _columns = widget.stateManager.leftFrozenColumns;
         _rows = widget.stateManager.rows;
       });
     }
@@ -57,7 +57,7 @@ class _RightFixedRowsState extends State<RightFixedRows> {
       itemExtent: PlutoDefaultSettings.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return RowWidget(
-          key: ValueKey('right_fixed_row_${_rows[i]._key}'),
+          key: ValueKey('left_frozen_row_${_rows[i]._key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
           row: _rows[i],

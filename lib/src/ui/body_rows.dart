@@ -65,13 +65,13 @@ class _BodyRowsState extends State<BodyRows> {
   }
 
   List<PlutoColumn> getColumns() {
-    return widget.stateManager.showFixedColumn == true
+    return widget.stateManager.showFrozenColumn == true
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
   }
 
   double getWidth() {
-    return widget.stateManager.showFixedColumn == true
+    return widget.stateManager.showFrozenColumn == true
         ? widget.stateManager.bodyColumnsWidth
         : widget.stateManager.columnsWidth;
   }

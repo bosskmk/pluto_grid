@@ -43,8 +43,8 @@ class PlutoColumn {
   /// Text alignment in Cell. (Left, Right)
   PlutoColumnTextAlign textAlign;
 
-  /// Fix the column to the left and right.
-  PlutoColumnFixed fixed;
+  /// Freeze the column to the left and right.
+  PlutoColumnFrozen frozen;
 
   /// Set column sorting.
   PlutoColumnSort sort;
@@ -85,7 +85,7 @@ class PlutoColumn {
     this.width = PlutoDefaultSettings.columnWidth,
     this.minWidth = PlutoDefaultSettings.minColumnWidth,
     this.textAlign = PlutoColumnTextAlign.left,
-    this.fixed = PlutoColumnFixed.none,
+    this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
     this.applyFormatterInEditing = false,
@@ -478,27 +478,27 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   bool get isRight => this == PlutoColumnTextAlign.right;
 }
 
-enum PlutoColumnFixed {
+enum PlutoColumnFrozen {
   none,
   left,
   right,
 }
 
-extension PlutoColumnFixedExtension on PlutoColumnFixed {
+extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
   bool get isNone {
-    return this == null || this == PlutoColumnFixed.none;
+    return this == null || this == PlutoColumnFrozen.none;
   }
 
   bool get isLeft {
-    return this == PlutoColumnFixed.left;
+    return this == PlutoColumnFrozen.left;
   }
 
   bool get isRight {
-    return this == PlutoColumnFixed.right;
+    return this == PlutoColumnFrozen.right;
   }
 
-  bool get isFixed {
-    return this == PlutoColumnFixed.left || this == PlutoColumnFixed.right;
+  bool get isFrozen {
+    return this == PlutoColumnFrozen.left || this == PlutoColumnFrozen.right;
   }
 }
 

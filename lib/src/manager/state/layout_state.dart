@@ -15,10 +15,10 @@ abstract class ILayoutState {
 
   double get offsetHeight;
 
-  /// Whether to apply a fixed column according to the screen size.
-  /// true : If there is a fixed column, the fixed column is exposed.
-  /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
-  bool get showFixedColumn;
+  /// Whether to apply a frozen column according to the screen size.
+  /// true : If there is a frozen column, the frozen column is exposed.
+  /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
+  bool get showFrozenColumn;
 
   /// Global offset of Grid.
   Offset get gridGlobalOffset;
@@ -29,9 +29,9 @@ abstract class ILayoutState {
 
   bool get showLoading;
 
-  bool get hasLeftFixedColumns;
+  bool get hasLeftFrozenColumns;
 
-  bool get hasRightFixedColumns;
+  bool get hasRightFrozenColumns;
 
   double get headerBottomOffset;
 
@@ -55,16 +55,16 @@ abstract class ILayoutState {
 
   double get bodyDownScrollOffset;
 
-  double get rightFixedLeftOffset;
+  double get rightFrozenLeftOffset;
 
   double get rightBlankOffset;
 
-  double get scrollOffsetByFixedColumn;
+  double get scrollOffsetByFrozenColumn;
 
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
-  void resetShowFixedColumn({bool notify = true});
+  void resetShowFrozenColumn({bool notify = true});
 
   void setShowLoading(bool flag);
 
@@ -89,9 +89,9 @@ mixin LayoutState implements IPlutoState {
 
   double get offsetHeight => maxHeight - headerHeight - footerHeight;
 
-  bool get showFixedColumn => _showFixedColumn;
+  bool get showFrozenColumn => _showFrozenColumn;
 
-  bool _showFixedColumn;
+  bool _showFrozenColumn;
 
   Offset get gridGlobalOffset {
     if (gridKey == null) {
@@ -119,9 +119,9 @@ mixin LayoutState implements IPlutoState {
 
   bool _showLoading;
 
-  bool get hasLeftFixedColumns => leftFixedColumnsWidth > 0;
+  bool get hasLeftFrozenColumns => leftFrozenColumnsWidth > 0;
 
-  bool get hasRightFixedColumns => rightFixedColumnsWidth > 0;
+  bool get hasRightFrozenColumns => rightFrozenColumnsWidth > 0;
 
   double get headerBottomOffset => maxHeight - headerHeight;
 
@@ -139,34 +139,34 @@ mixin LayoutState implements IPlutoState {
       PlutoDefaultSettings.rowTotalHeight;
 
   double get bodyLeftOffset {
-    return (showFixedColumn && leftFixedColumnsWidth > 0)
-        ? leftFixedColumnsWidth + 1
+    return (showFrozenColumn && leftFrozenColumnsWidth > 0)
+        ? leftFrozenColumnsWidth + 1
         : 0;
   }
 
   double get bodyRightOffset {
-    return (showFixedColumn && rightFixedColumnsWidth > 0)
-        ? rightFixedColumnsWidth + 1
+    return (showFrozenColumn && rightFrozenColumnsWidth > 0)
+        ? rightFrozenColumnsWidth + 1
         : 0;
   }
 
   double get bodyLeftScrollOffset {
-    final double leftFixedColumnWidth =
-        showFixedColumn ? leftFixedColumnsWidth : 0;
+    final double leftFrozenColumnWidth =
+        showFrozenColumn ? leftFrozenColumnsWidth : 0;
 
     return gridGlobalOffset.dx +
         PlutoDefaultSettings.gridPadding +
         PlutoDefaultSettings.gridBorderWidth +
-        leftFixedColumnWidth +
+        leftFrozenColumnWidth +
         PlutoDefaultSettings.offsetScrollingFromEdge;
   }
 
   double get bodyRightScrollOffset {
-    final double rightFixedColumnWidth =
-        showFixedColumn ? rightFixedColumnsWidth : 0;
+    final double rightFrozenColumnWidth =
+        showFrozenColumn ? rightFrozenColumnsWidth : 0;
 
     return (gridGlobalOffset.dx + maxWidth) -
-        rightFixedColumnWidth -
+        rightFrozenColumnWidth -
         PlutoDefaultSettings.offsetScrollingFromEdge;
   }
 
@@ -180,37 +180,37 @@ mixin LayoutState implements IPlutoState {
         PlutoDefaultSettings.offsetScrollingFromEdge;
   }
 
-  double get rightFixedLeftOffset =>
+  double get rightFrozenLeftOffset =>
       maxWidth -
       bodyRightOffset -
       PlutoDefaultSettings.totalShadowLineWidth +
       1;
 
   double get rightBlankOffset =>
-      rightFixedLeftOffset -
-      leftFixedColumnsWidth -
+      rightFrozenLeftOffset -
+      leftFrozenColumnsWidth -
       bodyColumnsWidth +
       scroll.horizontal.offset;
 
-  double get scrollOffsetByFixedColumn {
+  double get scrollOffsetByFrozenColumn {
     double offset = 0;
 
-    if (_showFixedColumn) {
-      offset += leftFixedColumnsWidth > 0 ? 1 : 0;
-      offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    if (_showFrozenColumn) {
+      offset += leftFrozenColumnsWidth > 0 ? 1 : 0;
+      offset += rightFrozenColumnsWidth > 0 ? 1 : 0;
     }
 
     return offset;
   }
 
   void setLayout(BoxConstraints size) {
-    final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
+    final _isShowFrozenColumn = isShowFrozenColumn(size.maxWidth);
 
-    final bool notify = _showFixedColumn != _isShowFixedColumn;
+    final bool notify = _showFrozenColumn != _isShowFrozenColumn;
 
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
-    _showFixedColumn = _isShowFixedColumn;
+    _showFrozenColumn = _isShowFrozenColumn;
 
     _gridGlobalOffset = null;
 
@@ -223,8 +223,8 @@ mixin LayoutState implements IPlutoState {
     }
   }
 
-  void resetShowFixedColumn({bool notify = true}) {
-    _showFixedColumn = isShowFixedColumn(_maxWidth);
+  void resetShowFrozenColumn({bool notify = true}) {
+    _showFrozenColumn = isShowFrozenColumn(_maxWidth);
 
     if (notify) {
       notifyListeners();

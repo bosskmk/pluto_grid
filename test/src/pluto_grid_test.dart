@@ -166,9 +166,9 @@ void main() {
       '2번 컬럼 고정 후 방향키 이동시 정상적으로 이동 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -192,7 +192,7 @@ void main() {
     );
 
     // 세번 째 컬럼 왼쪽 고정
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.left);
+    stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
     // 첫번 째 컬럼의 첫번 째 셀
     Finder firstCell = find.byKey(rows.first.cells['headerL0'].key);
@@ -238,8 +238,8 @@ void main() {
   });
 
   testWidgets(
-      'WHEN Fixed one column on the right when there are no fixed columns in the grid.'
-      'THEN showFixedColumn changes to true and the column is moved to the right and should disappear from its original position.',
+      'WHEN frozen one column on the right when there are no frozen columns in the grid.'
+      'THEN showFrozenColumn changes to true and the column is moved to the right and should disappear from its original position.',
       (WidgetTester tester) async {
     // given
     final columns = [
@@ -276,17 +276,17 @@ void main() {
     // Check first cell value of first column
     expect(stateManager.currentCell.value, 'header0 value 0');
 
-    // Check showFixedColumn before fixing column.
-    expect(stateManager.showFixedColumn, false);
+    // Check showFrozenColumn before freezing column.
+    expect(stateManager.showFrozenColumn, false);
 
-    // Fix the 3rd column
-    stateManager.toggleFixedColumn(columns[2].key, PlutoColumnFixed.right);
+    // Freeze the 3rd column
+    stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
 
-    // Await re-build by toggleFixedColumn
+    // Await re-build by toggleFrozenColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
-    // Check showFixedColumn after fixing column.
-    expect(stateManager.showFixedColumn, true);
+    // Check showFrozenColumn after freezing column.
+    expect(stateManager.showFrozenColumn, true);
 
     // Move current cell position to 3rd column (0 -> 1 -> 2)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -805,7 +805,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.left);
+      stateManager.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -822,9 +822,9 @@ void main() {
       expect(columns[1].title, 'body1');
       expect(columns[2].title, 'body2');
       expect(columns[3].title, 'body5');
-      expect(columns[3].fixed, PlutoColumnFixed.left);
+      expect(columns[3].frozen, PlutoColumnFrozen.left);
       expect(columns[4].title, 'body3');
-      expect(columns[4].fixed, PlutoColumnFixed.left);
+      expect(columns[4].frozen, PlutoColumnFrozen.left);
       expect(columns[5].title, 'body4');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
@@ -868,7 +868,7 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.left);
+      stateManager.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -886,12 +886,12 @@ void main() {
 
       // then
       expect(columns[0].title, 'body5');
-      expect(columns[0].fixed, PlutoColumnFixed.none);
+      expect(columns[0].frozen, PlutoColumnFrozen.none);
       expect(columns[1].title, 'body0');
       expect(columns[2].title, 'body1');
       expect(columns[3].title, 'body2');
       expect(columns[4].title, 'body3');
-      expect(columns[4].fixed, PlutoColumnFixed.left);
+      expect(columns[4].frozen, PlutoColumnFrozen.left);
       expect(columns[5].title, 'body4');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
@@ -1239,9 +1239,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1297,9 +1297,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1355,9 +1355,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1413,9 +1413,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1471,9 +1471,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1524,9 +1524,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1577,9 +1577,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1630,9 +1630,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', fixed: PlutoColumnFixed.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', fixed: PlutoColumnFixed.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1713,7 +1713,7 @@ void main() {
 
         await tester.tap(find.text('header1 value 3'));
 
-        stateManager.toggleFixedColumn(columns[1].key, PlutoColumnFixed.left);
+        stateManager.toggleFrozenColumn(columns[1].key, PlutoColumnFrozen.left);
       },
     );
 
@@ -1822,7 +1822,7 @@ void main() {
 
         await tester.tap(find.text('header3 value 5'));
 
-        stateManager.toggleFixedColumn(columns[3].key, PlutoColumnFixed.right);
+        stateManager.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.right);
       },
     );
 

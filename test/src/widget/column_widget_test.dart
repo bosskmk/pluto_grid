@@ -314,39 +314,39 @@ void main() {
     });
 
     tapColumn.test('기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('ToLeft'), findsOneWidget);
-      expect(find.text('ToRight'), findsOneWidget);
-      expect(find.text('AutoSize'), findsOneWidget);
+      expect(find.text('FreezeToLeft'), findsOneWidget);
+      expect(find.text('FreezeToRight'), findsOneWidget);
+      expect(find.text('AutoFit'), findsOneWidget);
     });
 
-    tapColumn.test('ToLeft 를 탭하면 toggleFixedColumn 이 호출 되어야 한다.',
+    tapColumn.test('FreezeToLeft 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('ToLeft'));
+      await tester.tap(find.text('FreezeToLeft'));
 
-      verify(stateManager.toggleFixedColumn(
+      verify(stateManager.toggleFrozenColumn(
         column.key,
-        PlutoColumnFixed.left,
+        PlutoColumnFrozen.left,
       )).called(1);
     });
 
-    tapColumn.test('ToRight 를 탭하면 toggleFixedColumn 이 호출 되어야 한다.',
+    tapColumn.test('FreezeToRight 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('ToRight'));
+      await tester.tap(find.text('FreezeToRight'));
 
-      verify(stateManager.toggleFixedColumn(
+      verify(stateManager.toggleFrozenColumn(
         column.key,
-        PlutoColumnFixed.right,
+        PlutoColumnFrozen.right,
       )).called(1);
     });
 
-    tapColumn.test('AutoSize 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([
         PlutoRow(cells: {
           'column_field_name': PlutoCell(value: 'cell value'),
         }),
       ]);
 
-      await tester.tap(find.text('AutoSize'));
+      await tester.tap(find.text('AutoFit'));
 
       verify(stateManager.resizeColumn(
         column.key,
@@ -360,7 +360,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.left,
+      frozen: PlutoColumnFrozen.left,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -382,26 +382,26 @@ void main() {
     });
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('Unfix'), findsOneWidget);
-      expect(find.text('ToLeft'), findsNothing);
-      expect(find.text('ToRight'), findsNothing);
-      expect(find.text('AutoSize'), findsOneWidget);
+      expect(find.text('Unfreeze'), findsOneWidget);
+      expect(find.text('FreezeToLeft'), findsNothing);
+      expect(find.text('FreezeToRight'), findsNothing);
+      expect(find.text('AutoFit'), findsOneWidget);
     });
 
-    tapColumn.test('Unfix 를 탭하면 toggleFixedColumn 이 호출 되어야 한다.',
+    tapColumn.test('Unfreeze 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('Unfix'));
+      await tester.tap(find.text('Unfreeze'));
 
-      verify(stateManager.toggleFixedColumn(
+      verify(stateManager.toggleFrozenColumn(
         column.key,
-        PlutoColumnFixed.none,
+        PlutoColumnFrozen.none,
       )).called(1);
     });
 
-    tapColumn.test('AutoSize 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
-      await tester.tap(find.text('AutoSize'));
+      await tester.tap(find.text('AutoFit'));
 
       verify(stateManager.resizeColumn(
         column.key,
@@ -415,7 +415,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.right,
+      frozen: PlutoColumnFrozen.right,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -437,26 +437,26 @@ void main() {
     });
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('Unfix'), findsOneWidget);
-      expect(find.text('ToLeft'), findsNothing);
-      expect(find.text('ToRight'), findsNothing);
-      expect(find.text('AutoSize'), findsOneWidget);
+      expect(find.text('Unfreeze'), findsOneWidget);
+      expect(find.text('FreezeToLeft'), findsNothing);
+      expect(find.text('FreezeToRight'), findsNothing);
+      expect(find.text('AutoFit'), findsOneWidget);
     });
 
-    tapColumn.test('Unfix 를 탭하면 toggleFixedColumn 이 호출 되어야 한다.',
+    tapColumn.test('Unfreeze 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('Unfix'));
+      await tester.tap(find.text('Unfreeze'));
 
-      verify(stateManager.toggleFixedColumn(
+      verify(stateManager.toggleFrozenColumn(
         column.key,
-        PlutoColumnFixed.none,
+        PlutoColumnFrozen.none,
       )).called(1);
     });
 
-    tapColumn.test('AutoSize 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
-      await tester.tap(find.text('AutoSize'));
+      await tester.tap(find.text('AutoFit'));
 
       verify(stateManager.resizeColumn(
         column.key,
@@ -470,7 +470,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.right,
+      frozen: PlutoColumnFrozen.right,
     );
 
     final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
@@ -548,7 +548,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      fixed: PlutoColumnFixed.right,
+      frozen: PlutoColumnFrozen.right,
     );
 
     final aColumnWithConfiguration = (PlutoConfiguration configuration) {

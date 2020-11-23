@@ -20,10 +20,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -83,10 +83,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -160,10 +160,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, fixed: PlutoColumnFixed.left),
+            count: 3, frozen: PlutoColumnFrozen.left),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, fixed: PlutoColumnFixed.right),
+            count: 3, frozen: PlutoColumnFrozen.right),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);

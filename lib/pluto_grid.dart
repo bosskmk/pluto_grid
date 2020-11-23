@@ -82,13 +82,13 @@ part './src/ui/body_columns.dart';
 
 part './src/ui/body_rows.dart';
 
-part './src/ui/left_fixed_columns.dart';
+part './src/ui/left_frozen_columns.dart';
 
-part './src/ui/left_fixed_rows.dart';
+part './src/ui/left_frozen_rows.dart';
 
-part './src/ui/right_fixed_columns.dart';
+part './src/ui/right_frozen_columns.dart';
 
-part './src/ui/right_fixed_rows.dart';
+part './src/ui/right_frozen_rows.dart';
 
 part './src/widget/cell_widget.dart';
 

@@ -47,7 +47,7 @@ mixin ScrollState implements IPlutoState {
     PlutoColumn columnToMove,
   ) {
     // 고정 컬럼이 보여지는 상태에서 이동 할 컬럼이 고정 컬럼인 경우 스크롤 불필요
-    return !(showFixedColumn == true && columnToMove.fixed.isFixed);
+    return !(showFrozenColumn == true && columnToMove.frozen.isFrozen);
   }
 
   void moveScrollByRow(MoveDirection direction, int rowIdx) {
@@ -86,7 +86,7 @@ mixin ScrollState implements IPlutoState {
     }
 
     final PlutoColumn columnToMove =
-        _columns[columnIndexesForShowFixed[columnIdx + direction.offset]];
+        _columns[columnIndexesForShowFrozen[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -96,13 +96,13 @@ mixin ScrollState implements IPlutoState {
     }
 
     // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
-    double offsetToMove = showFixedColumn == true
+    double offsetToMove = showFrozenColumn == true
         ? bodyColumnsWidthAtColumnIdx(
-            columnIdx + direction.offset - leftFixedColumnIndexes.length)
+            columnIdx + direction.offset - leftFrozenColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
-    final double screenOffset = showFixedColumn == true
-        ? maxWidth - leftFixedColumnsWidth - rightFixedColumnsWidth
+    final double screenOffset = showFrozenColumn == true
+        ? maxWidth - leftFrozenColumnsWidth - rightFrozenColumnsWidth
         : maxWidth;
 
     if (direction.isRight) {
@@ -110,7 +110,7 @@ mixin ScrollState implements IPlutoState {
         offsetToMove -= screenOffset;
         offsetToMove += PlutoDefaultSettings.totalShadowLineWidth;
         offsetToMove += columnToMove.width;
-        offsetToMove += scrollOffsetByFixedColumn;
+        offsetToMove += scrollOffsetByFrozenColumn;
 
         if (offsetToMove < _scroll.horizontal.offset) {
           return;
@@ -125,7 +125,7 @@ mixin ScrollState implements IPlutoState {
 
       if (offsetToNeed > currentOffset) {
         offsetToMove = _scroll.horizontal.offset + offsetToNeed - currentOffset;
-        offsetToMove += scrollOffsetByFixedColumn;
+        offsetToMove += scrollOffsetByFrozenColumn;
       } else if (offsetToMove > _scroll.horizontal.offset) {
         return;
       }

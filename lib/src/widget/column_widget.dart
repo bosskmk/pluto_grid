@@ -86,43 +86,43 @@ class _ColumnWidgetState extends State<ColumnWidget> {
       position: RelativeRect.fromRect(
           position & const Size(40, 40), Offset.zero & overlay.size),
       items: [
-        if (widget.column.fixed.isFixed == true)
+        if (widget.column.frozen.isFrozen == true)
           buildMenuItem(
-            value: _MenuItem.unfix,
-            child: buildTextItem(localeText.unfixColumn),
+            value: _MenuItem.unfreeze,
+            child: buildTextItem(localeText.unfreezeColumn),
           ),
-        if (widget.column.fixed.isFixed != true) ...[
+        if (widget.column.frozen.isFrozen != true) ...[
           buildMenuItem(
-            value: _MenuItem.toLeft,
-            child: buildTextItem(localeText.toLeftColumn),
+            value: _MenuItem.freezeToLeft,
+            child: buildTextItem(localeText.freezeColumnToLeft),
           ),
           buildMenuItem(
-            value: _MenuItem.toRight,
-            child: buildTextItem(localeText.toRightColumn),
+            value: _MenuItem.freezeToRight,
+            child: buildTextItem(localeText.freezeColumnToRight),
           ),
         ],
         const PopupMenuDivider(),
         buildMenuItem(
-          value: _MenuItem.autoSize,
-          child: buildTextItem(localeText.autoSizeColumn),
+          value: _MenuItem.autoFit,
+          child: buildTextItem(localeText.autoFitColumn),
         ),
       ],
     );
 
     switch (selectedMenu) {
-      case _MenuItem.unfix:
+      case _MenuItem.unfreeze:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.none);
+            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.none);
         break;
-      case _MenuItem.toLeft:
+      case _MenuItem.freezeToLeft:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.left);
+            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.left);
         break;
-      case _MenuItem.toRight:
+      case _MenuItem.freezeToRight:
         widget.stateManager
-            .toggleFixedColumn(widget.column._key, PlutoColumnFixed.right);
+            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.right);
         break;
-      case _MenuItem.autoSize:
+      case _MenuItem.autoFit:
         final String maxValue =
             widget.stateManager.rows.fold('', (previousValue, element) {
           final value = element.cells.entries
@@ -393,8 +393,8 @@ class __CheckboxAllSelectionWidgetState
 }
 
 enum _MenuItem {
-  unfix,
-  toLeft,
-  toRight,
-  autoSize,
+  unfreeze,
+  freezeToLeft,
+  freezeToRight,
+  autoFit,
 }
