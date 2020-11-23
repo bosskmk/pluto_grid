@@ -13,7 +13,7 @@ import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_rows_screen.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
-import 'feature/column_fixing_screen.dart';
+import 'feature/column_freezing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
 import 'feature/column_sorting_screen.dart';
@@ -189,10 +189,10 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
-            title: 'Column fixing',
-            description: 'Fix the column to the left or right.',
+            title: 'Column freezing',
+            description: 'Freeze the column to the left or right.',
             onTapLiveDemo: () {
-              Navigator.pushNamed(context, ColumnFixingScreen.routeName);
+              Navigator.pushNamed(context, ColumnFreezingScreen.routeName);
             },
           ),
           PlutoListTile(
@@ -359,11 +359,19 @@ class PlutoContributors extends StatelessWidget {
         runSpacing: 10,
         children: [
           PlutoContributorTile(
-            name: 'Manki Kim',
-            description: 'Backend developer in Korea.',
+            name: 'Kim Manki',
+            description: 'My hobby is creating flutter packages for managers or business applications.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/bosskmk');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Alexey Volkov',
+            description: 'First contributor.',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/ASGAlex');
             },
           ),
           PlutoContributorTile.invisible(

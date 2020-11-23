@@ -33,9 +33,9 @@ class DummyData {
           else
             return PlutoColumnType.text();
         }(i),
-        fixed: (i) {
-          if (i < 1) return PlutoColumnFixed.left;
-          if (i > columnLength - 2) return PlutoColumnFixed.right;
+        frozen: (i) {
+          if (i < 1) return PlutoColumnFrozen.left;
+          if (i > columnLength - 2) return PlutoColumnFrozen.right;
           return null;
         }(i),
       );

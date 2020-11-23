@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v1.0.0-pre.5
+## PlutoGrid for flutter - v1.0.0-pre.6
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
@@ -14,7 +14,7 @@ Of course, it works well on Android and IOS.
 
 <br>
 
-### [Demo Web 1.0.0-pre.5 - Preview](https://bosskmk.github.io/pluto_grid/build/preview/index.html)
+### [Demo Web 1.0.0-pre.6 - Preview](https://bosskmk.github.io/pluto_grid/build/preview/index.html)
 > You can play the demo before it is released.
 
 ### [Demo Web 0.1.21 - Latest](https://bosskmk.github.io/pluto_grid/build/web/index.html)
@@ -45,7 +45,7 @@ Of course, it works well on Android and IOS.
 - Columns
   - Dragging the column heading moves the column left and right.
   - Drag the icon to the right of the column heading to adjust the width of the column.
-  - Click the icon to the right of the column title to fix the column left or right or automatically adjust the width of the column.
+  - Click the icon to the right of the column title to freeze the column left or right or automatically adjust the width of the column.
   - Ascending or Descending the list by clicking on a column heading.
   - Text, number, date, time, select list type column.
   - (To do) Filtering.
@@ -88,7 +88,7 @@ Of course, it works well on Android and IOS.
   
 ### Screenshots
 
-#### With fixed columns on the left and right.
+#### Frozen columns on the left and right.
 ![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_1.jpg)
 
 <br>

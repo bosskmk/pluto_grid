@@ -270,7 +270,7 @@ void main() {
         'WHEN'
         'selectingMode.Row'
         'currentSelectingRows.length > 0'
-        'has fixed column In a state of sufficient width'
+        'has frozen column In a state of sufficient width'
         'THEN'
         'The values of the selected rows should be returned.',
         (WidgetTester tester) async {
@@ -280,14 +280,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ];
 
@@ -315,7 +315,7 @@ void main() {
           ClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.showFixedColumn, true);
+      expect(stateManager.showFrozenColumn, true);
 
       expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
       expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
@@ -334,7 +334,7 @@ void main() {
         'WHEN'
         'selectingMode.Row'
         'currentSelectingRows.length > 0'
-        'has fixed column In a narrow area'
+        'has frozen column In a narrow area'
         'THEN'
         'The values of the selected rows should be returned.',
         (WidgetTester tester) async {
@@ -344,14 +344,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ];
 
@@ -379,7 +379,7 @@ void main() {
           ClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.showFixedColumn, false);
+      expect(stateManager.showFrozenColumn, false);
 
       expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
       expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);

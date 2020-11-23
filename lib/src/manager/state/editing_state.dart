@@ -227,7 +227,7 @@ mixin EditingState implements IPlutoState {
     int columnStartIdx,
     int columnEndIdx,
   }) {
-    final List<int> columnIndexes = columnIndexesByShowFixed();
+    final List<int> columnIndexes = columnIndexesByShowFrozen();
 
     int textRowIdx = 0;
 

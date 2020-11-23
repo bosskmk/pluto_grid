@@ -79,7 +79,7 @@ mixin KeyboardState implements IPlutoState {
     PlutoCellPosition cellPosition,
     MoveDirection direction,
   ) {
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     switch (direction) {
       case MoveDirection.left:
@@ -181,7 +181,7 @@ mixin KeyboardState implements IPlutoState {
       return;
     }
 
-    final columnIndexes = columnIndexesByShowFixed();
+    final columnIndexes = columnIndexesByShowFrozen();
 
     final int columnIdx =
         direction.isLeft ? columnIndexes.first : columnIndexes.last;
@@ -192,7 +192,7 @@ mixin KeyboardState implements IPlutoState {
 
     setCurrentCell(cellToMove, currentRowIdx, notify: notify);
 
-    if (!showFixedColumn || column.fixed.isFixed != true) {
+    if (!showFrozenColumn || column.frozen.isFrozen != true) {
       direction.isLeft
           ? scroll.horizontal.jumpTo(0)
           : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);

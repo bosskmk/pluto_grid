@@ -6,7 +6,7 @@ class PlutoConfiguration {
 
   final Color gridBackgroundColor;
 
-  /// Grid border color. (Grid outline color, Fixed column division line color)
+  /// Grid border color. (Grid outline color, Frozen column division line color)
   final Color gridBorderColor;
 
   /// Activated Color. (Current or Selected row, cell)
@@ -112,10 +112,10 @@ class PlutoConfiguration {
 
 class PlutoGridLocaleText {
   // Column menu
-  final String unfixColumn;
-  final String toLeftColumn;
-  final String toRightColumn;
-  final String autoSizeColumn;
+  final String unfreezeColumn;
+  final String freezeColumnToLeft;
+  final String freezeColumnToRight;
+  final String autoFitColumn;
 
   // Date column popup
   final String sunday;
@@ -135,10 +135,10 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText({
     // Column menu
-    this.unfixColumn = 'Unfix',
-    this.toLeftColumn = 'ToLeft',
-    this.toRightColumn = 'ToRight',
-    this.autoSizeColumn = 'AutoSize',
+    this.unfreezeColumn = 'Unfreeze',
+    this.freezeColumnToLeft = 'FreezeToLeft',
+    this.freezeColumnToRight = 'FreezeToRight',
+    this.autoFitColumn = 'AutoFit',
     // Date popup
     this.sunday = 'Su',
     this.monday = 'Mo',
@@ -156,10 +156,10 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.korean({
     // Column menu
-    this.unfixColumn = '고정 해제',
-    this.toLeftColumn = '왼쪽 고정',
-    this.toRightColumn = '오른쪽 고정',
-    this.autoSizeColumn = '넓이 자동 조정',
+    this.unfreezeColumn = '고정 해제',
+    this.freezeColumnToLeft = '왼쪽 고정',
+    this.freezeColumnToRight = '오른쪽 고정',
+    this.autoFitColumn = '넓이 자동 조정',
     // Date popup
     this.sunday = '일',
     this.monday = '월',
@@ -177,10 +177,10 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.russian({
     // Column menu
-    this.unfixColumn = 'Открепить',
-    this.toLeftColumn = 'Закрепить слева',
-    this.toRightColumn = 'Закрепить справа',
-    this.autoSizeColumn = 'Автоматический размер',
+    this.unfreezeColumn = 'Открепить',
+    this.freezeColumnToLeft = 'Закрепить слева',
+    this.freezeColumnToRight = 'Закрепить справа',
+    this.autoFitColumn = 'Автоматический размер',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -194,6 +194,27 @@ class PlutoGridLocaleText {
     this.minute = 'Минуты',
     // Common
     this.loadingText = 'Загрузка...',
+  });
+
+  const PlutoGridLocaleText.czech({
+    // Column menu
+    this.unfreezeColumn = 'Uvolnit',
+    this.freezeColumnToLeft = 'Ukotvit vlevo',
+    this.freezeColumnToRight = 'Ukotvit vpravo',
+    this.autoFitColumn = 'Autom. přizpůsobit',
+    // Date popup
+    this.sunday = 'Ne',
+    this.monday = 'Po',
+    this.tuesday = 'Út',
+    this.wednesday = 'St',
+    this.thursday = 'Čt',
+    this.friday = 'Pá',
+    this.saturday = 'So',
+    // Time column popup
+    this.hour = 'Hodina',
+    this.minute = 'Minuta',
+    // Common
+    this.loadingText = 'Načítání...',
   });
 }
 

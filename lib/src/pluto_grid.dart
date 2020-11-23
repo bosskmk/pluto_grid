@@ -58,12 +58,12 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   PlutoEventManager eventManager;
 
-  bool _showFixedColumn;
-  bool _hasLeftFixedColumns;
+  bool _showFrozenColumn;
+  bool _hasLeftFrozenColumns;
   double _bodyLeftOffset;
   double _bodyRightOffset;
-  bool _hasRightFixedColumns;
-  double _rightFixedLeftOffset;
+  bool _hasRightFrozenColumns;
+  double _rightFrozenLeftOffset;
   bool _showLoading;
 
   List<Function()> disposeList = [];
@@ -193,12 +193,12 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void changeStateListener() {
-    if (_showFixedColumn != stateManager.showFixedColumn ||
-        _hasLeftFixedColumns != stateManager.hasLeftFixedColumns ||
+    if (_showFrozenColumn != stateManager.showFrozenColumn ||
+        _hasLeftFrozenColumns != stateManager.hasLeftFrozenColumns ||
         _bodyLeftOffset != stateManager.bodyLeftOffset ||
         _bodyRightOffset != stateManager.bodyRightOffset ||
-        _hasRightFixedColumns != stateManager.hasRightFixedColumns ||
-        _rightFixedLeftOffset != stateManager.rightFixedLeftOffset ||
+        _hasRightFrozenColumns != stateManager.hasRightFrozenColumns ||
+        _rightFrozenLeftOffset != stateManager.rightFrozenLeftOffset ||
         _showLoading != stateManager.showLoading) {
       setState(resetState);
     }
@@ -220,17 +220,17 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void resetState() {
-    _showFixedColumn = stateManager.showFixedColumn;
+    _showFrozenColumn = stateManager.showFrozenColumn;
 
-    _hasLeftFixedColumns = stateManager.hasLeftFixedColumns;
+    _hasLeftFrozenColumns = stateManager.hasLeftFrozenColumns;
 
     _bodyLeftOffset = stateManager.bodyLeftOffset;
 
     _bodyRightOffset = stateManager.bodyRightOffset;
 
-    _hasRightFixedColumns = stateManager.hasRightFixedColumns;
+    _hasRightFrozenColumns = stateManager.hasRightFrozenColumns;
 
-    _rightFixedLeftOffset = stateManager.rightFixedLeftOffset;
+    _rightFrozenLeftOffset = stateManager.rightFrozenLeftOffset;
 
     _showLoading = stateManager.showLoading;
   }
@@ -280,17 +280,17 @@ class _PlutoGridState extends State<PlutoGrid> {
                           ),
                         ),
                       ],
-                      if (_showFixedColumn && _hasLeftFixedColumns) ...[
+                      if (_showFrozenColumn && _hasLeftFrozenColumns) ...[
                         Positioned.fill(
                           top: stateManager.headerHeight,
                           left: 0,
-                          child: LeftFixedColumns(stateManager),
+                          child: LeftFrozenColumns(stateManager),
                         ),
                         Positioned.fill(
                           top: stateManager.rowsTopOffset,
                           left: 0,
                           bottom: stateManager.footerHeight,
-                          child: LeftFixedRows(stateManager),
+                          child: LeftFrozenRows(stateManager),
                         ),
                       ],
                       Positioned.fill(
@@ -306,20 +306,20 @@ class _PlutoGridState extends State<PlutoGrid> {
                         bottom: stateManager.footerHeight,
                         child: BodyRows(stateManager),
                       ),
-                      if (_showFixedColumn && _hasRightFixedColumns) ...[
+                      if (_showFrozenColumn && _hasRightFrozenColumns) ...[
                         Positioned.fill(
                           top: stateManager.headerHeight,
-                          left: _rightFixedLeftOffset,
-                          child: RightFixedColumns(stateManager),
+                          left: _rightFrozenLeftOffset,
+                          child: RightFrozenColumns(stateManager),
                         ),
                         Positioned.fill(
                           top: stateManager.rowsTopOffset,
-                          left: _rightFixedLeftOffset,
+                          left: _rightFrozenLeftOffset,
                           bottom: stateManager.footerHeight,
-                          child: RightFixedRows(stateManager),
+                          child: RightFrozenRows(stateManager),
                         ),
                       ],
-                      if (_showFixedColumn && _hasLeftFixedColumns)
+                      if (_showFrozenColumn && _hasLeftFrozenColumns)
                         Positioned(
                           top: stateManager.headerHeight,
                           left: _bodyLeftOffset - 1,
@@ -329,10 +329,10 @@ class _PlutoGridState extends State<PlutoGrid> {
                             color: stateManager.configuration.gridBorderColor,
                           ),
                         ),
-                      if (_showFixedColumn && _hasRightFixedColumns)
+                      if (_showFrozenColumn && _hasRightFrozenColumns)
                         Positioned(
                           top: stateManager.headerHeight,
-                          left: _rightFixedLeftOffset - 1,
+                          left: _rightFrozenLeftOffset - 1,
                           bottom: stateManager.footerHeight,
                           child: ShadowLine(
                             axis: Axis.vertical,
@@ -401,8 +401,8 @@ extension PlutoModeExtension on PlutoMode {
 }
 
 class PlutoDefaultSettings {
-  /// If there is a fixed column, the minimum width of the body
-  /// (if it is less than the value, the fixed column is released)
+  /// If there is a frozen column, the minimum width of the body
+  /// (if it is less than the value, the frozen column is released)
   static const double bodyMinWidth = 200.0;
 
   /// Default column width
@@ -411,10 +411,10 @@ class PlutoDefaultSettings {
   /// Column width
   static const double minColumnWidth = 80.0;
 
-  /// Fixed column division line (ShadowLine) size
+  /// Frozen column division line (ShadowLine) size
   static const double shadowLineSize = 3.0;
 
-  /// Sum of fixed column division line width
+  /// Sum of frozen column division line width
   static const double totalShadowLineWidth =
       PlutoDefaultSettings.shadowLineSize * 2;
 
