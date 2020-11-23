@@ -46,4 +46,26 @@ class ColumnHelper {
             ))
         .toList(growable: false);
   }
+
+  static List<PlutoColumn> timeColumn(
+    String title, {
+    int count = 1,
+    double width = PlutoDefaultSettings.columnWidth,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
+    bool readOnly = false,
+    dynamic defaultValue = '00:00',
+  }) {
+    return Iterable.generate(count)
+        .map((e) => PlutoColumn(
+              title: '$title$e',
+              field: '$title$e',
+              width: width,
+              frozen: frozen,
+              type: PlutoColumnType.time(
+                readOnly: readOnly,
+                defaultValue: defaultValue,
+              ),
+            ))
+        .toList(growable: false);
+  }
 }

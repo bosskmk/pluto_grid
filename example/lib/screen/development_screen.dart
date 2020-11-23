@@ -178,7 +178,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
         configuration: PlutoConfiguration(
-          rowHeight: 50.0,
+          // rowHeight: 30.0,
           scrollbarConfig: const PlutoScrollbarConfig(
             isAlwaysShown: true,
           ),

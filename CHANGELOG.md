@@ -1,3 +1,7 @@
+## [1.0.0-pre.7] - 
+
+* Add row height setting.
+
 ## [1.0.0-pre.6] - 2020. 11. 23
 
 * Add Czech locale.
