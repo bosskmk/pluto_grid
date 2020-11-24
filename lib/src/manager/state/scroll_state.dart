@@ -85,8 +85,10 @@ mixin ScrollState implements IPlutoState {
       return;
     }
 
+    final columnIndexes = columnIndexesByShowFrozen;
+
     final PlutoColumn columnToMove =
-        _columns[columnIndexesForShowFrozen[columnIdx + direction.offset]];
+        _columns[columnIndexes[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,

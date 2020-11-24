@@ -62,7 +62,7 @@ void main() {
     );
 
     // then
-    expect(find.byType(ColumnIcon), findsOneWidget);
+    expect(find.byType(PlutoGridColumnIcon), findsOneWidget);
   });
 
   testWidgets(
@@ -206,7 +206,7 @@ void main() {
     );
 
     // then
-    expect(find.byType(ColumnIcon), findsNothing);
+    expect(find.byType(PlutoGridColumnIcon), findsNothing);
   });
 
   testWidgets('enableContextMenu 이 true 면 ColumnIcon 이 출력 되어야 한다.',
@@ -232,7 +232,7 @@ void main() {
     );
 
     // then
-    final headerIcon = find.byType(ColumnIcon);
+    final headerIcon = find.byType(PlutoGridColumnIcon);
 
     expect(headerIcon, findsOneWidget);
   });
@@ -339,7 +339,7 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([
         PlutoRow(cells: {
           'column_field_name': PlutoCell(value: 'cell value'),
@@ -348,9 +348,9 @@ void main() {
 
       await tester.tap(find.text('AutoFit'));
 
-      verify(stateManager.resizeColumn(
-        column.key,
-        argThat(isA<double>()),
+      verify(stateManager.autoFitColumn(
+        argThat(isA<BuildContext>()),
+        column,
       )).called(1);
     });
   });
@@ -398,14 +398,14 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
       await tester.tap(find.text('AutoFit'));
 
-      verify(stateManager.resizeColumn(
-        column.key,
-        argThat(isA<double>()),
+      verify(stateManager.autoFitColumn(
+        argThat(isA<BuildContext>()),
+        column,
       )).called(1);
     });
   });
@@ -453,14 +453,14 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 resizeColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
       await tester.tap(find.text('AutoFit'));
 
-      verify(stateManager.resizeColumn(
-        column.key,
-        argThat(isA<double>()),
+      verify(stateManager.autoFitColumn(
+        argThat(isA<BuildContext>()),
+        column,
       )).called(1);
     });
   });
