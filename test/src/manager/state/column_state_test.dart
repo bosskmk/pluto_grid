@@ -524,7 +524,7 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2]);
+      expect(stateManager.columnIndexesByShowFrozen, [0, 1, 2]);
     });
 
     testWidgets(
@@ -553,7 +553,7 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
 
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [2, 0, 1, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen, [2, 0, 1, 3, 4]);
     });
 
     testWidgets(
@@ -582,7 +582,7 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
 
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen, [0, 1, 2, 3, 4]);
     });
 
     testWidgets(
@@ -620,7 +620,7 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 2, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen, [0, 1, 2, 3, 4]);
     });
 
     testWidgets(
@@ -661,7 +661,7 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [0, 2, 1, 3, 4]);
+      expect(stateManager.columnIndexesByShowFrozen, [0, 2, 1, 3, 4]);
     });
 
     testWidgets(
@@ -702,7 +702,7 @@ void main() {
 
       // when
       // then
-      expect(stateManager.columnIndexesByShowFrozen(), [0, 1, 3, 2, 4]);
+      expect(stateManager.columnIndexesByShowFrozen, [0, 1, 3, 2, 4]);
     });
   });
 

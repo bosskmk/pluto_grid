@@ -54,7 +54,7 @@ abstract class IColumnState {
   PlutoColumn get getSortedColumn;
 
   /// Column Index List by frozen Column
-  List<int> columnIndexesByShowFrozen();
+  List<int> get columnIndexesByShowFrozen;
 
   /// Whether a frozen column is displayed in the screen width.
   bool isShowFrozenColumn(double maxWidth);
@@ -82,6 +82,8 @@ abstract class IColumnState {
 
   /// Change column size
   void resizeColumn(Key columnKey, double offset);
+
+  void autoFitColumn(BuildContext context, PlutoColumn column);
 
   void sortAscending(PlutoColumn column);
 
@@ -195,7 +197,7 @@ mixin ColumnState implements IPlutoState {
         orElse: () => null,
       );
 
-  List<int> columnIndexesByShowFrozen() {
+  List<int> get columnIndexesByShowFrozen {
     return showFrozenColumn ? columnIndexesForShowFrozen : columnIndexes;
   }
 
@@ -270,7 +272,7 @@ mixin ColumnState implements IPlutoState {
   }
 
   int columnIndex(PlutoColumn column) {
-    final columnIndexes = columnIndexesByShowFrozen();
+    final columnIndexes = columnIndexesByShowFrozen;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
       if (_columns[columnIndexes[i]].field == column.field) {
@@ -284,7 +286,7 @@ mixin ColumnState implements IPlutoState {
   void moveColumn(Key columnKey, double offset) {
     offset -= gridGlobalOffset.dx;
 
-    final List<int> columnIndexes = columnIndexesByShowFrozen();
+    final List<int> columnIndexes = columnIndexesByShowFrozen;
 
     Function findColumnIndex = (int i) {
       if (_columns[columnIndexes[i]]._key == columnKey) {
@@ -376,6 +378,43 @@ mixin ColumnState implements IPlutoState {
     resetShowFrozenColumn(notify: false);
 
     notifyListeners();
+  }
+
+  void autoFitColumn(BuildContext context, PlutoColumn column) {
+    final String maxValue = _rows.fold('', (previousValue, element) {
+      final value = element.cells.entries
+          .firstWhere((element) => element.key == column.field)
+          .value
+          .value;
+
+      if (previousValue.toString().length < value.toString().length) {
+        return value.toString();
+      }
+
+      return previousValue.toString();
+    });
+
+    // Get size after rendering virtually
+    // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
+    TextSpan textSpan = TextSpan(
+      style: DefaultTextStyle.of(context).style,
+      text: maxValue,
+    );
+
+    TextPainter textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout();
+
+    resizeColumn(
+      column._key,
+      textPainter.width -
+          column.width +
+          (PlutoDefaultSettings.cellPadding * 2) +
+          10,
+    );
   }
 
   void sortAscending(PlutoColumn column) {

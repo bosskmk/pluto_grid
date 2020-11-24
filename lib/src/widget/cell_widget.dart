@@ -141,53 +141,6 @@ class _CellWidgetState extends State<CellWidget>
         .isSelectedCell(widget.cell, widget.column, widget.rowIdx);
   }
 
-  Widget _buildCell() {
-    if (!_isCurrentCell ||
-        !_isEditing ||
-        widget.column.enableEditingMode != true) {
-      return DefaultCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-        rowIdx: widget.rowIdx,
-      );
-    }
-
-    if (widget.column.type.isSelect) {
-      return SelectCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-      );
-    } else if (widget.column.type.isNumber) {
-      return NumberCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-      );
-    } else if (widget.column.type.isDate) {
-      return DateCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-      );
-    } else if (widget.column.type.isTime) {
-      return TimeCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-      );
-    } else if (widget.column.type.isText) {
-      return TextCellWidget(
-        stateManager: widget.stateManager,
-        cell: widget.cell,
-        column: widget.column,
-      );
-    }
-
-    throw Exception('Type not implemented.');
-  }
-
   void _addGestureEvent(PlutoGestureType gestureType, Offset offset) {
     widget.stateManager.eventManager.addEvent(
       PlutoCellGestureEvent(
@@ -229,7 +182,6 @@ class _CellWidgetState extends State<CellWidget>
       onLongPressEnd: _handleOnLongPressEnd,
       child: _CellContainerWidget(
         readOnly: widget.column.type.readOnly,
-        child: _buildCell(),
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
@@ -238,6 +190,14 @@ class _CellWidgetState extends State<CellWidget>
         selectingMode: _selectingMode,
         isSelectedCell: _isSelectedCell,
         configuration: widget.stateManager.configuration,
+        child: _BuildCellWidget(
+          stateManager: widget.stateManager,
+          rowIdx: widget.rowIdx,
+          column: widget.column,
+          cell: widget.cell,
+          isCurrentCell: _isCurrentCell,
+          isEditing: _isEditing,
+        ),
       ),
     );
   }
@@ -330,6 +290,69 @@ class _CellContainerWidget extends StatelessWidget {
           child: child,
         ),
       ),
+    );
+  }
+}
+
+class _BuildCellWidget extends StatelessWidget {
+  final PlutoStateManager stateManager;
+  final int rowIdx;
+  final PlutoColumn column;
+  final PlutoCell cell;
+  final bool isCurrentCell;
+  final bool isEditing;
+
+  const _BuildCellWidget({
+    Key key,
+    this.stateManager,
+    this.rowIdx,
+    this.column,
+    this.cell,
+    this.isCurrentCell,
+    this.isEditing,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (isCurrentCell && isEditing && column.enableEditingMode == true) {
+      if (column.type.isSelect) {
+        return SelectCellWidget(
+          stateManager: stateManager,
+          cell: cell,
+          column: column,
+        );
+      } else if (column.type.isNumber) {
+        return NumberCellWidget(
+          stateManager: stateManager,
+          cell: cell,
+          column: column,
+        );
+      } else if (column.type.isDate) {
+        return DateCellWidget(
+          stateManager: stateManager,
+          cell: cell,
+          column: column,
+        );
+      } else if (column.type.isTime) {
+        return TimeCellWidget(
+          stateManager: stateManager,
+          cell: cell,
+          column: column,
+        );
+      } else if (column.type.isText) {
+        return TextCellWidget(
+          stateManager: stateManager,
+          cell: cell,
+          column: column,
+        );
+      }
+    }
+
+    return DefaultCellWidget(
+      stateManager: stateManager,
+      cell: cell,
+      column: column,
+      rowIdx: rowIdx,
     );
   }
 }

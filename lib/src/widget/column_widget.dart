@@ -16,6 +16,8 @@ class ColumnWidget extends StatefulWidget {
 class _ColumnWidgetState extends State<ColumnWidget> {
   PlutoColumnSort _sort;
 
+  Offset _currentPosition;
+
   @override
   void dispose() {
     widget.stateManager.removeListener(changeStateListener);
@@ -44,225 +46,79 @@ class _ColumnWidgetState extends State<ColumnWidget> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    // The below GestureDetector's onTapDown event doesn't work if you click quickly, so it's null
-    if (position == null) {
-      return;
-    }
-
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
-
-    final Color textColor =
-        widget.stateManager.configuration.cellTextStyle.color;
-
-    final Color backgroundColor =
-        widget.stateManager.configuration.menuBackgroundColor;
-
-    final buildTextItem = (String text) {
-      return Text(
-        text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 13,
-        ),
-      );
-    };
-
-    final buildMenuItem = ({
-      _MenuItem value,
-      Widget child,
-    }) {
-      return PopupMenuItem(
-        value: value,
-        child: child,
-        height: 36,
-      );
-    };
-
-    final localeText = widget.stateManager.localeText;
-
-    final _MenuItem selectedMenu = await showMenu<_MenuItem>(
+    final PlutoGridColumnMenuItem selectedMenu = await showColumnMenu(
       context: context,
-      color: backgroundColor,
-      position: RelativeRect.fromRect(
-          position & const Size(40, 40), Offset.zero & overlay.size),
-      items: [
-        if (widget.column.frozen.isFrozen == true)
-          buildMenuItem(
-            value: _MenuItem.unfreeze,
-            child: buildTextItem(localeText.unfreezeColumn),
-          ),
-        if (widget.column.frozen.isFrozen != true) ...[
-          buildMenuItem(
-            value: _MenuItem.freezeToLeft,
-            child: buildTextItem(localeText.freezeColumnToLeft),
-          ),
-          buildMenuItem(
-            value: _MenuItem.freezeToRight,
-            child: buildTextItem(localeText.freezeColumnToRight),
-          ),
-        ],
-        const PopupMenuDivider(),
-        buildMenuItem(
-          value: _MenuItem.autoFit,
-          child: buildTextItem(localeText.autoFitColumn),
-        ),
-      ],
+      position: position,
+      stateManager: widget.stateManager,
+      column: widget.column,
     );
 
     switch (selectedMenu) {
-      case _MenuItem.unfreeze:
+      case PlutoGridColumnMenuItem.unfreeze:
         widget.stateManager
             .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.none);
         break;
-      case _MenuItem.freezeToLeft:
+      case PlutoGridColumnMenuItem.freezeToLeft:
         widget.stateManager
             .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.left);
         break;
-      case _MenuItem.freezeToRight:
+      case PlutoGridColumnMenuItem.freezeToRight:
         widget.stateManager
             .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.right);
         break;
-      case _MenuItem.autoFit:
-        final String maxValue =
-            widget.stateManager.rows.fold('', (previousValue, element) {
-          final value = element.cells.entries
-              .firstWhere((element) => element.key == widget.column.field)
-              .value
-              .value;
-
-          if (previousValue.toString().length < value.toString().length) {
-            return value.toString();
-          }
-
-          return previousValue.toString();
-        });
-
-        // Get size after rendering virtually
-        // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-        TextSpan textSpan = TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          text: maxValue,
-        );
-
-        TextPainter textPainter = TextPainter(
-          text: textSpan,
-          textDirection: TextDirection.ltr,
-        );
-
-        textPainter.layout();
-
-        widget.stateManager.resizeColumn(
-            widget.column._key,
-            textPainter.width -
-                widget.column.width +
-                (PlutoDefaultSettings.cellPadding * 2) +
-                10);
+      case PlutoGridColumnMenuItem.autoFit:
+        widget.stateManager.autoFitColumn(context, widget.column);
         break;
     }
   }
 
-  Widget _buildDraggable(Widget child) {
-    return Draggable(
-      onDragEnd: (dragDetails) {
-        widget.stateManager.moveColumn(widget.column._key,
-            dragDetails.offset.dx + (widget.column.width / 2));
-      },
-      feedback: ShadowContainer(
-        width: widget.column.width,
-        height: PlutoDefaultSettings.rowHeight,
-        backgroundColor: widget.stateManager.configuration.gridBackgroundColor,
-        borderColor: widget.stateManager.configuration.gridBorderColor,
-        child: Text(
-          widget.column.title,
-          style: widget.stateManager.configuration.columnTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          softWrap: false,
-        ),
-      ),
-      child: child,
-    );
+  void _handleOnTapUpContextMenu(TapUpDetails details) {
+    _showContextMenu(context, details.globalPosition);
   }
 
-  Widget _buildColumn() {
-    Widget _column = Container(
-      width: widget.column.width,
-      height: PlutoDefaultSettings.rowHeight,
-      padding: const EdgeInsets.symmetric(
-          horizontal: PlutoDefaultSettings.cellPadding),
-      decoration: widget.stateManager.configuration.enableColumnBorder
-          ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: widget.stateManager.configuration.borderColor,
-                  width: 1.0,
-                ),
-              ),
-            )
-          : const BoxDecoration(),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            if (widget.column.enableRowChecked)
-              _CheckboxAllSelectionWidget(
-                column: widget.column,
-                stateManager: widget.stateManager,
-              ),
-            Expanded(
-              child: Text(
-                widget.column.title,
-                style: widget.stateManager.configuration.columnTextStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                softWrap: false,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
+    _currentPosition = details.localPosition;
+  }
 
-    return widget.column.enableSorting
-        ? InkWell(
-            onTap: () {
-              widget.stateManager.toggleSortColumn(widget.column._key);
-            },
-            child: _column,
-          )
-        : _column;
+  void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
+    widget.stateManager
+        .resizeColumn(widget.column._key, _currentPosition.dx - 20);
   }
 
   @override
   Widget build(BuildContext context) {
-    Offset _currentPosition;
+    final _columnWidget = _BuildSortableWidget(
+      stateManager: widget.stateManager,
+      column: widget.column,
+      child: _BuildColumnWidget(
+        stateManager: widget.stateManager,
+        column: widget.column,
+      ),
+    );
 
     return Stack(
       children: [
         Positioned(
           child: widget.column.enableColumnDrag
-              ? _buildDraggable(_buildColumn())
-              : _buildColumn(),
+              ? _BuildDraggableWidget(
+                  stateManager: widget.stateManager,
+                  column: widget.column,
+                  child: _columnWidget,
+                )
+              : _columnWidget,
         ),
         if (widget.column.enableContextMenu)
           Positioned(
             right: -3,
             child: GestureDetector(
-              onTapUp: (TapUpDetails details) {
-                _showContextMenu(context, details.globalPosition);
-              },
-              onHorizontalDragUpdate: (DragUpdateDetails details) {
-                _currentPosition = details.localPosition;
-              },
-              onHorizontalDragEnd: (DragEndDetails details) {
-                widget.stateManager
-                    .resizeColumn(widget.column._key, _currentPosition.dx - 20);
-              },
+              onTapUp: _handleOnTapUpContextMenu,
+              onHorizontalDragUpdate: _handleOnHorizontalDragUpdateContextMenu,
+              onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
               child: Container(
                 height: widget.stateManager.columnHeight,
                 alignment: Alignment.center,
                 child: IconButton(
-                  icon: ColumnIcon(
+                  icon: PlutoGridColumnIcon(
                     sort: widget.column.sort,
                     color: widget.stateManager.configuration.iconColor,
                   ),
@@ -277,11 +133,11 @@ class _ColumnWidgetState extends State<ColumnWidget> {
   }
 }
 
-class ColumnIcon extends StatelessWidget {
+class PlutoGridColumnIcon extends StatelessWidget {
   final PlutoColumnSort sort;
   final Color color;
 
-  ColumnIcon({
+  PlutoGridColumnIcon({
     this.sort,
     this.color,
   });
@@ -308,6 +164,120 @@ class ColumnIcon extends StatelessWidget {
           color: color ?? Colors.black26,
         );
     }
+  }
+}
+
+class _BuildDraggableWidget extends StatelessWidget {
+  final PlutoStateManager stateManager;
+  final PlutoColumn column;
+  final Widget child;
+
+  const _BuildDraggableWidget({
+    Key key,
+    this.stateManager,
+    this.column,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable(
+      onDragEnd: (dragDetails) {
+        stateManager.moveColumn(
+            column._key, dragDetails.offset.dx + (column.width / 2));
+      },
+      feedback: ShadowContainer(
+        width: column.width,
+        height: PlutoDefaultSettings.rowHeight,
+        backgroundColor: stateManager.configuration.gridBackgroundColor,
+        borderColor: stateManager.configuration.gridBorderColor,
+        child: Text(
+          column.title,
+          style: stateManager.configuration.columnTextStyle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _BuildSortableWidget extends StatelessWidget {
+  final PlutoStateManager stateManager;
+  final PlutoColumn column;
+  final Widget child;
+
+  const _BuildSortableWidget({
+    Key key,
+    this.stateManager,
+    this.column,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return column.enableSorting
+        ? InkWell(
+            onTap: () {
+              stateManager.toggleSortColumn(column._key);
+            },
+            child: child,
+          )
+        : child;
+  }
+}
+
+class _BuildColumnWidget extends StatelessWidget {
+  final PlutoStateManager stateManager;
+  final PlutoColumn column;
+
+  const _BuildColumnWidget({
+    Key key,
+    this.stateManager,
+    this.column,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: column.width,
+      height: PlutoDefaultSettings.rowHeight,
+      padding: const EdgeInsets.symmetric(
+          horizontal: PlutoDefaultSettings.cellPadding),
+      decoration: stateManager.configuration.enableColumnBorder
+          ? BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: stateManager.configuration.borderColor,
+                  width: 1.0,
+                ),
+              ),
+            )
+          : const BoxDecoration(),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            if (column.enableRowChecked)
+              _CheckboxAllSelectionWidget(
+                column: column,
+                stateManager: stateManager,
+              ),
+            Expanded(
+              child: Text(
+                column.title,
+                style: stateManager.configuration.columnTextStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: false,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -390,11 +360,4 @@ class __CheckboxAllSelectionWidgetState
       checkColor: widget.stateManager.configuration.activatedColor,
     );
   }
-}
-
-enum _MenuItem {
-  unfreeze,
-  freezeToLeft,
-  freezeToRight,
-  autoFit,
 }

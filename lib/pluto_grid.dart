@@ -26,6 +26,8 @@ part './src/helper/datetime_helper.dart';
 
 part './src/helper/move_direction.dart';
 
+part './src/helper/show_column_menu.dart';
+
 part './src/manager/event/pluto_cannot_move_current_cell_event.dart';
 
 part './src/manager/event/pluto_cell_gesture_event.dart';

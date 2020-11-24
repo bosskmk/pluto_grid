@@ -76,7 +76,7 @@ mixin CellState implements IPlutoState {
       return null;
     }
 
-    final columnIndexes = columnIndexesByShowFrozen();
+    final columnIndexes = columnIndexesByShowFrozen;
 
     final columnField = _columns[columnIndexes.first].field;
 
@@ -143,7 +143,7 @@ mixin CellState implements IPlutoState {
       return null;
     }
 
-    final columnIndexes = columnIndexesByShowFrozen();
+    final columnIndexes = columnIndexesByShowFrozen;
 
     for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
       final field = _columns[columnIndexes[columnIdx]].field;

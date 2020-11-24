@@ -71,36 +71,38 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
     );
   }
 
-  Icon getDragIcon() {
-    return Icon(
-      Icons.drag_indicator,
-      size: 18,
-      color: widget.stateManager.configuration.iconColor,
-    );
+  void _handleOnDragStarted() {
+    addDragEventOfRow(type: PlutoDragType.start);
   }
 
-  Widget getCellWidget() {
-    return widget.column.hasRenderer
-        ? widget.column.renderer(PlutoColumnRendererContext(
-            column: widget.column,
-            rowIdx: widget.rowIdx,
-            row: thisRow,
-            cell: widget.cell,
-            stateManager: widget.stateManager,
-          ))
-        : Text(
-            widget.column.formattedValueForDisplay(widget.cell.value),
-            style: widget.stateManager.configuration.cellTextStyle.copyWith(
-              decoration: TextDecoration.none,
-              fontWeight: FontWeight.normal,
-            ),
-            overflow: TextOverflow.ellipsis,
-            textAlign: widget.column.textAlign.value,
-          );
+  void _handleOnDragUpdated(offset) {
+    addDragEventOfRow(
+      type: PlutoDragType.update,
+      offset: offset,
+    );
+
+    widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+      offset: offset,
+    ));
+  }
+
+  void _handleOnDragEnd(dragDetails) {
+    addDragEventOfRow(
+      type: PlutoDragType.end,
+      offset: dragDetails.offset,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cellWidget = _BuildDefaultCellWidget(
+      stateManager: widget.stateManager,
+      rowIdx: widget.rowIdx,
+      row: thisRow,
+      column: widget.column,
+      cell: widget.cell,
+    );
+
     return Row(
       children: [
         // todo : When onDragUpdated is added to the Draggable, remove the listener.
@@ -109,27 +111,15 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
-            onDragStarted: () {
-              addDragEventOfRow(type: PlutoDragType.start);
-            },
-            onDragUpdated: (offset) {
-              addDragEventOfRow(
-                type: PlutoDragType.update,
-                offset: offset,
-              );
-
-              widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
-                offset: offset,
-              ));
-            },
-            onDragEnd: (dragDetails) {
-              addDragEventOfRow(
-                type: PlutoDragType.end,
-                offset: dragDetails.offset,
-              );
-            },
-            dragIcon: getDragIcon(),
-            feedbackWidget: getCellWidget(),
+            onDragStarted: _handleOnDragStarted,
+            onDragUpdated: _handleOnDragUpdated,
+            onDragEnd: _handleOnDragEnd,
+            feedbackWidget: cellWidget,
+            dragIcon: Icon(
+              Icons.drag_indicator,
+              size: 18,
+              color: widget.stateManager.configuration.iconColor,
+            ),
           ),
         if (widget.column.enableRowChecked)
           _CheckboxSelectionWidget(
@@ -138,7 +128,7 @@ class _DefaultCellWidgetState extends State<DefaultCellWidget> {
             stateManager: widget.stateManager,
           ),
         Expanded(
-          child: getCellWidget(),
+          child: cellWidget,
         ),
       ],
     );
@@ -303,5 +293,43 @@ class __CheckboxSelectionWidgetState extends State<_CheckboxSelectionWidget> {
       activeColor: widget.stateManager.configuration.activatedBorderColor,
       checkColor: widget.stateManager.configuration.activatedColor,
     );
+  }
+}
+
+class _BuildDefaultCellWidget extends StatelessWidget {
+  final PlutoStateManager stateManager;
+  final int rowIdx;
+  final PlutoRow row;
+  final PlutoColumn column;
+  final PlutoCell cell;
+
+  const _BuildDefaultCellWidget({
+    Key key,
+    this.stateManager,
+    this.rowIdx,
+    this.row,
+    this.column,
+    this.cell,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return column.hasRenderer
+        ? column.renderer(PlutoColumnRendererContext(
+            column: column,
+            rowIdx: rowIdx,
+            row: row,
+            cell: cell,
+            stateManager: stateManager,
+          ))
+        : Text(
+            column.formattedValueForDisplay(cell.value),
+            style: stateManager.configuration.cellTextStyle.copyWith(
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.normal,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: column.textAlign.value,
+          );
   }
 }
