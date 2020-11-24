@@ -15,6 +15,9 @@ jobs:
     # getting for branch name
     - uses: nelonoel/branch-name@v1.0.1
 
+    - name: Set version name
+      run: echo "VERSION_NAME=$(echo $BRANCH_NAME | cut -d '/' -f 2)" >> $GITHUB_ENV
+
     # using flutter
     - uses: subosito/flutter-action@v1
     - run: flutter channel dev
@@ -37,9 +40,9 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
-        git commit -m "$BRANCH_NAME"
-        git tag "$BRANCH_NAME"
-        git push origin "$BRANCH_NAME"
+        git commit -m "$VERSION_NAME"
+        git tag "$VERSION_NAME"
+        git push origin "$VERSION_NAME"
 
     # publish to pub.dev
     - name: publish

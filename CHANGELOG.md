@@ -1,6 +1,6 @@
-## [1.0.0-pre.7] - 
+## [1.0.0-pre.7] - 2020. 11. 24
 
-* Add row height setting.
+* Added to PlutoConfiguration to allow you to set the row height.
 
 ## [1.0.0-pre.6] - 2020. 11. 23
 
