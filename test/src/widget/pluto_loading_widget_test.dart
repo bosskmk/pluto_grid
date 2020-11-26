@@ -12,7 +12,7 @@ void main() {
     indicatorSize,
   }) {
     return PlutoWidgetTestHelper('build widget.', (tester) async {
-      final widget = PlutoLoadingWidget(
+      final widget = PlutoLoading(
         backgroundColor: backgroundColor,
         indicatorColor: indicatorColor,
         indicatorText: indicatorText,

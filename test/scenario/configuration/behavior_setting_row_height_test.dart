@@ -68,7 +68,7 @@ void main() {
       (tester) async {
         expect(
           stateManager.rowTotalHeight,
-          rowHeight + PlutoDefaultSettings.rowBorderWidth,
+          rowHeight + PlutoGridSettings.rowBorderWidth,
         );
       },
     );
@@ -81,7 +81,7 @@ void main() {
       'CellWidget 의 높이가 설정 한 높이 값을 가져야 한다.',
       (tester) async {
         final cellWidget =
-            find.byType(CellWidget).evaluate().first.widget as CellWidget;
+            find.byType(PlutoBaseCell).evaluate().first.widget as PlutoBaseCell;
         expect(cellWidget.height, rowHeight);
       },
     );
@@ -110,10 +110,10 @@ void main() {
 
         final popupGrid = find.byType(PlutoGrid).last;
         final cellOfSelectPopup = find
-            .descendant(of: popupGrid, matching: find.byType(CellWidget))
+            .descendant(of: popupGrid, matching: find.byType(PlutoBaseCell))
             .evaluate()
             .first
-            .widget as CellWidget;
+            .widget as PlutoBaseCell;
 
         // select 팝업 높이 확인
         expect(cellOfSelectPopup.height, rowHeight);
@@ -149,11 +149,11 @@ void main() {
         final parent =
             find.ancestor(of: sundayColumn, matching: find.byType(PlutoGrid));
         final cellWidget = find
-            .descendant(of: parent, matching: find.byType(CellWidget))
+            .descendant(of: parent, matching: find.byType(PlutoBaseCell))
             .evaluate()
             .first
-            .widget as CellWidget;
-        expect(cellWidget.height, PlutoDefaultSettings.rowHeight);
+            .widget as PlutoBaseCell;
+        expect(cellWidget.height, PlutoGridSettings.rowHeight);
       },
     );
 
@@ -186,11 +186,11 @@ void main() {
         final parent =
             find.ancestor(of: hourColumn, matching: find.byType(PlutoGrid));
         final cellWidget = find
-            .descendant(of: parent, matching: find.byType(CellWidget))
+            .descendant(of: parent, matching: find.byType(PlutoBaseCell))
             .evaluate()
             .first
-            .widget as CellWidget;
-        expect(cellWidget.height, PlutoDefaultSettings.rowHeight);
+            .widget as PlutoBaseCell;
+        expect(cellWidget.height, PlutoGridSettings.rowHeight);
       },
     );
   });

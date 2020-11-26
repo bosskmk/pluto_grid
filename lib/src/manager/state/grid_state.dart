@@ -6,7 +6,7 @@ abstract class IGridState {
   /// FocusNode to control keyboard input.
   FocusNode get gridFocusNode;
 
-  PlutoMode get mode;
+  PlutoGridMode get mode;
 
   PlutoConfiguration get configuration;
 
@@ -39,7 +39,7 @@ abstract class IGridState {
 
   void setGridFocusNode(FocusNode focusNode);
 
-  void setGridMode(PlutoMode mode);
+  void setGridMode(PlutoGridMode mode);
 
   void setOnChanged(PlutoOnChangedEventCallback onChanged);
 
@@ -68,9 +68,9 @@ mixin GridState implements IPlutoState {
 
   FocusNode _gridFocusNode;
 
-  PlutoMode get mode => _mode;
+  PlutoGridMode get mode => _mode;
 
-  PlutoMode _mode;
+  PlutoGridMode _mode;
 
   PlutoConfiguration get configuration => _configuration;
 
@@ -120,7 +120,7 @@ mixin GridState implements IPlutoState {
     _gridFocusNode = focusNode;
   }
 
-  void setGridMode(PlutoMode mode) {
+  void setGridMode(PlutoGridMode mode) {
     _mode = mode;
   }
 

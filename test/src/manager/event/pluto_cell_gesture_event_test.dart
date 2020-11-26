@@ -78,7 +78,7 @@ void main() {
         when(stateManager.hasFocus).thenReturn(false);
         when(stateManager.isCurrentCell(any)).thenReturn(false);
         when(stateManager.isSelectingInteraction()).thenReturn(false);
-        when(stateManager.mode).thenReturn(PlutoMode.normal);
+        when(stateManager.mode).thenReturn(PlutoGridMode.normal);
         when(stateManager.isEditing).thenReturn(true);
         clearInteractions(stateManager);
 
@@ -115,7 +115,7 @@ void main() {
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isCurrentCell(any)).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(false);
-        when(stateManager.mode).thenReturn(PlutoMode.normal);
+        when(stateManager.mode).thenReturn(PlutoGridMode.normal);
         when(stateManager.isEditing).thenReturn(false);
         clearInteractions(stateManager);
 
@@ -231,7 +231,7 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(false);
-        when(stateManager.mode).thenReturn(PlutoMode.select);
+        when(stateManager.mode).thenReturn(PlutoGridMode.select);
         when(stateManager.isCurrentCell(any)).thenReturn(true);
         clearInteractions(stateManager);
 
@@ -265,7 +265,7 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(false);
-        when(stateManager.mode).thenReturn(PlutoMode.select);
+        when(stateManager.mode).thenReturn(PlutoGridMode.select);
         when(stateManager.isCurrentCell(any)).thenReturn(false);
         clearInteractions(stateManager);
 

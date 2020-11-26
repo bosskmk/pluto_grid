@@ -62,7 +62,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // then
-    final loading = find.byType(PlutoLoadingWidget);
+    final loading = find.byType(PlutoLoading);
     expect(loading, findsOneWidget);
   });
 
@@ -1587,4 +1587,17 @@ void main() {
     expect(stateManager.currentCellPosition.columnIdx, 2);
     expect(stateManager.currentCellPosition.rowIdx, 1);
   });
+
+  testWidgets(
+    '생성자를 호출 할 수 있어야 한다.',
+    (WidgetTester tester) async {
+      final PlutoOnChangedEvent onChangedEvent = PlutoOnChangedEvent(
+        columnIdx: null,
+        rowIdx: 1,
+      );
+
+      expect(onChangedEvent.columnIdx, null);
+      expect(onChangedEvent.rowIdx, 1);
+    },
+  );
 }

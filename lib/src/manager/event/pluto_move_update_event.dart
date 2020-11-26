@@ -36,8 +36,8 @@ class PlutoMoveUpdateEvent extends PlutoEvent {
         : stateManager.scroll.vertical;
 
     final double offset = move.isLeft || move.isUp
-        ? -PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce
-        : PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce;
+        ? -PlutoGridSettings.offsetScrollingFromEdgeAtOnce
+        : PlutoGridSettings.offsetScrollingFromEdgeAtOnce;
 
     scroll.animateTo(scroll.offset + offset,
         curve: Curves.ease, duration: const Duration(milliseconds: 800));

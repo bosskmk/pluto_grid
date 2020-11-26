@@ -85,10 +85,10 @@ void main() {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset.dx +
-              PlutoDefaultSettings.gridPadding +
-              PlutoDefaultSettings.gridBorderWidth +
+              PlutoGridSettings.gridPadding +
+              PlutoGridSettings.gridBorderWidth +
               stateManager.leftFrozenColumnsWidth +
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
@@ -100,7 +100,7 @@ void main() {
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
               stateManager.rightFrozenColumnsWidth -
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
@@ -136,10 +136,10 @@ void main() {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset.dx +
-              PlutoDefaultSettings.gridPadding +
-              PlutoDefaultSettings.gridBorderWidth +
+              PlutoGridSettings.gridPadding +
+              PlutoGridSettings.gridBorderWidth +
               // stateManager.leftFrozenColumnsWidth +
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
@@ -151,7 +151,7 @@ void main() {
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
               // stateManager.rightFrozenColumnsWidth -
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );

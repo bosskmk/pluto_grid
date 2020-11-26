@@ -86,10 +86,10 @@ mixin LayoutState implements IPlutoState {
   double _maxHeight;
 
   double get headerHeight =>
-      createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+      createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
   double get footerHeight =>
-      createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+      createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
   double get offsetHeight => maxHeight - headerHeight - footerHeight;
 
@@ -130,21 +130,21 @@ mixin LayoutState implements IPlutoState {
   double get headerBottomOffset => maxHeight - headerHeight;
 
   double get footerTopOffset =>
-      maxHeight - footerHeight - PlutoDefaultSettings.totalShadowLineWidth;
+      maxHeight - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
   // todo : set columnHeight from configuration.
-  double get columnHeight => PlutoDefaultSettings.rowTotalHeight;
+  double get columnHeight => PlutoGridSettings.rowTotalHeight;
 
   double get rowsTopOffset => headerHeight + columnHeight;
 
   double get rowHeight => configuration.rowHeight;
 
-  double get rowTotalHeight => rowHeight + PlutoDefaultSettings.rowBorderWidth;
+  double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;
 
   double get bodyTopOffset =>
       gridGlobalOffset.dy +
       headerHeight +
-      PlutoDefaultSettings.gridBorderWidth +
+      PlutoGridSettings.gridBorderWidth +
       columnHeight;
 
   double get bodyLeftOffset {
@@ -164,10 +164,10 @@ mixin LayoutState implements IPlutoState {
         showFrozenColumn ? leftFrozenColumnsWidth : 0;
 
     return gridGlobalOffset.dx +
-        PlutoDefaultSettings.gridPadding +
-        PlutoDefaultSettings.gridBorderWidth +
+        PlutoGridSettings.gridPadding +
+        PlutoGridSettings.gridBorderWidth +
         leftFrozenColumnWidth +
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   double get bodyRightScrollOffset {
@@ -176,24 +176,21 @@ mixin LayoutState implements IPlutoState {
 
     return (gridGlobalOffset.dx + maxWidth) -
         rightFrozenColumnWidth -
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   double get bodyUpScrollOffset {
-    return bodyTopOffset + PlutoDefaultSettings.offsetScrollingFromEdge;
+    return bodyTopOffset + PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   double get bodyDownScrollOffset {
     return gridGlobalOffset.dy +
         offsetHeight -
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   double get rightFrozenLeftOffset =>
-      maxWidth -
-      bodyRightOffset -
-      PlutoDefaultSettings.totalShadowLineWidth +
-      1;
+      maxWidth - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
 
   double get rightBlankOffset =>
       rightFrozenLeftOffset -

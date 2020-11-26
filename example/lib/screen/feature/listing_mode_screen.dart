@@ -260,7 +260,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
             openDetail(event.row);
           }
         },
-        mode: PlutoMode.select,
+        mode: PlutoGridMode.select,
       ),
     );
   }

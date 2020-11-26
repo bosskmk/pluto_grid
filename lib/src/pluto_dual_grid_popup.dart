@@ -4,7 +4,7 @@ class PlutoDualGridPopup {
   final BuildContext context;
   final PlutoDualGridProps gridPropsA;
   final PlutoDualGridProps gridPropsB;
-  final PlutoMode mode;
+  final PlutoGridMode mode;
   final PlutoDualOnSelectedEventCallback onSelected;
   final PlutoDualGridDisplay display;
   final double width;
@@ -33,7 +33,7 @@ class PlutoDualGridPopup {
                   builder: (ctx, size) {
                     return Container(
                       width: (width ?? size.maxWidth) +
-                          PlutoDefaultSettings.gridInnerSpacing,
+                          PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,
                       child: PlutoDualGrid(
                         gridPropsA: gridPropsA,

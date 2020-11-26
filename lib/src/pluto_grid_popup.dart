@@ -4,7 +4,7 @@ class PlutoGridPopup {
   final BuildContext context;
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
-  final PlutoMode mode;
+  final PlutoGridMode mode;
   final PlutoOnLoadedEventCallback onLoaded;
   final PlutoOnSelectedEventCallback onSelected;
   final double width;
@@ -38,7 +38,7 @@ class PlutoGridPopup {
               builder: (ctx, size) {
                 return Container(
                   width: (width ?? size.maxWidth) +
-                      PlutoDefaultSettings.gridInnerSpacing,
+                      PlutoGridSettings.gridInnerSpacing,
                   height: height ?? size.maxHeight,
                   child: PlutoGrid(
                     columns: columns,

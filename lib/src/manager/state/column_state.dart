@@ -209,8 +209,8 @@ mixin ColumnState implements IPlutoState {
         maxWidth >
             (leftFrozenColumnsWidth +
                 rightFrozenColumnsWidth +
-                PlutoDefaultSettings.bodyMinWidth +
-                PlutoDefaultSettings.totalShadowLineWidth);
+                PlutoGridSettings.bodyMinWidth +
+                PlutoGridSettings.totalShadowLineWidth);
   }
 
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
@@ -412,7 +412,7 @@ mixin ColumnState implements IPlutoState {
       column._key,
       textPainter.width -
           column.width +
-          (PlutoDefaultSettings.cellPadding * 2) +
+          (PlutoGridSettings.cellPadding * 2) +
           10,
     );
   }

@@ -47,7 +47,7 @@ void main() {
     withTheCellSelected.test(
       '그리드가 Select 모드 라면 onSelected 이벤트가 발생 되어야 한다.',
       (tester) async {
-        stateManager.setGridMode(PlutoMode.select);
+        stateManager.setGridMode(PlutoGridMode.select);
 
         stateManager.setOnSelected((event) {
           expect(event.row, null);

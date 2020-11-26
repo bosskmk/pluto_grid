@@ -80,7 +80,7 @@ void main() {
         event.handler(stateManager);
 
         verify(horizontal.animateTo(
-          scrollOffset - PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce,
+          scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
         ));
@@ -109,7 +109,7 @@ void main() {
         event.handler(stateManager);
 
         verify(horizontal.animateTo(
-          scrollOffset + PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce,
+          scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
         ));
@@ -138,7 +138,7 @@ void main() {
         event.handler(stateManager);
 
         verify(vertical.animateTo(
-          scrollOffset - PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce,
+          scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
         ));
@@ -167,7 +167,7 @@ void main() {
         event.handler(stateManager);
 
         verify(vertical.animateTo(
-          scrollOffset + PlutoDefaultSettings.offsetScrollingFromEdgeAtOnce,
+          scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
         ));

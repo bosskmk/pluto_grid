@@ -252,7 +252,7 @@ void main() {
     PlutoStateManager stateManager;
 
     Function({
-      PlutoMode mode,
+      PlutoGridMode mode,
       bool enableEditingMode,
       bool setCurrentCell,
       bool setIsEditing,
@@ -260,7 +260,7 @@ void main() {
 
     setUp(() {
       buildState = ({
-        mode = PlutoMode.normal,
+        mode = PlutoGridMode.normal,
         enableEditingMode = true,
         setCurrentCell = false,
         setIsEditing = false,
@@ -312,7 +312,7 @@ void main() {
       () {
         // given
         buildState(
-          mode: PlutoMode.select,
+          mode: PlutoGridMode.select,
           enableEditingMode: true,
           setCurrentCell: true,
           setIsEditing: false,
@@ -335,7 +335,7 @@ void main() {
       () {
         // given
         buildState(
-          mode: PlutoMode.normal,
+          mode: PlutoGridMode.normal,
           enableEditingMode: true,
           setCurrentCell: true,
           setIsEditing: false,
@@ -358,7 +358,7 @@ void main() {
       () {
         // given
         buildState(
-          mode: PlutoMode.normal,
+          mode: PlutoGridMode.normal,
           enableEditingMode: true,
           setCurrentCell: false,
           setIsEditing: false,
@@ -381,7 +381,7 @@ void main() {
       () {
         // given
         buildState(
-          mode: PlutoMode.normal,
+          mode: PlutoGridMode.normal,
           enableEditingMode: true,
           setCurrentCell: true,
           setIsEditing: true,
@@ -414,7 +414,7 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.select,
+          mode: PlutoGridMode.select,
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
@@ -447,7 +447,7 @@ void main() {
           rows: rows,
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.select,
+          mode: PlutoGridMode.select,
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
