@@ -1,11 +1,14 @@
 part of '../pluto_grid.dart';
 
+typedef PlutoDualOnSelectedEventCallback = void Function(
+    PlutoDualOnSelectedEvent event);
+
 class PlutoDualGrid extends StatefulWidget {
   final PlutoDualGridProps gridPropsA;
 
   final PlutoDualGridProps gridPropsB;
 
-  final PlutoMode mode;
+  final PlutoGridMode mode;
 
   final PlutoDualOnSelectedEventCallback onSelected;
 
@@ -40,7 +43,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 
   Widget _buildGrid({
     PlutoDualGridProps props,
-    PlutoMode mode,
+    PlutoGridMode mode,
     double width,
     bool isGridA,
   }) {
@@ -127,9 +130,6 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
     });
   }
 }
-
-typedef PlutoDualOnSelectedEventCallback = void Function(
-    PlutoDualOnSelectedEvent event);
 
 class PlutoDualOnSelectedEvent {
   PlutoOnSelectedEvent gridA;

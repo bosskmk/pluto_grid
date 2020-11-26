@@ -38,7 +38,7 @@ class PlutoStateManager extends PlutoState {
     @required List<PlutoRow> rows,
     @required FocusNode gridFocusNode,
     @required PlutoScrollController scroll,
-    PlutoMode mode,
+    PlutoGridMode mode,
     PlutoOnChangedEventCallback onChangedEventCallback,
     PlutoOnSelectedEventCallback onSelectedEventCallback,
     CreateHeaderCallBack createHeader,

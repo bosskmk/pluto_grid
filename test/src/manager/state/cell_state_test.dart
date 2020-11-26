@@ -486,7 +486,7 @@ void main() {
           rows: [],
           gridFocusNode: null,
           scroll: null,
-          mode: PlutoMode.select,
+          mode: PlutoGridMode.select,
         );
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(

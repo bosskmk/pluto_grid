@@ -1,5 +1,9 @@
 part of '../pluto_grid.dart';
 
+typedef PlutoOnLoadedEventCallback = void Function(PlutoOnLoadedEvent event);
+typedef PlutoOnChangedEventCallback = void Function(PlutoOnChangedEvent event);
+typedef PlutoOnSelectedEventCallback = void Function(
+    PlutoOnSelectedEvent event);
 typedef CreateHeaderCallBack = Widget Function(PlutoStateManager stateManager);
 typedef CreateFooterCallBack = Widget Function(PlutoStateManager stateManager);
 
@@ -20,13 +24,13 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoConfiguration configuration;
 
-  /// [PlutoMode.normal]
+  /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
   ///
-  /// [PlutoMode.select]
+  /// [PlutoGridMode.select]
   /// Editing is not possible, and if you press enter or tap on the list,
   /// you can receive the selected row and cell from the onSelected callback.
-  final PlutoMode mode;
+  final PlutoGridMode mode;
 
   const PlutoGrid({
     Key key,
@@ -38,7 +42,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    this.mode = PlutoMode.normal,
+    this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
   @override
@@ -254,13 +258,12 @@ class _PlutoGridState extends State<PlutoGrid> {
               return RawKeyboardListener(
                 focusNode: stateManager.gridFocusNode,
                 child: Container(
-                  padding:
-                      const EdgeInsets.all(PlutoDefaultSettings.gridPadding),
+                  padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
                   decoration: BoxDecoration(
                     color: stateManager.configuration.gridBackgroundColor,
                     border: Border.all(
                       color: stateManager.configuration.gridBorderColor,
-                      width: PlutoDefaultSettings.gridBorderWidth,
+                      width: PlutoGridSettings.gridBorderWidth,
                     ),
                   ),
                   child: Stack(
@@ -275,7 +278,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           top: stateManager.headerHeight,
                           left: 0,
                           right: 0,
-                          child: ShadowLine(
+                          child: PlutoShadowLine(
                             axis: Axis.horizontal,
                             color: stateManager.configuration.gridBorderColor,
                           ),
@@ -285,39 +288,39 @@ class _PlutoGridState extends State<PlutoGrid> {
                         Positioned.fill(
                           top: stateManager.headerHeight,
                           left: 0,
-                          child: LeftFrozenColumns(stateManager),
+                          child: PlutoLeftFrozenColumns(stateManager),
                         ),
                         Positioned.fill(
                           top: stateManager.rowsTopOffset,
                           left: 0,
                           bottom: stateManager.footerHeight,
-                          child: LeftFrozenRows(stateManager),
+                          child: PlutoLeftFrozenRows(stateManager),
                         ),
                       ],
                       Positioned.fill(
                         top: stateManager.headerHeight,
                         left: _bodyLeftOffset,
                         right: _bodyRightOffset,
-                        child: BodyColumns(stateManager),
+                        child: PlutoBodyColumns(stateManager),
                       ),
                       Positioned.fill(
                         top: stateManager.rowsTopOffset,
                         left: _bodyLeftOffset,
                         right: _bodyRightOffset,
                         bottom: stateManager.footerHeight,
-                        child: BodyRows(stateManager),
+                        child: PlutoBodyRows(stateManager),
                       ),
                       if (_showFrozenColumn && _hasRightFrozenColumns) ...[
                         Positioned.fill(
                           top: stateManager.headerHeight,
                           left: _rightFrozenLeftOffset,
-                          child: RightFrozenColumns(stateManager),
+                          child: PlutoRightFrozenColumns(stateManager),
                         ),
                         Positioned.fill(
                           top: stateManager.rowsTopOffset,
                           left: _rightFrozenLeftOffset,
                           bottom: stateManager.footerHeight,
-                          child: RightFrozenRows(stateManager),
+                          child: PlutoRightFrozenRows(stateManager),
                         ),
                       ],
                       if (_showFrozenColumn && _hasLeftFrozenColumns)
@@ -325,7 +328,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           top: stateManager.headerHeight,
                           left: _bodyLeftOffset - 1,
                           bottom: stateManager.footerHeight,
-                          child: ShadowLine(
+                          child: PlutoShadowLine(
                             axis: Axis.vertical,
                             color: stateManager.configuration.gridBorderColor,
                           ),
@@ -335,7 +338,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           top: stateManager.headerHeight,
                           left: _rightFrozenLeftOffset - 1,
                           bottom: stateManager.footerHeight,
-                          child: ShadowLine(
+                          child: PlutoShadowLine(
                             axis: Axis.vertical,
                             reverse: true,
                             color: stateManager.configuration.gridBorderColor,
@@ -345,7 +348,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                         top: stateManager.rowsTopOffset - 1,
                         left: 0,
                         right: 0,
-                        child: ShadowLine(
+                        child: PlutoShadowLine(
                           axis: Axis.horizontal,
                           color: stateManager.configuration.gridBorderColor,
                         ),
@@ -355,7 +358,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           top: stateManager.footerTopOffset,
                           left: 0,
                           right: 0,
-                          child: ShadowLine(
+                          child: PlutoShadowLine(
                             axis: Axis.horizontal,
                             reverse: true,
                             color: stateManager.configuration.gridBorderColor,
@@ -369,7 +372,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                       ],
                       if (stateManager.showLoading)
                         Positioned.fill(
-                          child: PlutoLoadingWidget(
+                          child: PlutoLoading(
                             backgroundColor:
                                 stateManager.configuration.gridBackgroundColor,
                             indicatorColor:
@@ -390,18 +393,55 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 }
 
-enum PlutoMode {
-  normal,
-  select,
+class PlutoOnLoadedEvent {
+  final PlutoStateManager stateManager;
+
+  PlutoOnLoadedEvent({
+    this.stateManager,
+  });
 }
 
-extension PlutoModeExtension on PlutoMode {
-  bool get isNormal => this == PlutoMode.normal;
+/// Caution
+///
+/// [columnIdx] and [rowIdx] are values in the currently displayed state.
+class PlutoOnChangedEvent {
+  final int columnIdx;
+  final PlutoColumn column;
+  final int rowIdx;
+  final PlutoRow row;
+  final dynamic value;
+  final dynamic oldValue;
 
-  bool get isSelect => this == PlutoMode.select;
+  PlutoOnChangedEvent({
+    this.columnIdx,
+    this.column,
+    this.rowIdx,
+    this.row,
+    this.value,
+    this.oldValue,
+  });
+
+  @override
+  String toString() {
+    String out = '[PlutoOnChangedEvent] ';
+    out += 'ColumnIndex : $columnIdx, RowIndex : $rowIdx\n';
+    out += '::: oldValue : $oldValue\n';
+    out += '::: newValue : $value';
+    return out;
+  }
 }
 
-class PlutoDefaultSettings {
+class PlutoOnSelectedEvent {
+  final PlutoRow row;
+  final PlutoCell cell;
+
+  PlutoOnSelectedEvent({
+    this.row,
+    this.cell,
+  });
+}
+
+class PlutoGridSettings {
   /// If there is a frozen column, the minimum width of the body
   /// (if it is less than the value, the frozen column is released)
   static const double bodyMinWidth = 200.0;
@@ -417,7 +457,7 @@ class PlutoDefaultSettings {
 
   /// Sum of frozen column division line width
   static const double totalShadowLineWidth =
-      PlutoDefaultSettings.shadowLineSize * 2;
+      PlutoGridSettings.shadowLineSize * 2;
 
   /// Scroll when multi-selection is as close as that value from the edge
   static const double offsetScrollingFromEdge = 10.0;
@@ -448,4 +488,15 @@ class PlutoDefaultSettings {
 
   /// Cell - fontSize
   static const double cellFontSize = 14;
+}
+
+enum PlutoGridMode {
+  normal,
+  select,
+}
+
+extension PlutoGridModeExtension on PlutoGridMode {
+  bool get isNormal => this == PlutoGridMode.normal;
+
+  bool get isSelect => this == PlutoGridMode.select;
 }

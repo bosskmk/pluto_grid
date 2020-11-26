@@ -4,7 +4,7 @@ class ColumnHelper {
   static List<PlutoColumn> textColumn(
     String title, {
     int count = 1,
-    double width = PlutoDefaultSettings.columnWidth,
+    double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
   }) {
@@ -22,7 +22,7 @@ class ColumnHelper {
   static List<PlutoColumn> dateColumn(
     String title, {
     int count = 1,
-    double width = PlutoDefaultSettings.columnWidth,
+    double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
     dynamic startDate,
@@ -50,7 +50,7 @@ class ColumnHelper {
   static List<PlutoColumn> timeColumn(
     String title, {
     int count = 1,
-    double width = PlutoDefaultSettings.columnWidth,
+    double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
     dynamic defaultValue = '00:00',

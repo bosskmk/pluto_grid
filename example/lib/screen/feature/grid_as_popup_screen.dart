@@ -68,7 +68,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       columns: columns,
       width: 600,
       rows: rows,
-      mode: PlutoMode.select,
+      mode: PlutoGridMode.select,
       onLoaded: (PlutoOnLoadedEvent event) {
         rows.asMap().entries.forEach((element) {
           final cell = element.value.cells[selectFieldName];

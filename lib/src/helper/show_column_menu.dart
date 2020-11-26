@@ -1,12 +1,5 @@
 part of '../../pluto_grid.dart';
 
-enum PlutoGridColumnMenuItem {
-  unfreeze,
-  freezeToLeft,
-  freezeToRight,
-  autoFit,
-}
-
 Future<PlutoGridColumnMenuItem> showColumnMenu({
   BuildContext context,
   Offset position,
@@ -74,4 +67,11 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
       ),
     ],
   );
+}
+
+enum PlutoGridColumnMenuItem {
+  unfreeze,
+  freezeToLeft,
+  freezeToRight,
+  autoFit,
 }

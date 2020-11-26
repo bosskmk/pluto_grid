@@ -266,7 +266,7 @@ mixin SelectingState implements IPlutoState {
     }
 
     final double gridBodyOffsetDy = gridGlobalOffset.dy +
-        PlutoDefaultSettings.gridBorderWidth +
+        PlutoGridSettings.gridBorderWidth +
         headerHeight +
         columnHeight;
 
@@ -290,8 +290,8 @@ mixin SelectingState implements IPlutoState {
 
     double currentWidth = 0.0;
     currentWidth += gridGlobalOffset.dx;
-    currentWidth += PlutoDefaultSettings.gridPadding;
-    currentWidth += PlutoDefaultSettings.gridBorderWidth;
+    currentWidth += PlutoGridSettings.gridPadding;
+    currentWidth += PlutoGridSettings.gridBorderWidth;
 
     final columnIndexes = columnIndexesByShowFrozen;
 

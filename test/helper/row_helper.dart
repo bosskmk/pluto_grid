@@ -58,6 +58,6 @@ class RowHelper {
   }
 
   static double resolveRowTotalHeight(double rowHeight) {
-    return rowHeight + PlutoDefaultSettings.rowBorderWidth;
+    return rowHeight + PlutoGridSettings.rowBorderWidth;
   }
 }

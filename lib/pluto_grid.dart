@@ -14,12 +14,6 @@ import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:rxdart/rxdart.dart';
 
-part './src/callback_event/pluto_on_changed_event.dart';
-
-part './src/callback_event/pluto_on_loaded_event.dart';
-
-part './src/callback_event/pluto_on_selected_event.dart';
-
 part './src/helper/clipboard_transformation.dart';
 
 part './src/helper/datetime_helper.dart';
@@ -68,6 +62,8 @@ part './src/model/pluto_cell.dart';
 
 part './src/model/pluto_column.dart';
 
+part './src/model/pluto_column_type.dart';
+
 part './src/model/pluto_row.dart';
 
 part './src/pluto_configuration.dart';
@@ -80,46 +76,46 @@ part './src/pluto_grid.dart';
 
 part './src/pluto_grid_popup.dart';
 
-part './src/ui/body_columns.dart';
+part './src/ui/pluto_body_columns.dart';
 
-part './src/ui/body_rows.dart';
+part './src/ui/pluto_body_rows.dart';
 
-part './src/ui/left_frozen_columns.dart';
+part './src/ui/pluto_left_frozen_columns.dart';
 
-part './src/ui/left_frozen_rows.dart';
+part './src/ui/pluto_left_frozen_rows.dart';
 
-part './src/ui/right_frozen_columns.dart';
+part './src/ui/pluto_right_frozen_columns.dart';
 
-part './src/ui/right_frozen_rows.dart';
+part './src/ui/pluto_right_frozen_rows.dart';
 
-part './src/widget/cell_widget.dart';
+part 'src/ui/pluto_base_cell.dart';
 
-part './src/widget/cells/date_cell_widget.dart';
+part './src/ui/cells/pluto_date_cell.dart';
 
-part './src/widget/cells/default_cell_widget.dart';
+part './src/ui/cells/pluto_default_cell.dart';
 
-part './src/widget/cells/number_cell_widget.dart';
+part './src/ui/cells/pluto_number_cell.dart';
 
-part './src/widget/cells/popup_base_mixin.dart';
+part './src/ui/cells/mixin_popup_cell.dart';
 
-part './src/widget/cells/select_cell_widget.dart';
+part './src/ui/cells/pluto_select_cell.dart';
 
-part './src/widget/cells/text_base_mixin.dart';
+part './src/ui/cells/mixin_text_cell.dart';
 
-part './src/widget/cells/text_cell_widget.dart';
+part './src/ui/cells/pluto_text_cell.dart';
 
-part './src/widget/cells/time_cell_widget.dart';
+part './src/ui/cells/pluto_time_cell.dart';
 
-part './src/widget/column_widget.dart';
+part 'src/ui/pluto_base_column.dart';
 
-part './src/widget/pluto_loading_widget.dart';
+part './src/widget/pluto_loading.dart';
 
 part './src/widget/pluto_scrollbar.dart';
 
-part './src/widget/row_widget.dart';
+part 'src/ui/pluto_base_row.dart';
 
-part './src/widget/scaled_checkbox.dart';
+part './src/widget/pluto_scaled_checkbox.dart';
 
-part './src/widget/shadow_container.dart';
+part './src/widget/pluto_shadow_container.dart';
 
-part './src/widget/shadow_line.dart';
+part './src/widget/pluto_shadow_line.dart';
