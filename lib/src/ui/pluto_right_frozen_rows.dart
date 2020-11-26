@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class PlutoRightFrozenRows extends StatefulWidget {
+class PlutoRightFrozenRows extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   PlutoRightFrozenRows(this.stateManager);
@@ -9,18 +9,37 @@ class PlutoRightFrozenRows extends StatefulWidget {
   _PlutoRightFrozenRowsState createState() => _PlutoRightFrozenRowsState();
 }
 
-class _PlutoRightFrozenRowsState extends State<PlutoRightFrozenRows> {
-  List<PlutoColumn> _columns;
+abstract class _PlutoRightFrozenRowsStateWithState
+    extends _PlutoStateWithChange<PlutoRightFrozenRows> {
+  List<PlutoColumn> columns;
 
-  List<PlutoRow> _rows;
+  List<PlutoRow> rows;
 
+  @override
+  void onChange() {
+    resetState((update) {
+      columns = update<List<PlutoColumn>>(
+        columns,
+        widget.stateManager.rightFrozenColumns,
+        compare: listEquals,
+      );
+
+      rows = update<List<PlutoRow>>(
+        rows,
+        widget.stateManager._rows,
+        compare: listEquals,
+        destructureList: true,
+      );
+    });
+  }
+}
+
+class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
   ScrollController scroll;
 
   @override
   void dispose() {
     scroll.dispose();
-
-    widget.stateManager.removeListener(changeStateListener);
 
     super.dispose();
   }
@@ -29,23 +48,7 @@ class _PlutoRightFrozenRowsState extends State<PlutoRightFrozenRows> {
   void initState() {
     super.initState();
 
-    _columns = widget.stateManager.rightFrozenColumns;
-
-    _rows = widget.stateManager.rows;
-
     scroll = widget.stateManager.scroll.vertical.addAndGet();
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.rightFrozenColumns) == false ||
-        listEquals(_rows, widget.stateManager._rows) == false) {
-      setState(() {
-        _columns = widget.stateManager.rightFrozenColumns;
-        _rows = widget.stateManager.rows;
-      });
-    }
   }
 
   @override
@@ -53,15 +56,15 @@ class _PlutoRightFrozenRowsState extends State<PlutoRightFrozenRows> {
     return ListView.builder(
       controller: scroll,
       scrollDirection: Axis.vertical,
-      itemCount: _rows.length,
+      itemCount: rows.length,
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('right_frozen_row_${_rows[i]._key}'),
+          key: ValueKey('right_frozen_row_${rows[i]._key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
-          row: _rows[i],
-          columns: _columns,
+          row: rows[i],
+          columns: columns,
         );
       },
     );

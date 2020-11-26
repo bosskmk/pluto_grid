@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class PlutoBaseCell extends StatefulWidget {
+class PlutoBaseCell extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final double width;
@@ -22,125 +22,52 @@ class PlutoBaseCell extends StatefulWidget {
   _PlutoBaseCellState createState() => _PlutoBaseCellState();
 }
 
-class _PlutoBaseCellState extends State<PlutoBaseCell>
-    with AutomaticKeepAliveClientMixin {
-  dynamic _cellValue;
+class _PlutoBaseCellStateWithChangeKeepAlive
+    extends _PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
+  dynamic cellValue;
 
-  bool _isCurrentCell;
+  bool isCurrentCell;
 
-  bool _isEditing;
+  bool isEditing;
 
-  PlutoSelectingMode _selectingMode;
+  PlutoSelectingMode selectingMode;
 
-  bool _isSelectedCell;
-
-  bool _keepAlive = false;
-
-  KeepAliveHandle _keepAliveHandle;
+  bool isSelectedCell;
 
   @override
-  bool get wantKeepAlive => _keepAlive;
+  void onChange() {
+    resetState((update) {
+      cellValue = update<dynamic>(cellValue, widget.cell.value);
 
-  @protected
-  void updateKeepAlive() {
-    if (wantKeepAlive) {
-      if (_keepAliveHandle == null) _ensureKeepAlive();
-    } else {
-      if (_keepAliveHandle != null) _releaseKeepAlive();
-    }
+      isCurrentCell = update<bool>(
+        isCurrentCell,
+        widget.stateManager.isCurrentCell(widget.cell),
+      );
+
+      isEditing = update<bool>(isEditing, widget.stateManager.isEditing);
+
+      selectingMode = update<PlutoSelectingMode>(
+        selectingMode,
+        widget.stateManager.selectingMode,
+      );
+
+      isSelectedCell = update<bool>(
+        isSelectedCell,
+        widget.stateManager.isSelectedCell(
+          widget.cell,
+          widget.column,
+          widget.rowIdx,
+        ),
+      );
+
+      if (widget.stateManager.mode.isNormal) {
+        setKeepAlive(isCurrentCell);
+      }
+    });
   }
+}
 
-  @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _cellValue = widget.cell.value;
-
-    _isCurrentCell = widget.stateManager.isCurrentCell(widget.cell);
-
-    _isEditing = widget.stateManager.isEditing;
-
-    _selectingMode = widget.stateManager.selectingMode;
-
-    _isSelectedCell = _getIsSelectedCell();
-
-    widget.stateManager.addListener(changeStateListener);
-
-    _resetKeepAlive();
-  }
-
-  void changeStateListener() {
-    if (widget.stateManager._rows.length - 1 < widget.rowIdx) {
-      return;
-    }
-
-    final bool changedIsCurrentCell =
-        widget.stateManager.isCurrentCell(widget.cell);
-
-    final bool changedIsEditing = widget.stateManager.isEditing;
-
-    final PlutoSelectingMode changedSelectingMode =
-        widget.stateManager.selectingMode;
-
-    final bool changedIsSelectedCell = _getIsSelectedCell();
-
-    final dynamic changedCellValue = widget
-        .stateManager._rows[widget.rowIdx].cells[widget.column.field].value;
-
-    if (_cellValue != changedCellValue ||
-        _isCurrentCell != changedIsCurrentCell ||
-        (_isCurrentCell && _isEditing != changedIsEditing) ||
-        _selectingMode != changedSelectingMode ||
-        _isSelectedCell != changedIsSelectedCell) {
-      setState(() {
-        _cellValue = changedCellValue;
-        _isCurrentCell = changedIsCurrentCell;
-        _isEditing = changedIsEditing;
-        _selectingMode = changedSelectingMode;
-        _isSelectedCell = changedIsSelectedCell;
-
-        _resetKeepAlive();
-      });
-    }
-  }
-
-  void _ensureKeepAlive() {
-    assert(_keepAliveHandle == null);
-    _keepAliveHandle = KeepAliveHandle();
-    KeepAliveNotification(_keepAliveHandle).dispatch(context);
-  }
-
-  void _releaseKeepAlive() {
-    _keepAliveHandle.release();
-    _keepAliveHandle = null;
-  }
-
-  void _resetKeepAlive() {
-    if (!widget.stateManager.mode.isNormal) {
-      return;
-    }
-
-    final bool resetKeepAlive = _isCurrentCell;
-
-    if (_keepAlive != resetKeepAlive) {
-      _keepAlive = resetKeepAlive;
-
-      updateKeepAlive();
-    }
-  }
-
-  bool _getIsSelectedCell() {
-    return widget.stateManager
-        .isSelectedCell(widget.cell, widget.column, widget.rowIdx);
-  }
-
+class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   void _addGestureEvent(PlutoGestureType gestureType, Offset offset) {
     widget.stateManager.eventManager.addEvent(
       PlutoCellGestureEvent(
@@ -185,18 +112,18 @@ class _PlutoBaseCellState extends State<PlutoBaseCell>
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
-        isCurrentCell: _isCurrentCell,
-        isEditing: _isEditing,
-        selectingMode: _selectingMode,
-        isSelectedCell: _isSelectedCell,
+        isCurrentCell: isCurrentCell,
+        isEditing: isEditing,
+        selectingMode: selectingMode,
+        isSelectedCell: isSelectedCell,
         configuration: widget.stateManager.configuration,
         child: _BuildCell(
           stateManager: widget.stateManager,
           rowIdx: widget.rowIdx,
           column: widget.column,
           cell: widget.cell,
-          isCurrentCell: _isCurrentCell,
-          isEditing: _isEditing,
+          isCurrentCell: isCurrentCell,
+          isEditing: isEditing,
         ),
       ),
     );

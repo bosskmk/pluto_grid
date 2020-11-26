@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class PlutoBodyColumns extends StatefulWidget {
+class PlutoBodyColumns extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   PlutoBodyColumns(this.stateManager);
@@ -9,18 +9,44 @@ class PlutoBodyColumns extends StatefulWidget {
   _PlutoBodyColumnsState createState() => _PlutoBodyColumnsState();
 }
 
-class _PlutoBodyColumnsState extends State<PlutoBodyColumns> {
-  List<PlutoColumn> _columns;
+abstract class _PlutoBodyColumnsStateWithChange
+    extends _PlutoStateWithChange<PlutoBodyColumns> {
+  List<PlutoColumn> columns;
 
-  double _width;
+  double width;
 
+  @override
+  void onChange() {
+    resetState((update) {
+      columns = update<List<PlutoColumn>>(
+        columns,
+        _getColumns(),
+        compare: listEquals,
+      );
+
+      width = update<double>(width, _getWidth());
+    });
+  }
+
+  List<PlutoColumn> _getColumns() {
+    return widget.stateManager.showFrozenColumn
+        ? widget.stateManager.bodyColumns
+        : widget.stateManager.columns;
+  }
+
+  double _getWidth() {
+    return widget.stateManager.showFrozenColumn
+        ? widget.stateManager.bodyColumnsWidth
+        : widget.stateManager.columnsWidth;
+  }
+}
+
+class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
   ScrollController scroll;
 
   @override
   void dispose() {
     scroll.dispose();
-
-    widget.stateManager.removeListener(changeStateListener);
 
     super.dispose();
   }
@@ -29,53 +55,22 @@ class _PlutoBodyColumnsState extends State<PlutoBodyColumns> {
   void initState() {
     super.initState();
 
-    _columns = getColumns();
-
-    _width = getWidth();
-
     scroll = widget.stateManager.scroll.horizontal.addAndGet();
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    List<PlutoColumn> changedColumns = getColumns();
-    double changedWidth = getWidth();
-
-    if (listEquals(_columns, changedColumns) == false ||
-        _width != changedWidth) {
-      setState(() {
-        _columns = changedColumns;
-        _width = changedWidth;
-      });
-    }
-  }
-
-  List<PlutoColumn> getColumns() {
-    return widget.stateManager.showFrozenColumn
-        ? widget.stateManager.bodyColumns
-        : widget.stateManager.columns;
-  }
-
-  double getWidth() {
-    return widget.stateManager.showFrozenColumn
-        ? widget.stateManager.bodyColumnsWidth
-        : widget.stateManager.columnsWidth;
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: _width,
+      width: width,
       child: ListView.builder(
         controller: scroll,
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: _columns.length,
+        itemCount: columns.length,
         itemBuilder: (ctx, i) {
           return PlutoBaseColumn(
             stateManager: widget.stateManager,
-            column: _columns[i],
+            column: columns[i],
           );
         },
       ),

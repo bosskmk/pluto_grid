@@ -1,6 +1,6 @@
 part of '../../../pluto_grid.dart';
 
-class PlutoDefaultCell extends StatefulWidget {
+class PlutoDefaultCell extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -17,39 +17,26 @@ class PlutoDefaultCell extends StatefulWidget {
   _PlutoDefaultCellState createState() => _PlutoDefaultCellState();
 }
 
-class _PlutoDefaultCellState extends State<PlutoDefaultCell> {
-  bool _hasSortedColumn;
+abstract class _PlutoDefaultCellStateWithChange
+    extends _PlutoStateWithChange<PlutoDefaultCell> {
+  bool hasSortedColumn;
 
+  @override
+  void onChange() {
+    resetState((update) {
+      hasSortedColumn = update<bool>(
+        hasSortedColumn,
+        widget.stateManager.hasSortedColumn,
+      );
+    });
+  }
+}
+
+class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
   PlutoRow get thisRow => widget.stateManager.getRowByIdx(widget.rowIdx);
 
   bool get isCurrentRowSelected {
     return widget.stateManager.isSelectedRow(thisRow?.key);
-  }
-
-  @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _hasSortedColumn = widget.stateManager.hasSortedColumn;
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    bool changeHasSortedColumn = widget.stateManager.hasSortedColumn;
-
-    if (_hasSortedColumn != changeHasSortedColumn) {
-      setState(() {
-        _hasSortedColumn = changeHasSortedColumn;
-      });
-    }
   }
 
   void addDragEventOfRow({
@@ -107,7 +94,7 @@ class _PlutoDefaultCellState extends State<PlutoDefaultCell> {
       children: [
         // todo : When onDragUpdated is added to the Draggable, remove the listener.
         // https://github.com/flutter/flutter/pull/68185
-        if (widget.column.enableRowDrag && !_hasSortedColumn)
+        if (widget.column.enableRowDrag && !hasSortedColumn)
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
@@ -226,7 +213,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
   }
 }
 
-class _CheckboxSelectionWidget extends StatefulWidget {
+class _CheckboxSelectionWidget extends _PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoRow row;
   final PlutoStateManager stateManager;
@@ -242,51 +229,36 @@ class _CheckboxSelectionWidget extends StatefulWidget {
       __CheckboxSelectionWidgetState();
 }
 
-class __CheckboxSelectionWidgetState extends State<_CheckboxSelectionWidget> {
-  bool _checked;
+abstract class __CheckboxSelectionWidgetStateWithChange
+    extends _PlutoStateWithChange<_CheckboxSelectionWidget> {
+  bool checked;
 
   @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
+  void onChange() {
+    resetState((update) {
+      checked = update<bool>(checked, widget.row.checked);
+    });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-
-    _checked = widget.row.checked;
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    bool changedChecked = widget.row.checked;
-
-    if (_checked != changedChecked) {
-      setState(() {
-        _checked = changedChecked;
-      });
-    }
-  }
-
+class __CheckboxSelectionWidgetState
+    extends __CheckboxSelectionWidgetStateWithChange {
   void _handleOnChanged(bool changed) {
-    if (changed == _checked) {
+    if (changed == checked) {
       return;
     }
 
     widget.stateManager.setRowChecked(widget.row, changed);
 
     setState(() {
-      _checked = changed;
+      checked = changed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScaledCheckbox(
-      value: _checked,
+      value: checked,
       handleOnChanged: _handleOnChanged,
       scale: 0.86,
       unselectedColor: widget.stateManager.configuration.iconColor,

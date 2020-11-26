@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class PlutoBaseColumn extends StatefulWidget {
+class PlutoBaseColumn extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
@@ -13,37 +13,20 @@ class PlutoBaseColumn extends StatefulWidget {
   _PlutoBaseColumnState createState() => _PlutoBaseColumnState();
 }
 
-class _PlutoBaseColumnState extends State<PlutoBaseColumn> {
-  PlutoColumnSort _sort;
+abstract class _PlutoBaseColumnStateWithChange
+    extends _PlutoStateWithChange<PlutoBaseColumn> {
+  PlutoColumnSort sort;
 
+  @override
+  void onChange() {
+    resetState((update) {
+      sort = update<PlutoColumnSort>(sort, widget.column.sort);
+    });
+  }
+}
+
+class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
   Offset _currentPosition;
-
-  @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _sort = widget.column.sort;
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    final changedColumn = widget.stateManager.columns
-        .firstWhere((element) => element._key == widget.column._key);
-
-    if (_sort != changedColumn.sort) {
-      setState(() {
-        _sort = changedColumn.sort;
-      });
-    }
-  }
 
   void _showContextMenu(BuildContext context, Offset position) async {
     final PlutoGridColumnMenuItem selectedMenu = await showColumnMenu(
@@ -281,7 +264,7 @@ class _BuildColumnWidget extends StatelessWidget {
   }
 }
 
-class _CheckboxAllSelectionWidget extends StatefulWidget {
+class _CheckboxAllSelectionWidget extends _PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoStateManager stateManager;
 
@@ -295,63 +278,49 @@ class _CheckboxAllSelectionWidget extends StatefulWidget {
       __CheckboxAllSelectionWidgetState();
 }
 
-class __CheckboxAllSelectionWidgetState
-    extends State<_CheckboxAllSelectionWidget> {
-  bool _checked;
+abstract class __CheckboxAllSelectionWidgetStateWithChange
+    extends _PlutoStateWithChange<_CheckboxAllSelectionWidget> {
+  bool checked;
 
   bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
 
   bool get hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
 
   @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
+  void onChange() {
+    resetState((update) {
+      checked = update<bool>(
+        checked,
+        hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow,
+      );
+    });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-
-    _checked = hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow;
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    bool changedChecked =
-        hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow;
-
-    if (_checked != changedChecked) {
-      setState(() {
-        _checked = changedChecked;
-      });
-    }
-  }
-
+class __CheckboxAllSelectionWidgetState
+    extends __CheckboxAllSelectionWidgetStateWithChange {
   void _handleOnChanged(bool changed) {
-    if (changed == _checked) {
+    if (changed == checked) {
       return;
     }
 
     changed ??= false;
 
-    if (_checked == null) {
+    if (checked == null) {
       changed = true;
     }
 
     widget.stateManager.toggleAllRowChecked(changed);
 
     setState(() {
-      _checked = changed;
+      checked = changed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScaledCheckbox(
-      value: _checked,
+      value: checked,
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,

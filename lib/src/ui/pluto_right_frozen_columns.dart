@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-class PlutoRightFrozenColumns extends StatefulWidget {
+class PlutoRightFrozenColumns extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   PlutoRightFrozenColumns(this.stateManager);
@@ -10,48 +10,43 @@ class PlutoRightFrozenColumns extends StatefulWidget {
       _PlutoRightFrozenColumnsState();
 }
 
-class _PlutoRightFrozenColumnsState extends State<PlutoRightFrozenColumns> {
-  List<PlutoColumn> _columns;
-  double _width;
+abstract class _PlutoRightFrozenColumnsStateWithChange
+    extends _PlutoStateWithChange<PlutoRightFrozenColumns> {
+  List<PlutoColumn> columns;
+
+  double width;
 
   @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-    super.dispose();
+  void onChange() {
+    resetState((update) {
+      columns = update<List<PlutoColumn>>(
+        columns,
+        widget.stateManager.rightFrozenColumns,
+        compare: listEquals,
+      );
+
+      width = update<double>(
+        width,
+        widget.stateManager.rightFrozenColumnsWidth,
+      );
+    });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-
-    _columns = widget.stateManager.rightFrozenColumns;
-    _width = widget.stateManager.rightFrozenColumnsWidth;
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    if (listEquals(_columns, widget.stateManager.rightFrozenColumns) == false ||
-        _width != widget.stateManager.rightFrozenColumnsWidth) {
-      setState(() {
-        _columns = widget.stateManager.rightFrozenColumns;
-        _width = widget.stateManager.rightFrozenColumnsWidth;
-      });
-    }
-  }
-
+class _PlutoRightFrozenColumnsState
+    extends _PlutoRightFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: _width,
+      width: width,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: _columns.length,
+        itemCount: columns.length,
         itemBuilder: (ctx, i) {
           return PlutoBaseColumn(
             stateManager: widget.stateManager,
-            column: _columns[i],
+            column: columns[i],
           );
         },
       ),

@@ -234,7 +234,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   }
 }
 
-class _DateCellHeader extends StatefulWidget {
+class _DateCellHeader extends _PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   _DateCellHeader({this.stateManager});
@@ -243,31 +243,23 @@ class _DateCellHeader extends StatefulWidget {
   _DateCellHeaderState createState() => _DateCellHeaderState();
 }
 
-class _DateCellHeaderState extends State<_DateCellHeader> {
+abstract class _DateCellHeaderStateWithChange
+    extends _PlutoStateWithChange<_DateCellHeader> {
   PlutoCell currentCell;
 
   @override
-  void dispose() {
-    widget.stateManager.removeListener(changeStateListener);
-
-    super.dispose();
+  void onChange() {
+    resetState((update) {
+      currentCell = update<PlutoCell>(
+        currentCell,
+        widget.stateManager.currentCell,
+        compare: identical,
+      );
+    });
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-
-    widget.stateManager.addListener(changeStateListener);
-  }
-
-  void changeStateListener() {
-    if (identical(currentCell, widget.stateManager.currentCell) == false) {
-      setState(() {
-        currentCell = widget.stateManager.currentCell;
-      });
-    }
-  }
-
+class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   String get currentDate {
     if (currentCell == null || currentCell.originalValue.isEmpty) {
       return '';
