@@ -6,6 +6,7 @@ class PlutoGridPopup {
   final List<PlutoRow> rows;
   final PlutoGridMode mode;
   final PlutoOnLoadedEventCallback onLoaded;
+  final PlutoOnChangedEventCallback onChanged;
   final PlutoOnSelectedEventCallback onSelected;
   final double width;
   final double height;
@@ -19,6 +20,7 @@ class PlutoGridPopup {
     this.rows,
     this.mode,
     this.onLoaded,
+    this.onChanged,
     this.onSelected,
     this.width,
     this.height,
@@ -45,6 +47,7 @@ class PlutoGridPopup {
                     rows: rows,
                     mode: mode,
                     onLoaded: onLoaded,
+                    onChanged: onChanged,
                     onSelected: (PlutoOnSelectedEvent event) {
                       Navigator.pop(ctx, event);
                     },

@@ -25,7 +25,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
         title: 'Permission',
         field: 'permission',
         type: PlutoColumnType.number(),
-        formatter: (String value) {
+        formatter: (dynamic value) {
           if (value == '1') {
             return '(1) Allowed';
           } else {
@@ -40,7 +40,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
           readOnly: true,
         ),
         applyFormatterInEditing: true,
-        formatter: (String value) {
+        formatter: (dynamic value) {
           if (value == '1') {
             return '(1) Allowed';
           } else {
@@ -53,7 +53,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
         field: 'group',
         type: PlutoColumnType.select(['A', 'B', 'C', 'N']),
         applyFormatterInEditing: true,
-        formatter: (String value) {
+        formatter: (dynamic value) {
           switch (value) {
             case 'A':
               return '(A) Admin';
@@ -71,7 +71,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
         field: 'group_original_value',
         type: PlutoColumnType.select(['A', 'B', 'C', 'N']),
         applyFormatterInEditing: false,
-        formatter: (String value) {
+        formatter: (dynamic value) {
           switch (value) {
             case 'A':
               return '(A) Admin';

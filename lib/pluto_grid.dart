@@ -12,9 +12,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:rxdart/rxdart.dart';
 
 part './src/helper/clipboard_transformation.dart';
+
+part './src/helper/filter_helper.dart';
 
 part './src/helper/datetime_helper.dart';
 
@@ -45,6 +48,8 @@ part './src/manager/state/column_state.dart';
 part './src/manager/state/dragging_row_state.dart';
 
 part './src/manager/state/editing_state.dart';
+
+part './src/manager/state/filtering_row_state.dart';
 
 part './src/manager/state/grid_state.dart';
 
@@ -88,7 +93,7 @@ part './src/ui/pluto_right_frozen_columns.dart';
 
 part './src/ui/pluto_right_frozen_rows.dart';
 
-part 'src/ui/pluto_base_cell.dart';
+part './src/ui/pluto_base_cell.dart';
 
 part './src/ui/cells/pluto_date_cell.dart';
 
@@ -106,7 +111,7 @@ part './src/ui/cells/pluto_text_cell.dart';
 
 part './src/ui/cells/pluto_time_cell.dart';
 
-part 'src/ui/pluto_base_column.dart';
+part './src/ui/pluto_base_column.dart';
 
 part './src/widget/pluto_loading.dart';
 

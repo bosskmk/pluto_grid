@@ -249,6 +249,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.2"
+  pluto_filtered_list:
+    dependency: "direct main"
+    description:
+      name: pluto_filtered_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-alpha.3"
   pub_semver:
     dependency: transitive
     description:

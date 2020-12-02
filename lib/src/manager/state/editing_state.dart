@@ -166,6 +166,8 @@ mixin EditingState implements IPlutoState {
             return;
           }
 
+          _rows[rowIdx]._setState(PlutoRowState.updated);
+
           _rows[rowIdx].cells[field].value =
               value = castValueByColumnType(value, currentColumn);
 
@@ -277,6 +279,8 @@ mixin EditingState implements IPlutoState {
           ++textColumnIdx;
           continue;
         }
+
+        _rows[rowIdx]._setState(PlutoRowState.updated);
 
         currentRow.value =
             newValue = castValueByColumnType(newValue, currentColumn);

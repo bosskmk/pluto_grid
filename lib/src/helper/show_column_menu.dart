@@ -16,11 +16,14 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
 
   final Color backgroundColor = stateManager.configuration.menuBackgroundColor;
 
-  final buildTextItem = (String text) {
+  final buildTextItem = (
+    String text, {
+    bool enabled = true,
+  }) {
     return Text(
       text,
       style: TextStyle(
-        color: textColor,
+        color: enabled ? textColor : textColor.withOpacity(0.5),
         fontSize: 13,
       ),
     );
@@ -29,11 +32,13 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
   final buildMenuItem = <PlutoGridColumnMenuItem>({
     PlutoGridColumnMenuItem value,
     Widget child,
+    bool enabled = true,
   }) {
     return PopupMenuItem<PlutoGridColumnMenuItem>(
       value: value,
       child: child,
       height: 36,
+      enabled: enabled,
     );
   };
 
@@ -65,6 +70,21 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
         value: PlutoGridColumnMenuItem.autoFit,
         child: buildTextItem(localeText.autoFitColumn),
       ),
+      if (column.enableFilterMenuItem == true) ...[
+        const PopupMenuDivider(),
+        buildMenuItem(
+          value: PlutoGridColumnMenuItem.setFilter,
+          child: buildTextItem(localeText.setFilter),
+        ),
+        buildMenuItem(
+          value: PlutoGridColumnMenuItem.resetFilter,
+          child: buildTextItem(
+            localeText.resetFilter,
+            enabled: stateManager.hasFilter,
+          ),
+          enabled: stateManager.hasFilter,
+        ),
+      ],
     ],
   );
 }
@@ -74,4 +94,6 @@ enum PlutoGridColumnMenuItem {
   freezeToLeft,
   freezeToRight,
   autoFit,
+  setFilter,
+  resetFilter,
 }

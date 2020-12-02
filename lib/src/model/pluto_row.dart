@@ -13,6 +13,7 @@ class PlutoRow {
     this.sortIdx,
     bool checked = false,
   })  : _checked = checked,
+        _state = PlutoRowState.none,
         _key = UniqueKey();
 
   /// The state value that the checkbox is checked.
@@ -29,6 +30,14 @@ class PlutoRow {
     _checked = flag;
   }
 
+  PlutoRowState get state => _state;
+
+  PlutoRowState _state;
+
+  void _setState(PlutoRowState state) {
+    _state = state;
+  }
+
   /// Row key
   Key get key => _key;
 
@@ -38,4 +47,18 @@ class PlutoRow {
   void setChecked(bool flag) {
     _checked = flag;
   }
+}
+
+enum PlutoRowState {
+  none,
+  added,
+  updated,
+}
+
+extension PlutoRowStateExtension on PlutoRowState {
+  bool get isNone => this == PlutoRowState.none;
+
+  bool get isAdded => this == PlutoRowState.added;
+
+  bool get isUpdated => this == PlutoRowState.updated;
 }

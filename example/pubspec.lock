@@ -135,6 +135,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  pluto_filtered_list:
+    dependency: transitive
+    description:
+      name: pluto_filtered_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-alpha.3"
   pluto_grid:
     dependency: "direct main"
     description:

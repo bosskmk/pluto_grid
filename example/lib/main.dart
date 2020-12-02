@@ -6,6 +6,7 @@ import 'screen/development_screen.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
 import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
+import 'screen/feature/column_filtering_screen.dart';
 import 'screen/feature/column_freezing_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         ColumnFreezingScreen.routeName: (context) => ColumnFreezingScreen(),
         ColumnResizingScreen.routeName: (context) => ColumnResizingScreen(),
         ColumnSortingScreen.routeName: (context) => ColumnSortingScreen(),
+        ColumnFilteringScreen.routeName: (context) => ColumnFilteringScreen(),
         TextTypeColumnScreen.routeName: (context) => TextTypeColumnScreen(),
         NumberTypeColumnScreen.routeName: (context) => NumberTypeColumnScreen(),
         DateTypeColumnScreen.routeName: (context) => DateTypeColumnScreen(),

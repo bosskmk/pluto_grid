@@ -1,6 +1,6 @@
 part of '../../pluto_grid.dart';
 
-typedef PlutoColumnValueFormatter = String Function(String value);
+typedef PlutoColumnValueFormatter = String Function(dynamic value);
 
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
@@ -55,6 +55,10 @@ class PlutoColumn {
   /// Displays the right icon of the column title.
   bool enableContextMenu;
 
+  /// Displays filter-related menus in the column context menu.
+  /// Valid only when [enableContextMenu] is activated.
+  bool enableFilterMenuItem;
+
   /// Entering the Enter key or tapping the cell enters the Editing mode.
   bool enableEditingMode;
 
@@ -75,6 +79,7 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
+    this.enableFilterMenuItem = true,
     this.enableEditingMode = true,
   }) : _key = UniqueKey();
 
@@ -95,7 +100,7 @@ class PlutoColumn {
 
   String formattedValueForDisplay(dynamic value) {
     if (formatter != null) {
-      return formatter(value.toString()).toString();
+      return formatter(value).toString();
     }
 
     return formattedValueForType(value);
@@ -107,7 +112,7 @@ class PlutoColumn {
           type.readOnly || type.isSelect || type.isTime || type.isDate;
 
       if (applyFormatterInEditing && allowFormatting) {
-        return formatter(value.toString()).toString();
+        return formatter(value).toString();
       }
     }
 

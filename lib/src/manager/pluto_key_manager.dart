@@ -168,10 +168,10 @@ class PlutoKeyManager {
           lastChildContext is StatefulElement &&
           lastChildContext?.dirty != true &&
           lastChildContext.widget is EditableText) {
-        stateManager.gridFocusNode.unfocus();
         developer.log('TODO',
             name: 'data_grid',
             error: 'Enter twice when entering Korean on the web.');
+        return;
       }
 
       if (stateManager.configuration.enterKeyAction.isToggleEditing) {

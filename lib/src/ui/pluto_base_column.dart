@@ -52,6 +52,15 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
       case PlutoGridColumnMenuItem.autoFit:
         widget.stateManager.autoFitColumn(context, widget.column);
         break;
+      case PlutoGridColumnMenuItem.setFilter:
+        widget.stateManager.showFilterPopup(
+          context,
+          calledColumn: widget.column,
+        );
+        break;
+      case PlutoGridColumnMenuItem.resetFilter:
+        widget.stateManager.setFilter(null);
+        break;
     }
   }
 
@@ -105,7 +114,7 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
                     sort: widget.column.sort,
                     color: widget.stateManager.configuration.iconColor,
                   ),
-                  iconSize: 18,
+                  iconSize: widget.stateManager.configuration.iconSize,
                   onPressed: null,
                 ),
               ),
@@ -249,12 +258,9 @@ class _BuildColumnWidget extends StatelessWidget {
                 stateManager: stateManager,
               ),
             Expanded(
-              child: Text(
-                column.title,
-                style: stateManager.configuration.columnTextStyle,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                softWrap: false,
+              child: _ColumnTextWidget(
+                column: column,
+                stateManager: stateManager,
               ),
             ),
           ],
@@ -327,6 +333,70 @@ class __CheckboxAllSelectionWidgetState
       unselectedColor: widget.stateManager.configuration.iconColor,
       activeColor: widget.stateManager.configuration.activatedBorderColor,
       checkColor: widget.stateManager.configuration.activatedColor,
+    );
+  }
+}
+
+class _ColumnTextWidget extends _PlutoStatefulWidget {
+  final PlutoColumn column;
+  final PlutoStateManager stateManager;
+
+  _ColumnTextWidget({
+    this.column,
+    this.stateManager,
+  });
+
+  @override
+  __ColumnTextWidgetState createState() => __ColumnTextWidgetState();
+}
+
+abstract class __ColumnTextWidgetStateWithChange
+    extends _PlutoStateWithChange<_ColumnTextWidget> {
+  bool isFilteredList;
+
+  @override
+  void onChange() {
+    resetState((update) {
+      isFilteredList = update<bool>(
+        isFilteredList,
+        widget.stateManager.isFilteredColumn(widget.column),
+      );
+    });
+  }
+
+  void handleOnPressedFilter() {
+    widget.stateManager.showFilterPopup(
+      context,
+      calledColumn: widget.column,
+    );
+  }
+}
+
+class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: widget.column.title,
+        children: [
+          if (isFilteredList)
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: IconButton(
+                icon: Icon(
+                  Icons.filter_alt_outlined,
+                  color: widget.stateManager.configuration.iconColor,
+                  size: widget.stateManager.configuration.iconSize,
+                ),
+                onPressed: handleOnPressedFilter,
+              ),
+            ),
+        ],
+      ),
+      style: widget.stateManager.configuration.columnTextStyle,
+      overflow: TextOverflow.ellipsis,
+      softWrap: false,
+      maxLines: 1,
     );
   }
 }

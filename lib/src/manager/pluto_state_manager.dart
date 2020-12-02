@@ -6,6 +6,7 @@ abstract class IPlutoState extends ChangeNotifier
         IColumnState,
         IDraggingRowState,
         IEditingState,
+        IFilteringRowState,
         IGridState,
         IKeyboardState,
         ILayoutState,
@@ -21,14 +22,25 @@ class PlutoState extends ChangeNotifier
         ColumnState,
         DraggingRowState,
         EditingState,
+        FilteringRowState,
         GridState,
         KeyboardState,
         LayoutState,
         RowState,
         ScrollState,
         SelectingState {
+  bool _disposed = false;
+
+  @override
+  dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   notifyListeners() {
-    super.notifyListeners();
+    if (!_disposed) {
+      super.notifyListeners();
+    }
   }
 }
 
@@ -46,7 +58,7 @@ class PlutoStateManager extends PlutoState {
     PlutoConfiguration configuration,
   }) {
     _columns = columns;
-    _rows = rows;
+    _rows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
     setGridMode(mode);

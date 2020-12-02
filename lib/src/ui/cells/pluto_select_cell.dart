@@ -43,6 +43,7 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
         field: widget.column.title,
         type: PlutoColumnType.text(readOnly: true),
         formatter: widget.column.formatter,
+        enableFilterMenuItem: false,
       )
     ];
 
