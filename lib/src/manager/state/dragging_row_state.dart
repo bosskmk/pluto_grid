@@ -7,6 +7,8 @@ abstract class IDraggingRowState {
 
   int get dragTargetRowIdx;
 
+  bool get canRowDrag;
+
   void setIsDraggingRow(
     bool flag, {
     bool notify = true,
@@ -43,6 +45,8 @@ mixin DraggingRowState implements IPlutoState {
   int get dragTargetRowIdx => _dragTargetRowIdx;
 
   int _dragTargetRowIdx;
+
+  bool get canRowDrag => !hasSortedColumn && !hasFilter;
 
   void setIsDraggingRow(
     bool flag, {

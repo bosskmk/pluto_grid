@@ -727,7 +727,7 @@ void main() {
           title: 'number column',
           field: 'number_column',
           type: PlutoColumnType.number(), // 기본 포멧 (#,###)
-          formatter: (String value) => '\$ $value',
+          formatter: (dynamic value) => '\$ $value',
         );
 
         expect(column.formattedValueForDisplay(12345), '\$ 12345');

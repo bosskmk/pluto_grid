@@ -110,6 +110,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column5',
         field: 'column5',
         type: PlutoColumnType.text(),
+        enableFilterMenuItem: false,
         enableEditingMode: false,
         renderer: (rendererContext) {
           return Image.network(
@@ -163,6 +164,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         },
         createHeader: (PlutoStateManager stateManager) {
           return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
             child: Container(
               height: stateManager.headerHeight,
               child: Row(
@@ -172,6 +174,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     onPressed: () {
                       handleAddRowButton(count: 10);
                     },
+                  ),
+                  FlatButton(
+                    child: const Text('Add 100 Rows'),
+                    onPressed: () => handleAddRowButton(count: 100),
                   ),
                   FlatButton(
                     child: const Text('Remove Current Row'),
@@ -213,6 +219,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           scrollbarConfig: const PlutoScrollbarConfig(
             isAlwaysShown: true,
           ),
+          // localeText: const PlutoGridLocaleText.korean(),
         ),
       ),
     );

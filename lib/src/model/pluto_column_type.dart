@@ -152,7 +152,7 @@ class PlutoColumnTypeText implements PlutoColumnType {
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.compareTo(b);
+    return a.toString().compareTo(b.toString());
   }
 }
 
@@ -279,6 +279,17 @@ class PlutoColumnTypeDate
   }
 
   int compare(dynamic a, dynamic b) {
+    var emptyA = a == null || a == '';
+    var emptyB = b == null || b == '';
+
+    if (emptyA || emptyB) {
+      return emptyA == emptyB
+          ? 0
+          : emptyA
+              ? -1
+              : 1;
+    }
+
     final dateFormat = intl.DateFormat(format);
 
     final _a = dateFormat.parse(a);

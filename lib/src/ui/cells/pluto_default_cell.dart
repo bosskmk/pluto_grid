@@ -19,14 +19,14 @@ class PlutoDefaultCell extends _PlutoStatefulWidget {
 
 abstract class _PlutoDefaultCellStateWithChange
     extends _PlutoStateWithChange<PlutoDefaultCell> {
-  bool hasSortedColumn;
+  bool canRowDrag;
 
   @override
   void onChange() {
     resetState((update) {
-      hasSortedColumn = update<bool>(
-        hasSortedColumn,
-        widget.stateManager.hasSortedColumn,
+      canRowDrag = update<bool>(
+        canRowDrag,
+        widget.stateManager.canRowDrag,
       );
     });
   }
@@ -94,7 +94,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
       children: [
         // todo : When onDragUpdated is added to the Draggable, remove the listener.
         // https://github.com/flutter/flutter/pull/68185
-        if (widget.column.enableRowDrag && !hasSortedColumn)
+        if (widget.column.enableRowDrag && canRowDrag)
           _RowDragIconWidget(
             column: widget.column,
             stateManager: widget.stateManager,
@@ -104,7 +104,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
             feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
-              size: 18,
+              size: widget.stateManager.configuration.iconSize,
               color: widget.stateManager.configuration.iconColor,
             ),
           ),

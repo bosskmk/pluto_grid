@@ -3,7 +3,7 @@ part of '../../../pluto_grid.dart';
 abstract class IRowState {
   List<PlutoRow> get rows;
 
-  List<PlutoRow> _rows;
+  FilteredList<PlutoRow> _rows;
 
   List<PlutoRow> get checkedRows;
 
@@ -74,7 +74,7 @@ abstract class IRowState {
 mixin RowState implements IPlutoState {
   List<PlutoRow> get rows => [..._rows];
 
-  List<PlutoRow> _rows;
+  FilteredList<PlutoRow> _rows;
 
   List<PlutoRow> get checkedRows => _rows.where((row) => row.checked).toList(
         growable: false,
@@ -232,9 +232,9 @@ mixin RowState implements IPlutoState {
         }
       }
 
-      _rows.insertAll(rowIdx, rows);
+      _insertRows(rowIdx, rows, state: PlutoRowState.added);
     } else {
-      _rows.insertAll(rowIdx, rows);
+      _insertRows(rowIdx, rows, state: PlutoRowState.added);
 
       PlutoStateManager.initializeRows(
         _columns,
@@ -287,7 +287,7 @@ mixin RowState implements IPlutoState {
       start: start,
     );
 
-    _rows.insertAll(0, rows);
+    _insertRows(0, rows, state: PlutoRowState.added);
 
     /// Update currentRowIdx
     if (currentCell != null) {
@@ -439,5 +439,19 @@ mixin RowState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void _insertRows(
+    int index,
+    List<PlutoRow> rows, {
+    PlutoRowState state,
+  }) {
+    if (state != null) {
+      for (var row in rows) {
+        row._setState(state);
+      }
+    }
+
+    _rows.insertAll(index, rows);
   }
 }

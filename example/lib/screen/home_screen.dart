@@ -13,6 +13,7 @@ import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_rows_screen.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
+import 'feature/column_filtering_screen.dart';
 import 'feature/column_freezing_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
@@ -209,6 +210,13 @@ class PlutoFeatures extends StatelessWidget {
                 'Ascending or Descending by clicking on the column heading.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnSortingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Column filtering',
+            description: 'Filter rows by setting filters on columns.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnFilteringScreen.routeName);
             },
           ),
           PlutoListTile(

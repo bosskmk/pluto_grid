@@ -15,6 +15,8 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
+    when(stateManager.hasFilter).thenReturn(false);
+    when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {

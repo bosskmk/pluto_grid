@@ -230,6 +230,7 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
             child: IconButton(
               icon: icon,
               color: widget.stateManager.configuration.iconColor,
+              iconSize: widget.stateManager.configuration.iconSize,
               onPressed: openPopup,
             ),
           ),

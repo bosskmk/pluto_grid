@@ -36,6 +36,9 @@ class PlutoConfiguration {
   /// Icon color. (column menu, cell of popup type)
   final Color iconColor;
 
+  /// Icon size. (column menu, cell of popup type)
+  final double iconSize;
+
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
 
@@ -77,6 +80,7 @@ class PlutoConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.black26,
+    this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
@@ -106,6 +110,7 @@ class PlutoConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.white38,
+    this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
@@ -165,6 +170,18 @@ class PlutoGridLocaleText {
   final String freezeColumnToLeft;
   final String freezeColumnToRight;
   final String autoFitColumn;
+  final String setFilter;
+  final String resetFilter;
+
+  // Filter popup
+  final String filterColumn;
+  final String filterType;
+  final String filterValue;
+  final String filterAllColumns;
+  final String filterContains;
+  final String filterEquals;
+  final String filterStartsWith;
+  final String filterEndsWith;
 
   // Date column popup
   final String sunday;
@@ -188,6 +205,17 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'FreezeToLeft',
     this.freezeColumnToRight = 'FreezeToRight',
     this.autoFitColumn = 'AutoFit',
+    this.setFilter = 'SetFilter',
+    this.resetFilter = 'ResetFilter',
+    // Filter popup
+    this.filterColumn = 'Column',
+    this.filterType = 'Type',
+    this.filterValue = 'Value',
+    this.filterAllColumns = 'All columns',
+    this.filterContains = 'Contains',
+    this.filterEquals = 'Equals',
+    this.filterStartsWith = 'StartsWith',
+    this.filterEndsWith = 'EndsWith',
     // Date popup
     this.sunday = 'Su',
     this.monday = 'Mo',
@@ -209,6 +237,17 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = '왼쪽 고정',
     this.freezeColumnToRight = '오른쪽 고정',
     this.autoFitColumn = '넓이 자동 조정',
+    this.setFilter = '필터 설정',
+    this.resetFilter = '필터 초기화',
+    // Filter popup
+    this.filterColumn = '컬럼',
+    this.filterType = '종류',
+    this.filterValue = '값',
+    this.filterAllColumns = '전체 컬럼',
+    this.filterContains = '포함',
+    this.filterEquals = '일치',
+    this.filterStartsWith = '~로 시작',
+    this.filterEndsWith = '~로 끝',
     // Date popup
     this.sunday = '일',
     this.monday = '월',
@@ -230,6 +269,17 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'Закрепить слева',
     this.freezeColumnToRight = 'Закрепить справа',
     this.autoFitColumn = 'Автоматический размер',
+    this.setFilter = 'SetFilter',
+    this.resetFilter = 'ResetFilter',
+    // Filter popup
+    this.filterColumn = 'Column',
+    this.filterType = 'Type',
+    this.filterValue = 'Value',
+    this.filterAllColumns = 'All columns',
+    this.filterContains = 'Contains',
+    this.filterEquals = 'Equals',
+    this.filterStartsWith = 'StartsWith',
+    this.filterEndsWith = 'EndsWith',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -251,6 +301,17 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'Ukotvit vlevo',
     this.freezeColumnToRight = 'Ukotvit vpravo',
     this.autoFitColumn = 'Autom. přizpůsobit',
+    this.setFilter = 'SetFilter',
+    this.resetFilter = 'ResetFilter',
+    // Filter popup
+    this.filterColumn = 'Column',
+    this.filterType = 'Type',
+    this.filterValue = 'Value',
+    this.filterAllColumns = 'All columns',
+    this.filterContains = 'Contains',
+    this.filterEquals = 'Equals',
+    this.filterStartsWith = 'StartsWith',
+    this.filterEndsWith = 'EndsWith',
     // Date popup
     this.sunday = 'Ne',
     this.monday = 'Po',
