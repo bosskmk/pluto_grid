@@ -47,6 +47,11 @@ class PlutoRow {
   void setChecked(bool flag) {
     _checked = flag;
   }
+
+  @visibleForTesting
+  void setState(PlutoRowState state) {
+    _state = state;
+  }
 }
 
 enum PlutoRowState {
