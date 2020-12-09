@@ -56,7 +56,9 @@ mixin FilteringRowState implements IPlutoState {
         .map((e) => e.field)
         .toList();
 
-    setFilter(FilterHelper.rowsToFilter(rows, enabledFilterColumnFields));
+    setFilter(
+      FilterHelper.convertRowsToFilter(rows, enabledFilterColumnFields),
+    );
   }
 
   void setFilterRows(List<PlutoRow> rows) {
@@ -77,7 +79,7 @@ mixin FilteringRowState implements IPlutoState {
         _filterRows.isEmpty && calledColumn != null;
 
     var rows = shouldProvideDefaultFilterRow
-        ? [FilterHelper.getFilter(columnField: calledColumn.field)]
+        ? [FilterHelper.createFilterRow(columnField: calledColumn.field)]
         : _filterRows;
 
     FilterHelper.filterPopup(
@@ -85,7 +87,7 @@ mixin FilteringRowState implements IPlutoState {
         context: context,
         configuration: configuration,
         handleAddNewFilter: (filterState) {
-          filterState.appendRows([FilterHelper.getFilter()]);
+          filterState.appendRows([FilterHelper.createFilterRow()]);
         },
         handleApplyFilter: (filterState) {
           setFilterWithFilterRows(filterState.rows);

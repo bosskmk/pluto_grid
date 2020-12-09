@@ -11,7 +11,7 @@ class FilterHelper {
 
   static const filterFieldValue = 'value';
 
-  static PlutoRow getFilter({
+  static PlutoRow createFilterRow({
     String columnField,
     PlutoFilterType filterType,
     String filterValue,
@@ -27,7 +27,7 @@ class FilterHelper {
     );
   }
 
-  static FilteredListFilter<PlutoRow> rowsToFilter(
+  static FilteredListFilter<PlutoRow> convertRowsToFilter(
     List<PlutoRow> rows,
     List<String> enabledFilterColumnFields,
   ) {
