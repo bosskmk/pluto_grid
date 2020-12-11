@@ -100,11 +100,13 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
       child: SingleChildScrollView(
         controller: horizontalScroll,
         scrollDirection: Axis.horizontal,
+        physics: const ClampingScrollPhysics(),
         child: SizedBox(
           width: width,
           child: ListView.builder(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
+            physics: const ClampingScrollPhysics(),
             itemCount: rows.length,
             itemExtent: widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {

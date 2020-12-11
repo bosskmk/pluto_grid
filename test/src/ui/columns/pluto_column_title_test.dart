@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../helper/pluto_widget_test_helper.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import '../../../helper/pluto_widget_test_helper.dart';
+import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   PlutoStateManager stateManager;
@@ -31,7 +31,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -55,7 +55,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -82,7 +82,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -111,7 +111,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -142,7 +142,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -171,7 +171,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -199,7 +199,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -225,7 +225,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: PlutoBaseColumn(
+          child: PlutoColumnTitle(
             stateManager: stateManager,
             column: column,
           ),
@@ -252,7 +252,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoBaseColumn(
+              child: PlutoColumnTitle(
                 stateManager: stateManager,
                 column: column,
               ),
@@ -301,7 +301,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: PlutoBaseColumn(
+            child: PlutoColumnTitle(
               stateManager: stateManager,
               column: column,
             ),
@@ -369,7 +369,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: PlutoBaseColumn(
+            child: PlutoColumnTitle(
               stateManager: stateManager,
               column: column,
             ),
@@ -424,7 +424,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: PlutoBaseColumn(
+            child: PlutoColumnTitle(
               stateManager: stateManager,
               column: column,
             ),
@@ -479,7 +479,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: PlutoBaseColumn(
+            child: PlutoColumnTitle(
               stateManager: stateManager,
               column: column,
             ),
@@ -507,7 +507,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoBaseColumn(
+              child: PlutoColumnTitle(
                 stateManager: stateManager,
                 column: column,
               ),
@@ -560,7 +560,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoBaseColumn(
+              child: PlutoColumnTitle(
                 stateManager: stateManager,
                 column: column,
               ),

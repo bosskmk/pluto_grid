@@ -15,13 +15,15 @@ abstract class ILayoutState {
 
   double get offsetHeight;
 
+  /// Global offset of Grid.
+  Offset get gridGlobalOffset;
+
   /// Whether to apply a frozen column according to the screen size.
   /// true : If there is a frozen column, the frozen column is exposed.
   /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
   bool get showFrozenColumn;
 
-  /// Global offset of Grid.
-  Offset get gridGlobalOffset;
+  bool get showColumnFilter;
 
   bool get showHeader;
 
@@ -38,6 +40,8 @@ abstract class ILayoutState {
   double get footerTopOffset;
 
   double get columnHeight;
+
+  double get columnFilterHeight;
 
   double get rowsTopOffset;
 
@@ -70,6 +74,8 @@ abstract class ILayoutState {
 
   void resetShowFrozenColumn({bool notify = true});
 
+  void setShowColumnFilter(bool flag);
+
   void setShowLoading(bool flag);
 
   @visibleForTesting
@@ -93,10 +99,6 @@ mixin LayoutState implements IPlutoState {
 
   double get offsetHeight => maxHeight - headerHeight - footerHeight;
 
-  bool get showFrozenColumn => _showFrozenColumn;
-
-  bool _showFrozenColumn;
-
   Offset get gridGlobalOffset {
     if (gridKey == null) {
       return _gridGlobalOffset;
@@ -114,6 +116,14 @@ mixin LayoutState implements IPlutoState {
   }
 
   Offset _gridGlobalOffset;
+
+  bool get showFrozenColumn => _showFrozenColumn;
+
+  bool _showFrozenColumn;
+
+  bool get showColumnFilter => _showColumnFilter == true;
+
+  bool _showColumnFilter;
 
   bool get showHeader => headerHeight > 0;
 
@@ -135,7 +145,10 @@ mixin LayoutState implements IPlutoState {
   // todo : set columnHeight from configuration.
   double get columnHeight => PlutoGridSettings.rowTotalHeight;
 
-  double get rowsTopOffset => headerHeight + columnHeight;
+  double get columnFilterHeight =>
+      showColumnFilter ? PlutoGridSettings.rowTotalHeight : 0;
+
+  double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
 
   double get rowHeight => configuration.rowHeight;
 
@@ -145,7 +158,8 @@ mixin LayoutState implements IPlutoState {
       gridGlobalOffset.dy +
       headerHeight +
       PlutoGridSettings.gridBorderWidth +
-      columnHeight;
+      columnHeight +
+      columnFilterHeight;
 
   double get bodyLeftOffset {
     return (showFrozenColumn && leftFrozenColumnsWidth > 0)
@@ -235,6 +249,16 @@ mixin LayoutState implements IPlutoState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void setShowColumnFilter(bool flag) {
+    if (_showColumnFilter == flag) {
+      return;
+    }
+
+    _showColumnFilter = flag;
+
+    notifyListeners();
   }
 
   void setShowLoading(bool flag) {

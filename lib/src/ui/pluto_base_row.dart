@@ -75,7 +75,7 @@ class __RowContainerWidgetStateWithChangeKeepAlive
 
   bool hasCurrentSelectingPosition;
 
-  bool keepFocus;
+  bool hasFocus;
 
   @override
   void onChange() {
@@ -114,9 +114,9 @@ class __RowContainerWidgetStateWithChangeKeepAlive
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      keepFocus = update<bool>(
-        keepFocus,
-        isCurrentRow && widget.stateManager.keepFocus,
+      hasFocus = update<bool>(
+        hasFocus,
+        isCurrentRow && widget.stateManager.hasFocus,
       );
 
       if (widget.stateManager.mode.isNormal) {
@@ -147,7 +147,7 @@ class __RowContainerWidgetState
           : Colors.transparent;
     }
 
-    if (!widget.stateManager.hasFocus) {
+    if (!hasFocus) {
       return Colors.transparent;
     }
 

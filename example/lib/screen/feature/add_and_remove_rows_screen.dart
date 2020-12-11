@@ -48,6 +48,10 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
     stateManager.removeRows(stateManager.currentSelectingRows);
   }
 
+  void handleFiltering() {
+    stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
+  }
+
   void setGridSelectingMode(PlutoSelectingMode mode) {
     if (gridSelectingMode == mode) {
       return;
@@ -97,6 +101,10 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                   FlatButton(
                     child: const Text('Remove Selected Rows'),
                     onPressed: handleRemoveSelectedRowsButton,
+                  ),
+                  FlatButton(
+                    child: const Text('Toggle filtering'),
+                    onPressed: handleFiltering,
                   ),
                   DropdownButtonHideUnderline(
                     child: DropdownButton(

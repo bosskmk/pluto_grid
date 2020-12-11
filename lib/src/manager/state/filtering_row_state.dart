@@ -11,6 +11,8 @@ abstract class IFilteringRowState {
 
   void setFilterRows(List<PlutoRow> rows);
 
+  List<PlutoRow> filterRowsByField(String columnField);
+
   bool isFilteredColumn(PlutoColumn column);
 
   void showFilterPopup(
@@ -57,12 +59,28 @@ mixin FilteringRowState implements IPlutoState {
         .toList();
 
     setFilter(
-      FilterHelper.convertRowsToFilter(rows, enabledFilterColumnFields),
+      FilterHelper.convertRowsToFilter(_filterRows, enabledFilterColumnFields),
     );
   }
 
   void setFilterRows(List<PlutoRow> rows) {
-    _filterRows = rows;
+    _filterRows = rows
+        .where(
+          (element) => element.cells[FilterHelper.filterFieldValue].value
+              .toString()
+              .isNotEmpty,
+        )
+        .toList();
+  }
+
+  List<PlutoRow> filterRowsByField(String columnField) {
+    return _filterRows
+        .where(
+          (element) =>
+              element.cells[FilterHelper.filterFieldColumn].value ==
+              columnField,
+        )
+        .toList();
   }
 
   bool isFilteredColumn(PlutoColumn column) {

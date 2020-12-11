@@ -88,7 +88,9 @@ void main() {
       () {
         expect(stateManager.filterRows.length, 0);
 
-        stateManager.setFilterWithFilterRows([FilterHelper.createFilterRow()]);
+        stateManager.setFilterWithFilterRows(
+          [FilterHelper.createFilterRow(filterValue: 'filter')],
+        );
 
         expect(stateManager.filterRows.length, 1);
 
@@ -147,8 +149,12 @@ void main() {
       () {
         var column = stateManager.columns.first;
 
-        stateManager.setFilterWithFilterRows(
-            [FilterHelper.createFilterRow(columnField: column.field)]);
+        stateManager.setFilterWithFilterRows([
+          FilterHelper.createFilterRow(
+            columnField: column.field,
+            filterValue: 'filter',
+          )
+        ]);
 
         expect(stateManager.hasFilter, isTrue);
 
@@ -166,6 +172,7 @@ void main() {
         stateManager.setFilterWithFilterRows([
           FilterHelper.createFilterRow(
             columnField: stateManager.columns.last.field,
+            filterValue: 'filter',
           ),
         ]);
 

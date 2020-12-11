@@ -138,6 +138,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     stateManager.removeRows(stateManager.currentSelectingRows);
   }
 
+  void handleToggleColumnFilter() {
+    stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
+  }
+
   void setGridSelectingMode(PlutoSelectingMode mode) {
     if (gridSelectingMode == mode) {
       return;
@@ -152,74 +156,81 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PlutoGrid(
-        columns: columns,
-        rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
-          print(event);
-        },
-        onLoaded: (PlutoOnLoadedEvent event) {
-          stateManager = event.stateManager;
-          stateManager.setSelectingMode(gridSelectingMode);
-        },
-        createHeader: (PlutoStateManager stateManager) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              height: stateManager.headerHeight,
-              child: Row(
-                children: [
-                  FlatButton(
-                    child: const Text('Add 10'),
-                    onPressed: () {
-                      handleAddRowButton(count: 10);
-                    },
-                  ),
-                  FlatButton(
-                    child: const Text('Add 100 Rows'),
-                    onPressed: () => handleAddRowButton(count: 100),
-                  ),
-                  FlatButton(
-                    child: const Text('Remove Current Row'),
-                    onPressed: handleRemoveCurrentRowButton,
-                  ),
-                  FlatButton(
-                    child: const Text('Remove Selected Rows'),
-                    onPressed: handleRemoveSelectedRowsButton,
-                  ),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: gridSelectingMode,
-                      items: PlutoStateManager.selectingModes
-                          .map<DropdownMenuItem<PlutoSelectingMode>>(
-                              (PlutoSelectingMode item) {
-                            final color =
-                            gridSelectingMode == item ? Colors.blue : null;
-
-                            return DropdownMenuItem<PlutoSelectingMode>(
-                              value: item,
-                              child: Text(
-                                item.toShortString(),
-                                style: TextStyle(color: color),
-                              ),
-                            );
-                          }).toList(),
-                      onChanged: (PlutoSelectingMode mode) {
-                        setGridSelectingMode(mode);
+      body: Container(
+        padding: const EdgeInsets.all(15),
+        child: PlutoGrid(
+          columns: columns,
+          rows: rows,
+          onChanged: (PlutoOnChangedEvent event) {
+            print(event);
+          },
+          onLoaded: (PlutoOnLoadedEvent event) {
+            stateManager = event.stateManager;
+            stateManager.setSelectingMode(gridSelectingMode);
+          },
+          createHeader: (PlutoStateManager stateManager) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                height: stateManager.headerHeight,
+                child: Row(
+                  children: [
+                    FlatButton(
+                      child: const Text('Add 10'),
+                      onPressed: () {
+                        handleAddRowButton(count: 10);
                       },
                     ),
-                  ),
-                ],
+                    FlatButton(
+                      child: const Text('Add 100 Rows'),
+                      onPressed: () => handleAddRowButton(count: 100),
+                    ),
+                    FlatButton(
+                      child: const Text('Remove Current Row'),
+                      onPressed: handleRemoveCurrentRowButton,
+                    ),
+                    FlatButton(
+                      child: const Text('Remove Selected Rows'),
+                      onPressed: handleRemoveSelectedRowsButton,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: gridSelectingMode,
+                        items: PlutoStateManager.selectingModes
+                            .map<DropdownMenuItem<PlutoSelectingMode>>(
+                                (PlutoSelectingMode item) {
+                          final color =
+                              gridSelectingMode == item ? Colors.blue : null;
+
+                          return DropdownMenuItem<PlutoSelectingMode>(
+                            value: item,
+                            child: Text(
+                              item.toShortString(),
+                              style: TextStyle(color: color),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (PlutoSelectingMode mode) {
+                          setGridSelectingMode(mode);
+                        },
+                      ),
+                    ),
+                    FlatButton(
+                      child: const Text('Toggle filter'),
+                      onPressed: handleToggleColumnFilter,
+                    ),
+                  ],
+                ),
               ),
+            );
+          },
+          configuration: PlutoConfiguration(
+            // rowHeight: 30.0,
+            scrollbarConfig: const PlutoScrollbarConfig(
+              isAlwaysShown: true,
             ),
-          );
-        },
-        configuration: PlutoConfiguration(
-          // rowHeight: 30.0,
-          scrollbarConfig: const PlutoScrollbarConfig(
-            isAlwaysShown: true,
+            // localeText: const PlutoGridLocaleText.korean(),
           ),
-          // localeText: const PlutoGridLocaleText.korean(),
         ),
       ),
     );
