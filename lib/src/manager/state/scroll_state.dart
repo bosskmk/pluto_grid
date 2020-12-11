@@ -60,8 +60,11 @@ mixin ScrollState implements IPlutoState {
     final double gridOffset =
         PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
 
-    final double screenOffset =
-        _scroll.verticalOffset + offsetHeight - columnHeight - gridOffset;
+    final double screenOffset = _scroll.verticalOffset +
+        offsetHeight -
+        columnHeight -
+        columnFilterHeight -
+        gridOffset;
 
     double offsetToMove =
         direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;

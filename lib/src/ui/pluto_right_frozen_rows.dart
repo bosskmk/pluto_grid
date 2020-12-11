@@ -56,6 +56,7 @@ class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
     return ListView.builder(
       controller: scroll,
       scrollDirection: Axis.vertical,
+      physics: const ClampingScrollPhysics(),
       itemCount: rows.length,
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {

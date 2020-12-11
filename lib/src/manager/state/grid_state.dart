@@ -104,7 +104,8 @@ mixin GridState implements IPlutoState {
 
   bool _keepFocus = false;
 
-  bool get hasFocus => _gridFocusNode != null && _gridFocusNode.hasFocus;
+  bool get hasFocus =>
+      _gridFocusNode != null && _keepFocus && _gridFocusNode.hasFocus;
 
   PlutoGridLocaleText get localeText => configuration.localeText;
 

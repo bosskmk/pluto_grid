@@ -106,6 +106,7 @@ class FilterHelper {
       onLoaded: popupState.onLoaded,
       onChanged: popupState.onChanged,
       onSelected: popupState.onSelected,
+      mode: PlutoGridMode.popup,
     );
   }
 
@@ -235,7 +236,7 @@ class FilterPopupState {
   }) {
     Map<String, String> columnMap = {
       FilterHelper.filterFieldAllColumns:
-      configuration.localeText.filterAllColumns,
+          configuration.localeText.filterAllColumns,
     };
 
     columns.where((element) => element.enableFilterMenuItem).forEach((element) {

@@ -68,6 +68,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double _bodyRightOffset;
   bool _hasRightFrozenColumns;
   double _rightFrozenLeftOffset;
+  bool _showColumnFilter;
   bool _showLoading;
 
   List<Function()> disposeList = [];
@@ -203,6 +204,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         _bodyRightOffset != stateManager.bodyRightOffset ||
         _hasRightFrozenColumns != stateManager.hasRightFrozenColumns ||
         _rightFrozenLeftOffset != stateManager.rightFrozenLeftOffset ||
+        _showColumnFilter != stateManager.showColumnFilter ||
         _showLoading != stateManager.showLoading) {
       setState(resetState);
     }
@@ -235,6 +237,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     _hasRightFrozenColumns = stateManager.hasRightFrozenColumns;
 
     _rightFrozenLeftOffset = stateManager.rightFrozenLeftOffset;
+
+    _showColumnFilter = stateManager.showColumnFilter;
 
     _showLoading = stateManager.showLoading;
   }
@@ -370,6 +374,19 @@ class _PlutoGridState extends State<PlutoGrid> {
                           child: widget.createFooter(stateManager),
                         ),
                       ],
+                      if (_showColumnFilter)
+                        Positioned(
+                          top: stateManager.headerHeight +
+                              stateManager.columnHeight,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 1,
+                            decoration: BoxDecoration(
+                              color: stateManager.configuration.gridBorderColor,
+                            ),
+                          ),
+                        ),
                       if (stateManager.showLoading)
                         Positioned.fill(
                           child: PlutoLoading(
@@ -493,10 +510,13 @@ class PlutoGridSettings {
 enum PlutoGridMode {
   normal,
   select,
+  popup,
 }
 
 extension PlutoGridModeExtension on PlutoGridMode {
   bool get isNormal => this == PlutoGridMode.normal;
 
   bool get isSelect => this == PlutoGridMode.select;
+
+  bool get isPopup => this == PlutoGridMode.popup;
 }

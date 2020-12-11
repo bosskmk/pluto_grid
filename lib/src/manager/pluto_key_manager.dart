@@ -227,7 +227,8 @@ class PlutoKeyManager {
   }
 
   void _handleEsc(KeyManagerEvent keyManagerEvent) {
-    if (stateManager.mode.isSelect) {
+    if (stateManager.mode.isSelect ||
+        (stateManager.mode.isPopup && !stateManager.isEditing)) {
       stateManager.onSelected(PlutoOnSelectedEvent(
         row: null,
         cell: null,

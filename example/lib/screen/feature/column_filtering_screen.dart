@@ -75,6 +75,8 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         ),
         const Text(
             'Select the SetFilter menu from the menu that appears when you tap the icon on the right of the column'),
+        const Text(
+            'If the filter is set to all or complex conditions, TextField under the column is deactivated.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -85,6 +87,9 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
+        onLoaded: (PlutoOnLoadedEvent event) {
+          event.stateManager.setShowColumnFilter(true);
+        },
         onChanged: (PlutoOnChangedEvent event) {
           print(event);
         },

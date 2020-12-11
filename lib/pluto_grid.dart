@@ -29,6 +29,8 @@ part './src/manager/event/pluto_cannot_move_current_cell_event.dart';
 
 part './src/manager/event/pluto_cell_gesture_event.dart';
 
+part './src/manager/event/pluto_change_column_filter_event.dart';
+
 part './src/manager/event/pluto_drag_rows_event.dart';
 
 part './src/manager/event/pluto_event.dart';
@@ -95,6 +97,14 @@ part './src/ui/pluto_right_frozen_rows.dart';
 
 part './src/ui/pluto_base_cell.dart';
 
+part './src/ui/pluto_base_column.dart';
+
+part './src/ui/columns/pluto_column_title.dart';
+
+part './src/ui/columns/pluto_column_filter.dart';
+
+part './src/ui/pluto_base_row.dart';
+
 part './src/ui/cells/pluto_date_cell.dart';
 
 part './src/ui/cells/pluto_default_cell.dart';
@@ -111,13 +121,9 @@ part './src/ui/cells/pluto_text_cell.dart';
 
 part './src/ui/cells/pluto_time_cell.dart';
 
-part './src/ui/pluto_base_column.dart';
-
 part './src/widget/pluto_loading.dart';
 
 part './src/widget/pluto_scrollbar.dart';
-
-part 'src/ui/pluto_base_row.dart';
 
 part './src/widget/pluto_scaled_checkbox.dart';
 

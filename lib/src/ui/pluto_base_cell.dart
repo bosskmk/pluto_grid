@@ -34,6 +34,8 @@ class _PlutoBaseCellStateWithChangeKeepAlive
 
   bool isSelectedCell;
 
+  bool hasFocus;
+
   @override
   void onChange() {
     resetState((update) {
@@ -58,6 +60,11 @@ class _PlutoBaseCellStateWithChangeKeepAlive
           widget.column,
           widget.rowIdx,
         ),
+      );
+
+      hasFocus = update<bool>(
+        hasFocus,
+        isCurrentCell && widget.stateManager.hasFocus,
       );
 
       if (widget.stateManager.mode.isNormal) {
