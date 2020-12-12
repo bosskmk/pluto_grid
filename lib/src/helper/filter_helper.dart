@@ -169,17 +169,18 @@ class FilterPopupState {
     this.width = 600,
     this.height = 450,
   })  : assert(context != null),
+        assert(configuration != null),
         assert(handleAddNewFilter != null),
         assert(handleApplyFilter != null),
-        assert(columns.isNotEmpty),
+        assert(columns != null && columns.isNotEmpty),
         assert(filterRows != null),
-        assert(configuration != null),
+        assert(focusFirstFilterValue != null),
         _previousFilterRows = [...filterRows];
 
   PlutoStateManager _stateManager;
   List<PlutoRow> _previousFilterRows;
 
-  void onLoaded(e) {
+  void onLoaded(PlutoOnLoadedEvent e) {
     _stateManager = e.stateManager;
 
     _stateManager.setSelectingMode(PlutoSelectingMode.row);
@@ -199,11 +200,11 @@ class FilterPopupState {
     _stateManager.addListener(stateListener);
   }
 
-  void onChanged(e) {
+  void onChanged(PlutoOnChangedEvent e) {
     applyFilter();
   }
 
-  void onSelected(e) {
+  void onSelected(PlutoOnSelectedEvent e) {
     _stateManager.removeListener(stateListener);
   }
 
