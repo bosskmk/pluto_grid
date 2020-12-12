@@ -109,6 +109,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoColumn(
         title: 'column5',
         field: 'column5',
+        type: PlutoColumnType.number(
+          negative: true,
+        ),
+      ),
+      PlutoColumn(
+        title: 'column6',
+        field: 'column6',
         type: PlutoColumnType.text(),
         enableFilterMenuItem: false,
         enableEditingMode: false,

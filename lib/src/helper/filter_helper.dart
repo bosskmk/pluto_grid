@@ -126,24 +126,51 @@ class FilterHelper {
     return filterType.compare(base, target);
   }
 
-  static bool compareStartsWith(dynamic base, dynamic target) {
-    return base.toString().startsWith(target.toString());
-  }
-
-  static bool compareEndsWith(dynamic base, dynamic target) {
-    return base.toString().endsWith(target.toString());
-  }
-
   static bool compareContains(dynamic base, dynamic target) {
-    return base.toString().contains(target.toString());
+    return _compareWithRegExp(
+      RegExp.escape(target.toString()),
+      base.toString(),
+    );
   }
 
   static bool compareEquals(dynamic base, dynamic target) {
     if (base is String || base is int || base is double || base is bool) {
-      return base.runtimeType == target.runtimeType && base == target;
+      return base.runtimeType == target.runtimeType &&
+          _compareWithRegExp(
+            // ignore: prefer_interpolation_to_compose_strings
+            r'^' + RegExp.escape(target.toString()) + r'$',
+            base.toString(),
+          );
     }
 
     return identical(base, target);
+  }
+
+  static bool compareStartsWith(dynamic base, dynamic target) {
+    return _compareWithRegExp(
+      // ignore: prefer_interpolation_to_compose_strings
+      r'^' + RegExp.escape(target.toString()),
+      base.toString(),
+    );
+  }
+
+  static bool compareEndsWith(dynamic base, dynamic target) {
+    return _compareWithRegExp(
+      // ignore: prefer_interpolation_to_compose_strings
+      RegExp.escape(target.toString()) + r'$',
+      base.toString(),
+    );
+  }
+
+  static bool _compareWithRegExp(
+    Pattern pattern,
+    String value, {
+    bool caseSensitive = false,
+  }) {
+    return RegExp(
+      pattern,
+      caseSensitive: caseSensitive,
+    ).hasMatch(value);
   }
 }
 
