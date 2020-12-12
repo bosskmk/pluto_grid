@@ -22,7 +22,7 @@ abstract class _PlutoStateWithChange<T extends _PlutoStatefulWidget>
 
   bool _changed = false;
 
-  StatefulElement get _element => context;
+  StatefulElement get _statefulElement => mounted ? context : null;
 
   void onChange();
 
@@ -48,7 +48,7 @@ abstract class _PlutoStateWithChange<T extends _PlutoStatefulWidget>
     callback(_update);
     if (mounted && _initialized && _changed) {
       _changed = false;
-      _element.markNeedsBuild();
+      _statefulElement?.markNeedsBuild();
     }
   }
 

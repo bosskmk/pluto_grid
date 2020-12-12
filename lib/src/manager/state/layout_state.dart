@@ -199,7 +199,8 @@ mixin LayoutState implements IPlutoState {
 
   double get bodyDownScrollOffset {
     return gridGlobalOffset.dy +
-        offsetHeight -
+        maxHeight -
+        footerHeight -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 

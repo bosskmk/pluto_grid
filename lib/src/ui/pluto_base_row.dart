@@ -57,7 +57,7 @@ class _RowContainerWidget extends _PlutoStatefulWidget {
   __RowContainerWidgetState createState() => __RowContainerWidgetState();
 }
 
-class __RowContainerWidgetStateWithChangeKeepAlive
+abstract class __RowContainerWidgetStateWithChangeKeepAlive
     extends _PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
   bool isCurrentRow;
 
