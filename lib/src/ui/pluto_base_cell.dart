@@ -22,7 +22,7 @@ class PlutoBaseCell extends _PlutoStatefulWidget {
   _PlutoBaseCellState createState() => _PlutoBaseCellState();
 }
 
-class _PlutoBaseCellStateWithChangeKeepAlive
+abstract class _PlutoBaseCellStateWithChangeKeepAlive
     extends _PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
   dynamic cellValue;
 

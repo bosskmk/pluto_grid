@@ -1,5 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../helper/column_helper.dart';
+import '../../helper/row_helper.dart';
+import '../../mock/mock_build_context.dart';
+import '../../mock/mock_on_change_listener.dart';
+import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
   group('createFilterRow', () {
@@ -332,7 +339,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterType.contains);
+        compare = makeCompareFunction(PlutoFilterType.equals);
       });
 
       test('apple equals apple', () {
@@ -342,6 +349,278 @@ void main() {
       test('apple is not equals banana', () {
         expect(compare('apple', 'banana'), isFalse);
       });
+    });
+  });
+
+  group('FilterPopupState', () {
+    test(
+      'context should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: null,
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: ColumnHelper.textColumn('column'),
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'configuration should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: null,
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: ColumnHelper.textColumn('column'),
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'handleAddNewFilter should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: null,
+              handleApplyFilter: (_) {},
+              columns: ColumnHelper.textColumn('column'),
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'handleApplyFilter should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: null,
+              columns: ColumnHelper.textColumn('column'),
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'columns should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: null,
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'columns should not be empty.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: [],
+              filterRows: [],
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'filterRows should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: [],
+              filterRows: null,
+              focusFirstFilterValue: false,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    test(
+      'focusFirstFilterValue should not be null.',
+      () {
+        expect(
+          () {
+            FilterPopupState(
+              context: MockBuildContext(),
+              configuration: PlutoConfiguration(),
+              handleAddNewFilter: (_) {},
+              handleApplyFilter: (_) {},
+              columns: [],
+              filterRows: [],
+              focusFirstFilterValue: null,
+            );
+          },
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
+
+    group('onLoaded', () {
+      test(
+        'should be called setSelectingMode, addListener.',
+        () {
+          var filterPopupState = FilterPopupState(
+            context: MockBuildContext(),
+            configuration: PlutoConfiguration(),
+            handleAddNewFilter: (_) {},
+            handleApplyFilter: (_) {},
+            columns: ColumnHelper.textColumn('column'),
+            filterRows: [],
+            focusFirstFilterValue: false,
+          );
+
+          var stateManager = MockPlutoStateManager();
+
+          filterPopupState.onLoaded(
+            PlutoOnLoadedEvent(stateManager: stateManager),
+          );
+
+          verify(
+            stateManager.setSelectingMode(PlutoSelectingMode.row),
+          ).called(1);
+
+          verify(
+            stateManager.addListener(filterPopupState.stateListener),
+          ).called(1);
+        },
+      );
+
+      test(
+        'if focusFirstFilterValue is true and stateManager has rows, '
+        'then setKeepFocus, setCurrentCell and setEditing should be called.',
+        () {
+          var columns = ColumnHelper.textColumn('column');
+          var rows = RowHelper.count(1, columns);
+
+          var filterPopupState = FilterPopupState(
+            context: MockBuildContext(),
+            configuration: PlutoConfiguration(),
+            handleAddNewFilter: (_) {},
+            handleApplyFilter: (_) {},
+            columns: columns,
+            filterRows: [],
+            focusFirstFilterValue: true,
+          );
+
+          var stateManager = MockPlutoStateManager();
+
+          when(stateManager.rows).thenReturn(rows);
+
+          filterPopupState.onLoaded(
+            PlutoOnLoadedEvent(stateManager: stateManager),
+          );
+
+          verify(stateManager.setKeepFocus(true)).called(1);
+
+          verify(stateManager.setCurrentCell(
+            rows.first.cells[FilterHelper.filterFieldValue],
+            0,
+            notify: false,
+          )).called(1);
+
+          verify(stateManager.setEditing(true)).called(1);
+        },
+      );
+    });
+
+    test('onChanged', () {
+      var mock = MockOnChangeListener();
+
+      var filterPopupState = FilterPopupState(
+        context: MockBuildContext(),
+        configuration: PlutoConfiguration(),
+        handleAddNewFilter: (_) {},
+        handleApplyFilter: mock.onChangeOneParamListener,
+        columns: ColumnHelper.textColumn('column'),
+        filterRows: [],
+        focusFirstFilterValue: true,
+      );
+
+      filterPopupState.onChanged(PlutoOnChangedEvent());
+
+      verify(mock.onChangeOneParamListener(any)).called(1);
+    });
+
+    test('onSelected', () {
+      var filterPopupState = FilterPopupState(
+        context: MockBuildContext(),
+        configuration: PlutoConfiguration(),
+        handleAddNewFilter: (_) {},
+        handleApplyFilter: (_) {},
+        columns: ColumnHelper.textColumn('column'),
+        filterRows: [],
+        focusFirstFilterValue: false,
+      );
+
+      var stateManager = MockPlutoStateManager();
+
+      filterPopupState.onLoaded(
+        PlutoOnLoadedEvent(stateManager: stateManager),
+      );
+
+      filterPopupState.onSelected(PlutoOnSelectedEvent());
+
+      verify(
+        stateManager.removeListener(filterPopupState.stateListener),
+      ).called(1);
     });
   });
 }
