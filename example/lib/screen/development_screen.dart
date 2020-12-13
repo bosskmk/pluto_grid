@@ -237,6 +237,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               isAlwaysShown: true,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
+            // columnFilters: [PlutoFilterTypeContains()],
           ),
         ),
       ),

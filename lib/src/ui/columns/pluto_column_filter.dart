@@ -110,7 +110,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     widget.stateManager.eventManager.addEvent(
       PlutoChangeColumnFilterEvent(
         columnField: widget.column.field,
-        filterType: PlutoFilterType.contains,
+        filterType: PlutoFilterTypeContains(),
         filterValue: changed,
       ),
     );

@@ -59,6 +59,28 @@ class PlutoConfiguration {
   /// Customise scrollbars for desktop usage
   final PlutoScrollbarConfig scrollbarConfig;
 
+  /// An instance of a class that implements [PlutoFilterType] is an element of the list.
+  ///
+  /// ```dart
+  /// class ClassYouImplemented implements PlutoFilterType {
+  ///   String get title => 'CustomFilter';
+  ///
+  ///   PlutoCompareFunction get compare =>
+  ///     (dynamic a, dynamic b) => a.toString().contains(b.toString());
+  /// }
+  /// ```
+  ///
+  /// ```dart
+  /// [
+  ///   PlutoFilterTypeContains(),
+  ///   PlutoFilterTypeEquals(),
+  ///   PlutoFilterTypeStartsWith(),
+  ///   PlutoFilterTypeEndsWith(),
+  ///   ClassYouImplemented(),
+  /// ]
+  /// ```
+  List<PlutoFilterType> columnFilters;
+
   PlutoConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
@@ -87,7 +109,10 @@ class PlutoConfiguration {
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
-  });
+    this.columnFilters,
+  }) {
+    _init();
+  }
 
   PlutoConfiguration.dark({
     this.enableColumnBorder = false,
@@ -117,7 +142,26 @@ class PlutoConfiguration {
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
-  });
+    this.columnFilters,
+  }) {
+    _init();
+  }
+
+  _init() {
+    assert(columnFilters == null || columnFilters.isNotEmpty);
+
+    PlutoFilterTypeContains.name = localeText.filterContains;
+    PlutoFilterTypeEquals.name = localeText.filterEquals;
+    PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;
+    PlutoFilterTypeEndsWith.name = localeText.filterEndsWith;
+
+    columnFilters ??= [
+      PlutoFilterTypeContains(),
+      PlutoFilterTypeEquals(),
+      PlutoFilterTypeStartsWith(),
+      PlutoFilterTypeEndsWith(),
+    ];
+  }
 
   PlutoConfiguration copyWith({
     bool enableColumnBorder,
@@ -138,6 +182,7 @@ class PlutoConfiguration {
     PlutoEnterKeyAction enterKeyAction,
     PlutoGridLocaleText localeText,
     PlutoScrollbarConfig scrollbarConfig,
+    List<PlutoFilterType> columnFilters,
   }) {
     return PlutoConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -160,6 +205,7 @@ class PlutoConfiguration {
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
+      columnFilters: columnFilters ?? this.columnFilters,
     );
   }
 }
@@ -202,11 +248,11 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText({
     // Column menu
     this.unfreezeColumn = 'Unfreeze',
-    this.freezeColumnToLeft = 'FreezeToLeft',
-    this.freezeColumnToRight = 'FreezeToRight',
-    this.autoFitColumn = 'AutoFit',
-    this.setFilter = 'SetFilter',
-    this.resetFilter = 'ResetFilter',
+    this.freezeColumnToLeft = 'Freeze to left',
+    this.freezeColumnToRight = 'Freeze to right',
+    this.autoFitColumn = 'Auto fit',
+    this.setFilter = 'Set filter',
+    this.resetFilter = 'Reset filter',
     // Filter popup
     this.filterColumn = 'Column',
     this.filterType = 'Type',
@@ -214,8 +260,8 @@ class PlutoGridLocaleText {
     this.filterAllColumns = 'All columns',
     this.filterContains = 'Contains',
     this.filterEquals = 'Equals',
-    this.filterStartsWith = 'StartsWith',
-    this.filterEndsWith = 'EndsWith',
+    this.filterStartsWith = 'Starts with',
+    this.filterEndsWith = 'Ends with',
     // Date popup
     this.sunday = 'Su',
     this.monday = 'Mo',
@@ -278,8 +324,8 @@ class PlutoGridLocaleText {
     this.filterAllColumns = 'All columns',
     this.filterContains = 'Contains',
     this.filterEquals = 'Equals',
-    this.filterStartsWith = 'StartsWith',
-    this.filterEndsWith = 'EndsWith',
+    this.filterStartsWith = 'Starts with',
+    this.filterEndsWith = 'Ends with',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -310,8 +356,8 @@ class PlutoGridLocaleText {
     this.filterAllColumns = 'All columns',
     this.filterContains = 'Contains',
     this.filterEquals = 'Equals',
-    this.filterStartsWith = 'StartsWith',
-    this.filterEndsWith = 'EndsWith',
+    this.filterStartsWith = 'Starts with',
+    this.filterEndsWith = 'Ends with',
     // Date popup
     this.sunday = 'Ne',
     this.monday = 'Po',
