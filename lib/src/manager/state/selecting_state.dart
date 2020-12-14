@@ -1,4 +1,7 @@
-part of '../../../pluto_grid.dart';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ISelectingState {
   /// Multi-selection state.
@@ -12,7 +15,7 @@ abstract class ISelectingState {
   PlutoCellPosition get currentSelectingPosition;
 
   /// Position list of currently selected.
-  /// Only valid in [PlutoSelectingMode.square].
+  /// Only valid in [PlutoSelectingMode.cell].
   ///
   /// ```dart
   /// stateManager.currentSelectingPositionList.forEach((element) {
@@ -82,14 +85,14 @@ mixin SelectingState implements IPlutoState {
 
   PlutoSelectingMode get selectingMode => _selectingMode;
 
-  PlutoSelectingMode _selectingMode = PlutoSelectingMode.square;
+  PlutoSelectingMode _selectingMode = PlutoSelectingMode.cell;
 
   PlutoCellPosition get currentSelectingPosition => _currentSelectingPosition;
 
   PlutoCellPosition _currentSelectingPosition;
 
   List<PlutoSelectingCellPosition> get currentSelectingPositionList {
-    if (!_selectingMode.isSquare ||
+    if (!_selectingMode.isCell ||
         currentCellPosition == null ||
         currentSelectingPosition == null) {
       return [];
@@ -113,7 +116,7 @@ mixin SelectingState implements IPlutoState {
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = _columns[columnIndexes[j]].field;
+        final String field = refColumns[columnIndexes[j]].field;
 
         positions.add(PlutoSelectingCellPosition(
           rowIdx: i,
@@ -184,19 +187,19 @@ mixin SelectingState implements IPlutoState {
   }
 
   void setAllCurrentSelecting() {
-    if (_rows == null || _rows.isEmpty) {
+    if (refRows == null || refRows.isEmpty) {
       return;
     }
 
     switch (_selectingMode) {
-      case PlutoSelectingMode.square:
-      case PlutoSelectingMode._horizontal:
+      case PlutoSelectingMode.cell:
+      case PlutoSelectingMode.horizontal:
         setCurrentCell(firstCell, 0, notify: false);
 
         setCurrentSelectingPosition(
           cellPosition: PlutoCellPosition(
-            columnIdx: _columns.length - 1,
-            rowIdx: _rows.length - 1,
+            columnIdx: refColumns.length - 1,
+            rowIdx: refRows.length - 1,
           ),
         );
         break;
@@ -206,11 +209,11 @@ mixin SelectingState implements IPlutoState {
         }
 
         _currentSelectingPosition = PlutoCellPosition(
-          columnIdx: _columns.length - 1,
-          rowIdx: _rows.length - 1,
+          columnIdx: refColumns.length - 1,
+          rowIdx: refRows.length - 1,
         );
 
-        setCurrentSelectingRowsByRange(0, _rows.length - 1);
+        setCurrentSelectingRowsByRange(0, refRows.length - 1);
         break;
       case PlutoSelectingMode.none:
       default:
@@ -300,7 +303,7 @@ mixin SelectingState implements IPlutoState {
     final _horizontalScrollOffset = scroll.horizontal.offset;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      final column = _columns[columnIndexes[i]];
+      final column = refColumns[columnIndexes[i]];
 
       currentWidth += column.width;
 
@@ -335,11 +338,11 @@ mixin SelectingState implements IPlutoState {
 
     final _to = max(from, to) + 1;
 
-    if (_from < 0 || _to > _rows.length) {
+    if (_from < 0 || _to > refRows.length) {
       return;
     }
 
-    _currentSelectingRows = _rows.getRange(_from, _to).toList();
+    _currentSelectingRows = refRows.getRange(_from, _to).toList();
 
     if (notify) {
       notifyListeners();
@@ -375,11 +378,11 @@ mixin SelectingState implements IPlutoState {
       return;
     }
 
-    if (rowIdx == null || rowIdx < 0 || rowIdx > _rows.length - 1) {
+    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows.length - 1) {
       return;
     }
 
-    final PlutoRow row = _rows[rowIdx];
+    final PlutoRow row = refRows[rowIdx];
 
     final keys =
         _currentSelectingRows.map((e) => e.key).toList(growable: false);
@@ -429,7 +432,7 @@ mixin SelectingState implements IPlutoState {
       return false;
     }
 
-    if (_selectingMode.isSquare) {
+    if (_selectingMode.isCell) {
       final bool inRangeOfRows = min(currentCellPosition.rowIdx,
                   _currentSelectingPosition.rowIdx) <=
               rowIdx &&
@@ -458,7 +461,7 @@ mixin SelectingState implements IPlutoState {
       }
 
       return true;
-    } else if (_selectingMode._isHorizontal) {
+    } else if (_selectingMode.isHorizontal) {
       int startRowIdx =
           min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
 
@@ -508,7 +511,7 @@ mixin SelectingState implements IPlutoState {
   }
 
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
-    changeCellValue(cell._key, value, notify: false);
+    changeCellValue(cell.key, value, notify: false);
 
     if (configuration.enableMoveDownAfterSelecting) {
       moveCurrentCell(MoveDirection.down, notify: false);
@@ -530,7 +533,7 @@ mixin SelectingState implements IPlutoState {
       List<String> columnText = [];
 
       for (var i = 0; i < columnIndexes.length; i += 1) {
-        final String field = _columns[columnIndexes[i]].field;
+        final String field = refColumns[columnIndexes[i]].field;
 
         columnText.add(row.cells[field].value.toString());
       }
@@ -562,9 +565,9 @@ mixin SelectingState implements IPlutoState {
       List<String> columnText = [];
 
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = _columns[columnIndexes[j]].field;
+        final String field = refColumns[columnIndexes[j]].field;
 
-        columnText.add(_rows[i].cells[field].value.toString());
+        columnText.add(refRows[i].cells[field].value.toString());
       }
 
       rowText.add(columnText.join('\t'));

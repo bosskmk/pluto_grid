@@ -1,6 +1,10 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoNumberCell extends StatefulWidget implements _AbstractMixinTextCell {
+import 'mixin_text_cell.dart';
+
+class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -16,7 +20,7 @@ class PlutoNumberCell extends StatefulWidget implements _AbstractMixinTextCell {
 }
 
 class _PlutoNumberCellState extends State<PlutoNumberCell>
-    with _MixinTextCell<PlutoNumberCell> {
+    with MixinTextCell<PlutoNumberCell> {
   int decimalRange;
 
   bool activatedNegative;
@@ -33,10 +37,10 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
-      _cellFocus.requestFocus();
+      cellFocus.requestFocus();
     }
 
-    return _buildTextField(
+    return buildTextField(
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         DecimalTextInputFormatter(

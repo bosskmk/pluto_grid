@@ -1,6 +1,8 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoLeftFrozenRows extends _PlutoStatefulWidget {
+class PlutoLeftFrozenRows extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   PlutoLeftFrozenRows(this.stateManager);
@@ -10,7 +12,7 @@ class PlutoLeftFrozenRows extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoLeftFrozenRowsStateWithState
-    extends _PlutoStateWithChange<PlutoLeftFrozenRows> {
+    extends PlutoStateWithChange<PlutoLeftFrozenRows> {
   List<PlutoColumn> columns;
 
   List<PlutoRow> rows;
@@ -26,7 +28,7 @@ abstract class _PlutoLeftFrozenRowsStateWithState
 
       rows = update<List<PlutoRow>>(
         rows,
-        widget.stateManager._rows,
+        widget.stateManager.refRows,
         compare: listEquals,
         destructureList: true,
       );
@@ -61,7 +63,7 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('left_frozen_row_${rows[i]._key}'),
+          key: ValueKey('left_frozen_row_${rows[i].key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
           row: rows[i],

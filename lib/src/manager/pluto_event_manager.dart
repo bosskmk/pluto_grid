@@ -1,4 +1,5 @@
-part of '../../pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PlutoEventManager {
   PlutoStateManager stateManager;
@@ -32,6 +33,6 @@ class PlutoEventManager {
   }
 
   void _handler(PlutoEvent event) {
-    event._handler(stateManager);
+    event.handler(stateManager);
   }
 }

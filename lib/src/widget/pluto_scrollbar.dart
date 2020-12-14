@@ -1,10 +1,15 @@
-part of '../../pluto_grid.dart';
 /*
  * This widget modifies [CupertinoScrollbar] a little,
  * so that the horizontal and vertical scroll controllers work together.
 */
 
 // All values eyeballed.
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
+
 const double _kScrollbarMinLength = 36.0;
 const double _kScrollbarMinOverscrollLength = 8.0;
 const Duration _kScrollbarTimeToFade = Duration(milliseconds: 1200);

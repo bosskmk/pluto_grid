@@ -1,6 +1,7 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoColumnFilter extends _PlutoStatefulWidget {
+class PlutoColumnFilter extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
@@ -14,7 +15,7 @@ class PlutoColumnFilter extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoColumnFilterStateWithChange
-    extends _PlutoStateWithChange<PlutoColumnFilter> {
+    extends PlutoStateWithChange<PlutoColumnFilter> {
   FocusNode focusNode;
 
   TextEditingController controller;
@@ -67,7 +68,7 @@ abstract class _PlutoColumnFilterStateWithChange
       if (focusNode?.hasPrimaryFocus != true) {
         text = update<String>(text, filterValue);
 
-        if (_changed) {
+        if (changed) {
           controller?.text = text;
         }
       }

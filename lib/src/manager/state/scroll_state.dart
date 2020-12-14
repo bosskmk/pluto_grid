@@ -1,4 +1,5 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
@@ -91,7 +92,7 @@ mixin ScrollState implements IPlutoState {
     final columnIndexes = columnIndexesByShowFrozen;
 
     final PlutoColumn columnToMove =
-        _columns[columnIndexes[columnIdx + direction.offset]];
+        refColumns[columnIndexes[columnIdx + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,

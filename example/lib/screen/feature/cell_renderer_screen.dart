@@ -144,7 +144,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.square);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
           stateManager = event.stateManager;
         },

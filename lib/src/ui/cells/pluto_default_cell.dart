@@ -1,6 +1,7 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoDefaultCell extends _PlutoStatefulWidget {
+class PlutoDefaultCell extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -18,7 +19,7 @@ class PlutoDefaultCell extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoDefaultCellStateWithChange
-    extends _PlutoStateWithChange<PlutoDefaultCell> {
+    extends PlutoStateWithChange<PlutoDefaultCell> {
   bool canRowDrag;
 
   @override
@@ -213,7 +214,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
   }
 }
 
-class _CheckboxSelectionWidget extends _PlutoStatefulWidget {
+class _CheckboxSelectionWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoRow row;
   final PlutoStateManager stateManager;
@@ -230,7 +231,7 @@ class _CheckboxSelectionWidget extends _PlutoStatefulWidget {
 }
 
 abstract class __CheckboxSelectionWidgetStateWithChange
-    extends _PlutoStateWithChange<_CheckboxSelectionWidget> {
+    extends PlutoStateWithChange<_CheckboxSelectionWidget> {
   bool checked;
 
   @override

@@ -1,10 +1,5 @@
-part of '../../../pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class PlutoEvent {
-  void _handler(PlutoStateManager stateManager);
-
-  @visibleForTesting
-  void handler(PlutoStateManager stateManager) {
-    _handler(stateManager);
-  }
+  void handler(PlutoStateManager stateManager);
 }

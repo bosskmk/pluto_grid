@@ -1,6 +1,8 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoRightFrozenColumns extends _PlutoStatefulWidget {
+class PlutoRightFrozenColumns extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   PlutoRightFrozenColumns(this.stateManager);
@@ -11,7 +13,7 @@ class PlutoRightFrozenColumns extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoRightFrozenColumnsStateWithChange
-    extends _PlutoStateWithChange<PlutoRightFrozenColumns> {
+    extends PlutoStateWithChange<PlutoRightFrozenColumns> {
   List<PlutoColumn> columns;
 
   double width;

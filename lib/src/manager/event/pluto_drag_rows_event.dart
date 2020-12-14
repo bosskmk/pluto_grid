@@ -1,4 +1,5 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event : Dragging [PlutoRow].
 class PlutoDragRowsEvent extends PlutoEvent {
@@ -12,7 +13,7 @@ class PlutoDragRowsEvent extends PlutoEvent {
     this.rows,
   });
 
-  void _handler(PlutoStateManager stateManager) {
+  void handler(PlutoStateManager stateManager) {
     if (dragType == null ||
         (!dragType.isStart && offset == null) ||
         rows == null) {

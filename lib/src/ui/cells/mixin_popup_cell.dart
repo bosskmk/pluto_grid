@@ -1,18 +1,21 @@
-part of '../../../pluto_grid.dart';
+import 'dart:developer' as developer;
 
-abstract class _AbstractMixinPopupCell extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+abstract class AbstractMixinPopupCell extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
-  _AbstractMixinPopupCell({
+  AbstractMixinPopupCell({
     this.stateManager,
     this.cell,
     this.column,
   });
 }
 
-abstract class _AbstractPopup {
+abstract class AbstractPopup {
   List<PlutoColumn> popupColumns;
 
   List<PlutoRow> popupRows;
@@ -20,15 +23,15 @@ abstract class _AbstractPopup {
   Icon icon;
 }
 
-mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
-    implements _AbstractPopup {
+mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
+    implements AbstractPopup {
   TextEditingController _textController;
 
   FocusNode _keyboardFocus;
 
   FocusNode _textFocus;
 
-  bool _isOpenedPopup = false;
+  bool isOpenedPopup = false;
 
   /// If a column field name is specified,
   /// the value of the field is returned even if another cell is selected.
@@ -80,13 +83,13 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
       return;
     }
 
-    _isOpenedPopup = true;
+    isOpenedPopup = true;
 
     PlutoGridPopup(
       context: context,
       mode: PlutoGridMode.select,
-      onLoaded: _onLoaded,
-      onSelected: _onSelected,
+      onLoaded: onLoaded,
+      onSelected: onSelected,
       columns: popupColumns,
       rows: popupRows,
       width: popupColumns.fold(0, (previous, column) {
@@ -112,7 +115,7 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
 
     if (keyManagerEvent.isKeyDownEvent) {
       if (keyManagerEvent.isF2 || keyManagerEvent.isCharacter) {
-        if (_isOpenedPopup != true) {
+        if (isOpenedPopup != true) {
           openPopup();
           return true;
         }
@@ -122,14 +125,14 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
     return false;
   }
 
-  void _onLoaded(PlutoOnLoadedEvent event) {
+  void onLoaded(PlutoOnLoadedEvent event) {
     for (var i = 0; i < popupRows.length; i += 1) {
       if (fieldOnSelected == null) {
         for (var entry in popupRows[i].cells.entries) {
           if (popupRows[i].cells[entry.key].originalValue ==
               widget.cell.originalValue) {
             event.stateManager.setCurrentCell(
-                event.stateManager._rows[i].cells[entry.key], i);
+                event.stateManager.refRows[i].cells[entry.key], i);
             break;
           }
         }
@@ -137,7 +140,7 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
         if (popupRows[i].cells[fieldOnSelected].originalValue ==
             widget.cell.originalValue) {
           event.stateManager.setCurrentCell(
-              event.stateManager._rows[i].cells[fieldOnSelected], i);
+              event.stateManager.refRows[i].cells[fieldOnSelected], i);
           break;
         }
       }
@@ -147,17 +150,17 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
       final rowIdxToMove =
           event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
 
-      if (rowIdxToMove < event.stateManager._rows.length) {
+      if (rowIdxToMove < event.stateManager.refRows.length) {
         event.stateManager.moveScrollByRow(MoveDirection.up, rowIdxToMove);
       } else {
-        event.stateManager
-            .moveScrollByRow(MoveDirection.up, event.stateManager._rows.length);
+        event.stateManager.moveScrollByRow(
+            MoveDirection.up, event.stateManager.refRows.length);
       }
     }
   }
 
-  void _onSelected(PlutoOnSelectedEvent event) {
-    _isOpenedPopup = false;
+  void onSelected(PlutoOnSelectedEvent event) {
+    isOpenedPopup = false;
 
     if (event == null) {
       return;
@@ -175,10 +178,10 @@ mixin _MixinPopupCell<T extends _AbstractMixinPopupCell> on State<T>
       return;
     }
 
-    _handleSelected(selectedValue);
+    handleSelected(selectedValue);
   }
 
-  void _handleSelected(dynamic value) {
+  void handleSelected(dynamic value) {
     widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
     try {

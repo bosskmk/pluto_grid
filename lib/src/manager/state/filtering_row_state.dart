@@ -1,4 +1,6 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_filtered_list/pluto_filtered_list.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IFilteringRowState {
   List<PlutoRow> get filterRows;
@@ -26,11 +28,11 @@ mixin FilteringRowState implements IPlutoState {
 
   List<PlutoRow> _filterRows = [];
 
-  bool get hasFilter => _rows.hasFilter;
+  bool get hasFilter => refRows.hasFilter;
 
   void setFilter(FilteredListFilter<PlutoRow> filter) {
-    for (var row in _rows.originalList) {
-      row._setState(PlutoRowState.none);
+    for (var row in refRows.originalList) {
+      row.setState(PlutoRowState.none);
     }
 
     var _filter = filter;
@@ -39,11 +41,11 @@ mixin FilteringRowState implements IPlutoState {
       setFilterRows([]);
     } else {
       _filter = (PlutoRow row) {
-        return !row._state.isNone || filter(row);
+        return !row.state.isNone || filter(row);
       };
     }
 
-    _rows.setFilter(_filter);
+    refRows.setFilter(_filter);
 
     resetCurrentState(notify: false);
 
@@ -53,7 +55,7 @@ mixin FilteringRowState implements IPlutoState {
   void setFilterWithFilterRows(List<PlutoRow> rows) {
     setFilterRows(rows);
 
-    var enabledFilterColumnFields = _columns
+    var enabledFilterColumnFields = refColumns
         .where((element) => element.enableFilterMenuItem)
         .map((e) => e.field)
         .toList();

@@ -1,6 +1,7 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseCell extends _PlutoStatefulWidget {
+class PlutoBaseCell extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final double width;
@@ -23,7 +24,7 @@ class PlutoBaseCell extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoBaseCellStateWithChangeKeepAlive
-    extends _PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
+    extends PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
   dynamic cellValue;
 
   bool isCurrentCell;
@@ -291,14 +292,14 @@ class _BuildCell extends StatelessWidget {
   }
 }
 
-enum _CellEditingStatus {
+enum CellEditingStatus {
   init,
   changed,
   updated,
 }
 
-extension _CellEditingStatusExtension on _CellEditingStatus {
+extension CellEditingStatusExtension on CellEditingStatus {
   bool get isChanged {
-    return _CellEditingStatus.changed == this;
+    return CellEditingStatus.changed == this;
   }
 }

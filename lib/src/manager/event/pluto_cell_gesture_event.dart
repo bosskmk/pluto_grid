@@ -1,4 +1,5 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoCellGestureEvent extends PlutoEvent {
   final PlutoGestureType gestureType;
@@ -16,7 +17,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   });
 
   @override
-  void _handler(PlutoStateManager stateManager) {
+  void handler(PlutoStateManager stateManager) {
     if (gestureType == null ||
         offset == null ||
         cell == null ||

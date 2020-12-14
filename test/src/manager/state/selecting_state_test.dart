@@ -64,7 +64,7 @@ void main() {
         stateManager
             .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
+        stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
         final currentCell = rows[3].cells['text1'];
 
@@ -420,7 +420,7 @@ void main() {
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.square);
+      stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
       final currentCell = rows[3].cells['text1'];
 
@@ -492,7 +492,7 @@ void main() {
         stateManager
             .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
+        stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
         expect(stateManager.currentCell, null);
         expect(stateManager.isSelecting, false);
@@ -771,7 +771,7 @@ void main() {
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-      stateManager.setSelectingMode(PlutoSelectingMode.square);
+      stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -1117,7 +1117,7 @@ void main() {
             .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
+        stateManager.setSelectingMode(PlutoSelectingMode.cell);
         stateManager.setKeyPressed(PlutoKeyPressed(
           ctrl: true,
         ));
@@ -1153,7 +1153,7 @@ void main() {
           .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
@@ -1199,7 +1199,7 @@ void main() {
       );
 
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
@@ -1252,7 +1252,7 @@ void main() {
       );
 
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {

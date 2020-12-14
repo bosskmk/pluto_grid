@@ -1,6 +1,9 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoTimeCell extends StatefulWidget implements _AbstractMixinPopupCell {
+import 'mixin_popup_cell.dart';
+
+class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -16,7 +19,7 @@ class PlutoTimeCell extends StatefulWidget implements _AbstractMixinPopupCell {
 }
 
 class _PlutoTimeCellState extends State<PlutoTimeCell>
-    with _MixinPopupCell<PlutoTimeCell> {
+    with MixinPopupCell<PlutoTimeCell> {
   PlutoStateManager popupStateManager;
 
   List<PlutoColumn> popupColumns = [];
@@ -36,7 +39,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
       return;
     }
 
-    _isOpenedPopup = true;
+    isOpenedPopup = true;
 
     final localeText = widget.stateManager.localeText;
 
@@ -47,13 +50,13 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
     PlutoDualGridPopup(
       context: context,
       onSelected: (PlutoDualOnSelectedEvent event) {
-        _isOpenedPopup = false;
+        isOpenedPopup = false;
 
         if (event == null || event.gridA == null || event.gridB == null) {
           return;
         }
 
-        super._handleSelected(
+        super.handleSelected(
           '${event.gridA.cell.originalValue}:'
           '${event.gridB.cell.originalValue}',
         );
@@ -80,11 +83,11 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
         onLoaded: (PlutoOnLoadedEvent event) {
           event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
-          for (var i = 0; i < event.stateManager._rows.length; i += 1) {
-            if (event.stateManager._rows[i].cells['hour'].originalValue ==
+          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
+            if (event.stateManager.refRows[i].cells['hour'].originalValue ==
                 cellHour) {
-              event.stateManager
-                  .setCurrentCell(event.stateManager._rows[i].cells['hour'], i);
+              event.stateManager.setCurrentCell(
+                  event.stateManager.refRows[i].cells['hour'], i);
 
               event.stateManager.moveScrollByRow(
                   MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
@@ -116,11 +119,11 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
         onLoaded: (PlutoOnLoadedEvent event) {
           event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
-          for (var i = 0; i < event.stateManager._rows.length; i += 1) {
-            if (event.stateManager._rows[i].cells['minute'].originalValue ==
+          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
+            if (event.stateManager.refRows[i].cells['minute'].originalValue ==
                 cellMinute) {
               event.stateManager.setCurrentCell(
-                  event.stateManager._rows[i].cells['minute'], i);
+                  event.stateManager.refRows[i].cells['minute'], i);
 
               event.stateManager.moveScrollByRow(
                   MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
