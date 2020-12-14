@@ -72,7 +72,10 @@ abstract class _PlutoColumnFilterStateWithChange
         }
       }
 
-      enabled = update<bool>(enabled, !hasCompositeFilter);
+      enabled = update<bool>(
+        enabled,
+        widget.column.enableFilterMenuItem && !hasCompositeFilter,
+      );
     });
   }
 
@@ -107,7 +110,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     widget.stateManager.eventManager.addEvent(
       PlutoChangeColumnFilterEvent(
         columnField: widget.column.field,
-        filterType: PlutoFilterType.contains,
+        filterType: PlutoFilterTypeContains(),
         filterValue: changed,
       ),
     );

@@ -25,7 +25,7 @@ void main() {
 
         expect(
           row.cells[FilterHelper.filterFieldType].value,
-          PlutoFilterType.contains,
+          isA<PlutoFilterTypeContains>(),
         );
 
         expect(
@@ -39,9 +39,11 @@ void main() {
       'When called with arguments,'
       'Should be returned a row filled with arguments.',
       () {
+        var filter = PlutoFilterTypeEndsWith();
+
         var row = FilterHelper.createFilterRow(
           columnField: 'filterColumnField',
-          filterType: PlutoFilterType.endsWith,
+          filterType: filter,
           filterValue: 'abc',
         );
 
@@ -54,7 +56,7 @@ void main() {
 
         expect(
           row.cells[FilterHelper.filterFieldType].value,
-          PlutoFilterType.endsWith,
+          filter,
         );
 
         expect(
@@ -145,7 +147,7 @@ void main() {
           var filterRows = [
             FilterHelper.createFilterRow(
               columnField: 'column1',
-              filterType: PlutoFilterType.startsWith,
+              filterType: PlutoFilterTypeStartsWith(),
               filterValue: 'column1',
             )
           ];
@@ -171,7 +173,7 @@ void main() {
         () {
           var filterRows = [
             FilterHelper.createFilterRow(
-              filterType: PlutoFilterType.startsWith,
+              filterType: PlutoFilterTypeStartsWith(),
               filterValue: 'column1',
             )
           ];
@@ -291,7 +293,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterType.startsWith);
+        compare = makeCompareFunction(PlutoFilterTypeStartsWith());
       });
 
       test('apple startsWith ap', () {
@@ -307,7 +309,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterType.endsWith);
+        compare = makeCompareFunction(PlutoFilterTypeEndsWith());
       });
 
       test('apple endsWith le', () {
@@ -323,7 +325,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterType.contains);
+        compare = makeCompareFunction(PlutoFilterTypeContains());
       });
 
       test('apple contains le', () {
@@ -339,7 +341,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterType.equals);
+        compare = makeCompareFunction(PlutoFilterTypeEquals());
       });
 
       test('apple equals apple', () {

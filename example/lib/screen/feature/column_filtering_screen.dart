@@ -77,6 +77,10 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
             'Select the SetFilter menu from the menu that appears when you tap the icon on the right of the column'),
         const Text(
             'If the filter is set to all or complex conditions, TextField under the column is deactivated.'),
+        const SizedBox(
+          height: 10,
+        ),
+        const Text('Check out the source to add custom filters.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -93,7 +97,27 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         onChanged: (PlutoOnChangedEvent event) {
           print(event);
         },
+        configuration: PlutoConfiguration(
+          /// If columnFilters is not set, default filters are set.
+          /// The following is an example to add a custom filter.
+          columnFilters: [
+            PlutoFilterTypeContains(),
+            PlutoFilterTypeEquals(),
+            PlutoFilterTypeStartsWith(),
+            PlutoFilterTypeEndsWith(),
+            YourCustomFilter(),
+          ],
+        ),
       ),
     );
   }
+}
+
+class YourCustomFilter implements PlutoFilterType {
+  @override
+  get compare => (dynamic base, dynamic search) =>
+      base.toString().contains(search.toString());
+
+  @override
+  String get title => 'Custom filter';
 }

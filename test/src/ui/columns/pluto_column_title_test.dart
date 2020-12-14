@@ -316,14 +316,14 @@ void main() {
     });
 
     tapColumn.test('기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('FreezeToLeft'), findsOneWidget);
-      expect(find.text('FreezeToRight'), findsOneWidget);
-      expect(find.text('AutoFit'), findsOneWidget);
+      expect(find.text('Freeze to left'), findsOneWidget);
+      expect(find.text('Freeze to right'), findsOneWidget);
+      expect(find.text('Auto fit'), findsOneWidget);
     });
 
-    tapColumn.test('FreezeToLeft 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
+    tapColumn.test('Freeze to left 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('FreezeToLeft'));
+      await tester.tap(find.text('Freeze to left'));
 
       verify(stateManager.toggleFrozenColumn(
         column.key,
@@ -331,9 +331,9 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('FreezeToRight 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
+    tapColumn.test('Freeze to right 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('FreezeToRight'));
+      await tester.tap(find.text('Freeze to right'));
 
       verify(stateManager.toggleFrozenColumn(
         column.key,
@@ -341,14 +341,14 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('Auto fit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([
         PlutoRow(cells: {
           'column_field_name': PlutoCell(value: 'cell value'),
         }),
       ]);
 
-      await tester.tap(find.text('AutoFit'));
+      await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
         argThat(isA<BuildContext>()),
@@ -385,9 +385,9 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('FreezeToLeft'), findsNothing);
-      expect(find.text('FreezeToRight'), findsNothing);
-      expect(find.text('AutoFit'), findsOneWidget);
+      expect(find.text('Freeze to left'), findsNothing);
+      expect(find.text('Freeze to right'), findsNothing);
+      expect(find.text('Auto fit'), findsOneWidget);
     });
 
     tapColumn.test('Unfreeze 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
@@ -400,10 +400,10 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('Auto fit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
-      await tester.tap(find.text('AutoFit'));
+      await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
         argThat(isA<BuildContext>()),
@@ -440,9 +440,9 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('FreezeToLeft'), findsNothing);
-      expect(find.text('FreezeToRight'), findsNothing);
-      expect(find.text('AutoFit'), findsOneWidget);
+      expect(find.text('Freeze to left'), findsNothing);
+      expect(find.text('Freeze to right'), findsNothing);
+      expect(find.text('Auto fit'), findsOneWidget);
     });
 
     tapColumn.test('Unfreeze 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
@@ -455,10 +455,10 @@ void main() {
       )).called(1);
     });
 
-    tapColumn.test('AutoFit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
+    tapColumn.test('Auto fit 를 탭하면 autoFitColumn 이 호출 되어야 한다.', (tester) async {
       when(stateManager.rows).thenReturn([]);
 
-      await tester.tap(find.text('AutoFit'));
+      await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
         argThat(isA<BuildContext>()),

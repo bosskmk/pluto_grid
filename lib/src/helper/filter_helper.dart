@@ -21,7 +21,7 @@ class FilterHelper {
         filterFieldColumn:
             PlutoCell(value: columnField ?? filterFieldAllColumns),
         filterFieldType:
-            PlutoCell(value: filterType ?? PlutoFilterType.contains),
+            PlutoCell(value: filterType ?? PlutoFilterTypeContains()),
         filterFieldValue: PlutoCell(value: filterValue ?? ''),
       },
     );
@@ -121,29 +121,56 @@ class FilterHelper {
   static bool compareByFilterType(
     PlutoFilterType filterType,
     dynamic base,
-    dynamic target,
+    dynamic search,
   ) {
-    return filterType.compare(base, target);
+    return filterType.compare(base, search);
   }
 
-  static bool compareStartsWith(dynamic base, dynamic target) {
-    return base.toString().startsWith(target.toString());
+  static bool compareContains(dynamic base, dynamic search) {
+    return _compareWithRegExp(
+      RegExp.escape(search.toString()),
+      base.toString(),
+    );
   }
 
-  static bool compareEndsWith(dynamic base, dynamic target) {
-    return base.toString().endsWith(target.toString());
-  }
-
-  static bool compareContains(dynamic base, dynamic target) {
-    return base.toString().contains(target.toString());
-  }
-
-  static bool compareEquals(dynamic base, dynamic target) {
+  static bool compareEquals(dynamic base, dynamic search) {
     if (base is String || base is int || base is double || base is bool) {
-      return base.runtimeType == target.runtimeType && base == target;
+      return base.runtimeType == search.runtimeType &&
+          _compareWithRegExp(
+            // ignore: prefer_interpolation_to_compose_strings
+            r'^' + RegExp.escape(search.toString()) + r'$',
+            base.toString(),
+          );
     }
 
-    return identical(base, target);
+    return identical(base, search);
+  }
+
+  static bool compareStartsWith(dynamic base, dynamic search) {
+    return _compareWithRegExp(
+      // ignore: prefer_interpolation_to_compose_strings
+      r'^' + RegExp.escape(search.toString()),
+      base.toString(),
+    );
+  }
+
+  static bool compareEndsWith(dynamic base, dynamic search) {
+    return _compareWithRegExp(
+      // ignore: prefer_interpolation_to_compose_strings
+      RegExp.escape(search.toString()) + r'$',
+      base.toString(),
+    );
+  }
+
+  static bool _compareWithRegExp(
+    Pattern pattern,
+    String value, {
+    bool caseSensitive = false,
+  }) {
+    return RegExp(
+      pattern,
+      caseSensitive: caseSensitive,
+    ).hasMatch(value);
   }
 }
 
@@ -247,17 +274,6 @@ class FilterPopupState {
     return columnMap;
   }
 
-  Map<PlutoFilterType, String> _makeFilterTypeMap({
-    @required PlutoConfiguration configuration,
-  }) {
-    return {
-      PlutoFilterType.contains: configuration.localeText.filterContains,
-      PlutoFilterType.equals: configuration.localeText.filterEquals,
-      PlutoFilterType.startsWith: configuration.localeText.filterStartsWith,
-      PlutoFilterType.endsWith: configuration.localeText.filterEndsWith,
-    };
-  }
-
   List<PlutoColumn> _makeFilterColumns({
     @required PlutoConfiguration configuration,
     @required List<PlutoColumn> columns,
@@ -265,10 +281,6 @@ class FilterPopupState {
     Map<String, String> columnMap = _makeFilterColumnMap(
       configuration: configuration,
       columns: columns,
-    );
-
-    Map<PlutoFilterType, String> filterMap = _makeFilterTypeMap(
-      configuration: configuration,
     );
 
     return [
@@ -285,11 +297,11 @@ class FilterPopupState {
       PlutoColumn(
         title: configuration.localeText.filterType,
         field: FilterHelper.filterFieldType,
-        type: PlutoColumnType.select(filterMap.keys.toList(growable: false)),
+        type: PlutoColumnType.select(configuration.columnFilters),
         enableFilterMenuItem: false,
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
-          return filterMap[value] ?? '';
+          return value?.title ?? '';
         },
       ),
       PlutoColumn(
@@ -350,28 +362,44 @@ class _FilterPopupHeader extends StatelessWidget {
   }
 }
 
-enum PlutoFilterType {
-  contains,
-  equals,
-  startsWith,
-  endsWith,
+/// [base] is the cell values of the column on which the search is based.
+/// [search] is the value entered by the user to search.
+typedef PlutoCompareFunction = bool Function(dynamic base, dynamic search);
+
+abstract class PlutoFilterType {
+  String get title => throw UnimplementedError();
+
+  PlutoCompareFunction get compare => throw UnimplementedError();
 }
 
-typedef PlutoCompareFunction = bool Function(dynamic a, dynamic b);
+class PlutoFilterTypeContains implements PlutoFilterType {
+  static String name = 'Contains';
 
-extension PlutoFilterTypeExtension on PlutoFilterType {
-  PlutoCompareFunction get compare {
-    switch (this) {
-      case PlutoFilterType.contains:
-        return FilterHelper.compareContains;
-      case PlutoFilterType.equals:
-        return FilterHelper.compareEquals;
-      case PlutoFilterType.startsWith:
-        return FilterHelper.compareStartsWith;
-      case PlutoFilterType.endsWith:
-        return FilterHelper.compareEndsWith;
-    }
+  String get title => PlutoFilterTypeContains.name;
 
-    throw Exception('Not implements $this');
-  }
+  PlutoCompareFunction get compare => FilterHelper.compareContains;
+}
+
+class PlutoFilterTypeEquals implements PlutoFilterType {
+  static String name = 'Equals';
+
+  String get title => PlutoFilterTypeEquals.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareEquals;
+}
+
+class PlutoFilterTypeStartsWith implements PlutoFilterType {
+  static String name = 'Starts with';
+
+  String get title => PlutoFilterTypeStartsWith.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareStartsWith;
+}
+
+class PlutoFilterTypeEndsWith implements PlutoFilterType {
+  static String name = 'Ends with';
+
+  String get title => PlutoFilterTypeEndsWith.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareEndsWith;
 }
