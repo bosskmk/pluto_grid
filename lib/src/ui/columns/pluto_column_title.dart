@@ -1,20 +1,23 @@
-part of '../../../pluto_grid.dart';
+import 'dart:math';
 
-class PlutoColumnTitle extends _PlutoStatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+class PlutoColumnTitle extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
   PlutoColumnTitle({
     @required this.stateManager,
     @required this.column,
-  }) : super(key: column._key);
+  }) : super(key: column.key);
 
   @override
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
 }
 
 abstract class _PlutoColumnTitleStateWithChange
-    extends _PlutoStateWithChange<PlutoColumnTitle> {
+    extends PlutoStateWithChange<PlutoColumnTitle> {
   PlutoColumnSort sort;
 
   @override
@@ -39,15 +42,15 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     switch (selectedMenu) {
       case PlutoGridColumnMenuItem.unfreeze:
         widget.stateManager
-            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.none);
+            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.none);
         break;
       case PlutoGridColumnMenuItem.freezeToLeft:
         widget.stateManager
-            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.left);
+            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.left);
         break;
       case PlutoGridColumnMenuItem.freezeToRight:
         widget.stateManager
-            .toggleFrozenColumn(widget.column._key, PlutoColumnFrozen.right);
+            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.right);
         break;
       case PlutoGridColumnMenuItem.autoFit:
         widget.stateManager.autoFitColumn(context, widget.column);
@@ -74,7 +77,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
 
   void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
     widget.stateManager
-        .resizeColumn(widget.column._key, _currentPosition.dx - 20);
+        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
   }
 
   @override
@@ -176,7 +179,7 @@ class _BuildDraggableWidget extends StatelessWidget {
     return Draggable(
       onDragEnd: (dragDetails) {
         stateManager.moveColumn(
-            column._key, dragDetails.offset.dx + (column.width / 2));
+            column.key, dragDetails.offset.dx + (column.width / 2));
       },
       feedback: PlutoShadowContainer(
         width: column.width,
@@ -213,7 +216,7 @@ class _BuildSortableWidget extends StatelessWidget {
     return column.enableSorting
         ? InkWell(
             onTap: () {
-              stateManager.toggleSortColumn(column._key);
+              stateManager.toggleSortColumn(column.key);
             },
             child: child,
           )
@@ -270,7 +273,7 @@ class _BuildColumnWidget extends StatelessWidget {
   }
 }
 
-class _CheckboxAllSelectionWidget extends _PlutoStatefulWidget {
+class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoStateManager stateManager;
 
@@ -285,7 +288,7 @@ class _CheckboxAllSelectionWidget extends _PlutoStatefulWidget {
 }
 
 abstract class __CheckboxAllSelectionWidgetStateWithChange
-    extends _PlutoStateWithChange<_CheckboxAllSelectionWidget> {
+    extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
   bool checked;
 
   bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
@@ -337,7 +340,7 @@ class __CheckboxAllSelectionWidgetState
   }
 }
 
-class _ColumnTextWidget extends _PlutoStatefulWidget {
+class _ColumnTextWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoStateManager stateManager;
 
@@ -351,7 +354,7 @@ class _ColumnTextWidget extends _PlutoStatefulWidget {
 }
 
 abstract class __ColumnTextWidgetStateWithChange
-    extends _PlutoStateWithChange<_ColumnTextWidget> {
+    extends PlutoStateWithChange<_ColumnTextWidget> {
   bool isFilteredList;
 
   @override

@@ -1,4 +1,7 @@
-part of '../../../pluto_grid.dart';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IEditingState {
   /// Editing status of the current.
@@ -140,16 +143,16 @@ mixin EditingState implements IPlutoState {
     bool force = false,
     bool notify = true,
   }) {
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
       for (var columnIdx = 0;
           columnIdx < columnIndexes.length;
           columnIdx += 1) {
-        final field = _columns[columnIndexes[columnIdx]].field;
+        final field = refColumns[columnIndexes[columnIdx]].field;
 
-        if (_rows[rowIdx].cells[field]._key == cellKey) {
-          final currentColumn = _columns[columnIndexes[columnIdx]];
+        if (refRows[rowIdx].cells[field].key == cellKey) {
+          final currentColumn = refColumns[columnIndexes[columnIdx]];
 
-          final dynamic oldValue = _rows[rowIdx].cells[field].value;
+          final dynamic oldValue = refRows[rowIdx].cells[field].value;
 
           value = filteredCellValue(
             column: currentColumn,
@@ -166,9 +169,9 @@ mixin EditingState implements IPlutoState {
             return;
           }
 
-          _rows[rowIdx]._setState(PlutoRowState.updated);
+          refRows[rowIdx].setState(PlutoRowState.updated);
 
-          _rows[rowIdx].cells[field].value =
+          refRows[rowIdx].cells[field].value =
               value = castValueByColumnType(value, currentColumn);
 
           if (callOnChangedEvent == true && onChanged != null) {
@@ -176,7 +179,7 @@ mixin EditingState implements IPlutoState {
               columnIdx: columnIdx,
               column: currentColumn,
               rowIdx: rowIdx,
-              row: _rows[rowIdx],
+              row: refRows[rowIdx],
               value: value,
               oldValue: oldValue,
             ));
@@ -195,15 +198,15 @@ mixin EditingState implements IPlutoState {
   void _pasteCellValueIntoSelectingRows({List<List<String>> textList}) {
     int columnStartIdx = 0;
 
-    int columnEndIdx = _columns.length - 1;
+    int columnEndIdx = refColumns.length - 1;
 
     final List<Key> selectingRowKeys =
         currentSelectingRows.map((e) => e.key).toList();
 
     List<int> rowIdxList = [];
 
-    for (var i = 0; i < _rows.length; i += 1) {
-      final currentRowKey = _rows[i].key;
+    for (var i = 0; i < refRows.length; i += 1) {
+      final currentRowKey = refRows[i].key;
 
       if (selectingRowKeys.contains(currentRowKey)) {
         selectingRowKeys.removeWhere((key) => key == currentRowKey);
@@ -238,7 +241,7 @@ mixin EditingState implements IPlutoState {
 
       int textColumnIdx = 0;
 
-      if (rowIdx > _rows.length - 1) {
+      if (rowIdx > refRows.length - 1) {
         break;
       }
 
@@ -257,9 +260,9 @@ mixin EditingState implements IPlutoState {
           textColumnIdx = 0;
         }
 
-        final currentColumn = _columns[columnIndexes[columnIdx]];
+        final currentColumn = refColumns[columnIndexes[columnIdx]];
 
-        final currentRow = _rows[rowIdx].cells[currentColumn.field];
+        final currentRow = refRows[rowIdx].cells[currentColumn.field];
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
@@ -280,7 +283,7 @@ mixin EditingState implements IPlutoState {
           continue;
         }
 
-        _rows[rowIdx]._setState(PlutoRowState.updated);
+        refRows[rowIdx].setState(PlutoRowState.updated);
 
         currentRow.value =
             newValue = castValueByColumnType(newValue, currentColumn);
@@ -290,7 +293,7 @@ mixin EditingState implements IPlutoState {
             columnIdx: columnIndexes[columnIdx],
             column: currentColumn,
             rowIdx: rowIdx,
-            row: _rows[rowIdx],
+            row: refRows[rowIdx],
             value: newValue,
             oldValue: oldValue,
           ));

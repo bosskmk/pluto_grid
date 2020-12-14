@@ -52,7 +52,7 @@ class _ColumnFreezingScreenState extends State<ColumnFreezingScreen> {
           print(event);
         },
         onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.square);
+          event.stateManager.setSelectingMode(PlutoSelectingMode.cell);
         },
       ),
     );

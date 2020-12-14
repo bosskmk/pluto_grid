@@ -1,5 +1,3 @@
-part of '../../pluto_grid.dart';
-
 enum MoveDirection {
   left,
   right,

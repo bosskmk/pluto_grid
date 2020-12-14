@@ -1,4 +1,4 @@
-part of '../../../pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoChangeColumnFilterEvent extends PlutoEvent {
   final String columnField;
@@ -11,7 +11,7 @@ class PlutoChangeColumnFilterEvent extends PlutoEvent {
     this.filterValue,
   });
 
-  void _handler(PlutoStateManager stateManager) {
+  void handler(PlutoStateManager stateManager) {
     List<PlutoRow> foundFilterRows =
         stateManager.filterRowsByField(columnField);
 

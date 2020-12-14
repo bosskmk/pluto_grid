@@ -1,4 +1,7 @@
-part of '../../pluto_grid.dart';
+import 'dart:developer' as developer;
+
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 typedef _ResetStateCallback = void Function(_UpdateStateFunction update);
 
@@ -11,16 +14,18 @@ typedef _UpdateStateFunction = T Function<T>(
 
 typedef _CompareFunction<T> = bool Function(T a, T b);
 
-abstract class _PlutoStatefulWidget extends StatefulWidget
+abstract class PlutoStatefulWidget extends StatefulWidget
     implements _HasPlutoStateManager {
-  _PlutoStatefulWidget({Key key}) : super(key: key);
+  PlutoStatefulWidget({Key key}) : super(key: key);
 }
 
-abstract class _PlutoStateWithChange<T extends _PlutoStatefulWidget>
+abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     extends State<T> {
   bool _initialized = false;
 
   bool _changed = false;
+
+  bool get changed => _changed;
 
   StatefulElement get _statefulElement => mounted ? context : null;
 
@@ -82,8 +87,8 @@ abstract class _PlutoStateWithChange<T extends _PlutoStatefulWidget>
   }
 }
 
-abstract class _PlutoStateWithChangeKeepAlive<T extends _PlutoStatefulWidget>
-    extends _PlutoStateWithChange<T> with AutomaticKeepAliveClientMixin {
+abstract class PlutoStateWithChangeKeepAlive<T extends PlutoStatefulWidget>
+    extends PlutoStateWithChange<T> with AutomaticKeepAliveClientMixin {
   bool _keepAlive = false;
 
   KeepAliveHandle _keepAliveHandle;

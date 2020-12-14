@@ -1,4 +1,6 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event : Such as DragUpdate or LongPressMoveUpdate.
 class PlutoMoveUpdateEvent extends PlutoEvent {
@@ -8,7 +10,7 @@ class PlutoMoveUpdateEvent extends PlutoEvent {
     this.offset,
   });
 
-  void _handler(PlutoStateManager stateManager) {
+  void handler(PlutoStateManager stateManager) {
     if (offset == null) {
       return;
     }

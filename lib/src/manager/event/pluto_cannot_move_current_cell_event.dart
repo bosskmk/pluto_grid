@@ -1,4 +1,4 @@
-part of '../../../pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event : Cannot move current cell
 class PlutoCannotMoveCurrentCellEvent extends PlutoEvent {
@@ -10,5 +10,5 @@ class PlutoCannotMoveCurrentCellEvent extends PlutoEvent {
     this.direction,
   });
 
-  void _handler(PlutoStateManager stateManager) {}
+  void handler(PlutoStateManager stateManager) {}
 }

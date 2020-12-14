@@ -1,27 +1,29 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-abstract class _AbstractMixinTextCell extends StatefulWidget {
+abstract class AbstractMixinTextCell extends StatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
-  _AbstractMixinTextCell({
+  AbstractMixinTextCell({
     this.stateManager,
     this.cell,
     this.column,
   });
 }
 
-mixin _MixinTextCell<T extends _AbstractMixinTextCell> on State<T> {
+mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   final _textController = TextEditingController();
-  final FocusNode _cellFocus = FocusNode();
+  final FocusNode cellFocus = FocusNode();
 
-  _CellEditingStatus _cellEditingStatus;
+  CellEditingStatus _cellEditingStatus;
 
   @override
   void dispose() {
     _textController.dispose();
-    _cellFocus.dispose();
+    cellFocus.dispose();
 
     /**
      * Saves the changed value when moving a cell while text is being input.
@@ -43,25 +45,25 @@ mixin _MixinTextCell<T extends _AbstractMixinTextCell> on State<T> {
     _textController.text =
         widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
-    _cellEditingStatus = _CellEditingStatus.init;
+    _cellEditingStatus = CellEditingStatus.init;
   }
 
   void _changeValue() {
-    widget.stateManager.changeCellValue(widget.cell._key, _textController.text);
+    widget.stateManager.changeCellValue(widget.cell.key, _textController.text);
   }
 
   void _handleOnChanged(String value) {
-    _cellEditingStatus = _CellEditingStatus.changed;
+    _cellEditingStatus = CellEditingStatus.changed;
   }
 
   void _handleOnComplete() {
-    _cellEditingStatus = _CellEditingStatus.updated;
-    _cellFocus.unfocus();
+    _cellEditingStatus = CellEditingStatus.updated;
+    cellFocus.unfocus();
     widget.stateManager.gridFocusNode.requestFocus();
     _changeValue();
   }
 
-  TextField _buildTextField({
+  TextField buildTextField({
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
     TextStyle style,
@@ -73,7 +75,7 @@ mixin _MixinTextCell<T extends _AbstractMixinTextCell> on State<T> {
     maxLines = 1,
   }) {
     return TextField(
-      focusNode: _cellFocus,
+      focusNode: cellFocus,
       controller: _textController,
       readOnly: widget.column.type.readOnly,
       onChanged: _handleOnChanged,
@@ -90,9 +92,9 @@ mixin _MixinTextCell<T extends _AbstractMixinTextCell> on State<T> {
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
-      _cellFocus.requestFocus();
+      cellFocus.requestFocus();
     }
 
-    return _buildTextField();
+    return buildTextField();
   }
 }

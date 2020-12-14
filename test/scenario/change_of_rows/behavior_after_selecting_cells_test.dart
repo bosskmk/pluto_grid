@@ -8,7 +8,7 @@ import '../../helper/row_helper.dart';
 
 /// 셀 선택 상태 이후의 동작 테스트
 void main() {
-  final PlutoSelectingMode selectingMode = PlutoSelectingMode.square;
+  final PlutoSelectingMode selectingMode = PlutoSelectingMode.cell;
 
   PlutoStateManager stateManager;
 

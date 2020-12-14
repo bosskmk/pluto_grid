@@ -175,7 +175,7 @@ void main() {
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.square);
+      stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));

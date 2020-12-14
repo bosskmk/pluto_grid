@@ -1,4 +1,4 @@
-part of '../../../pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IKeyboardState {
   /// Currently pressed key
@@ -152,7 +152,8 @@ mixin KeyboardState implements IPlutoState {
       direction,
     );
 
-    setCurrentCell(_rows[toMove.rowIdx].cells[_columns[toMove.columnIdx].field],
+    setCurrentCell(
+        refRows[toMove.rowIdx].cells[refColumns[toMove.columnIdx].field],
         toMove.rowIdx,
         notify: notify);
 
@@ -186,7 +187,7 @@ mixin KeyboardState implements IPlutoState {
     final int columnIdx =
         direction.isLeft ? columnIndexes.first : columnIndexes.last;
 
-    final column = _columns[columnIdx];
+    final column = refColumns[columnIdx];
 
     final cellToMove = currentRow.cells[column.field];
 
@@ -214,9 +215,9 @@ mixin KeyboardState implements IPlutoState {
 
     final field = currentColumnField ?? columns.first.field;
 
-    final int rowIdx = direction.isUp ? 0 : _rows.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
 
-    final cellToMove = _rows[rowIdx].cells[field];
+    final cellToMove = refRows[rowIdx].cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
@@ -238,13 +239,13 @@ mixin KeyboardState implements IPlutoState {
       rowIdx = 0;
     }
 
-    if (rowIdx > _rows.length - 1) {
-      rowIdx = _rows.length - 1;
+    if (rowIdx > refRows.length - 1) {
+      rowIdx = refRows.length - 1;
     }
 
-    final field = currentColumnField ?? _columns.first.field;
+    final field = currentColumnField ?? refColumns.first.field;
 
-    final cellToMove = _rows[rowIdx].cells[field];
+    final cellToMove = refRows[rowIdx].cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
@@ -292,7 +293,7 @@ mixin KeyboardState implements IPlutoState {
       return;
     }
 
-    final int columnIdx = direction.isLeft ? 0 : _columns.length - 1;
+    final int columnIdx = direction.isLeft ? 0 : refColumns.length - 1;
 
     final int rowIdx = hasCurrentSelectingPosition
         ? currentSelectingPosition.rowIdx
@@ -332,7 +333,7 @@ mixin KeyboardState implements IPlutoState {
         ? currentSelectingPosition.columnIdx
         : currentCellPosition.columnIdx;
 
-    final int rowIdx = direction.isUp ? 0 : _rows.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
 
     setCurrentSelectingPosition(
       cellPosition: PlutoCellPosition(
@@ -356,8 +357,8 @@ mixin KeyboardState implements IPlutoState {
       rowIdx = 0;
     }
 
-    if (rowIdx > _rows.length - 1) {
-      rowIdx = _rows.length - 1;
+    if (rowIdx > refRows.length - 1) {
+      rowIdx = refRows.length - 1;
     }
 
     if (currentCell == null) {

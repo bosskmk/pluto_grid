@@ -1,4 +1,5 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRow {
   /// List of row
@@ -26,7 +27,7 @@ class PlutoRow {
 
   bool _checked;
 
-  void _setChecked(bool flag) {
+  void setChecked(bool flag) {
     _checked = flag;
   }
 
@@ -34,7 +35,7 @@ class PlutoRow {
 
   PlutoRowState _state;
 
-  void _setState(PlutoRowState state) {
+  void setState(PlutoRowState state) {
     _state = state;
   }
 
@@ -42,16 +43,6 @@ class PlutoRow {
   Key get key => _key;
 
   final Key _key;
-
-  @visibleForTesting
-  void setChecked(bool flag) {
-    _checked = flag;
-  }
-
-  @visibleForTesting
-  void setState(PlutoRowState state) {
-    _state = state;
-  }
 }
 
 enum PlutoRowState {

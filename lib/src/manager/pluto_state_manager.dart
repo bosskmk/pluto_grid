@@ -1,4 +1,19 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:pluto_filtered_list/pluto_filtered_list.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import 'state/cell_state.dart';
+import 'state/column_state.dart';
+import 'state/dragging_row_state.dart';
+import 'state/editing_state.dart';
+import 'state/filtering_row_state.dart';
+import 'state/grid_state.dart';
+import 'state/keyboard_state.dart';
+import 'state/layout_state.dart';
+import 'state/row_state.dart';
+import 'state/scroll_state.dart';
+import 'state/selecting_state.dart';
 
 abstract class IPlutoState extends ChangeNotifier
     implements
@@ -57,8 +72,8 @@ class PlutoStateManager extends PlutoState {
     CreateFooterCallBack createFooter,
     PlutoConfiguration configuration,
   }) {
-    _columns = columns;
-    _rows = FilteredList(initialList: rows);
+    refColumns = columns;
+    refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
     setGridMode(mode);
@@ -217,27 +232,27 @@ class PlutoKeyPressed {
 }
 
 enum PlutoSelectingMode {
-  square,
+  cell,
   row,
   none,
 
   /// using only internal
-  _horizontal,
+  horizontal,
 }
 
 extension PlutoSelectingModeExtension on PlutoSelectingMode {
-  bool get isSquare => this == PlutoSelectingMode.square;
+  bool get isCell => this == PlutoSelectingMode.cell;
 
   bool get isRow => this == PlutoSelectingMode.row;
 
   bool get isNone => this == PlutoSelectingMode.none;
 
   /// using only internal
-  bool get _isHorizontal => this == PlutoSelectingMode._horizontal;
+  bool get isHorizontal => this == PlutoSelectingMode.horizontal;
 
   List<PlutoSelectingMode> get items {
     return [
-      PlutoSelectingMode.square,
+      PlutoSelectingMode.cell,
       PlutoSelectingMode.row,
       PlutoSelectingMode.none,
     ];

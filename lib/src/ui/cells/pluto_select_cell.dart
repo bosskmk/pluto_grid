@@ -1,7 +1,9 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoSelectCell extends StatefulWidget
-    implements _AbstractMixinPopupCell {
+import 'mixin_popup_cell.dart';
+
+class PlutoSelectCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -17,7 +19,7 @@ class PlutoSelectCell extends StatefulWidget
 }
 
 class _PlutoSelectCellState extends State<PlutoSelectCell>
-    with _MixinPopupCell<PlutoSelectCell> {
+    with MixinPopupCell<PlutoSelectCell> {
   List<PlutoColumn> popupColumns;
 
   List<PlutoRow> popupRows;
@@ -57,9 +59,9 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
   }
 
   @override
-  void _onLoaded(PlutoOnLoadedEvent event) {
+  void onLoaded(PlutoOnLoadedEvent event) {
     event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
-    super._onLoaded(event);
+    super.onLoaded(event);
   }
 }

@@ -78,7 +78,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       topTitle: 'Cell selection',
       topContents: [
         const Text(
-            'In Square selection mode, Shift + tap or long tap and then move to select cells.'),
+            'In cell selection mode, Shift + tap or long tap and then move to select cells.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -107,7 +107,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoOnLoadedEvent event) {
-                event.stateManager.setSelectingMode(PlutoSelectingMode.square);
+                event.stateManager.setSelectingMode(PlutoSelectingMode.cell);
 
                 stateManager = event.stateManager;
               },

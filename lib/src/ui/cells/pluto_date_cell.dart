@@ -1,6 +1,12 @@
-part of '../../../pluto_grid.dart';
+import 'dart:async';
 
-class PlutoDateCell extends StatefulWidget implements _AbstractMixinPopupCell {
+import 'package:intl/intl.dart' as intl;
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import 'mixin_popup_cell.dart';
+
+class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -16,7 +22,7 @@ class PlutoDateCell extends StatefulWidget implements _AbstractMixinPopupCell {
 }
 
 class _PlutoDateCellState extends State<PlutoDateCell>
-    with _MixinPopupCell<PlutoDateCell> {
+    with MixinPopupCell<PlutoDateCell> {
   PlutoStateManager popupStateManager;
 
   List<PlutoColumn> popupColumns = [];
@@ -78,7 +84,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   }
 
   @override
-  void _onLoaded(PlutoOnLoadedEvent event) {
+  void onLoaded(PlutoOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
     popupStateManager.setSelectingMode(PlutoSelectingMode.none);
@@ -92,7 +98,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     keyManagerStream = popupStateManager.keyManager.subject.stream
         .listen(_handleGridFocusOnKey);
 
-    super._onLoaded(event);
+    super.onLoaded(event);
   }
 
   void _handleGridFocusOnKey(KeyManagerEvent keyManagerEvent) {
@@ -104,7 +110,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
         }
       } else if (keyManagerEvent.isDown) {
         if (popupStateManager.currentRowIdx ==
-            popupStateManager._rows.length - 1) {
+            popupStateManager.refRows.length - 1) {
           popupStateManager.appendRows(_getMoreRows());
           return;
         }
@@ -190,7 +196,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = -1;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager._rows.first.cells.entries.first.value.originalValue,
+          popupStateManager
+              .refRows.first.cells.entries.first.value.originalValue,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -206,7 +213,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = 30;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager._rows.last.cells.entries.last.value.originalValue,
+          popupStateManager.refRows.last.cells.entries.last.value.originalValue,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -234,7 +241,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   }
 }
 
-class _DateCellHeader extends _PlutoStatefulWidget {
+class _DateCellHeader extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
 
   _DateCellHeader({this.stateManager});
@@ -244,7 +251,7 @@ class _DateCellHeader extends _PlutoStatefulWidget {
 }
 
 abstract class _DateCellHeaderStateWithChange
-    extends _PlutoStateWithChange<_DateCellHeader> {
+    extends PlutoStateWithChange<_DateCellHeader> {
   PlutoCell currentCell;
 
   @override

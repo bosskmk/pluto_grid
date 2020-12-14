@@ -1,6 +1,7 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseColumn extends _PlutoStatefulWidget {
+class PlutoBaseColumn extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final PlutoColumn column;
 
@@ -14,7 +15,7 @@ class PlutoBaseColumn extends _PlutoStatefulWidget {
 }
 
 abstract class _PlutoBaseColumnStateWithChange
-    extends _PlutoStateWithChange<PlutoBaseColumn> {
+    extends PlutoStateWithChange<PlutoBaseColumn> {
   bool showColumnFilter;
 
   @override

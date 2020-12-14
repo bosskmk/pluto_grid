@@ -1,4 +1,10 @@
-part of '../../pluto_grid.dart';
+import 'dart:developer' as developer;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PlutoKeyManager {
   PlutoStateManager stateManager;
@@ -247,7 +253,7 @@ class PlutoKeyManager {
           .text = stateManager.cellValueBeforeEditing.toString();
 
       stateManager.changeCellValue(
-          stateManager.currentCell._key, stateManager.cellValueBeforeEditing);
+          stateManager.currentCell.key, stateManager.cellValueBeforeEditing);
     }
   }
 
@@ -288,7 +294,7 @@ class PlutoKeyManager {
     if (stateManager.isEditing != true && stateManager.currentCell != null) {
       stateManager.setEditing(true);
 
-      stateManager.changeCellValue(stateManager.currentCell._key,
+      stateManager.changeCellValue(stateManager.currentCell.key,
           keyManagerEvent.event.logicalKey.keyLabel);
     }
   }

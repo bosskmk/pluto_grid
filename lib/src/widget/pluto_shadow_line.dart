@@ -1,4 +1,4 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
 
 class PlutoShadowLine extends StatelessWidget {
   final Axis axis;

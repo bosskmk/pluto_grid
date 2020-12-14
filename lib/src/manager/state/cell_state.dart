@@ -1,4 +1,6 @@
-part of '../../../pluto_grid.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ICellState {
   /// currently selected cell.
@@ -72,15 +74,15 @@ mixin CellState implements IPlutoState {
   PlutoCellPosition _currentCellPosition;
 
   PlutoCell get firstCell {
-    if (_rows == null || _rows.isEmpty) {
+    if (refRows == null || refRows.isEmpty) {
       return null;
     }
 
     final columnIndexes = columnIndexesByShowFrozen;
 
-    final columnField = _columns[columnIndexes.first].field;
+    final columnField = refColumns[columnIndexes.first].field;
 
-    return _rows.first.cells[columnField];
+    return refRows.first.cells[columnField];
   }
 
   void setCurrentCellPosition(
@@ -124,7 +126,7 @@ mixin CellState implements IPlutoState {
   PlutoCellPosition cellPositionByCellKey(Key cellKey) {
     assert(cellKey != null);
 
-    for (var rowIdx = 0; rowIdx < _rows.length; rowIdx += 1) {
+    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
       final columnIdx = columnIdxByCellKeyAndRowIdx(cellKey, rowIdx);
 
       if (columnIdx != null) {
@@ -138,17 +140,17 @@ mixin CellState implements IPlutoState {
   int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx) {
     if (cellKey == null ||
         rowIdx < 0 ||
-        _rows == null ||
-        rowIdx >= _rows.length) {
+        refRows == null ||
+        rowIdx >= refRows.length) {
       return null;
     }
 
     final columnIndexes = columnIndexesByShowFrozen;
 
     for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
-      final field = _columns[columnIndexes[columnIdx]].field;
+      final field = refColumns[columnIndexes[columnIdx]].field;
 
-      if (_rows[rowIdx].cells[field]._key == cellKey) {
+      if (refRows[rowIdx].cells[field].key == cellKey) {
         return columnIdx;
       }
     }
@@ -177,14 +179,14 @@ mixin CellState implements IPlutoState {
   }) {
     if (cell == null ||
         rowIdx == null ||
-        _rows == null ||
-        _rows.isEmpty ||
+        refRows == null ||
+        refRows.isEmpty ||
         rowIdx < 0 ||
-        rowIdx > _rows.length - 1) {
+        rowIdx > refRows.length - 1) {
       return;
     }
 
-    if (_currentCell != null && _currentCell._key == cell._key) {
+    if (_currentCell != null && _currentCell.key == cell.key) {
       return;
     }
 
@@ -212,11 +214,11 @@ mixin CellState implements IPlutoState {
         return cellPosition.columnIdx > 0;
       case MoveDirection.right:
         return cellPosition.columnIdx <
-            _rows[cellPosition.rowIdx].cells.length - 1;
+            refRows[cellPosition.rowIdx].cells.length - 1;
       case MoveDirection.up:
         return cellPosition.rowIdx > 0;
       case MoveDirection.down:
-        return cellPosition.rowIdx < _rows.length - 1;
+        return cellPosition.rowIdx < refRows.length - 1;
     }
 
     throw Exception('Not handled MoveDirection');
@@ -288,7 +290,7 @@ mixin CellState implements IPlutoState {
   }
 
   bool isCurrentCell(PlutoCell cell) {
-    return _currentCell != null && _currentCell._key == cell._key;
+    return _currentCell != null && _currentCell.key == cell.key;
   }
 
   bool isInvalidCellPosition(PlutoCellPosition cellPosition) {
@@ -297,7 +299,7 @@ mixin CellState implements IPlutoState {
         cellPosition.rowIdx == null ||
         cellPosition.columnIdx < 0 ||
         cellPosition.rowIdx < 0 ||
-        cellPosition.columnIdx > _columns.length - 1 ||
-        cellPosition.rowIdx > _rows.length - 1;
+        cellPosition.columnIdx > refColumns.length - 1 ||
+        cellPosition.rowIdx > refRows.length - 1;
   }
 }

@@ -1,4 +1,5 @@
-part of '../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseRow extends StatelessWidget {
   final PlutoStateManager stateManager;
@@ -24,7 +25,7 @@ class PlutoBaseRow extends StatelessWidget {
       child: Row(
         children: columns.map((column) {
           return PlutoBaseCell(
-            key: row.cells[column.field]._key,
+            key: row.cells[column.field].key,
             stateManager: stateManager,
             cell: row.cells[column.field],
             width: column.width,
@@ -38,7 +39,7 @@ class PlutoBaseRow extends StatelessWidget {
   }
 }
 
-class _RowContainerWidget extends _PlutoStatefulWidget {
+class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
@@ -58,7 +59,7 @@ class _RowContainerWidget extends _PlutoStatefulWidget {
 }
 
 abstract class __RowContainerWidgetStateWithChangeKeepAlive
-    extends _PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
+    extends PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
   bool isCurrentRow;
 
   bool isSelectedRow;

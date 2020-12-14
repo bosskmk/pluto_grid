@@ -10,7 +10,7 @@ void main() {
     test('Square, Row, None 이 리턴 되야 한다.', () {
       final selectingModes = PlutoStateManager.selectingModes;
 
-      expect(selectingModes.contains(PlutoSelectingMode.square), isTrue);
+      expect(selectingModes.contains(PlutoSelectingMode.cell), isTrue);
       expect(selectingModes.contains(PlutoSelectingMode.row), isTrue);
       expect(selectingModes.contains(PlutoSelectingMode.none), isTrue);
     });
@@ -89,7 +89,7 @@ void main() {
 
   group('PlutoSelectingMode', () {
     test('toShortString', () {
-      expect(PlutoSelectingMode.square.toShortString(), 'square');
+      expect(PlutoSelectingMode.cell.toShortString(), 'cell');
 
       expect(PlutoSelectingMode.row.toShortString(), 'row');
 

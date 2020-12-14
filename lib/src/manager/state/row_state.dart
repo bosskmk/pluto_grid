@@ -1,9 +1,13 @@
-part of '../../../pluto_grid.dart';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:pluto_filtered_list/pluto_filtered_list.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IRowState {
   List<PlutoRow> get rows;
 
-  FilteredList<PlutoRow> _rows;
+  FilteredList<PlutoRow> refRows;
 
   List<PlutoRow> get checkedRows;
 
@@ -72,27 +76,28 @@ abstract class IRowState {
 }
 
 mixin RowState implements IPlutoState {
-  List<PlutoRow> get rows => [..._rows];
+  List<PlutoRow> get rows => [...refRows];
 
-  FilteredList<PlutoRow> _rows;
+  FilteredList<PlutoRow> refRows;
 
-  List<PlutoRow> get checkedRows => _rows.where((row) => row.checked).toList(
+  List<PlutoRow> get checkedRows => refRows.where((row) => row.checked).toList(
         growable: false,
       );
 
-  List<PlutoRow> get unCheckedRows => _rows.where((row) => !row.checked).toList(
-        growable: false,
-      );
+  List<PlutoRow> get unCheckedRows =>
+      refRows.where((row) => !row.checked).toList(
+            growable: false,
+          );
 
   bool get hasCheckedRow =>
-      _rows.firstWhere(
+      refRows.firstWhere(
         (element) => element.checked,
         orElse: () => null,
       ) !=
       null;
 
   bool get hasUnCheckedRow =>
-      _rows.firstWhere(
+      refRows.firstWhere(
         (element) => !element.checked,
         orElse: () => null,
       ) !=
@@ -105,7 +110,7 @@ mixin RowState implements IPlutoState {
       return null;
     }
 
-    return _rows[currentRowIdx];
+    return refRows[currentRowIdx];
   }
 
   int getRowIdxByOffset(double offset) {
@@ -115,7 +120,7 @@ mixin RowState implements IPlutoState {
 
     int indexToMove;
 
-    final int rowsLength = _rows.length;
+    final int rowsLength = refRows.length;
 
     for (var i = 0; i < rowsLength; i += 1) {
       if (currentOffset <= offset && offset < currentOffset + rowTotalHeight) {
@@ -130,17 +135,17 @@ mixin RowState implements IPlutoState {
   }
 
   PlutoRow getRowByIdx(int rowIdx) {
-    if (rowIdx == null || rowIdx < 0 || _rows.length - 1 < rowIdx) {
+    if (rowIdx == null || rowIdx < 0 || refRows.length - 1 < rowIdx) {
       return null;
     }
 
-    return _rows[rowIdx];
+    return refRows[rowIdx];
   }
 
   PlutoRow getNewRow() {
     final cells = <String, PlutoCell>{};
 
-    _columns.forEach((PlutoColumn column) {
+    refColumns.forEach((PlutoColumn column) {
       cells[column.field] = PlutoCell(
         value: column.type.defaultValue,
       );
@@ -186,7 +191,7 @@ mixin RowState implements IPlutoState {
     bool flag, {
     bool notify = true,
   }) {
-    final findRow = _rows.firstWhere(
+    final findRow = refRows.firstWhere(
       (element) => element.key == row.key,
       orElse: () => null,
     );
@@ -195,7 +200,7 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    findRow._setChecked(flag);
+    findRow.setChecked(flag);
 
     if (notify) {
       notifyListeners();
@@ -207,28 +212,28 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    if (rowIdx < 0 || _rows.length < rowIdx) {
+    if (rowIdx < 0 || refRows.length < rowIdx) {
       return;
     } else if (rowIdx == 0) {
       prependRows(rows);
       return;
-    } else if (_rows.length == rowIdx) {
+    } else if (refRows.length == rowIdx) {
       appendRows(rows);
       return;
     }
 
     if (hasSortedColumn) {
-      final int sortIdx = _rows[rowIdx].sortIdx;
+      final int sortIdx = refRows[rowIdx].sortIdx;
 
       PlutoStateManager.initializeRows(
-        _columns,
+        refColumns,
         rows,
         start: sortIdx,
       );
 
-      for (var i = 0; i < _rows.length; i += 1) {
-        if (sortIdx <= _rows[i].sortIdx) {
-          _rows[i].sortIdx = _rows[i].sortIdx + rows.length;
+      for (var i = 0; i < refRows.length; i += 1) {
+        if (sortIdx <= refRows[i].sortIdx) {
+          refRows[i].sortIdx = refRows[i].sortIdx + rows.length;
         }
       }
 
@@ -237,8 +242,8 @@ mixin RowState implements IPlutoState {
       _insertRows(rowIdx, rows, state: PlutoRowState.added);
 
       PlutoStateManager.initializeRows(
-        _columns,
-        _rows,
+        refColumns,
+        refRows,
         forceApplySortIdx: true,
       );
     }
@@ -276,13 +281,13 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start = (_rows.isNotEmpty
-            ? _rows.map((row) => row.sortIdx ?? 0).reduce(min)
+    final start = (refRows.isNotEmpty
+            ? refRows.map((row) => row.sortIdx ?? 0).reduce(min)
             : 0) -
         rows.length;
 
     PlutoStateManager.initializeRows(
-      _columns,
+      refColumns,
       rows,
       start: start,
     );
@@ -329,17 +334,17 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    final start = _rows.isNotEmpty
-        ? _rows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
+    final start = refRows.isNotEmpty
+        ? refRows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
         : 0;
 
     PlutoStateManager.initializeRows(
-      _columns,
+      refColumns,
       rows,
       start: start,
     );
 
-    _rows.addAll(rows);
+    refRows.addAll(rows);
 
     notifyListeners();
   }
@@ -349,7 +354,7 @@ mixin RowState implements IPlutoState {
       return;
     }
 
-    _rows.removeAt(currentRowIdx);
+    refRows.removeAt(currentRowIdx);
 
     resetCurrentState(notify: false);
 
@@ -367,15 +372,15 @@ mixin RowState implements IPlutoState {
     final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
 
     if (currentRowIdx != null &&
-        _rows.length > currentRowIdx &&
-        removeKeys.contains(_rows[currentRowIdx].key)) {
+        refRows.length > currentRowIdx &&
+        removeKeys.contains(refRows[currentRowIdx].key)) {
       resetCurrentState(notify: false);
     }
 
     Key selectingCellKey;
 
     if (hasCurrentSelectingPosition) {
-      selectingCellKey = _rows[currentSelectingPosition.rowIdx]
+      selectingCellKey = refRows[currentSelectingPosition.rowIdx]
           .cells
           .entries
           .elementAt(currentSelectingPosition.columnIdx)
@@ -383,7 +388,7 @@ mixin RowState implements IPlutoState {
           .key;
     }
 
-    _rows.removeWhere((row) => removeKeys.contains(row.key));
+    refRows.removeWhere((row) => removeKeys.contains(row.key));
 
     updateCurrentCellPosition(notify: false);
 
@@ -405,19 +410,19 @@ mixin RowState implements IPlutoState {
 
     if (indexToMove == null) {
       return;
-    } else if (indexToMove + rows.length > _rows.length) {
-      indexToMove = _rows.length - rows.length;
+    } else if (indexToMove + rows.length > refRows.length) {
+      indexToMove = refRows.length - rows.length;
     }
 
     rows.forEach((row) {
-      _rows.remove(row);
+      refRows.remove(row);
     });
 
-    _rows.insertAll(indexToMove, rows);
+    refRows.insertAll(indexToMove, rows);
 
     int sortIdx = 0;
 
-    _rows.forEach((element) {
+    refRows.forEach((element) {
       element.sortIdx = sortIdx++;
     });
 
@@ -432,8 +437,8 @@ mixin RowState implements IPlutoState {
     bool flag, {
     bool notify = true,
   }) {
-    _rows.forEach((e) {
-      e._setChecked(flag == true);
+    refRows.forEach((e) {
+      e.setChecked(flag == true);
     });
 
     if (notify) {
@@ -448,10 +453,10 @@ mixin RowState implements IPlutoState {
   }) {
     if (state != null) {
       for (var row in rows) {
-        row._setState(state);
+        row.setState(state);
       }
     }
 
-    _rows.insertAll(index, rows);
+    refRows.insertAll(index, rows);
   }
 }

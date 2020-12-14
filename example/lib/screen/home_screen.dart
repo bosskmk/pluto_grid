@@ -286,7 +286,7 @@ class PlutoFeatures extends StatelessWidget {
           PlutoListTile(
             title: 'Cell selection',
             description:
-                'In Square selection mode, Shift + tap or long tap and then move to select cells.',
+                'In cell selection mode, Shift + tap or long tap and then move to select cells.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CellSelectionScreen.routeName);
             },
