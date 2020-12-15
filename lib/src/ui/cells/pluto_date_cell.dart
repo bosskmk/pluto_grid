@@ -151,8 +151,14 @@ class _PlutoDateCellState extends State<PlutoDateCell>
         enableSorting: false,
         enableContextMenu: false,
         formatter: (dynamic value) {
-          var dateTime = DateTime.tryParse(value);
-          return dateTime == null ? '' : dateTime.day.toString();
+          if (value == null || value.toString().isEmpty) {
+            return '';
+          }
+
+          var dateTime =
+              intl.DateFormat(widget.column.type.date.format).parse(value);
+
+          return dateTime.day.toString();
         },
       );
     }).toList(growable: false);

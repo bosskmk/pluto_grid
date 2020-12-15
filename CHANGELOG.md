@@ -1,3 +1,9 @@
+## [1.0.0-pre.8] - 2020. 12. 16
+
+* Add filtering.
+* Rename PlutoSelectingMode.square to PlutoSelectingMode.cell.
+* Remove originalValue property from PlutoCell.
+
 ## [1.0.0-pre.7] - 2020. 11. 24
 
 * Added to PlutoConfiguration to allow you to set the row height.
