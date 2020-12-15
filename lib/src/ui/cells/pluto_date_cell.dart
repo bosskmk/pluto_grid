@@ -150,6 +150,10 @@ class _PlutoDateCellState extends State<PlutoDateCell>
         enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,
+        formatter: (dynamic value) {
+          var dateTime = DateTime.tryParse(value);
+          return dateTime == null ? '' : dateTime.day.toString();
+        },
       );
     }).toList(growable: false);
   }
@@ -173,9 +177,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
           final DateTime day = days.removeAt(0);
 
           return PlutoCell(
-              value: day.day,
-              originalValue:
-                  intl.DateFormat(widget.column.type.date.format).format(day));
+            value: intl.DateFormat(widget.column.type.date.format).format(day),
+          );
         },
       );
 
@@ -197,7 +200,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
           popupStateManager
-              .refRows.first.cells.entries.first.value.originalValue,
+              .refRows.first.cells.entries.first.value.value,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -213,7 +216,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = 30;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager.refRows.last.cells.entries.last.value.originalValue,
+          popupStateManager.refRows.last.cells.entries.last.value.value,
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -268,11 +271,11 @@ abstract class _DateCellHeaderStateWithChange
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   String get currentDate {
-    if (currentCell == null || currentCell.originalValue.isEmpty) {
+    if (currentCell == null || currentCell.value.isEmpty) {
       return '';
     }
 
-    return currentCell.originalValue;
+    return currentCell.value;
   }
 
   Color get textColor =>

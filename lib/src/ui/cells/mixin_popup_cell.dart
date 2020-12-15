@@ -129,16 +129,14 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     for (var i = 0; i < popupRows.length; i += 1) {
       if (fieldOnSelected == null) {
         for (var entry in popupRows[i].cells.entries) {
-          if (popupRows[i].cells[entry.key].originalValue ==
-              widget.cell.originalValue) {
+          if (popupRows[i].cells[entry.key].value == widget.cell.value) {
             event.stateManager.setCurrentCell(
                 event.stateManager.refRows[i].cells[entry.key], i);
             break;
           }
         }
       } else {
-        if (popupRows[i].cells[fieldOnSelected].originalValue ==
-            widget.cell.originalValue) {
+        if (popupRows[i].cells[fieldOnSelected].value == widget.cell.value) {
           event.stateManager.setCurrentCell(
               event.stateManager.refRows[i].cells[fieldOnSelected], i);
           break;
@@ -171,9 +169,9 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     if (event.row != null &&
         fieldOnSelected != null &&
         event.row.cells.containsKey(fieldOnSelected)) {
-      selectedValue = event.row.cells[fieldOnSelected].originalValue;
+      selectedValue = event.row.cells[fieldOnSelected].value;
     } else if (event.cell != null) {
-      selectedValue = event.cell.originalValue;
+      selectedValue = event.cell.value;
     } else {
       return;
     }
