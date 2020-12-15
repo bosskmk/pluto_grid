@@ -247,11 +247,17 @@ void main() {
   });
 
   group('format yyyy년 MM월 dd일', () {
-    final makeDateCell = (String date) {
+    final makeDateCell = (
+      String date, {
+      DateTime startDate,
+    }) {
       PlutoColumn column = PlutoColumn(
         title: 'column title',
         field: 'column_field_name',
-        type: PlutoColumnType.date(format: 'yyyy년 MM월 dd일'),
+        type: PlutoColumnType.date(
+          format: 'yyyy년 MM월 dd일',
+          startDate: startDate,
+        ),
       );
 
       PlutoCell cell = PlutoCell(value: date);
@@ -292,6 +298,32 @@ void main() {
 
         verify(stateManager.handleAfterSelectingRow(any, '2020년 11월 30일'))
             .called(1);
+      },
+    );
+
+    makeDateCell(
+      '2020년 12월 01일',
+      startDate: DateTime.parse('2020-12-01'),
+    ).test(
+      '왼쪽 방향키를 입력하고 엔터를 입력해도 startDate 보다 작아 선택 되지 않아야 한다.',
+      (tester) async {
+        await tester.tap(find.byType(TextField));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(Dialog), findsOneWidget);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pumpAndSettle(const Duration(milliseconds: 300));
+
+        verifyNever(stateManager.handleAfterSelectingRow(
+          any,
+          '2020년 11월 30일',
+        ));
+
+        expect(find.text('2020년 12월 01일'), findsOneWidget);
       },
     );
   });

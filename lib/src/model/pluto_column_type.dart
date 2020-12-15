@@ -64,11 +64,11 @@ abstract class PlutoColumnType {
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   factory PlutoColumnType.date({
-    readOnly = false,
+    bool readOnly = false,
     dynamic defaultValue = '',
-    startDate,
-    endDate,
-    format = 'yyyy-MM-dd',
+    DateTime startDate,
+    DateTime endDate,
+    String format = 'yyyy-MM-dd',
     applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeDate(
