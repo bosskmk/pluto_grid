@@ -29,6 +29,8 @@ abstract class IPlutoState extends ChangeNotifier
         IScrollState,
         ISelectingState {
   notifyListeners();
+
+  notifyListenersOnPostFrame();
 }
 
 class PlutoState extends ChangeNotifier
@@ -56,6 +58,12 @@ class PlutoState extends ChangeNotifier
     if (!_disposed) {
       super.notifyListeners();
     }
+  }
+
+  notifyListenersOnPostFrame() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      notifyListeners();
+    });
   }
 }
 

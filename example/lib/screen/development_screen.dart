@@ -1,3 +1,4 @@
+import 'package:example/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -182,6 +183,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 height: stateManager.headerHeight,
                 child: Row(
                   children: [
+                    FlatButton(
+                      child: const Text('Go Home'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, HomeScreen.routeName);
+                      },
+                    ),
                     FlatButton(
                       child: const Text('Add 10'),
                       onPressed: () {

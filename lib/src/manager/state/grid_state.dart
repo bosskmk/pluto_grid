@@ -157,12 +157,18 @@ mixin GridState implements IPlutoState {
 
     _keepFocus = flag;
 
-    if (_keepFocus == true) {
+    if (_keepFocus) {
       _gridFocusNode.requestFocus();
     }
 
     if (notify) {
-      notifyListeners();
+      if (_keepFocus) {
+        // RequestFocus is fired and notifies listeners with hasFocus true.
+        // requestFocus delays up to one frame.
+        notifyListenersOnPostFrame();
+      } else {
+        notifyListeners();
+      }
     }
   }
 
