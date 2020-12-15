@@ -10,10 +10,12 @@ class PlutoEventManager {
     this.stateManager,
   });
 
-  PublishSubject<PlutoEvent> subject = PublishSubject<PlutoEvent>();
+  final PublishSubject<PlutoEvent> _subject = PublishSubject<PlutoEvent>();
+
+  PublishSubject<PlutoEvent> get subject => _subject;
 
   void dispose() {
-    subject.close();
+    _subject.close();
   }
 
   void init() {
@@ -21,9 +23,9 @@ class PlutoEventManager {
       return event is PlutoMoveUpdateEvent;
     };
 
-    final stream = subject.stream.where((event) => !isThrottle(event));
+    final stream = _subject.stream.where((event) => !isThrottle(event));
 
-    final throttleStream = subject.stream
+    final throttleStream = _subject.stream
         .where((event) => isThrottle(event))
         .throttleTime(const Duration(milliseconds: 800));
 
@@ -31,13 +33,13 @@ class PlutoEventManager {
   }
 
   void addEvent(PlutoEvent event) {
-    subject.add(event);
+    _subject.add(event);
   }
 
   StreamSubscription<PlutoEvent> listener(
     void onData(PlutoEvent event),
   ) {
-    return subject.stream.listen(onData);
+    return _subject.stream.listen(onData);
   }
 
   void _handler(PlutoEvent event) {

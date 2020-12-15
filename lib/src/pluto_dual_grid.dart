@@ -61,8 +61,8 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
             _stateManagerB = onLoadedEvent.stateManager;
           }
 
-          onLoadedEvent.stateManager.eventManager.subject.stream
-              .listen((PlutoEvent plutoEvent) {
+          onLoadedEvent.stateManager.eventManager
+              .listener((PlutoEvent plutoEvent) {
             if (plutoEvent is PlutoCannotMoveCurrentCellEvent) {
               if (isGridA == true && plutoEvent.direction.isRight) {
                 _stateManagerA.setKeepFocus(false);
