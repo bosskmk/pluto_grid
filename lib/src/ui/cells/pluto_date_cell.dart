@@ -199,9 +199,9 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = -1;
 
       defaultDate = DatetimeHelper.parseOrNullWithFormat(
-          popupStateManager
-              .refRows.first.cells.entries.first.value.value,
-          widget.column.type.date.format);
+        popupStateManager.refRows.first.cells.entries.first.value.value,
+        widget.column.type.date.format,
+      );
 
       if (defaultDate == null) {
         return [];

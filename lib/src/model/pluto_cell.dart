@@ -6,7 +6,7 @@ class PlutoCell {
 
   PlutoCell({
     this.value,
-  })  : _key = UniqueKey();
+  }) : _key = UniqueKey();
 
   final Key _key;
 
