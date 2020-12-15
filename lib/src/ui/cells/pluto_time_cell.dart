@@ -57,8 +57,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
         }
 
         super.handleSelected(
-          '${event.gridA.cell.originalValue}:'
-          '${event.gridB.cell.originalValue}',
+          '${event.gridA.cell.value}:'
+          '${event.gridB.cell.value}',
         );
       },
       gridPropsA: PlutoDualGridProps(
@@ -84,8 +84,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
           for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['hour'].originalValue ==
-                cellHour) {
+            if (event.stateManager.refRows[i].cells['hour'].value == cellHour) {
               event.stateManager.setCurrentCell(
                   event.stateManager.refRows[i].cells['hour'], i);
 
@@ -120,7 +119,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           event.stateManager.setSelectingMode(PlutoSelectingMode.none);
 
           for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['minute'].originalValue ==
+            if (event.stateManager.refRows[i].cells['minute'].value ==
                 cellMinute) {
               event.stateManager.setCurrentCell(
                   event.stateManager.refRows[i].cells['minute'], i);

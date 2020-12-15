@@ -137,7 +137,7 @@ mixin KeyboardState implements IPlutoState {
     final cellPosition = currentCellPosition;
 
     if (canNotMoveCell(cellPosition, direction)) {
-      eventManager.subject.add(
+      eventManager.addEvent(
         PlutoCannotMoveCurrentCellEvent(
           cellPosition: cellPosition,
           direction: direction,

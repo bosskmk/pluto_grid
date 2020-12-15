@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
@@ -26,6 +29,8 @@ abstract class _PlutoColumnFilterStateWithChange
 
   bool enabled;
 
+  StreamSubscription event;
+
   String get filterValue {
     return filterRows.isEmpty
         ? ''
@@ -45,14 +50,20 @@ abstract class _PlutoColumnFilterStateWithChange
 
     focusNode = FocusNode(onKey: handleOnKey);
 
+    widget.column.setFilterFocusNode(focusNode);
+
     controller = TextEditingController(text: filterValue);
+
+    event = widget.stateManager.eventManager.listener(handleFocusFromRows);
   }
 
   @override
   dispose() {
-    focusNode.dispose();
+    event.cancel();
 
     controller.dispose();
+
+    focusNode.dispose();
 
     super.dispose();
   }
@@ -81,7 +92,58 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   bool handleOnKey(FocusNode node, RawKeyEvent event) {
+    var keyManager = KeyManagerEvent(
+      focusNode: node,
+      event: event,
+    );
+
+    if (keyManager.isKeyDownEvent) {
+      if (keyManager.isDown || keyManager.isEnter) {
+        if (widget.stateManager.refRows.isNotEmpty) {
+          focusNode.unfocus();
+
+          if (widget.stateManager.currentCell == null) {
+            widget.stateManager.setCurrentCell(
+              widget.stateManager.refRows.first.cells[widget.column.field],
+              0,
+              notify: false,
+            );
+          }
+
+          widget.stateManager.setKeepFocus(true);
+        }
+      } else if (keyManager.isTab ||
+          (controller.text.isEmpty && keyManager.isHorizontal)) {
+        widget.stateManager.nextFocusOfColumnFilter(
+          widget.column,
+          reversed: keyManager.isLeft || keyManager.isShiftPressed,
+        );
+      }
+    }
+
     return true;
+  }
+
+  void handleFocusFromRows(PlutoEvent plutoEvent) {
+    if (!widget.column.enableFilterMenuItem) {
+      return;
+    }
+
+    if (plutoEvent is PlutoCannotMoveCurrentCellEvent &&
+        plutoEvent.direction.isUp) {
+      var isCurrentColumn = widget
+              .stateManager
+              .refColumns[widget.stateManager
+                  .columnIndexesByShowFrozen[plutoEvent.cellPosition.columnIdx]]
+              .key ==
+          widget.column.key;
+
+      if (isCurrentColumn) {
+        widget.stateManager.clearCurrentCell(notify: false);
+        widget.stateManager.setKeepFocus(false);
+        focusNode.requestFocus();
+      }
+    }
   }
 }
 

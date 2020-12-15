@@ -4,9 +4,6 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IGridState {
   GlobalKey get gridKey;
 
-  /// FocusNode to control keyboard input.
-  FocusNode get gridFocusNode;
-
   PlutoGridMode get mode;
 
   PlutoConfiguration get configuration;
@@ -26,10 +23,6 @@ abstract class IGridState {
 
   CreateFooterCallBack get createFooter;
 
-  bool get keepFocus;
-
-  bool get hasFocus;
-
   PlutoGridLocaleText get localeText;
 
   void setGridKey(Key key);
@@ -37,8 +30,6 @@ abstract class IGridState {
   void setKeyManager(PlutoKeyManager keyManager);
 
   void setEventManager(PlutoEventManager eventManager);
-
-  void setGridFocusNode(FocusNode focusNode);
 
   void setGridMode(PlutoGridMode mode);
 
@@ -52,8 +43,6 @@ abstract class IGridState {
 
   void setConfiguration(PlutoConfiguration configuration);
 
-  void setKeepFocus(bool flag, {bool notify = true});
-
   void resetCurrentState({notify = true});
 
   /// Event occurred after selecting Row in Select mode.
@@ -64,10 +53,6 @@ mixin GridState implements IPlutoState {
   GlobalKey get gridKey => _gridKey;
 
   GlobalKey _gridKey;
-
-  FocusNode get gridFocusNode => _gridFocusNode;
-
-  FocusNode _gridFocusNode;
 
   PlutoGridMode get mode => _mode;
 
@@ -101,13 +86,6 @@ mixin GridState implements IPlutoState {
 
   CreateFooterCallBack _createFooter;
 
-  bool get keepFocus => _keepFocus;
-
-  bool _keepFocus = false;
-
-  bool get hasFocus =>
-      _gridFocusNode != null && _keepFocus && _gridFocusNode.hasFocus;
-
   PlutoGridLocaleText get localeText => configuration.localeText;
 
   void setKeyManager(PlutoKeyManager keyManager) {
@@ -116,10 +94,6 @@ mixin GridState implements IPlutoState {
 
   void setEventManager(PlutoEventManager eventManager) {
     _eventManager = eventManager;
-  }
-
-  void setGridFocusNode(FocusNode focusNode) {
-    _gridFocusNode = focusNode;
   }
 
   void setGridMode(PlutoGridMode mode) {
@@ -148,22 +122,6 @@ mixin GridState implements IPlutoState {
 
   void setGridKey(Key key) {
     _gridKey = key;
-  }
-
-  void setKeepFocus(bool flag, {bool notify = true}) {
-    if (_keepFocus == flag) {
-      return;
-    }
-
-    _keepFocus = flag;
-
-    if (_keepFocus == true) {
-      _gridFocusNode.requestFocus();
-    }
-
-    if (notify) {
-      notifyListeners();
-    }
   }
 
   void resetCurrentState({notify = true}) {

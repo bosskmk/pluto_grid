@@ -8,6 +8,7 @@ import 'state/column_state.dart';
 import 'state/dragging_row_state.dart';
 import 'state/editing_state.dart';
 import 'state/filtering_row_state.dart';
+import 'state/focus_state.dart';
 import 'state/grid_state.dart';
 import 'state/keyboard_state.dart';
 import 'state/layout_state.dart';
@@ -22,6 +23,7 @@ abstract class IPlutoState extends ChangeNotifier
         IDraggingRowState,
         IEditingState,
         IFilteringRowState,
+        IFocusState,
         IGridState,
         IKeyboardState,
         ILayoutState,
@@ -29,6 +31,8 @@ abstract class IPlutoState extends ChangeNotifier
         IScrollState,
         ISelectingState {
   notifyListeners();
+
+  notifyListenersOnPostFrame();
 }
 
 class PlutoState extends ChangeNotifier
@@ -38,6 +42,7 @@ class PlutoState extends ChangeNotifier
         DraggingRowState,
         EditingState,
         FilteringRowState,
+        FocusState,
         GridState,
         KeyboardState,
         LayoutState,
@@ -56,6 +61,12 @@ class PlutoState extends ChangeNotifier
     if (!_disposed) {
       super.notifyListeners();
     }
+  }
+
+  notifyListenersOnPostFrame() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      notifyListeners();
+    });
   }
 }
 
