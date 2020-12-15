@@ -35,6 +35,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         title: 'Column C',
         field: 'column_c',
         type: PlutoColumnType.text(),
+        enableFilterMenuItem: false,
       ),
     ];
 
@@ -77,6 +78,8 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
             'Select the SetFilter menu from the menu that appears when you tap the icon on the right of the column'),
         const Text(
             'If the filter is set to all or complex conditions, TextField under the column is deactivated.'),
+        const Text(
+            'Also, like the Column C, if enableFilterMenuItem is false, it is excluded from all column filtering conditions.'),
         const SizedBox(
           height: 10,
         ),
