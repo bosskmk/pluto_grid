@@ -125,7 +125,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   void handleFocusFromRows(PlutoEvent plutoEvent) {
-    if (!widget.column.enableFilterMenuItem) {
+    if (!enabled) {
       return;
     }
 
