@@ -8,6 +8,7 @@ import 'state/column_state.dart';
 import 'state/dragging_row_state.dart';
 import 'state/editing_state.dart';
 import 'state/filtering_row_state.dart';
+import 'state/focus_state.dart';
 import 'state/grid_state.dart';
 import 'state/keyboard_state.dart';
 import 'state/layout_state.dart';
@@ -22,6 +23,7 @@ abstract class IPlutoState extends ChangeNotifier
         IDraggingRowState,
         IEditingState,
         IFilteringRowState,
+        IFocusState,
         IGridState,
         IKeyboardState,
         ILayoutState,
@@ -40,6 +42,7 @@ class PlutoState extends ChangeNotifier
         DraggingRowState,
         EditingState,
         FilteringRowState,
+        FocusState,
         GridState,
         KeyboardState,
         LayoutState,

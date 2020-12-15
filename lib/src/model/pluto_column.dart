@@ -91,6 +91,16 @@ class PlutoColumn {
 
   bool get hasRenderer => renderer != null;
 
+  FocusNode _filterFocusNode;
+
+  FocusNode get filterFocusNode {
+    return _filterFocusNode;
+  }
+
+  void setFilterFocusNode(FocusNode node) {
+    _filterFocusNode = node;
+  }
+
   String formattedValueForType(dynamic value) {
     if (type.isNumber) {
       return type.number.applyFormat(value);

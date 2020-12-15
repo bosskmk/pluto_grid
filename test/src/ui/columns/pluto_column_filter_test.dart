@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -10,14 +12,19 @@ import '../../../mock/mock_pluto_state_manager.dart';
 void main() {
   PlutoStateManager stateManager;
   PlutoEventManager eventManager;
+  StreamSubscription<PlutoEvent> streamSubscription;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
     eventManager = MockPlutoEventManager();
+    streamSubscription = MockStreamSubscription();
+
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
+
+    when(eventManager.listener(any)).thenReturn(streamSubscription);
   });
 
   testWidgets(

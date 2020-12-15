@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -30,6 +32,12 @@ class PlutoEventManager {
 
   void addEvent(PlutoEvent event) {
     subject.add(event);
+  }
+
+  StreamSubscription<PlutoEvent> listener(
+    void onData(PlutoEvent event),
+  ) {
+    return subject.stream.listen(onData);
   }
 
   void _handler(PlutoEvent event) {
