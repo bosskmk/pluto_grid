@@ -368,6 +368,26 @@ class _FilterPopupHeader extends StatelessWidget {
     this.handleAddNewFilter,
   }) : super(key: key);
 
+  void handleAddButton() {
+    handleAddNewFilter(stateManager);
+  }
+
+  void handleRemoveButton() {
+    if (stateManager.currentSelectingRows.isEmpty) {
+      stateManager.removeCurrentRow();
+    } else {
+      stateManager.removeRows(stateManager.currentSelectingRows);
+    }
+  }
+
+  void handleClearButton() {
+    if (stateManager.rows.isEmpty) {
+      Navigator.of(stateManager.gridFocusNode.context).pop();
+    } else {
+      stateManager.removeRows(stateManager.rows);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -378,25 +398,19 @@ class _FilterPopupHeader extends StatelessWidget {
             icon: const Icon(Icons.add),
             color: configuration.iconColor,
             iconSize: configuration.iconSize,
-            onPressed: () => handleAddNewFilter(stateManager),
+            onPressed: handleAddButton,
           ),
           IconButton(
             icon: const Icon(Icons.remove),
             color: configuration.iconColor,
             iconSize: configuration.iconSize,
-            onPressed: () {
-              if (stateManager.currentSelectingRows.isEmpty) {
-                stateManager.removeCurrentRow();
-              } else {
-                stateManager.removeRows(stateManager.currentSelectingRows);
-              }
-            },
+            onPressed: handleRemoveButton,
           ),
           IconButton(
             icon: const Icon(Icons.clear_sharp),
             color: Colors.red,
             iconSize: configuration.iconSize,
-            onPressed: () => stateManager.removeRows(stateManager.rows),
+            onPressed: handleClearButton,
           ),
         ],
       ),
