@@ -485,7 +485,7 @@ void main() {
               configuration: PlutoConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
-              columns: [],
+              columns: ColumnHelper.textColumn('column'),
               filterRows: null,
               focusFirstFilterValue: false,
             );
@@ -505,7 +505,7 @@ void main() {
               configuration: PlutoConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
-              columns: [],
+              columns: ColumnHelper.textColumn('column'),
               filterRows: [],
               focusFirstFilterValue: null,
             );
@@ -623,6 +623,167 @@ void main() {
       verify(
         stateManager.removeListener(filterPopupState.stateListener),
       ).called(1);
+    });
+
+    group('stateListener', () {
+      test('filterRows 가 변경되지 않았으면 handleApplyFilter 가 호출되지 않아야 한다.', () {
+        var mock = MockOnChangeListener();
+
+        var columns = ColumnHelper.textColumn('column');
+
+        var filterRows = RowHelper.count(1, columns);
+
+        var filterPopupState = FilterPopupState(
+          context: MockBuildContext(),
+          configuration: PlutoConfiguration(),
+          handleAddNewFilter: (_) {},
+          handleApplyFilter: mock.onChangeOneParamListener,
+          columns: columns,
+          filterRows: filterRows,
+          focusFirstFilterValue: false,
+        );
+
+        var stateManager = MockPlutoStateManager();
+
+        filterPopupState.onLoaded(
+          PlutoOnLoadedEvent(stateManager: stateManager),
+        );
+
+        when(stateManager.rows).thenReturn([...filterRows]);
+
+        filterPopupState.stateListener();
+
+        verifyNever(mock.onChangeOneParamListener(stateManager));
+      });
+
+      test('filterRows 가 변경 되었으면 handleApplyFilter 가 호출 되어야 한다.', () {
+        var mock = MockOnChangeListener();
+
+        var columns = ColumnHelper.textColumn('column');
+
+        var filterPopupState = FilterPopupState(
+          context: MockBuildContext(),
+          configuration: PlutoConfiguration(),
+          handleAddNewFilter: (_) {},
+          handleApplyFilter: mock.onChangeOneParamListener,
+          columns: columns,
+          filterRows: [],
+          focusFirstFilterValue: false,
+        );
+
+        var stateManager = MockPlutoStateManager();
+
+        filterPopupState.onLoaded(
+          PlutoOnLoadedEvent(stateManager: stateManager),
+        );
+
+        when(stateManager.rows).thenReturn(RowHelper.count(1, columns));
+
+        filterPopupState.stateListener();
+
+        verify(mock.onChangeOneParamListener(stateManager)).called(1);
+      });
+    });
+
+    group('makeColumns', () {
+      var columns = ColumnHelper.textColumn('column', count: 3);
+
+      var configuration = PlutoConfiguration();
+
+      var filterPopupState = FilterPopupState(
+        context: MockBuildContext(),
+        configuration: configuration,
+        handleAddNewFilter: (_) {},
+        handleApplyFilter: (_) {},
+        columns: columns,
+        filterRows: [],
+        focusFirstFilterValue: false,
+      );
+
+      var filterColumns = filterPopupState.makeColumns();
+
+      test('3개의 컬럼이 생성 되어야 한다.', () {
+        expect(filterColumns.length, 3);
+        expect(filterColumns[0].field, FilterHelper.filterFieldColumn);
+        expect(filterColumns[1].field, FilterHelper.filterFieldType);
+        expect(filterColumns[2].field, FilterHelper.filterFieldValue);
+      });
+
+      test('filterColumns 의 첫번째 컬럼이 select type 으로 생성 되어야 한다.', () {
+        var filterColumn = filterColumns[0];
+
+        expect(filterColumn.type, isA<PlutoColumnTypeSelect>());
+
+        var columnType = filterColumn.type as PlutoColumnTypeSelect;
+
+        // 전체 검색 필드가 추가 되어 +1 (FilterHelper.filterFieldAllColumns)
+        expect(columnType.items.length, columns.length + 1);
+
+        expect(columnType.items[0], FilterHelper.filterFieldAllColumns);
+        expect(columnType.items[1], columns[0].field);
+        expect(columnType.items[2], columns[1].field);
+        expect(columnType.items[3], columns[2].field);
+
+        // formatter
+        expect(
+          filterColumn.formatter(FilterHelper.filterFieldAllColumns),
+          configuration.localeText.filterAllColumns,
+        );
+
+        expect(
+          filterColumn.formatter(columns[0].field),
+          columns[0].title,
+        );
+
+        expect(
+          filterColumn.formatter(columns[1].field),
+          columns[1].title,
+        );
+
+        expect(
+          filterColumn.formatter(columns[2].field),
+          columns[2].title,
+        );
+      });
+
+      test('filterColumns 의 두번째 컬럼이 select type 으로 생성 되어야 한다.', () {
+        var filterColumn = filterColumns[1];
+
+        expect(filterColumn.type, isA<PlutoColumnTypeSelect>());
+
+        var columnType = filterColumn.type as PlutoColumnTypeSelect;
+
+        // configuration 의 필터 수 만큼 생성 되어야 한다. (기본 4개)
+        expect(configuration.columnFilters.length, 4);
+        expect(columnType.items.length, configuration.columnFilters.length);
+
+        // formatter
+        expect(
+          filterColumn.formatter(configuration.columnFilters[0]),
+          configuration.columnFilters[0].title,
+        );
+
+        expect(
+          filterColumn.formatter(configuration.columnFilters[1]),
+          configuration.columnFilters[1].title,
+        );
+
+        expect(
+          filterColumn.formatter(configuration.columnFilters[2]),
+          configuration.columnFilters[2].title,
+        );
+
+        expect(
+          filterColumn.formatter(configuration.columnFilters[3]),
+          configuration.columnFilters[3].title,
+        );
+      });
+
+      test('filterColumns 의 세번째 컬럼이 text type 으로 생성 되어야 한다.', () {
+        var filterColumn = filterColumns[2];
+
+        expect(filterColumn.type, isA<PlutoColumnTypeText>());
+      });
     });
   });
 }
