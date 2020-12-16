@@ -138,12 +138,11 @@ class FilterHelper {
 
   static bool compareEquals(dynamic base, dynamic search) {
     if (base is String || base is int || base is double || base is bool) {
-      return base.runtimeType == search.runtimeType &&
-          _compareWithRegExp(
-            // ignore: prefer_interpolation_to_compose_strings
-            r'^' + RegExp.escape(search.toString()) + r'$',
-            base.toString(),
-          );
+      return _compareWithRegExp(
+        // ignore: prefer_interpolation_to_compose_strings
+        r'^' + RegExp.escape(search.toString()) + r'$',
+        base.toString(),
+      );
     }
 
     return identical(base, search);
