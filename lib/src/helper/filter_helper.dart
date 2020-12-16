@@ -6,14 +6,22 @@ import 'package:pluto_grid/pluto_grid.dart';
 typedef SetFilterPopupHandler = void Function(PlutoStateManager stateManager);
 
 class FilterHelper {
+  /// A value to identify all column searches when searching filters.
   static const filterFieldAllColumns = 'plutoFilterAllColumns';
 
+  /// The field name of the column that includes the field values of the column
+  /// when searching for a filter.
   static const filterFieldColumn = 'column';
 
+  /// The field name of the column including the filter type
+  /// when searching for a filter.
   static const filterFieldType = 'type';
 
+  /// The field name of the column containing the value to be searched
+  /// when searching for a filter.
   static const filterFieldValue = 'value';
 
+  /// Create a row to contain filter information.
   static PlutoRow createFilterRow({
     String columnField,
     PlutoFilterType filterType,
@@ -30,6 +38,7 @@ class FilterHelper {
     );
   }
 
+  /// Converts rows containing filter information into comparison functions.
   static FilteredListFilter<PlutoRow> convertRowsToFilter(
     List<PlutoRow> rows,
     List<String> enabledFilterColumnFields,
@@ -77,6 +86,11 @@ class FilterHelper {
     };
   }
 
+  /// Whether [column] is included in [filteredRows].
+  ///
+  /// That is, check if it is a filtered column.
+  /// If there is a search condition for all columns in [filteredRows],
+  /// it is regarded as a filtering column.
   static bool isFilteredColumn(
     PlutoColumn column,
     List<PlutoRow> filteredRows,
@@ -97,6 +111,7 @@ class FilterHelper {
     return false;
   }
 
+  /// Opens a pop-up for filtering.
   static void filterPopup(FilterPopupState popupState) {
     PlutoGridPopup(
       width: popupState.width,
@@ -113,14 +128,17 @@ class FilterHelper {
     );
   }
 
+  /// 'or' comparison with null values
   static bool compareOr(bool a, bool b) {
     return a != true ? a == true || b : true;
   }
 
+  /// 'and' comparison with null values
   static bool compareAnd(bool a, bool b) {
     return a != false ? b : false;
   }
 
+  /// Compare [base] and [search] with [PlutoFilterType.compare].
   static bool compareByFilterType(
     PlutoFilterType filterType,
     dynamic base,
@@ -129,6 +147,7 @@ class FilterHelper {
     return filterType.compare(base, search);
   }
 
+  /// Whether [search] is contains in [base].
   static bool compareContains(dynamic base, dynamic search) {
     return _compareWithRegExp(
       RegExp.escape(search.toString()),
@@ -136,6 +155,7 @@ class FilterHelper {
     );
   }
 
+  /// Whether [search] is equals to [base].
   static bool compareEquals(dynamic base, dynamic search) {
     if (base is String || base is int || base is double || base is bool) {
       return _compareWithRegExp(
@@ -148,6 +168,7 @@ class FilterHelper {
     return identical(base, search);
   }
 
+  /// Whether [base] starts with [search].
   static bool compareStartsWith(dynamic base, dynamic search) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
@@ -156,6 +177,7 @@ class FilterHelper {
     );
   }
 
+  /// Whether [base] ends with [search].
   static bool compareEndsWith(dynamic base, dynamic search) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
@@ -176,15 +198,33 @@ class FilterHelper {
   }
 }
 
+/// State for calling filter pop
 class FilterPopupState {
+  /// [BuildContext] for calling [showDialog]
   final BuildContext context;
+
+  /// [PlutoConfiguration] to call [PlutoGridPopup]
   final PlutoConfiguration configuration;
+
+  /// A callback function called when adding a new filter.
   final SetFilterPopupHandler handleAddNewFilter;
+
+  /// A callback function called when filter information changes.
   final SetFilterPopupHandler handleApplyFilter;
+
+  /// List of columns to be filtered.
   final List<PlutoColumn> columns;
+
+  /// List with filtering condition information
   final List<PlutoRow> filterRows;
+
+  /// The filter popup opens and focuses on the filter value in the first row.
   final bool focusFirstFilterValue;
+
+  /// Width of filter popup
   final double width;
+
+  /// Height of filter popup
   final double height;
 
   FilterPopupState({

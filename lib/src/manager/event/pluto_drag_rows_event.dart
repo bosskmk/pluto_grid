@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-/// Event : Dragging [PlutoRow].
+/// Event called when a row is dragged.
 class PlutoDragRowsEvent extends PlutoEvent {
   final Offset offset;
   final PlutoDragType dragType;
