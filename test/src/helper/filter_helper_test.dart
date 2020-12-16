@@ -351,6 +351,10 @@ void main() {
       test('apple is not equals banana', () {
         expect(compare('apple', 'banana'), isFalse);
       });
+
+      test('0 equals "0"', () {
+        expect(compare(0, '0'), isTrue);
+      });
     });
   });
 
