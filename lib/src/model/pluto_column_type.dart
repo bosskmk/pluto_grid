@@ -26,11 +26,11 @@ abstract class PlutoColumnType {
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   factory PlutoColumnType.number({
-    readOnly = false,
+    bool readOnly = false,
     dynamic defaultValue = 0,
-    negative = true,
-    format = '#,###',
-    applyFormatOnInit = true,
+    bool negative = true,
+    String format = '#,###',
+    bool applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeNumber(
       readOnly: readOnly,
@@ -44,7 +44,7 @@ abstract class PlutoColumnType {
   /// Provides a selection list and sets it as a selection column.
   factory PlutoColumnType.select(
     List<dynamic> items, {
-    readOnly = false,
+    bool readOnly = false,
     dynamic defaultValue = '',
   }) {
     return PlutoColumnTypeSelect(
@@ -69,7 +69,7 @@ abstract class PlutoColumnType {
     DateTime startDate,
     DateTime endDate,
     String format = 'yyyy-MM-dd',
-    applyFormatOnInit = true,
+    bool applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeDate(
       readOnly: readOnly,
@@ -82,7 +82,7 @@ abstract class PlutoColumnType {
   }
 
   factory PlutoColumnType.time({
-    readOnly = false,
+    bool readOnly = false,
     dynamic defaultValue = '00:00',
   }) {
     return PlutoColumnTypeTime(
