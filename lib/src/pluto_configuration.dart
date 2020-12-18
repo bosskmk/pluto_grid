@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'helper/filter_helper.dart';
+
 class PlutoConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
@@ -135,6 +137,11 @@ class PlutoConfiguration {
     PlutoFilterTypeEquals.name = localeText.filterEquals;
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;
     PlutoFilterTypeEndsWith.name = localeText.filterEndsWith;
+    PlutoFilterTypeGreaterThan.name = localeText.filterGreaterThan;
+    PlutoFilterTypeGreaterThanOrEqualTo.name =
+        localeText.filterGreaterThanOrEqualTo;
+    PlutoFilterTypeLessThan.name = localeText.filterLessThan;
+    PlutoFilterTypeLessThanOrEqualTo.name = localeText.filterLessThanOrEqualTo;
   }
 
   /// Fired when setConfiguration is called in [PlutoStateManager]'s constructor.
@@ -219,6 +226,10 @@ class PlutoGridLocaleText {
   final String filterEquals;
   final String filterStartsWith;
   final String filterEndsWith;
+  final String filterGreaterThan;
+  final String filterGreaterThanOrEqualTo;
+  final String filterLessThan;
+  final String filterLessThanOrEqualTo;
 
   // Date column popup
   final String sunday;
@@ -253,6 +264,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Su',
     this.monday = 'Mo',
@@ -285,6 +300,10 @@ class PlutoGridLocaleText {
     this.filterEquals = '일치',
     this.filterStartsWith = '~로 시작',
     this.filterEndsWith = '~로 끝',
+    this.filterGreaterThan = '~보다 큰',
+    this.filterGreaterThanOrEqualTo = '_보다 크거나 같은',
+    this.filterLessThan = '~보다 작은',
+    this.filterLessThanOrEqualTo = '_보다 작거나 같은',
     // Date popup
     this.sunday = '일',
     this.monday = '월',
@@ -317,6 +336,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -349,6 +372,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Ne',
     this.monday = 'Po',
@@ -408,50 +435,52 @@ class PlutoScrollbarConfig {
   final Radius scrollbarRadiusWhileDragging;
 }
 
+typedef PlutoColumnFilterResolver = Function<T>();
+
 typedef PlutoResolveDefaultColumnFilter = PlutoFilterType Function(
   PlutoColumn column,
-  List<PlutoFilterType> filters,
+  PlutoColumnFilterResolver resolver,
 );
 
 class PlutoColumnFilterConfig {
   /// # Set the filter information of the column.
   ///
-  /// ## a List that implements [PlutoFilterType].
+  /// **Return the value returned by [resolveDefaultColumnFilter] through the resolver function.**
+  /// **Prevents errors returning filter that are not in the [filters] list.**
+  ///
+  /// The value of returning from resolveDefaultColumnFilter
+  /// becomes the condition of TextField below the column or
+  /// is set as the default filter when calling the column popup.
   ///
   /// ```dart
+  ///
+  /// var filterConfig = PlutoColumnFilterConfig(
+  ///   filters: const [
+  ///     ...FilterHelper.defaultFilters,
+  ///     // custom filter
+  ///     ClassYouImplemented(),
+  ///   ],
+  ///   resolveDefaultColumnFilter: (column, resolver) {
+  ///     if (column.field == 'text') {
+  ///       return resolver<PlutoFilterTypeContains>();
+  ///     } else if (column.field == 'number') {
+  ///       return resolver<PlutoFilterTypeGreaterThan>();
+  ///     } else if (column.field == 'date') {
+  ///       return resolver<PlutoFilterTypeLessThan>();
+  ///     } else if (column.field == 'select') {
+  ///       return resolver<ClassYouImplemented>();
+  ///     }
+  ///
+  ///     return resolver<PlutoFilterTypeContains>();
+  ///   },
+  /// );
+  ///
   /// class ClassYouImplemented implements PlutoFilterType {
   ///   String get title => 'CustomFilter';
   ///
   ///   PlutoCompareFunction get compare =>
   ///     (dynamic a, dynamic b) => a.toString().contains(b.toString());
   /// }
-  /// ```
-  ///
-  /// ```dart
-  /// [
-  ///   PlutoFilterTypeContains(),
-  ///   PlutoFilterTypeEquals(),
-  ///   PlutoFilterTypeStartsWith(),
-  ///   PlutoFilterTypeEndsWith(),
-  ///   ClassYouImplemented(),
-  /// ]
-  /// ```
-  /// ## sets the default filter for each column.
-  ///
-  /// It becomes the condition of TextField below the column or
-  /// is set as the default filter when calling the column popup.
-  ///
-  /// ```dart
-  /// resolveDefaultColumnFilter: (column, filters) {
-  ///   if (column.field == 'column1') {
-  ///     return filters.firstWhere(
-  ///       (element) => element.runtimeType == PlutoFilterTypeEquals,
-  ///       orElse: () => filters.first,
-  ///     );
-  ///   }
-  ///
-  ///   return filters.first;
-  /// },
   /// ```
   const PlutoColumnFilterConfig({
     List<PlutoFilterType> filters,
@@ -461,25 +490,30 @@ class PlutoColumnFilterConfig {
 
   final List<PlutoFilterType> _userFilters;
 
-  final List<PlutoFilterType> _defaultFilter = const [
-    PlutoFilterTypeContains(),
-    PlutoFilterTypeEquals(),
-    PlutoFilterTypeStartsWith(),
-    PlutoFilterTypeEndsWith(),
-  ];
-
   final PlutoResolveDefaultColumnFilter _userResolveDefaultColumnFilter;
 
   bool get hasUserFilter => _userFilters != null && _userFilters.isNotEmpty;
 
   List<PlutoFilterType> get filters =>
-      hasUserFilter ? _userFilters : _defaultFilter;
+      hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
+
+  PlutoFilterType resolver<T>() {
+    return filters.firstWhere(
+          (element) => element.runtimeType == T,
+          orElse: () => null,
+        ) ??
+        filters.first;
+  }
 
   PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
     if (_userResolveDefaultColumnFilter == null) {
       return filters.first;
     }
 
-    return _userResolveDefaultColumnFilter(column, filters);
+    var resolvedFilter = _userResolveDefaultColumnFilter(column, resolver);
+
+    assert(filters.contains(resolvedFilter));
+
+    return resolvedFilter;
   }
 }

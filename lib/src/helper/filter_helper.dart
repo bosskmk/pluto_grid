@@ -21,6 +21,17 @@ class FilterHelper {
   /// when searching for a filter.
   static const filterFieldValue = 'value';
 
+  static const List<PlutoFilterType> defaultFilters = [
+    PlutoFilterTypeContains(),
+    PlutoFilterTypeEquals(),
+    PlutoFilterTypeStartsWith(),
+    PlutoFilterTypeEndsWith(),
+    PlutoFilterTypeGreaterThan(),
+    PlutoFilterTypeGreaterThanOrEqualTo(),
+    PlutoFilterTypeLessThan(),
+    PlutoFilterTypeLessThanOrEqualTo(),
+  ];
+
   /// Create a row to contain filter information.
   static PlutoRow createFilterRow({
     String columnField,
@@ -41,7 +52,7 @@ class FilterHelper {
   /// Converts rows containing filter information into comparison functions.
   static FilteredListFilter<PlutoRow> convertRowsToFilter(
     List<PlutoRow> rows,
-    List<String> enabledFilterColumnFields,
+    List<PlutoColumn> enabledFilterColumns,
   ) {
     if (rows.isEmpty) {
       return null;
@@ -57,13 +68,19 @@ class FilterHelper {
           bool flagAllColumns;
 
           row.cells.forEach((key, value) {
-            if (enabledFilterColumnFields.contains(key)) {
+            var foundColumn = enabledFilterColumns.firstWhere(
+              (element) => element.field == key,
+              orElse: () => null,
+            );
+
+            if (foundColumn != null) {
               flagAllColumns = compareOr(
                 flagAllColumns,
                 compareByFilterType(
-                  filterType,
-                  value.value,
-                  _row.cells[filterFieldValue].value,
+                  filterType: filterType,
+                  base: value.value.toString(),
+                  search: _row.cells[filterFieldValue].value,
+                  column: foundColumn,
                 ),
               );
             }
@@ -71,12 +88,19 @@ class FilterHelper {
 
           flag = compareAnd(flag, flagAllColumns);
         } else {
+          var foundColumn = enabledFilterColumns.firstWhere(
+            (element) => element.field == _row.cells[filterFieldColumn].value,
+            orElse: () => null,
+          );
+
           flag = compareAnd(
             flag,
             compareByFilterType(
-              filterType,
-              row.cells[_row.cells[filterFieldColumn].value].value,
-              _row.cells[filterFieldValue].value,
+              filterType: filterType,
+              base: row.cells[_row.cells[filterFieldColumn].value].value
+                  .toString(),
+              search: _row.cells[filterFieldValue].value,
+              column: foundColumn,
             ),
           );
         }
@@ -139,51 +163,100 @@ class FilterHelper {
   }
 
   /// Compare [base] and [search] with [PlutoFilterType.compare].
-  static bool compareByFilterType(
-    PlutoFilterType filterType,
-    dynamic base,
-    dynamic search,
-  ) {
-    return filterType.compare(base, search);
+  static bool compareByFilterType({
+    @required PlutoFilterType filterType,
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return filterType.compare(
+      base: base,
+      search: search,
+      column: column,
+    );
   }
 
   /// Whether [search] is contains in [base].
-  static bool compareContains(dynamic base, dynamic search) {
+  static bool compareContains({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
     return _compareWithRegExp(
-      RegExp.escape(search.toString()),
-      base.toString(),
+      RegExp.escape(search),
+      base,
     );
   }
 
   /// Whether [search] is equals to [base].
-  static bool compareEquals(dynamic base, dynamic search) {
-    if (base is String || base is int || base is double || base is bool) {
-      return _compareWithRegExp(
-        // ignore: prefer_interpolation_to_compose_strings
-        r'^' + RegExp.escape(search.toString()) + r'$',
-        base.toString(),
-      );
-    }
-
-    return identical(base, search);
+  static bool compareEquals({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return _compareWithRegExp(
+      // ignore: prefer_interpolation_to_compose_strings
+      r'^' + RegExp.escape(search) + r'$',
+      base,
+    );
   }
 
   /// Whether [base] starts with [search].
-  static bool compareStartsWith(dynamic base, dynamic search) {
+  static bool compareStartsWith({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
-      r'^' + RegExp.escape(search.toString()),
-      base.toString(),
+      r'^' + RegExp.escape(search),
+      base,
     );
   }
 
   /// Whether [base] ends with [search].
-  static bool compareEndsWith(dynamic base, dynamic search) {
+  static bool compareEndsWith({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
-      RegExp.escape(search.toString()) + r'$',
-      base.toString(),
+      RegExp.escape(search) + r'$',
+      base,
     );
+  }
+
+  static bool compareGreaterThan({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return column.type.compare(base, search) == 1;
+  }
+
+  static bool compareGreaterThanOrEqualTo({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return column.type.compare(base, search) > -1;
+  }
+
+  static bool compareLessThan({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return column.type.compare(base, search) == -1;
+  }
+
+  static bool compareLessThanOrEqualTo({
+    @required String base,
+    @required String search,
+    @required PlutoColumn column,
+  }) {
+    return column.type.compare(base, search) < 1;
   }
 
   static bool _compareWithRegExp(
@@ -420,7 +493,11 @@ class _FilterPopupHeader extends StatelessWidget {
 
 /// [base] is the cell values of the column on which the search is based.
 /// [search] is the value entered by the user to search.
-typedef PlutoCompareFunction = bool Function(dynamic base, dynamic search);
+typedef PlutoCompareFunction = bool Function({
+  String base,
+  String search,
+  PlutoColumn column,
+});
 
 abstract class PlutoFilterType {
   String get title => throw UnimplementedError();
@@ -466,4 +543,44 @@ class PlutoFilterTypeEndsWith implements PlutoFilterType {
   PlutoCompareFunction get compare => FilterHelper.compareEndsWith;
 
   const PlutoFilterTypeEndsWith();
+}
+
+class PlutoFilterTypeGreaterThan implements PlutoFilterType {
+  static String name = 'Greater than';
+
+  String get title => PlutoFilterTypeGreaterThan.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareGreaterThan;
+
+  const PlutoFilterTypeGreaterThan();
+}
+
+class PlutoFilterTypeGreaterThanOrEqualTo implements PlutoFilterType {
+  static String name = 'Greater than or equal to';
+
+  String get title => PlutoFilterTypeGreaterThanOrEqualTo.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareGreaterThanOrEqualTo;
+
+  const PlutoFilterTypeGreaterThanOrEqualTo();
+}
+
+class PlutoFilterTypeLessThan implements PlutoFilterType {
+  static String name = 'Less than';
+
+  String get title => PlutoFilterTypeLessThan.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareLessThan;
+
+  const PlutoFilterTypeLessThan();
+}
+
+class PlutoFilterTypeLessThanOrEqualTo implements PlutoFilterType {
+  static String name = 'Less than or equal to';
+
+  String get title => PlutoFilterTypeLessThanOrEqualTo.name;
+
+  PlutoCompareFunction get compare => FilterHelper.compareLessThanOrEqualTo;
+
+  const PlutoFilterTypeLessThanOrEqualTo();
 }

@@ -201,6 +201,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       onPressed: () => handleAddRowButton(count: 100),
                     ),
                     FlatButton(
+                      child: const Text('Add 100,000 Rows'),
+                      onPressed: () => handleAddRowButton(count: 100000),
+                    ),
+                    FlatButton(
                       child: const Text('Remove Current Row'),
                       onPressed: handleRemoveCurrentRowButton,
                     ),
@@ -247,21 +251,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // localeText: const PlutoGridLocaleText.korean(),
             columnFilterConfig: PlutoColumnFilterConfig(
               filters: const [
-                PlutoFilterTypeContains(),
-                PlutoFilterTypeEquals(),
-                PlutoFilterTypeStartsWith(),
-                PlutoFilterTypeEndsWith(),
+                ...FilterHelper.defaultFilters,
                 ClassYouImplemented(),
               ],
-              resolveDefaultColumnFilter: (column, filters) {
-                if (column.field == 'column1') {
-                  return filters.firstWhere(
-                    (element) => element.runtimeType == PlutoFilterTypeStartsWith,
-                    orElse: () => filters.first,
-                  );
+              resolveDefaultColumnFilter: (column, resolver) {
+                if (column.field == 'column3') {
+                  return resolver<PlutoFilterTypeGreaterThan>();
                 }
 
-                return filters.first;
+                return resolver<PlutoFilterTypeContains>();
               },
             ),
           ),
@@ -272,10 +270,17 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 }
 
 class ClassYouImplemented implements PlutoFilterType {
-  String get title => 'CustomFilter';
+  String get title => 'Custom contains';
 
-  PlutoCompareFunction get compare =>
-      (dynamic a, dynamic b) => a.toString().contains(b.toString());
+  get compare => ({
+        String base,
+        String search,
+        PlutoColumn column,
+      }) {
+        var keys = search.split(',');
+
+        return keys.contains(base);
+      };
 
   const ClassYouImplemented();
 }

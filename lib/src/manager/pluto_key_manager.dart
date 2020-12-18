@@ -1,10 +1,10 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../helper/pluto_log.dart';
 
 class PlutoKeyManager {
   PlutoStateManager stateManager;
@@ -174,9 +174,11 @@ class PlutoKeyManager {
           lastChildContext is StatefulElement &&
           lastChildContext?.dirty != true &&
           lastChildContext.widget is EditableText) {
-        developer.log('TODO',
-            name: 'data_grid',
-            error: 'Enter twice when entering Korean on the web.');
+        PlutoLog(
+          'Enter twice when entering Korean on the web.',
+          type: PlutoLogType.todo,
+        );
+
         return;
       }
 

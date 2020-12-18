@@ -58,7 +58,6 @@ mixin FilteringRowState implements IPlutoState {
 
     var enabledFilterColumnFields = refColumns
         .where((element) => element.enableFilterMenuItem)
-        .map((e) => e.field)
         .toList();
 
     setFilter(

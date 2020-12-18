@@ -1,7 +1,7 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../helper/pluto_log.dart';
 
 typedef _ResetStateCallback = void Function(_UpdateStateFunction update);
 
@@ -75,10 +75,9 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
       } else if (newValue is List<PlutoColumn>) {
         return [...newValue] as T;
       } else {
-        developer.log(
-          'Warning',
-          name: '_PlutoStateWithChange',
-          error: 'Unhandled destructureList sub type.',
+        PlutoLog(
+          'Unhandled destructureList sub type on PlutoStateWithChange.',
+          type: PlutoLogType.warning,
         );
       }
     }

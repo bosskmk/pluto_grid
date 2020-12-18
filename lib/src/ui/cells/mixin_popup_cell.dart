@@ -1,7 +1,7 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../helper/pluto_log.dart';
 
 abstract class AbstractMixinPopupCell extends StatefulWidget {
   final PlutoStateManager stateManager;
@@ -194,7 +194,11 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
        *
        * TODO : Change widget structure...
        */
-      developer.log('TODO', name: 'popup_base_mixin', error: e.toString());
+      PlutoLog(
+        'popup_base_mixin',
+        type: PlutoLogType.todo,
+        error: e,
+      );
     }
   }
 
