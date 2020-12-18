@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/helper/filter_helper.dart';
 
 abstract class IFilteringRowState {
   List<PlutoRow> get filterRows;
@@ -57,7 +58,6 @@ mixin FilteringRowState implements IPlutoState {
 
     var enabledFilterColumnFields = refColumns
         .where((element) => element.enableFilterMenuItem)
-        .map((e) => e.field)
         .toList();
 
     setFilter(
@@ -99,7 +99,12 @@ mixin FilteringRowState implements IPlutoState {
         _filterRows.isEmpty && calledColumn != null;
 
     var rows = shouldProvideDefaultFilterRow
-        ? [FilterHelper.createFilterRow(columnField: calledColumn.field)]
+        ? [
+            FilterHelper.createFilterRow(
+              columnField: calledColumn.field,
+              filterType: calledColumn.defaultFilter,
+            ),
+          ]
         : _filterRows;
 
     FilterHelper.filterPopup(

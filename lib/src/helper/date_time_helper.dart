@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart' as intl;
 
-class DatetimeHelper {
+class DateTimeHelper {
+  /// Returns the dates of [startDate] and [endDate].
   static List<DateTime> getDaysInBetween(DateTime startDate, DateTime endDate) {
     if (endDate.isBefore(startDate)) {
       endDate = startDate;
@@ -14,6 +15,7 @@ class DatetimeHelper {
     return days;
   }
 
+  /// Returns the first date of the week containing [date].
   static DateTime moveToFirstWeekday(DateTime date) {
     if (date.weekday == DateTime.sunday) {
       return date;
@@ -22,6 +24,7 @@ class DatetimeHelper {
     return date.add(Duration(days: -date.weekday));
   }
 
+  /// Returns the last day of the week containing [date].
   static DateTime moveToLastWeekday(DateTime date) {
     if (date.weekday == DateTime.saturday) {
       return date;
@@ -33,6 +36,8 @@ class DatetimeHelper {
     return date.add(Duration(days: moveCount));
   }
 
+  /// Returns the value converted from [date] to [format].
+  /// If conversion fails, null is returned.
   static DateTime parseOrNullWithFormat(String date, String format) {
     try {
       return intl.DateFormat(format).parseStrict(date);

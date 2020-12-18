@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Open the context menu on the right side of the column.
 Future<PlutoGridColumnMenuItem> showColumnMenu({
   BuildContext context,
   Offset position,
@@ -90,6 +91,7 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
   );
 }
 
+/// Items in the context menu on the right side of the column
 enum PlutoGridColumnMenuItem {
   unfreeze,
   freezeToLeft,

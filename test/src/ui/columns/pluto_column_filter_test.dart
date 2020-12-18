@@ -84,7 +84,7 @@ void main() {
       verify(eventManager.addEvent(
         argThat(
             PlutoObjectMatcher<PlutoChangeColumnFilterEvent>(rule: (object) {
-          return object.columnField == column.field &&
+          return object.column.field == column.field &&
               object.filterType.runtimeType == PlutoFilterTypeContains &&
               object.filterValue == 'abc';
         })),

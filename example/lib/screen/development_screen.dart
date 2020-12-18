@@ -175,6 +175,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoOnLoadedEvent event) {
             stateManager = event.stateManager;
             stateManager.setSelectingMode(gridSelectingMode);
+            stateManager.setShowColumnFilter(true);
           },
           createHeader: (PlutoStateManager stateManager) {
             return SingleChildScrollView(
@@ -198,6 +199,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     FlatButton(
                       child: const Text('Add 100 Rows'),
                       onPressed: () => handleAddRowButton(count: 100),
+                    ),
+                    FlatButton(
+                      child: const Text('Add 100,000 Rows'),
+                      onPressed: () => handleAddRowButton(count: 100000),
                     ),
                     FlatButton(
                       child: const Text('Remove Current Row'),
@@ -244,10 +249,38 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               isAlwaysShown: true,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
-            // columnFilters: [PlutoFilterTypeContains()],
+            columnFilterConfig: PlutoColumnFilterConfig(
+              filters: const [
+                ...FilterHelper.defaultFilters,
+                ClassYouImplemented(),
+              ],
+              resolveDefaultColumnFilter: (column, resolver) {
+                if (column.field == 'column3') {
+                  return resolver<PlutoFilterTypeGreaterThan>();
+                }
+
+                return resolver<PlutoFilterTypeContains>();
+              },
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+class ClassYouImplemented implements PlutoFilterType {
+  String get title => 'Custom contains';
+
+  get compare => ({
+        String base,
+        String search,
+        PlutoColumn column,
+      }) {
+        var keys = search.split(',');
+
+        return keys.contains(base);
+      };
+
+  const ClassYouImplemented();
 }

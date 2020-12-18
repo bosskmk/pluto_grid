@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart' as intl;
 
+import '../helper/pluto_log.dart';
+
 abstract class PlutoColumnType {
   bool readOnly;
 
@@ -177,7 +179,7 @@ class PlutoColumnTypeNumber
   });
 
   bool isValid(dynamic value) {
-    if (value is! num) {
+    if (!_isNumeric(value)) {
       return false;
     }
 
@@ -189,6 +191,14 @@ class PlutoColumnTypeNumber
   }
 
   int compare(dynamic a, dynamic b) {
+    if (a.runtimeType != num) {
+      a = num.tryParse(a.toString()) ?? 0;
+    }
+
+    if (b.runtimeType != num) {
+      b = num.tryParse(b.toString()) ?? 0;
+    }
+
     return a.compareTo(b);
   }
 
@@ -210,6 +220,13 @@ class PlutoColumnTypeNumber
     final int dotIndex = format.indexOf('.');
 
     return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  }
+
+  bool _isNumeric(dynamic s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s.toString()) != null;
   }
 }
 
@@ -279,24 +296,33 @@ class PlutoColumnTypeDate
   }
 
   int compare(dynamic a, dynamic b) {
-    var emptyA = a == null || a == '';
-    var emptyB = b == null || b == '';
+    DateTime _a;
 
-    if (emptyA || emptyB) {
-      return emptyA == emptyB
+    DateTime _b;
+
+    try {
+      final dateFormat = intl.DateFormat(format);
+
+      _a = dateFormat.parse(a);
+
+      _b = dateFormat.parse(b);
+
+      return _a.compareTo(_b);
+    } on FormatException {
+      return _a == _b
           ? 0
-          : emptyA
+          : _a == null
               ? -1
               : 1;
+    } on Exception catch (e) {
+      PlutoLog(
+        'Exception on compare function of PlutoColumnTypeDate.',
+        type: PlutoLogType.exception,
+        error: e,
+      );
     }
 
-    final dateFormat = intl.DateFormat(format);
-
-    final _a = dateFormat.parse(a);
-
-    final _b = dateFormat.parse(b);
-
-    return _a.compareTo(_b);
+    return 0;
   }
 
   String applyFormat(value) {

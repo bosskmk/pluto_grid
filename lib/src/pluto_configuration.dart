@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'helper/filter_helper.dart';
+
 class PlutoConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
@@ -61,27 +63,8 @@ class PlutoConfiguration {
   /// Customise scrollbars for desktop usage
   final PlutoScrollbarConfig scrollbarConfig;
 
-  /// An instance of a class that implements [PlutoFilterType] is an element of the list.
-  ///
-  /// ```dart
-  /// class ClassYouImplemented implements PlutoFilterType {
-  ///   String get title => 'CustomFilter';
-  ///
-  ///   PlutoCompareFunction get compare =>
-  ///     (dynamic a, dynamic b) => a.toString().contains(b.toString());
-  /// }
-  /// ```
-  ///
-  /// ```dart
-  /// [
-  ///   PlutoFilterTypeContains(),
-  ///   PlutoFilterTypeEquals(),
-  ///   PlutoFilterTypeStartsWith(),
-  ///   PlutoFilterTypeEndsWith(),
-  ///   ClassYouImplemented(),
-  /// ]
-  /// ```
-  List<PlutoFilterType> columnFilters;
+  /// Customise filter of columns
+  final PlutoColumnFilterConfig columnFilterConfig;
 
   PlutoConfiguration({
     this.enableColumnBorder = false,
@@ -111,7 +94,7 @@ class PlutoConfiguration {
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
-    this.columnFilters,
+    this.columnFilterConfig = const PlutoColumnFilterConfig(),
   }) {
     _init();
   }
@@ -144,25 +127,38 @@ class PlutoConfiguration {
     this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoScrollbarConfig(),
-    this.columnFilters,
+    this.columnFilterConfig = const PlutoColumnFilterConfig(),
   }) {
     _init();
   }
 
   _init() {
-    assert(columnFilters == null || columnFilters.isNotEmpty);
-
     PlutoFilterTypeContains.name = localeText.filterContains;
     PlutoFilterTypeEquals.name = localeText.filterEquals;
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;
     PlutoFilterTypeEndsWith.name = localeText.filterEndsWith;
+    PlutoFilterTypeGreaterThan.name = localeText.filterGreaterThan;
+    PlutoFilterTypeGreaterThanOrEqualTo.name =
+        localeText.filterGreaterThanOrEqualTo;
+    PlutoFilterTypeLessThan.name = localeText.filterLessThan;
+    PlutoFilterTypeLessThanOrEqualTo.name = localeText.filterLessThanOrEqualTo;
+  }
 
-    columnFilters ??= [
-      PlutoFilterTypeContains(),
-      PlutoFilterTypeEquals(),
-      PlutoFilterTypeStartsWith(),
-      PlutoFilterTypeEndsWith(),
-    ];
+  /// Fired when setConfiguration is called in [PlutoStateManager]'s constructor.
+  void applyColumnFilter(List<PlutoColumn> refColumns) {
+    if (refColumns == null || refColumns.isEmpty) {
+      return;
+    }
+
+    var len = refColumns.length;
+
+    for (var i = 0; i < len; i += 1) {
+      var column = refColumns[i];
+
+      column.setDefaultFilter(
+        columnFilterConfig.getDefaultColumnFilter(column),
+      );
+    }
   }
 
   PlutoConfiguration copyWith({
@@ -184,7 +180,7 @@ class PlutoConfiguration {
     PlutoEnterKeyAction enterKeyAction,
     PlutoGridLocaleText localeText,
     PlutoScrollbarConfig scrollbarConfig,
-    List<PlutoFilterType> columnFilters,
+    PlutoColumnFilterConfig columnFilterConfig,
   }) {
     return PlutoConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -207,7 +203,7 @@ class PlutoConfiguration {
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
-      columnFilters: columnFilters ?? this.columnFilters,
+      columnFilterConfig: columnFilterConfig ?? this.columnFilterConfig,
     );
   }
 }
@@ -230,6 +226,10 @@ class PlutoGridLocaleText {
   final String filterEquals;
   final String filterStartsWith;
   final String filterEndsWith;
+  final String filterGreaterThan;
+  final String filterGreaterThanOrEqualTo;
+  final String filterLessThan;
+  final String filterLessThanOrEqualTo;
 
   // Date column popup
   final String sunday;
@@ -264,6 +264,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Su',
     this.monday = 'Mo',
@@ -296,6 +300,10 @@ class PlutoGridLocaleText {
     this.filterEquals = '일치',
     this.filterStartsWith = '~로 시작',
     this.filterEndsWith = '~로 끝',
+    this.filterGreaterThan = '~보다 큰',
+    this.filterGreaterThanOrEqualTo = '_보다 크거나 같은',
+    this.filterLessThan = '~보다 작은',
+    this.filterLessThanOrEqualTo = '_보다 작거나 같은',
     // Date popup
     this.sunday = '일',
     this.monday = '월',
@@ -328,6 +336,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -360,6 +372,10 @@ class PlutoGridLocaleText {
     this.filterEquals = 'Equals',
     this.filterStartsWith = 'Starts with',
     this.filterEndsWith = 'Ends with',
+    this.filterGreaterThan = 'Greater than',
+    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
+    this.filterLessThan = 'Less than',
+    this.filterLessThanOrEqualTo = 'Less than or equal to',
     // Date popup
     this.sunday = 'Ne',
     this.monday = 'Po',
@@ -417,4 +433,87 @@ class PlutoScrollbarConfig {
   final double scrollbarThicknessWhileDragging;
   final Radius scrollbarRadius;
   final Radius scrollbarRadiusWhileDragging;
+}
+
+typedef PlutoColumnFilterResolver = Function<T>();
+
+typedef PlutoResolveDefaultColumnFilter = PlutoFilterType Function(
+  PlutoColumn column,
+  PlutoColumnFilterResolver resolver,
+);
+
+class PlutoColumnFilterConfig {
+  /// # Set the filter information of the column.
+  ///
+  /// **Return the value returned by [resolveDefaultColumnFilter] through the resolver function.**
+  /// **Prevents errors returning filter that are not in the [filters] list.**
+  ///
+  /// The value of returning from resolveDefaultColumnFilter
+  /// becomes the condition of TextField below the column or
+  /// is set as the default filter when calling the column popup.
+  ///
+  /// ```dart
+  ///
+  /// var filterConfig = PlutoColumnFilterConfig(
+  ///   filters: const [
+  ///     ...FilterHelper.defaultFilters,
+  ///     // custom filter
+  ///     ClassYouImplemented(),
+  ///   ],
+  ///   resolveDefaultColumnFilter: (column, resolver) {
+  ///     if (column.field == 'text') {
+  ///       return resolver<PlutoFilterTypeContains>();
+  ///     } else if (column.field == 'number') {
+  ///       return resolver<PlutoFilterTypeGreaterThan>();
+  ///     } else if (column.field == 'date') {
+  ///       return resolver<PlutoFilterTypeLessThan>();
+  ///     } else if (column.field == 'select') {
+  ///       return resolver<ClassYouImplemented>();
+  ///     }
+  ///
+  ///     return resolver<PlutoFilterTypeContains>();
+  ///   },
+  /// );
+  ///
+  /// class ClassYouImplemented implements PlutoFilterType {
+  ///   String get title => 'CustomFilter';
+  ///
+  ///   PlutoCompareFunction get compare =>
+  ///     (dynamic a, dynamic b) => a.toString().contains(b.toString());
+  /// }
+  /// ```
+  const PlutoColumnFilterConfig({
+    List<PlutoFilterType> filters,
+    PlutoResolveDefaultColumnFilter resolveDefaultColumnFilter,
+  })  : _userFilters = filters,
+        _userResolveDefaultColumnFilter = resolveDefaultColumnFilter;
+
+  final List<PlutoFilterType> _userFilters;
+
+  final PlutoResolveDefaultColumnFilter _userResolveDefaultColumnFilter;
+
+  bool get hasUserFilter => _userFilters != null && _userFilters.isNotEmpty;
+
+  List<PlutoFilterType> get filters =>
+      hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
+
+  PlutoFilterType resolver<T>() {
+    return filters.firstWhere(
+          (element) => element.runtimeType == T,
+          orElse: () => null,
+        ) ??
+        filters.first;
+  }
+
+  PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
+    if (_userResolveDefaultColumnFilter == null) {
+      return filters.first;
+    }
+
+    var resolvedFilter = _userResolveDefaultColumnFilter(column, resolver);
+
+    assert(filters.contains(resolvedFilter));
+
+    return resolvedFilter;
+  }
 }

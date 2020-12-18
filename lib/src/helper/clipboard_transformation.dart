@@ -1,4 +1,5 @@
 class ClipboardTransformation {
+  /// Converts [text] separated by newline and tab characters into a two-dimensional array.
   static List<List<String>> stringToList(String text) {
     return text
         .split(RegExp('\n|\r\n'))

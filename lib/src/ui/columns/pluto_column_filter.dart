@@ -172,8 +172,8 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   void handleOnChanged(String changed) {
     widget.stateManager.eventManager.addEvent(
       PlutoChangeColumnFilterEvent(
-        columnField: widget.column.field,
-        filterType: PlutoFilterTypeContains(),
+        column: widget.column,
+        filterType: widget.column.defaultFilter,
         filterValue: changed,
       ),
     );
@@ -197,6 +197,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               onTap: handleOnTap,
               onChanged: handleOnChanged,
               decoration: InputDecoration(
+                hintText: enabled ? widget.column.defaultFilter.title : '',
                 isDense: true,
                 filled: true,
                 fillColor: textFieldColor,

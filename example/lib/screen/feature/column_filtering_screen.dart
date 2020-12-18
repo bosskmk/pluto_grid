@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
 
@@ -22,46 +23,34 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
 
     columns = [
       PlutoColumn(
-        title: 'Column A',
-        field: 'column_a',
+        title: 'Text',
+        field: 'text',
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
-        title: 'Column B',
-        field: 'column_b',
-        type: PlutoColumnType.text(),
+        title: 'Number',
+        field: 'number',
+        type: PlutoColumnType.number(),
       ),
       PlutoColumn(
-        title: 'Column C',
-        field: 'column_c',
+        title: 'Date',
+        field: 'date',
+        type: PlutoColumnType.date(),
+      ),
+      PlutoColumn(
+        title: 'Disable',
+        field: 'disable',
         type: PlutoColumnType.text(),
         enableFilterMenuItem: false,
       ),
+      PlutoColumn(
+        title: 'Select',
+        field: 'select',
+        type: PlutoColumnType.select(['A', 'B', 'C', 'D', 'E', 'F']),
+      ),
     ];
 
-    rows = [
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a1'),
-          'column_b': PlutoCell(value: 'b1'),
-          'column_c': PlutoCell(value: 'c1'),
-        },
-      ),
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a2'),
-          'column_b': PlutoCell(value: 'b2'),
-          'column_c': PlutoCell(value: 'c2'),
-        },
-      ),
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a3'),
-          'column_b': PlutoCell(value: 'b3'),
-          'column_c': PlutoCell(value: 'c3'),
-        },
-      ),
-    ];
+    rows = DummyData.rowsByColumns(length: 30, columns: columns);
   }
 
   @override
@@ -79,7 +68,9 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         const Text(
             'If the filter is set to all or complex conditions, TextField under the column is deactivated.'),
         const Text(
-            'Also, like the Column C, if enableFilterMenuItem is false, it is excluded from all column filtering conditions.'),
+            'Also, like the Disable column, if enableFilterMenuItem is false, it is excluded from all column filtering conditions.'),
+        const Text(
+            'In the case of the Select column, it is a custom filter that can filter multiple filters with commas. (ex: a,b,c)'),
         const SizedBox(
           height: 10,
         ),
@@ -101,26 +92,48 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
           print(event);
         },
         configuration: PlutoConfiguration(
-          /// If columnFilters is not set, default filters are set.
-          /// The following is an example to add a custom filter.
-          columnFilters: [
-            PlutoFilterTypeContains(),
-            PlutoFilterTypeEquals(),
-            PlutoFilterTypeStartsWith(),
-            PlutoFilterTypeEndsWith(),
-            YourCustomFilter(),
-          ],
+          /// If columnFilterConfig is not set, the default setting is applied.
+          ///
+          /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
+          /// Prevents errors returning filters that are not in the filters list.
+          columnFilterConfig: PlutoColumnFilterConfig(
+            filters: const [
+              ...FilterHelper.defaultFilters,
+              // custom filter
+              ClassYouImplemented(),
+            ],
+            resolveDefaultColumnFilter: (column, resolver) {
+              if (column.field == 'text') {
+                return resolver<PlutoFilterTypeContains>();
+              } else if (column.field == 'number') {
+                return resolver<PlutoFilterTypeGreaterThan>();
+              } else if (column.field == 'date') {
+                return resolver<PlutoFilterTypeLessThan>();
+              } else if (column.field == 'select') {
+                return resolver<ClassYouImplemented>();
+              }
+
+              return resolver<PlutoFilterTypeContains>();
+            },
+          ),
         ),
       ),
     );
   }
 }
 
-class YourCustomFilter implements PlutoFilterType {
-  @override
-  get compare => (dynamic base, dynamic search) =>
-      base.toString().contains(search.toString());
+class ClassYouImplemented implements PlutoFilterType {
+  String get title => 'Custom contains';
 
-  @override
-  String get title => 'Custom filter';
+  get compare => ({
+        String base,
+        String search,
+        PlutoColumn column,
+      }) {
+        var keys = search.split(',').map((e) => e.toUpperCase()).toList();
+
+        return keys.contains(base.toUpperCase());
+      };
+
+  const ClassYouImplemented();
 }
