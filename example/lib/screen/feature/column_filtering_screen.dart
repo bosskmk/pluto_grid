@@ -29,7 +29,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       PlutoColumn(
         title: 'Column B',
         field: 'column_b',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.number(),
       ),
       PlutoColumn(
         title: 'Column C',
@@ -43,21 +43,21 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       PlutoRow(
         cells: {
           'column_a': PlutoCell(value: 'a1'),
-          'column_b': PlutoCell(value: 'b1'),
+          'column_b': PlutoCell(value: 11),
           'column_c': PlutoCell(value: 'c1'),
         },
       ),
       PlutoRow(
         cells: {
           'column_a': PlutoCell(value: 'a2'),
-          'column_b': PlutoCell(value: 'b2'),
+          'column_b': PlutoCell(value: 2),
           'column_c': PlutoCell(value: 'c2'),
         },
       ),
       PlutoRow(
         cells: {
           'column_a': PlutoCell(value: 'a3'),
-          'column_b': PlutoCell(value: 'b3'),
+          'column_b': PlutoCell(value: -2),
           'column_c': PlutoCell(value: 'c3'),
         },
       ),
@@ -101,15 +101,28 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
           print(event);
         },
         configuration: PlutoConfiguration(
-          /// If columnFilters is not set, default filters are set.
+          /// If columnFilterConfig is not set, default filters are set.
           /// The following is an example to add a custom filter.
-          columnFilters: [
-            PlutoFilterTypeContains(),
-            PlutoFilterTypeEquals(),
-            PlutoFilterTypeStartsWith(),
-            PlutoFilterTypeEndsWith(),
-            YourCustomFilter(),
-          ],
+          columnFilterConfig: PlutoColumnFilterConfig(
+            filters: const [
+              PlutoFilterTypeContains(),
+              PlutoFilterTypeEquals(),
+              PlutoFilterTypeStartsWith(),
+              PlutoFilterTypeEndsWith(),
+              // custom filter
+              YourCustomFilter(),
+            ],
+            resolveDefaultColumnFilter: (column, filters) {
+              switch(column.field) {
+                case 'column_a':
+                  return filters[0];
+                case 'column_b':
+                  return filters[4];
+              }
+
+              return filters.first;
+            },
+          ),
         ),
       ),
     );
@@ -118,9 +131,10 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
 
 class YourCustomFilter implements PlutoFilterType {
   @override
-  get compare => (dynamic base, dynamic search) =>
-      base.toString().contains(search.toString());
+  get compare => (dynamic base, dynamic search) => base.compareTo(search) == 1;
 
   @override
-  String get title => 'Custom filter';
+  String get title => 'Greater than';
+
+  const YourCustomFilter();
 }

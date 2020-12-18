@@ -118,6 +118,8 @@ mixin GridState implements IPlutoState {
 
   void setConfiguration(PlutoConfiguration configuration) {
     _configuration = configuration ?? PlutoConfiguration();
+
+    _configuration.applyColumnFilter(refColumns);
   }
 
   void setGridKey(Key key) {

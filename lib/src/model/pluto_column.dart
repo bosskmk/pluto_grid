@@ -97,8 +97,16 @@ class PlutoColumn {
     return _filterFocusNode;
   }
 
+  PlutoFilterType _defaultFilter;
+
+  PlutoFilterType get defaultFilter => _defaultFilter ?? const PlutoFilterTypeContains();
+
   void setFilterFocusNode(FocusNode node) {
     _filterFocusNode = node;
+  }
+
+  void setDefaultFilter(PlutoFilterType filter) {
+    _defaultFilter = filter;
   }
 
   String formattedValueForType(dynamic value) {

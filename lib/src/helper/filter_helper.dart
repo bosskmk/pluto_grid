@@ -32,7 +32,7 @@ class FilterHelper {
         filterFieldColumn:
             PlutoCell(value: columnField ?? filterFieldAllColumns),
         filterFieldType:
-            PlutoCell(value: filterType ?? PlutoFilterTypeContains()),
+            PlutoCell(value: filterType ?? const PlutoFilterTypeContains()),
         filterFieldValue: PlutoCell(value: filterValue ?? ''),
       },
     );
@@ -339,7 +339,7 @@ class FilterPopupState {
       PlutoColumn(
         title: configuration.localeText.filterType,
         field: FilterHelper.filterFieldType,
-        type: PlutoColumnType.select(configuration.columnFilters),
+        type: PlutoColumnType.select(configuration.columnFilterConfig.filters),
         enableFilterMenuItem: false,
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
@@ -434,6 +434,8 @@ class PlutoFilterTypeContains implements PlutoFilterType {
   String get title => PlutoFilterTypeContains.name;
 
   PlutoCompareFunction get compare => FilterHelper.compareContains;
+
+  const PlutoFilterTypeContains();
 }
 
 class PlutoFilterTypeEquals implements PlutoFilterType {
@@ -442,6 +444,8 @@ class PlutoFilterTypeEquals implements PlutoFilterType {
   String get title => PlutoFilterTypeEquals.name;
 
   PlutoCompareFunction get compare => FilterHelper.compareEquals;
+
+  const PlutoFilterTypeEquals();
 }
 
 class PlutoFilterTypeStartsWith implements PlutoFilterType {
@@ -450,6 +454,8 @@ class PlutoFilterTypeStartsWith implements PlutoFilterType {
   String get title => PlutoFilterTypeStartsWith.name;
 
   PlutoCompareFunction get compare => FilterHelper.compareStartsWith;
+
+  const PlutoFilterTypeStartsWith();
 }
 
 class PlutoFilterTypeEndsWith implements PlutoFilterType {
@@ -458,4 +464,6 @@ class PlutoFilterTypeEndsWith implements PlutoFilterType {
   String get title => PlutoFilterTypeEndsWith.name;
 
   PlutoCompareFunction get compare => FilterHelper.compareEndsWith;
+
+  const PlutoFilterTypeEndsWith();
 }

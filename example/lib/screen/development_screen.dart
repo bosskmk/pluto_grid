@@ -175,6 +175,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoOnLoadedEvent event) {
             stateManager = event.stateManager;
             stateManager.setSelectingMode(gridSelectingMode);
+            stateManager.setShowColumnFilter(true);
           },
           createHeader: (PlutoStateManager stateManager) {
             return SingleChildScrollView(
@@ -244,10 +245,37 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               isAlwaysShown: true,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
-            // columnFilters: [PlutoFilterTypeContains()],
+            columnFilterConfig: PlutoColumnFilterConfig(
+              filters: const [
+                PlutoFilterTypeContains(),
+                PlutoFilterTypeEquals(),
+                PlutoFilterTypeStartsWith(),
+                PlutoFilterTypeEndsWith(),
+                ClassYouImplemented(),
+              ],
+              resolveDefaultColumnFilter: (column, filters) {
+                if (column.field == 'column1') {
+                  return filters.firstWhere(
+                    (element) => element.runtimeType == PlutoFilterTypeStartsWith,
+                    orElse: () => filters.first,
+                  );
+                }
+
+                return filters.first;
+              },
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+class ClassYouImplemented implements PlutoFilterType {
+  String get title => 'CustomFilter';
+
+  PlutoCompareFunction get compare =>
+      (dynamic a, dynamic b) => a.toString().contains(b.toString());
+
+  const ClassYouImplemented();
 }

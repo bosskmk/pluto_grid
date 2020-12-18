@@ -39,7 +39,7 @@ void main() {
       'When called with arguments,'
       'Should be returned a row filled with arguments.',
       () {
-        var filter = PlutoFilterTypeEndsWith();
+        var filter = const PlutoFilterTypeEndsWith();
 
         var row = FilterHelper.createFilterRow(
           columnField: 'filterColumnField',
@@ -147,7 +147,7 @@ void main() {
           var filterRows = [
             FilterHelper.createFilterRow(
               columnField: 'column1',
-              filterType: PlutoFilterTypeStartsWith(),
+              filterType: const PlutoFilterTypeStartsWith(),
               filterValue: 'column1',
             )
           ];
@@ -173,7 +173,7 @@ void main() {
         () {
           var filterRows = [
             FilterHelper.createFilterRow(
-              filterType: PlutoFilterTypeStartsWith(),
+              filterType: const PlutoFilterTypeStartsWith(),
               filterValue: 'column1',
             )
           ];
@@ -293,7 +293,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterTypeStartsWith());
+        compare = makeCompareFunction(const PlutoFilterTypeStartsWith());
       });
 
       test('apple startsWith ap', () {
@@ -309,7 +309,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterTypeEndsWith());
+        compare = makeCompareFunction(const PlutoFilterTypeEndsWith());
       });
 
       test('apple endsWith le', () {
@@ -325,7 +325,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterTypeContains());
+        compare = makeCompareFunction(const PlutoFilterTypeContains());
       });
 
       test('apple contains le', () {
@@ -341,7 +341,7 @@ void main() {
       Function compare;
 
       setUp(() {
-        compare = makeCompareFunction(PlutoFilterTypeEquals());
+        compare = makeCompareFunction(const PlutoFilterTypeEquals());
       });
 
       test('apple equals apple', () {
@@ -758,28 +758,29 @@ void main() {
         var columnType = filterColumn.type as PlutoColumnTypeSelect;
 
         // configuration 의 필터 수 만큼 생성 되어야 한다. (기본 4개)
-        expect(configuration.columnFilters.length, 4);
-        expect(columnType.items.length, configuration.columnFilters.length);
+        expect(configuration.columnFilterConfig.filters.length, 4);
+        expect(columnType.items.length,
+            configuration.columnFilterConfig.filters.length);
 
         // formatter
         expect(
-          filterColumn.formatter(configuration.columnFilters[0]),
-          configuration.columnFilters[0].title,
+          filterColumn.formatter(configuration.columnFilterConfig.filters[0]),
+          configuration.columnFilterConfig.filters[0].title,
         );
 
         expect(
-          filterColumn.formatter(configuration.columnFilters[1]),
-          configuration.columnFilters[1].title,
+          filterColumn.formatter(configuration.columnFilterConfig.filters[1]),
+          configuration.columnFilterConfig.filters[1].title,
         );
 
         expect(
-          filterColumn.formatter(configuration.columnFilters[2]),
-          configuration.columnFilters[2].title,
+          filterColumn.formatter(configuration.columnFilterConfig.filters[2]),
+          configuration.columnFilterConfig.filters[2].title,
         );
 
         expect(
-          filterColumn.formatter(configuration.columnFilters[3]),
-          configuration.columnFilters[3].title,
+          filterColumn.formatter(configuration.columnFilterConfig.filters[3]),
+          configuration.columnFilterConfig.filters[3].title,
         );
       });
 
