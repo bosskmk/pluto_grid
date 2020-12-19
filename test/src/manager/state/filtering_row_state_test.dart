@@ -101,6 +101,87 @@ void main() {
     );
   });
 
+  group('filterRowsByField', () {
+    test(
+      'When there is 0 column1 in filterRows, '
+      'Should return 0 list.',
+      () {
+        expect(stateManager.filterRows.length, 0);
+
+        stateManager.setFilterWithFilterRows(
+          [
+            FilterHelper.createFilterRow(
+              columnField: 'column2',
+              filterValue: 'filter',
+            ),
+            FilterHelper.createFilterRow(
+              columnField: 'column3',
+              filterValue: 'filter',
+            ),
+          ],
+        );
+
+        var filterRows = stateManager.filterRowsByField('column1');
+
+        expect(filterRows.length, 0);
+      },
+    );
+
+    test(
+      'When there is 1 column1 in filterRows, '
+      'Should return 1 list.',
+      () {
+        expect(stateManager.filterRows.length, 0);
+
+        stateManager.setFilterWithFilterRows(
+          [
+            FilterHelper.createFilterRow(
+              columnField: 'column1',
+              filterValue: 'filter',
+            ),
+            FilterHelper.createFilterRow(
+              columnField: 'column2',
+              filterValue: 'filter',
+            ),
+          ],
+        );
+
+        var filterRows = stateManager.filterRowsByField('column1');
+
+        expect(filterRows.length, 1);
+      },
+    );
+
+    test(
+      'When there is 2 column1 in filterRows, '
+      'Should return 2 list.',
+      () {
+        expect(stateManager.filterRows.length, 0);
+
+        stateManager.setFilterWithFilterRows(
+          [
+            FilterHelper.createFilterRow(
+              columnField: 'column1',
+              filterValue: 'filter',
+            ),
+            FilterHelper.createFilterRow(
+              columnField: 'column1',
+              filterValue: 'filter',
+            ),
+            FilterHelper.createFilterRow(
+              columnField: 'column2',
+              filterValue: 'filter',
+            ),
+          ],
+        );
+
+        var filterRows = stateManager.filterRowsByField('column1');
+
+        expect(filterRows.length, 2);
+      },
+    );
+  });
+
   group('isFilteredColumn', () {
     test(
       'when there is no filter, should be returned false.',

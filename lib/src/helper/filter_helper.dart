@@ -93,16 +93,18 @@ class FilterHelper {
             orElse: () => null,
           );
 
-          flag = compareAnd(
-            flag,
-            compareByFilterType(
-              filterType: filterType,
-              base: row.cells[_row.cells[filterFieldColumn].value].value
-                  .toString(),
-              search: _row.cells[filterFieldValue].value,
-              column: foundColumn,
-            ),
-          );
+          if (foundColumn != null) {
+            flag = compareAnd(
+              flag,
+              compareByFilterType(
+                filterType: filterType,
+                base: row.cells[_row.cells[filterFieldColumn].value].value
+                    .toString(),
+                search: _row.cells[filterFieldValue].value,
+                column: foundColumn,
+              ),
+            );
+          }
         }
       }
 

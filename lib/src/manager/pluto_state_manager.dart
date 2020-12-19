@@ -83,6 +83,7 @@ class PlutoStateManager extends PlutoState {
     CreateFooterCallBack createFooter,
     PlutoConfiguration configuration,
   }) {
+    initializeRows(columns, rows);
     refColumns = columns;
     refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
@@ -113,41 +114,25 @@ class PlutoStateManager extends PlutoState {
       return;
     }
 
-    List<PlutoColumn> columnsForApplyFormat = refColumns
-        .where((element) => element.type.applyFormatOnInit)
-        .toList(growable: false);
+    _ApplyList applyList = _ApplyList([
+      _ApplyCellForSetColumn(refColumns),
+      _ApplyCellForFormat(refColumns),
+      _ApplyRowForSortIdx(
+        forceApply: forceApplySortIdx,
+        increase: increase,
+        start: start,
+        firstRow: refRows.first,
+      ),
+    ]);
 
-    final bool applyFormat = columnsForApplyFormat.isNotEmpty;
-
-    final bool applySortIdx = forceApplySortIdx == true ||
-        (refRows.isNotEmpty && refRows.first.sortIdx == null);
-
-    if (applyFormat == false && applySortIdx == false) {
+    if (!applyList.apply) {
       return;
     }
 
-    int sortIdx = start;
+    var rowLength = refRows.length;
 
-    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
-      if (applyFormat) {
-        columnsForApplyFormat.forEach((column) {
-          refRows[rowIdx].cells[column.field].value = column.type
-              .applyFormat(refRows[rowIdx].cells[column.field].value);
-
-          if (column.type.isNumber) {
-            refRows[rowIdx].cells[column.field].value = num.tryParse(
-                  refRows[rowIdx].cells[column.field].value.replaceAll(',', ''),
-                ) ??
-                0;
-          }
-        });
-      }
-
-      if (applySortIdx == true) {
-        refRows[rowIdx].sortIdx = sortIdx;
-
-        sortIdx = increase ? ++sortIdx : --sortIdx;
-      }
+    for (var rowIdx = 0; rowIdx < rowLength; rowIdx += 1) {
+      applyList.execute(refRows[rowIdx]);
     }
   }
 }
@@ -271,5 +256,109 @@ extension PlutoSelectingModeExtension on PlutoSelectingMode {
 
   String toShortString() {
     return toString().split('.').last;
+  }
+}
+
+abstract class _Apply {
+  bool get apply;
+
+  void execute(PlutoRow row);
+}
+
+class _ApplyList implements _Apply {
+  final List<_Apply> list;
+
+  _ApplyList(this.list) {
+    list.removeWhere((element) => !element.apply);
+  }
+
+  bool get apply => list.isNotEmpty;
+
+  void execute(PlutoRow row) {
+    var len = list.length;
+
+    for (var i = 0; i < len; i += 1) {
+      list[i].execute(row);
+    }
+  }
+}
+
+class _ApplyCellForSetColumn implements _Apply {
+  final List<PlutoColumn> refColumns;
+
+  _ApplyCellForSetColumn(this.refColumns);
+
+  bool get apply => true;
+
+  void execute(PlutoRow row) {
+    refColumns.forEach((element) {
+      row.cells[element.field].setColumn(element);
+    });
+  }
+}
+
+class _ApplyCellForFormat implements _Apply {
+  final List<PlutoColumn> refColumns;
+
+  _ApplyCellForFormat(
+    this.refColumns,
+  ) {
+    assert(refColumns != null && refColumns.isNotEmpty);
+
+    columnsToApply = refColumns
+        .where((element) => element.type.applyFormatOnInit)
+        .toList(growable: false);
+  }
+
+  List<PlutoColumn> columnsToApply;
+
+  bool get apply => columnsToApply.isNotEmpty;
+
+  void execute(PlutoRow row) {
+    columnsToApply.forEach((column) {
+      row.cells[column.field].value =
+          column.type.applyFormat(row.cells[column.field].value);
+
+      if (column.type.isNumber) {
+        row.cells[column.field].value = num.tryParse(
+              row.cells[column.field].value.replaceAll(',', ''),
+            ) ??
+            0;
+      }
+    });
+  }
+}
+
+class _ApplyRowForSortIdx implements _Apply {
+  final bool forceApply;
+
+  final bool increase;
+
+  final int start;
+
+  final PlutoRow firstRow;
+
+  _ApplyRowForSortIdx({
+    @required this.forceApply,
+    @required this.increase,
+    @required this.start,
+    @required this.firstRow,
+  }) {
+    assert(forceApply != null);
+    assert(increase != null);
+    assert(start != null);
+    assert(firstRow != null);
+
+    _sortIdx = start;
+  }
+
+  int _sortIdx;
+
+  bool get apply => forceApply == true || firstRow.sortIdx == null;
+
+  void execute(PlutoRow row) {
+    row.sortIdx = _sortIdx;
+
+    _sortIdx = increase ? ++_sortIdx : --_sortIdx;
   }
 }

@@ -184,7 +184,8 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
 
     try {
       _textController.text = widget.column.formattedValueForDisplayInEditing(
-          widget.stateManager.currentCell.value);
+        widget.stateManager.currentCell.value,
+      );
     } catch (e) {
       /**
        * When the Popup is opened, the TextField is closed
