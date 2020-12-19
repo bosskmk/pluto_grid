@@ -1,3 +1,10 @@
+## [1.0.0-pre.9] - 2020. 12. 20
+
+* The method of setting the filter has changed. columnFilters in configuration changed to columnFilterConfig.
+* Different default filters can be set for each column.
+* Modified to close the popup if there is no filter to clear when clicking the clear button in the filter popup.
+* Rename DatetimeHelper to DateTimeHelper.
+
 ## [1.0.0-pre.8] - 2020. 12. 16
 
 * Add filtering.
