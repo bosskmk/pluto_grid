@@ -169,6 +169,35 @@ void main() {
       );
 
       test(
+        'column1 이 enabledFilterColumns 에 존재하지 않을 때, '
+        'filterFieldColumn : column1, '
+        'filterFieldType : Contains, '
+        'filterFieldValue : column1, '
+        'false',
+        () {
+          var filterRows = [
+            FilterHelper.createFilterRow(
+              columnField: 'column1',
+              filterType: const PlutoFilterTypeContains(),
+              filterValue: 'column1',
+            )
+          ];
+
+          columns.removeWhere((element) => element.field == 'column1');
+
+          var enabledFilterColumns = columns;
+
+          expect(
+            FilterHelper.convertRowsToFilter(
+              filterRows,
+              enabledFilterColumns,
+            )(row),
+            isFalse,
+          );
+        },
+      );
+
+      test(
         'filterFieldColumn : All, '
         'filterFieldType : StartsWith, '
         'filterFieldValue : column1, '
@@ -289,16 +318,17 @@ void main() {
   group('compareByFilterType', () {
     Function makeCompareFunction;
 
-    PlutoColumn column;
-
     setUp(() {
-      column = PlutoColumn(
-        title: 'column',
-        field: 'column',
-        type: PlutoColumnType.text(),
-      );
+      makeCompareFunction = (
+        PlutoFilterType filterType, {
+        PlutoColumn column,
+      }) {
+        column ??= PlutoColumn(
+          title: 'column',
+          field: 'column',
+          type: PlutoColumnType.text(),
+        );
 
-      makeCompareFunction = (PlutoFilterType filterType) {
         return (dynamic a, dynamic b) {
           return FilterHelper.compareByFilterType(
             filterType: filterType,
@@ -310,39 +340,7 @@ void main() {
       };
     });
 
-    group('startsWith', () {
-      Function compare;
-
-      setUp(() {
-        compare = makeCompareFunction(const PlutoFilterTypeStartsWith());
-      });
-
-      test('apple startsWith ap', () {
-        expect(compare('apple', 'ap'), isTrue);
-      });
-
-      test('apple is not startsWith banana', () {
-        expect(compare('apple', 'banana'), isFalse);
-      });
-    });
-
-    group('endsWith', () {
-      Function compare;
-
-      setUp(() {
-        compare = makeCompareFunction(const PlutoFilterTypeEndsWith());
-      });
-
-      test('apple endsWith le', () {
-        expect(compare('apple', 'le'), isTrue);
-      });
-
-      test('apple is not endsWith app', () {
-        expect(compare('apple', 'app'), isFalse);
-      });
-    });
-
-    group('contains', () {
+    group('Contains', () {
       Function compare;
 
       setUp(() {
@@ -358,7 +356,7 @@ void main() {
       });
     });
 
-    group('equals', () {
+    group('Equals', () {
       Function compare;
 
       setUp(() {
@@ -375,6 +373,112 @@ void main() {
 
       test('0 equals "0"', () {
         expect(compare(0, '0'), isTrue);
+      });
+    });
+
+    group('StartsWith', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(const PlutoFilterTypeStartsWith());
+      });
+
+      test('apple startsWith ap', () {
+        expect(compare('apple', 'ap'), isTrue);
+      });
+
+      test('apple is not startsWith banana', () {
+        expect(compare('apple', 'banana'), isFalse);
+      });
+    });
+
+    group('EndsWith', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(const PlutoFilterTypeEndsWith());
+      });
+
+      test('apple endsWith le', () {
+        expect(compare('apple', 'le'), isTrue);
+      });
+
+      test('apple is not endsWith app', () {
+        expect(compare('apple', 'app'), isFalse);
+      });
+    });
+
+    group('GreaterThan', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(const PlutoFilterTypeGreaterThan());
+      });
+
+      test('banana GreaterThan apple', () {
+        expect(compare('banana', 'apple'), isTrue);
+      });
+
+      test('apple is not GreaterThan banana', () {
+        expect(compare('apple', 'banana'), isFalse);
+      });
+    });
+
+    group('GreaterThanOrEqualTo', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(
+          const PlutoFilterTypeGreaterThanOrEqualTo(),
+        );
+      });
+
+      test('banana GreaterThanOrEqualTo apple', () {
+        expect(compare('banana', 'apple'), isTrue);
+      });
+
+      test('banana GreaterThanOrEqualTo apple', () {
+        expect(compare('banana', 'banana'), isTrue);
+      });
+
+      test('apple is not GreaterThanOrEqualTo banana', () {
+        expect(compare('apple', 'banana'), isFalse);
+      });
+    });
+
+    group('LessThan', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(const PlutoFilterTypeLessThan());
+      });
+
+      test('A LessThan B', () {
+        expect(compare('A', 'B'), isTrue);
+      });
+
+      test('B is not LessThan A', () {
+        expect(compare('B', 'A'), isFalse);
+      });
+    });
+
+    group('LessThanOrEqualTo', () {
+      Function compare;
+
+      setUp(() {
+        compare = makeCompareFunction(const PlutoFilterTypeLessThanOrEqualTo());
+      });
+
+      test('A LessThanOrEqualTo B', () {
+        expect(compare('A', 'B'), isTrue);
+      });
+
+      test('A LessThanOrEqualTo A', () {
+        expect(compare('A', 'A'), isTrue);
+      });
+
+      test('B is not LessThanOrEqualTo A', () {
+        expect(compare('B', 'A'), isFalse);
       });
     });
   });

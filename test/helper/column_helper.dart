@@ -16,7 +16,7 @@ class ColumnHelper {
               frozen: frozen,
               type: PlutoColumnType.text(readOnly: readOnly),
             ))
-        .toList(growable: false);
+        .toList();
   }
 
   static List<PlutoColumn> dateColumn(
@@ -44,7 +44,7 @@ class ColumnHelper {
                 applyFormatOnInit: applyFormatOnInit,
               ),
             ))
-        .toList(growable: false);
+        .toList();
   }
 
   static List<PlutoColumn> timeColumn(
@@ -66,6 +66,6 @@ class ColumnHelper {
                 defaultValue: defaultValue,
               ),
             ))
-        .toList(growable: false);
+        .toList();
   }
 }
