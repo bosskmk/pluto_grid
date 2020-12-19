@@ -301,9 +301,9 @@ class PlutoGridLocaleText {
     this.filterStartsWith = '~로 시작',
     this.filterEndsWith = '~로 끝',
     this.filterGreaterThan = '~보다 큰',
-    this.filterGreaterThanOrEqualTo = '_보다 크거나 같은',
+    this.filterGreaterThanOrEqualTo = '~보다 크거나 같은',
     this.filterLessThan = '~보다 작은',
-    this.filterLessThanOrEqualTo = '_보다 작거나 같은',
+    this.filterLessThanOrEqualTo = '~보다 작거나 같은',
     // Date popup
     this.sunday = '일',
     this.monday = '월',
