@@ -83,6 +83,7 @@ class PlutoStateManager extends PlutoState {
     CreateFooterCallBack createFooter,
     PlutoConfiguration configuration,
   }) {
+    initializeRows(columns, rows);
     refColumns = columns;
     refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
@@ -114,8 +115,9 @@ class PlutoStateManager extends PlutoState {
     }
 
     _ApplyList applyList = _ApplyList([
-      _ApplyCellFormat(refColumns),
-      _ApplyRowSortIdx(
+      _ApplyCellForSetColumn(refColumns),
+      _ApplyCellForFormat(refColumns),
+      _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
         increase: increase,
         start: start,
@@ -281,10 +283,24 @@ class _ApplyList implements _Apply {
   }
 }
 
-class _ApplyCellFormat implements _Apply {
+class _ApplyCellForSetColumn implements _Apply {
   final List<PlutoColumn> refColumns;
 
-  _ApplyCellFormat(
+  _ApplyCellForSetColumn(this.refColumns);
+
+  bool get apply => true;
+
+  void execute(PlutoRow row) {
+    refColumns.forEach((element) {
+      row.cells[element.field].setColumn(element);
+    });
+  }
+}
+
+class _ApplyCellForFormat implements _Apply {
+  final List<PlutoColumn> refColumns;
+
+  _ApplyCellForFormat(
     this.refColumns,
   ) {
     assert(refColumns != null && refColumns.isNotEmpty);
@@ -313,7 +329,7 @@ class _ApplyCellFormat implements _Apply {
   }
 }
 
-class _ApplyRowSortIdx implements _Apply {
+class _ApplyRowForSortIdx implements _Apply {
   final bool forceApply;
 
   final bool increase;
@@ -322,7 +338,7 @@ class _ApplyRowSortIdx implements _Apply {
 
   final PlutoRow firstRow;
 
-  _ApplyRowSortIdx({
+  _ApplyRowForSortIdx({
     @required this.forceApply,
     @required this.increase,
     @required this.start,

@@ -106,8 +106,6 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initProperties() {
-    initializeColumnRow();
-
     gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
 
     // Dispose
@@ -197,10 +195,6 @@ class _PlutoGridState extends State<PlutoGrid> {
 
       stateManager.gridFocusNode.requestFocus();
     });
-  }
-
-  void initializeColumnRow() {
-    PlutoStateManager.initializeRows(widget.columns, widget.rows);
   }
 
   void changeStateListener() {

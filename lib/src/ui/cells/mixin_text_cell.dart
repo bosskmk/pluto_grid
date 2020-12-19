@@ -42,8 +42,9 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   void initState() {
     super.initState();
 
-    _textController.text =
-        widget.column.formattedValueForDisplayInEditing(widget.cell.value);
+    _textController.text = widget.column.formattedValueForDisplayInEditing(
+      widget.cell.value,
+    );
 
     _cellEditingStatus = CellEditingStatus.init;
   }

@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart' as intl;
 
-import '../helper/pluto_log.dart';
-
 abstract class PlutoColumnType {
   bool readOnly;
 
@@ -154,7 +152,7 @@ class PlutoColumnTypeText implements PlutoColumnType {
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.toString().compareTo(b.toString());
+    return a.compareTo(b);
   }
 }
 
@@ -191,14 +189,6 @@ class PlutoColumnTypeNumber
   }
 
   int compare(dynamic a, dynamic b) {
-    if (a.runtimeType != num) {
-      a = num.tryParse(a.toString()) ?? 0;
-    }
-
-    if (b.runtimeType != num) {
-      b = num.tryParse(b.toString()) ?? 0;
-    }
-
     return a.compareTo(b);
   }
 
@@ -296,33 +286,7 @@ class PlutoColumnTypeDate
   }
 
   int compare(dynamic a, dynamic b) {
-    DateTime _a;
-
-    DateTime _b;
-
-    try {
-      final dateFormat = intl.DateFormat(format);
-
-      _a = dateFormat.parse(a);
-
-      _b = dateFormat.parse(b);
-
-      return _a.compareTo(_b);
-    } on FormatException {
-      return _a == _b
-          ? 0
-          : _a == null
-              ? -1
-              : 1;
-    } on Exception catch (e) {
-      PlutoLog(
-        'Exception on compare function of PlutoColumnTypeDate.',
-        type: PlutoLogType.exception,
-        error: e,
-      );
-    }
-
-    return 0;
+    return a.compareTo(b);
   }
 
   String applyFormat(value) {

@@ -555,12 +555,15 @@ void main() {
           },
         );
 
+        // 날짜 포멧이 적용 된 경우 컬럼의 compare 함수의 동작이 의도와 다르다.
+        // 포멧을 바꿔 compare 함수를 호출해야 한다. compare 함수는 포멧을 적당하게
+        // 변환하여 호출하고 포멧의 변경은 외부에서 호출 할 때 처리 한다.
         test(
-          '12/30/2019, 01/01/2020 인 경우 -1',
+          '12/30/2019, 01/01/2020 인 경우 1',
           () {
             final PlutoColumnTypeDate column =
                 PlutoColumnType.date(format: 'MM/dd/yyyy');
-            expect(column.compare('12/30/2019', '01/01/2020'), -1);
+            expect(column.compare('12/30/2019', '01/01/2020'), 1);
           },
         );
 
@@ -572,12 +575,15 @@ void main() {
           },
         );
 
+        // 날짜 포멧이 적용 된 경우 컬럼의 compare 함수의 동작이 의도와 다르다.
+        // 포멧을 바꿔 compare 함수를 호출해야 한다. compare 함수는 포멧을 적당하게
+        // 변환하여 호출하고 포멧의 변경은 외부에서 호출 할 때 처리 한다.
         test(
-          '01/01/2020, 12/30/2019  인 경우 1',
+          '01/01/2020, 12/30/2019  인 경우 -1',
           () {
             final PlutoColumnTypeDate column =
                 PlutoColumnType.date(format: 'MM/dd/yyyy');
-            expect(column.compare('01/01/2020', '12/30/2019'), 1);
+            expect(column.compare('01/01/2020', '12/30/2019'), -1);
           },
         );
 
