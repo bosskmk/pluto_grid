@@ -1,3 +1,7 @@
+## [1.0.0-pre.10] - 2020. 12. 21
+
+* Fix sorting error when null value.
+
 ## [1.0.0-pre.9] - 2020. 12. 20
 
 * The method of setting the filter has changed. columnFilters in configuration changed to columnFilterConfig.

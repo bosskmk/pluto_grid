@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 
 import 'pluto_column.dart';
-import 'pluto_column_type.dart';
 
 class PlutoCell {
   PlutoCell({
@@ -39,35 +37,9 @@ class PlutoCell {
   }
 
   dynamic _getValueForSorting() {
-    if (_valueForSorting != null) {
-      return _valueForSorting;
-    }
-
     assert(_column != null);
 
-    if (_column.type.isText) {
-      _valueForSorting = _value.toString();
-    } else if (_column.type.isNumber) {
-      _valueForSorting = _value.runtimeType != num
-          ? num.tryParse(_value.toString()) ?? 0
-          : _value;
-    } else if (_column.type.isDate) {
-      PlutoColumnTypeDate dateColumn = _column.type;
-
-      final dateFormat = intl.DateFormat(dateColumn.format);
-
-      DateTime dateFormatValue;
-
-      try {
-        dateFormatValue = dateFormat.parse(_value);
-      } catch (e) {
-        dateFormatValue = _column.type.defaultValue;
-      }
-
-      _valueForSorting = dateFormatValue;
-    } else {
-      _valueForSorting = _value;
-    }
+    _valueForSorting ??= _column.type.makeCompareValue(_value);
 
     return _valueForSorting;
   }
