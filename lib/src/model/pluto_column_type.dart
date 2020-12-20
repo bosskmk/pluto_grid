@@ -94,6 +94,8 @@ abstract class PlutoColumnType {
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
+
+  dynamic makeCompareValue(dynamic v);
 }
 
 extension PlutoColumnTypeExtension on PlutoColumnType {
@@ -135,6 +137,22 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   dynamic applyFormat(dynamic value) => hasFormat
       ? (this as _PlutoColumnTypeHasFormat).applyFormat(value)
       : value;
+
+  int compareWithNull(
+    dynamic a,
+    dynamic b,
+    int Function() resolve,
+  ) {
+    if (a == null || b == null) {
+      return a == b
+          ? 0
+          : a == null
+              ? -1
+              : 1;
+    }
+
+    return resolve();
+  }
 }
 
 class PlutoColumnTypeText implements PlutoColumnType {
@@ -152,7 +170,11 @@ class PlutoColumnTypeText implements PlutoColumnType {
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.compareTo(b);
+    return compareWithNull(a, b, () => a.compareTo(b));
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v.toString();
   }
 }
 
@@ -189,7 +211,11 @@ class PlutoColumnTypeNumber
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.compareTo(b);
+    return compareWithNull(a, b, () => a.compareTo(b));
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
   }
 
   String applyFormat(value) {
@@ -236,11 +262,17 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
   bool isValid(dynamic value) => items.contains(value) == true;
 
   int compare(dynamic a, dynamic b) {
-    final _a = items.indexOf(a);
+    return compareWithNull(a, b, () {
+      final _a = items.indexOf(a);
 
-    final _b = items.indexOf(b);
+      final _b = items.indexOf(b);
 
-    return _a.compareTo(_b);
+      return _a.compareTo(_b);
+    });
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v;
   }
 }
 
@@ -286,7 +318,21 @@ class PlutoColumnTypeDate
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.compareTo(b);
+    return compareWithNull(a, b, () => a.compareTo(b));
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    final dateFormat = intl.DateFormat(format);
+
+    DateTime dateFormatValue;
+
+    try {
+      dateFormatValue = dateFormat.parse(v);
+    } catch (e) {
+      dateFormatValue = null;
+    }
+
+    return dateFormatValue;
   }
 
   String applyFormat(value) {
@@ -315,7 +361,11 @@ class PlutoColumnTypeTime implements PlutoColumnType {
   }
 
   int compare(dynamic a, dynamic b) {
-    return a.compareTo(b);
+    return compareWithNull(a, b, () => a.compareTo(b));
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v;
   }
 }
 
