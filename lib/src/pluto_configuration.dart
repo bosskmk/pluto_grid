@@ -476,10 +476,19 @@ class PlutoColumnFilterConfig {
   /// );
   ///
   /// class ClassYouImplemented implements PlutoFilterType {
-  ///   String get title => 'CustomFilter';
+  ///   String get title => 'Custom contains';
   ///
-  ///   PlutoCompareFunction get compare =>
-  ///     (dynamic a, dynamic b) => a.toString().contains(b.toString());
+  ///   get compare => ({
+  ///         String base,
+  ///         String search,
+  ///         PlutoColumn column,
+  ///       }) {
+  ///         var keys = search.split(',').map((e) => e.toUpperCase()).toList();
+  ///
+  ///         return keys.contains(base.toUpperCase());
+  ///       };
+  ///
+  ///   const ClassYouImplemented();
   /// }
   /// ```
   const PlutoColumnFilterConfig({
