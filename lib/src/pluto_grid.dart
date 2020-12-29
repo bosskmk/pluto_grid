@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoOnLoadedEventCallback = void Function(PlutoGridOnLoadedEvent event);
+typedef PlutoOnLoadedEventCallback = void Function(
+    PlutoGridOnLoadedEvent event);
 
-typedef PlutoOnChangedEventCallback = void Function(PlutoGridOnChangedEvent event);
+typedef PlutoOnChangedEventCallback = void Function(
+    PlutoGridOnChangedEvent event);
 
 typedef PlutoOnSelectedEventCallback = void Function(
     PlutoGridOnSelectedEvent event);

@@ -33,34 +33,35 @@ class PlutoGridPopup {
   }
 
   Future<void> open() async {
-    PlutoGridOnSelectedEvent selected = await showDialog<PlutoGridOnSelectedEvent>(
-        context: context,
-        builder: (BuildContext ctx) {
-          return Dialog(
-            child: LayoutBuilder(
-              builder: (ctx, size) {
-                return Container(
-                  width: (width ?? size.maxWidth) +
-                      PlutoGridSettings.gridInnerSpacing,
-                  height: height ?? size.maxHeight,
-                  child: PlutoGrid(
-                    columns: columns,
-                    rows: rows,
-                    mode: mode,
-                    onLoaded: onLoaded,
-                    onChanged: onChanged,
-                    onSelected: (PlutoGridOnSelectedEvent event) {
-                      Navigator.pop(ctx, event);
-                    },
-                    createHeader: createHeader,
-                    createFooter: createFooter,
-                    configuration: configuration,
-                  ),
-                );
-              },
-            ),
-          );
-        });
+    PlutoGridOnSelectedEvent selected =
+        await showDialog<PlutoGridOnSelectedEvent>(
+            context: context,
+            builder: (BuildContext ctx) {
+              return Dialog(
+                child: LayoutBuilder(
+                  builder: (ctx, size) {
+                    return Container(
+                      width: (width ?? size.maxWidth) +
+                          PlutoGridSettings.gridInnerSpacing,
+                      height: height ?? size.maxHeight,
+                      child: PlutoGrid(
+                        columns: columns,
+                        rows: rows,
+                        mode: mode,
+                        onLoaded: onLoaded,
+                        onChanged: onChanged,
+                        onSelected: (PlutoGridOnSelectedEvent event) {
+                          Navigator.pop(ctx, event);
+                        },
+                        createHeader: createHeader,
+                        createFooter: createFooter,
+                        configuration: configuration,
+                      ),
+                    );
+                  },
+                ),
+              );
+            });
     if (onSelected != null) {
       onSelected(selected);
     }
