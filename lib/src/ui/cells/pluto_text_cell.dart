@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_text_cell.dart';
 
 class PlutoTextCell extends StatefulWidget implements AbstractMixinTextCell {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 

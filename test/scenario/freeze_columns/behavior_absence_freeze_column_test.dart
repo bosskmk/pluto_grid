@@ -13,7 +13,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     final toLeftColumn1 = PlutoWidgetTestHelper(
       '1번 컬럼의 셀 하나를 선택하고 1번 컬럼을 왼쪽 고정',
@@ -31,7 +31,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),
@@ -122,7 +122,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     final toLeftColumn1 = PlutoWidgetTestHelper(
       '3번 컬럼의 셀 하나를 선택하고 3번 컬럼을 오른쪽 고정',
@@ -140,7 +140,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),

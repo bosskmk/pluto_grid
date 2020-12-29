@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event called when a row is dragged.
-class PlutoDragRowsEvent extends PlutoEvent {
+class PlutoGridDragRowsEvent extends PlutoGridEvent {
   final Offset offset;
-  final PlutoDragType dragType;
+  final PlutoGridDragType dragType;
   final List<PlutoRow> rows;
 
-  PlutoDragRowsEvent({
+  PlutoGridDragRowsEvent({
     this.offset,
     this.dragType,
     this.rows,
   });
 
-  void handler(PlutoStateManager stateManager) {
+  void handler(PlutoGridStateManager stateManager) {
     if (dragType == null ||
         (!dragType.isStart && offset == null) ||
         rows == null) {
@@ -29,18 +29,18 @@ class PlutoDragRowsEvent extends PlutoEvent {
     }
   }
 
-  void _startDrag(PlutoStateManager stateManager) {
+  void _startDrag(PlutoGridStateManager stateManager) {
     stateManager.setIsDraggingRow(true, notify: false);
     stateManager.setDragRows(rows);
   }
 
-  void _updateDrag(PlutoStateManager stateManager) {
+  void _updateDrag(PlutoGridStateManager stateManager) {
     stateManager.setDragTargetRowIdx(
       stateManager.getRowIdxByOffset(offset.dy),
     );
   }
 
-  void _endDrag(PlutoStateManager stateManager) {
+  void _endDrag(PlutoGridStateManager stateManager) {
     stateManager.moveRows(
       rows,
       offset.dy,
@@ -50,24 +50,24 @@ class PlutoDragRowsEvent extends PlutoEvent {
   }
 }
 
-enum PlutoDragType {
+enum PlutoGridDragType {
   start,
   update,
   end,
 }
 
-extension PlutoDragTypeExtension on PlutoDragType {
-  bool get isStart => this == PlutoDragType.start;
+extension PlutoGridDragTypeExtension on PlutoGridDragType {
+  bool get isStart => this == PlutoGridDragType.start;
 
-  bool get isUpdate => this == PlutoDragType.update;
+  bool get isUpdate => this == PlutoGridDragType.update;
 
-  bool get isEnd => this == PlutoDragType.end;
+  bool get isEnd => this == PlutoGridDragType.end;
 }
 
-enum PlutoDragItemType {
+enum PlutoGridDragItemType {
   rows,
 }
 
-extension PlutoDragItemExtension on PlutoDragItemType {
-  bool get isRows => this == PlutoDragItemType.rows;
+extension PlutoGridDragItemExtension on PlutoGridDragItemType {
+  bool get isRows => this == PlutoGridDragItemType.rows;
 }

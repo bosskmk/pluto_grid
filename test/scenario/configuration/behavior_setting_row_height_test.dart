@@ -9,9 +9,9 @@ import '../../helper/row_helper.dart';
 
 /// 행 높이 설정 후 동작 테스트
 void main() {
-  final PlutoSelectingMode selectingMode = PlutoSelectingMode.row;
+  final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   final buildRowsWithSettingRowHeight = ({
     int numberOfRows = 10,
@@ -34,7 +34,7 @@ void main() {
                 child: PlutoGrid(
                   columns: _columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                     stateManager.setSelectingMode(selectingMode);
 
@@ -43,7 +43,7 @@ void main() {
                       rowIdx,
                     );
                   },
-                  configuration: PlutoConfiguration(
+                  configuration: PlutoGridConfiguration(
                     rowHeight: rowHeight,
                   ),
                 ),

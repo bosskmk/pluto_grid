@@ -491,7 +491,7 @@ void main() {
           () {
             FilterPopupState(
               context: null,
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: ColumnHelper.textColumn('column'),
@@ -531,7 +531,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: null,
               handleApplyFilter: (_) {},
               columns: ColumnHelper.textColumn('column'),
@@ -551,7 +551,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: null,
               columns: ColumnHelper.textColumn('column'),
@@ -571,7 +571,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: null,
@@ -591,7 +591,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: [],
@@ -611,7 +611,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: ColumnHelper.textColumn('column'),
@@ -631,7 +631,7 @@ void main() {
           () {
             FilterPopupState(
               context: MockBuildContext(),
-              configuration: PlutoConfiguration(),
+              configuration: PlutoGridConfiguration(),
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: ColumnHelper.textColumn('column'),
@@ -650,7 +650,7 @@ void main() {
         () {
           var filterPopupState = FilterPopupState(
             context: MockBuildContext(),
-            configuration: PlutoConfiguration(),
+            configuration: PlutoGridConfiguration(),
             handleAddNewFilter: (_) {},
             handleApplyFilter: (_) {},
             columns: ColumnHelper.textColumn('column'),
@@ -661,11 +661,11 @@ void main() {
           var stateManager = MockPlutoStateManager();
 
           filterPopupState.onLoaded(
-            PlutoOnLoadedEvent(stateManager: stateManager),
+            PlutoGridOnLoadedEvent(stateManager: stateManager),
           );
 
           verify(
-            stateManager.setSelectingMode(PlutoSelectingMode.row),
+            stateManager.setSelectingMode(PlutoGridSelectingMode.row),
           ).called(1);
 
           verify(
@@ -683,7 +683,7 @@ void main() {
 
           var filterPopupState = FilterPopupState(
             context: MockBuildContext(),
-            configuration: PlutoConfiguration(),
+            configuration: PlutoGridConfiguration(),
             handleAddNewFilter: (_) {},
             handleApplyFilter: (_) {},
             columns: columns,
@@ -696,7 +696,7 @@ void main() {
           when(stateManager.rows).thenReturn(rows);
 
           filterPopupState.onLoaded(
-            PlutoOnLoadedEvent(stateManager: stateManager),
+            PlutoGridOnLoadedEvent(stateManager: stateManager),
           );
 
           verify(stateManager.setKeepFocus(true)).called(1);
@@ -717,7 +717,7 @@ void main() {
 
       var filterPopupState = FilterPopupState(
         context: MockBuildContext(),
-        configuration: PlutoConfiguration(),
+        configuration: PlutoGridConfiguration(),
         handleAddNewFilter: (_) {},
         handleApplyFilter: mock.onChangeOneParamListener,
         columns: ColumnHelper.textColumn('column'),
@@ -725,7 +725,7 @@ void main() {
         focusFirstFilterValue: true,
       );
 
-      filterPopupState.onChanged(PlutoOnChangedEvent());
+      filterPopupState.onChanged(PlutoGridOnChangedEvent());
 
       verify(mock.onChangeOneParamListener(any)).called(1);
     });
@@ -733,7 +733,7 @@ void main() {
     test('onSelected', () {
       var filterPopupState = FilterPopupState(
         context: MockBuildContext(),
-        configuration: PlutoConfiguration(),
+        configuration: PlutoGridConfiguration(),
         handleAddNewFilter: (_) {},
         handleApplyFilter: (_) {},
         columns: ColumnHelper.textColumn('column'),
@@ -744,10 +744,10 @@ void main() {
       var stateManager = MockPlutoStateManager();
 
       filterPopupState.onLoaded(
-        PlutoOnLoadedEvent(stateManager: stateManager),
+        PlutoGridOnLoadedEvent(stateManager: stateManager),
       );
 
-      filterPopupState.onSelected(PlutoOnSelectedEvent());
+      filterPopupState.onSelected(PlutoGridOnSelectedEvent());
 
       verify(
         stateManager.removeListener(filterPopupState.stateListener),
@@ -764,7 +764,7 @@ void main() {
 
         var filterPopupState = FilterPopupState(
           context: MockBuildContext(),
-          configuration: PlutoConfiguration(),
+          configuration: PlutoGridConfiguration(),
           handleAddNewFilter: (_) {},
           handleApplyFilter: mock.onChangeOneParamListener,
           columns: columns,
@@ -775,7 +775,7 @@ void main() {
         var stateManager = MockPlutoStateManager();
 
         filterPopupState.onLoaded(
-          PlutoOnLoadedEvent(stateManager: stateManager),
+          PlutoGridOnLoadedEvent(stateManager: stateManager),
         );
 
         when(stateManager.rows).thenReturn([...filterRows]);
@@ -792,7 +792,7 @@ void main() {
 
         var filterPopupState = FilterPopupState(
           context: MockBuildContext(),
-          configuration: PlutoConfiguration(),
+          configuration: PlutoGridConfiguration(),
           handleAddNewFilter: (_) {},
           handleApplyFilter: mock.onChangeOneParamListener,
           columns: columns,
@@ -803,7 +803,7 @@ void main() {
         var stateManager = MockPlutoStateManager();
 
         filterPopupState.onLoaded(
-          PlutoOnLoadedEvent(stateManager: stateManager),
+          PlutoGridOnLoadedEvent(stateManager: stateManager),
         );
 
         when(stateManager.rows).thenReturn(RowHelper.count(1, columns));
@@ -817,7 +817,7 @@ void main() {
     group('makeColumns', () {
       var columns = ColumnHelper.textColumn('column', count: 3);
 
-      var configuration = PlutoConfiguration();
+      var configuration = PlutoGridConfiguration();
 
       var filterPopupState = FilterPopupState(
         context: MockBuildContext(),

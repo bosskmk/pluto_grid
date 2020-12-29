@@ -10,9 +10,9 @@ import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
-  PlutoEventManager eventManager;
-  StreamSubscription<PlutoEvent> streamSubscription;
+  PlutoGridStateManager stateManager;
+  PlutoGridEventManager eventManager;
+  StreamSubscription<PlutoGridEvent> streamSubscription;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
@@ -20,7 +20,7 @@ void main() {
     streamSubscription = MockStreamSubscription();
 
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
 
@@ -82,8 +82,8 @@ void main() {
       await tester.enterText(find.byType(TextField), 'abc');
 
       verify(eventManager.addEvent(
-        argThat(
-            PlutoObjectMatcher<PlutoChangeColumnFilterEvent>(rule: (object) {
+        argThat(PlutoObjectMatcher<PlutoGridChangeColumnFilterEvent>(
+            rule: (object) {
           return object.column.field == column.field &&
               object.filterType.runtimeType == PlutoFilterTypeContains &&
               object.filterValue == 'abc';

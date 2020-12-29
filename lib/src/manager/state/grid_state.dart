@@ -6,11 +6,11 @@ abstract class IGridState {
 
   PlutoGridMode get mode;
 
-  PlutoConfiguration get configuration;
+  PlutoGridConfiguration get configuration;
 
-  PlutoKeyManager get keyManager;
+  PlutoGridKeyManager get keyManager;
 
-  PlutoEventManager get eventManager;
+  PlutoGridEventManager get eventManager;
 
   /// Event callback fired when cell value changes.
   PlutoOnChangedEventCallback get onChanged;
@@ -27,9 +27,9 @@ abstract class IGridState {
 
   void setGridKey(Key key);
 
-  void setKeyManager(PlutoKeyManager keyManager);
+  void setKeyManager(PlutoGridKeyManager keyManager);
 
-  void setEventManager(PlutoEventManager eventManager);
+  void setEventManager(PlutoGridEventManager eventManager);
 
   void setGridMode(PlutoGridMode mode);
 
@@ -41,7 +41,7 @@ abstract class IGridState {
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
 
-  void setConfiguration(PlutoConfiguration configuration);
+  void setConfiguration(PlutoGridConfiguration configuration);
 
   void resetCurrentState({notify = true});
 
@@ -49,7 +49,7 @@ abstract class IGridState {
   void handleOnSelected();
 }
 
-mixin GridState implements IPlutoState {
+mixin GridState implements IPlutoGridState {
   GlobalKey get gridKey => _gridKey;
 
   GlobalKey _gridKey;
@@ -58,17 +58,17 @@ mixin GridState implements IPlutoState {
 
   PlutoGridMode _mode;
 
-  PlutoConfiguration get configuration => _configuration;
+  PlutoGridConfiguration get configuration => _configuration;
 
-  PlutoConfiguration _configuration;
+  PlutoGridConfiguration _configuration;
 
-  PlutoKeyManager _keyManager;
+  PlutoGridKeyManager _keyManager;
 
-  PlutoKeyManager get keyManager => _keyManager;
+  PlutoGridKeyManager get keyManager => _keyManager;
 
-  PlutoEventManager _eventManager;
+  PlutoGridEventManager _eventManager;
 
-  PlutoEventManager get eventManager => _eventManager;
+  PlutoGridEventManager get eventManager => _eventManager;
 
   PlutoOnChangedEventCallback get onChanged => _onChanged;
 
@@ -88,11 +88,11 @@ mixin GridState implements IPlutoState {
 
   PlutoGridLocaleText get localeText => configuration.localeText;
 
-  void setKeyManager(PlutoKeyManager keyManager) {
+  void setKeyManager(PlutoGridKeyManager keyManager) {
     _keyManager = keyManager;
   }
 
-  void setEventManager(PlutoEventManager eventManager) {
+  void setEventManager(PlutoGridEventManager eventManager) {
     _eventManager = eventManager;
   }
 
@@ -116,8 +116,8 @@ mixin GridState implements IPlutoState {
     _createFooter = createFooter;
   }
 
-  void setConfiguration(PlutoConfiguration configuration) {
-    _configuration = configuration ?? PlutoConfiguration();
+  void setConfiguration(PlutoGridConfiguration configuration) {
+    _configuration = configuration ?? PlutoGridConfiguration();
 
     _configuration.applyColumnFilter(refColumns);
   }
@@ -138,7 +138,7 @@ mixin GridState implements IPlutoState {
 
   void handleOnSelected() {
     if (_mode.isSelect == true && _onSelected != null) {
-      _onSelected(PlutoOnSelectedEvent(row: currentRow, cell: currentCell));
+      _onSelected(PlutoGridOnSelectedEvent(row: currentRow, cell: currentCell));
     }
   }
 }

@@ -48,12 +48,12 @@ class _MovingScreenState extends State<MovingScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        configuration: PlutoConfiguration(
+        configuration: PlutoGridConfiguration(
           enableMoveDownAfterSelecting: true,
-          enterKeyAction: PlutoEnterKeyAction.editingAndMoveDown,
+          enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
         ),
       ),
     );

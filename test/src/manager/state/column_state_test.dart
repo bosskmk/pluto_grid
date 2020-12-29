@@ -9,7 +9,7 @@ void main() {
   testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
@@ -31,7 +31,7 @@ void main() {
   testWidgets('columnIndexesForShowFrozen - 고정 컬럼 순서에 맞게 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: '',
@@ -63,7 +63,7 @@ void main() {
   testWidgets('columnsWidth - 컬럼 넓이 합계를 리턴 해야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: '',
@@ -99,7 +99,7 @@ void main() {
   testWidgets('leftFrozenColumns - 왼쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'left1',
@@ -132,7 +132,7 @@ void main() {
   testWidgets('leftFrozenColumnIndexes - 왼쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'right1',
@@ -164,7 +164,7 @@ void main() {
   testWidgets('leftFrozenColumnsWidth - 왼쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'right1',
@@ -202,7 +202,7 @@ void main() {
   testWidgets('rightFrozenColumns - 오른쪽 고정 컬럼 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'left1',
@@ -234,7 +234,7 @@ void main() {
   testWidgets('rightFrozenColumnIndexes - 오른쪽 고정 컬럼 인덱스 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'right1',
@@ -267,7 +267,7 @@ void main() {
   testWidgets('rightFrozenColumnsWidth - 오른쪽 고정 컬럼 넓이 합계를 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         PlutoColumn(
           title: 'right1',
@@ -312,7 +312,7 @@ void main() {
   testWidgets('bodyColumns - body 컬럼 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
             count: 3, frozen: PlutoColumnFrozen.left),
@@ -338,7 +338,7 @@ void main() {
   testWidgets('bodyColumnIndexes - body 컬럼 인덱스 리스트만 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
             count: 3, frozen: PlutoColumnFrozen.left),
@@ -364,7 +364,7 @@ void main() {
   testWidgets('bodyColumnsWidth - body 컬럼 넓이 합계를 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
             count: 3, frozen: PlutoColumnFrozen.left),
@@ -387,7 +387,7 @@ void main() {
   testWidgets('currentColumn - currentColumnField 값이 없는 경우 null 을 리턴해야 한다.',
       (WidgetTester tester) async {
     // given
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
             count: 3, frozen: PlutoColumnFrozen.left),
@@ -420,7 +420,7 @@ void main() {
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
       gridFocusNode: null,
@@ -454,7 +454,7 @@ void main() {
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
       gridFocusNode: null,
@@ -482,7 +482,7 @@ void main() {
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager = PlutoStateManager(
+    PlutoGridStateManager stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
       gridFocusNode: null,
@@ -513,7 +513,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -539,7 +539,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -568,7 +568,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -608,7 +608,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -647,7 +647,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -688,7 +688,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -728,7 +728,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -770,7 +770,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,

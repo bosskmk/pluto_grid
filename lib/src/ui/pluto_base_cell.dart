@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseCell extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final double width;
   final double height;
@@ -31,7 +31,7 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 
   bool isEditing;
 
-  PlutoSelectingMode selectingMode;
+  PlutoGridSelectingMode selectingMode;
 
   bool isSelectedCell;
 
@@ -49,7 +49,7 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 
       isEditing = update<bool>(isEditing, widget.stateManager.isEditing);
 
-      selectingMode = update<PlutoSelectingMode>(
+      selectingMode = update<PlutoGridSelectingMode>(
         selectingMode,
         widget.stateManager.selectingMode,
       );
@@ -76,9 +76,9 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 }
 
 class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
-  void _addGestureEvent(PlutoGestureType gestureType, Offset offset) {
+  void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
     widget.stateManager.eventManager.addEvent(
-      PlutoCellGestureEvent(
+      PlutoGridCellGestureEvent(
         gestureType: gestureType,
         offset: offset,
         cell: widget.cell,
@@ -89,20 +89,22 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnTapUp(TapUpDetails details) {
-    _addGestureEvent(PlutoGestureType.onTapUp, details.globalPosition);
+    _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
   }
 
   void _handleOnLongPressStart(LongPressStartDetails details) {
-    _addGestureEvent(PlutoGestureType.onLongPressStart, details.globalPosition);
+    _addGestureEvent(
+        PlutoGridGestureType.onLongPressStart, details.globalPosition);
   }
 
   void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
     _addGestureEvent(
-        PlutoGestureType.onLongPressMoveUpdate, details.globalPosition);
+        PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
   }
 
   void _handleOnLongPressEnd(LongPressEndDetails details) {
-    _addGestureEvent(PlutoGestureType.onLongPressEnd, details.globalPosition);
+    _addGestureEvent(
+        PlutoGridGestureType.onLongPressEnd, details.globalPosition);
   }
 
   @override
@@ -146,9 +148,9 @@ class _CellContainer extends StatelessWidget {
   final bool hasFocus;
   final bool isCurrentCell;
   final bool isEditing;
-  final PlutoSelectingMode selectingMode;
+  final PlutoGridSelectingMode selectingMode;
   final bool isSelectedCell;
-  final PlutoConfiguration configuration;
+  final PlutoGridConfiguration configuration;
 
   _CellContainer({
     this.readOnly,
@@ -230,7 +232,7 @@ class _CellContainer extends StatelessWidget {
 }
 
 class _BuildCell extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoColumn column;
   final PlutoCell cell;

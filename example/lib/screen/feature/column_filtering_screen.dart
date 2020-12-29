@@ -85,18 +85,18 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onLoaded: (PlutoOnLoadedEvent event) {
+        onLoaded: (PlutoGridOnLoadedEvent event) {
           event.stateManager.setShowColumnFilter(true);
         },
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        configuration: PlutoConfiguration(
+        configuration: PlutoGridConfiguration(
           /// If columnFilterConfig is not set, the default setting is applied.
           ///
           /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
           /// Prevents errors returning filters that are not in the filters list.
-          columnFilterConfig: PlutoColumnFilterConfig(
+          columnFilterConfig: PlutoGridColumnFilterConfig(
             filters: const [
               ...FilterHelper.defaultFilters,
               // custom filter

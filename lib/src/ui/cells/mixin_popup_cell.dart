@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../helper/pluto_log.dart';
-
 abstract class AbstractMixinPopupCell extends StatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
@@ -45,11 +43,11 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
   int offsetOfScrollRowIdx = 0;
 
   /// Callback function that returns Header to be inserted at the top of the popup
-  /// Implement a callback function that takes [PlutoStateManager] as a parameter.
+  /// Implement a callback function that takes [PlutoGridStateManager] as a parameter.
   CreateHeaderCallBack createHeader;
 
   /// Callback function that returns Footer to be inserted at the bottom of the popup
-  /// Implement a callback function that takes [PlutoStateManager] as a parameter.
+  /// Implement a callback function that takes [PlutoGridStateManager] as a parameter.
   CreateFooterCallBack createFooter;
 
   @override
@@ -108,7 +106,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
   }
 
   bool _handleKeyboardFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    KeyManagerEvent keyManagerEvent = KeyManagerEvent(
+    PlutoKeyManagerEvent keyManagerEvent = PlutoKeyManagerEvent(
       focusNode: focusNode,
       event: event,
     );
@@ -125,7 +123,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     return false;
   }
 
-  void onLoaded(PlutoOnLoadedEvent event) {
+  void onLoaded(PlutoGridOnLoadedEvent event) {
     for (var i = 0; i < popupRows.length; i += 1) {
       if (fieldOnSelected == null) {
         for (var entry in popupRows[i].cells.entries) {
@@ -149,15 +147,15 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
           event.stateManager.currentRowIdx + 1 + offsetOfScrollRowIdx;
 
       if (rowIdxToMove < event.stateManager.refRows.length) {
-        event.stateManager.moveScrollByRow(MoveDirection.up, rowIdxToMove);
+        event.stateManager.moveScrollByRow(PlutoMoveDirection.up, rowIdxToMove);
       } else {
         event.stateManager.moveScrollByRow(
-            MoveDirection.up, event.stateManager.refRows.length);
+            PlutoMoveDirection.up, event.stateManager.refRows.length);
       }
     }
   }
 
-  void onSelected(PlutoOnSelectedEvent event) {
+  void onSelected(PlutoGridOnSelectedEvent event) {
     isOpenedPopup = false;
 
     if (event == null) {

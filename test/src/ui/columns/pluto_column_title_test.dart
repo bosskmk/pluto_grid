@@ -7,11 +7,11 @@ import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
@@ -553,7 +553,7 @@ void main() {
       frozen: PlutoColumnFrozen.right,
     );
 
-    final aColumnWithConfiguration = (PlutoConfiguration configuration) {
+    final aColumnWithConfiguration = (PlutoGridConfiguration configuration) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
 
@@ -570,7 +570,7 @@ void main() {
       });
     };
 
-    aColumnWithConfiguration(PlutoConfiguration(
+    aColumnWithConfiguration(PlutoGridConfiguration(
       enableColumnBorder: true,
       borderColor: Colors.deepOrange,
     )).test(
@@ -594,7 +594,7 @@ void main() {
       },
     );
 
-    aColumnWithConfiguration(PlutoConfiguration(
+    aColumnWithConfiguration(PlutoGridConfiguration(
       enableColumnBorder: false,
       borderColor: Colors.deepOrange,
     )).test(

@@ -9,15 +9,15 @@ import '../../helper/row_helper.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
-  PlutoConfiguration configuration;
+  PlutoGridConfiguration configuration;
 
   FocusNode keyboardFocusNode;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    configuration = PlutoConfiguration();
+    configuration = PlutoGridConfiguration();
     when(stateManager.configuration).thenReturn(configuration);
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
@@ -34,7 +34,7 @@ void main() {
     'Ctrl + C',
     (WidgetTester tester) async {
       // given
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -45,7 +45,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -85,7 +85,7 @@ void main() {
     'Ctrl + C - editing 상태에서는 selectingText 값이 클립보드에 복사 되지 않는다.',
     (WidgetTester tester) async {
       // given
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -96,7 +96,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -137,7 +137,7 @@ void main() {
     'Ctrl + V - pasteCellValue 가 호출 되어야 한다.',
     (WidgetTester tester) async {
       // given
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -148,7 +148,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -191,7 +191,7 @@ void main() {
     'Ctrl + V - currentCell 이 null 이면 pasteCellValue 가 호출 되지 않는다.',
     (WidgetTester tester) async {
       // given
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -202,7 +202,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -245,7 +245,7 @@ void main() {
     'Ctrl + V - isEditing 이 true 이면 pasteCellValue 가 호출 되지 않는다.',
     (WidgetTester tester) async {
       // given
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -256,7 +256,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -298,7 +298,7 @@ void main() {
   group('_handleHomeEnd', () {
     final withKeyboardListener =
         PlutoWidgetTestHelper('키 입력 테스트', (tester) async {
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -309,7 +309,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -332,7 +332,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.home);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.left))
+      verify(stateManager
+              .moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.left))
           .called(1);
     });
 
@@ -343,7 +344,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.left))
+      verify(stateManager
+              .moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.left))
           .called(1);
     });
 
@@ -354,7 +356,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.up))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -367,7 +369,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.up))
+      verify(stateManager.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -376,7 +378,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.end);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.right))
+      verify(stateManager
+              .moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.right))
           .called(1);
     });
 
@@ -387,7 +390,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.right))
+      verify(stateManager
+              .moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.right))
           .called(1);
     });
 
@@ -398,7 +402,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.down))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.down))
           .called(1);
     });
 
@@ -411,7 +415,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.down))
+      verify(stateManager
+              .moveSelectingCellToEdgeOfRows(PlutoMoveDirection.down))
           .called(1);
     });
   });
@@ -419,7 +424,7 @@ void main() {
   group('_handlePageUpDown', () {
     final withKeyboardListener =
         PlutoWidgetTestHelper('키 입력 테스트', (tester) async {
-      final PlutoKeyManager keyManager = PlutoKeyManager(
+      final PlutoGridKeyManager keyManager = PlutoGridKeyManager(
         stateManager: stateManager,
       );
 
@@ -433,7 +438,7 @@ void main() {
           home: Material(
             child: RawKeyboardListener(
               onKey: (event) {
-                keyManager.subject.add(KeyManagerEvent(
+                keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
                 ));
@@ -456,7 +461,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageUp);
 
       // then
-      verify(stateManager.moveCurrentCellByRowIdx(-5, MoveDirection.up))
+      verify(stateManager.moveCurrentCellByRowIdx(-5, PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -467,7 +472,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellByRowIdx(-5, MoveDirection.up))
+      verify(stateManager.moveSelectingCellByRowIdx(-5, PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -476,7 +481,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageDown);
 
       // then
-      verify(stateManager.moveCurrentCellByRowIdx(5, MoveDirection.down))
+      verify(stateManager.moveCurrentCellByRowIdx(5, PlutoMoveDirection.down))
           .called(1);
     });
 
@@ -487,7 +492,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager.moveSelectingCellByRowIdx(5, MoveDirection.down))
+      verify(stateManager.moveSelectingCellByRowIdx(5, PlutoMoveDirection.down))
           .called(1);
     });
   });

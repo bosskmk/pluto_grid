@@ -64,7 +64,7 @@ class _TimeTypeColumnScreenState extends State<TimeTypeColumnScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
       ),

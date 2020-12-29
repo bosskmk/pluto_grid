@@ -8,17 +8,18 @@ class _MockScrollController extends Mock implements ScrollController {}
 void main() {
   group('selectingModes', () {
     test('Square, Row, None 이 리턴 되야 한다.', () {
-      final selectingModes = PlutoStateManager.selectingModes;
+      final selectingModes = PlutoGridStateManager.selectingModes;
 
-      expect(selectingModes.contains(PlutoSelectingMode.cell), isTrue);
-      expect(selectingModes.contains(PlutoSelectingMode.row), isTrue);
-      expect(selectingModes.contains(PlutoSelectingMode.none), isTrue);
+      expect(selectingModes.contains(PlutoGridSelectingMode.cell), isTrue);
+      expect(selectingModes.contains(PlutoGridSelectingMode.row), isTrue);
+      expect(selectingModes.contains(PlutoGridSelectingMode.none), isTrue);
     });
   });
 
   group('PlutoScrollController', () {
     test('bodyRowsVertical', () {
-      final PlutoScrollController scrollController = PlutoScrollController();
+      final PlutoGridScrollController scrollController =
+          PlutoGridScrollController();
 
       ScrollController scroll = _MockScrollController();
       ScrollController anotherScroll = _MockScrollController();
@@ -34,7 +35,7 @@ void main() {
   group('PlutoCellPosition', () {
     testWidgets('null 과의 비교는 false 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoCellPosition(
+      final cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
@@ -50,12 +51,12 @@ void main() {
 
     testWidgets('값이 다른 비교는 false 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoCellPosition(
+      final cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
 
-      final cellPositionB = PlutoCellPosition(
+      final cellPositionB = PlutoGridCellPosition(
         columnIdx: 2,
         rowIdx: 1,
       );
@@ -69,12 +70,12 @@ void main() {
 
     testWidgets('값이 동일한 비교는 true 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoCellPosition(
+      final cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
 
-      final cellPositionB = PlutoCellPosition(
+      final cellPositionB = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
@@ -89,11 +90,11 @@ void main() {
 
   group('PlutoSelectingMode', () {
     test('toShortString', () {
-      expect(PlutoSelectingMode.cell.toShortString(), 'cell');
+      expect(PlutoGridSelectingMode.cell.toShortString(), 'cell');
 
-      expect(PlutoSelectingMode.row.toShortString(), 'row');
+      expect(PlutoGridSelectingMode.row.toShortString(), 'row');
 
-      expect(PlutoSelectingMode.none.toShortString(), 'none');
+      expect(PlutoGridSelectingMode.none.toShortString(), 'none');
     });
   });
 }

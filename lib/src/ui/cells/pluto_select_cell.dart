@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoSelectCell extends StatefulWidget implements AbstractMixinPopupCell {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
@@ -59,8 +59,8 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
   }
 
   @override
-  void onLoaded(PlutoOnLoadedEvent event) {
-    event.stateManager.setSelectingMode(PlutoSelectingMode.none);
+  void onLoaded(PlutoGridOnLoadedEvent event) {
+    event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
     super.onLoaded(event);
   }

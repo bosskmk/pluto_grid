@@ -9,13 +9,13 @@ import '../../helper/row_helper.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
   });
 

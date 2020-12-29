@@ -6,7 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
@@ -16,7 +16,7 @@ void main() {
     test(
       'dragType 이 null 이면 return 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(dragType: null);
+        var event = PlutoGridDragRowsEvent(dragType: null);
         event.handler(stateManager);
 
         verifyNever(stateManager.setIsDraggingRow(any, notify: false));
@@ -29,8 +29,8 @@ void main() {
     test(
       'dragType 이 start 가 아니고 offset 이 null 이면 return 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(
-          dragType: PlutoDragType.update,
+        var event = PlutoGridDragRowsEvent(
+          dragType: PlutoGridDragType.update,
           offset: null,
         );
         event.handler(stateManager);
@@ -45,8 +45,8 @@ void main() {
     test(
       'rows 가 null 이면 return 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(
-          dragType: PlutoDragType.update,
+        var event = PlutoGridDragRowsEvent(
+          dragType: PlutoGridDragType.update,
           offset: const Offset(0, 0),
           rows: null,
         );
@@ -63,8 +63,8 @@ void main() {
       'dragType 이 start 면, '
       'setIsDraggingRow, setDragRows 이 호출 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(
-          dragType: PlutoDragType.start,
+        var event = PlutoGridDragRowsEvent(
+          dragType: PlutoGridDragType.start,
           offset: const Offset(0, 0),
           rows: [],
         );
@@ -82,8 +82,8 @@ void main() {
       'dragType 이 update 면, '
       'setDragTargetRowIdx 이 호출 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(
-          dragType: PlutoDragType.update,
+        var event = PlutoGridDragRowsEvent(
+          dragType: PlutoGridDragType.update,
           offset: const Offset(0, 0),
           rows: [],
         );
@@ -101,8 +101,8 @@ void main() {
       'dragType 이 end 면, '
       'moveRows, setIsDraggingRow 이 호출 되어야 한다.',
       () {
-        var event = PlutoDragRowsEvent(
-          dragType: PlutoDragType.end,
+        var event = PlutoGridDragRowsEvent(
+          dragType: PlutoGridDragType.end,
           offset: const Offset(0, 0),
           rows: [],
         );

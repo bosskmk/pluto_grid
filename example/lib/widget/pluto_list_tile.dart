@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/pluto_colors.dart';
+import '../constants/pluto_grid_example_colors.dart';
 
 class PlutoListTile extends StatelessWidget {
   final String title;
@@ -17,7 +17,7 @@ class PlutoListTile extends StatelessWidget {
     this.onTapPreview,
     this.onTapLiveDemo,
   })  : _color = Colors.white,
-        _fontColor = PlutoColors.fontColor;
+        _fontColor = PlutoGridExampleColors.fontColor;
 
   PlutoListTile.dark({
     @required this.title,

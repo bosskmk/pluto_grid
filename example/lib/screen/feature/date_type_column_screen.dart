@@ -113,7 +113,7 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
       ),

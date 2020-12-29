@@ -144,7 +144,7 @@ void main() {
     final columns = ColumnHelper.textColumn('header');
     final rows = RowHelper.count(3, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -154,7 +154,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -227,7 +227,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -236,7 +236,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -272,7 +272,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -281,7 +281,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
               createHeader: (stateManager) => const Text('grid header'),
@@ -333,7 +333,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -343,7 +343,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -384,7 +384,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -394,7 +394,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -433,7 +433,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 1234567.123456)}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -443,7 +443,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -482,7 +482,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: -0)}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -492,7 +492,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -525,7 +525,7 @@ void main() {
         PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -535,7 +535,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
                 createHeader: (stateManager) => const Text('grid header'),
@@ -568,7 +568,7 @@ void main() {
         PlutoRow(sortIdx: 9, cells: {'header0': PlutoCell(value: 'value')}),
       ];
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -578,7 +578,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
                 createHeader: (stateManager) => const Text('grid header'),
@@ -608,7 +608,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -618,7 +618,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -646,7 +646,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -656,7 +656,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -693,7 +693,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -704,7 +704,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -753,7 +753,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager;
+      PlutoGridStateManager stateManager;
 
       // when
       await tester.pumpWidget(
@@ -764,7 +764,7 @@ void main() {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                 },
               ),
@@ -819,7 +819,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager;
+        PlutoGridStateManager stateManager;
 
         // when
         await tester.pumpWidget(
@@ -829,7 +829,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),
@@ -900,7 +900,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager;
+        PlutoGridStateManager stateManager;
 
         // when
         await tester.pumpWidget(
@@ -910,7 +910,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),
@@ -986,7 +986,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager;
+        PlutoGridStateManager stateManager;
 
         // when
         await tester.pumpWidget(
@@ -996,7 +996,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),
@@ -1069,7 +1069,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager;
+        PlutoGridStateManager stateManager;
 
         // when
         await tester.pumpWidget(
@@ -1079,7 +1079,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),
@@ -1154,7 +1154,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1164,7 +1164,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1212,7 +1212,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1222,7 +1222,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1270,7 +1270,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1280,7 +1280,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1328,7 +1328,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1338,7 +1338,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1386,7 +1386,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1396,7 +1396,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1439,7 +1439,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1449,7 +1449,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1492,7 +1492,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1502,7 +1502,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1545,7 +1545,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1555,7 +1555,7 @@ void main() {
             child: PlutoGrid(
               columns: columns,
               rows: rows,
-              onLoaded: (PlutoOnLoadedEvent event) {
+              onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
               },
             ),
@@ -1591,7 +1591,7 @@ void main() {
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
-      final PlutoOnChangedEvent onChangedEvent = PlutoOnChangedEvent(
+      final PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
         columnIdx: null,
         rowIdx: 1,
       );

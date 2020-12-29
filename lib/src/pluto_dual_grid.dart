@@ -38,9 +38,9 @@ class PlutoDualGrid extends StatefulWidget {
 }
 
 class _PlutoDualGridState extends State<PlutoDualGrid> {
-  PlutoStateManager _stateManagerA;
+  PlutoGridStateManager _stateManagerA;
 
-  PlutoStateManager _stateManagerB;
+  PlutoGridStateManager _stateManagerB;
 
   Widget _buildGrid({
     PlutoDualGridProps props,
@@ -54,7 +54,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
         columns: props.columns,
         rows: props.rows,
         mode: mode,
-        onLoaded: (PlutoOnLoadedEvent onLoadedEvent) {
+        onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
           if (isGridA) {
             _stateManagerA = onLoadedEvent.stateManager;
           } else {
@@ -62,8 +62,8 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           }
 
           onLoadedEvent.stateManager.eventManager
-              .listener((PlutoEvent plutoEvent) {
-            if (plutoEvent is PlutoCannotMoveCurrentCellEvent) {
+              .listener((PlutoGridEvent plutoEvent) {
+            if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
               if (isGridA == true && plutoEvent.direction.isRight) {
                 _stateManagerA.setKeepFocus(false);
                 _stateManagerB.setKeepFocus(true);
@@ -79,7 +79,7 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           }
         },
         onChanged: props.onChanged,
-        onSelected: (PlutoOnSelectedEvent onSelectedEvent) {
+        onSelected: (PlutoGridOnSelectedEvent onSelectedEvent) {
           if (onSelectedEvent.row == null || onSelectedEvent.cell == null) {
             widget.onSelected(
               PlutoDualOnSelectedEvent(
@@ -90,11 +90,11 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
           } else {
             widget.onSelected(
               PlutoDualOnSelectedEvent(
-                gridA: PlutoOnSelectedEvent(
+                gridA: PlutoGridOnSelectedEvent(
                   row: _stateManagerA.currentRow,
                   cell: _stateManagerA.currentCell,
                 ),
-                gridB: PlutoOnSelectedEvent(
+                gridB: PlutoGridOnSelectedEvent(
                   row: _stateManagerB.currentRow,
                   cell: _stateManagerB.currentCell,
                 ),
@@ -133,8 +133,8 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 }
 
 class PlutoDualOnSelectedEvent {
-  PlutoOnSelectedEvent gridA;
-  PlutoOnSelectedEvent gridB;
+  PlutoGridOnSelectedEvent gridA;
+  PlutoGridOnSelectedEvent gridB;
 
   PlutoDualOnSelectedEvent({
     this.gridA,
@@ -191,7 +191,7 @@ class PlutoDualGridProps {
   final PlutoOnChangedEventCallback onChanged;
   final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
-  final PlutoConfiguration configuration;
+  final PlutoGridConfiguration configuration;
 
   PlutoDualGridProps({
     this.columns,

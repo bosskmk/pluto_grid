@@ -7,19 +7,19 @@ abstract class ICellState {
   PlutoCell get currentCell;
 
   /// The position index value of the currently selected cell.
-  PlutoCellPosition get currentCellPosition;
+  PlutoGridCellPosition get currentCellPosition;
 
   PlutoCell get firstCell;
 
   void setCurrentCellPosition(
-    PlutoCellPosition cellPosition, {
+    PlutoGridCellPosition cellPosition, {
     bool notify = true,
   });
 
   void updateCurrentCellPosition({bool notify = true});
 
   /// Index position of cell in a column
-  PlutoCellPosition cellPositionByCellKey(Key cellKey);
+  PlutoGridCellPosition cellPositionByCellKey(Key cellKey);
 
   int columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx);
 
@@ -34,9 +34,11 @@ abstract class ICellState {
   });
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
-  bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction);
+  bool canMoveCell(
+      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction);
 
-  bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction);
+  bool canNotMoveCell(
+      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction);
 
   /// Whether the cell is in a mutable state
   bool canChangeCellValue({
@@ -61,17 +63,17 @@ abstract class ICellState {
   /// Whether the cell is the currently selected cell.
   bool isCurrentCell(PlutoCell cell);
 
-  bool isInvalidCellPosition(PlutoCellPosition cellPosition);
+  bool isInvalidCellPosition(PlutoGridCellPosition cellPosition);
 }
 
-mixin CellState implements IPlutoState {
+mixin CellState implements IPlutoGridState {
   PlutoCell get currentCell => _currentCell;
 
   PlutoCell _currentCell;
 
-  PlutoCellPosition get currentCellPosition => _currentCellPosition;
+  PlutoGridCellPosition get currentCellPosition => _currentCellPosition;
 
-  PlutoCellPosition _currentCellPosition;
+  PlutoGridCellPosition _currentCellPosition;
 
   PlutoCell get firstCell {
     if (refRows == null || refRows.isEmpty) {
@@ -86,7 +88,7 @@ mixin CellState implements IPlutoState {
   }
 
   void setCurrentCellPosition(
-    PlutoCellPosition cellPosition, {
+    PlutoGridCellPosition cellPosition, {
     bool notify = true,
   }) {
     if (_currentCellPosition == cellPosition) {
@@ -123,14 +125,14 @@ mixin CellState implements IPlutoState {
     }
   }
 
-  PlutoCellPosition cellPositionByCellKey(Key cellKey) {
+  PlutoGridCellPosition cellPositionByCellKey(Key cellKey) {
     assert(cellKey != null);
 
     for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
       final columnIdx = columnIdxByCellKeyAndRowIdx(cellKey, rowIdx);
 
       if (columnIdx != null) {
-        return PlutoCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
+        return PlutoGridCellPosition(columnIdx: columnIdx, rowIdx: rowIdx);
       }
     }
 
@@ -192,7 +194,7 @@ mixin CellState implements IPlutoState {
 
     _currentCell = cell;
 
-    _currentCellPosition = PlutoCellPosition(
+    _currentCellPosition = PlutoGridCellPosition(
       rowIdx: rowIdx,
       columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
     );
@@ -208,23 +210,25 @@ mixin CellState implements IPlutoState {
     }
   }
 
-  bool canMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
+  bool canMoveCell(
+      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction) {
     switch (direction) {
-      case MoveDirection.left:
+      case PlutoMoveDirection.left:
         return cellPosition.columnIdx > 0;
-      case MoveDirection.right:
+      case PlutoMoveDirection.right:
         return cellPosition.columnIdx <
             refRows[cellPosition.rowIdx].cells.length - 1;
-      case MoveDirection.up:
+      case PlutoMoveDirection.up:
         return cellPosition.rowIdx > 0;
-      case MoveDirection.down:
+      case PlutoMoveDirection.down:
         return cellPosition.rowIdx < refRows.length - 1;
     }
 
-    throw Exception('Not handled MoveDirection');
+    throw Exception('Not handled PlutoMoveDirection');
   }
 
-  bool canNotMoveCell(PlutoCellPosition cellPosition, MoveDirection direction) {
+  bool canNotMoveCell(
+      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction) {
     return !canMoveCell(cellPosition, direction);
   }
 
@@ -293,7 +297,7 @@ mixin CellState implements IPlutoState {
     return _currentCell != null && _currentCell.key == cell.key;
   }
 
-  bool isInvalidCellPosition(PlutoCellPosition cellPosition) {
+  bool isInvalidCellPosition(PlutoGridCellPosition cellPosition) {
     return cellPosition == null ||
         cellPosition.columnIdx == null ||
         cellPosition.rowIdx == null ||

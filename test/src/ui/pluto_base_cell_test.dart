@@ -11,14 +11,14 @@ import '../../mock/mock_pluto_event_manager.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
-  PlutoEventManager eventManager;
+  PlutoGridStateManager stateManager;
+  PlutoGridEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
     eventManager = MockPlutoEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
     );
@@ -383,7 +383,7 @@ void main() {
       await tester.tap(gesture);
 
       verify(eventManager.addEvent(
-        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+        argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnTapUp &&
               object.cell.key == cell.key &&
               object.column.key == column.key &&
@@ -430,7 +430,7 @@ void main() {
       await tester.longPress(gesture);
 
       verify(eventManager.addEvent(
-        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+        argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressStart &&
               object.cell.key == cell.key &&
               object.column.key == column.key &&
@@ -457,7 +457,7 @@ void main() {
 
       when(stateManager.isCurrentCell(any)).thenReturn(true);
       when(stateManager.isEditing).thenReturn(false);
-      when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
+      when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
 
       when(stateManager.isSelectingInteraction()).thenReturn(false);
       when(stateManager.needMovingScroll(any, any)).thenReturn(false);
@@ -491,7 +491,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
       verify(eventManager.addEvent(
-        argThat(PlutoObjectMatcher<PlutoCellGestureEvent>(rule: (object) {
+        argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressMoveUpdate &&
               object.cell.key == cell.key &&
               object.column.key == column.key &&
@@ -588,7 +588,7 @@ void main() {
     int rowIdx;
 
     final aCellWithConfiguration = (
-      PlutoConfiguration configuration, {
+      PlutoGridConfiguration configuration, {
       bool isCurrentCell = true,
       bool isSelectedCell = false,
       bool readOnly = false,
@@ -632,7 +632,7 @@ void main() {
     };
 
     aCellWithConfiguration(
-      PlutoConfiguration(
+      PlutoGridConfiguration(
         enableColumnBorder: false,
         borderColor: Colors.deepOrange,
       ),
@@ -658,7 +658,7 @@ void main() {
     );
 
     aCellWithConfiguration(
-      PlutoConfiguration(
+      PlutoGridConfiguration(
         enableColumnBorder: true,
         borderColor: Colors.deepOrange,
       ),
@@ -685,7 +685,7 @@ void main() {
     );
 
     aCellWithConfiguration(
-      PlutoConfiguration(
+      PlutoGridConfiguration(
         enableColumnBorder: false,
         borderColor: Colors.deepOrange,
       ),

@@ -3,39 +3,39 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
-  PlutoScrollController get scroll;
+  PlutoGridScrollController get scroll;
 
-  void setScroll(PlutoScrollController scroll);
+  void setScroll(PlutoGridScrollController scroll);
 
   /// [direction] Scroll direction
   /// [offset] Scroll position
-  void scrollByDirection(MoveDirection direction, double offset);
+  void scrollByDirection(PlutoMoveDirection direction, double offset);
 
   /// Whether the cell can be scrolled when moving.
   bool canHorizontalCellScrollByDirection(
-    MoveDirection direction,
+    PlutoMoveDirection direction,
     PlutoColumn columnToMove,
   );
 
   /// Scroll to [rowIdx] position.
-  void moveScrollByRow(MoveDirection direction, int rowIdx);
+  void moveScrollByRow(PlutoMoveDirection direction, int rowIdx);
 
   /// Scroll to [columnIdx] position.
-  void moveScrollByColumn(MoveDirection direction, int columnIdx);
+  void moveScrollByColumn(PlutoMoveDirection direction, int columnIdx);
 
-  bool needMovingScroll(Offset offset, MoveDirection move);
+  bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 }
 
-mixin ScrollState implements IPlutoState {
-  PlutoScrollController get scroll => _scroll;
+mixin ScrollState implements IPlutoGridState {
+  PlutoGridScrollController get scroll => _scroll;
 
-  PlutoScrollController _scroll;
+  PlutoGridScrollController _scroll;
 
-  void setScroll(PlutoScrollController scroll) {
+  void setScroll(PlutoGridScrollController scroll) {
     _scroll = scroll;
   }
 
-  void scrollByDirection(MoveDirection direction, double offset) {
+  void scrollByDirection(PlutoMoveDirection direction, double offset) {
     if (direction.vertical) {
       _scroll.vertical.jumpTo(offset);
     } else {
@@ -44,14 +44,14 @@ mixin ScrollState implements IPlutoState {
   }
 
   bool canHorizontalCellScrollByDirection(
-    MoveDirection direction,
+    PlutoMoveDirection direction,
     PlutoColumn columnToMove,
   ) {
     // 고정 컬럼이 보여지는 상태에서 이동 할 컬럼이 고정 컬럼인 경우 스크롤 불필요
     return !(showFrozenColumn == true && columnToMove.frozen.isFrozen);
   }
 
-  void moveScrollByRow(MoveDirection direction, int rowIdx) {
+  void moveScrollByRow(PlutoMoveDirection direction, int rowIdx) {
     if (!direction.vertical) {
       return;
     }
@@ -84,7 +84,7 @@ mixin ScrollState implements IPlutoState {
     scrollByDirection(direction, offsetToMove);
   }
 
-  void moveScrollByColumn(MoveDirection direction, int columnIdx) {
+  void moveScrollByColumn(PlutoMoveDirection direction, int columnIdx) {
     if (!direction.horizontal) {
       return;
     }
@@ -140,19 +140,19 @@ mixin ScrollState implements IPlutoState {
     scrollByDirection(direction, offsetToMove);
   }
 
-  bool needMovingScroll(Offset offset, MoveDirection move) {
+  bool needMovingScroll(Offset offset, PlutoMoveDirection move) {
     if (selectingMode.isNone) {
       return false;
     }
 
     switch (move) {
-      case MoveDirection.left:
+      case PlutoMoveDirection.left:
         return offset.dx < bodyLeftScrollOffset;
-      case MoveDirection.right:
+      case PlutoMoveDirection.right:
         return offset.dx > bodyRightScrollOffset;
-      case MoveDirection.up:
+      case PlutoMoveDirection.up:
         return offset.dy < bodyUpScrollOffset;
-      case MoveDirection.down:
+      case PlutoMoveDirection.down:
         return offset.dy > bodyDownScrollOffset;
     }
 

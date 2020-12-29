@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoDefaultCell extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
   final int rowIdx;
@@ -41,7 +41,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
   }
 
   void addDragEventOfRow({
-    PlutoDragType type,
+    PlutoGridDragType type,
     Offset offset,
   }) {
     if (offset != null) {
@@ -49,7 +49,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
     }
 
     widget.stateManager.eventManager.addEvent(
-      PlutoDragRowsEvent(
+      PlutoGridDragRowsEvent(
         offset: offset,
         dragType: type,
         rows: isCurrentRowSelected
@@ -60,23 +60,23 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
   }
 
   void _handleOnDragStarted() {
-    addDragEventOfRow(type: PlutoDragType.start);
+    addDragEventOfRow(type: PlutoGridDragType.start);
   }
 
   void _handleOnDragUpdated(offset) {
     addDragEventOfRow(
-      type: PlutoDragType.update,
+      type: PlutoGridDragType.update,
       offset: offset,
     );
 
-    widget.stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+    widget.stateManager.eventManager.addEvent(PlutoGridMoveUpdateEvent(
       offset: offset,
     ));
   }
 
   void _handleOnDragEnd(dragDetails) {
     addDragEventOfRow(
-      type: PlutoDragType.end,
+      type: PlutoGridDragType.end,
       offset: dragDetails.offset,
     );
   }
@@ -127,7 +127,7 @@ typedef DragUpdatedCallback = Function(Offset offset);
 
 class _RowDragIconWidget extends StatefulWidget {
   final PlutoColumn column;
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final VoidCallback onDragStarted;
   final DragUpdatedCallback onDragUpdated;
   final DragEndCallback onDragEnd;
@@ -217,7 +217,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
 class _CheckboxSelectionWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
   final PlutoRow row;
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   _CheckboxSelectionWidget({
     this.column,
@@ -270,7 +270,7 @@ class __CheckboxSelectionWidgetState
 }
 
 class _BuildDefaultCellWidget extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
   final PlutoColumn column;

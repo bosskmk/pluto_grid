@@ -149,7 +149,7 @@ class PlutoColumnRendererContext {
 
   final PlutoCell cell;
 
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   PlutoColumnRendererContext({
     this.column,

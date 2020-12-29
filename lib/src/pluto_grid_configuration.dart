@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import 'helper/filter_helper.dart';
 
-class PlutoConfiguration {
+class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
 
@@ -56,17 +56,17 @@ class PlutoConfiguration {
   /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
   /// PlutoEnterKeyAction.ToggleEditing : The editing state is toggled and cells are not moved.
   /// PlutoEnterKeyAction.None : There is no action.
-  final PlutoEnterKeyAction enterKeyAction;
+  final PlutoGridEnterKeyAction enterKeyAction;
 
   final PlutoGridLocaleText localeText;
 
   /// Customise scrollbars for desktop usage
-  final PlutoScrollbarConfig scrollbarConfig;
+  final PlutoGridScrollbarConfig scrollbarConfig;
 
   /// Customise filter of columns
-  final PlutoColumnFilterConfig columnFilterConfig;
+  final PlutoGridColumnFilterConfig columnFilterConfig;
 
-  PlutoConfiguration({
+  PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
@@ -91,15 +91,15 @@ class PlutoConfiguration {
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
-    this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
+    this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
-    this.scrollbarConfig = const PlutoScrollbarConfig(),
-    this.columnFilterConfig = const PlutoColumnFilterConfig(),
+    this.scrollbarConfig = const PlutoGridScrollbarConfig(),
+    this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
   }) {
     _init();
   }
 
-  PlutoConfiguration.dark({
+  PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
@@ -124,10 +124,10 @@ class PlutoConfiguration {
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
-    this.enterKeyAction = PlutoEnterKeyAction.editingAndMoveDown,
+    this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
-    this.scrollbarConfig = const PlutoScrollbarConfig(),
-    this.columnFilterConfig = const PlutoColumnFilterConfig(),
+    this.scrollbarConfig = const PlutoGridScrollbarConfig(),
+    this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
   }) {
     _init();
   }
@@ -144,7 +144,7 @@ class PlutoConfiguration {
     PlutoFilterTypeLessThanOrEqualTo.name = localeText.filterLessThanOrEqualTo;
   }
 
-  /// Fired when setConfiguration is called in [PlutoStateManager]'s constructor.
+  /// Fired when setConfiguration is called in [PlutoGridStateManager]'s constructor.
   void applyColumnFilter(List<PlutoColumn> refColumns) {
     if (refColumns == null || refColumns.isEmpty) {
       return;
@@ -161,7 +161,7 @@ class PlutoConfiguration {
     }
   }
 
-  PlutoConfiguration copyWith({
+  PlutoGridConfiguration copyWith({
     bool enableColumnBorder,
     Color gridBackgroundColor,
     Color gridBorderColor,
@@ -177,12 +177,12 @@ class PlutoConfiguration {
     Color menuBackgroundColor,
     double rowHeight,
     bool enableMoveDownAfterSelecting,
-    PlutoEnterKeyAction enterKeyAction,
+    PlutoGridEnterKeyAction enterKeyAction,
     PlutoGridLocaleText localeText,
-    PlutoScrollbarConfig scrollbarConfig,
-    PlutoColumnFilterConfig columnFilterConfig,
+    PlutoGridScrollbarConfig scrollbarConfig,
+    PlutoGridColumnFilterConfig columnFilterConfig,
   }) {
-    return PlutoConfiguration(
+    return PlutoGridConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
       gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
       gridBorderColor: gridBorderColor ?? this.gridBorderColor,
@@ -392,31 +392,31 @@ class PlutoGridLocaleText {
   });
 }
 
-enum PlutoEnterKeyAction {
+enum PlutoGridEnterKeyAction {
   editingAndMoveDown,
   editingAndMoveRight,
   toggleEditing,
   none,
 }
 
-extension PlutoEnterKeyActionExtension on PlutoEnterKeyAction {
+extension PlutoGridEnterKeyActionExtension on PlutoGridEnterKeyAction {
   bool get isEditingAndMoveDown =>
-      this == PlutoEnterKeyAction.editingAndMoveDown;
+      this == PlutoGridEnterKeyAction.editingAndMoveDown;
 
   bool get isEditingAndMoveRight =>
-      this == PlutoEnterKeyAction.editingAndMoveRight;
+      this == PlutoGridEnterKeyAction.editingAndMoveRight;
 
-  bool get isToggleEditing => this == PlutoEnterKeyAction.toggleEditing;
+  bool get isToggleEditing => this == PlutoGridEnterKeyAction.toggleEditing;
 
-  bool get isNone => this == null || this == PlutoEnterKeyAction.none;
+  bool get isNone => this == null || this == PlutoGridEnterKeyAction.none;
 }
 
 /// Allows to customise scrollbars "look and feel"
 /// The general feature is making vertical scrollbar draggable and therefore more useful
 /// for desktop systems. Set [draggableScrollbar] to true to achieve this behavior. Also
 /// changing [isAlwaysShown] to true is recommended for more usability at desktops.
-class PlutoScrollbarConfig {
-  const PlutoScrollbarConfig({
+class PlutoGridScrollbarConfig {
+  const PlutoGridScrollbarConfig({
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
     this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
@@ -435,14 +435,14 @@ class PlutoScrollbarConfig {
   final Radius scrollbarRadiusWhileDragging;
 }
 
-typedef PlutoColumnFilterResolver = Function<T>();
+typedef PlutoGridColumnFilterResolver = Function<T>();
 
-typedef PlutoResolveDefaultColumnFilter = PlutoFilterType Function(
+typedef PlutoGridResolveDefaultColumnFilter = PlutoFilterType Function(
   PlutoColumn column,
-  PlutoColumnFilterResolver resolver,
+  PlutoGridColumnFilterResolver resolver,
 );
 
-class PlutoColumnFilterConfig {
+class PlutoGridColumnFilterConfig {
   /// # Set the filter information of the column.
   ///
   /// **Return the value returned by [resolveDefaultColumnFilter] through the resolver function.**
@@ -491,15 +491,15 @@ class PlutoColumnFilterConfig {
   ///   const ClassYouImplemented();
   /// }
   /// ```
-  const PlutoColumnFilterConfig({
+  const PlutoGridColumnFilterConfig({
     List<PlutoFilterType> filters,
-    PlutoResolveDefaultColumnFilter resolveDefaultColumnFilter,
+    PlutoGridResolveDefaultColumnFilter resolveDefaultColumnFilter,
   })  : _userFilters = filters,
         _userResolveDefaultColumnFilter = resolveDefaultColumnFilter;
 
   final List<PlutoFilterType> _userFilters;
 
-  final PlutoResolveDefaultColumnFilter _userResolveDefaultColumnFilter;
+  final PlutoGridResolveDefaultColumnFilter _userResolveDefaultColumnFilter;
 
   bool get hasUserFilter => _userFilters != null && _userFilters.isNotEmpty;
 

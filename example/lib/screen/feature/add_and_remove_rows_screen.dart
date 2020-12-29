@@ -17,9 +17,9 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.row;
+  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
     stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
   }
 
-  void setGridSelectingMode(PlutoSelectingMode mode) {
+  void setGridSelectingMode(PlutoGridSelectingMode mode) {
     if (gridSelectingMode == mode) {
       return;
     }
@@ -109,13 +109,13 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                   DropdownButtonHideUnderline(
                     child: DropdownButton(
                       value: gridSelectingMode,
-                      items: PlutoStateManager.selectingModes
-                          .map<DropdownMenuItem<PlutoSelectingMode>>(
-                              (PlutoSelectingMode item) {
+                      items: PlutoGridStateManager.selectingModes
+                          .map<DropdownMenuItem<PlutoGridSelectingMode>>(
+                              (PlutoGridSelectingMode item) {
                         final color =
                             gridSelectingMode == item ? Colors.blue : null;
 
-                        return DropdownMenuItem<PlutoSelectingMode>(
+                        return DropdownMenuItem<PlutoGridSelectingMode>(
                           value: item,
                           child: Text(
                             item.toShortString(),
@@ -123,7 +123,7 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (PlutoSelectingMode mode) {
+                      onChanged: (PlutoGridSelectingMode mode) {
                         setGridSelectingMode(mode);
                       },
                     ),
@@ -135,10 +135,10 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
               child: PlutoGrid(
                 columns: columns,
                 rows: rows,
-                onChanged: (PlutoOnChangedEvent event) {
+                onChanged: (PlutoGridOnChangedEvent event) {
                   print(event);
                 },
-                onLoaded: (PlutoOnLoadedEvent event) {
+                onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                   stateManager.setSelectingMode(gridSelectingMode);
                 },

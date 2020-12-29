@@ -75,7 +75,7 @@ abstract class IRowState {
   });
 }
 
-mixin RowState implements IPlutoState {
+mixin RowState implements IPlutoGridState {
   List<PlutoRow> get rows => [...refRows];
 
   FilteredList<PlutoRow> refRows;
@@ -225,7 +225,7 @@ mixin RowState implements IPlutoState {
     if (hasSortedColumn) {
       final int sortIdx = refRows[rowIdx].sortIdx;
 
-      PlutoStateManager.initializeRows(
+      PlutoGridStateManager.initializeRows(
         refColumns,
         rows,
         start: sortIdx,
@@ -241,7 +241,7 @@ mixin RowState implements IPlutoState {
     } else {
       _insertRows(rowIdx, rows, state: PlutoRowState.added);
 
-      PlutoStateManager.initializeRows(
+      PlutoGridStateManager.initializeRows(
         refColumns,
         refRows,
         forceApplySortIdx: true,
@@ -259,7 +259,7 @@ mixin RowState implements IPlutoState {
     if (currentSelectingPosition != null &&
         rowIdx <= currentSelectingPosition.rowIdx) {
       setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: currentSelectingPosition.columnIdx,
           rowIdx: rows.length + currentSelectingPosition.rowIdx,
         ),
@@ -286,7 +286,7 @@ mixin RowState implements IPlutoState {
             : 0) -
         rows.length;
 
-    PlutoStateManager.initializeRows(
+    PlutoGridStateManager.initializeRows(
       refColumns,
       rows,
       start: start,
@@ -297,7 +297,7 @@ mixin RowState implements IPlutoState {
     /// Update currentRowIdx
     if (currentCell != null) {
       setCurrentCellPosition(
-        PlutoCellPosition(
+        PlutoGridCellPosition(
           columnIdx: currentCellPosition.columnIdx,
           rowIdx: rows.length + currentRowIdx,
         ),
@@ -306,13 +306,13 @@ mixin RowState implements IPlutoState {
 
       double offsetToMove = rows.length * rowTotalHeight;
 
-      scrollByDirection(MoveDirection.up, offsetToMove);
+      scrollByDirection(PlutoMoveDirection.up, offsetToMove);
     }
 
     /// Update currentSelectingPosition
     if (currentSelectingPosition != null) {
       setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: currentSelectingPosition.columnIdx,
           rowIdx: rows.length + currentSelectingPosition.rowIdx,
         ),
@@ -338,7 +338,7 @@ mixin RowState implements IPlutoState {
         ? refRows.map((row) => row.sortIdx ?? 0).reduce(max) + 1
         : 0;
 
-    PlutoStateManager.initializeRows(
+    PlutoGridStateManager.initializeRows(
       refColumns,
       rows,
       start: start,

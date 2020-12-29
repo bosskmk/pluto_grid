@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef SetFilterPopupHandler = void Function(PlutoStateManager stateManager);
+typedef SetFilterPopupHandler = void Function(
+    PlutoGridStateManager stateManager);
 
 class FilterHelper {
   /// A value to identify all column searches when searching filters.
@@ -278,8 +279,8 @@ class FilterPopupState {
   /// [BuildContext] for calling [showDialog]
   final BuildContext context;
 
-  /// [PlutoConfiguration] to call [PlutoGridPopup]
-  final PlutoConfiguration configuration;
+  /// [PlutoGridConfiguration] to call [PlutoGridPopup]
+  final PlutoGridConfiguration configuration;
 
   /// A callback function called when adding a new filter.
   final SetFilterPopupHandler handleAddNewFilter;
@@ -321,13 +322,13 @@ class FilterPopupState {
         assert(focusFirstFilterValue != null),
         _previousFilterRows = [...filterRows];
 
-  PlutoStateManager _stateManager;
+  PlutoGridStateManager _stateManager;
   List<PlutoRow> _previousFilterRows;
 
-  void onLoaded(PlutoOnLoadedEvent e) {
+  void onLoaded(PlutoGridOnLoadedEvent e) {
     _stateManager = e.stateManager;
 
-    _stateManager.setSelectingMode(PlutoSelectingMode.row);
+    _stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
     if (focusFirstFilterValue && _stateManager.rows.isNotEmpty) {
       _stateManager.setKeepFocus(true);
@@ -344,11 +345,11 @@ class FilterPopupState {
     _stateManager.addListener(stateListener);
   }
 
-  void onChanged(PlutoOnChangedEvent e) {
+  void onChanged(PlutoGridOnChangedEvent e) {
     applyFilter();
   }
 
-  void onSelected(PlutoOnSelectedEvent e) {
+  void onSelected(PlutoGridOnSelectedEvent e) {
     _stateManager.removeListener(stateListener);
   }
 
@@ -376,7 +377,7 @@ class FilterPopupState {
   }
 
   Map<String, String> _makeFilterColumnMap({
-    @required PlutoConfiguration configuration,
+    @required PlutoGridConfiguration configuration,
     @required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = {
@@ -392,7 +393,7 @@ class FilterPopupState {
   }
 
   List<PlutoColumn> _makeFilterColumns({
-    @required PlutoConfiguration configuration,
+    @required PlutoGridConfiguration configuration,
     @required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = _makeFilterColumnMap(
@@ -432,8 +433,8 @@ class FilterPopupState {
 }
 
 class _FilterPopupHeader extends StatelessWidget {
-  final PlutoStateManager stateManager;
-  final PlutoConfiguration configuration;
+  final PlutoGridStateManager stateManager;
+  final PlutoGridConfiguration configuration;
   final SetFilterPopupHandler handleAddNewFilter;
 
   const _FilterPopupHeader({

@@ -24,7 +24,7 @@ abstract class IFilteringRowState {
   });
 }
 
-mixin FilteringRowState implements IPlutoState {
+mixin FilteringRowState implements IPlutoGridState {
   List<PlutoRow> get filterRows => _filterRows;
 
   List<PlutoRow> _filterRows = [];

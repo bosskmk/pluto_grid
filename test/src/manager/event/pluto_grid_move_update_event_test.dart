@@ -7,15 +7,15 @@ import '../../../mock/mock_pluto_scroll_controller.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
-  PlutoScrollController scrollController;
+  PlutoGridStateManager stateManager;
+  PlutoGridScrollController scrollController;
   LinkedScrollControllerGroup vertical;
   LinkedScrollControllerGroup horizontal;
 
   var eventBuilder = ({
     Offset offset,
   }) =>
-      PlutoMoveUpdateEvent(
+      PlutoGridMoveUpdateEvent(
         offset: offset,
       );
 
@@ -23,7 +23,7 @@ void main() {
     stateManager = MockPlutoStateManager();
     vertical = MockLinkedScrollControllerGroup();
     horizontal = MockLinkedScrollControllerGroup();
-    scrollController = PlutoScrollController(
+    scrollController = PlutoGridScrollController(
       vertical: vertical,
       horizontal: horizontal,
     );
@@ -59,7 +59,7 @@ void main() {
     );
 
     test(
-      'needMovingScroll(offset, MoveDirection.left) 가 true 면, '
+      'needMovingScroll(offset, PlutoMoveDirection.left) 가 true 면, '
       'horizontal scroll 의 animateTo 가 offset 보다 작게 호출 되어야 한다.',
       () {
         final offset = const Offset(10, 10);
@@ -67,13 +67,13 @@ void main() {
 
         when(horizontal.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, MoveDirection.left))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, MoveDirection.right))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.up))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.down))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
@@ -88,7 +88,7 @@ void main() {
     );
 
     test(
-      'needMovingScroll(offset, MoveDirection.right) 가 true 면, '
+      'needMovingScroll(offset, PlutoMoveDirection.right) 가 true 면, '
       'horizontal scroll 의 animateTo 가 offset 보다 크게 호출 되어야 한다.',
       () {
         final offset = const Offset(10, 10);
@@ -96,13 +96,13 @@ void main() {
 
         when(horizontal.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, MoveDirection.left))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.right))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, MoveDirection.up))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.down))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
@@ -117,7 +117,7 @@ void main() {
     );
 
     test(
-      'needMovingScroll(offset, MoveDirection.up) 가 true 면, '
+      'needMovingScroll(offset, PlutoMoveDirection.up) 가 true 면, '
       'vertical scroll 의 animateTo 가 offset 보다 작게 호출 되어야 한다.',
       () {
         final offset = const Offset(10, 10);
@@ -125,13 +125,13 @@ void main() {
 
         when(vertical.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, MoveDirection.left))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.right))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.up))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, MoveDirection.down))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
@@ -146,7 +146,7 @@ void main() {
     );
 
     test(
-      'needMovingScroll(offset, MoveDirection.down) 가 true 면, '
+      'needMovingScroll(offset, PlutoMoveDirection.down) 가 true 면, '
       'vertical scroll 의 animateTo 가 offset 보다 크게 호출 되어야 한다.',
       () {
         final offset = const Offset(10, 10);
@@ -154,13 +154,13 @@ void main() {
 
         when(vertical.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, MoveDirection.left))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.right))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.up))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, MoveDirection.down))
+        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(true);
 
         var event = eventBuilder(offset: offset);

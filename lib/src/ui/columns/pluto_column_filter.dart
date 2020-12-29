@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoColumn column;
 
   PlutoColumnFilter({
@@ -92,7 +92,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   bool handleOnKey(FocusNode node, RawKeyEvent event) {
-    var keyManager = KeyManagerEvent(
+    var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
     );
@@ -124,12 +124,12 @@ abstract class _PlutoColumnFilterStateWithChange
     return true;
   }
 
-  void handleFocusFromRows(PlutoEvent plutoEvent) {
+  void handleFocusFromRows(PlutoGridEvent plutoEvent) {
     if (!enabled) {
       return;
     }
 
-    if (plutoEvent is PlutoCannotMoveCurrentCellEvent &&
+    if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent &&
         plutoEvent.direction.isUp) {
       var isCurrentColumn = widget
               .stateManager
@@ -171,7 +171,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
 
   void handleOnChanged(String changed) {
     widget.stateManager.eventManager.addEvent(
-      PlutoChangeColumnFilterEvent(
+      PlutoGridChangeColumnFilterEvent(
         column: widget.column,
         filterType: widget.column.defaultFilter,
         filterValue: changed,
