@@ -17,7 +17,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -75,11 +75,11 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.row);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

@@ -4,17 +4,17 @@ import 'package:pluto_grid/pluto_grid.dart';
 void main() {
   testWidgets('PlutoCannotMoveCurrentCellEvent', (WidgetTester tester) async {
     // given
-    final cellPosition = PlutoCellPosition(columnIdx: 0, rowIdx: 0);
+    final cellPosition = PlutoGridCellPosition(columnIdx: 0, rowIdx: 0);
 
-    final direction = MoveDirection.right;
+    final direction = PlutoMoveDirection.right;
 
     // when
-    final event = PlutoCannotMoveCurrentCellEvent(
+    final event = PlutoGridCannotMoveCurrentCellEvent(
       cellPosition: cellPosition,
       direction: direction,
     );
 
     // then
-    expect(event is PlutoEvent, true);
+    expect(event is PlutoGridEvent, true);
   });
 }

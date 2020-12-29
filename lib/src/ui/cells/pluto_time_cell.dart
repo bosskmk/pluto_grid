@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
@@ -20,7 +20,7 @@ class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
 
 class _PlutoTimeCellState extends State<PlutoTimeCell>
     with MixinPopupCell<PlutoTimeCell> {
-  PlutoStateManager popupStateManager;
+  PlutoGridStateManager popupStateManager;
 
   List<PlutoColumn> popupColumns = [];
 
@@ -80,8 +80,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                   ),
                 }))
             .toList(growable: false),
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.none);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
           for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
             if (event.stateManager.refRows[i].cells['hour'].value == cellHour) {
@@ -89,7 +89,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                   event.stateManager.refRows[i].cells['hour'], i);
 
               event.stateManager.moveScrollByRow(
-                  MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }
@@ -115,8 +115,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                   ),
                 }))
             .toList(growable: false),
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.none);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
           for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
             if (event.stateManager.refRows[i].cells['minute'].value ==
@@ -125,7 +125,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                   event.stateManager.refRows[i].cells['minute'], i);
 
               event.stateManager.moveScrollByRow(
-                  MoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }

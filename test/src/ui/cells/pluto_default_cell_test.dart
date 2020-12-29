@@ -10,14 +10,14 @@ import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
-  PlutoEventManager eventManager;
+  PlutoGridStateManager stateManager;
+  PlutoGridEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
     eventManager = MockPlutoEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(PlutoConfiguration());
+    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
     );
@@ -183,7 +183,7 @@ void main() {
         // It only needs to be called Update, so it is ignored.
 
         verifyNever(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate;
           })),
         ));
@@ -203,7 +203,7 @@ void main() {
         await tester.drag(find.byType(Icon), offset);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isStart &&
                 object.rows.length == 1 &&
                 object.rows.first.key == row.key;
@@ -211,7 +211,7 @@ void main() {
         )).called(1);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
                 object.offset.dy > 100 &&
                 object.rows.length == 1 &&
@@ -220,7 +220,7 @@ void main() {
         )).called(greaterThan(1));
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.offset.dy > 100 &&
                 object.dragType.isEnd &&
                 object.rows.length == 1 &&
@@ -249,7 +249,7 @@ void main() {
         await tester.drag(find.byType(Icon), offset);
 
         verify(eventManager.addEvent(
-          argThat(PlutoObjectMatcher<PlutoDragRowsEvent>(rule: (object) {
+          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
                 object.offset.dy > 100 &&
                 object.rows.length == 3 &&

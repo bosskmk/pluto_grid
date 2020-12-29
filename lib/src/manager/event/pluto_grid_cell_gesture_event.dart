@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoCellGestureEvent extends PlutoEvent {
-  final PlutoGestureType gestureType;
+class PlutoGridCellGestureEvent extends PlutoGridEvent {
+  final PlutoGridGestureType gestureType;
   final Offset offset;
   final PlutoCell cell;
   final PlutoColumn column;
   final int rowIdx;
 
-  PlutoCellGestureEvent({
+  PlutoGridCellGestureEvent({
     this.gestureType,
     this.offset,
     this.cell,
@@ -17,7 +17,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   });
 
   @override
-  void handler(PlutoStateManager stateManager) {
+  void handler(PlutoGridStateManager stateManager) {
     if (gestureType == null ||
         offset == null ||
         cell == null ||
@@ -37,7 +37,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
     }
   }
 
-  void _onTapUp(PlutoStateManager stateManager) {
+  void _onTapUp(PlutoGridStateManager stateManager) {
     if (_setKeepFocusAndCurrentCell(stateManager)) {
       return;
     } else if (stateManager.isSelectingInteraction()) {
@@ -55,7 +55,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
     }
   }
 
-  void _onLongPressStart(PlutoStateManager stateManager) {
+  void _onLongPressStart(PlutoGridStateManager stateManager) {
     _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(true);
@@ -65,23 +65,23 @@ class PlutoCellGestureEvent extends PlutoEvent {
     }
   }
 
-  void _onLongPressMoveUpdate(PlutoStateManager stateManager) {
+  void _onLongPressMoveUpdate(PlutoGridStateManager stateManager) {
     _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setCurrentSelectingPositionWithOffset(offset);
 
-    stateManager.eventManager.addEvent(PlutoMoveUpdateEvent(
+    stateManager.eventManager.addEvent(PlutoGridMoveUpdateEvent(
       offset: offset,
     ));
   }
 
-  void _onLongPressEnd(PlutoStateManager stateManager) {
+  void _onLongPressEnd(PlutoGridStateManager stateManager) {
     _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(false);
   }
 
-  bool _setKeepFocusAndCurrentCell(PlutoStateManager stateManager) {
+  bool _setKeepFocusAndCurrentCell(PlutoGridStateManager stateManager) {
     if (stateManager.hasFocus) {
       return false;
     }
@@ -91,12 +91,12 @@ class PlutoCellGestureEvent extends PlutoEvent {
     return stateManager.isCurrentCell(cell);
   }
 
-  void _selecting(PlutoStateManager stateManager) {
+  void _selecting(PlutoGridStateManager stateManager) {
     if (stateManager.keyPressed.shift) {
       final int columnIdx = stateManager.columnIndex(column);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: columnIdx,
           rowIdx: rowIdx,
         ),
@@ -106,7 +106,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
     }
   }
 
-  void _selectMode(PlutoStateManager stateManager) {
+  void _selectMode(PlutoGridStateManager stateManager) {
     if (stateManager.isCurrentCell(cell)) {
       stateManager.handleOnSelected();
     } else {
@@ -115,7 +115,7 @@ class PlutoCellGestureEvent extends PlutoEvent {
   }
 
   void _setCurrentCell(
-    PlutoStateManager stateManager,
+    PlutoGridStateManager stateManager,
     PlutoCell cell,
     int rowIdx,
   ) {
@@ -125,20 +125,20 @@ class PlutoCellGestureEvent extends PlutoEvent {
   }
 }
 
-enum PlutoGestureType {
+enum PlutoGridGestureType {
   onTapUp,
   onLongPressStart,
   onLongPressMoveUpdate,
   onLongPressEnd,
 }
 
-extension PlutoGestureTypeExtension on PlutoGestureType {
-  bool get isOnTapUp => this == PlutoGestureType.onTapUp;
+extension PlutoGridGestureTypeExtension on PlutoGridGestureType {
+  bool get isOnTapUp => this == PlutoGridGestureType.onTapUp;
 
-  bool get isOnLongPressStart => this == PlutoGestureType.onLongPressStart;
+  bool get isOnLongPressStart => this == PlutoGridGestureType.onLongPressStart;
 
   bool get isOnLongPressMoveUpdate =>
-      this == PlutoGestureType.onLongPressMoveUpdate;
+      this == PlutoGridGestureType.onLongPressMoveUpdate;
 
-  bool get isOnLongPressEnd => this == PlutoGestureType.onLongPressEnd;
+  bool get isOnLongPressEnd => this == PlutoGridGestureType.onLongPressEnd;
 }

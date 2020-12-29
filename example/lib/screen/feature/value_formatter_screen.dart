@@ -127,7 +127,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
       ),

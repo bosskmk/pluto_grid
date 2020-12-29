@@ -28,14 +28,14 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
@@ -91,14 +91,14 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
@@ -168,14 +168,14 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
       );
 
-      stateManager.setSelectingMode(PlutoSelectingMode.cell);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
       stateManager
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
@@ -185,7 +185,7 @@ void main() {
       stateManager.setCurrentCell(currentCell, 2);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: 6,
           rowIdx: 4,
         ),
@@ -249,7 +249,7 @@ void main() {
     MockOnChangeListener mock;
     List<PlutoColumn> columns;
     List<PlutoRow> rows;
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     Function({
       PlutoGridMode mode,
@@ -278,7 +278,7 @@ void main() {
 
         rows = RowHelper.count(10, columns);
 
-        stateManager = PlutoStateManager(
+        stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
@@ -409,7 +409,7 @@ void main() {
       () {
         final mock = MockOnChangeListener();
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
@@ -442,7 +442,7 @@ void main() {
       () {
         final mock = MockOnChangeListener();
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,

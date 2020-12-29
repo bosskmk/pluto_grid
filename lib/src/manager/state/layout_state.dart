@@ -83,7 +83,7 @@ abstract class ILayoutState {
   void setGridGlobalOffset(Offset offset);
 }
 
-mixin LayoutState implements IPlutoState {
+mixin LayoutState implements IPlutoGridState {
   double get maxWidth => _maxWidth;
 
   double _maxWidth;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseRow extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
   final List<PlutoColumn> columns;
@@ -40,7 +40,7 @@ class PlutoBaseRow extends StatelessWidget {
 }
 
 class _RowContainerWidget extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
   final List<PlutoColumn> columns;

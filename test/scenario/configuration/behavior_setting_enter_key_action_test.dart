@@ -14,9 +14,9 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
-    final withEnterKeyAction = (PlutoEnterKeyAction enterKeyAction) {
+    final withEnterKeyAction = (PlutoGridEnterKeyAction enterKeyAction) {
       return PlutoWidgetTestHelper(
         '2, 2 셀이 선택 된 상태에서',
         (tester) async {
@@ -33,10 +33,10 @@ void main() {
                   child: PlutoGrid(
                     columns: columns,
                     rows: rows,
-                    onLoaded: (PlutoOnLoadedEvent event) {
+                    onLoaded: (PlutoGridOnLoadedEvent event) {
                       stateManager = event.stateManager;
                     },
-                    configuration: PlutoConfiguration(
+                    configuration: PlutoGridConfiguration(
                       enterKeyAction: enterKeyAction,
                     ),
                   ),
@@ -50,7 +50,7 @@ void main() {
       );
     };
 
-    withEnterKeyAction(PlutoEnterKeyAction.none).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.none).test(
       'PlutoEnterKeyAction.None 인 경우 기존 상태에서 아무 변화가 없어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -63,7 +63,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.toggleEditing).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.toggleEditing).test(
       'PlutoEnterKeyAction.ToggleEditing 인 경우 editing 이 false 가 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -77,7 +77,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.toggleEditing).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.toggleEditing).test(
       'PlutoEnterKeyAction.ToggleEditing 인 경우 editing 이 true 가 되어야 한다.',
       (tester) async {
         stateManager.setEditing(false);
@@ -91,7 +91,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveDown).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.editingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 아래로 이동 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -105,7 +105,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveDown).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.editingAndMoveDown).test(
       'PlutoEnterKeyAction.EditingAndMoveDown 인 경우 위로 이동 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -121,7 +121,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveRight).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.editingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 우측으로 이동 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);
@@ -135,7 +135,7 @@ void main() {
       },
     );
 
-    withEnterKeyAction(PlutoEnterKeyAction.editingAndMoveRight).test(
+    withEnterKeyAction(PlutoGridEnterKeyAction.editingAndMoveRight).test(
       'PlutoEnterKeyAction.EditingAndMoveRight 인 경우 좌측으로 이동 되어야 한다.',
       (tester) async {
         stateManager.setEditing(true);

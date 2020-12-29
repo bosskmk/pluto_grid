@@ -7,7 +7,7 @@ import '../../helper/pluto_widget_test_helper.dart';
 
 /// 키보드로 팝업 그리드 호출 및 선택 테스트
 void main() {
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   final buildGrid = ({
     int numberOfRows = 10,
@@ -43,7 +43,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),

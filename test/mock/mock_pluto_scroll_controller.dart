@@ -8,7 +8,8 @@ class MockScrollController extends Mock implements ScrollController {}
 class MockLinkedScrollControllerGroup extends Mock
     implements LinkedScrollControllerGroup {}
 
-class MockPlutoScrollController extends Mock implements PlutoScrollController {
+class MockPlutoScrollController extends Mock
+    implements PlutoGridScrollController {
   @override
   LinkedScrollControllerGroup get vertical => MockLinkedScrollControllerGroup();
 

@@ -13,7 +13,7 @@ class PlutoGridPopup {
   final double height;
   final CreateHeaderCallBack createHeader;
   final CreateFooterCallBack createFooter;
-  final PlutoConfiguration configuration;
+  final PlutoGridConfiguration configuration;
 
   PlutoGridPopup({
     this.context,
@@ -33,7 +33,7 @@ class PlutoGridPopup {
   }
 
   Future<void> open() async {
-    PlutoOnSelectedEvent selected = await showDialog<PlutoOnSelectedEvent>(
+    PlutoGridOnSelectedEvent selected = await showDialog<PlutoGridOnSelectedEvent>(
         context: context,
         builder: (BuildContext ctx) {
           return Dialog(
@@ -49,7 +49,7 @@ class PlutoGridPopup {
                     mode: mode,
                     onLoaded: onLoaded,
                     onChanged: onChanged,
-                    onSelected: (PlutoOnSelectedEvent event) {
+                    onSelected: (PlutoGridOnSelectedEvent event) {
                       Navigator.pop(ctx, event);
                     },
                     createHeader: createHeader,

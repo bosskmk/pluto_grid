@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRightFrozenColumns extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   PlutoRightFrozenColumns(this.stateManager);
 

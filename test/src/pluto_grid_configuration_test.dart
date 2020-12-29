@@ -5,7 +5,7 @@ void main() {
   testWidgets(
     'dark 생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
-      final PlutoConfiguration configuration = PlutoConfiguration.dark(
+      final PlutoGridConfiguration configuration = PlutoGridConfiguration.dark(
         enableColumnBorder: true,
       );
 

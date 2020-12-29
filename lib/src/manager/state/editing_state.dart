@@ -36,7 +36,7 @@ abstract class IEditingState {
   });
 }
 
-mixin EditingState implements IPlutoState {
+mixin EditingState implements IPlutoGridState {
   bool get isEditing => _isEditing;
 
   bool _isEditing = false;
@@ -175,7 +175,7 @@ mixin EditingState implements IPlutoState {
               value = castValueByColumnType(value, currentColumn);
 
           if (callOnChangedEvent == true && onChanged != null) {
-            onChanged(PlutoOnChangedEvent(
+            onChanged(PlutoGridOnChangedEvent(
               columnIdx: columnIdx,
               column: currentColumn,
               rowIdx: rowIdx,
@@ -289,7 +289,7 @@ mixin EditingState implements IPlutoState {
             newValue = castValueByColumnType(newValue, currentColumn);
 
         if (onChanged != null) {
-          onChanged(PlutoOnChangedEvent(
+          onChanged(PlutoGridOnChangedEvent(
             columnIdx: columnIndexes[columnIdx],
             column: currentColumn,
             rowIdx: rowIdx,

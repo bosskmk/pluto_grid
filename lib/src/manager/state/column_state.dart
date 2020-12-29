@@ -93,7 +93,7 @@ abstract class IColumnState {
   void sortBySortIdx();
 }
 
-mixin ColumnState implements IPlutoState {
+mixin ColumnState implements IPlutoGridState {
   List<PlutoColumn> get columns => [...refColumns];
 
   List<PlutoColumn> refColumns;

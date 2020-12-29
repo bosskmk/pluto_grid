@@ -18,7 +18,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -140,11 +140,11 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.cell);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
           stateManager = event.stateManager;
         },

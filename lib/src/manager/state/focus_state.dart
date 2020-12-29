@@ -19,7 +19,7 @@ abstract class IFocusState {
   });
 }
 
-mixin FocusState implements IPlutoState {
+mixin FocusState implements IPlutoGridState {
   FocusNode get gridFocusNode => _gridFocusNode;
 
   FocusNode _gridFocusNode;
@@ -92,7 +92,7 @@ mixin FocusState implements IPlutoState {
         toMove.filterFocusNode?.requestFocus();
 
         moveScrollByColumn(
-          reversed ? MoveDirection.left : MoveDirection.right,
+          reversed ? PlutoMoveDirection.left : PlutoMoveDirection.right,
           reversed ? length - 1 - i : i,
         );
 

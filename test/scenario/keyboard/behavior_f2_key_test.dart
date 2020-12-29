@@ -13,7 +13,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoStateManager stateManager;
+    PlutoGridStateManager stateManager;
 
     final withTheCellSelected = PlutoWidgetTestHelper(
       '0, 0 셀이 선택 된 상태에서',
@@ -31,7 +31,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
                 ),

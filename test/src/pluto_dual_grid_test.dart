@@ -64,8 +64,8 @@ void main() {
   group(
     '그리드간 셀 이동 테스트',
     () {
-      PlutoStateManager stateManagerA;
-      PlutoStateManager stateManagerB;
+      PlutoGridStateManager stateManagerA;
+      PlutoGridStateManager stateManagerB;
 
       group('왼쪽 그리드의', () {
         final leftGridCellSelected =
@@ -84,13 +84,13 @@ void main() {
                     gridPropsA: PlutoDualGridProps(
                       columns: gridAColumns,
                       rows: gridARows,
-                      onLoaded: (PlutoOnLoadedEvent event) =>
+                      onLoaded: (PlutoGridOnLoadedEvent event) =>
                           stateManagerA = event.stateManager,
                     ),
                     gridPropsB: PlutoDualGridProps(
                       columns: gridBColumns,
                       rows: gridBRows,
-                      onLoaded: (PlutoOnLoadedEvent event) =>
+                      onLoaded: (PlutoGridOnLoadedEvent event) =>
                           stateManagerB = event.stateManager,
                     ),
                   ),

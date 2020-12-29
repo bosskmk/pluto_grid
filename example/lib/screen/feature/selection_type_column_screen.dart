@@ -119,10 +119,10 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        configuration: PlutoConfiguration(
+        configuration: PlutoGridConfiguration(
             // If you don't want to move to the next line after selecting the pop-up item, uncomment it.
             // enableMoveDownAfterSelecting: false,
             ),

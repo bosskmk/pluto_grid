@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoOnLoadedEventCallback = void Function(PlutoOnLoadedEvent event);
+typedef PlutoOnLoadedEventCallback = void Function(PlutoGridOnLoadedEvent event);
 
-typedef PlutoOnChangedEventCallback = void Function(PlutoOnChangedEvent event);
+typedef PlutoOnChangedEventCallback = void Function(PlutoGridOnChangedEvent event);
 
 typedef PlutoOnSelectedEventCallback = void Function(
-    PlutoOnSelectedEvent event);
+    PlutoGridOnSelectedEvent event);
 
-typedef CreateHeaderCallBack = Widget Function(PlutoStateManager stateManager);
+typedef CreateHeaderCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
 
-typedef CreateFooterCallBack = Widget Function(PlutoStateManager stateManager);
+typedef CreateFooterCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
 
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn> columns;
@@ -28,7 +30,7 @@ class PlutoGrid extends StatefulWidget {
 
   final CreateFooterCallBack createFooter;
 
-  final PlutoConfiguration configuration;
+  final PlutoGridConfiguration configuration;
 
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
@@ -62,11 +64,11 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   LinkedScrollControllerGroup horizontalScroll = LinkedScrollControllerGroup();
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
-  PlutoKeyManager keyManager;
+  PlutoGridKeyManager keyManager;
 
-  PlutoEventManager eventManager;
+  PlutoGridEventManager eventManager;
 
   bool _showFrozenColumn;
   bool _hasLeftFrozenColumns;
@@ -115,11 +117,11 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initStateManager() {
-    stateManager = PlutoStateManager(
+    stateManager = PlutoGridStateManager(
       columns: widget.columns,
       rows: widget.rows,
       gridFocusNode: gridFocusNode,
-      scroll: PlutoScrollController(
+      scroll: PlutoGridScrollController(
         vertical: verticalScroll,
         horizontal: horizontalScroll,
       ),
@@ -141,7 +143,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initKeyManager() {
-    keyManager = PlutoKeyManager(
+    keyManager = PlutoGridKeyManager(
       stateManager: stateManager,
     );
 
@@ -156,7 +158,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initEventManager() {
-    eventManager = PlutoEventManager(
+    eventManager = PlutoGridEventManager(
       stateManager: stateManager,
     );
 
@@ -176,7 +178,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onLoaded(PlutoOnLoadedEvent(
+      widget.onLoaded(PlutoGridOnLoadedEvent(
         stateManager: stateManager,
       ));
     });
@@ -211,7 +213,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   bool handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    keyManager.subject.add(KeyManagerEvent(
+    keyManager.subject.add(PlutoKeyManagerEvent(
       focusNode: focusNode,
       event: event,
     ));
@@ -410,10 +412,10 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 }
 
-class PlutoOnLoadedEvent {
-  final PlutoStateManager stateManager;
+class PlutoGridOnLoadedEvent {
+  final PlutoGridStateManager stateManager;
 
-  PlutoOnLoadedEvent({
+  PlutoGridOnLoadedEvent({
     this.stateManager,
   });
 }
@@ -421,7 +423,7 @@ class PlutoOnLoadedEvent {
 /// Caution
 ///
 /// [columnIdx] and [rowIdx] are values in the currently displayed state.
-class PlutoOnChangedEvent {
+class PlutoGridOnChangedEvent {
   final int columnIdx;
   final PlutoColumn column;
   final int rowIdx;
@@ -429,7 +431,7 @@ class PlutoOnChangedEvent {
   final dynamic value;
   final dynamic oldValue;
 
-  PlutoOnChangedEvent({
+  PlutoGridOnChangedEvent({
     this.columnIdx,
     this.column,
     this.rowIdx,
@@ -448,11 +450,11 @@ class PlutoOnChangedEvent {
   }
 }
 
-class PlutoOnSelectedEvent {
+class PlutoGridOnSelectedEvent {
   final PlutoRow row;
   final PlutoCell cell;
 
-  PlutoOnSelectedEvent({
+  PlutoGridOnSelectedEvent({
     this.row,
     this.cell,
   });
@@ -475,12 +477,6 @@ class PlutoGridSettings {
   /// Sum of frozen column division line width
   static const double totalShadowLineWidth =
       PlutoGridSettings.shadowLineSize * 2;
-
-  /// Scroll when multi-selection is as close as that value from the edge
-  static const double offsetScrollingFromEdge = 10.0;
-
-  /// Size that scrolls from the edge at once when selecting multiple
-  static const double offsetScrollingFromEdgeAtOnce = 200.0;
 
   /// Grid - padding
   static const double gridPadding = 2.0;
@@ -505,6 +501,14 @@ class PlutoGridSettings {
 
   /// Cell - fontSize
   static const double cellFontSize = 14;
+
+  /// Scroll when multi-selection is as close as that value from the edge
+  static const double offsetScrollingFromEdge =
+      PlutoSetting.offsetScrollingFromEdge;
+
+  /// Size that scrolls from the edge at once when selecting multiple
+  static const double offsetScrollingFromEdgeAtOnce =
+      PlutoSetting.offsetScrollingFromEdgeAtOnce;
 }
 
 enum PlutoGridMode {

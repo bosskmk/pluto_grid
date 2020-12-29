@@ -8,9 +8,9 @@ import '../../helper/row_helper.dart';
 
 /// 행 선택(selectingRows) 상태 이후의 동작 테스트
 void main() {
-  final PlutoSelectingMode selectingMode = PlutoSelectingMode.row;
+  final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   final buildRowsWithSelectingRows = ({
     int numberOfRows = 10,
@@ -31,7 +31,7 @@ void main() {
                 child: PlutoGrid(
                   columns: columns,
                   rows: rows,
-                  onLoaded: (PlutoOnLoadedEvent event) {
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                     stateManager.setSelectingMode(selectingMode);
                     stateManager.setCurrentSelectingRowsByRange(from, to);

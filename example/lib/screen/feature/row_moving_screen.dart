@@ -17,7 +17,7 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -77,11 +77,11 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        onLoaded: (PlutoOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoSelectingMode.row);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

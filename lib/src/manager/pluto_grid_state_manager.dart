@@ -16,7 +16,7 @@ import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
 
-abstract class IPlutoState extends ChangeNotifier
+abstract class IPlutoGridState extends PlutoChangeNotifier
     implements
         ICellState,
         IColumnState,
@@ -29,13 +29,9 @@ abstract class IPlutoState extends ChangeNotifier
         ILayoutState,
         IRowState,
         IScrollState,
-        ISelectingState {
-  notifyListeners();
+        ISelectingState {}
 
-  notifyListenersOnPostFrame();
-}
-
-class PlutoState extends ChangeNotifier
+class PlutoGridState extends PlutoChangeNotifier
     with
         CellState,
         ColumnState,
@@ -48,40 +44,20 @@ class PlutoState extends ChangeNotifier
         LayoutState,
         RowState,
         ScrollState,
-        SelectingState {
-  bool _disposed = false;
+        SelectingState {}
 
-  @override
-  dispose() {
-    _disposed = true;
-    super.dispose();
-  }
-
-  notifyListeners() {
-    if (!_disposed) {
-      super.notifyListeners();
-    }
-  }
-
-  notifyListenersOnPostFrame() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      notifyListeners();
-    });
-  }
-}
-
-class PlutoStateManager extends PlutoState {
-  PlutoStateManager({
+class PlutoGridStateManager extends PlutoGridState {
+  PlutoGridStateManager({
     @required List<PlutoColumn> columns,
     @required List<PlutoRow> rows,
     @required FocusNode gridFocusNode,
-    @required PlutoScrollController scroll,
+    @required PlutoGridScrollController scroll,
     PlutoGridMode mode,
     PlutoOnChangedEventCallback onChangedEventCallback,
     PlutoOnSelectedEventCallback onSelectedEventCallback,
     CreateHeaderCallBack createHeader,
     CreateFooterCallBack createFooter,
-    PlutoConfiguration configuration,
+    PlutoGridConfiguration configuration,
   }) {
     initializeRows(columns, rows);
     refColumns = columns;
@@ -97,8 +73,8 @@ class PlutoStateManager extends PlutoState {
     setGridKey(GlobalKey());
   }
 
-  static List<PlutoSelectingMode> get selectingModes =>
-      PlutoSelectingMode.none.items;
+  static List<PlutoGridSelectingMode> get selectingModes =>
+      PlutoGridSelectingMode.none.items;
 
   static void initializeRows(
     List<PlutoColumn> refColumns,
@@ -137,12 +113,12 @@ class PlutoStateManager extends PlutoState {
   }
 }
 
-class PlutoScrollController {
+class PlutoGridScrollController {
   LinkedScrollControllerGroup vertical;
 
   LinkedScrollControllerGroup horizontal;
 
-  PlutoScrollController({
+  PlutoGridScrollController({
     this.vertical,
     this.horizontal,
   });
@@ -180,17 +156,17 @@ class PlutoScrollController {
   }
 }
 
-class PlutoCellPosition {
+class PlutoGridCellPosition {
   int columnIdx;
   int rowIdx;
 
-  PlutoCellPosition({
+  PlutoGridCellPosition({
     this.columnIdx,
     this.rowIdx,
   });
 
   @override
-  bool operator ==(covariant PlutoCellPosition other) {
+  bool operator ==(covariant PlutoGridCellPosition other) {
     return columnIdx == other.columnIdx && rowIdx == other.rowIdx;
   }
 
@@ -198,17 +174,17 @@ class PlutoCellPosition {
   int get hashCode => super.hashCode;
 }
 
-class PlutoSelectingCellPosition {
+class PlutoGridSelectingCellPosition {
   String field;
   int rowIdx;
 
-  PlutoSelectingCellPosition({
+  PlutoGridSelectingCellPosition({
     this.field,
     this.rowIdx,
   });
 
   @override
-  bool operator ==(covariant PlutoSelectingCellPosition other) {
+  bool operator ==(covariant PlutoGridSelectingCellPosition other) {
     return field == other.field && rowIdx == other.rowIdx;
   }
 
@@ -216,18 +192,18 @@ class PlutoSelectingCellPosition {
   int get hashCode => super.hashCode;
 }
 
-class PlutoKeyPressed {
+class PlutoGridKeyPressed {
   bool shift;
 
   bool ctrl;
 
-  PlutoKeyPressed({
+  PlutoGridKeyPressed({
     this.shift = false,
     this.ctrl = false,
   });
 }
 
-enum PlutoSelectingMode {
+enum PlutoGridSelectingMode {
   cell,
   row,
   none,
@@ -236,21 +212,21 @@ enum PlutoSelectingMode {
   horizontal,
 }
 
-extension PlutoSelectingModeExtension on PlutoSelectingMode {
-  bool get isCell => this == PlutoSelectingMode.cell;
+extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
+  bool get isCell => this == PlutoGridSelectingMode.cell;
 
-  bool get isRow => this == PlutoSelectingMode.row;
+  bool get isRow => this == PlutoGridSelectingMode.row;
 
-  bool get isNone => this == PlutoSelectingMode.none;
+  bool get isNone => this == PlutoGridSelectingMode.none;
 
   /// using only internal
-  bool get isHorizontal => this == PlutoSelectingMode.horizontal;
+  bool get isHorizontal => this == PlutoGridSelectingMode.horizontal;
 
-  List<PlutoSelectingMode> get items {
+  List<PlutoGridSelectingMode> get items {
     return [
-      PlutoSelectingMode.cell,
-      PlutoSelectingMode.row,
-      PlutoSelectingMode.none,
+      PlutoGridSelectingMode.cell,
+      PlutoGridSelectingMode.row,
+      PlutoGridSelectingMode.none,
     ];
   }
 

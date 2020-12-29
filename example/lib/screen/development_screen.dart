@@ -16,9 +16,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
-  PlutoSelectingMode gridSelectingMode = PlutoSelectingMode.row;
+  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
   @override
   void initState() {
@@ -150,7 +150,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
   }
 
-  void setGridSelectingMode(PlutoSelectingMode mode) {
+  void setGridSelectingMode(PlutoGridSelectingMode mode) {
     if (gridSelectingMode == mode) {
       return;
     }
@@ -169,15 +169,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         child: PlutoGrid(
           columns: columns,
           rows: rows,
-          onChanged: (PlutoOnChangedEvent event) {
+          onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          onLoaded: (PlutoOnLoadedEvent event) {
+          onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
             stateManager.setSelectingMode(gridSelectingMode);
             stateManager.setShowColumnFilter(true);
           },
-          createHeader: (PlutoStateManager stateManager) {
+          createHeader: (PlutoGridStateManager stateManager) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
@@ -215,13 +215,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     DropdownButtonHideUnderline(
                       child: DropdownButton(
                         value: gridSelectingMode,
-                        items: PlutoStateManager.selectingModes
-                            .map<DropdownMenuItem<PlutoSelectingMode>>(
-                                (PlutoSelectingMode item) {
+                        items: PlutoGridStateManager.selectingModes
+                            .map<DropdownMenuItem<PlutoGridSelectingMode>>(
+                                (PlutoGridSelectingMode item) {
                           final color =
                               gridSelectingMode == item ? Colors.blue : null;
 
-                          return DropdownMenuItem<PlutoSelectingMode>(
+                          return DropdownMenuItem<PlutoGridSelectingMode>(
                             value: item,
                             child: Text(
                               item.toShortString(),
@@ -229,7 +229,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                             ),
                           );
                         }).toList(),
-                        onChanged: (PlutoSelectingMode mode) {
+                        onChanged: (PlutoGridSelectingMode mode) {
                           setGridSelectingMode(mode);
                         },
                       ),
@@ -243,13 +243,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
             );
           },
-          configuration: PlutoConfiguration(
+          configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
-            scrollbarConfig: const PlutoScrollbarConfig(
+            scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: true,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
-            columnFilterConfig: PlutoColumnFilterConfig(
+            columnFilterConfig: PlutoGridColumnFilterConfig(
               filters: const [
                 ...FilterHelper.defaultFilters,
                 ClassYouImplemented(),

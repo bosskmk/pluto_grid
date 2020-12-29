@@ -23,7 +23,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -31,7 +31,8 @@ void main() {
       );
 
       // when
-      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoGridCellPosition currentCellPosition =
+          stateManager.currentCellPosition;
 
       // when
       expect(currentCellPosition, null);
@@ -50,7 +51,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -64,7 +65,8 @@ void main() {
       String selectColumnField = 'body1';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
-      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoGridCellPosition currentCellPosition =
+          stateManager.currentCellPosition;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -82,7 +84,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -99,7 +101,8 @@ void main() {
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
-      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoGridCellPosition currentCellPosition =
+          stateManager.currentCellPosition;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -119,7 +122,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -136,7 +139,8 @@ void main() {
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
-      PlutoCellPosition currentCellPosition = stateManager.currentCellPosition;
+      PlutoGridCellPosition currentCellPosition =
+          stateManager.currentCellPosition;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -158,7 +162,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
@@ -172,7 +176,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -180,7 +184,7 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         // then
@@ -199,7 +203,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
@@ -213,7 +217,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -221,15 +225,15 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 1, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 2, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 2, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 2, rowIdx: 2),
+          PlutoGridCellPosition(columnIdx: 2, rowIdx: 2),
         );
 
         // then
@@ -249,7 +253,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
@@ -263,7 +267,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 0, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -271,19 +275,19 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: -1, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: -1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: columns.length, rowIdx: 1),
+          PlutoGridCellPosition(columnIdx: columns.length, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 1, rowIdx: -1),
+          PlutoGridCellPosition(columnIdx: 1, rowIdx: -1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoCellPosition(columnIdx: 1, rowIdx: rows.length),
+          PlutoGridCellPosition(columnIdx: 1, rowIdx: rows.length),
         );
 
         // then
@@ -301,7 +305,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -323,7 +327,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -349,7 +353,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -378,7 +382,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
@@ -416,7 +420,7 @@ void main() {
       'readonly column.'
       'should be returned false.',
       () {
-        final normalGridAndReadonlyColumn = PlutoStateManager(
+        final normalGridAndReadonlyColumn = PlutoGridStateManager(
           columns: [],
           rows: [],
           gridFocusNode: null,
@@ -437,7 +441,7 @@ void main() {
       'enableEditingMode = false, '
       'should be returned false.',
       () {
-        final normalGridAndReadonlyColumn = PlutoStateManager(
+        final normalGridAndReadonlyColumn = PlutoGridStateManager(
           columns: [],
           rows: [],
           gridFocusNode: null,
@@ -459,7 +463,7 @@ void main() {
       'grid mode is normal.'
       'should be returned true.',
       () {
-        final normalGridAndReadonlyColumn = PlutoStateManager(
+        final normalGridAndReadonlyColumn = PlutoGridStateManager(
           columns: [],
           rows: [],
           gridFocusNode: null,
@@ -481,7 +485,7 @@ void main() {
       'grid mode is select.'
       'should be returned false.',
       () {
-        final normalGridAndReadonlyColumn = PlutoStateManager(
+        final normalGridAndReadonlyColumn = PlutoGridStateManager(
           columns: [],
           rows: [],
           gridFocusNode: null,
@@ -505,7 +509,7 @@ void main() {
       'but same values.'
       'should be returned false.',
       () {
-        final normalGridAndReadonlyColumn = PlutoStateManager(
+        final normalGridAndReadonlyColumn = PlutoGridStateManager(
           columns: [],
           rows: [],
           gridFocusNode: null,
@@ -540,7 +544,7 @@ void main() {
         type: PlutoColumnType.select(['one', 'two', 'three']),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,
@@ -574,7 +578,7 @@ void main() {
         type: PlutoColumnType.select(['one', 'two', 'three', 'four']),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,
@@ -608,7 +612,7 @@ void main() {
         type: PlutoColumnType.date(),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,
@@ -642,7 +646,7 @@ void main() {
         type: PlutoColumnType.date(),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,
@@ -676,7 +680,7 @@ void main() {
         type: PlutoColumnType.time(),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,
@@ -710,7 +714,7 @@ void main() {
         type: PlutoColumnType.time(),
       );
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: [column],
         rows: [],
         gridFocusNode: null,

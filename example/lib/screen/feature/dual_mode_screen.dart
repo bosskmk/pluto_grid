@@ -24,9 +24,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
 
   List<PlutoRow> gridBRows;
 
-  PlutoStateManager gridAStateManager;
+  PlutoGridStateManager gridAStateManager;
 
-  PlutoStateManager gridBStateManager;
+  PlutoGridStateManager gridBStateManager;
 
   Key currentRowKey;
 
@@ -147,10 +147,10 @@ class _DualModeScreenState extends State<DualModeScreen> {
         gridPropsA: PlutoDualGridProps(
           columns: gridAColumns,
           rows: gridARows,
-          onChanged: (PlutoOnChangedEvent event) {
+          onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          onLoaded: (PlutoOnLoadedEvent event) {
+          onLoaded: (PlutoGridOnLoadedEvent event) {
             gridAStateManager = event.stateManager;
             event.stateManager.addListener(gridAHandler);
           },
@@ -158,13 +158,13 @@ class _DualModeScreenState extends State<DualModeScreen> {
         gridPropsB: PlutoDualGridProps(
           columns: gridBColumns,
           rows: gridBRows,
-          onChanged: (PlutoOnChangedEvent event) {
+          onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          onLoaded: (PlutoOnLoadedEvent event) {
+          onLoaded: (PlutoGridOnLoadedEvent event) {
             gridBStateManager = event.stateManager;
           },
-          configuration: PlutoConfiguration(),
+          configuration: PlutoGridConfiguration(),
         ),
         display: const PlutoDualGridDisplayRatio(ratio: 0.5),
       ),

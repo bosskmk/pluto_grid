@@ -3,24 +3,25 @@ import 'dart:async';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:rxdart/rxdart.dart';
 
-class PlutoEventManager {
-  PlutoStateManager stateManager;
+class PlutoGridEventManager {
+  PlutoGridStateManager stateManager;
 
-  PlutoEventManager({
+  PlutoGridEventManager({
     this.stateManager,
   });
 
-  final PublishSubject<PlutoEvent> _subject = PublishSubject<PlutoEvent>();
+  final PublishSubject<PlutoGridEvent> _subject =
+      PublishSubject<PlutoGridEvent>();
 
-  PublishSubject<PlutoEvent> get subject => _subject;
+  PublishSubject<PlutoGridEvent> get subject => _subject;
 
   void dispose() {
     _subject.close();
   }
 
   void init() {
-    bool Function(PlutoEvent event) isThrottle = (event) {
-      return event is PlutoMoveUpdateEvent;
+    bool Function(PlutoGridEvent event) isThrottle = (event) {
+      return event is PlutoGridMoveUpdateEvent;
     };
 
     final stream = _subject.stream.where((event) => !isThrottle(event));
@@ -32,17 +33,17 @@ class PlutoEventManager {
     MergeStream([stream, throttleStream]).listen(_handler);
   }
 
-  void addEvent(PlutoEvent event) {
+  void addEvent(PlutoGridEvent event) {
     _subject.add(event);
   }
 
-  StreamSubscription<PlutoEvent> listener(
-    void onData(PlutoEvent event),
+  StreamSubscription<PlutoGridEvent> listener(
+    void onData(PlutoGridEvent event),
   ) {
     return _subject.stream.listen(onData);
   }
 
-  void _handler(PlutoEvent event) {
+  void _handler(PlutoGridEvent event) {
     event.handler(stateManager);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/pluto_colors.dart';
+import '../constants/pluto_grid_example_colors.dart';
 
 class PlutoContributorTile extends StatelessWidget {
   final String name;
@@ -17,7 +17,7 @@ class PlutoContributorTile extends StatelessWidget {
     this.linkTitle,
     this.onTapLink,
   })  : _color = Colors.white,
-        _fontColor = PlutoColors.fontColor;
+        _fontColor = PlutoGridExampleColors.fontColor;
 
   PlutoContributorTile.invisible({
     @required this.name,

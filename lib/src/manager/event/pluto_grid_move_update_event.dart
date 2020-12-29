@@ -3,32 +3,33 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// An event that occurs when dragging or moving after a long tap.
-class PlutoMoveUpdateEvent extends PlutoEvent {
+class PlutoGridMoveUpdateEvent extends PlutoGridEvent {
   final Offset offset;
 
-  PlutoMoveUpdateEvent({
+  PlutoGridMoveUpdateEvent({
     this.offset,
   });
 
-  void handler(PlutoStateManager stateManager) {
+  void handler(PlutoGridStateManager stateManager) {
     if (offset == null) {
       return;
     }
 
-    if (stateManager.needMovingScroll(offset, MoveDirection.left)) {
-      _scroll(stateManager, MoveDirection.left);
-    } else if (stateManager.needMovingScroll(offset, MoveDirection.right)) {
-      _scroll(stateManager, MoveDirection.right);
+    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.left)) {
+      _scroll(stateManager, PlutoMoveDirection.left);
+    } else if (stateManager.needMovingScroll(
+        offset, PlutoMoveDirection.right)) {
+      _scroll(stateManager, PlutoMoveDirection.right);
     }
 
-    if (stateManager.needMovingScroll(offset, MoveDirection.up)) {
-      _scroll(stateManager, MoveDirection.up);
-    } else if (stateManager.needMovingScroll(offset, MoveDirection.down)) {
-      _scroll(stateManager, MoveDirection.down);
+    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.up)) {
+      _scroll(stateManager, PlutoMoveDirection.up);
+    } else if (stateManager.needMovingScroll(offset, PlutoMoveDirection.down)) {
+      _scroll(stateManager, PlutoMoveDirection.down);
     }
   }
 
-  void _scroll(PlutoStateManager stateManager, MoveDirection move) {
+  void _scroll(PlutoGridStateManager stateManager, PlutoMoveDirection move) {
     if (move == null) {
       return;
     }

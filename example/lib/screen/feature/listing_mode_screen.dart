@@ -19,7 +19,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
 
   List<PlutoRow> rows;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   StreamSubscription removeKeyboardListener;
 
@@ -65,7 +65,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
     rows = DummyData.rowsByColumns(length: 30, columns: columns);
   }
 
-  void handleKeyboard(KeyManagerEvent event) {
+  void handleKeyboard(PlutoKeyManagerEvent event) {
     // Specify the desired shortcut key.
     if (event.isKeyDownEvent && event.isCtrlC) {
       openNewRecord();
@@ -145,7 +145,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
     );
 
     stateManager.prependRows([newRow]);
-    stateManager.moveScrollByRow(MoveDirection.up, 1);
+    stateManager.moveScrollByRow(PlutoMoveDirection.up, 1);
     stateManager.setCurrentCell(newRow.cells.entries.first.value, 0);
   }
 
@@ -244,18 +244,18 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        onLoaded: (PlutoOnLoadedEvent event) {
+        onLoaded: (PlutoGridOnLoadedEvent event) {
           stateManager = event.stateManager;
 
           removeKeyboardListener =
               stateManager.keyManager.subject.stream.listen(handleKeyboard);
 
-          stateManager.setSelectingMode(PlutoSelectingMode.none);
+          stateManager.setSelectingMode(PlutoGridSelectingMode.none);
         },
-        onSelected: (PlutoOnSelectedEvent event) {
+        onSelected: (PlutoGridOnSelectedEvent event) {
           if (event.row != null) {
             openDetail(event.row);
           }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnTitle extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoColumn column;
 
   PlutoColumnTitle({
@@ -163,7 +163,7 @@ class PlutoGridColumnIcon extends StatelessWidget {
 }
 
 class _BuildDraggableWidget extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoColumn column;
   final Widget child;
 
@@ -200,7 +200,7 @@ class _BuildDraggableWidget extends StatelessWidget {
 }
 
 class _BuildSortableWidget extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoColumn column;
   final Widget child;
 
@@ -225,7 +225,7 @@ class _BuildSortableWidget extends StatelessWidget {
 }
 
 class _BuildColumnWidget extends StatelessWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoColumn column;
 
   const _BuildColumnWidget({
@@ -275,7 +275,7 @@ class _BuildColumnWidget extends StatelessWidget {
 
 class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   _CheckboxAllSelectionWidget({
     this.column,
@@ -342,7 +342,7 @@ class __CheckboxAllSelectionWidgetState
 
 class _ColumnTextWidget extends PlutoStatefulWidget {
   final PlutoColumn column;
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   _ColumnTextWidget({
     this.column,

@@ -148,7 +148,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-pre.10"
+    version: "1.0.0"
+  pluto_inside:
+    dependency: transitive
+    description:
+      name: pluto_inside
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   rainbow_color:
     dependency: "direct main"
     description:

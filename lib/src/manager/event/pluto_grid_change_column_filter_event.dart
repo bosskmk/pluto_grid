@@ -2,18 +2,18 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event called when the value of the TextField
 /// that handles the filter under the column changes.
-class PlutoChangeColumnFilterEvent extends PlutoEvent {
+class PlutoGridChangeColumnFilterEvent extends PlutoGridEvent {
   final PlutoColumn column;
   final PlutoFilterType filterType;
   final String filterValue;
 
-  PlutoChangeColumnFilterEvent({
+  PlutoGridChangeColumnFilterEvent({
     this.column,
     this.filterType,
     this.filterValue,
   });
 
-  void handler(PlutoStateManager stateManager) {
+  void handler(PlutoGridStateManager stateManager) {
     List<PlutoRow> foundFilterRows =
         stateManager.filterRowsByField(column.field);
 

@@ -34,7 +34,7 @@ abstract class IDraggingRowState {
   bool isRowBeingDragged(Key rowKey);
 }
 
-mixin DraggingRowState implements IPlutoState {
+mixin DraggingRowState implements IPlutoGridState {
   bool get isDraggingRow => _isDraggingRow;
 
   bool _isDraggingRow = false;

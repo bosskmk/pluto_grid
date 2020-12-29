@@ -70,7 +70,7 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoOnChangedEvent event) {
+        onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
       ),

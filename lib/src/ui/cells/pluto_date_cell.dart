@@ -7,7 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
 
@@ -23,7 +23,7 @@ class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
 
 class _PlutoDateCellState extends State<PlutoDateCell>
     with MixinPopupCell<PlutoDateCell> {
-  PlutoStateManager popupStateManager;
+  PlutoGridStateManager popupStateManager;
 
   List<PlutoColumn> popupColumns = [];
 
@@ -33,7 +33,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     Icons.date_range,
   );
 
-  StreamSubscription<KeyManagerEvent> keyManagerStream;
+  StreamSubscription<PlutoKeyManagerEvent> keyManagerStream;
 
   @override
   void dispose() {
@@ -60,34 +60,34 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     popupColumns = _buildColumns();
 
-    final defaultDate = DateTimeHelper.parseOrNullWithFormat(
+    final defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
             widget.cell.value, widget.column.type.date.format) ??
         DateTime.now();
 
     final startDate = widget.column.type.date.startDate ??
-        DateTimeHelper.moveToFirstWeekday(
+        PlutoDateTimeHelper.moveToFirstWeekday(
             defaultDate.add(const Duration(days: -60)));
 
     final endDate = widget.column.type.date.endDate ??
-        DateTimeHelper.moveToLastWeekday(
+        PlutoDateTimeHelper.moveToLastWeekday(
             defaultDate.add(const Duration(days: 60)));
 
-    final List<DateTime> days = DateTimeHelper.getDaysInBetween(
+    final List<DateTime> days = PlutoDateTimeHelper.getDaysInBetween(
       startDate,
       endDate,
     );
 
     popupRows = _buildRows(days);
 
-    createHeader = (PlutoStateManager stateManager) =>
+    createHeader = (PlutoGridStateManager stateManager) =>
         _DateCellHeader(stateManager: stateManager);
   }
 
   @override
-  void onLoaded(PlutoOnLoadedEvent event) {
+  void onLoaded(PlutoGridOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
-    popupStateManager.setSelectingMode(PlutoSelectingMode.none);
+    popupStateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
     if (widget.column.type.date.startDate == null ||
         widget.column.type.date.endDate == null) {
@@ -101,7 +101,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     super.onLoaded(event);
   }
 
-  void _handleGridFocusOnKey(KeyManagerEvent keyManagerEvent) {
+  void _handleGridFocusOnKey(PlutoKeyManagerEvent keyManagerEvent) {
     if (keyManagerEvent.isKeyDownEvent) {
       if (keyManagerEvent.isUp) {
         if (popupStateManager.currentRowIdx == 0) {
@@ -204,7 +204,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       firstDays = -30;
       lastDays = -1;
 
-      defaultDate = DateTimeHelper.parseOrNullWithFormat(
+      defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
         popupStateManager.refRows.first.cells.entries.first.value.value,
         widget.column.type.date.format,
       );
@@ -221,7 +221,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       firstDays = 1;
       lastDays = 30;
 
-      defaultDate = DateTimeHelper.parseOrNullWithFormat(
+      defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
           popupStateManager.refRows.last.cells.entries.last.value.value,
           widget.column.type.date.format);
 
@@ -235,13 +235,13 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       }
     }
 
-    final startDate = DateTimeHelper.moveToFirstWeekday(
+    final startDate = PlutoDateTimeHelper.moveToFirstWeekday(
         defaultDate.add(Duration(days: firstDays)));
 
-    final endDate = DateTimeHelper.moveToLastWeekday(
+    final endDate = PlutoDateTimeHelper.moveToLastWeekday(
         defaultDate.add(Duration(days: lastDays)));
 
-    final List<DateTime> days = DateTimeHelper.getDaysInBetween(
+    final List<DateTime> days = PlutoDateTimeHelper.getDaysInBetween(
       startDate,
       endDate,
     );
@@ -251,7 +251,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 }
 
 class _DateCellHeader extends PlutoStatefulWidget {
-  final PlutoStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
   _DateCellHeader({this.stateManager});
 

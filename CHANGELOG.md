@@ -1,3 +1,10 @@
+## [1.0.0] - 2020. 12. 30
+
+* Class name change. Just like changing PlutoConfiguration to PlutoGridConfiguration, the word Grid was added in the middle.
+  - PlutoStateManager > PlutoGridStateManager
+  - PlutoOnLoadedEvent > PlutoGridOnLoadedEvent
+  - Many other classes...
+
 ## [1.0.0-pre.10] - 2020. 12. 21
 
 * Fix sorting error when null value.

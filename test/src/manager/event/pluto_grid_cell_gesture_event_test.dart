@@ -8,17 +8,17 @@ import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoStateManager stateManager;
-  PlutoEventManager eventManager;
+  PlutoGridStateManager stateManager;
+  PlutoGridEventManager eventManager;
 
   var eventBuilder = ({
-    @required PlutoGestureType gestureType,
+    @required PlutoGridGestureType gestureType,
     Offset offset,
     PlutoCell cell,
     PlutoColumn column,
     int rowIdx,
   }) =>
-      PlutoCellGestureEvent(
+      PlutoGridCellGestureEvent(
         gestureType: gestureType,
         offset: offset ?? Offset.zero,
         cell: cell ?? PlutoCell(value: 'value'),
@@ -52,7 +52,7 @@ void main() {
         clearInteractions(stateManager);
 
         // when
-        var event = eventBuilder(gestureType: PlutoGestureType.onTapUp);
+        var event = eventBuilder(gestureType: PlutoGridGestureType.onTapUp);
         event.handler(stateManager);
 
         // then
@@ -87,7 +87,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -124,7 +124,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -153,13 +153,14 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(true);
-        when(stateManager.keyPressed).thenReturn(PlutoKeyPressed(shift: true));
+        when(stateManager.keyPressed)
+            .thenReturn(PlutoGridKeyPressed(shift: true));
         when(stateManager.columnIndex(any)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -168,7 +169,7 @@ void main() {
         // then
         verify(
           stateManager.setCurrentSelectingPosition(
-              cellPosition: PlutoCellPosition(
+              cellPosition: PlutoGridCellPosition(
             columnIdx: columnIdx,
             rowIdx: rowIdx,
           )),
@@ -193,12 +194,13 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(true);
-        when(stateManager.keyPressed).thenReturn(PlutoKeyPressed(ctrl: true));
+        when(stateManager.keyPressed)
+            .thenReturn(PlutoGridKeyPressed(ctrl: true));
         clearInteractions(stateManager);
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -237,7 +239,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -271,7 +273,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onTapUp,
+          gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -301,7 +303,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onLongPressStart,
+          gestureType: PlutoGridGestureType.onLongPressStart,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -329,7 +331,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onLongPressStart,
+          gestureType: PlutoGridGestureType.onLongPressStart,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -352,12 +354,12 @@ void main() {
         final rowIdx = 1;
 
         when(stateManager.isCurrentCell(any)).thenReturn(false);
-        when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
+        when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
         clearInteractions(stateManager);
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onLongPressStart,
+          gestureType: PlutoGridGestureType.onLongPressStart,
           cell: cell,
           rowIdx: rowIdx,
         );
@@ -379,12 +381,12 @@ void main() {
         final rowIdx = 1;
 
         when(stateManager.isCurrentCell(any)).thenReturn(false);
-        when(stateManager.selectingMode).thenReturn(PlutoSelectingMode.row);
+        when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
         clearInteractions(stateManager);
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onLongPressMoveUpdate,
+          gestureType: PlutoGridGestureType.onLongPressMoveUpdate,
           offset: offset,
           cell: cell,
           rowIdx: rowIdx,
@@ -394,7 +396,7 @@ void main() {
         // then
         verify(stateManager.setCurrentSelectingPositionWithOffset(offset));
         verify(eventManager.addEvent(
-            argThat(PlutoObjectMatcher<PlutoMoveUpdateEvent>(rule: (event) {
+            argThat(PlutoObjectMatcher<PlutoGridMoveUpdateEvent>(rule: (event) {
           return event.offset == offset;
         }))));
       },
@@ -411,7 +413,7 @@ void main() {
 
         // when
         var event = eventBuilder(
-          gestureType: PlutoGestureType.onLongPressEnd,
+          gestureType: PlutoGridGestureType.onLongPressEnd,
           cell: cell,
           rowIdx: rowIdx,
         );

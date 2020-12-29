@@ -13,9 +13,9 @@ void main() {
 
   List<PlutoRow> rows;
 
-  PlutoScrollController scrollController;
+  PlutoGridScrollController scrollController;
 
-  PlutoStateManager stateManager;
+  PlutoGridStateManager stateManager;
 
   final withColumnAndRows =
       PlutoWidgetTestHelper('컬럼 10개와 행 10개 인 상태에서, ', (tester) async {
@@ -29,7 +29,7 @@ void main() {
 
     when(scrollController.verticalOffset).thenReturn(100);
 
-    stateManager = PlutoStateManager(
+    stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
       gridFocusNode: null,
@@ -41,18 +41,18 @@ void main() {
 
   group('moveCurrentCellToEdgeOfColumns', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.up);
+        stateManager.moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.up);
 
         expect(stateManager.currentCell, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.down);
+        stateManager.moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.down);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -63,7 +63,7 @@ void main() {
       (tester) async {
         expect(stateManager.currentCell, isNull);
 
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.left);
+        stateManager.moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -81,7 +81,7 @@ void main() {
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
-        stateManager.moveCurrentCellToEdgeOfColumns(MoveDirection.right);
+        stateManager.moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.right);
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -101,7 +101,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.right,
+          PlutoMoveDirection.right,
           force: true,
         );
 
@@ -111,7 +111,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Left 면 왼쪽 끝으로 이동 해야 한다.',
+      'PlutoMoveDirection 이 Left 면 왼쪽 끝으로 이동 해야 한다.',
       (tester) async {
         stateManager.setCurrentCell(rows.first.cells['column3'], 0);
 
@@ -123,7 +123,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.left,
+          PlutoMoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -132,7 +132,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 면 오른쪽 끝으로 이동 해야 한다.',
+      'PlutoMoveDirection 이 Right 면 오른쪽 끝으로 이동 해야 한다.',
       (tester) async {
         stateManager.setCurrentCell(rows.first.cells['column3'], 0);
 
@@ -144,7 +144,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfColumns(
-          MoveDirection.right,
+          PlutoMoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 9);
@@ -155,18 +155,18 @@ void main() {
 
   group('moveCurrentCellToEdgeOfRows', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.left);
+        stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.right);
+        stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.right);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -184,7 +184,7 @@ void main() {
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
-        stateManager.moveCurrentCellToEdgeOfRows(MoveDirection.down);
+        stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.down);
 
         expect(stateManager.currentCellPosition.columnIdx, 0);
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -204,7 +204,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 0);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
           force: true,
         );
 
@@ -214,7 +214,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Up 이면 맨 위 Row 로 이동 되어야 한다.',
+      'PlutoMoveDirection 이 Up 이면 맨 위 Row 로 이동 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[4].cells['column7'], 4);
 
@@ -226,7 +226,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 4);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.up,
+          PlutoMoveDirection.up,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 7);
@@ -235,7 +235,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Down 이면 맨 아래 Row 로 이동 되어야 한다.',
+      'PlutoMoveDirection 이 Down 이면 맨 아래 Row 로 이동 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[4].cells['column7'], 4);
 
@@ -247,7 +247,7 @@ void main() {
         expect(stateManager.currentCellPosition.rowIdx, 4);
 
         stateManager.moveCurrentCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
         );
 
         expect(stateManager.currentCellPosition.columnIdx, 7);
@@ -258,18 +258,18 @@ void main() {
 
   group('moveCurrentCellByRowIdx', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.left);
+        stateManager.moveCurrentCellByRowIdx(0, PlutoMoveDirection.left);
 
         expect(stateManager.currentCell, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(0, MoveDirection.right);
+        stateManager.moveCurrentCellByRowIdx(0, PlutoMoveDirection.right);
 
         expect(stateManager.currentCell, isNull);
       },
@@ -278,7 +278,7 @@ void main() {
     withColumnAndRows.test(
       'rowIdx 가 0보다 작으면 0번 행으로 이동 되어야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(-1, MoveDirection.down);
+        stateManager.moveCurrentCellByRowIdx(-1, PlutoMoveDirection.down);
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -288,7 +288,7 @@ void main() {
     withColumnAndRows.test(
       'rowIdx 가 전체 행 인덱스보다 많으면 마지막 행으로 이동 되어야 한다.',
       (tester) async {
-        stateManager.moveCurrentCellByRowIdx(11, MoveDirection.down);
+        stateManager.moveCurrentCellByRowIdx(11, PlutoMoveDirection.down);
 
         expect(stateManager.currentCellPosition.rowIdx, 9);
         expect(stateManager.currentCellPosition.columnIdx, 0);
@@ -298,18 +298,18 @@ void main() {
 
   group('moveSelectingCellToEdgeOfColumns', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Up 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.up);
+        stateManager.moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.up);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Down 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.down);
+        stateManager.moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -326,7 +326,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellToEdgeOfColumns(MoveDirection.right);
+        stateManager.moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -344,7 +344,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.right,
+          PlutoMoveDirection.right,
           force: true,
         );
 
@@ -355,7 +355,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Left 면 현재 셀 부터 왼쪽 끝까지 선택 되어야 한다.',
+      'PlutoMoveDirection 이 Left 면 현재 셀 부터 왼쪽 끝까지 선택 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[0].cells['column3'], 0);
 
@@ -366,7 +366,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.left,
+          PlutoMoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -379,7 +379,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Left 이고 현재 선택 된 셀이 있다면 선택 된 셀이 왼쪽 끝으로 변경 되어야 한다.',
+      'PlutoMoveDirection 이 Left 이고 현재 선택 된 셀이 있다면 선택 된 셀이 왼쪽 끝으로 변경 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[0].cells['column3'], 0);
 
@@ -388,7 +388,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 0,
           ),
@@ -399,7 +399,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 0);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.left,
+          PlutoMoveDirection.left,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -412,7 +412,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 면 현재 셀 부터 오른쪽 끝까지 선택 되어야 한다.',
+      'PlutoMoveDirection 이 Right 면 현재 셀 부터 오른쪽 끝까지 선택 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[0].cells['column3'], 0);
 
@@ -423,7 +423,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.right,
+          PlutoMoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -436,7 +436,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 이고 현재 선택 된 셀이 있다면 선택 된 셀이 오른쪽 끝으로 변경 되어야 한다.',
+      'PlutoMoveDirection 이 Right 이고 현재 선택 된 셀이 있다면 선택 된 셀이 오른쪽 끝으로 변경 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[0].cells['column3'], 0);
 
@@ -445,7 +445,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 0,
           ),
@@ -456,7 +456,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 0);
 
         stateManager.moveSelectingCellToEdgeOfColumns(
-          MoveDirection.right,
+          PlutoMoveDirection.right,
         );
 
         expect(stateManager.currentCellPosition.rowIdx, 0);
@@ -471,18 +471,18 @@ void main() {
 
   group('moveSelectingCellToEdgeOfRows', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.left);
+        stateManager.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.left);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.right);
+        stateManager.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -499,7 +499,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellToEdgeOfRows(MoveDirection.down);
+        stateManager.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -517,7 +517,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
           force: true,
         );
 
@@ -537,7 +537,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNull);
@@ -545,7 +545,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Down 이면 가장 아래 셀이 선택 되어야 한다.',
+      'PlutoMoveDirection 이 Down 이면 가장 아래 셀이 선택 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.firstCell, 0);
 
@@ -556,7 +556,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -566,7 +566,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Up 이면 가장 위의 셀이 선택 되어야 한다.',
+      'PlutoMoveDirection 이 Up 이면 가장 위의 셀이 선택 되어야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.rows[4].cells['column3'], 4);
 
@@ -577,7 +577,7 @@ void main() {
         expect(stateManager.currentSelectingPosition, isNull);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.up,
+          PlutoMoveDirection.up,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -587,7 +587,7 @@ void main() {
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Down 이고 선택 된 셀이 있으면 컬럼은 유지하고 가장 아래로 이동 해야 한다.',
+      'PlutoMoveDirection 이 Down 이고 선택 된 셀이 있으면 컬럼은 유지하고 가장 아래로 이동 해야 한다.',
       (tester) async {
         stateManager.setCurrentCell(stateManager.firstCell, 0);
 
@@ -596,7 +596,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 3,
             rowIdx: 2,
           ),
@@ -606,7 +606,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.rowIdx, 2);
 
         stateManager.moveSelectingCellToEdgeOfRows(
-          MoveDirection.down,
+          PlutoMoveDirection.down,
         );
 
         expect(stateManager.currentSelectingPosition, isNotNull);
@@ -618,18 +618,18 @@ void main() {
 
   group('moveSelectingCellByRowIdx', () {
     withColumnAndRows.test(
-      'MoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Left 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.left);
+        stateManager.moveSelectingCellByRowIdx(0, PlutoMoveDirection.left);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
     );
 
     withColumnAndRows.test(
-      'MoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
+      'PlutoMoveDirection 이 Right 이면 셀이 선택 되지 않아야 한다.',
       (tester) async {
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.right);
+        stateManager.moveSelectingCellByRowIdx(0, PlutoMoveDirection.right);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -642,7 +642,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(0, MoveDirection.down);
+        stateManager.moveSelectingCellByRowIdx(0, PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNull);
       },
@@ -657,7 +657,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(-1, MoveDirection.down);
+        stateManager.moveSelectingCellByRowIdx(-1, PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 3);
@@ -674,7 +674,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(11, MoveDirection.down);
+        stateManager.moveSelectingCellByRowIdx(11, PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 3);
@@ -691,7 +691,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNull);
 
-        stateManager.moveSelectingCellByRowIdx(3, MoveDirection.down);
+        stateManager.moveSelectingCellByRowIdx(3, PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 0);
@@ -707,7 +707,7 @@ void main() {
         expect(stateManager.currentCell, isNotNull);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 5,
             rowIdx: 3,
           ),
@@ -716,7 +716,7 @@ void main() {
         expect(stateManager.currentSelectingPosition.columnIdx, 5);
         expect(stateManager.currentSelectingPosition.rowIdx, 3);
 
-        stateManager.moveSelectingCellByRowIdx(6, MoveDirection.down);
+        stateManager.moveSelectingCellByRowIdx(6, PlutoMoveDirection.down);
 
         expect(stateManager.currentSelectingPosition, isNotNull);
         expect(stateManager.currentSelectingPosition.columnIdx, 5);
