@@ -26,7 +26,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
         field: 'permission',
         type: PlutoColumnType.number(),
         formatter: (dynamic value) {
-          if (value == '1') {
+          if (value.toString() == '1') {
             return '(1) Allowed';
           } else {
             return '(0) Disallowed';
@@ -41,7 +41,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
         ),
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
-          if (value == '1') {
+          if (value.toString() == '1') {
             return '(1) Allowed';
           } else {
             return '(0) Disallowed';
