@@ -15,6 +15,7 @@ import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
 import 'feature/column_freezing_screen.dart';
+import 'feature/column_hiding_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
 import 'feature/column_sorting_screen.dart';
@@ -217,6 +218,13 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Filter rows by setting filters on columns.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnFilteringScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Column hiding',
+            description: 'Hide or un-hide the column.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnHidingScreen.routeName);
             },
           ),
           PlutoListTile(

@@ -60,8 +60,19 @@ class PlutoColumn {
   /// Valid only when [enableContextMenu] is activated.
   bool enableFilterMenuItem;
 
+  /// Displays Hide column menu in the column context menu.
+  /// Valid only when [enableContextMenu] is activated.
+  bool enableHideColumnMenuItem;
+
+  /// Displays Set columns menu in the column context menu.
+  /// Valid only when [enableContextMenu] is activated.
+  bool enableSetColumnsMenuItem;
+
   /// Entering the Enter key or tapping the cell enters the Editing mode.
   bool enableEditingMode;
+
+  /// Hide the column.
+  bool hide;
 
   PlutoColumn({
     @required this.title,
@@ -81,7 +92,10 @@ class PlutoColumn {
     this.enableSorting = true,
     this.enableContextMenu = true,
     this.enableFilterMenuItem = true,
+    this.enableHideColumnMenuItem = true,
+    this.enableSetColumnsMenuItem = true,
     this.enableEditingMode = true,
+    this.hide = false,
   }) : _key = UniqueKey();
 
   /// Column key

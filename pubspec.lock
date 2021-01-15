@@ -248,7 +248,7 @@ packages:
       name: pluto_filtered_list
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1"
+    version: "0.1.0"
   pluto_inside:
     dependency: "direct main"
     description:

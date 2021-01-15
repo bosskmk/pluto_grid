@@ -55,6 +55,12 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       case PlutoGridColumnMenuItem.autoFit:
         widget.stateManager.autoFitColumn(context, widget.column);
         break;
+      case PlutoGridColumnMenuItem.hideColumn:
+        widget.stateManager.hideColumn(widget.column.key, true);
+        break;
+      case PlutoGridColumnMenuItem.setColumns:
+        widget.stateManager.showSetColumnsPopup(context);
+        break;
       case PlutoGridColumnMenuItem.setFilter:
         widget.stateManager.showFilterPopup(
           context,
@@ -91,6 +97,19 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       ),
     );
 
+    final _contextMenuIcon = Container(
+      height: widget.stateManager.columnHeight,
+      alignment: Alignment.center,
+      child: IconButton(
+        icon: PlutoGridColumnIcon(
+          sort: widget.column.sort,
+          color: widget.stateManager.configuration.iconColor,
+        ),
+        iconSize: widget.stateManager.configuration.iconSize,
+        onPressed: null,
+      ),
+    );
+
     return Stack(
       children: [
         Positioned(
@@ -102,26 +121,18 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                 )
               : _columnWidget,
         ),
-        if (widget.column.enableContextMenu)
+        if (widget.column.enableContextMenu || !widget.column.sort.isNone)
           Positioned(
             right: -3,
-            child: GestureDetector(
-              onTapUp: _handleOnTapUpContextMenu,
-              onHorizontalDragUpdate: _handleOnHorizontalDragUpdateContextMenu,
-              onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
-              child: Container(
-                height: widget.stateManager.columnHeight,
-                alignment: Alignment.center,
-                child: IconButton(
-                  icon: PlutoGridColumnIcon(
-                    sort: widget.column.sort,
-                    color: widget.stateManager.configuration.iconColor,
-                  ),
-                  iconSize: widget.stateManager.configuration.iconSize,
-                  onPressed: null,
-                ),
-              ),
-            ),
+            child: widget.column.enableContextMenu
+                ? GestureDetector(
+                    onTapUp: _handleOnTapUpContextMenu,
+                    onHorizontalDragUpdate:
+                        _handleOnHorizontalDragUpdateContextMenu,
+                    onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
+                    child: _contextMenuIcon,
+                  )
+                : _contextMenuIcon,
           ),
       ],
     );
