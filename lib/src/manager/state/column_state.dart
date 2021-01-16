@@ -493,6 +493,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void showSetColumnsPopup(BuildContext context) {
+    const columnField = 'field';
+
     var columns = [
       PlutoColumn(
         title: configuration.localeText.setColumnsTitle,
@@ -505,7 +507,7 @@ mixin ColumnState implements IPlutoGridState {
       ),
       PlutoColumn(
         title: 'column field',
-        field: 'field',
+        field: columnField,
         type: PlutoColumnType.text(),
         hide: true,
       ),
@@ -515,7 +517,7 @@ mixin ColumnState implements IPlutoGridState {
       return PlutoRow(
         cells: {
           'title': PlutoCell(value: c.title),
-          'field': PlutoCell(value: c.field),
+          columnField: PlutoCell(value: c.field),
         },
         checked: !c.hide,
       );
@@ -528,7 +530,7 @@ mixin ColumnState implements IPlutoGridState {
     var handleLister = () {
       stateManager.refRows.forEach((row) {
         var found = refColumns.originalList.firstWhere(
-          (column) => column.field == row.cells['field'].value.toString(),
+          (column) => column.field == row.cells[columnField].value.toString(),
           orElse: () => null,
         );
 
@@ -536,8 +538,6 @@ mixin ColumnState implements IPlutoGridState {
           hideColumn(found.key, row.checked != true, notify: false);
         }
       });
-
-      resetCurrentState(notify: false);
 
       notifyListeners();
     };
