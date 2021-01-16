@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_on_change_listener.dart';
 
 void main() {
   testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',
@@ -789,4 +791,121 @@ void main() {
       expect(stateManager.showFrozenColumn, true);
     },
   );
+
+  group('hideColumn', () {
+    testWidgets('flag 를 true 로 호출 한 경우 컬럼의 hide 가 true 로 변경 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      var columns = [
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+      ];
+
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
+        columns: columns,
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      expect(stateManager.columns.first.hide, isFalse);
+
+      stateManager.hideColumn(columns.first.key, true);
+
+      // then
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
+    });
+
+    testWidgets(
+        'hide 가 true 인 컬럼을 flag 를 false 로 호출하여 hide 가 false 로 변경 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      var columns = [
+        PlutoColumn(
+          title: '',
+          field: '',
+          type: PlutoColumnType.text(),
+          hide: true,
+        ),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+      ];
+
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
+        columns: columns,
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      // when
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
+
+      stateManager.hideColumn(columns.first.key, false);
+
+      // then
+      expect(stateManager.columns.first.hide, isFalse);
+    });
+
+    testWidgets('flag 를 true 로 호출 한 경우 notifyListeners 가 호출 되어야 한다.',
+        (WidgetTester tester) async {
+      // given
+      var columns = [
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+      ];
+
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
+        columns: columns,
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      var listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      // when
+      expect(stateManager.columns.first.hide, isFalse);
+
+      stateManager.hideColumn(columns.first.key, true);
+
+      // then
+      verify(listeners.onChangeVoidNoParamListener()).called(1);
+    });
+
+    testWidgets(
+        'hide 가 false 이 경우 flag 를 false 로 호출 하면 notifyListeners 가 호출 되지 않아야 한다.',
+        (WidgetTester tester) async {
+      // given
+      var columns = [
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+      ];
+
+      PlutoGridStateManager stateManager = PlutoGridStateManager(
+        columns: columns,
+        rows: null,
+        gridFocusNode: null,
+        scroll: null,
+      );
+
+      var listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      // when
+      expect(stateManager.columns.first.hide, isFalse);
+
+      stateManager.hideColumn(columns.first.key, false);
+
+      // then
+      verifyNever(listeners.onChangeVoidNoParamListener());
+    });
+  });
 }
