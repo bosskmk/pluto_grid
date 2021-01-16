@@ -72,6 +72,20 @@ Future<PlutoGridColumnMenuItem> showColumnMenu({
         value: PlutoGridColumnMenuItem.autoFit,
         child: buildTextItem(localeText.autoFitColumn),
       ),
+      if (column.enableHideColumnMenuItem == true)
+        buildMenuItem(
+          value: PlutoGridColumnMenuItem.hideColumn,
+          child: buildTextItem(
+            localeText.hideColumn,
+            enabled: stateManager.refColumns.length > 1,
+          ),
+          enabled: stateManager.refColumns.length > 1,
+        ),
+      if (column.enableSetColumnsMenuItem == true)
+        buildMenuItem(
+          value: PlutoGridColumnMenuItem.setColumns,
+          child: buildTextItem(localeText.setColumns),
+        ),
       if (column.enableFilterMenuItem == true) ...[
         const PopupMenuDivider(),
         buildMenuItem(
@@ -96,6 +110,8 @@ enum PlutoGridColumnMenuItem {
   unfreeze,
   freezeToLeft,
   freezeToRight,
+  hideColumn,
+  setColumns,
   autoFit,
   setFilter,
   resetFilter,

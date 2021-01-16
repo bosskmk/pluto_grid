@@ -59,8 +59,7 @@ class PlutoGridStateManager extends PlutoGridState {
     CreateFooterCallBack createFooter,
     PlutoGridConfiguration configuration,
   }) {
-    initializeRows(columns, rows);
-    refColumns = columns;
+    refColumns = FilteredList(initialList: columns);
     refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);

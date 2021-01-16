@@ -78,7 +78,14 @@ abstract class IRowState {
 mixin RowState implements IPlutoGridState {
   List<PlutoRow> get rows => [...refRows];
 
-  FilteredList<PlutoRow> refRows;
+  FilteredList<PlutoRow> get refRows => _refRows;
+
+  set refRows(FilteredList<PlutoRow> setRows) {
+    PlutoGridStateManager.initializeRows(refColumns.originalList, setRows);
+    _refRows = setRows;
+  }
+
+  FilteredList<PlutoRow> _refRows;
 
   List<PlutoRow> get checkedRows => refRows.where((row) => row.checked).toList(
         growable: false,

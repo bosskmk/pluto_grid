@@ -216,8 +216,7 @@ mixin CellState implements IPlutoGridState {
       case PlutoMoveDirection.left:
         return cellPosition.columnIdx > 0;
       case PlutoMoveDirection.right:
-        return cellPosition.columnIdx <
-            refRows[cellPosition.rowIdx].cells.length - 1;
+        return cellPosition.columnIdx < refColumns.length - 1;
       case PlutoMoveDirection.up:
         return cellPosition.rowIdx > 0;
       case PlutoMoveDirection.down:

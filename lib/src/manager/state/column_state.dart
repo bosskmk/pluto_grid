@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../pluto_grid_state_manager.dart';
 
 abstract class IColumnState {
   /// Columns provided at grid start.
   List<PlutoColumn> get columns;
 
-  List<PlutoColumn> refColumns;
+  FilteredList<PlutoColumn> refColumns;
 
   /// Column index list.
   List<int> get columnIndexes;
@@ -86,17 +89,32 @@ abstract class IColumnState {
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
 
+  void hideColumn(
+    Key columnKey,
+    bool flag, {
+    bool notify = true,
+  });
+
   void sortAscending(PlutoColumn column);
 
   void sortDescending(PlutoColumn column);
 
   void sortBySortIdx();
+
+  void showSetColumnsPopup(BuildContext context);
 }
 
 mixin ColumnState implements IPlutoGridState {
   List<PlutoColumn> get columns => [...refColumns];
 
-  List<PlutoColumn> refColumns;
+  FilteredList<PlutoColumn> get refColumns => _refColumns;
+
+  set refColumns(FilteredList<PlutoColumn> setColumns) {
+    _refColumns = setColumns;
+    _refColumns.setFilter((element) => element.hide == false);
+  }
+
+  FilteredList<PlutoColumn> _refColumns;
 
   List<int> get columnIndexes => refColumns.asMap().keys.toList();
 
@@ -351,13 +369,12 @@ mixin ColumnState implements IPlutoGridState {
 
     // 컬럼의 순서 변경
     refColumns[columnIndex].frozen = refColumns[indexToMove].frozen;
-    if (indexToMove < columnIndex) {
-      refColumns.insert(indexToMove, refColumns[columnIndex]);
-      refColumns.removeRange(columnIndex + 1, columnIndex + 2);
-    } else {
-      refColumns.insert(indexToMove + 1, refColumns[columnIndex]);
-      refColumns.removeRange(columnIndex, columnIndex + 1);
-    }
+
+    var columnToMove = refColumns[columnIndex];
+
+    refColumns.removeAt(columnIndex);
+
+    refColumns.insert(indexToMove, columnToMove);
 
     updateCurrentCellPosition(notify: false);
 
@@ -418,6 +435,31 @@ mixin ColumnState implements IPlutoGridState {
     );
   }
 
+  void hideColumn(
+    Key columnKey,
+    bool flag, {
+    bool notify = true,
+  }) {
+    var found = refColumns.originalList.firstWhere(
+      (element) => element.key == columnKey,
+      orElse: () => null,
+    );
+
+    if (found == null || found.hide == flag) {
+      return;
+    }
+
+    found.hide = flag;
+
+    refColumns.update();
+
+    resetCurrentState(notify: false);
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
   void sortAscending(PlutoColumn column) {
     refRows.sort(
       (a, b) => column.type.compare(
@@ -448,5 +490,70 @@ mixin ColumnState implements IPlutoGridState {
 
       return a.sortIdx.compareTo(b.sortIdx);
     });
+  }
+
+  void showSetColumnsPopup(BuildContext context) {
+    var columns = [
+      PlutoColumn(
+        title: configuration.localeText.setColumnsTitle,
+        field: 'title',
+        type: PlutoColumnType.text(),
+        enableRowChecked: true,
+        enableEditingMode: false,
+        enableContextMenu: false,
+        enableColumnDrag: false,
+      ),
+      PlutoColumn(
+        title: 'column field',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        hide: true,
+      ),
+    ];
+
+    var toRow = (PlutoColumn c) {
+      return PlutoRow(
+        cells: {
+          'title': PlutoCell(value: c.title),
+          'field': PlutoCell(value: c.field),
+        },
+        checked: !c.hide,
+      );
+    };
+
+    var rows = refColumns.originalList.map(toRow).toList();
+
+    PlutoGridStateManager stateManager;
+
+    var handleLister = () {
+      stateManager.refRows.forEach((row) {
+        var found = refColumns.originalList.firstWhere(
+          (column) => column.field == row.cells['field'].value.toString(),
+          orElse: () => null,
+        );
+
+        if (found != null) {
+          hideColumn(found.key, row.checked != true, notify: false);
+        }
+      });
+
+      resetCurrentState(notify: false);
+
+      notifyListeners();
+    };
+
+    PlutoGridPopup(
+      context: context,
+      configuration: configuration,
+      columns: columns,
+      rows: rows,
+      width: 200,
+      height: 500,
+      onLoaded: (e) {
+        stateManager = e.stateManager;
+        stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+        stateManager.addListener(handleLister);
+      },
+    );
   }
 }

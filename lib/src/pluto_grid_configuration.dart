@@ -214,8 +214,13 @@ class PlutoGridLocaleText {
   final String freezeColumnToLeft;
   final String freezeColumnToRight;
   final String autoFitColumn;
+  final String hideColumn;
+  final String setColumns;
   final String setFilter;
   final String resetFilter;
+
+  // SetColumns popup
+  final String setColumnsTitle;
 
   // Filter popup
   final String filterColumn;
@@ -253,8 +258,12 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'Freeze to left',
     this.freezeColumnToRight = 'Freeze to right',
     this.autoFitColumn = 'Auto fit',
+    this.hideColumn = 'Hide column',
+    this.setColumns = 'Set columns',
     this.setFilter = 'Set filter',
     this.resetFilter = 'Reset filter',
+    // SetColumns popup
+    this.setColumnsTitle = 'Column title',
     // Filter popup
     this.filterColumn = 'Column',
     this.filterType = 'Type',
@@ -289,8 +298,12 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = '왼쪽 고정',
     this.freezeColumnToRight = '오른쪽 고정',
     this.autoFitColumn = '넓이 자동 조정',
+    this.hideColumn = '컬럼 숨기기',
+    this.setColumns = '컬럼 설정',
     this.setFilter = '필터 설정',
     this.resetFilter = '필터 초기화',
+    // SetColumns popup
+    this.setColumnsTitle = '컬럼명',
     // Filter popup
     this.filterColumn = '컬럼',
     this.filterType = '종류',
@@ -325,8 +338,12 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'Закрепить слева',
     this.freezeColumnToRight = 'Закрепить справа',
     this.autoFitColumn = 'Автоматический размер',
+    this.hideColumn = 'Hide column',
+    this.setColumns = 'Set columns',
     this.setFilter = 'SetFilter',
     this.resetFilter = 'ResetFilter',
+    // SetColumns popup
+    this.setColumnsTitle = 'Column title',
     // Filter popup
     this.filterColumn = 'Column',
     this.filterType = 'Type',
@@ -361,8 +378,12 @@ class PlutoGridLocaleText {
     this.freezeColumnToLeft = 'Ukotvit vlevo',
     this.freezeColumnToRight = 'Ukotvit vpravo',
     this.autoFitColumn = 'Autom. přizpůsobit',
+    this.hideColumn = 'Hide column',
+    this.setColumns = 'Set columns',
     this.setFilter = 'SetFilter',
     this.resetFilter = 'ResetFilter',
+    // SetColumns popup
+    this.setColumnsTitle = 'Column title',
     // Filter popup
     this.filterColumn = 'Column',
     this.filterType = 'Type',

@@ -43,7 +43,7 @@ abstract class IGridState {
 
   void setConfiguration(PlutoGridConfiguration configuration);
 
-  void resetCurrentState({notify = true});
+  void resetCurrentState({bool notify = true});
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
@@ -126,7 +126,7 @@ mixin GridState implements IPlutoGridState {
     _gridKey = key;
   }
 
-  void resetCurrentState({notify = true}) {
+  void resetCurrentState({bool notify = true}) {
     clearCurrentCell(notify: false);
 
     clearCurrentSelectingPosition(notify: false);
