@@ -105,7 +105,8 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     );
   }
 
-  bool _handleKeyboardFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult _handleKeyboardFocusOnKey(
+      FocusNode focusNode, RawKeyEvent event) {
     PlutoKeyManagerEvent keyManagerEvent = PlutoKeyManagerEvent(
       focusNode: focusNode,
       event: event,
@@ -115,12 +116,12 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
       if (keyManagerEvent.isF2 || keyManagerEvent.isCharacter) {
         if (isOpenedPopup != true) {
           openPopup();
-          return true;
+          return KeyEventResult.handled;
         }
       }
     }
 
-    return false;
+    return KeyEventResult.ignored;
   }
 
   void onLoaded(PlutoGridOnLoadedEvent event) {

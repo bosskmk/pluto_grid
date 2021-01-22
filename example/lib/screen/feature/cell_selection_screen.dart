@@ -92,7 +92,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                FlatButton(
+                ElevatedButton(
                   child: const Text('Show selected cells.'),
                   onPressed: handleSelected,
                 ),

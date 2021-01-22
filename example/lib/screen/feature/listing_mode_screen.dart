@@ -98,14 +98,15 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                         const SizedBox(height: 15),
                         Center(
                           child: Wrap(
+                            spacing: 10,
                             children: [
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   Navigator.pop(ctx, null);
                                 },
                                 child: const Text('Cancel.'),
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () {
                                   print(textController.text);
                                   Navigator.pop(ctx, textController.text);
@@ -116,7 +117,12 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                color: Colors.blue,
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                    Colors.blue,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -182,14 +188,15 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                         const SizedBox(height: 20),
                         Center(
                           child: Wrap(
+                            spacing: 10,
                             children: [
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   Navigator.pop(ctx, null);
                                 },
                                 child: const Text('Cancel.'),
                               ),
-                              FlatButton(
+                              ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(ctx, textController.text);
                                 },
@@ -199,7 +206,12 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                color: Colors.blue,
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                    Colors.blue,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
