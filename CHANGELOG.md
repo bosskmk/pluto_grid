@@ -1,3 +1,8 @@
+## [1.1.1] - 2021. 1. 22
+
+* Changed the return value of FocusNode's onKey callback function from bool to KeyEventResult.
+* Add china locale.
+
 ## [1.1.0] - 2021. 1. 16
 
 * Add hide columns.

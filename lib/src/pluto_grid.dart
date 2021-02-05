@@ -214,13 +214,13 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
   }
 
-  bool handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
     keyManager.subject.add(PlutoKeyManagerEvent(
       focusNode: focusNode,
       event: event,
     ));
 
-    return true;
+    return KeyEventResult.handled;
   }
 
   void setLayout(BoxConstraints size) {

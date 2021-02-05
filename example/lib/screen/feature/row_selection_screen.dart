@@ -90,7 +90,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                FlatButton(
+                TextButton(
                   child: const Text('Show selected rows.'),
                   onPressed: handleSelected,
                 ),

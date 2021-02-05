@@ -12,7 +12,7 @@ class PlutoExampleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       onPressed: () {
         launchUrl(url);
       },

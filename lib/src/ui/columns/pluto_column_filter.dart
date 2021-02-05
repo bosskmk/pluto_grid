@@ -91,7 +91,7 @@ abstract class _PlutoColumnFilterStateWithChange
     });
   }
 
-  bool handleOnKey(FocusNode node, RawKeyEvent event) {
+  KeyEventResult handleOnKey(FocusNode node, RawKeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
@@ -121,7 +121,7 @@ abstract class _PlutoColumnFilterStateWithChange
       }
     }
 
-    return true;
+    return KeyEventResult.handled;
   }
 
   void handleFocusFromRows(PlutoGridEvent plutoEvent) {

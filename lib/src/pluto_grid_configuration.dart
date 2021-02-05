@@ -292,6 +292,46 @@ class PlutoGridLocaleText {
     this.loadingText = 'Loading...',
   });
 
+  const PlutoGridLocaleText.china({
+    // Column menu
+    this.unfreezeColumn = '解冻',
+    this.freezeColumnToLeft = '冻结至左侧',
+    this.freezeColumnToRight = '冻结至右侧',
+    this.autoFitColumn = '自动列宽',
+    this.hideColumn = '隐藏列',
+    this.setColumns = '设置列',
+    this.setFilter = '设置过滤器',
+    this.resetFilter = '重置过滤器',
+    // SetColumns popup
+    this.setColumnsTitle = '列标题',
+    // Filter popup
+    this.filterColumn = '列',
+    this.filterType = '类型',
+    this.filterValue = '值',
+    this.filterAllColumns = '全部列',
+    this.filterContains = '包含',
+    this.filterEquals = '等于',
+    this.filterStartsWith = '开始于',
+    this.filterEndsWith = '结束于',
+    this.filterGreaterThan = '大于',
+    this.filterGreaterThanOrEqualTo = '大于等于',
+    this.filterLessThan = '小于',
+    this.filterLessThanOrEqualTo = '小于等于',
+    // Date popup
+    this.sunday = '日',
+    this.monday = '一',
+    this.tuesday = '四',
+    this.wednesday = '三',
+    this.thursday = '二',
+    this.friday = '五',
+    this.saturday = '六',
+    // Time column popup
+    this.hour = '时',
+    this.minute = '分',
+    // Common
+    this.loadingText = '加载中...',
+  });
+
   const PlutoGridLocaleText.korean({
     // Column menu
     this.unfreezeColumn = '고정 해제',
