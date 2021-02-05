@@ -20,7 +20,7 @@ void main() {
           child: Builder(
             builder: (BuildContext context) {
               return Container(
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () {
                     PlutoDualGridPopup(
                       context: context,
@@ -44,7 +44,7 @@ void main() {
     );
 
     // when
-    await tester.tap(find.byType(FlatButton));
+    await tester.tap(find.byType(TextButton));
 
     await tester.pumpAndSettle();
 

@@ -84,25 +84,26 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
+              child: Wrap(
+                spacing: 10,
                 children: [
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Add a Row'),
                     onPressed: handleAddRowButton,
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Add 100 Rows'),
                     onPressed: () => handleAddRowButton(count: 100),
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Remove Current Row'),
                     onPressed: handleRemoveCurrentRowButton,
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Remove Selected Rows'),
                     onPressed: handleRemoveSelectedRowsButton,
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Toggle filtering'),
                     onPressed: handleFiltering,
                   ),

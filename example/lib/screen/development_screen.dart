@@ -121,8 +121,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableFilterMenuItem: false,
         enableEditingMode: false,
         renderer: (rendererContext) {
-          return Image.network(
-              'https://flutter.dev/assets/flutter-lockup-1caf6476beed76adec3c477586da54de6b552b2f42108ec5bc68dc63bae2df75.png');
+          return Image.asset('assets/images/cat.jpg');
         },
       ),
     ];
@@ -182,33 +181,35 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: stateManager.headerHeight,
-                child: Row(
+                child: Wrap(
+                  spacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Go Home'),
                       onPressed: () {
                         Navigator.pushNamed(context, HomeScreen.routeName);
                       },
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Add 10'),
                       onPressed: () {
                         handleAddRowButton(count: 10);
                       },
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Add 100 Rows'),
                       onPressed: () => handleAddRowButton(count: 100),
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Add 100,000 Rows'),
                       onPressed: () => handleAddRowButton(count: 100000),
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Remove Current Row'),
                       onPressed: handleRemoveCurrentRowButton,
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Remove Selected Rows'),
                       onPressed: handleRemoveSelectedRowsButton,
                     ),
@@ -234,7 +235,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                         },
                       ),
                     ),
-                    FlatButton(
+                    ElevatedButton(
                       child: const Text('Toggle filter'),
                       onPressed: handleToggleColumnFilter,
                     ),

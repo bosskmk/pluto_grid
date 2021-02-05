@@ -98,13 +98,14 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
+              child: Wrap(
+                spacing: 10,
                 children: [
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Toggle hide Column A'),
                     onPressed: handleToggleColumnA,
                   ),
-                  FlatButton(
+                  ElevatedButton(
                     child: const Text('Show Popup'),
                     onPressed: () {
                       handleShowPopup(context);
