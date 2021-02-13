@@ -110,7 +110,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void initProperties() {
-    gridFocusNode = FocusNode(onKey: handleGridFocusOnKey);
+    gridFocusNode = FocusNode();
 
     // Dispose
     disposeList.add(() {
@@ -220,7 +220,9 @@ class _PlutoGridState extends State<PlutoGrid> {
       event: event,
     ));
 
-    return KeyEventResult.handled;
+    return stateManager.isEditing
+        ? KeyEventResult.skipRemainingHandlers
+        : KeyEventResult.handled;
   }
 
   void setLayout(BoxConstraints size) {
@@ -253,6 +255,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       onFocusChange: (hasFocus) {
         stateManager.setKeepFocus(hasFocus);
       },
+      onKey: handleGridFocusOnKey,
       child: SafeArea(
         child: LayoutBuilder(
             key: stateManager.gridKey,
@@ -263,7 +266,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                 FocusScope.of(ctx).requestFocus(gridFocusNode);
               }
 
-              return RawKeyboardListener(
+              return Focus(
                 focusNode: stateManager.gridFocusNode,
                 child: Container(
                   padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),

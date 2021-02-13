@@ -1,3 +1,9 @@
+## [1.2.0] - 
+
+* Rename moveRows to moveRowsByOffset.
+* Add moveRowsByIndex.
+* Fix focus.
+
 ## [1.1.1] - 2021. 1. 22
 
 * Changed the return value of FocusNode's onKey callback function from bool to KeyEventResult.

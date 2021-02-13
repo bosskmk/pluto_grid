@@ -252,17 +252,6 @@ class PlutoGridKeyManager {
     if (stateManager.isEditing) {
       stateManager.setEditing(false);
     }
-
-    if (plutoKeyManagerEvent.focusNode.children.last.context.widget
-        is EditableText) {
-      (plutoKeyManagerEvent.focusNode.children.last.context.widget
-              as EditableText)
-          .controller
-          .text = stateManager.cellValueBeforeEditing.toString();
-
-      stateManager.changeCellValue(
-          stateManager.currentCell.key, stateManager.cellValueBeforeEditing);
-    }
   }
 
   void _handleCtrlC(PlutoKeyManagerEvent plutoKeyManagerEvent) {

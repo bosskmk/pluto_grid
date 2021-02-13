@@ -111,6 +111,8 @@ abstract class _PlutoColumnFilterStateWithChange
           }
 
           widget.stateManager.setKeepFocus(true);
+
+          return KeyEventResult.handled;
         }
       } else if (keyManager.isTab ||
           (controller.text.isEmpty && keyManager.isHorizontal)) {
@@ -118,10 +120,12 @@ abstract class _PlutoColumnFilterStateWithChange
           widget.column,
           reversed: keyManager.isLeft || keyManager.isShiftPressed,
         );
+
+        return KeyEventResult.handled;
       }
     }
 
-    return KeyEventResult.handled;
+    return KeyEventResult.skipRemainingHandlers;
   }
 
   void handleFocusFromRows(PlutoGridEvent plutoEvent) {
