@@ -63,9 +63,15 @@ abstract class IRowState {
 
   void removeRows(List<PlutoRow> rows);
 
-  void moveRows(
+  void moveRowsByOffset(
     List<PlutoRow> rows,
     double offset, {
+    bool notify = true,
+  });
+
+  void moveRowsByIndex(
+    List<PlutoRow> rows,
+    int index, {
     bool notify = true,
   });
 
@@ -408,13 +414,21 @@ mixin RowState implements IPlutoGridState {
     }
   }
 
-  void moveRows(
+  void moveRowsByOffset(
     List<PlutoRow> rows,
     double offset, {
     bool notify = true,
   }) {
     int indexToMove = getRowIdxByOffset(offset);
 
+    moveRowsByIndex(rows, indexToMove, notify: notify);
+  }
+
+  void moveRowsByIndex(
+    List<PlutoRow> rows,
+    int indexToMove, {
+    bool notify = true,
+  }) {
     if (indexToMove == null) {
       return;
     } else if (indexToMove + rows.length > refRows.length) {

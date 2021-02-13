@@ -22,7 +22,7 @@ void main() {
         verifyNever(stateManager.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager.setDragRows(any));
         verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRows(any, any, notify: false));
+        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -38,7 +38,7 @@ void main() {
         verifyNever(stateManager.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager.setDragRows(any));
         verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRows(any, any, notify: false));
+        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -55,7 +55,7 @@ void main() {
         verifyNever(stateManager.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager.setDragRows(any));
         verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRows(any, any, notify: false));
+        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -74,7 +74,7 @@ void main() {
         verify(stateManager.setDragRows(any));
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRows(any, any, notify: false));
+        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -93,7 +93,7 @@ void main() {
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager.setIsDraggingRow(true, notify: false));
         verifyNever(stateManager.setDragRows(any));
-        verifyNever(stateManager.moveRows(any, any, notify: false));
+        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -108,7 +108,7 @@ void main() {
         );
         event.handler(stateManager);
 
-        verify(stateManager.moveRows(any, any, notify: false));
+        verify(stateManager.moveRowsByOffset(any, any, notify: false));
         verify(stateManager.setIsDraggingRow(false));
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager.setDragTargetRowIdx(any));

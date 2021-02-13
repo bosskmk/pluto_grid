@@ -1419,7 +1419,7 @@ void main() {
     });
   });
 
-  group('moveRows', () {
+  group('moveRowsByOffset', () {
     testWidgets(
       '0번 row 를 1번 row 로 이동 시키기',
       (WidgetTester tester) async {
@@ -1458,7 +1458,7 @@ void main() {
         // header size + row 0 + row 1(중간)
         final offset = stateManager.rowTotalHeight * 2.5;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows.first],
           offset,
         );
@@ -1508,7 +1508,7 @@ void main() {
         // header size + row 0 + row 1(중간)
         final offset = stateManager.rowTotalHeight * 2.5;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows[2]],
           offset,
         );
@@ -1558,7 +1558,7 @@ void main() {
         // header size + row0 ~ row4
         final offset = stateManager.rowTotalHeight * 5.5;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows.first],
           offset,
         );
@@ -1605,7 +1605,7 @@ void main() {
         // when
         final offset = -10.0;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows.first],
           offset,
         );
@@ -1652,7 +1652,7 @@ void main() {
         // header + row0 ~ row4 + 1
         final offset = stateManager.rowTotalHeight * 7;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows.first],
           offset,
         );
@@ -1703,7 +1703,7 @@ void main() {
         // header size + column size + row 0(중간)
         final offset = stateManager.rowTotalHeight * 2.5;
 
-        stateManager.moveRows(
+        stateManager.moveRowsByOffset(
           [rows[1]],
           offset,
         );
@@ -1711,6 +1711,84 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[0].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+  });
+
+  group('moveRowsByIndex', () {
+    testWidgets(
+      '0번 row 를 1번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows.first.key;
+
+        stateManager.moveRowsByIndex(
+          [rows.first],
+          1,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[1].key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
+
+    testWidgets(
+      '2번 row 를 1번 row 로 이동 시키기',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(5, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows[2].key;
+
+        stateManager.moveRowsByIndex(
+          [rows[2]],
+          1,
+        );
+
+        // then
+        expect(stateManager.rows.length, 5);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
