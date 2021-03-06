@@ -105,7 +105,8 @@ mixin LayoutState implements IPlutoGridState {
       return _gridGlobalOffset;
     }
 
-    final RenderBox gridRenderBox = gridKey.currentContext?.findRenderObject();
+    final RenderBox gridRenderBox =
+        gridKey.currentContext?.findRenderObject() as RenderBox;
 
     if (gridRenderBox == null) {
       return _gridGlobalOffset;

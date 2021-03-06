@@ -90,7 +90,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
       onSelected: onSelected,
       columns: popupColumns,
       rows: popupRows,
-      width: popupColumns.fold(0, (previous, column) {
+      width: popupColumns.fold<double>(0, (previous, column) {
             return previous + column.width;
           }) +
           1,

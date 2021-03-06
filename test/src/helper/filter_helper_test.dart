@@ -316,7 +316,10 @@ void main() {
   });
 
   group('compareByFilterType', () {
-    Function makeCompareFunction;
+    bool Function(dynamic a, dynamic b) Function(
+      PlutoFilterType filterType, {
+      PlutoColumn column,
+    }) makeCompareFunction;
 
     setUp(() {
       makeCompareFunction = (
@@ -333,7 +336,7 @@ void main() {
           return FilterHelper.compareByFilterType(
             filterType: filterType,
             base: a.toString(),
-            search: b,
+            search: b.toString(),
             column: column,
           );
         };

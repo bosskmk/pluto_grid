@@ -280,7 +280,7 @@ void main() {
     final PlutoColumn column = PlutoColumn(
       title: 'header',
       field: 'header',
-      type: PlutoColumnType.select(['one', 'two', 'three']),
+      type: PlutoColumnType.select(<String>['one', 'two', 'three']),
     );
 
     final rowIdx = 0;
@@ -649,7 +649,7 @@ void main() {
 
         final container = target.evaluate().first.widget as Container;
 
-        final BoxDecoration decoration = container.decoration;
+        final BoxDecoration decoration = container.decoration as BoxDecoration;
 
         final Color color = decoration.color;
 
@@ -676,9 +676,9 @@ void main() {
 
         final container = target.evaluate().first.widget as Container;
 
-        final BoxDecoration decoration = container.decoration;
+        final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border;
+        final Border border = decoration.border as Border;
 
         expect(border.right.color, stateManager.configuration.borderColor);
       },
@@ -703,9 +703,9 @@ void main() {
 
         final container = target.evaluate().first.widget as Container;
 
-        final BoxDecoration decoration = container.decoration;
+        final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border;
+        final Border border = decoration.border as Border;
 
         expect(border, isNull);
       },

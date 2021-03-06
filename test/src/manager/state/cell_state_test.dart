@@ -541,7 +541,7 @@ void main() {
       PlutoColumn column = PlutoColumn(
         title: 'column',
         field: 'column',
-        type: PlutoColumnType.select(['one', 'two', 'three']),
+        type: PlutoColumnType.select(<String>['one', 'two', 'three']),
       );
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
@@ -552,11 +552,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, oldValue);
@@ -575,7 +577,7 @@ void main() {
       PlutoColumn column = PlutoColumn(
         title: 'column',
         field: 'column',
-        type: PlutoColumnType.select(['one', 'two', 'three', 'four']),
+        type: PlutoColumnType.select(<String>['one', 'two', 'three', 'four']),
       );
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
@@ -586,11 +588,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, newValue);
@@ -620,11 +624,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, oldValue);
@@ -654,11 +660,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, newValue);
@@ -688,11 +696,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, oldValue);
@@ -722,11 +732,13 @@ void main() {
       );
 
       // when
-      final String filteredValue = stateManager.filteredCellValue(
-        column: column,
-        newValue: newValue,
-        oldValue: oldValue,
-      );
+      final String filteredValue = stateManager
+          .filteredCellValue(
+            column: column,
+            newValue: newValue,
+            oldValue: oldValue,
+          )
+          .toString();
 
       // then
       expect(filteredValue, newValue);

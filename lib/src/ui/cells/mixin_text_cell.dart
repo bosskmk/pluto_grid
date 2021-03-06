@@ -95,12 +95,12 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
     TextStyle style,
-    decoration = const InputDecoration(
+    InputDecoration decoration = const InputDecoration(
       border: InputBorder.none,
       contentPadding: EdgeInsets.all(0),
       isDense: true,
     ),
-    maxLines = 1,
+    int maxLines = 1,
   }) {
     return TextField(
       focusNode: cellFocus,

@@ -64,7 +64,8 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext.row.cells[rendererContext.column.field].value,
+                  rendererContext.row.cells[rendererContext.column.field].value
+                      .toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -76,7 +77,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       PlutoColumn(
         title: 'column2',
         field: 'column2',
-        type: PlutoColumnType.select(['red', 'blue', 'green']),
+        type: PlutoColumnType.select(<String>['red', 'blue', 'green']),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
@@ -89,7 +90,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           }
 
           return Text(
-            rendererContext.cell.value,
+            rendererContext.cell.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,

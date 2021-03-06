@@ -29,7 +29,7 @@ void main() {
 
         // when
         // then
-        expect(stateManager.checkedRows.toList(), []);
+        expect(stateManager.checkedRows.toList(), <PlutoRow>[]);
       },
     );
 
@@ -1192,7 +1192,8 @@ void main() {
           PlutoColumn(
             title: 'select',
             field: 'select',
-            type: PlutoColumnType.select(['One', 'Two'], defaultValue: 'Two'),
+            type: PlutoColumnType.select(<String>['One', 'Two'],
+                defaultValue: 'Two'),
           ),
           PlutoColumn(
             title: 'date',

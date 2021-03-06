@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
 import 'mixin_popup_cell.dart';
@@ -61,7 +61,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     popupColumns = _buildColumns();
 
     final defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-            widget.cell.value, widget.column.type.date.format) ??
+            widget.cell.value.toString(), widget.column.type.date.format) ??
         DateTime.now();
 
     final startDate = widget.column.type.date.startDate ??
@@ -155,8 +155,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
             return '';
           }
 
-          var dateTime =
-              intl.DateFormat(widget.column.type.date.format).parse(value);
+          var dateTime = intl.DateFormat(widget.column.type.date.format)
+              .parse(value.toString());
 
           return dateTime.day.toString();
         },
@@ -169,9 +169,9 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     while (days.isNotEmpty) {
       final Map<String, PlutoCell> cells = Map.fromIterable(
-        ['7', '1', '2', '3', '4', '5', '6'],
-        key: (e) => e,
-        value: (e) {
+        <String>['7', '1', '2', '3', '4', '5', '6'],
+        key: (dynamic e) => e.toString(),
+        value: (dynamic e) {
           if (days.isEmpty) {
             return PlutoCell(value: '');
           }
@@ -205,7 +205,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = -1;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-        popupStateManager.refRows.first.cells.entries.first.value.value,
+        popupStateManager.refRows.first.cells.entries.first.value.value
+            .toString(),
         widget.column.type.date.format,
       );
 
@@ -222,7 +223,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = 30;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-          popupStateManager.refRows.last.cells.entries.last.value.value,
+          popupStateManager.refRows.last.cells.entries.last.value.value
+              .toString(),
           widget.column.type.date.format);
 
       if (defaultDate == null) {
@@ -277,11 +279,11 @@ abstract class _DateCellHeaderStateWithChange
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   String get currentDate {
-    if (currentCell == null || currentCell.value.isEmpty) {
+    if (currentCell == null || currentCell.value.toString().isEmpty) {
       return '';
     }
 
-    return currentCell.value;
+    return currentCell.value.toString();
   }
 
   Color get textColor =>

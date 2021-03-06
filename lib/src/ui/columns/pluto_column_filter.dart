@@ -34,7 +34,8 @@ abstract class _PlutoColumnFilterStateWithChange
   String get filterValue {
     return filterRows.isEmpty
         ? ''
-        : filterRows.first.cells[FilterHelper.filterFieldValue].value;
+        : filterRows.first.cells[FilterHelper.filterFieldValue].value
+            .toString();
   }
 
   bool get hasCompositeFilter {

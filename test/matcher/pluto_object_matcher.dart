@@ -8,12 +8,12 @@ class PlutoObjectMatcher<T> extends Matcher {
   bool Function(T object) rule;
 
   @override
-  bool matches(item, Map matchState) {
+  bool matches(dynamic item, Map matchState) {
     if (item is! T) {
       return false;
     }
 
-    return rule(item);
+    return rule(item as T);
   }
 
   @override

@@ -46,7 +46,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       PlutoColumn(
         title: 'Select',
         field: 'select',
-        type: PlutoColumnType.select(['A', 'B', 'C', 'D', 'E', 'F']),
+        type: PlutoColumnType.select(<String>['A', 'B', 'C', 'D', 'E', 'F']),
       ),
     ];
 
@@ -104,16 +104,17 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
             ],
             resolveDefaultColumnFilter: (column, resolver) {
               if (column.field == 'text') {
-                return resolver<PlutoFilterTypeContains>();
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
               } else if (column.field == 'number') {
-                return resolver<PlutoFilterTypeGreaterThan>();
+                return resolver<PlutoFilterTypeGreaterThan>()
+                    as PlutoFilterType;
               } else if (column.field == 'date') {
-                return resolver<PlutoFilterTypeLessThan>();
+                return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
               } else if (column.field == 'select') {
-                return resolver<ClassYouImplemented>();
+                return resolver<ClassYouImplemented>() as PlutoFilterType;
               }
 
-              return resolver<PlutoFilterTypeContains>();
+              return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
             },
           ),
         ),

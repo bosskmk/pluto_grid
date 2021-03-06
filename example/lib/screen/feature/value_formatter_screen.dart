@@ -51,10 +51,10 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       PlutoColumn(
         title: 'Group',
         field: 'group',
-        type: PlutoColumnType.select(['A', 'B', 'C', 'N']),
+        type: PlutoColumnType.select(<String>['A', 'B', 'C', 'N']),
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
-          switch (value) {
+          switch (value.toString()) {
             case 'A':
               return '(A) Admin';
             case 'B':
@@ -69,10 +69,10 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       PlutoColumn(
         title: 'Group original value',
         field: 'group_original_value',
-        type: PlutoColumnType.select(['A', 'B', 'C', 'N']),
+        type: PlutoColumnType.select(<String>['A', 'B', 'C', 'N']),
         applyFormatterInEditing: false,
         formatter: (dynamic value) {
-          switch (value) {
+          switch (value.toString()) {
             case 'A':
               return '(A) Admin';
             case 'B':

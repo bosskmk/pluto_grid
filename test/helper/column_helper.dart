@@ -8,7 +8,7 @@ class ColumnHelper {
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
   }) {
-    return Iterable.generate(count)
+    return Iterable<int>.generate(count)
         .map((e) => PlutoColumn(
               title: '$title$e',
               field: '$title$e',
@@ -25,12 +25,12 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    dynamic startDate,
-    dynamic endDate,
+    DateTime startDate,
+    DateTime endDate,
     String format = 'yyyy-MM-dd',
     bool applyFormatOnInit = true,
   }) {
-    return Iterable.generate(count)
+    return Iterable<int>.generate(count)
         .map((e) => PlutoColumn(
               title: '$title$e',
               field: '$title$e',
@@ -55,7 +55,7 @@ class ColumnHelper {
     bool readOnly = false,
     dynamic defaultValue = '00:00',
   }) {
-    return Iterable.generate(count)
+    return Iterable<int>.generate(count)
         .map((e) => PlutoColumn(
               title: '$title$e',
               field: '$title$e',

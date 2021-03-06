@@ -9,21 +9,21 @@ class RowHelper {
     List<PlutoColumn> columns, {
     bool checked = false,
   }) {
-    return Iterable.generate(count)
+    return Iterable<int>.generate(count)
         .map((rowIdx) => PlutoRow(
               sortIdx: rowIdx,
               cells: Map.fromIterable(
                 columns,
-                key: (column) => column.field,
-                value: (column) {
+                key: (dynamic column) => column.field.toString(),
+                value: (dynamic column) {
                   if ((column as PlutoColumn).type.isText) {
-                    return cellOfTextColumn(column, rowIdx);
+                    return cellOfTextColumn(column as PlutoColumn, rowIdx);
                   } else if ((column as PlutoColumn).type.isDate) {
-                    return cellOfDateColumn(column, rowIdx);
+                    return cellOfDateColumn(column as PlutoColumn, rowIdx);
                   } else if ((column as PlutoColumn).type.isTime) {
-                    return cellOfTimeColumn(column, rowIdx);
+                    return cellOfTimeColumn(column as PlutoColumn, rowIdx);
                   } else if ((column as PlutoColumn).type.isSelect) {
-                    return cellOfTimeColumn(column, rowIdx);
+                    return cellOfTimeColumn(column as PlutoColumn, rowIdx);
                   }
 
                   throw Exception('Column is not implemented.');

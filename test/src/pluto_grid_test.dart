@@ -863,7 +863,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -885,7 +885,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         expect(currentDate.add(const Duration(days: -7)), selectedDate);
       });
@@ -944,7 +944,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -971,7 +971,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         expect(currentDate.add(const Duration(days: -(7 * 6))), selectedDate);
       });
@@ -1030,7 +1030,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -1054,7 +1054,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         expect(currentDate.add(const Duration(days: -(7 * 10))), selectedDate);
       });
@@ -1113,7 +1113,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -1137,7 +1137,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value);
+            DateTime.parse(stateManager.currentCell.value.toString());
 
         expect(currentDate.add(const Duration(days: 7 * 10)), selectedDate);
       });

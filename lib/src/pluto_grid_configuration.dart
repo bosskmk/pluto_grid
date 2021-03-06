@@ -132,7 +132,7 @@ class PlutoGridConfiguration {
     _init();
   }
 
-  _init() {
+  void _init() {
     PlutoFilterTypeContains.name = localeText.filterContains;
     PlutoFilterTypeEquals.name = localeText.filterEquals;
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;
