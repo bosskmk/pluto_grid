@@ -16,13 +16,15 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
 
 mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   final _textController = TextEditingController();
-  final FocusNode cellFocus = FocusNode();
 
   CellEditingStatus _cellEditingStatus;
+
+  FocusNode cellFocus;
 
   @override
   void dispose() {
     _textController.dispose();
+
     cellFocus.dispose();
 
     /**
@@ -42,6 +44,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   void initState() {
     super.initState();
 
+    cellFocus = FocusNode(onKey: _handleOnKey);
+
     _textController.text = widget.column.formattedValueForDisplayInEditing(
       widget.cell.value,
     );
@@ -59,21 +63,44 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
   void _handleOnComplete() {
     _cellEditingStatus = CellEditingStatus.updated;
+
     cellFocus.unfocus();
+
     widget.stateManager.gridFocusNode.requestFocus();
+
     _changeValue();
+  }
+
+  KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
+    var keyManager = PlutoKeyManagerEvent(
+      focusNode: node,
+      event: event,
+    );
+
+    if (keyManager.isEsc) {
+      _textController.text =
+          widget.stateManager.cellValueBeforeEditing.toString();
+
+      widget.stateManager.changeCellValue(
+        widget.stateManager.currentCell.key,
+        widget.stateManager.cellValueBeforeEditing,
+        notify: false,
+      );
+    }
+
+    return KeyEventResult.ignored;
   }
 
   TextField buildTextField({
     TextInputType keyboardType,
     List<TextInputFormatter> inputFormatters,
     TextStyle style,
-    decoration = const InputDecoration(
+    InputDecoration decoration = const InputDecoration(
       border: InputBorder.none,
       contentPadding: EdgeInsets.all(0),
       isDense: true,
     ),
-    maxLines = 1,
+    int maxLines = 1,
   }) {
     return TextField(
       focusNode: cellFocus,

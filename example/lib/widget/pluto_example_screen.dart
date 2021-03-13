@@ -87,7 +87,7 @@ class PlutoExampleScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
+          showDialog<void>(
             context: context,
             builder: reportingDialog,
           );

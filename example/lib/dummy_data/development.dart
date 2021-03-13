@@ -12,7 +12,7 @@ class DummyData {
       return PlutoColumn(
         title: faker.food.cuisine(),
         field: i.toString(),
-        type: (i) {
+        type: (int i) {
           if (i == 0)
             return PlutoColumnType.number();
           else if (i == 1)
@@ -22,9 +22,9 @@ class DummyData {
           else if (i == 3)
             return PlutoColumnType.text(readOnly: true);
           else if (i == 4)
-            return PlutoColumnType.select(['One', 'Two', 'Three']);
+            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
           else if (i == 5)
-            return PlutoColumnType.select(['One', 'Two', 'Three'],
+            return PlutoColumnType.select(<String>['One', 'Two', 'Three'],
                 readOnly: true);
           else if (i == 6)
             return PlutoColumnType.date();
@@ -33,7 +33,7 @@ class DummyData {
           else
             return PlutoColumnType.text();
         }(i),
-        frozen: (i) {
+        frozen: (int i) {
           if (i < 1) return PlutoColumnFrozen.left;
           if (i > columnLength - 2) return PlutoColumnFrozen.right;
           return null;

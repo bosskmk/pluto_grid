@@ -25,7 +25,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoColumn(
         title: 'Select A',
         field: 'select_a',
-        type: PlutoColumnType.select([
+        type: PlutoColumnType.select(<String>[
           'One',
           'Two',
           'Three',
@@ -34,7 +34,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoColumn(
         title: 'Select B',
         field: 'select_b',
-        type: PlutoColumnType.select([
+        type: PlutoColumnType.select(<String>[
           'Mercury',
           'Venus',
           'Earth',
@@ -49,7 +49,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoColumn(
         title: 'Select C',
         field: 'select_c',
-        type: PlutoColumnType.select([
+        type: PlutoColumnType.select(<String>[
           '9.01',
           '30.02',
           '100.001',
@@ -58,7 +58,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoColumn(
         title: 'Select D',
         field: 'select_d',
-        type: PlutoColumnType.select([
+        type: PlutoColumnType.select(<String>[
           '一',
           '二',
           '三',

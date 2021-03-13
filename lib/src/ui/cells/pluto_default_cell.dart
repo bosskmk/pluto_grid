@@ -63,7 +63,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
     addDragEventOfRow(type: PlutoGridDragType.start);
   }
 
-  void _handleOnDragUpdated(offset) {
+  void _handleOnDragUpdated(Offset offset) {
     addDragEventOfRow(
       type: PlutoGridDragType.update,
       offset: offset,
@@ -74,7 +74,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
     ));
   }
 
-  void _handleOnDragEnd(dragDetails) {
+  void _handleOnDragEnd(DraggableDetails dragDetails) {
     addDragEventOfRow(
       type: PlutoGridDragType.end,
       offset: dragDetails.offset,
@@ -160,7 +160,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
     }
 
     final RenderBox renderBoxRed =
-        _feedbackKey.currentContext.findRenderObject();
+        _feedbackKey.currentContext.findRenderObject() as RenderBox;
 
     return renderBoxRed.localToGlobal(Offset.zero);
   }

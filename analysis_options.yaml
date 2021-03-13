@@ -1,8 +1,8 @@
 # todo : Solve one by one.
 analyzer:
   strong-mode:
-    implicit-casts: true
-    implicit-dynamic: true
+    implicit-casts: false
+    implicit-dynamic: false
 linter:
   rules:
 #    - public_member_api_docs

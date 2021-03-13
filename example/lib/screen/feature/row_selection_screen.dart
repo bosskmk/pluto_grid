@@ -34,7 +34,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
     String value = '';
 
     stateManager.currentSelectingRows.forEach((element) {
-      final cellValue = element.cells.entries.first.value.value;
+      final cellValue = element.cells.entries.first.value.value.toString();
 
       value += 'first cell value of row: $cellValue\n';
     });
@@ -43,7 +43,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
       value = 'No rows are selected.';
     }
 
-    await showDialog(
+    await showDialog<void>(
         context: context,
         builder: (BuildContext ctx) {
           return Dialog(

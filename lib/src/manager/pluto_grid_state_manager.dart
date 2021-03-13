@@ -296,7 +296,7 @@ class _ApplyCellForFormat implements _Apply {
 
       if (column.type.isNumber) {
         row.cells[column.field].value = num.tryParse(
-              row.cells[column.field].value.replaceAll(',', ''),
+              row.cells[column.field].value.toString().replaceAll(',', ''),
             ) ??
             0;
       }

@@ -73,7 +73,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
             width: 134,
           ),
         ],
-        rows: Iterable.generate(24)
+        rows: Iterable<int>.generate(24)
             .map((hour) => PlutoRow(cells: {
                   'hour': PlutoCell(
                     value: hour.toString().padLeft(2, '0'),
@@ -108,7 +108,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
             width: 134,
           ),
         ],
-        rows: Iterable.generate(60)
+        rows: Iterable<int>.generate(60)
             .map((minute) => PlutoRow(cells: {
                   'minute': PlutoCell(
                     value: minute.toString().padLeft(2, '0'),

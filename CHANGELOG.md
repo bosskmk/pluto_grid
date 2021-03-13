@@ -1,3 +1,14 @@
+## [1.2.0] - 2021. 3. 13
+
+* Add moveRowsByIndex.
+* Fix focusing bug.
+* Apply strong-mode.
+* Allow custom key in row.
+
+* Rename moveRows to moveRowsByOffset.
+* Add moveRowsByIndex.
+* Fix focus.
+
 ## [1.1.1] - 2021. 1. 22
 
 * Changed the return value of FocusNode's onKey callback function from bool to KeyEventResult.

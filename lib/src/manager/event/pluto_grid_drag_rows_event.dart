@@ -41,7 +41,7 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
   }
 
   void _endDrag(PlutoGridStateManager stateManager) {
-    stateManager.moveRows(
+    stateManager.moveRowsByOffset(
       rows,
       offset.dy,
       notify: false,

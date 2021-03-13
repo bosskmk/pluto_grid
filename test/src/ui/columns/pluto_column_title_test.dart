@@ -595,9 +595,9 @@ void main() {
 
         final container = target.evaluate().single.widget as Container;
 
-        final BoxDecoration decoration = container.decoration;
+        final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border;
+        final Border border = decoration.border as Border;
 
         expect(border.right.width, 1.0);
         expect(border.right.color, Colors.deepOrange);
@@ -619,9 +619,9 @@ void main() {
 
         final container = target.evaluate().single.widget as Container;
 
-        final BoxDecoration decoration = container.decoration;
+        final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border;
+        final Border border = decoration.border as Border;
 
         expect(border, null);
       },

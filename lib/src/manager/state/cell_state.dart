@@ -274,7 +274,7 @@ mixin CellState implements IPlutoGridState {
     } else if (column.type.isDate) {
       try {
         final parseNewValue =
-            intl.DateFormat(column.type.date.format).parseStrict(newValue);
+            intl.DateFormat(column.type.date.format).parseStrict(newValue.toString());
 
         newValue =
             intl.DateFormat(column.type.date.format).format(parseNewValue);
@@ -284,7 +284,7 @@ mixin CellState implements IPlutoGridState {
     } else if (column.type.isTime) {
       final time = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
 
-      if (!time.hasMatch(newValue)) {
+      if (!time.hasMatch(newValue.toString())) {
         newValue = oldValue;
       }
     }

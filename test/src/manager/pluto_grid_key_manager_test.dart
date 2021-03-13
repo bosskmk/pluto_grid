@@ -64,7 +64,7 @@ void main() {
       SystemChannels.platform
           .setMockMethodCallHandler((MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.setData') {
-          copied = await methodCall.arguments['text'];
+          copied = (await methodCall.arguments['text']).toString();
         }
         return null;
       });
@@ -118,7 +118,7 @@ void main() {
       SystemChannels.platform
           .setMockMethodCallHandler((MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.setData') {
-          copied = await methodCall.arguments['text'];
+          copied = (await methodCall.arguments['text']).toString();
         }
         return null;
       });

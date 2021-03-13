@@ -57,7 +57,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
       PlutoColumn(
         title: 'grade',
         field: 'grade',
-        type: PlutoColumnType.select(['A', 'B', 'C']),
+        type: PlutoColumnType.select(<String>['A', 'B', 'C']),
       ),
     ];
 

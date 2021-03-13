@@ -34,7 +34,8 @@ abstract class _PlutoColumnFilterStateWithChange
   String get filterValue {
     return filterRows.isEmpty
         ? ''
-        : filterRows.first.cells[FilterHelper.filterFieldValue].value;
+        : filterRows.first.cells[FilterHelper.filterFieldValue].value
+            .toString();
   }
 
   bool get hasCompositeFilter {
@@ -111,6 +112,8 @@ abstract class _PlutoColumnFilterStateWithChange
           }
 
           widget.stateManager.setKeepFocus(true);
+
+          return KeyEventResult.handled;
         }
       } else if (keyManager.isTab ||
           (controller.text.isEmpty && keyManager.isHorizontal)) {
@@ -118,10 +121,12 @@ abstract class _PlutoColumnFilterStateWithChange
           widget.column,
           reversed: keyManager.isLeft || keyManager.isShiftPressed,
         );
+
+        return KeyEventResult.handled;
       }
     }
 
-    return KeyEventResult.handled;
+    return KeyEventResult.skipRemainingHandlers;
   }
 
   void handleFocusFromRows(PlutoGridEvent plutoEvent) {

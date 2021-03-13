@@ -25,7 +25,7 @@ abstract class IGridState {
 
   PlutoGridLocaleText get localeText;
 
-  void setGridKey(Key key);
+  void setGridKey(GlobalKey key);
 
   void setKeyManager(PlutoGridKeyManager keyManager);
 
@@ -122,7 +122,7 @@ mixin GridState implements IPlutoGridState {
     _configuration.applyColumnFilter(refColumns);
   }
 
-  void setGridKey(Key key) {
+  void setGridKey(GlobalKey key) {
     _gridKey = key;
   }
 

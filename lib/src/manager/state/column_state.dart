@@ -307,14 +307,14 @@ mixin ColumnState implements IPlutoGridState {
 
     final List<int> columnIndexes = columnIndexesByShowFrozen;
 
-    Function findColumnIndex = (int i) {
+    int Function(int i) findColumnIndex = (int i) {
       if (refColumns[columnIndexes[i]].key == columnKey) {
         return columnIndexes[i];
       }
       return null;
     };
 
-    Function findIndexToMove = () {
+    int Function(int i) findIndexToMove = () {
       final double minLeft = showFrozenColumn ? leftFrozenColumnsWidth : 0;
 
       final double minRight =
@@ -403,7 +403,8 @@ mixin ColumnState implements IPlutoGridState {
       final value = element.cells.entries
           .firstWhere((element) => element.key == column.field)
           .value
-          .value;
+          .value
+          .toString();
 
       if (previousValue.toString().length < value.toString().length) {
         return value.toString();

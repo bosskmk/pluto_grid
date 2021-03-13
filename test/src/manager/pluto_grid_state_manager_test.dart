@@ -40,7 +40,7 @@ void main() {
         rowIdx: 1,
       );
 
-      final cellPositionB = null;
+      PlutoGridCellPosition cellPositionB;
 
       // when
       final bool compare = cellPositionA == cellPositionB;

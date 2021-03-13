@@ -110,23 +110,33 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isTime => this is PlutoColumnTypeTime;
 
   PlutoColumnTypeText get text {
-    return this is PlutoColumnTypeText ? this : throw TypeError();
+    return this is PlutoColumnTypeText
+        ? this as PlutoColumnTypeText
+        : throw TypeError();
   }
 
   PlutoColumnTypeNumber get number {
-    return this is PlutoColumnTypeNumber ? this : throw TypeError();
+    return this is PlutoColumnTypeNumber
+        ? this as PlutoColumnTypeNumber
+        : throw TypeError();
   }
 
   PlutoColumnTypeSelect get select {
-    return this is PlutoColumnTypeSelect ? this : throw TypeError();
+    return this is PlutoColumnTypeSelect
+        ? this as PlutoColumnTypeSelect
+        : throw TypeError();
   }
 
   PlutoColumnTypeDate get date {
-    return this is PlutoColumnTypeDate ? this : throw TypeError();
+    return this is PlutoColumnTypeDate
+        ? this as PlutoColumnTypeDate
+        : throw TypeError();
   }
 
   PlutoColumnTypeTime get time {
-    return this is PlutoColumnTypeTime ? this : throw TypeError();
+    return this is PlutoColumnTypeTime
+        ? this as PlutoColumnTypeTime
+        : throw TypeError();
   }
 
   bool get hasFormat => this is _PlutoColumnTypeHasFormat;
@@ -170,7 +180,7 @@ class PlutoColumnTypeText implements PlutoColumnType {
   }
 
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(a, b, () => a.compareTo(b));
+    return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
   dynamic makeCompareValue(dynamic v) {
@@ -203,7 +213,7 @@ class PlutoColumnTypeNumber
       return false;
     }
 
-    if (negative == false && value < 0) {
+    if (negative == false && int.parse(value.toString()) < 0) {
       return false;
     }
 
@@ -211,14 +221,15 @@ class PlutoColumnTypeNumber
   }
 
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(a, b, () => a.compareTo(b));
+    return compareWithNull(
+        a, b, () => int.parse(a.toString()).compareTo(int.parse(b.toString())));
   }
 
   dynamic makeCompareValue(dynamic v) {
     return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
   }
 
-  String applyFormat(value) {
+  String applyFormat(dynamic value) {
     final f = intl.NumberFormat(format);
 
     double num =
@@ -300,7 +311,7 @@ class PlutoColumnTypeDate
   });
 
   bool isValid(dynamic value) {
-    final parsedDate = DateTime.tryParse(value);
+    final parsedDate = DateTime.tryParse(value.toString());
 
     if (parsedDate == null) {
       return false;
@@ -318,7 +329,7 @@ class PlutoColumnTypeDate
   }
 
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(a, b, () => a.compareTo(b));
+    return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
   dynamic makeCompareValue(dynamic v) {
@@ -327,7 +338,7 @@ class PlutoColumnTypeDate
     DateTime dateFormatValue;
 
     try {
-      dateFormatValue = dateFormat.parse(v);
+      dateFormatValue = dateFormat.parse(v.toString());
     } catch (e) {
       dateFormatValue = null;
     }
@@ -335,14 +346,14 @@ class PlutoColumnTypeDate
     return dateFormatValue;
   }
 
-  String applyFormat(value) {
-    final parseValue = DateTime.tryParse(value);
+  String applyFormat(dynamic value) {
+    final parseValue = DateTime.tryParse(value.toString());
 
     if (parseValue == null) {
       return '';
     }
 
-    return intl.DateFormat(format).format(DateTime.parse(value));
+    return intl.DateFormat(format).format(DateTime.parse(value.toString()));
   }
 }
 
@@ -357,11 +368,12 @@ class PlutoColumnTypeTime implements PlutoColumnType {
   });
 
   bool isValid(dynamic value) {
-    return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$').hasMatch(value);
+    return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')
+        .hasMatch(value.toString());
   }
 
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(a, b, () => a.compareTo(b));
+    return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
   dynamic makeCompareValue(dynamic v) {

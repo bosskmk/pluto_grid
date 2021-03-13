@@ -76,7 +76,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoColumn(
         title: 'column2',
         field: 'column2',
-        type: PlutoColumnType.select(['red', 'blue', 'green']),
+        type: PlutoColumnType.select(<String>['red', 'blue', 'green']),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
@@ -89,7 +89,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           }
 
           return Text(
-            rendererContext.cell.value,
+            rendererContext.cell.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
@@ -257,10 +257,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ],
               resolveDefaultColumnFilter: (column, resolver) {
                 if (column.field == 'column3') {
-                  return resolver<PlutoFilterTypeGreaterThan>();
+                  return resolver<PlutoFilterTypeGreaterThan>()
+                      as PlutoFilterType;
                 }
 
-                return resolver<PlutoFilterTypeContains>();
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
               },
             ),
           ),

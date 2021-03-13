@@ -24,7 +24,7 @@ class DummyData {
       PlutoColumn(
         title: 'select column',
         field: 'select_field',
-        type: PlutoColumnType.select(['item1', 'item2', 'item3']),
+        type: PlutoColumnType.select(<String>['item1', 'item2', 'item3']),
       ),
 
       /// Datetime Column definition

@@ -64,7 +64,7 @@ abstract class ISelectingState {
 
   void clearCurrentSelectingRows({bool notify = true});
 
-  void toggleSelectingRow(int rowIdx, {notify = true});
+  void toggleSelectingRow(int rowIdx, {bool notify = true});
 
   bool isSelectingInteraction();
 
@@ -394,7 +394,7 @@ mixin SelectingState implements IPlutoGridState {
       _currentSelectingRows.add(row);
     }
 
-    if (notify) {
+    if (notify != null) {
       notifyListeners();
     }
   }

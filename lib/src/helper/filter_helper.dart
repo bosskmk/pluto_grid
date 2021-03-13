@@ -63,7 +63,7 @@ class FilterHelper {
       bool flag;
 
       for (var _row in rows) {
-        final filterType = _row.cells[filterFieldType].value;
+        final filterType = _row.cells[filterFieldType].value as PlutoFilterType;
 
         if (_row.cells[filterFieldColumn].value == filterFieldAllColumns) {
           bool flagAllColumns;
@@ -80,7 +80,7 @@ class FilterHelper {
                 compareByFilterType(
                   filterType: filterType,
                   base: value.value.toString(),
-                  search: _row.cells[filterFieldValue].value,
+                  search: _row.cells[filterFieldValue].value.toString(),
                   column: foundColumn,
                 ),
               );
@@ -101,7 +101,7 @@ class FilterHelper {
                 filterType: filterType,
                 base: row.cells[_row.cells[filterFieldColumn].value].value
                     .toString(),
-                search: _row.cells[filterFieldValue].value,
+                search: _row.cells[filterFieldValue].value.toString(),
                 column: foundColumn,
               ),
             );
@@ -263,7 +263,7 @@ class FilterHelper {
   }
 
   static bool _compareWithRegExp(
-    Pattern pattern,
+    String pattern,
     String value, {
     bool caseSensitive = false,
   }) {
@@ -364,7 +364,7 @@ class FilterPopupState {
     handleApplyFilter(_stateManager);
   }
 
-  _FilterPopupHeader createHeader(_stateManager) {
+  _FilterPopupHeader createHeader(PlutoGridStateManager _stateManager) {
     return _FilterPopupHeader(
       stateManager: _stateManager,
       configuration: configuration,
@@ -419,7 +419,7 @@ class FilterPopupState {
         enableFilterMenuItem: false,
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
-          return value?.title ?? '';
+          return (value?.title ?? '').toString();
         },
       ),
       PlutoColumn(

@@ -92,7 +92,7 @@ void main() {
         PlutoColumn(
             title: 'header',
             field: 'header0',
-            type: PlutoColumnType.select(['one', 'two', 'three'])),
+            type: PlutoColumnType.select(<String>['one', 'two', 'three'])),
       ],
     ).test(
       'CellWidget 의 높이를 설정하면 selectColumn 의 팝업의 셀 높이는 '

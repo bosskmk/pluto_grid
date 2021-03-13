@@ -34,8 +34,9 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
     String value = '';
 
     stateManager.currentSelectingPositionList.forEach((element) {
-      final cellValue =
-          stateManager.rows[element.rowIdx].cells[element.field].value;
+      final cellValue = stateManager
+          .rows[element.rowIdx].cells[element.field].value
+          .toString();
 
       value +=
           'rowIdx: ${element.rowIdx}, field: ${element.field}, value: $cellValue\n';
@@ -45,7 +46,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       value = 'No cells are selected.';
     }
 
-    await showDialog(
+    await showDialog<void>(
         context: context,
         builder: (BuildContext ctx) {
           return Dialog(

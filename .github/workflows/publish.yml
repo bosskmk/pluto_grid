@@ -20,7 +20,7 @@ jobs:
 
     # using flutter
     - uses: subosito/flutter-action@v1
-    - run: flutter channel master
+    - run: flutter channel stable
     - run: flutter upgrade
     - run: dart --version
     - run: flutter --version
