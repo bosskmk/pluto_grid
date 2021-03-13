@@ -13,10 +13,10 @@ class PlutoRow {
     @required this.cells,
     this.sortIdx,
     bool checked = false,
-    Key key = null,
+    Key key,
   })  : _checked = checked,
         _state = PlutoRowState.none,
-        _key = key??UniqueKey();
+        _key = key ?? UniqueKey();
 
   /// The state value that the checkbox is checked.
   /// If the enableRowChecked value of the [PlutoColumn] property is set to true,
