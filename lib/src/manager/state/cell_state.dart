@@ -273,8 +273,8 @@ mixin CellState implements IPlutoGridState {
       newValue = oldValue;
     } else if (column.type.isDate) {
       try {
-        final parseNewValue =
-            intl.DateFormat(column.type.date.format).parseStrict(newValue.toString());
+        final parseNewValue = intl.DateFormat(column.type.date.format)
+            .parseStrict(newValue.toString());
 
         newValue =
             intl.DateFormat(column.type.date.format).format(parseNewValue);
