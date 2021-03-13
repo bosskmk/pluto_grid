@@ -1,4 +1,9 @@
-## [1.2.0] - 
+## [1.2.0] - 2021. 3. 13
+
+* Add moveRowsByIndex.
+* Fix focusing bug.
+* Apply strong-mode.
+* Allow custom key in row.
 
 * Rename moveRows to moveRowsByOffset.
 * Add moveRowsByIndex.
