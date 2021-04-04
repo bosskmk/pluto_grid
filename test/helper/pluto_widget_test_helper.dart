@@ -15,7 +15,7 @@ class PlutoWidgetTestHelper {
     _setTestContext(description, testContext);
   }
 
-  PlutoWidgetTestContext _testContext;
+  late PlutoWidgetTestContext _testContext;
 
   void _setTestContext(
       String contextDescription, WidgetTesterCallback testContext) {

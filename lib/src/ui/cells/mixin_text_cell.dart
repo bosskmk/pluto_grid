@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class AbstractMixinTextCell extends StatefulWidget {
-  final PlutoGridStateManager stateManager;
-  final PlutoCell cell;
-  final PlutoColumn column;
+  final PlutoGridStateManager? stateManager;
+  final PlutoCell? cell;
+  final PlutoColumn? column;
 
   AbstractMixinTextCell({
     this.stateManager,
@@ -17,22 +17,22 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
 mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   final _textController = TextEditingController();
 
-  CellEditingStatus _cellEditingStatus;
+  CellEditingStatus? _cellEditingStatus;
 
-  FocusNode cellFocus;
+  FocusNode? cellFocus;
 
   @override
   void dispose() {
     _textController.dispose();
 
-    cellFocus.dispose();
+    cellFocus!.dispose();
 
     /**
      * Saves the changed value when moving a cell while text is being input.
      * if user do not press enter key, onEditingComplete is not called and the value is not saved.
      */
     if (_cellEditingStatus.isChanged) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         _changeValue();
       });
     }
@@ -46,15 +46,15 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     cellFocus = FocusNode(onKey: _handleOnKey);
 
-    _textController.text = widget.column.formattedValueForDisplayInEditing(
-      widget.cell.value,
+    _textController.text = widget.column!.formattedValueForDisplayInEditing(
+      widget.cell!.value,
     );
 
     _cellEditingStatus = CellEditingStatus.init;
   }
 
   void _changeValue() {
-    widget.stateManager.changeCellValue(widget.cell.key, _textController.text);
+    widget.stateManager!.changeCellValue(widget.cell!.key, _textController.text);
   }
 
   void _handleOnChanged(String value) {
@@ -64,9 +64,9 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   void _handleOnComplete() {
     _cellEditingStatus = CellEditingStatus.updated;
 
-    cellFocus.unfocus();
+    cellFocus!.unfocus();
 
-    widget.stateManager.gridFocusNode.requestFocus();
+    widget.stateManager!.gridFocusNode!.requestFocus();
 
     _changeValue();
   }
@@ -79,11 +79,11 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     if (keyManager.isEsc) {
       _textController.text =
-          widget.stateManager.cellValueBeforeEditing.toString();
+          widget.stateManager!.cellValueBeforeEditing.toString();
 
-      widget.stateManager.changeCellValue(
-        widget.stateManager.currentCell.key,
-        widget.stateManager.cellValueBeforeEditing,
+      widget.stateManager!.changeCellValue(
+        widget.stateManager!.currentCell!.key,
+        widget.stateManager!.cellValueBeforeEditing,
         notify: false,
       );
     }
@@ -92,9 +92,9 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   }
 
   TextField buildTextField({
-    TextInputType keyboardType,
-    List<TextInputFormatter> inputFormatters,
-    TextStyle style,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
+    TextStyle? style,
     InputDecoration decoration = const InputDecoration(
       border: InputBorder.none,
       contentPadding: EdgeInsets.all(0),
@@ -105,22 +105,22 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
-      readOnly: widget.column.type.readOnly,
+      readOnly: widget.column!.type!.readOnly!,
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
-      style: style ?? widget.stateManager.configuration.cellTextStyle,
+      style: style ?? widget.stateManager!.configuration!.cellTextStyle,
       decoration: decoration,
       maxLines: maxLines,
       keyboardType: keyboardType ?? TextInputType.text,
       inputFormatters: inputFormatters ?? [],
-      textAlign: widget.column.textAlign.value,
+      textAlign: widget.column!.textAlign.value,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stateManager.keepFocus) {
-      cellFocus.requestFocus();
+    if (widget.stateManager!.keepFocus) {
+      cellFocus!.requestFocus();
     }
 
     return buildTextField();

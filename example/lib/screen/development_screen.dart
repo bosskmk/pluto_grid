@@ -12,13 +12,13 @@ class DevelopmentScreen extends StatefulWidget {
 }
 
 class _DevelopmentScreenState extends State<DevelopmentScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
-  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
+  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
 
   @override
   void initState() {
@@ -41,9 +41,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.add_circle,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager.insertRows(
-                    rendererContext.rowIdx,
-                    rendererContext.stateManager.getNewRows(count: 3),
+                  rendererContext.stateManager!.insertRows(
+                    rendererContext.rowIdx!,
+                    rendererContext.stateManager!.getNewRows(count: 3),
                   );
                 },
                 iconSize: 18,
@@ -55,7 +55,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager
+                  rendererContext.stateManager!
                       .removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
@@ -64,7 +64,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
               Expanded(
                 child: Text(
-                  '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field].value.toString()})',
+                  '${rendererContext.row!.sortIdx.toString()}(${rendererContext.row!.cells[rendererContext.column!.field]!.value.toString()})',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -80,16 +80,16 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
-          if (rendererContext.cell.value == 'red') {
+          if (rendererContext.cell!.value == 'red') {
             textColor = Colors.red;
-          } else if (rendererContext.cell.value == 'blue') {
+          } else if (rendererContext.cell!.value == 'blue') {
             textColor = Colors.blue;
-          } else if (rendererContext.cell.value == 'green') {
+          } else if (rendererContext.cell!.value == 'green') {
             textColor = Colors.green;
           }
 
           return Text(
-            rendererContext.cell.value.toString(),
+            rendererContext.cell!.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
@@ -129,34 +129,34 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     rows = DummyData.rowsByColumns(length: 30, columns: columns);
   }
 
-  void handleAddRowButton({int count}) {
+  void handleAddRowButton({int? count}) {
     final List<PlutoRow> rows = count == null
-        ? [DummyData.rowByColumns(columns)]
+        ? [DummyData.rowByColumns(columns!)]
         : DummyData.rowsByColumns(length: count, columns: columns);
 
-    stateManager.prependRows(rows);
+    stateManager!.prependRows(rows);
   }
 
   void handleRemoveCurrentRowButton() {
-    stateManager.removeCurrentRow();
+    stateManager!.removeCurrentRow();
   }
 
   void handleRemoveSelectedRowsButton() {
-    stateManager.removeRows(stateManager.currentSelectingRows);
+    stateManager!.removeRows(stateManager!.currentSelectingRows);
   }
 
   void handleToggleColumnFilter() {
-    stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
+    stateManager!.setShowColumnFilter(!stateManager!.showColumnFilter);
   }
 
-  void setGridSelectingMode(PlutoGridSelectingMode mode) {
+  void setGridSelectingMode(PlutoGridSelectingMode? mode) {
     if (gridSelectingMode == mode) {
       return;
     }
 
     setState(() {
       gridSelectingMode = mode;
-      stateManager.setSelectingMode(mode);
+      stateManager!.setSelectingMode(mode!);
     });
   }
 
@@ -173,8 +173,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
-            stateManager.setSelectingMode(gridSelectingMode);
-            stateManager.setShowColumnFilter(true);
+            stateManager!.setSelectingMode(gridSelectingMode!);
+            stateManager!.setShowColumnFilter(true);
           },
           createHeader: (PlutoGridStateManager stateManager) {
             return SingleChildScrollView(
@@ -230,7 +230,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                             ),
                           );
                         }).toList(),
-                        onChanged: (PlutoGridSelectingMode mode) {
+                        onChanged: (PlutoGridSelectingMode? mode) {
                           setGridSelectingMode(mode);
                         },
                       ),
@@ -275,11 +275,11 @@ class ClassYouImplemented implements PlutoFilterType {
   String get title => 'Custom contains';
 
   get compare => ({
-        String base,
-        String search,
-        PlutoColumn column,
+        required String? base,
+        required String? search,
+        required PlutoColumn? column,
       }) {
-        var keys = search.split(',');
+        var keys = search!.split(',');
 
         return keys.contains(base);
       };

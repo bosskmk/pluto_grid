@@ -13,19 +13,19 @@ class GridAsPopupScreen extends StatefulWidget {
 }
 
 class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
-  TextEditingController _nameController;
+  TextEditingController? _nameController;
 
-  TextEditingController _moneyController;
+  TextEditingController? _moneyController;
 
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameController!.dispose();
 
-    _moneyController.dispose();
+    _moneyController!.dispose();
 
     super.dispose();
   }
@@ -70,19 +70,19 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       rows: rows,
       mode: PlutoGridMode.select,
       onLoaded: (PlutoGridOnLoadedEvent event) {
-        rows.asMap().entries.forEach((element) {
-          final cell = element.value.cells[selectFieldName];
+        rows!.asMap().entries.forEach((element) {
+          final cell = element.value.cells[selectFieldName]!;
 
-          if (cell.value.toString() == controller.text) {
-            event.stateManager.setCurrentCell(cell, element.key);
-            event.stateManager
+          if (cell.value.toString() == controller!.text) {
+            event.stateManager!.setCurrentCell(cell, element.key);
+            event.stateManager!
                 .moveScrollByRow(PlutoMoveDirection.up, element.key + 1);
           }
         });
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         if (event != null) {
-          controller.text = event.row.cells[selectFieldName].value.toString();
+          controller!.text = event.row!.cells[selectFieldName]!.value.toString();
         }
       },
     );

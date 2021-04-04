@@ -13,7 +13,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final withTheCellSelected = PlutoWidgetTestHelper(
       '0, 0 셀이 선택 된 상태에서',
@@ -47,11 +47,11 @@ void main() {
     withTheCellSelected.test(
       'F2 키 입력 시 편집 상태가 아니면 편집 상태로 변경 되어야 한다.',
       (tester) async {
-        expect(stateManager.isEditing, false);
+        expect(stateManager!.isEditing, false);
 
         await tester.sendKeyEvent(LogicalKeyboardKey.f2);
 
-        expect(stateManager.isEditing, true);
+        expect(stateManager!.isEditing, true);
       },
     );
   });

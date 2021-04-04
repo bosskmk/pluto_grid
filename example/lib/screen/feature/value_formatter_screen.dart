@@ -12,9 +12,9 @@ class ValueFormatterScreen extends StatefulWidget {
 }
 
 class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

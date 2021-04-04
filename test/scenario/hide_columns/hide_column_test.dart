@@ -8,11 +8,11 @@ import '../../helper/row_helper.dart';
 
 void main() {
   group('숨김 컬럼이 없는 상태에서', () {
-    List<PlutoColumn> columns;
+    List<PlutoColumn>? columns;
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final withTenColumns = PlutoWidgetTestHelper(
       '10개의 컬럼을 생성',
@@ -48,7 +48,7 @@ void main() {
 
         expect(column, findsOneWidget);
 
-        stateManager.hideColumn(columns[1].key, true);
+        stateManager!.hideColumn(columns![1].key, true);
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
@@ -59,12 +59,12 @@ void main() {
     withTenColumns.test(
       'showSetColumnsPopup 을 호출 하면 컬럼 설정 팝업이 호출 되어야 한다.',
       (tester) async {
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context);
+        stateManager!.showSetColumnsPopup(stateManager!.gridFocusNode!.context);
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         var columnTitleOfPopup = find.text(
-          stateManager.configuration.localeText.setColumnsTitle,
+          stateManager!.configuration!.localeText.setColumnsTitle,
         );
 
         expect(columnTitleOfPopup, findsOneWidget);
@@ -77,7 +77,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final withTenColumns = PlutoWidgetTestHelper(
       '10개의 컬럼을 생성하고 0, 5번 컬럼을 숨김',
@@ -104,8 +104,8 @@ void main() {
           ),
         );
 
-        stateManager.hideColumn(columns[0].key, true, notify: false);
-        stateManager.hideColumn(columns[5].key, true);
+        stateManager!.hideColumn(columns[0].key, true, notify: false);
+        stateManager!.hideColumn(columns[5].key, true);
       },
     );
 
@@ -116,8 +116,8 @@ void main() {
 
         expect(column, findsNothing);
 
-        stateManager.hideColumn(
-          stateManager.refColumns.originalList[0].key,
+        stateManager!.hideColumn(
+          stateManager!.refColumns!.originalList[0].key,
           false,
         );
 

@@ -6,7 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
@@ -19,10 +19,10 @@ void main() {
         var event = PlutoGridDragRowsEvent(dragType: null);
         event.handler(stateManager);
 
-        verifyNever(stateManager.setIsDraggingRow(any, notify: false));
-        verifyNever(stateManager.setDragRows(any));
-        verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setDragRows(any));
+        verifyNever(stateManager!.setDragTargetRowIdx(any));
+        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
       },
     );
 
@@ -35,10 +35,10 @@ void main() {
         );
         event.handler(stateManager);
 
-        verifyNever(stateManager.setIsDraggingRow(any, notify: false));
-        verifyNever(stateManager.setDragRows(any));
-        verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setDragRows(any));
+        verifyNever(stateManager!.setDragTargetRowIdx(any));
+        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
       },
     );
 
@@ -52,10 +52,10 @@ void main() {
         );
         event.handler(stateManager);
 
-        verifyNever(stateManager.setIsDraggingRow(any, notify: false));
-        verifyNever(stateManager.setDragRows(any));
-        verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setDragRows(any));
+        verifyNever(stateManager!.setDragTargetRowIdx(any));
+        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
       },
     );
 
@@ -70,11 +70,11 @@ void main() {
         );
         event.handler(stateManager);
 
-        verify(stateManager.setIsDraggingRow(true, notify: false));
-        verify(stateManager.setDragRows(any));
+        verify(stateManager!.setIsDraggingRow(true, notify: false));
+        verify(stateManager!.setDragRows(any));
         // 호출 되지 않아야 되는 메소드
-        verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
+        verifyNever(stateManager!.setDragTargetRowIdx(any));
+        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
       },
     );
 
@@ -89,11 +89,11 @@ void main() {
         );
         event.handler(stateManager);
 
-        verify(stateManager.setDragTargetRowIdx(any));
+        verify(stateManager!.setDragTargetRowIdx(any));
         // 호출 되지 않아야 되는 메소드
-        verifyNever(stateManager.setIsDraggingRow(true, notify: false));
-        verifyNever(stateManager.setDragRows(any));
-        verifyNever(stateManager.moveRowsByOffset(any, any, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(true, notify: false));
+        verifyNever(stateManager!.setDragRows(any));
+        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
       },
     );
 
@@ -108,11 +108,11 @@ void main() {
         );
         event.handler(stateManager);
 
-        verify(stateManager.moveRowsByOffset(any, any, notify: false));
-        verify(stateManager.setIsDraggingRow(false));
+        verify(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verify(stateManager!.setIsDraggingRow(false));
         // 호출 되지 않아야 되는 메소드
-        verifyNever(stateManager.setDragTargetRowIdx(any));
-        verifyNever(stateManager.setDragRows(any));
+        verifyNever(stateManager!.setDragTargetRowIdx(any));
+        verifyNever(stateManager!.setDragRows(any));
       },
     );
   });

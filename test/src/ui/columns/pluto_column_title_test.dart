@@ -8,7 +8,7 @@ import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
+  late PlutoGridStateManager stateManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
@@ -94,7 +94,7 @@ void main() {
     await tester.tap(find.byType(InkWell));
 
     // then
-    verify(stateManager.toggleSortColumn(captureAny)).called(1);
+    verify(stateManager.toggleSortColumn(captureAny!)).called(1);
   });
 
   testWidgets(
@@ -125,7 +125,7 @@ void main() {
     // then
     expect(inkWell, findsNothing);
 
-    verifyNever(stateManager.toggleSortColumn(captureAny));
+    verifyNever(stateManager.toggleSortColumn(captureAny!));
   });
 
   testWidgets(
@@ -355,7 +355,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>()),
+        argThat(isA<BuildContext>())!,
         column,
       )).called(1);
     });
@@ -413,7 +413,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>()),
+        argThat(isA<BuildContext>())!,
         column,
       )).called(1);
     });
@@ -471,7 +471,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>()),
+        argThat(isA<BuildContext>())!,
         column,
       )).called(1);
     });
@@ -586,7 +586,7 @@ void main() {
     )).test(
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
-        expect(stateManager.configuration.enableColumnBorder, true);
+        expect(stateManager.configuration!.enableColumnBorder, true);
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -610,7 +610,7 @@ void main() {
     )).test(
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
-        expect(stateManager.configuration.enableColumnBorder, false);
+        expect(stateManager.configuration!.enableColumnBorder, false);
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -621,7 +621,7 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final Border? border = decoration.border as Border?;
 
         expect(border, null);
       },

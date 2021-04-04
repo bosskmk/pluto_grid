@@ -13,11 +13,11 @@ class RowSelectionScreen extends StatefulWidget {
 }
 
 class _RowSelectionScreenState extends State<RowSelectionScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   @override
   void initState() {
@@ -33,8 +33,8 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
   void handleSelected() async {
     String value = '';
 
-    stateManager.currentSelectingRows.forEach((element) {
-      final cellValue = element.cells.entries.first.value.value.toString();
+    stateManager!.currentSelectingRows.forEach((element) {
+      final cellValue = element!.cells.entries.first.value.value.toString();
 
       value += 'first cell value of row: $cellValue\n';
     });
@@ -105,7 +105,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
-                event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+                event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
 
                 stateManager = event.stateManager;
               },

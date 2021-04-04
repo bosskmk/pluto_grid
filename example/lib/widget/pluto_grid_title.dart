@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PlutoGridTitle extends StatelessWidget {
-  final double fontSize;
+  final double? fontSize;
 
   PlutoGridTitle({
     this.fontSize,

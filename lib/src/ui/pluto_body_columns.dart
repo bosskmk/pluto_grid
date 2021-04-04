@@ -13,42 +13,42 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoBodyColumnsStateWithChange
     extends PlutoStateWithChange<PlutoBodyColumns> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  double width;
+  double? width;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>>(
+      columns = update<List<PlutoColumn>?>(
         columns,
         _getColumns(),
         compare: listEquals,
       );
 
-      width = update<double>(width, _getWidth());
+      width = update<double?>(width, _getWidth());
     });
   }
 
   List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn
+    return widget.stateManager.showFrozenColumn!
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
   }
 
   double _getWidth() {
-    return widget.stateManager.showFrozenColumn
+    return widget.stateManager.showFrozenColumn!
         ? widget.stateManager.bodyColumnsWidth
         : widget.stateManager.columnsWidth;
   }
 }
 
 class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
-  ScrollController scroll;
+  ScrollController? scroll;
 
   @override
   void dispose() {
-    scroll.dispose();
+    scroll!.dispose();
 
     super.dispose();
   }
@@ -57,7 +57,7 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
   void initState() {
     super.initState();
 
-    scroll = widget.stateManager.scroll.horizontal.addAndGet();
+    scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
   }
 
   @override
@@ -68,11 +68,11 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
         controller: scroll,
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: columns.length,
+        itemCount: columns!.length,
         itemBuilder: (ctx, i) {
           return PlutoBaseColumn(
             stateManager: widget.stateManager,
-            column: columns[i],
+            column: columns![i],
           );
         },
       ),

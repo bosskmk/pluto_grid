@@ -4,9 +4,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IDraggingRowState {
   bool get isDraggingRow;
 
-  List<PlutoRow> get dragRows;
+  List<PlutoRow?>? get dragRows;
 
-  int get dragTargetRowIdx;
+  int? get dragTargetRowIdx;
 
   bool get canRowDrag;
 
@@ -39,13 +39,13 @@ mixin DraggingRowState implements IPlutoGridState {
 
   bool _isDraggingRow = false;
 
-  List<PlutoRow> get dragRows => _dragRows;
+  List<PlutoRow?>? get dragRows => _dragRows;
 
-  List<PlutoRow> _dragRows;
+  List<PlutoRow?>? _dragRows;
 
-  int get dragTargetRowIdx => _dragTargetRowIdx;
+  int? get dragTargetRowIdx => _dragTargetRowIdx;
 
-  int _dragTargetRowIdx;
+  int? _dragTargetRowIdx;
 
   bool get canRowDrag => !hasSortedColumn && !hasFilter;
 
@@ -67,7 +67,7 @@ mixin DraggingRowState implements IPlutoGridState {
   }
 
   void setDragRows(
-    List<PlutoRow> rows, {
+    List<PlutoRow?>? rows, {
     bool notify = true,
   }) {
     _dragRows = rows;
@@ -78,7 +78,7 @@ mixin DraggingRowState implements IPlutoGridState {
   }
 
   void setDragTargetRowIdx(
-    int rowIdx, {
+    int? rowIdx, {
     bool notify = true,
   }) {
     if (_dragTargetRowIdx == rowIdx) {
@@ -92,30 +92,30 @@ mixin DraggingRowState implements IPlutoGridState {
     }
   }
 
-  bool isRowIdxDragTarget(int rowIdx) {
+  bool isRowIdxDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
-        _dragTargetRowIdx <= rowIdx &&
-        rowIdx < _dragTargetRowIdx + _dragRows.length;
+        _dragTargetRowIdx! <= rowIdx &&
+        rowIdx < _dragTargetRowIdx! + _dragRows!.length;
   }
 
-  bool isRowIdxTopDragTarget(int rowIdx) {
+  bool isRowIdxTopDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
         _dragTargetRowIdx == rowIdx;
   }
 
-  bool isRowIdxBottomDragTarget(int rowIdx) {
+  bool isRowIdxBottomDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
-        rowIdx == _dragTargetRowIdx + _dragRows.length - 1;
+        rowIdx == _dragTargetRowIdx! + _dragRows!.length - 1;
   }
 
-  bool isRowBeingDragged(Key rowKey) {
+  bool isRowBeingDragged(Key? rowKey) {
     return rowKey != null &&
         _isDraggingRow == true &&
         dragRows != null &&
-        dragRows.firstWhere((element) => element.key == rowKey,
+        dragRows!.firstWhere((element) => element!.key == rowKey,
                 orElse: () => null) !=
             null;
   }

@@ -13,9 +13,9 @@ class ColumnFilteringScreen extends StatefulWidget {
 }
 
 class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {
@@ -86,7 +86,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         columns: columns,
         rows: rows,
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setShowColumnFilter(true);
+          event.stateManager!.setShowColumnFilter(true);
         },
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
@@ -127,13 +127,13 @@ class ClassYouImplemented implements PlutoFilterType {
   String get title => 'Custom contains';
 
   get compare => ({
-        String base,
-        String search,
-        PlutoColumn column,
+        required String? base,
+        required String? search,
+        required PlutoColumn? column,
       }) {
-        var keys = search.split(',').map((e) => e.toUpperCase()).toList();
+        var keys = search!.split(',').map((e) => e.toUpperCase()).toList();
 
-        return keys.contains(base.toUpperCase());
+        return keys.contains(base!.toUpperCase());
       };
 
   const ClassYouImplemented();

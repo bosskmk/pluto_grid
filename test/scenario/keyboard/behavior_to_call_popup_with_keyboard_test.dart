@@ -7,7 +7,7 @@ import '../../helper/pluto_widget_test_helper.dart';
 
 /// 키보드로 팝업 그리드 호출 및 선택 테스트
 void main() {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   final buildGrid = ({
     int numberOfRows = 10,
@@ -65,7 +65,7 @@ void main() {
       // 문자열 입력으로 팝업 호출 후 2020-01-01 아래 있는
       // 2020-01-08 날짜를 선택하고 엔터를 입력 해 다음 행으로 이동 한다.
       await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
-      expect(stateManager.isEditing, isTrue);
+      expect(stateManager!.isEditing, isTrue);
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
       await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
@@ -76,13 +76,13 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
       // 기존 셀 값이 2020-01-08 로 변경 되어야 한다.
-      expect(stateManager.rows[0].cells['date'].value, '2020-01-08');
+      expect(stateManager!.rows[0]!.cells['date']!.value, '2020-01-08');
 
       // 현재 셀이 다음 행으로 변경 되어야 한다.
-      expect(stateManager.currentCellPosition.rowIdx, 1);
+      expect(stateManager!.currentCellPosition!.rowIdx, 1);
 
       // 수정 상태가 유지 되어야 한다.
-      expect(stateManager.isEditing, isTrue);
+      expect(stateManager!.isEditing, isTrue);
 
       // 문자열 입력으로 팝업을 다시 호출 하고 2020-01-02 아래 날짜인
       // 2020-01-09 를 선택 하고 엔터를 입력 해 다음 행으로 이동 한다.
@@ -93,13 +93,13 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       // 기존 셀 값이 2020-01-09 로 변경 되어야 한다.
-      expect(stateManager.rows[1].cells['date'].value, '2020-01-09');
+      expect(stateManager!.rows[1]!.cells['date']!.value, '2020-01-09');
 
       // 현재 셀이 다음 행으로 변경 되어야 한다.
-      expect(stateManager.currentCellPosition.rowIdx, 2);
+      expect(stateManager!.currentCellPosition!.rowIdx, 2);
 
       // 수정 상태가 유지 되어야 한다.
-      expect(stateManager.isEditing, isTrue);
+      expect(stateManager!.isEditing, isTrue);
     },
   );
 }

@@ -11,8 +11,8 @@ import '../../mock/mock_pluto_event_manager.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
-  PlutoGridEventManager eventManager;
+  late PlutoGridStateManager stateManager;
+  PlutoGridEventManager? eventManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
@@ -20,7 +20,7 @@ void main() {
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
@@ -382,13 +382,13 @@ void main() {
 
       await tester.tap(gesture);
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnTapUp &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        })),
+        }))!,
       )).called(1);
     },
   );
@@ -429,13 +429,13 @@ void main() {
 
       await tester.longPress(gesture);
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressStart &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        })),
+        }))!,
       )).called(1);
     },
   );
@@ -460,7 +460,7 @@ void main() {
       when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
 
       when(stateManager.isSelectingInteraction()).thenReturn(false);
-      when(stateManager.needMovingScroll(any, any)).thenReturn(false);
+      when(stateManager.needMovingScroll(any, any!)).thenReturn(false);
 
       // when
       await tester.pumpWidget(
@@ -490,13 +490,13 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressMoveUpdate &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        })),
+        }))!,
       )).called(1);
     },
   );
@@ -583,7 +583,7 @@ void main() {
   group('configuration', () {
     PlutoCell cell;
 
-    PlutoColumn column;
+    PlutoColumn? column;
 
     int rowIdx;
 
@@ -640,7 +640,7 @@ void main() {
     ).test(
       'if readOnly is true, should be set the color to cellColorInReadOnlyState.',
       (tester) async {
-        expect(column.type.readOnly, true);
+        expect(column!.type!.readOnly, true);
 
         final target = find.descendant(
           of: find.byType(GestureDetector),
@@ -651,9 +651,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Color color = decoration.color;
+        final Color? color = decoration.color;
 
-        expect(color, stateManager.configuration.cellColorInReadOnlyState);
+        expect(color, stateManager.configuration!.cellColorInReadOnlyState);
       },
     );
 
@@ -680,7 +680,7 @@ void main() {
 
         final Border border = decoration.border as Border;
 
-        expect(border.right.color, stateManager.configuration.borderColor);
+        expect(border.right.color, stateManager.configuration!.borderColor);
       },
     );
 
@@ -705,7 +705,7 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final Border? border = decoration.border as Border?;
 
         expect(border, isNull);
       },

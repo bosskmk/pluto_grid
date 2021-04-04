@@ -7,9 +7,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
-  final PlutoGridStateManager stateManager;
-  final PlutoCell cell;
-  final PlutoColumn column;
+  final PlutoGridStateManager? stateManager;
+  final PlutoCell? cell;
+  final PlutoColumn? column;
 
   PlutoDateCell({
     this.stateManager,
@@ -23,22 +23,22 @@ class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
 
 class _PlutoDateCellState extends State<PlutoDateCell>
     with MixinPopupCell<PlutoDateCell> {
-  PlutoGridStateManager popupStateManager;
+  PlutoGridStateManager? popupStateManager;
 
-  List<PlutoColumn> popupColumns = [];
+  List<PlutoColumn>? popupColumns = [];
 
-  List<PlutoRow> popupRows = [];
+  List<PlutoRow>? popupRows = [];
 
-  Icon icon = const Icon(
+  Icon? icon = const Icon(
     Icons.date_range,
   );
 
-  StreamSubscription<PlutoKeyManagerEvent> keyManagerStream;
+  StreamSubscription<PlutoKeyManagerEvent>? keyManagerStream;
 
   @override
   void dispose() {
-    if (widget.column.type.date.startDate == null ||
-        widget.column.type.date.endDate == null) {
+    if (widget.column!.type.date!.startDate == null ||
+        widget.column!.type.date!.endDate == null) {
       popupStateManager?.scroll?.vertical
           ?.removeOffsetChangedListener(_handleScroll);
     }
@@ -61,14 +61,14 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     popupColumns = _buildColumns();
 
     final defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-            widget.cell.value.toString(), widget.column.type.date.format) ??
+            widget.cell!.value.toString(), widget.column!.type.date!.format!) ??
         DateTime.now();
 
-    final startDate = widget.column.type.date.startDate ??
+    final startDate = widget.column!.type.date!.startDate ??
         PlutoDateTimeHelper.moveToFirstWeekday(
             defaultDate.add(const Duration(days: -60)));
 
-    final endDate = widget.column.type.date.endDate ??
+    final endDate = widget.column!.type.date!.endDate ??
         PlutoDateTimeHelper.moveToLastWeekday(
             defaultDate.add(const Duration(days: 60)));
 
@@ -79,23 +79,23 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     popupRows = _buildRows(days);
 
-    createHeader = (PlutoGridStateManager stateManager) =>
-        _DateCellHeader(stateManager: stateManager);
+    createHeader = (PlutoGridStateManager? stateManager) =>
+        _DateCellHeader(stateManager: stateManager!);
   }
 
   @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
     popupStateManager = event.stateManager;
 
-    popupStateManager.setSelectingMode(PlutoGridSelectingMode.none);
+    popupStateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
-    if (widget.column.type.date.startDate == null ||
-        widget.column.type.date.endDate == null) {
-      event.stateManager.scroll.vertical
+    if (widget.column!.type.date!.startDate == null ||
+        widget.column!.type.date!.endDate == null) {
+      event.stateManager!.scroll!.vertical!
           .addOffsetChangedListener(_handleScroll);
     }
 
-    keyManagerStream = popupStateManager.keyManager.subject.stream
+    keyManagerStream = popupStateManager!.keyManager!.subject.stream
         .listen(_handleGridFocusOnKey);
 
     super.onLoaded(event);
@@ -104,14 +104,14 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   void _handleGridFocusOnKey(PlutoKeyManagerEvent keyManagerEvent) {
     if (keyManagerEvent.isKeyDownEvent) {
       if (keyManagerEvent.isUp) {
-        if (popupStateManager.currentRowIdx == 0) {
-          popupStateManager.prependRows(_getMoreRows(insertBefore: true));
+        if (popupStateManager!.currentRowIdx == 0) {
+          popupStateManager!.prependRows(_getMoreRows(insertBefore: true));
           return;
         }
       } else if (keyManagerEvent.isDown) {
-        if (popupStateManager.currentRowIdx ==
-            popupStateManager.refRows.length - 1) {
-          popupStateManager.appendRows(_getMoreRows());
+        if (popupStateManager!.currentRowIdx ==
+            popupStateManager!.refRows!.length - 1) {
+          popupStateManager!.appendRows(_getMoreRows());
           return;
         }
       }
@@ -120,18 +120,18 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   }
 
   void _handleScroll() {
-    if (widget.column.type.date.startDate == null &&
-        popupStateManager.scroll.vertical.offset == 0) {
-      popupStateManager.prependRows(_getMoreRows(insertBefore: true));
-    } else if (widget.column.type.date.endDate == null &&
-        popupStateManager.scroll.maxScrollVertical ==
-            popupStateManager.scroll.vertical.offset) {
-      popupStateManager.appendRows(_getMoreRows());
+    if (widget.column!.type.date!.startDate == null &&
+        popupStateManager!.scroll!.vertical!.offset == 0) {
+      popupStateManager!.prependRows(_getMoreRows(insertBefore: true));
+    } else if (widget.column!.type.date!.endDate == null &&
+        popupStateManager!.scroll!.maxScrollVertical ==
+            popupStateManager!.scroll!.vertical!.offset) {
+      popupStateManager!.appendRows(_getMoreRows());
     }
   }
 
   List<PlutoColumn> _buildColumns() {
-    final localeText = widget.stateManager.localeText;
+    final localeText = widget.stateManager!.localeText;
 
     return [
       [localeText.sunday, '7'],
@@ -155,7 +155,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
             return '';
           }
 
-          var dateTime = intl.DateFormat(widget.column.type.date.format)
+          var dateTime = intl.DateFormat(widget.column!.type.date!.format)
               .parse(value.toString());
 
           return dateTime.day.toString();
@@ -183,7 +183,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
           final DateTime day = days.removeAt(0);
 
           return PlutoCell(
-            value: intl.DateFormat(widget.column.type.date.format).format(day),
+            value: intl.DateFormat(widget.column!.type.date!.format).format(day),
           );
         },
       );
@@ -198,47 +198,47 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     int firstDays;
     int lastDays;
 
-    DateTime defaultDate;
+    DateTime? defaultDate;
 
     if (insertBefore) {
       firstDays = -30;
       lastDays = -1;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-        popupStateManager.refRows.first.cells.entries.first.value.value
+        popupStateManager!.refRows!.first!.cells.entries.first.value.value
             .toString(),
-        widget.column.type.date.format,
+        widget.column!.type.date!.format!,
       );
 
       if (defaultDate == null) {
         return [];
       }
 
-      if (widget.column.type.date.startDate != null &&
-          defaultDate.isBefore(widget.column.type.date.startDate)) {
-        defaultDate = widget.column.type.date.startDate;
+      if (widget.column!.type.date!.startDate != null &&
+          defaultDate.isBefore(widget.column!.type.date!.startDate!)) {
+        defaultDate = widget.column!.type.date!.startDate;
       }
     } else {
       firstDays = 1;
       lastDays = 30;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-          popupStateManager.refRows.last.cells.entries.last.value.value
+          popupStateManager!.refRows!.last!.cells.entries.last.value.value
               .toString(),
-          widget.column.type.date.format);
+          widget.column!.type.date!.format!);
 
       if (defaultDate == null) {
         return [];
       }
 
-      if (widget.column.type.date.endDate != null &&
-          defaultDate.isAfter(widget.column.type.date.endDate)) {
-        defaultDate = widget.column.type.date.endDate;
+      if (widget.column!.type.date!.endDate != null &&
+          defaultDate.isAfter(widget.column!.type.date!.endDate!)) {
+        defaultDate = widget.column!.type.date!.endDate;
       }
     }
 
     final startDate = PlutoDateTimeHelper.moveToFirstWeekday(
-        defaultDate.add(Duration(days: firstDays)));
+        defaultDate!.add(Duration(days: firstDays)));
 
     final endDate = PlutoDateTimeHelper.moveToLastWeekday(
         defaultDate.add(Duration(days: lastDays)));
@@ -255,7 +255,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 class _DateCellHeader extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  _DateCellHeader({this.stateManager});
+  _DateCellHeader({required this.stateManager});
 
   @override
   _DateCellHeaderState createState() => _DateCellHeaderState();
@@ -263,12 +263,12 @@ class _DateCellHeader extends PlutoStatefulWidget {
 
 abstract class _DateCellHeaderStateWithChange
     extends PlutoStateWithChange<_DateCellHeader> {
-  PlutoCell currentCell;
+  PlutoCell? currentCell;
 
   @override
   void onChange() {
     resetState((update) {
-      currentCell = update<PlutoCell>(
+      currentCell = update<PlutoCell?>(
         currentCell,
         widget.stateManager.currentCell,
         compare: identical,
@@ -279,15 +279,15 @@ abstract class _DateCellHeaderStateWithChange
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   String get currentDate {
-    if (currentCell == null || currentCell.value.toString().isEmpty) {
+    if (currentCell == null || currentCell!.value.toString().isEmpty) {
       return '';
     }
 
-    return currentCell.value.toString();
+    return currentCell!.value.toString();
   }
 
-  Color get textColor =>
-      widget.stateManager.configuration.columnTextStyle.color;
+  Color? get textColor =>
+      widget.stateManager.configuration!.columnTextStyle.color;
 
   @override
   Widget build(BuildContext context) {

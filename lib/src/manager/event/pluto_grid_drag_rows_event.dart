@@ -3,9 +3,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event called when a row is dragged.
 class PlutoGridDragRowsEvent extends PlutoGridEvent {
-  final Offset offset;
-  final PlutoGridDragType dragType;
-  final List<PlutoRow> rows;
+  final Offset? offset;
+  final PlutoGridDragType? dragType;
+  final List<PlutoRow?>? rows;
 
   PlutoGridDragRowsEvent({
     this.offset,
@@ -13,7 +13,7 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
     this.rows,
   });
 
-  void handler(PlutoGridStateManager stateManager) {
+  void handler(PlutoGridStateManager? stateManager) {
     if (dragType == null ||
         (!dragType.isStart && offset == null) ||
         rows == null) {
@@ -21,11 +21,11 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
     }
 
     if (dragType.isStart) {
-      _startDrag(stateManager);
+      _startDrag(stateManager!);
     } else if (dragType.isUpdate) {
-      _updateDrag(stateManager);
+      _updateDrag(stateManager!);
     } else if (dragType.isEnd) {
-      _endDrag(stateManager);
+      _endDrag(stateManager!);
     }
   }
 
@@ -36,14 +36,14 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
 
   void _updateDrag(PlutoGridStateManager stateManager) {
     stateManager.setDragTargetRowIdx(
-      stateManager.getRowIdxByOffset(offset.dy),
+      stateManager.getRowIdxByOffset(offset!.dy),
     );
   }
 
   void _endDrag(PlutoGridStateManager stateManager) {
     stateManager.moveRowsByOffset(
       rows,
-      offset.dy,
+      offset!.dy,
       notify: false,
     );
     stateManager.setIsDraggingRow(false);
@@ -56,7 +56,7 @@ enum PlutoGridDragType {
   end,
 }
 
-extension PlutoGridDragTypeExtension on PlutoGridDragType {
+extension PlutoGridDragTypeExtension on PlutoGridDragType? {
   bool get isStart => this == PlutoGridDragType.start;
 
   bool get isUpdate => this == PlutoGridDragType.update;

@@ -5,7 +5,7 @@ class PlutoObjectMatcher<T> extends Matcher {
     this.rule,
   });
 
-  bool Function(T object) rule;
+  bool Function(T object)? rule;
 
   @override
   bool matches(dynamic item, Map matchState) {
@@ -13,7 +13,7 @@ class PlutoObjectMatcher<T> extends Matcher {
       return false;
     }
 
-    return rule(item as T);
+    return rule!(item);
   }
 
   @override

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridCellGestureEvent extends PlutoGridEvent {
-  final PlutoGridGestureType gestureType;
-  final Offset offset;
-  final PlutoCell cell;
-  final PlutoColumn column;
-  final int rowIdx;
+  final PlutoGridGestureType? gestureType;
+  final Offset? offset;
+  final PlutoCell? cell;
+  final PlutoColumn? column;
+  final int? rowIdx;
 
   PlutoGridCellGestureEvent({
     this.gestureType,
@@ -17,7 +17,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   });
 
   @override
-  void handler(PlutoGridStateManager stateManager) {
+  void handler(PlutoGridStateManager? stateManager) {
     if (gestureType == null ||
         offset == null ||
         cell == null ||
@@ -27,13 +27,13 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     }
 
     if (gestureType.isOnTapUp) {
-      _onTapUp(stateManager);
+      _onTapUp(stateManager!);
     } else if (gestureType.isOnLongPressStart) {
-      _onLongPressStart(stateManager);
+      _onLongPressStart(stateManager!);
     } else if (gestureType.isOnLongPressMoveUpdate) {
-      _onLongPressMoveUpdate(stateManager);
+      _onLongPressMoveUpdate(stateManager!);
     } else if (gestureType.isOnLongPressEnd) {
-      _onLongPressEnd(stateManager);
+      _onLongPressEnd(stateManager!);
     }
   }
 
@@ -70,7 +70,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
     stateManager.setCurrentSelectingPositionWithOffset(offset);
 
-    stateManager.eventManager.addEvent(PlutoGridMoveUpdateEvent(
+    stateManager.eventManager!.addEvent(PlutoGridMoveUpdateEvent(
       offset: offset,
     ));
   }
@@ -93,7 +93,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
   void _selecting(PlutoGridStateManager stateManager) {
     if (stateManager.keyPressed.shift) {
-      final int columnIdx = stateManager.columnIndex(column);
+      final int? columnIdx = stateManager.columnIndex(column);
 
       stateManager.setCurrentSelectingPosition(
         cellPosition: PlutoGridCellPosition(
@@ -116,8 +116,8 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
   void _setCurrentCell(
     PlutoGridStateManager stateManager,
-    PlutoCell cell,
-    int rowIdx,
+    PlutoCell? cell,
+    int? rowIdx,
   ) {
     if (stateManager.isCurrentCell(cell) != true) {
       stateManager.setCurrentCell(cell, rowIdx, notify: false);
@@ -132,7 +132,7 @@ enum PlutoGridGestureType {
   onLongPressEnd,
 }
 
-extension PlutoGridGestureTypeExtension on PlutoGridGestureType {
+extension PlutoGridGestureTypeExtension on PlutoGridGestureType? {
   bool get isOnTapUp => this == PlutoGridGestureType.onTapUp;
 
   bool get isOnLongPressStart => this == PlutoGridGestureType.onLongPressStart;

@@ -11,11 +11,11 @@ import '../../helper/row_helper.dart';
 void main() {
   final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
-  final buildRowsWithSettingRowHeight = ({
+  final PlutoWidgetTestHelper Function({int columnIdx, List<PlutoColumn> columns, int numberOfRows, double rowHeight, int rowIdx}) buildRowsWithSettingRowHeight = ({
     int numberOfRows = 10,
-    List<PlutoColumn> columns,
+    List<PlutoColumn>? columns,
     int columnIdx = 0,
     int rowIdx = 0,
     double rowHeight = 45.0,
@@ -36,10 +36,10 @@ void main() {
                   rows: rows,
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
-                    stateManager.setSelectingMode(selectingMode);
+                    stateManager!.setSelectingMode(selectingMode);
 
-                    stateManager.setCurrentCell(
-                      stateManager.rows[rowIdx].cells['header$columnIdx'],
+                    stateManager!.setCurrentCell(
+                      stateManager!.rows[rowIdx]!.cells['header$columnIdx'],
                       rowIdx,
                     );
                   },
@@ -52,9 +52,9 @@ void main() {
           ),
         );
 
-        expect(stateManager.currentCell, isNotNull);
-        expect(stateManager.currentCellPosition.columnIdx, columnIdx);
-        expect(stateManager.currentCellPosition.rowIdx, rowIdx);
+        expect(stateManager!.currentCell, isNotNull);
+        expect(stateManager!.currentCellPosition!.columnIdx, columnIdx);
+        expect(stateManager!.currentCellPosition!.rowIdx, rowIdx);
       },
     );
   };
@@ -67,7 +67,7 @@ void main() {
       'rowTotalHeight 값이 90 + PlutoDefaultSettings.rowBorderWidth 이어야 한다.',
       (tester) async {
         expect(
-          stateManager.rowTotalHeight,
+          stateManager!.rowTotalHeight,
           rowHeight + PlutoGridSettings.rowBorderWidth,
         );
       },
@@ -101,7 +101,7 @@ void main() {
         // Editing 상태로 설정
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-        expect(stateManager.isEditing, isTrue);
+        expect(stateManager!.isEditing, isTrue);
 
         // select 팝업 호출
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
@@ -130,7 +130,7 @@ void main() {
         // Editing 상태로 설정
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-        expect(stateManager.isEditing, isTrue);
+        expect(stateManager!.isEditing, isTrue);
 
         // date 팝업 호출
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
@@ -138,7 +138,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         final sundayColumn =
-            find.text(stateManager.configuration.localeText.sunday);
+            find.text(stateManager!.configuration!.localeText.sunday);
 
         expect(
           sundayColumn,
@@ -167,7 +167,7 @@ void main() {
         // Editing 상태로 설정
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-        expect(stateManager.isEditing, isTrue);
+        expect(stateManager!.isEditing, isTrue);
 
         // time 팝업 호출
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
@@ -175,7 +175,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         final hourColumn =
-            find.text(stateManager.configuration.localeText.hour);
+            find.text(stateManager!.configuration!.localeText.hour);
 
         expect(
           hourColumn,

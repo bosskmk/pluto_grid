@@ -6,14 +6,14 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
-    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager.keepFocus).thenReturn(true);
-    when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager!.keepFocus).thenReturn(true);
+    when(stateManager!.hasFocus).thenReturn(true);
   });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {

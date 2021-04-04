@@ -5,13 +5,13 @@ typedef PlutoDualOnSelectedEventCallback = void Function(
     PlutoDualOnSelectedEvent event);
 
 class PlutoDualGrid extends StatefulWidget {
-  final PlutoDualGridProps gridPropsA;
+  final PlutoDualGridProps? gridPropsA;
 
-  final PlutoDualGridProps gridPropsB;
+  final PlutoDualGridProps? gridPropsB;
 
-  final PlutoGridMode mode;
+  final PlutoGridMode? mode;
 
-  final PlutoDualOnSelectedEventCallback onSelected;
+  final PlutoDualOnSelectedEventCallback? onSelected;
 
   /// [PlutoDualGridDisplayRatio]
   /// Set the width of the two grids by specifying the ratio of the left grid.
@@ -38,15 +38,15 @@ class PlutoDualGrid extends StatefulWidget {
 }
 
 class _PlutoDualGridState extends State<PlutoDualGrid> {
-  PlutoGridStateManager _stateManagerA;
+  PlutoGridStateManager? _stateManagerA;
 
-  PlutoGridStateManager _stateManagerB;
+  PlutoGridStateManager? _stateManagerB;
 
   Widget _buildGrid({
-    PlutoDualGridProps props,
-    PlutoGridMode mode,
-    double width,
-    bool isGridA,
+    required PlutoDualGridProps props,
+    PlutoGridMode? mode,
+    double? width,
+    bool? isGridA,
   }) {
     return SizedBox(
       width: width,
@@ -55,48 +55,48 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
         rows: props.rows,
         mode: mode,
         onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
-          if (isGridA) {
+          if (isGridA!) {
             _stateManagerA = onLoadedEvent.stateManager;
           } else {
             _stateManagerB = onLoadedEvent.stateManager;
           }
 
-          onLoadedEvent.stateManager.eventManager
+          onLoadedEvent.stateManager!.eventManager!
               .listener((PlutoGridEvent plutoEvent) {
             if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
-              if (isGridA == true && plutoEvent.direction.isRight) {
-                _stateManagerA.setKeepFocus(false);
-                _stateManagerB.setKeepFocus(true);
-              } else if (isGridA != true && plutoEvent.direction.isLeft) {
-                _stateManagerA.setKeepFocus(true);
-                _stateManagerB.setKeepFocus(false);
+              if (isGridA == true && plutoEvent.direction!.isRight) {
+                _stateManagerA!.setKeepFocus(false);
+                _stateManagerB!.setKeepFocus(true);
+              } else if (isGridA != true && plutoEvent.direction!.isLeft) {
+                _stateManagerA!.setKeepFocus(true);
+                _stateManagerB!.setKeepFocus(false);
               }
             }
           });
 
           if (props.onLoaded != null) {
-            props.onLoaded(onLoadedEvent);
+            props.onLoaded!(onLoadedEvent);
           }
         },
         onChanged: props.onChanged,
         onSelected: (PlutoGridOnSelectedEvent onSelectedEvent) {
           if (onSelectedEvent.row == null || onSelectedEvent.cell == null) {
-            widget.onSelected(
+            widget.onSelected!(
               PlutoDualOnSelectedEvent(
                 gridA: null,
                 gridB: null,
               ),
             );
           } else {
-            widget.onSelected(
+            widget.onSelected!(
               PlutoDualOnSelectedEvent(
                 gridA: PlutoGridOnSelectedEvent(
-                  row: _stateManagerA.currentRow,
-                  cell: _stateManagerA.currentCell,
+                  row: _stateManagerA!.currentRow,
+                  cell: _stateManagerA!.currentCell,
                 ),
                 gridB: PlutoGridOnSelectedEvent(
-                  row: _stateManagerB.currentRow,
-                  cell: _stateManagerB.currentCell,
+                  row: _stateManagerB!.currentRow,
+                  cell: _stateManagerB!.currentCell,
                 ),
               ),
             );
@@ -115,13 +115,13 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
       return Row(
         children: [
           _buildGrid(
-            props: widget.gridPropsA,
+            props: widget.gridPropsA!,
             mode: widget.mode,
             width: widget.display.gridAWidth(size),
             isGridA: true,
           ),
           _buildGrid(
-            props: widget.gridPropsB,
+            props: widget.gridPropsB!,
             mode: widget.mode,
             width: widget.display.gridBWidth(size),
             isGridA: false,
@@ -133,8 +133,8 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
 }
 
 class PlutoDualOnSelectedEvent {
-  PlutoGridOnSelectedEvent gridA;
-  PlutoGridOnSelectedEvent gridB;
+  PlutoGridOnSelectedEvent? gridA;
+  PlutoGridOnSelectedEvent? gridB;
 
   PlutoDualOnSelectedEvent({
     this.gridA,
@@ -185,13 +185,13 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 }
 
 class PlutoDualGridProps {
-  final List<PlutoColumn> columns;
-  final List<PlutoRow> rows;
-  final PlutoOnLoadedEventCallback onLoaded;
-  final PlutoOnChangedEventCallback onChanged;
-  final CreateHeaderCallBack createHeader;
-  final CreateFooterCallBack createFooter;
-  final PlutoGridConfiguration configuration;
+  final List<PlutoColumn>? columns;
+  final List<PlutoRow>? rows;
+  final PlutoOnLoadedEventCallback? onLoaded;
+  final PlutoOnChangedEventCallback? onChanged;
+  final CreateHeaderCallBack? createHeader;
+  final CreateFooterCallBack? createFooter;
+  final PlutoGridConfiguration? configuration;
 
   PlutoDualGridProps({
     this.columns,

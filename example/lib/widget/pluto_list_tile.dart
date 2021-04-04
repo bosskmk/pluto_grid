@@ -5,14 +5,14 @@ import '../constants/pluto_grid_example_colors.dart';
 class PlutoListTile extends StatelessWidget {
   final String title;
 
-  final String description;
+  final String? description;
 
-  final Function() onTapPreview;
+  final Function()? onTapPreview;
 
-  final Function() onTapLiveDemo;
+  final Function()? onTapLiveDemo;
 
   PlutoListTile({
-    @required this.title,
+    required this.title,
     this.description,
     this.onTapPreview,
     this.onTapLiveDemo,
@@ -20,7 +20,7 @@ class PlutoListTile extends StatelessWidget {
         _fontColor = PlutoGridExampleColors.fontColor;
 
   PlutoListTile.dark({
-    @required this.title,
+    required this.title,
     this.description,
     this.onTapPreview,
     this.onTapLiveDemo,
@@ -74,7 +74,7 @@ class PlutoListTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    description,
+                    description!,
                     style: TextStyle(
                       color: _fontColor,
                       fontWeight: FontWeight.w600,

@@ -39,13 +39,13 @@ class PlutoCell {
   dynamic _getValueForSorting() {
     assert(_column != null);
 
-    _valueForSorting ??= _column.type.makeCompareValue(_value);
+    _valueForSorting ??= _column!.type!.makeCompareValue(_value);
 
     return _valueForSorting;
   }
 
   /// cell column
-  PlutoColumn _column;
+  PlutoColumn? _column;
 
   void setColumn(PlutoColumn column) {
     _column = column;

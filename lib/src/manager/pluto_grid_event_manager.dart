@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlutoGridEventManager {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   PlutoGridEventManager({
     this.stateManager,

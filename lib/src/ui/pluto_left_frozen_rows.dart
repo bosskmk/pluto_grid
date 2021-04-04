@@ -13,20 +13,20 @@ class PlutoLeftFrozenRows extends PlutoStatefulWidget {
 
 abstract class _PlutoLeftFrozenRowsStateWithState
     extends PlutoStateWithChange<PlutoLeftFrozenRows> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow?>? rows;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>>(
+      columns = update<List<PlutoColumn>?>(
         columns,
         widget.stateManager.leftFrozenColumns,
         compare: listEquals,
       );
 
-      rows = update<List<PlutoRow>>(
+      rows = update<List<PlutoRow?>?>(
         rows,
         widget.stateManager.refRows,
         compare: listEquals,
@@ -37,11 +37,11 @@ abstract class _PlutoLeftFrozenRowsStateWithState
 }
 
 class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
-  ScrollController scroll;
+  ScrollController? scroll;
 
   @override
   void dispose() {
-    scroll.dispose();
+    scroll!.dispose();
 
     super.dispose();
   }
@@ -50,7 +50,7 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
   void initState() {
     super.initState();
 
-    scroll = widget.stateManager.scroll.vertical.addAndGet();
+    scroll = widget.stateManager.scroll!.vertical!.addAndGet();
   }
 
   @override
@@ -59,14 +59,14 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
       controller: scroll,
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
-      itemCount: rows.length,
+      itemCount: rows!.length,
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('left_frozen_row_${rows[i].key}'),
+          key: ValueKey('left_frozen_row_${rows![i]!.key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
-          row: rows[i],
+          row: rows![i],
           columns: columns,
         );
       },

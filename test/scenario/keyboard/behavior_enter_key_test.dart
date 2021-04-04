@@ -13,7 +13,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final withTheCellSelected = PlutoWidgetTestHelper(
       '3, 3 셀이 선택 된 상태에서',
@@ -47,34 +47,34 @@ void main() {
     withTheCellSelected.test(
       'editing 상태에서 shift + enter 입력 시 위 셀로 이동 되어야 한다.',
       (tester) async {
-        stateManager.setEditing(true);
-        expect(stateManager.currentCell.value, 'header3 value 3');
-        expect(stateManager.currentCellPosition.columnIdx, 3);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        stateManager!.setEditing(true);
+        expect(stateManager!.currentCell!.value, 'header3 value 3');
+        expect(stateManager!.currentCellPosition!.columnIdx, 3);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
 
         await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
         await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-        expect(stateManager.currentCell.value, 'header3 value 2');
-        expect(stateManager.currentCellPosition.columnIdx, 3);
-        expect(stateManager.currentCellPosition.rowIdx, 2);
+        expect(stateManager!.currentCell!.value, 'header3 value 2');
+        expect(stateManager!.currentCellPosition!.columnIdx, 3);
+        expect(stateManager!.currentCellPosition!.rowIdx, 2);
       },
     );
 
     withTheCellSelected.test(
       'editing 상태에서 enter 입력 시 아래 셀로 이동 되어야 한다.',
       (tester) async {
-        stateManager.setEditing(true);
-        expect(stateManager.currentCell.value, 'header3 value 3');
-        expect(stateManager.currentCellPosition.columnIdx, 3);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        stateManager!.setEditing(true);
+        expect(stateManager!.currentCell!.value, 'header3 value 3');
+        expect(stateManager!.currentCellPosition!.columnIdx, 3);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
 
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        expect(stateManager.currentCell.value, 'header3 value 4');
-        expect(stateManager.currentCellPosition.columnIdx, 3);
-        expect(stateManager.currentCellPosition.rowIdx, 4);
+        expect(stateManager!.currentCell!.value, 'header3 value 4');
+        expect(stateManager!.currentCellPosition!.columnIdx, 3);
+        expect(stateManager!.currentCellPosition!.rowIdx, 4);
       },
     );
   });

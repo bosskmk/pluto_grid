@@ -3,7 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
-  PlutoGridScrollController get scroll;
+  PlutoGridScrollController? get scroll;
 
   void setScroll(PlutoGridScrollController scroll);
 
@@ -18,28 +18,28 @@ abstract class IScrollState {
   );
 
   /// Scroll to [rowIdx] position.
-  void moveScrollByRow(PlutoMoveDirection direction, int rowIdx);
+  void moveScrollByRow(PlutoMoveDirection direction, int? rowIdx);
 
   /// Scroll to [columnIdx] position.
-  void moveScrollByColumn(PlutoMoveDirection direction, int columnIdx);
+  void moveScrollByColumn(PlutoMoveDirection direction, int? columnIdx);
 
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 }
 
 mixin ScrollState implements IPlutoGridState {
-  PlutoGridScrollController get scroll => _scroll;
+  PlutoGridScrollController? get scroll => _scroll;
 
-  PlutoGridScrollController _scroll;
+  PlutoGridScrollController? _scroll;
 
-  void setScroll(PlutoGridScrollController scroll) {
+  void setScroll(PlutoGridScrollController? scroll) {
     _scroll = scroll;
   }
 
   void scrollByDirection(PlutoMoveDirection direction, double offset) {
     if (direction.vertical) {
-      _scroll.vertical.jumpTo(offset);
+      _scroll!.vertical!.jumpTo(offset);
     } else {
-      _scroll.horizontal.jumpTo(offset);
+      _scroll!.horizontal!.jumpTo(offset);
     }
   }
 
@@ -51,7 +51,7 @@ mixin ScrollState implements IPlutoGridState {
     return !(showFrozenColumn == true && columnToMove.frozen.isFrozen);
   }
 
-  void moveScrollByRow(PlutoMoveDirection direction, int rowIdx) {
+  void moveScrollByRow(PlutoMoveDirection direction, int? rowIdx) {
     if (!direction.vertical) {
       return;
     }
@@ -61,16 +61,16 @@ mixin ScrollState implements IPlutoGridState {
     final double gridOffset =
         PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
 
-    final double screenOffset = _scroll.verticalOffset +
+    final double screenOffset = _scroll!.verticalOffset +
         offsetHeight -
         columnHeight -
         columnFilterHeight -
         gridOffset;
 
     double offsetToMove =
-        direction.isUp ? (rowIdx - 1) * rowSize : (rowIdx + 1) * rowSize;
+        direction.isUp ? (rowIdx! - 1) * rowSize : (rowIdx! + 1) * rowSize;
 
-    final bool inScrollStart = _scroll.verticalOffset <= offsetToMove;
+    final bool inScrollStart = _scroll!.verticalOffset <= offsetToMove;
 
     final bool inScrollEnd = offsetToMove + rowSize <= screenOffset;
 
@@ -78,13 +78,13 @@ mixin ScrollState implements IPlutoGridState {
       return;
     } else if (inScrollEnd == false) {
       offsetToMove =
-          _scroll.verticalOffset + offsetToMove + rowSize - screenOffset;
+          _scroll!.verticalOffset + offsetToMove + rowSize - screenOffset;
     }
 
     scrollByDirection(direction, offsetToMove);
   }
 
-  void moveScrollByColumn(PlutoMoveDirection direction, int columnIdx) {
+  void moveScrollByColumn(PlutoMoveDirection direction, int? columnIdx) {
     if (!direction.horizontal) {
       return;
     }
@@ -92,7 +92,7 @@ mixin ScrollState implements IPlutoGridState {
     final columnIndexes = columnIndexesByShowFrozen;
 
     final PlutoColumn columnToMove =
-        refColumns[columnIndexes[columnIdx + direction.offset]];
+        refColumns![columnIndexes[columnIdx! + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,
@@ -107,18 +107,18 @@ mixin ScrollState implements IPlutoGridState {
             columnIdx + direction.offset - leftFrozenColumnIndexes.length)
         : columnsWidthAtColumnIdx(columnIdx + direction.offset);
 
-    final double screenOffset = showFrozenColumn == true
-        ? maxWidth - leftFrozenColumnsWidth - rightFrozenColumnsWidth
+    final double? screenOffset = showFrozenColumn == true
+        ? maxWidth! - leftFrozenColumnsWidth - rightFrozenColumnsWidth
         : maxWidth;
 
     if (direction.isRight) {
-      if (offsetToMove > _scroll.horizontal.offset) {
-        offsetToMove -= screenOffset;
+      if (offsetToMove > _scroll!.horizontal!.offset) {
+        offsetToMove -= screenOffset!;
         offsetToMove += PlutoGridSettings.totalShadowLineWidth;
         offsetToMove += columnToMove.width;
         offsetToMove += scrollOffsetByFrozenColumn;
 
-        if (offsetToMove < _scroll.horizontal.offset) {
+        if (offsetToMove < _scroll!.horizontal!.offset) {
           return;
         }
       }
@@ -127,12 +127,13 @@ mixin ScrollState implements IPlutoGridState {
           columnToMove.width +
           PlutoGridSettings.totalShadowLineWidth;
 
-      final currentOffset = screenOffset + _scroll.horizontal.offset;
+      final currentOffset = screenOffset! + _scroll!.horizontal!.offset;
 
       if (offsetToNeed > currentOffset) {
-        offsetToMove = _scroll.horizontal.offset + offsetToNeed - currentOffset;
+        offsetToMove =
+            _scroll!.horizontal!.offset + offsetToNeed - currentOffset;
         offsetToMove += scrollOffsetByFrozenColumn;
-      } else if (offsetToMove > _scroll.horizontal.offset) {
+      } else if (offsetToMove > _scroll!.horizontal!.offset) {
         return;
       }
     }
@@ -140,22 +141,20 @@ mixin ScrollState implements IPlutoGridState {
     scrollByDirection(direction, offsetToMove);
   }
 
-  bool needMovingScroll(Offset offset, PlutoMoveDirection move) {
+  bool needMovingScroll(Offset? offset, PlutoMoveDirection move) {
     if (selectingMode.isNone) {
       return false;
     }
 
     switch (move) {
       case PlutoMoveDirection.left:
-        return offset.dx < bodyLeftScrollOffset;
+        return offset!.dx < bodyLeftScrollOffset;
       case PlutoMoveDirection.right:
-        return offset.dx > bodyRightScrollOffset;
+        return offset!.dx > bodyRightScrollOffset;
       case PlutoMoveDirection.up:
-        return offset.dy < bodyUpScrollOffset;
+        return offset!.dy < bodyUpScrollOffset;
       case PlutoMoveDirection.down:
-        return offset.dy > bodyDownScrollOffset;
+        return offset!.dy > bodyDownScrollOffset;
     }
-
-    return false;
   }
 }

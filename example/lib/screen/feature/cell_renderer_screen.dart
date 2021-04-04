@@ -14,11 +14,11 @@ class CellRendererScreen extends StatefulWidget {
 }
 
 class _CellRendererScreenState extends State<CellRendererScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   @override
   void initState() {
@@ -41,9 +41,9 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                   Icons.add_circle,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager.insertRows(
-                    rendererContext.rowIdx,
-                    [rendererContext.stateManager.getNewRow()],
+                  rendererContext.stateManager!.insertRows(
+                    rendererContext.rowIdx!,
+                    [rendererContext.stateManager!.getNewRow()],
                   );
                 },
                 iconSize: 18,
@@ -55,7 +55,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager
+                  rendererContext.stateManager!
                       .removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
@@ -64,7 +64,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext.row.cells[rendererContext.column.field].value
+                  rendererContext.row!.cells[rendererContext.column!.field]!.value
                       .toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -81,16 +81,16 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
-          if (rendererContext.cell.value == 'red') {
+          if (rendererContext.cell!.value == 'red') {
             textColor = Colors.red;
-          } else if (rendererContext.cell.value == 'blue') {
+          } else if (rendererContext.cell!.value == 'blue') {
             textColor = Colors.blue;
-          } else if (rendererContext.cell.value == 'green') {
+          } else if (rendererContext.cell!.value == 'green') {
             textColor = Colors.green;
           }
 
           return Text(
-            rendererContext.cell.value.toString(),
+            rendererContext.cell!.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
+          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.cell);
 
           stateManager = event.stateManager;
         },

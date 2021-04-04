@@ -10,8 +10,8 @@ import '../../../mock/mock_pluto_event_manager.dart';
 import '../../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
-  PlutoGridEventManager eventManager;
+  late PlutoGridStateManager stateManager;
+  PlutoGridEventManager? eventManager;
   StreamSubscription<PlutoGridEvent> streamSubscription;
 
   setUp(() {
@@ -22,9 +22,9 @@ void main() {
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager.filterRowsByField(any)).thenReturn([]);
+    when(stateManager.filterRowsByField(any!)).thenReturn([]);
 
-    when(eventManager.listener(any)).thenReturn(streamSubscription);
+    when(eventManager!.listener(any!)).thenReturn(streamSubscription);
   });
 
   testWidgets(
@@ -81,13 +81,13 @@ void main() {
       // then
       await tester.enterText(find.byType(TextField), 'abc');
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridChangeColumnFilterEvent>(
             rule: (object) {
-          return object.column.field == column.field &&
+          return object.column!.field == column.field &&
               object.filterType.runtimeType == PlutoFilterTypeContains &&
               object.filterValue == 'abc';
-        })),
+        }))!,
       )).called(1);
     },
   );
@@ -137,7 +137,7 @@ void main() {
           enableFilterMenuItem: true,
         );
 
-        when(stateManager.filterRowsByField(any)).thenReturn([
+        when(stateManager.filterRowsByField('argThat')).thenReturn([
           FilterHelper.createFilterRow(
             columnField: 'column_field_name',
           ),
@@ -181,7 +181,7 @@ void main() {
           enableFilterMenuItem: true,
         );
 
-        when(stateManager.filterRowsByField(any)).thenReturn([
+        when(stateManager.filterRowsByField(any!)).thenReturn([
           FilterHelper.createFilterRow(
             columnField: FilterHelper.filterFieldAllColumns,
           ),

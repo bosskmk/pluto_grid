@@ -62,7 +62,7 @@ mixin EditingState implements IPlutoGridState {
     }
 
     if (flag == true) {
-      _cellValueBeforeEditing = currentCell.value;
+      _cellValueBeforeEditing = currentCell!.value;
     }
 
     _isEditing = flag;
@@ -84,42 +84,42 @@ mixin EditingState implements IPlutoGridState {
     if (selectingMode.isRow && currentSelectingRows.isNotEmpty) {
       _pasteCellValueIntoSelectingRows(textList: textList);
     } else {
-      int columnStartIdx;
+      int? columnStartIdx;
 
       int columnEndIdx;
 
-      int rowStartIdx;
+      int? rowStartIdx;
 
       int rowEndIdx;
 
       if (currentSelectingPosition == null) {
         // No cell selection : Paste in order based on the current cell
-        columnStartIdx = currentCellPosition.columnIdx;
+        columnStartIdx = currentCellPosition!.columnIdx;
 
         columnEndIdx =
-            currentCellPosition.columnIdx + textList.first.length - 1;
+            currentCellPosition!.columnIdx! + textList.first.length - 1;
 
-        rowStartIdx = currentCellPosition.rowIdx;
+        rowStartIdx = currentCellPosition!.rowIdx;
 
-        rowEndIdx = currentCellPosition.rowIdx + textList.length - 1;
+        rowEndIdx = currentCellPosition!.rowIdx! + textList.length - 1;
       } else {
         // If there are selected cells : Paste in order from selected cell range
         columnStartIdx = min(
-            currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+            currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
         columnEndIdx = max(
-            currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+            currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
         rowStartIdx =
-            min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+            min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
         rowEndIdx =
-            max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+            max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
       }
 
       _pasteCellValueInOrder(
         textList: textList,
-        rowIdxList: [for (var i = rowStartIdx; i <= rowEndIdx; i += 1) i],
+        rowIdxList: [for (var i = rowStartIdx!; i <= rowEndIdx; i += 1) i],
         columnStartIdx: columnStartIdx,
         columnEndIdx: columnEndIdx,
       );
@@ -143,16 +143,16 @@ mixin EditingState implements IPlutoGridState {
     bool force = false,
     bool notify = true,
   }) {
-    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
+    for (var rowIdx = 0; rowIdx < refRows!.length; rowIdx += 1) {
       for (var columnIdx = 0;
           columnIdx < columnIndexes.length;
           columnIdx += 1) {
-        final field = refColumns[columnIndexes[columnIdx]].field;
+        final field = refColumns![columnIndexes[columnIdx]].field;
 
-        if (refRows[rowIdx].cells[field].key == cellKey) {
-          final currentColumn = refColumns[columnIndexes[columnIdx]];
+        if (refRows![rowIdx]!.cells[field]!.key == cellKey) {
+          final currentColumn = refColumns![columnIndexes[columnIdx]];
 
-          final dynamic oldValue = refRows[rowIdx].cells[field].value;
+          final dynamic oldValue = refRows![rowIdx]!.cells[field]!.value;
 
           value = filteredCellValue(
             column: currentColumn,
@@ -169,17 +169,17 @@ mixin EditingState implements IPlutoGridState {
             return;
           }
 
-          refRows[rowIdx].setState(PlutoRowState.updated);
+          refRows![rowIdx]!.setState(PlutoRowState.updated);
 
-          refRows[rowIdx].cells[field].value =
+          refRows![rowIdx]!.cells[field]!.value =
               value = castValueByColumnType(value, currentColumn);
 
           if (callOnChangedEvent == true && onChanged != null) {
-            onChanged(PlutoGridOnChangedEvent(
+            onChanged!(PlutoGridOnChangedEvent(
               columnIdx: columnIdx,
               column: currentColumn,
               rowIdx: rowIdx,
-              row: refRows[rowIdx],
+              row: refRows![rowIdx],
               value: value,
               oldValue: oldValue,
             ));
@@ -195,18 +195,18 @@ mixin EditingState implements IPlutoGridState {
     }
   }
 
-  void _pasteCellValueIntoSelectingRows({List<List<String>> textList}) {
+  void _pasteCellValueIntoSelectingRows({List<List<String>>? textList}) {
     int columnStartIdx = 0;
 
-    int columnEndIdx = refColumns.length - 1;
+    int columnEndIdx = refColumns!.length - 1;
 
     final List<Key> selectingRowKeys =
-        currentSelectingRows.map((e) => e.key).toList();
+        currentSelectingRows.map((e) => e!.key).toList();
 
     List<int> rowIdxList = [];
 
-    for (var i = 0; i < refRows.length; i += 1) {
-      final currentRowKey = refRows[i].key;
+    for (var i = 0; i < refRows!.length; i += 1) {
+      final currentRowKey = refRows![i]!.key;
 
       if (selectingRowKeys.contains(currentRowKey)) {
         selectingRowKeys.removeWhere((key) => key == currentRowKey);
@@ -227,10 +227,10 @@ mixin EditingState implements IPlutoGridState {
   }
 
   void _pasteCellValueInOrder({
-    List<List<String>> textList,
-    List<int> rowIdxList,
-    int columnStartIdx,
-    int columnEndIdx,
+    List<List<String>>? textList,
+    required List<int> rowIdxList,
+    int? columnStartIdx,
+    int? columnEndIdx,
   }) {
     final List<int> columnIndexes = columnIndexesByShowFrozen;
 
@@ -241,16 +241,16 @@ mixin EditingState implements IPlutoGridState {
 
       int textColumnIdx = 0;
 
-      if (rowIdx > refRows.length - 1) {
+      if (rowIdx > refRows!.length - 1) {
         break;
       }
 
-      if (textRowIdx > textList.length - 1) {
+      if (textRowIdx > textList!.length - 1) {
         textRowIdx = 0;
       }
 
-      for (var columnIdx = columnStartIdx;
-          columnIdx <= columnEndIdx;
+      for (var columnIdx = columnStartIdx!;
+          columnIdx <= columnEndIdx!;
           columnIdx += 1) {
         if (columnIdx > columnIndexes.length - 1) {
           break;
@@ -260,9 +260,9 @@ mixin EditingState implements IPlutoGridState {
           textColumnIdx = 0;
         }
 
-        final currentColumn = refColumns[columnIndexes[columnIdx]];
+        final currentColumn = refColumns![columnIndexes[columnIdx]];
 
-        final currentRow = refRows[rowIdx].cells[currentColumn.field];
+        final currentRow = refRows![rowIdx]!.cells[currentColumn.field]!;
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
@@ -283,17 +283,17 @@ mixin EditingState implements IPlutoGridState {
           continue;
         }
 
-        refRows[rowIdx].setState(PlutoRowState.updated);
+        refRows![rowIdx]!.setState(PlutoRowState.updated);
 
         currentRow.value =
             newValue = castValueByColumnType(newValue, currentColumn);
 
         if (onChanged != null) {
-          onChanged(PlutoGridOnChangedEvent(
+          onChanged!(PlutoGridOnChangedEvent(
             columnIdx: columnIndexes[columnIdx],
             column: currentColumn,
             rowIdx: rowIdx,
-            row: refRows[rowIdx],
+            row: refRows![rowIdx],
             value: newValue,
             oldValue: oldValue,
           ));

@@ -10,7 +10,7 @@ import '../../helper/row_helper.dart';
 void main() {
   final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.cell;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   final buildRowsWithSelectingCells = ({
     int numberOfRows = 10,
@@ -36,14 +36,14 @@ void main() {
                   rows: rows,
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
-                    stateManager.setSelectingMode(selectingMode);
+                    stateManager!.setSelectingMode(selectingMode);
 
-                    stateManager.setCurrentCell(
-                      stateManager.rows[rowIdx].cells['header$columnIdx'],
+                    stateManager!.setCurrentCell(
+                      stateManager!.rows[rowIdx]!.cells['header$columnIdx'],
                       rowIdx,
                     );
 
-                    stateManager.setCurrentSelectingPosition(
+                    stateManager!.setCurrentSelectingPosition(
                       cellPosition: PlutoGridCellPosition(
                         columnIdx: columnIdxToSelect,
                         rowIdx: rowIdxToSelect,
@@ -56,14 +56,14 @@ void main() {
           ),
         );
 
-        expect(stateManager.currentCell, isNotNull);
-        expect(stateManager.currentCellPosition.columnIdx, columnIdx);
-        expect(stateManager.currentCellPosition.rowIdx, rowIdx);
+        expect(stateManager!.currentCell, isNotNull);
+        expect(stateManager!.currentCellPosition!.columnIdx, columnIdx);
+        expect(stateManager!.currentCellPosition!.rowIdx, rowIdx);
 
-        expect(stateManager.currentSelectingPosition, isNotNull);
+        expect(stateManager!.currentSelectingPosition, isNotNull);
         expect(
-            stateManager.currentSelectingPosition.columnIdx, columnIdxToSelect);
-        expect(stateManager.currentSelectingPosition.rowIdx, rowIdxToSelect);
+            stateManager!.currentSelectingPosition!.columnIdx, columnIdxToSelect);
+        expect(stateManager!.currentSelectingPosition!.rowIdx, rowIdxToSelect);
       },
     );
   };
@@ -90,23 +90,23 @@ void main() {
       '선택 된 셀이 (0, 2), (1, 3) 로 변경 되어야 한다.',
       (tester) async {
         // before
-        expect(stateManager.currentCellPosition.columnIdx, currentColumnIdx);
-        expect(stateManager.currentCellPosition.rowIdx, currentRowIdx);
+        expect(stateManager!.currentCellPosition!.columnIdx, currentColumnIdx);
+        expect(stateManager!.currentCellPosition!.rowIdx, currentRowIdx);
 
         expect(
-            stateManager.currentSelectingPosition.columnIdx, columnIdxToSelect);
-        expect(stateManager.currentSelectingPosition.rowIdx, rowIdxToSelect);
+            stateManager!.currentSelectingPosition!.columnIdx, columnIdxToSelect);
+        expect(stateManager!.currentSelectingPosition!.rowIdx, rowIdxToSelect);
 
-        final rowToInsert = stateManager.getNewRow();
+        final rowToInsert = stateManager!.getNewRow();
 
-        stateManager.insertRows(0, [rowToInsert]);
+        stateManager!.insertRows(0, [rowToInsert]);
 
         // after
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 2);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 2);
 
-        expect(stateManager.currentSelectingPosition.columnIdx, 1);
-        expect(stateManager.currentSelectingPosition.rowIdx, 3);
+        expect(stateManager!.currentSelectingPosition!.columnIdx, 1);
+        expect(stateManager!.currentSelectingPosition!.rowIdx, 3);
       },
     );
 
@@ -115,23 +115,23 @@ void main() {
       '선택 된 셀이 (0, 0), (1, 1) 로 변경 되어야 한다.',
       (tester) async {
         // before
-        expect(stateManager.currentCellPosition.columnIdx, currentColumnIdx);
-        expect(stateManager.currentCellPosition.rowIdx, currentRowIdx);
+        expect(stateManager!.currentCellPosition!.columnIdx, currentColumnIdx);
+        expect(stateManager!.currentCellPosition!.rowIdx, currentRowIdx);
 
         expect(
-            stateManager.currentSelectingPosition.columnIdx, columnIdxToSelect);
-        expect(stateManager.currentSelectingPosition.rowIdx, rowIdxToSelect);
+            stateManager!.currentSelectingPosition!.columnIdx, columnIdxToSelect);
+        expect(stateManager!.currentSelectingPosition!.rowIdx, rowIdxToSelect);
 
-        final rowToDelete = stateManager.rows.first;
+        final rowToDelete = stateManager!.rows.first;
 
-        stateManager.removeRows([rowToDelete]);
+        stateManager!.removeRows([rowToDelete]);
 
         // after
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 0);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 0);
 
-        expect(stateManager.currentSelectingPosition.columnIdx, 1);
-        expect(stateManager.currentSelectingPosition.rowIdx, 1);
+        expect(stateManager!.currentSelectingPosition!.columnIdx, 1);
+        expect(stateManager!.currentSelectingPosition!.rowIdx, 1);
       },
     );
   });
@@ -158,17 +158,17 @@ void main() {
     selectCells().test(
       '선택 된 행을 마지막 행부터 차례대로 삭제.',
       (tester) async {
-        expect(stateManager.rows.length, 10);
+        expect(stateManager!.rows.length, 10);
 
         final getLastRow = () {
-          return stateManager.rows.last;
+          return stateManager!.rows.last;
         };
 
-        stateManager.removeRows([getLastRow()]);
-        expect(stateManager.rows.length, 9);
+        stateManager!.removeRows([getLastRow()]);
+        expect(stateManager!.rows.length, 9);
 
-        stateManager.removeRows([getLastRow()]);
-        expect(stateManager.rows.length, 8);
+        stateManager!.removeRows([getLastRow()]);
+        expect(stateManager!.rows.length, 8);
       },
     );
   });

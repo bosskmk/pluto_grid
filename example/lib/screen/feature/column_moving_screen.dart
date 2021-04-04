@@ -12,9 +12,9 @@ class ColumnMovingScreen extends StatefulWidget {
 }
 
 class _ColumnMovingScreenState extends State<ColumnMovingScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

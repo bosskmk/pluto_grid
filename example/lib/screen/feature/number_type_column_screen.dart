@@ -12,9 +12,9 @@ class NumberTypeColumnScreen extends StatefulWidget {
 }
 
 class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

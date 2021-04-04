@@ -4,18 +4,18 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 /// An event that occurs when dragging or moving after a long tap.
 class PlutoGridMoveUpdateEvent extends PlutoGridEvent {
-  final Offset offset;
+  final Offset? offset;
 
   PlutoGridMoveUpdateEvent({
     this.offset,
   });
 
-  void handler(PlutoGridStateManager stateManager) {
+  void handler(PlutoGridStateManager? stateManager) {
     if (offset == null) {
       return;
     }
 
-    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.left)) {
+    if (stateManager!.needMovingScroll(offset, PlutoMoveDirection.left)) {
       _scroll(stateManager, PlutoMoveDirection.left);
     } else if (stateManager.needMovingScroll(
         offset, PlutoMoveDirection.right)) {
@@ -29,14 +29,10 @@ class PlutoGridMoveUpdateEvent extends PlutoGridEvent {
     }
   }
 
-  void _scroll(PlutoGridStateManager stateManager, PlutoMoveDirection move) {
-    if (move == null) {
-      return;
-    }
-
+  void _scroll(PlutoGridStateManager? stateManager, PlutoMoveDirection move) {
     final LinkedScrollControllerGroup scroll = move.horizontal
-        ? stateManager.scroll.horizontal
-        : stateManager.scroll.vertical;
+        ? stateManager!.scroll!.horizontal!
+        : stateManager!.scroll!.vertical!;
 
     final double offset = move.isLeft || move.isUp
         ? -PlutoGridSettings.offsetScrollingFromEdgeAtOnce

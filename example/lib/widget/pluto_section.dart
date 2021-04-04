@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PlutoSection extends StatelessWidget {
-  final String title;
+  final String? title;
 
-  final Widget child;
+  final Widget? child;
 
-  final Color color;
+  final Color? color;
 
-  final Color fontColor;
+  final Color? fontColor;
 
   PlutoSection({
     this.title,
@@ -28,7 +28,7 @@ class PlutoSection extends StatelessWidget {
               bottom: 20,
             ),
             child: Text(
-              title,
+              title!,
               style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
@@ -36,7 +36,7 @@ class PlutoSection extends StatelessWidget {
               ),
             ),
           ),
-          child,
+          child!,
         ],
       ),
     );

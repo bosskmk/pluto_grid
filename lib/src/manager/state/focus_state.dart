@@ -3,7 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IFocusState {
   /// FocusNode to control keyboard input.
-  FocusNode get gridFocusNode;
+  FocusNode? get gridFocusNode;
 
   bool get keepFocus;
 
@@ -20,18 +20,18 @@ abstract class IFocusState {
 }
 
 mixin FocusState implements IPlutoGridState {
-  FocusNode get gridFocusNode => _gridFocusNode;
+  FocusNode? get gridFocusNode => _gridFocusNode;
 
-  FocusNode _gridFocusNode;
+  FocusNode? _gridFocusNode;
 
   bool get keepFocus => _keepFocus;
 
   bool _keepFocus = false;
 
   bool get hasFocus =>
-      _gridFocusNode != null && _keepFocus && _gridFocusNode.hasFocus;
+      _gridFocusNode != null && _keepFocus && _gridFocusNode!.hasFocus;
 
-  void setGridFocusNode(FocusNode focusNode) {
+  void setGridFocusNode(FocusNode? focusNode) {
     _gridFocusNode = focusNode;
   }
 
@@ -43,7 +43,7 @@ mixin FocusState implements IPlutoGridState {
     _keepFocus = flag;
 
     if (_keepFocus) {
-      _gridFocusNode.requestFocus();
+      _gridFocusNode!.requestFocus();
     }
 
     if (notify) {
@@ -74,7 +74,7 @@ mixin FocusState implements IPlutoGridState {
     bool found = false;
 
     for (var i = 0; i < length - 1; i += 1) {
-      var current = refColumns[columnIndexes[i]];
+      var current = refColumns![columnIndexes[i]];
 
       if (!found && current.key == column.key) {
         found = true;
@@ -86,7 +86,7 @@ mixin FocusState implements IPlutoGridState {
 
       var toMoveIndex = columnIndexes[i + 1];
 
-      var toMove = refColumns[toMoveIndex];
+      var toMove = refColumns![toMoveIndex];
 
       if (toMove.enableFilterMenuItem) {
         toMove.filterFocusNode?.requestFocus();

@@ -5,14 +5,14 @@ import '../constants/pluto_grid_example_colors.dart';
 class PlutoContributorTile extends StatelessWidget {
   final String name;
 
-  final String description;
+  final String? description;
 
-  final String linkTitle;
+  final String? linkTitle;
 
-  final Function() onTapLink;
+  final Function()? onTapLink;
 
   PlutoContributorTile({
-    @required this.name,
+    required this.name,
     this.description,
     this.linkTitle,
     this.onTapLink,
@@ -20,7 +20,7 @@ class PlutoContributorTile extends StatelessWidget {
         _fontColor = PlutoGridExampleColors.fontColor;
 
   PlutoContributorTile.invisible({
-    @required this.name,
+    required this.name,
     this.description,
     this.linkTitle,
     this.onTapLink,
@@ -69,7 +69,7 @@ class PlutoContributorTile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    description,
+                    description!,
                     style: TextStyle(
                       color: _fontColor,
                       fontWeight: FontWeight.w600,

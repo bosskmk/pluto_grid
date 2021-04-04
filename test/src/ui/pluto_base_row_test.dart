@@ -9,14 +9,14 @@ import '../../helper/row_helper.dart';
 import '../../mock/mock_pluto_state_manager.dart';
 
 void main() {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
   setUp(() {
     stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
-    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
   });
 
   final buildRowWidget = ({
@@ -32,14 +32,14 @@ void main() {
     return PlutoWidgetTestHelper(
       'build row widget.',
       (tester) async {
-        when(stateManager.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
-        when(stateManager.isRowIdxTopDragTarget(any))
+        when(stateManager!.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
+        when(stateManager!.isRowIdxTopDragTarget(any))
             .thenReturn(isTopDragTarget);
-        when(stateManager.isRowIdxBottomDragTarget(any))
+        when(stateManager!.isRowIdxBottomDragTarget(any))
             .thenReturn(isBottomDragTarget);
-        when(stateManager.isSelectedRow(any)).thenReturn(isSelectedRow);
-        when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
-        when(stateManager.isSelectedCell(any, any, any))
+        when(stateManager!.isSelectedRow(any)).thenReturn(isSelectedRow);
+        when(stateManager!.isCurrentCell(any)).thenReturn(isCurrentCell);
+        when(stateManager!.isSelectedCell(any, any, any))
             .thenReturn(isSelectedCell);
 
         // given
@@ -111,7 +111,7 @@ void main() {
           rowContainerWidget.decoration as BoxDecoration;
 
       expect(
-        rowContainerDecoration.border.top.width,
+        rowContainerDecoration.border!.top.width,
         PlutoGridSettings.rowBorderWidth,
       );
     },
@@ -130,7 +130,7 @@ void main() {
           rowContainerWidget.decoration as BoxDecoration;
 
       expect(
-        rowContainerDecoration.border.bottom.width,
+        rowContainerDecoration.border!.bottom.width,
         PlutoGridSettings.rowBorderWidth,
       );
     },

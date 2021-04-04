@@ -13,9 +13,9 @@ class CopyAndPasteScreen extends StatefulWidget {
 }
 
 class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoDualGridPopup {
-  final BuildContext context;
-  final PlutoDualGridProps gridPropsA;
-  final PlutoDualGridProps gridPropsB;
-  final PlutoGridMode mode;
-  final PlutoDualOnSelectedEventCallback onSelected;
+  final BuildContext? context;
+  final PlutoDualGridProps? gridPropsA;
+  final PlutoDualGridProps? gridPropsB;
+  final PlutoGridMode? mode;
+  final PlutoDualOnSelectedEventCallback? onSelected;
   final PlutoDualGridDisplay display;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
 
   PlutoDualGridPopup({
     this.context,
@@ -25,9 +25,9 @@ class PlutoDualGridPopup {
   }
 
   Future<void> open() async {
-    PlutoDualOnSelectedEvent selected =
+    PlutoDualOnSelectedEvent? selected =
         await showDialog<PlutoDualOnSelectedEvent>(
-            context: context,
+            context: context!,
             builder: (BuildContext ctx) {
               return Dialog(
                 child: LayoutBuilder(
@@ -50,8 +50,8 @@ class PlutoDualGridPopup {
                 ),
               );
             });
-    if (onSelected != null) {
-      onSelected(selected);
+    if (onSelected != null && selected != null) {
+      onSelected!(selected);
     }
   }
 }

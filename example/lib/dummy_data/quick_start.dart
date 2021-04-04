@@ -1,8 +1,8 @@
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DummyData {
-  List<PlutoColumn> columns;
-  List<PlutoRow> rows;
+  List<PlutoColumn>? columns;
+  List<PlutoRow>? rows;
 
   DummyData() {
     columns = [

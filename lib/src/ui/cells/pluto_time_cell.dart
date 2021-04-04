@@ -4,9 +4,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
-  final PlutoGridStateManager stateManager;
-  final PlutoCell cell;
-  final PlutoColumn column;
+  final PlutoGridStateManager? stateManager;
+  final PlutoCell? cell;
+  final PlutoColumn? column;
 
   PlutoTimeCell({
     this.stateManager,
@@ -20,30 +20,30 @@ class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
 
 class _PlutoTimeCellState extends State<PlutoTimeCell>
     with MixinPopupCell<PlutoTimeCell> {
-  PlutoGridStateManager popupStateManager;
+  PlutoGridStateManager? popupStateManager;
 
-  List<PlutoColumn> popupColumns = [];
+  List<PlutoColumn>? popupColumns = [];
 
-  List<PlutoRow> popupRows = [];
+  List<PlutoRow>? popupRows = [];
 
-  Icon icon = const Icon(
+  Icon? icon = const Icon(
     Icons.access_time,
   );
 
-  String get cellHour => widget.cell.value.toString().substring(0, 2);
+  String get cellHour => widget.cell!.value.toString().substring(0, 2);
 
-  String get cellMinute => widget.cell.value.toString().substring(3, 5);
+  String get cellMinute => widget.cell!.value.toString().substring(3, 5);
 
   void openPopup() {
-    if (widget.column.type.readOnly) {
+    if (widget.column!.type!.readOnly!) {
       return;
     }
 
     isOpenedPopup = true;
 
-    final localeText = widget.stateManager.localeText;
+    final localeText = widget.stateManager!.localeText;
 
-    final configuration = widget.stateManager.configuration.copyWith(
+    final configuration = widget.stateManager!.configuration!.copyWith(
       rowHeight: PlutoGridSettings.rowHeight,
     );
 
@@ -57,8 +57,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
         }
 
         super.handleSelected(
-          '${event.gridA.cell.value}:'
-          '${event.gridB.cell.value}',
+          '${event.gridA!.cell!.value}:'
+          '${event.gridB!.cell!.value}',
         );
       },
       gridPropsA: PlutoDualGridProps(
@@ -81,14 +81,14 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
-          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['hour'].value == cellHour) {
-              event.stateManager.setCurrentCell(
-                  event.stateManager.refRows[i].cells['hour'], i);
+          for (var i = 0; i < event.stateManager!.refRows!.length; i += 1) {
+            if (event.stateManager!.refRows![i]!.cells['hour']!.value == cellHour) {
+              event.stateManager!.setCurrentCell(
+                  event.stateManager!.refRows![i]!.cells['hour'], i);
 
-              event.stateManager.moveScrollByRow(
+              event.stateManager!.moveScrollByRow(
                   PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
@@ -116,15 +116,15 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
-          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['minute'].value ==
+          for (var i = 0; i < event.stateManager!.refRows!.length; i += 1) {
+            if (event.stateManager!.refRows![i]!.cells['minute']!.value ==
                 cellMinute) {
-              event.stateManager.setCurrentCell(
-                  event.stateManager.refRows[i].cells['minute'], i);
+              event.stateManager!.setCurrentCell(
+                  event.stateManager!.refRows![i]!.cells['minute'], i);
 
-              event.stateManager.moveScrollByRow(
+              event.stateManager!.moveScrollByRow(
                   PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }

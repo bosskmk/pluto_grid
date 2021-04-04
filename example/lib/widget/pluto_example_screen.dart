@@ -5,11 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widget/pluto_expansion_tile.dart';
 
 class PlutoExampleScreen extends StatelessWidget {
-  final String title;
-  final String topTitle;
-  final List<Widget> topContents;
-  final List<Widget> topButtons;
-  final Widget body;
+  final String? title;
+  final String? topTitle;
+  final List<Widget>? topContents;
+  final List<Widget>? topButtons;
+  final Widget? body;
 
   PlutoExampleScreen({
     this.title,
@@ -69,7 +69,7 @@ class PlutoExampleScreen extends StatelessWidget {
               child: Column(
                 children: [
                   PlutoExpansionTile(
-                    title: topTitle,
+                    title: topTitle!,
                     children: topContents,
                     buttons: topButtons,
                   ),
@@ -77,7 +77,7 @@ class PlutoExampleScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Expanded(
-                    child: body,
+                    child: body!,
                   ),
                 ],
               ),
