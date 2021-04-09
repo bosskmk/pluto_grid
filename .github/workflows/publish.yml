@@ -25,7 +25,7 @@ jobs:
     - run: dart --version
     - run: flutter --version
     - run: flutter pub get
-    - run: flutter test
+#    - run: flutter test
 
     # delete unnecessary directories
     - run: |
