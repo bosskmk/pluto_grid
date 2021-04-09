@@ -54,7 +54,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   }
 
   void _changeValue() {
-    widget.stateManager!.changeCellValue(widget.cell!.key, _textController.text);
+    widget.stateManager!
+        .changeCellValue(widget.cell!.key, _textController.text);
   }
 
   void _handleOnChanged(String value) {

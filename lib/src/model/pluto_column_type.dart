@@ -157,8 +157,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
       return a == b
           ? 0
           : a == null
-              ? -1
-              : 1;
+          ? -1
+          : 1;
     }
 
     return resolve();

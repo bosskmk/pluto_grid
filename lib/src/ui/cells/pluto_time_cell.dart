@@ -84,7 +84,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
           for (var i = 0; i < event.stateManager!.refRows!.length; i += 1) {
-            if (event.stateManager!.refRows![i]!.cells['hour']!.value == cellHour) {
+            if (event.stateManager!.refRows![i]!.cells['hour']!.value ==
+                cellHour) {
               event.stateManager!.setCurrentCell(
                   event.stateManager!.refRows![i]!.cells['hour'], i);
 
