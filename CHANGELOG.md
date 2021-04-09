@@ -1,3 +1,8 @@
+## [2.0.0-nullsafety.0] - 2021. 4. 9
+
+* Null safety version.
+* Fix CupertinoScrollBar error.(In flutter 2.1.0.xxx)
+
 ## [1.2.0] - 2021. 3. 13
 
 * Add moveRowsByIndex.
