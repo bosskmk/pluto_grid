@@ -12,7 +12,8 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     return null;
   }
 
-  final RenderBox overlay = Overlay.of(context!)!.context.findRenderObject() as RenderBox;
+  final RenderBox overlay =
+      Overlay.of(context!)!.context.findRenderObject() as RenderBox;
 
   final Color? textColor = stateManager!.configuration!.cellTextStyle.color;
 
@@ -31,7 +32,10 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     );
   };
 
-  final PopupMenuItem<PlutoGridColumnMenuItem> Function<PlutoGridColumnMenuItem>({Widget child, bool enabled, PlutoGridColumnMenuItem value}) buildMenuItem = <PlutoGridColumnMenuItem>({
+  final PopupMenuItem<PlutoGridColumnMenuItem> Function<
+              PlutoGridColumnMenuItem>(
+          {Widget child, bool enabled, PlutoGridColumnMenuItem value})
+      buildMenuItem = <PlutoGridColumnMenuItem>({
     PlutoGridColumnMenuItem? value,
     Widget? child,
     bool enabled = true,

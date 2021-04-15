@@ -96,7 +96,8 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
           widget.stateManager.configuration!.scrollbarConfig.scrollbarThickness,
       thicknessWhileDragging: widget.stateManager.configuration!.scrollbarConfig
           .scrollbarThicknessWhileDragging,
-      radius: widget.stateManager.configuration!.scrollbarConfig.scrollbarRadius,
+      radius:
+          widget.stateManager.configuration!.scrollbarConfig.scrollbarRadius,
       radiusWhileDragging: widget.stateManager.configuration!.scrollbarConfig
           .scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(

@@ -183,7 +183,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
           final DateTime day = days.removeAt(0);
 
           return PlutoCell(
-            value: intl.DateFormat(widget.column!.type.date!.format).format(day),
+            value:
+                intl.DateFormat(widget.column!.type.date!.format).format(day),
           );
         },
       );
