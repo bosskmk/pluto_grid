@@ -1,3 +1,7 @@
+## [2.0.0-nullsafety.1] - 2021. 4. 15
+
+* Edit dependency.
+
 ## [2.0.0-nullsafety.0] - 2021. 4. 9
 
 * Null safety version.

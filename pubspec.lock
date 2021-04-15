@@ -234,7 +234,7 @@ packages:
       name: pluto_inside
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-pre.0"
+    version: "0.2.0"
   pub_semver:
     dependency: transitive
     description:
@@ -274,7 +274,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   stack_trace:
     dependency: transitive
     description:
@@ -309,7 +309,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.2.19"
   typed_data:
     dependency: transitive
     description:
