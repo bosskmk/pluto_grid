@@ -81,9 +81,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
         });
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
-        if (event != null) {
-          controller!.text = event.row!.cells[selectFieldName]!.value.toString();
-        }
+        controller!.text = event.row!.cells[selectFieldName]!.value.toString();
       },
     );
   }
