@@ -221,8 +221,8 @@ class PlutoColumnTypeNumber
   }
 
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(
-        a, b, () => int.parse(a.toString()).compareTo(int.parse(b.toString())));
+    return compareWithNull(a, b,
+        () => double.parse(a.toString()).compareTo(double.parse(b.toString())));
   }
 
   dynamic makeCompareValue(dynamic v) {
