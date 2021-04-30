@@ -1560,7 +1560,7 @@ void main() {
         final offset = stateManager.rowTotalHeight * 5.5;
 
         stateManager.moveRowsByOffset(
-          [rows.first],
+          <PlutoRow>[rows.first],
           offset,
         );
 
