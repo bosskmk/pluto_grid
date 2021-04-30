@@ -1,22 +1,26 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../matcher/pluto_object_matcher.dart';
-import '../../mock/mock_pluto_event_manager.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import 'pluto_base_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  late PlutoGridStateManager stateManager;
-  PlutoGridEventManager? eventManager;
+  late MockPlutoGridStateManager stateManager;
+  MockPlutoGridEventManager? eventManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
@@ -26,6 +30,9 @@ void main() {
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
+    when(stateManager.canRowDrag).thenReturn(true);
+    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
   });
 
   testWidgets(
@@ -388,7 +395,7 @@ void main() {
               object.cell!.key == cell.key &&
               object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        }))!,
+        })),
       )).called(1);
     },
   );
@@ -435,7 +442,7 @@ void main() {
               object.cell!.key == cell.key &&
               object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        }))!,
+        })),
       )).called(1);
     },
   );
@@ -460,7 +467,7 @@ void main() {
       when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
 
       when(stateManager.isSelectingInteraction()).thenReturn(false);
-      when(stateManager.needMovingScroll(any, any!)).thenReturn(false);
+      when(stateManager.needMovingScroll(any, any)).thenReturn(false);
 
       // when
       await tester.pumpWidget(
@@ -496,7 +503,7 @@ void main() {
               object.cell!.key == cell.key &&
               object.column!.key == column.key &&
               object.rowIdx == rowIdx;
-        }))!,
+        })),
       )).called(1);
     },
   );

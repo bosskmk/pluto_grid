@@ -26,7 +26,8 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
         compare: listEquals,
       );
 
-      width = update<double?>(width, widget.stateManager.leftFrozenColumnsWidth);
+      width =
+          update<double?>(width, widget.stateManager.leftFrozenColumnsWidth);
     });
   }
 }

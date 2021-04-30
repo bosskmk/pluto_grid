@@ -197,7 +197,8 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
             height: widget.stateManager!.rowHeight,
             backgroundColor:
                 widget.stateManager!.configuration!.gridBackgroundColor,
-            borderColor: widget.stateManager!.configuration!.activatedBorderColor,
+            borderColor:
+                widget.stateManager!.configuration!.activatedBorderColor,
             child: Row(
               children: [
                 widget.dragIcon!,

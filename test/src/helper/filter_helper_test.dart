@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -6,8 +7,11 @@ import '../../helper/column_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../mock/mock_build_context.dart';
 import '../../mock/mock_on_change_listener.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import 'filter_helper_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
   group('createFilterRow', () {
     test(
@@ -488,106 +492,6 @@ void main() {
 
   group('FilterPopupState', () {
     test(
-      'context should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) {},
-              handleApplyFilter: (_) {},
-              columns: ColumnHelper.textColumn('column'),
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
-      'configuration should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) {},
-              handleApplyFilter: (_) {},
-              columns: ColumnHelper.textColumn('column'),
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
-      'handleAddNewFilter should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) => null,
-              handleApplyFilter: (_) {},
-              columns: ColumnHelper.textColumn('column'),
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
-      'handleApplyFilter should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) {},
-              handleApplyFilter: (_) => null,
-              columns: ColumnHelper.textColumn('column'),
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
-      'columns should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) {},
-              handleApplyFilter: (_) {},
-              columns: null,
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
       'columns should not be empty.',
       () {
         expect(
@@ -598,26 +502,6 @@ void main() {
               handleAddNewFilter: (_) {},
               handleApplyFilter: (_) {},
               columns: [],
-              filterRows: [],
-              focusFirstFilterValue: false,
-            );
-          },
-          throwsA(isA<AssertionError>()),
-        );
-      },
-    );
-
-    test(
-      'filterRows should not be null.',
-      () {
-        expect(
-          () {
-            FilterPopupState(
-              context: MockBuildContext(),
-              configuration: PlutoGridConfiguration(),
-              handleAddNewFilter: (_) {},
-              handleApplyFilter: (_) {},
-              columns: ColumnHelper.textColumn('column'),
               filterRows: [],
               focusFirstFilterValue: false,
             );
@@ -641,7 +525,7 @@ void main() {
             focusFirstFilterValue: false,
           );
 
-          var stateManager = MockPlutoStateManager();
+          var stateManager = MockPlutoGridStateManager();
 
           filterPopupState.onLoaded(
             PlutoGridOnLoadedEvent(stateManager: stateManager),
@@ -674,7 +558,7 @@ void main() {
             focusFirstFilterValue: true,
           );
 
-          var stateManager = MockPlutoStateManager();
+          var stateManager = MockPlutoGridStateManager();
 
           when(stateManager.rows).thenReturn(rows);
 
@@ -724,7 +608,7 @@ void main() {
         focusFirstFilterValue: false,
       );
 
-      var stateManager = MockPlutoStateManager();
+      var stateManager = MockPlutoGridStateManager();
 
       filterPopupState.onLoaded(
         PlutoGridOnLoadedEvent(stateManager: stateManager),
@@ -755,7 +639,7 @@ void main() {
           focusFirstFilterValue: false,
         );
 
-        var stateManager = MockPlutoStateManager();
+        var stateManager = MockPlutoGridStateManager();
 
         filterPopupState.onLoaded(
           PlutoGridOnLoadedEvent(stateManager: stateManager),
@@ -783,7 +667,7 @@ void main() {
           focusFirstFilterValue: false,
         );
 
-        var stateManager = MockPlutoStateManager();
+        var stateManager = MockPlutoGridStateManager();
 
         filterPopupState.onLoaded(
           PlutoGridOnLoadedEvent(stateManager: stateManager),

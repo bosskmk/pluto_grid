@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import 'pluto_grid_key_manager_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager? stateManager;
+  MockPlutoGridStateManager? stateManager;
 
   PlutoGridConfiguration configuration;
 
   late FocusNode keyboardFocusNode;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     configuration = PlutoGridConfiguration();
     when(stateManager!.configuration).thenReturn(configuration);
     when(stateManager!.rowTotalHeight).thenReturn(
@@ -57,6 +61,7 @@ void main() {
         ),
       );
 
+      when(stateManager!.isEditing).thenReturn(false);
       when(stateManager!.currentSelectingText).thenReturn('copied');
 
       String? copied;
@@ -492,7 +497,8 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!.moveSelectingCellByRowIdx(5, PlutoMoveDirection.down))
+      verify(stateManager!
+              .moveSelectingCellByRowIdx(5, PlutoMoveDirection.down))
           .called(1);
     });
   });

@@ -104,17 +104,17 @@ mixin EditingState implements IPlutoGridState {
         rowEndIdx = currentCellPosition!.rowIdx! + textList.length - 1;
       } else {
         // If there are selected cells : Paste in order from selected cell range
-        columnStartIdx = min(
-            currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
+        columnStartIdx = min(currentCellPosition!.columnIdx!,
+            currentSelectingPosition!.columnIdx!);
 
-        columnEndIdx = max(
-            currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
+        columnEndIdx = max(currentCellPosition!.columnIdx!,
+            currentSelectingPosition!.columnIdx!);
 
-        rowStartIdx =
-            min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+        rowStartIdx = min(
+            currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
-        rowEndIdx =
-            max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+        rowEndIdx = max(
+            currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
       }
 
       _pasteCellValueInOrder(

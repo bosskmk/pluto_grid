@@ -64,7 +64,8 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext.row!.cells[rendererContext.column!.field]!.value
+                  rendererContext
+                      .row!.cells[rendererContext.column!.field]!.value
                       .toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

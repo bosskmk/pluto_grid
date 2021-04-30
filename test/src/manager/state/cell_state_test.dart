@@ -297,7 +297,7 @@ void main() {
   });
 
   group('cellPositionByCellKey', () {
-    testWidgets('should be caused AssertionError', (WidgetTester tester) async {
+    testWidgets('should be returned null', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 10, width: 150),
@@ -314,9 +314,7 @@ void main() {
 
       // when
       // then
-      expect(() {
-        stateManager.cellPositionByCellKey(null);
-      }, throwsA(isA<AssertionError>()));
+      expect(stateManager.cellPositionByCellKey(null), isNull);
     });
 
     testWidgets('should be returned null', (WidgetTester tester) async {

@@ -138,8 +138,8 @@ abstract class _PlutoColumnFilterStateWithChange
         plutoEvent.direction!.isUp) {
       var isCurrentColumn = widget
               .stateManager
-              .refColumns![widget.stateManager
-                  .columnIndexesByShowFrozen[plutoEvent.cellPosition!.columnIdx!]]
+              .refColumns![widget.stateManager.columnIndexesByShowFrozen[
+                  plutoEvent.cellPosition!.columnIdx!]]
               .key ==
           widget.column!.key;
 

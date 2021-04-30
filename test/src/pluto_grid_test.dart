@@ -186,8 +186,8 @@ void main() {
     //     find.descendant(of: firstCell, matching: find.byType(TextField)),
     //     'cell value4');
     // (2)
-    stateManager!.changeCellValue(
-        stateManager!.currentCell!.key, 'header0 value 4');
+    stateManager!
+        .changeCellValue(stateManager!.currentCell!.key, 'header0 value 4');
 
     // 다음 행으로 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);

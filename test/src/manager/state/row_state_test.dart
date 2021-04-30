@@ -1850,8 +1850,8 @@ void main() {
         stateManager.toggleAllRowChecked(false);
 
         // then
-        expect(
-            stateManager.rows.where((element) => !element!.checked!).length, 10);
+        expect(stateManager.rows.where((element) => !element!.checked!).length,
+            10);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );

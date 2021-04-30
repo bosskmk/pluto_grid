@@ -322,7 +322,7 @@ void main() {
 
   group('isRowBeingDragged', () {
     const int givenDragTargetRowIdx = 3;
-    List<PlutoRow> givenDragRows;
+    List<PlutoRow?> givenDragRows;
 
     final setDrag = () {
       givenDragRows = [

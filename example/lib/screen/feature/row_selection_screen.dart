@@ -105,7 +105,8 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
-                event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
+                event.stateManager!
+                    .setSelectingMode(PlutoGridSelectingMode.row);
 
                 stateManager = event.stateManager;
               },

@@ -13,7 +13,12 @@ void main() {
 
   PlutoGridStateManager? stateManager;
 
-  final PlutoWidgetTestHelper Function({int columnIdx, List<PlutoColumn> columns, int numberOfRows, double rowHeight, int rowIdx}) buildRowsWithSettingRowHeight = ({
+  final PlutoWidgetTestHelper Function(
+      {int columnIdx,
+      List<PlutoColumn> columns,
+      int numberOfRows,
+      double rowHeight,
+      int rowIdx}) buildRowsWithSettingRowHeight = ({
     int numberOfRows = 10,
     List<PlutoColumn>? columns,
     int columnIdx = 0,

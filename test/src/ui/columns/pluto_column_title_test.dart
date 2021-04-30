@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_column_filter_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  late PlutoGridStateManager stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
     when(stateManager.hasFilter).thenReturn(false);
+    when(stateManager.columnHeight).thenReturn(45);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
@@ -94,7 +99,7 @@ void main() {
     await tester.tap(find.byType(InkWell));
 
     // then
-    verify(stateManager.toggleSortColumn(captureAny!)).called(1);
+    verify(stateManager.toggleSortColumn(captureAny)).called(1);
   });
 
   testWidgets(
@@ -125,7 +130,7 @@ void main() {
     // then
     expect(inkWell, findsNothing);
 
-    verifyNever(stateManager.toggleSortColumn(captureAny!));
+    verifyNever(stateManager.toggleSortColumn(captureAny));
   });
 
   testWidgets(
@@ -355,7 +360,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>())!,
+        argThat(isA<BuildContext>()),
         column,
       )).called(1);
     });
@@ -413,7 +418,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>())!,
+        argThat(isA<BuildContext>()),
         column,
       )).called(1);
     });
@@ -471,7 +476,7 @@ void main() {
       await tester.tap(find.text('Auto fit'));
 
       verify(stateManager.autoFitColumn(
-        argThat(isA<BuildContext>())!,
+        argThat(isA<BuildContext>()),
         column,
       )).called(1);
     });
