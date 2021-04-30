@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_grid_cell_gesture_event_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager? stateManager;
+  MockPlutoGridStateManager? stateManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
   });
 
   group('인수 값 테스트', () {
@@ -19,10 +23,10 @@ void main() {
         var event = PlutoGridDragRowsEvent(dragType: null);
         event.handler(stateManager);
 
-        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager!.setDragRows(any));
         verifyNever(stateManager!.setDragTargetRowIdx(any));
-        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verifyNever(stateManager!.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -35,10 +39,10 @@ void main() {
         );
         event.handler(stateManager);
 
-        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager!.setDragRows(any));
         verifyNever(stateManager!.setDragTargetRowIdx(any));
-        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verifyNever(stateManager!.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -52,10 +56,10 @@ void main() {
         );
         event.handler(stateManager);
 
-        verifyNever(stateManager!.setIsDraggingRow(any!, notify: false));
+        verifyNever(stateManager!.setIsDraggingRow(any, notify: false));
         verifyNever(stateManager!.setDragRows(any));
         verifyNever(stateManager!.setDragTargetRowIdx(any));
-        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verifyNever(stateManager!.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -74,7 +78,7 @@ void main() {
         verify(stateManager!.setDragRows(any));
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager!.setDragTargetRowIdx(any));
-        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verifyNever(stateManager!.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -93,7 +97,7 @@ void main() {
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager!.setIsDraggingRow(true, notify: false));
         verifyNever(stateManager!.setDragRows(any));
-        verifyNever(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verifyNever(stateManager!.moveRowsByOffset(any, any, notify: false));
       },
     );
 
@@ -108,7 +112,7 @@ void main() {
         );
         event.handler(stateManager);
 
-        verify(stateManager!.moveRowsByOffset(any, any!, notify: false));
+        verify(stateManager!.moveRowsByOffset(any, any, notify: false));
         verify(stateManager!.setIsDraggingRow(false));
         // 호출 되지 않아야 되는 메소드
         verifyNever(stateManager!.setDragTargetRowIdx(any));

@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../matcher/pluto_object_matcher.dart';
-import '../../../mock/mock_pluto_event_manager.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_default_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  late PlutoGridStateManager stateManager;
-  PlutoGridEventManager? eventManager;
+  late MockPlutoGridStateManager stateManager;
+  MockPlutoGridEventManager? eventManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
@@ -24,6 +28,8 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.canRowDrag).thenReturn(true);
+    when(stateManager.rowHeight).thenReturn(0);
   });
 
   group('기본 셀 테스트', () {
@@ -185,7 +191,7 @@ void main() {
         verifyNever(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate;
-          }))!,
+          })),
         ));
       },
     );
@@ -207,7 +213,7 @@ void main() {
             return object.dragType.isStart &&
                 object.rows!.length == 1 &&
                 object.rows!.first!.key == row.key;
-          }))!,
+          })),
         )).called(1);
 
         verify(eventManager!.addEvent(
@@ -216,7 +222,7 @@ void main() {
                 object.offset!.dy > 100 &&
                 object.rows!.length == 1 &&
                 object.rows!.first!.key == row.key;
-          }))!,
+          })),
         )).called(greaterThan(1));
 
         verify(eventManager!.addEvent(
@@ -225,7 +231,7 @@ void main() {
                 object.dragType.isEnd &&
                 object.rows!.length == 1 &&
                 object.rows!.first!.key == row.key;
-          }))!,
+          })),
         )).called(1);
       },
     );
@@ -256,7 +262,7 @@ void main() {
                 object.rows![0]!.key == rows[0].key &&
                 object.rows![1]!.key == rows[1].key &&
                 object.rows![1]!.key == rows[1].key;
-          }))!,
+          })),
         )).called(greaterThan(1));
       },
     );

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../matcher/pluto_object_matcher.dart';
-import '../../../mock/mock_pluto_event_manager.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_grid_cell_gesture_event_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager? stateManager;
-  PlutoGridEventManager? eventManager;
+  MockPlutoGridStateManager? stateManager;
+  MockPlutoGridEventManager? eventManager;
 
   var eventBuilder = ({
     required PlutoGridGestureType gestureType,
@@ -32,8 +36,8 @@ void main() {
       );
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     when(stateManager!.eventManager).thenReturn(eventManager);
   });
 
@@ -58,7 +62,7 @@ void main() {
         // then
         verify(stateManager!.setKeepFocus(true)).called(1);
         // return 이후 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setEditing(any!));
+        verifyNever(stateManager!.setEditing(any));
         verifyNever(stateManager!.setCurrentCell(any, any));
       },
     );
@@ -97,7 +101,7 @@ void main() {
         verify(stateManager!.setKeepFocus(true)).called(1);
         verify(stateManager!.setCurrentCell(cell, rowIdx)).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setEditing(any!));
+        verifyNever(stateManager!.setEditing(any));
       },
     );
 
@@ -299,6 +303,9 @@ void main() {
         final rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(false);
+        when(stateManager!.selectingMode).thenReturn(
+          PlutoGridSelectingMode.cell,
+        );
         clearInteractions(stateManager);
 
         // when
@@ -327,6 +334,9 @@ void main() {
         final rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(true);
+        when(stateManager!.selectingMode).thenReturn(
+          PlutoGridSelectingMode.cell,
+        );
         clearInteractions(stateManager);
 
         // when
@@ -400,7 +410,7 @@ void main() {
         verify(eventManager!.addEvent(
             argThat(PlutoObjectMatcher<PlutoGridMoveUpdateEvent>(rule: (event) {
           return event.offset == offset;
-        }))!));
+        }))));
       },
     );
   });
@@ -414,6 +424,8 @@ void main() {
         final rowIdx = 1;
 
         // when
+        when(stateManager!.isCurrentCell(any)).thenReturn(true);
+
         var event = eventBuilder(
           gestureType: PlutoGridGestureType.onLongPressEnd,
           cell: cell,

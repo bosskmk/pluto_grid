@@ -1,16 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../mock/mock_pluto_scroll_controller.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_grid_move_update_event_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager? stateManager;
+  MockPlutoGridStateManager? stateManager;
   PlutoGridScrollController scrollController;
-  LinkedScrollControllerGroup? vertical;
-  LinkedScrollControllerGroup? horizontal;
+  MockLinkedScrollControllerGroup? vertical;
+  MockLinkedScrollControllerGroup? horizontal;
 
   var eventBuilder = ({
     Offset? offset,
@@ -20,7 +24,7 @@ void main() {
       );
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     vertical = MockLinkedScrollControllerGroup();
     horizontal = MockLinkedScrollControllerGroup();
     scrollController = PlutoGridScrollController(
@@ -37,11 +41,11 @@ void main() {
         var event = eventBuilder(offset: null);
         event.handler(stateManager);
 
-        verifyNever(stateManager!.needMovingScroll(any, any!));
+        verifyNever(stateManager!.needMovingScroll(any, any));
         verifyNever(horizontal!.animateTo(
-          any!,
-          curve: anyNamed('curve')!,
-          duration: anyNamed('duration')!,
+          any,
+          curve: anyNamed('curve'),
+          duration: anyNamed('duration'),
         ));
       },
     );
@@ -49,12 +53,12 @@ void main() {
     test(
       'offset 이 null 가 아니면 needMovingScroll 이 호출 되어야 한다.',
       () {
-        when(stateManager!.needMovingScroll(any, any!)).thenReturn(false);
+        when(stateManager!.needMovingScroll(any, any)).thenReturn(false);
 
         var event = eventBuilder(offset: const Offset(0, 0));
         event.handler(stateManager);
 
-        verify(stateManager!.needMovingScroll(any, any!)).called(4);
+        verify(stateManager!.needMovingScroll(any, any)).called(4);
       },
     );
 
@@ -81,8 +85,8 @@ void main() {
 
         verify(horizontal!.animateTo(
           scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
-          curve: anyNamed('curve')!,
-          duration: anyNamed('duration')!,
+          curve: anyNamed('curve'),
+          duration: anyNamed('duration'),
         ));
       },
     );
@@ -110,8 +114,8 @@ void main() {
 
         verify(horizontal!.animateTo(
           scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
-          curve: anyNamed('curve')!,
-          duration: anyNamed('duration')!,
+          curve: anyNamed('curve'),
+          duration: anyNamed('duration'),
         ));
       },
     );
@@ -139,8 +143,8 @@ void main() {
 
         verify(vertical!.animateTo(
           scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
-          curve: anyNamed('curve')!,
-          duration: anyNamed('duration')!,
+          curve: anyNamed('curve'),
+          duration: anyNamed('duration'),
         ));
       },
     );
@@ -168,8 +172,8 @@ void main() {
 
         verify(vertical!.animateTo(
           scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
-          curve: anyNamed('curve')!,
-          duration: anyNamed('duration')!,
+          curve: anyNamed('curve'),
+          duration: anyNamed('duration'),
         ));
       },
     );

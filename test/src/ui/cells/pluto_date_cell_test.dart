@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_date_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager? stateManager;
+  MockPlutoGridStateManager? stateManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager!.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager!.configuration!.rowHeight),
@@ -172,7 +176,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '01/23/2020'))
+        verify(stateManager!.handleAfterSelectingRow(any, '01/23/2020'))
             .called(1);
       },
     );
@@ -189,7 +193,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '02/06/2020'))
+        verify(stateManager!.handleAfterSelectingRow(any, '02/06/2020'))
             .called(1);
       },
     );
@@ -206,7 +210,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '01/29/2020'))
+        verify(stateManager!.handleAfterSelectingRow(any, '01/29/2020'))
             .called(1);
       },
     );
@@ -223,7 +227,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '01/31/2020'))
+        verify(stateManager!.handleAfterSelectingRow(any, '01/31/2020'))
             .called(1);
       },
     );
@@ -240,14 +244,15 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '02/01/2020'))
+        verify(stateManager!.handleAfterSelectingRow(any, '02/01/2020'))
             .called(1);
       },
     );
   });
 
   group('format yyyy년 MM월 dd일', () {
-    final PlutoWidgetTestHelper Function(String, {DateTime startDate}) makeDateCell = (
+    final PlutoWidgetTestHelper Function(String, {DateTime startDate})
+        makeDateCell = (
       String date, {
       DateTime? startDate,
     }) {
@@ -296,7 +301,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any!, '2020년 11월 30일'))
+        verify(stateManager!.handleAfterSelectingRow(any, '2020년 11월 30일'))
             .called(1);
       },
     );
@@ -319,7 +324,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         verifyNever(stateManager!.handleAfterSelectingRow(
-          any!,
+          any,
           '2020년 11월 30일',
         ));
 
