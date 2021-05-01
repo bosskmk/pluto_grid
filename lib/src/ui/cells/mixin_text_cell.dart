@@ -72,24 +72,52 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     _changeValue();
   }
 
+  void _restoreText() {
+    _textController.text =
+        widget.stateManager!.cellValueBeforeEditing.toString();
+
+    widget.stateManager!.changeCellValue(
+      widget.stateManager!.currentCell!.key,
+      widget.stateManager!.cellValueBeforeEditing,
+      notify: false,
+    );
+  }
+
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
     );
 
-    if (keyManager.isEsc) {
-      _textController.text =
-          widget.stateManager!.cellValueBeforeEditing.toString();
-
-      widget.stateManager!.changeCellValue(
-        widget.stateManager!.currentCell!.key,
-        widget.stateManager!.cellValueBeforeEditing,
-        notify: false,
-      );
+    if (keyManager.isKeyUpEvent) {
+      return KeyEventResult.handled;
     }
 
-    return KeyEventResult.ignored;
+    final skip = !(keyManager.isVertical ||
+        keyManager.isEsc ||
+        keyManager.isTab ||
+        keyManager.isEnter);
+
+    // 이동 및 엔터키를 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
+    if (skip) {
+      return KeyEventResult.skipRemainingHandlers;
+    }
+
+    // 엔터키는 그리드 포커스 핸들러로 전파 한다.
+    if (keyManager.isEnter) {
+      return KeyEventResult.ignored;
+    }
+
+    // ESC 는 편집된 문자열을 원래 문자열로 돌이킨다.
+    if (keyManager.isEsc) {
+      _restoreText();
+    }
+
+    // KeyManager 로 이벤트 처리를 위임 한다.
+    widget.stateManager!.keyManager!.subject.add(keyManager);
+
+    // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
+    return KeyEventResult.handled;
   }
 
   TextField buildTextField({

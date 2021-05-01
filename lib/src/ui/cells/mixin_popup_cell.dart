@@ -25,8 +25,6 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     implements AbstractPopup {
   TextEditingController? _textController;
 
-  late FocusNode _keyboardFocus;
-
   FocusNode? _textFocus;
 
   bool isOpenedPopup = false;
@@ -56,8 +54,6 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
 
     _textController!.dispose();
 
-    _keyboardFocus.dispose();
-
     _textFocus!.dispose();
 
     super.dispose();
@@ -71,9 +67,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
       ..text =
           widget.column!.formattedValueForDisplayInEditing(widget.cell!.value);
 
-    _keyboardFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
-
-    _textFocus = FocusNode();
+    _textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
   }
 
   void openPopup() {
@@ -105,23 +99,33 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     );
   }
 
-  KeyEventResult _handleKeyboardFocusOnKey(
-      FocusNode focusNode, RawKeyEvent event) {
-    PlutoKeyManagerEvent keyManagerEvent = PlutoKeyManagerEvent(
-      focusNode: focusNode,
+  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, RawKeyEvent event) {
+    var keyManager = PlutoKeyManagerEvent(
+      focusNode: node,
       event: event,
     );
 
-    if (keyManagerEvent.isKeyDownEvent) {
-      if (keyManagerEvent.isF2 || keyManagerEvent.isCharacter) {
-        if (isOpenedPopup != true) {
-          openPopup();
-          return KeyEventResult.handled;
-        }
+    if (keyManager.isKeyUpEvent) {
+      return KeyEventResult.handled;
+    }
+
+    if (keyManager.isF2 || keyManager.isCharacter) {
+      if (isOpenedPopup != true) {
+        openPopup();
+        return KeyEventResult.handled;
       }
     }
 
-    return KeyEventResult.ignored;
+    // 엔터키는 그리드 포커스 핸들러로 전파 한다.
+    if (keyManager.isEnter) {
+      return KeyEventResult.ignored;
+    }
+
+    // KeyManager 로 이벤트 처리를 위임 한다.
+    widget.stateManager!.keyManager!.subject.add(keyManager);
+
+    // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
+    return KeyEventResult.handled;
   }
 
   void onLoaded(PlutoGridOnLoadedEvent event) {
@@ -206,39 +210,36 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
       _textFocus!.requestFocus();
     }
 
-    return RawKeyboardListener(
-      focusNode: _keyboardFocus,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          TextField(
-            controller: _textController,
-            focusNode: _textFocus,
-            readOnly: true,
-            textInputAction: TextInputAction.none,
-            onTap: openPopup,
-            style: widget.stateManager!.configuration!.cellTextStyle,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(0),
-              isDense: true,
-            ),
-            maxLines: 1,
-            textAlign: widget.column!.textAlign.value,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        TextField(
+          controller: _textController,
+          focusNode: _textFocus,
+          readOnly: true,
+          textInputAction: TextInputAction.none,
+          onTap: openPopup,
+          style: widget.stateManager!.configuration!.cellTextStyle,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(0),
+            isDense: true,
           ),
-          Positioned(
-            top: -14,
-            right: widget.column!.textAlign.isLeft ? -10 : null,
-            left: widget.column!.textAlign.isRight ? -10 : null,
-            child: IconButton(
-              icon: icon!,
-              color: widget.stateManager!.configuration!.iconColor,
-              iconSize: widget.stateManager!.configuration!.iconSize,
-              onPressed: openPopup,
-            ),
+          maxLines: 1,
+          textAlign: widget.column!.textAlign.value,
+        ),
+        Positioned(
+          top: -14,
+          right: widget.column!.textAlign.isLeft ? -10 : null,
+          left: widget.column!.textAlign.isRight ? -10 : null,
+          child: IconButton(
+            icon: icon!,
+            color: widget.stateManager!.configuration!.iconColor,
+            iconSize: widget.stateManager!.configuration!.iconSize,
+            onPressed: openPopup,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

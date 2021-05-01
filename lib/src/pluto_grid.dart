@@ -220,9 +220,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       event: event,
     ));
 
-    return stateManager!.isEditing
-        ? KeyEventResult.skipRemainingHandlers
-        : KeyEventResult.handled;
+    return KeyEventResult.handled;
   }
 
   void setLayout(BoxConstraints size) {
