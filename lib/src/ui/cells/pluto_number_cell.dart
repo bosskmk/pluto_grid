@@ -5,9 +5,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_text_cell.dart';
 
 class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
-  final PlutoGridStateManager stateManager;
-  final PlutoCell cell;
-  final PlutoColumn column;
+  final PlutoGridStateManager? stateManager;
+  final PlutoCell? cell;
+  final PlutoColumn? column;
 
   PlutoNumberCell({
     this.stateManager,
@@ -21,23 +21,23 @@ class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
 
 class _PlutoNumberCellState extends State<PlutoNumberCell>
     with MixinTextCell<PlutoNumberCell> {
-  int decimalRange;
+  int? decimalRange;
 
-  bool activatedNegative;
+  bool? activatedNegative;
 
   @override
   void initState() {
     super.initState();
 
-    decimalRange = widget.column.type.number.decimalRange();
+    decimalRange = widget.column!.type.number!.decimalRange();
 
-    activatedNegative = widget.column.type.number.negative;
+    activatedNegative = widget.column!.type.number!.negative;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stateManager.keepFocus) {
-      cellFocus.requestFocus();
+    if (widget.stateManager!.keepFocus) {
+      cellFocus!.requestFocus();
     }
 
     return buildTextField(
@@ -45,7 +45,7 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
       inputFormatters: <TextInputFormatter>[
         DecimalTextInputFormatter(
           decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative,
+          activatedNegativeValues: activatedNegative!,
         ),
       ],
     );
@@ -55,8 +55,8 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
 // https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({
-    int decimalRange,
-    bool activatedNegativeValues,
+    int? decimalRange,
+    required bool activatedNegativeValues,
   }) : assert(decimalRange == null || decimalRange >= 0,
             'DecimalTextInputFormatter declaration error') {
     String dp = (decimalRange != null && decimalRange > 0)
@@ -71,7 +71,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     }
   }
 
-  RegExp _exp;
+  late RegExp _exp;
 
   @override
   TextEditingValue formatEditUpdate(

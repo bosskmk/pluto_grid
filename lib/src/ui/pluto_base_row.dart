@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseRow extends StatelessWidget {
-  final PlutoGridStateManager stateManager;
-  final int rowIdx;
-  final PlutoRow row;
-  final List<PlutoColumn> columns;
+  final PlutoGridStateManager? stateManager;
+  final int? rowIdx;
+  final PlutoRow? row;
+  final List<PlutoColumn>? columns;
 
   PlutoBaseRow({
-    Key key,
+    Key? key,
     this.stateManager,
     this.rowIdx,
     this.row,
@@ -18,18 +18,18 @@ class PlutoBaseRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _RowContainerWidget(
-      stateManager: stateManager,
+      stateManager: stateManager!,
       rowIdx: rowIdx,
       row: row,
       columns: columns,
       child: Row(
-        children: columns.map((column) {
+        children: columns!.map((column) {
           return PlutoBaseCell(
-            key: row.cells[column.field].key,
-            stateManager: stateManager,
-            cell: row.cells[column.field],
+            key: row!.cells[column.field]!.key,
+            stateManager: stateManager!,
+            cell: row!.cells[column.field],
             width: column.width,
-            height: stateManager.rowHeight,
+            height: stateManager!.rowHeight,
             column: column,
             rowIdx: rowIdx,
           );
@@ -41,13 +41,13 @@ class PlutoBaseRow extends StatelessWidget {
 
 class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-  final int rowIdx;
-  final PlutoRow row;
-  final List<PlutoColumn> columns;
-  final Widget child;
+  final int? rowIdx;
+  final PlutoRow? row;
+  final List<PlutoColumn>? columns;
+  final Widget? child;
 
   _RowContainerWidget({
-    this.stateManager,
+    required this.stateManager,
     this.rowIdx,
     this.row,
     this.columns,
@@ -60,68 +60,68 @@ class _RowContainerWidget extends PlutoStatefulWidget {
 
 abstract class __RowContainerWidgetStateWithChangeKeepAlive
     extends PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
-  bool isCurrentRow;
+  bool? isCurrentRow;
 
-  bool isSelectedRow;
+  bool? isSelectedRow;
 
-  bool isSelecting;
+  bool? isSelecting;
 
-  bool isCheckedRow;
+  bool? isCheckedRow;
 
-  bool isDragTarget;
+  bool? isDragTarget;
 
-  bool isTopDragTarget;
+  bool? isTopDragTarget;
 
-  bool isBottomDragTarget;
+  bool? isBottomDragTarget;
 
-  bool hasCurrentSelectingPosition;
+  bool? hasCurrentSelectingPosition;
 
-  bool hasFocus;
+  bool? hasFocus;
 
   @override
   void onChange() {
     resetState((update) {
-      isCurrentRow = update<bool>(
+      isCurrentRow = update<bool?>(
         isCurrentRow,
         widget.stateManager.currentRowIdx == widget.rowIdx,
       );
 
-      isSelectedRow = update<bool>(
+      isSelectedRow = update<bool?>(
         isSelectedRow,
-        widget.stateManager.isSelectedRow(widget.row.key),
+        widget.stateManager.isSelectedRow(widget.row!.key),
       );
 
-      isSelecting = update<bool>(isSelecting, widget.stateManager.isSelecting);
+      isSelecting = update<bool?>(isSelecting, widget.stateManager.isSelecting);
 
-      isCheckedRow = update<bool>(isCheckedRow, widget.row.checked);
+      isCheckedRow = update<bool?>(isCheckedRow, widget.row!.checked);
 
-      isDragTarget = update<bool>(
+      isDragTarget = update<bool?>(
         isDragTarget,
         widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
       );
 
-      isTopDragTarget = update<bool>(
+      isTopDragTarget = update<bool?>(
         isTopDragTarget,
         widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
       );
 
-      isBottomDragTarget = update<bool>(
+      isBottomDragTarget = update<bool?>(
         isBottomDragTarget,
         widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
       );
 
-      hasCurrentSelectingPosition = update<bool>(
+      hasCurrentSelectingPosition = update<bool?>(
         hasCurrentSelectingPosition,
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      hasFocus = update<bool>(
+      hasFocus = update<bool?>(
         hasFocus,
-        isCurrentRow && widget.stateManager.hasFocus,
+        isCurrentRow! && widget.stateManager.hasFocus,
       );
 
       if (widget.stateManager.mode.isNormal) {
-        setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
+        setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row!.key));
       }
     });
   }
@@ -130,13 +130,13 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 class __RowContainerWidgetState
     extends __RowContainerWidgetStateWithChangeKeepAlive {
   Color rowColor() {
-    if (isDragTarget) return widget.stateManager.configuration.checkedColor;
+    if (isDragTarget!) return widget.stateManager.configuration!.checkedColor;
 
     final bool checkCurrentRow =
-        isCurrentRow && (!isSelecting && !hasCurrentSelectingPosition);
+        isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
 
     final bool checkSelectedRow =
-        widget.stateManager.isSelectedRow(widget.row.key);
+        widget.stateManager.isSelectedRow(widget.row!.key);
 
     if (!checkCurrentRow && !checkSelectedRow) {
       return Colors.transparent;
@@ -144,16 +144,16 @@ class __RowContainerWidgetState
 
     if (widget.stateManager.selectingMode.isRow) {
       return checkSelectedRow
-          ? widget.stateManager.configuration.activatedColor
+          ? widget.stateManager.configuration!.activatedColor
           : Colors.transparent;
     }
 
-    if (!hasFocus) {
+    if (!hasFocus!) {
       return Colors.transparent;
     }
 
     return checkCurrentRow
-        ? widget.stateManager.configuration.activatedColor
+        ? widget.stateManager.configuration!.activatedColor
         : Colors.transparent;
   }
 
@@ -163,21 +163,22 @@ class __RowContainerWidgetState
 
     return Container(
       decoration: BoxDecoration(
-        color: isCheckedRow
+        color: isCheckedRow!
             ? Color.alphaBlend(const Color(0x11757575), rowColor())
             : rowColor(),
         border: Border(
-          top: isDragTarget && isTopDragTarget
+          top: isDragTarget! && isTopDragTarget!
               ? BorderSide(
                   width: PlutoGridSettings.rowBorderWidth,
-                  color: widget.stateManager.configuration.activatedBorderColor,
+                  color:
+                      widget.stateManager.configuration!.activatedBorderColor,
                 )
               : BorderSide.none,
           bottom: BorderSide(
             width: PlutoGridSettings.rowBorderWidth,
-            color: isDragTarget && isBottomDragTarget
-                ? widget.stateManager.configuration.activatedBorderColor
-                : widget.stateManager.configuration.borderColor,
+            color: isDragTarget! && isBottomDragTarget!
+                ? widget.stateManager.configuration!.activatedBorderColor
+                : widget.stateManager.configuration!.borderColor,
           ),
         ),
       ),

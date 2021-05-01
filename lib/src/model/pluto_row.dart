@@ -7,13 +7,13 @@ class PlutoRow {
 
   /// Value to maintain the default sort order when sorting columns.
   /// If there is no value, it is automatically set when loading the grid.
-  int sortIdx;
+  int? sortIdx;
 
   PlutoRow({
-    @required this.cells,
+    required this.cells,
     this.sortIdx,
     bool checked = false,
-    Key key,
+    Key? key,
   })  : _checked = checked,
         _state = PlutoRowState.none,
         _key = key ?? UniqueKey();
@@ -24,11 +24,11 @@ class PlutoRow {
   /// To manually change the values at runtime,
   /// use the PlutoStateManager.setRowChecked
   /// or PlutoStateManager.toggleAllRowChecked methods.
-  bool get checked => _checked;
+  bool? get checked => _checked;
 
-  bool _checked;
+  bool? _checked;
 
-  void setChecked(bool flag) {
+  void setChecked(bool? flag) {
     _checked = flag;
   }
 

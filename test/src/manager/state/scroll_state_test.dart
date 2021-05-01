@@ -7,7 +7,7 @@ import '../../../helper/row_helper.dart';
 
 void main() {
   group('고정 컬럼이 있는 상태에서 needMovingScroll', () {
-    PlutoGridStateManager stateManager;
+    late PlutoGridStateManager stateManager;
 
     List<PlutoColumn> columns;
 

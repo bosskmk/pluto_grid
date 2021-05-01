@@ -2,29 +2,35 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../matcher/pluto_object_matcher.dart';
-import '../../../mock/mock_pluto_event_manager.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_column_filter_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+  MockSpec<StreamSubscription>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
-  PlutoGridEventManager eventManager;
-  StreamSubscription<PlutoGridEvent> streamSubscription;
+  late MockPlutoGridStateManager stateManager;
+  MockPlutoGridEventManager? eventManager;
+  MockStreamSubscription<PlutoGridEvent> streamSubscription;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     streamSubscription = MockStreamSubscription();
 
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
+    when(stateManager.columnHeight).thenReturn(0);
 
-    when(eventManager.listener(any)).thenReturn(streamSubscription);
+    when(eventManager!.listener(any)).thenReturn(streamSubscription);
   });
 
   testWidgets(
@@ -81,10 +87,10 @@ void main() {
       // then
       await tester.enterText(find.byType(TextField), 'abc');
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridChangeColumnFilterEvent>(
             rule: (object) {
-          return object.column.field == column.field &&
+          return object.column!.field == column.field &&
               object.filterType.runtimeType == PlutoFilterTypeContains &&
               object.filterValue == 'abc';
         })),
@@ -137,7 +143,7 @@ void main() {
           enableFilterMenuItem: true,
         );
 
-        when(stateManager.filterRowsByField(any)).thenReturn([
+        when(stateManager.filterRowsByField('column_field_name')).thenReturn([
           FilterHelper.createFilterRow(
             columnField: 'column_field_name',
           ),

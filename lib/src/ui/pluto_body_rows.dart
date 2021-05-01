@@ -13,29 +13,29 @@ class PlutoBodyRows extends PlutoStatefulWidget {
 
 abstract class _PlutoBodyRowsStateWithChange
     extends PlutoStateWithChange<PlutoBodyRows> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow?>? rows;
 
-  double width;
+  double? width;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>>(
+      columns = update<List<PlutoColumn>?>(
         columns,
         _getColumns(),
         compare: listEquals,
       );
 
-      rows = update<List<PlutoRow>>(
+      rows = update<List<PlutoRow?>?>(
         rows,
         widget.stateManager.refRows,
         compare: listEquals,
         destructureList: true,
       );
 
-      width = update<double>(width, _getWidth());
+      width = update<double?>(width, _getWidth());
     });
   }
 
@@ -53,15 +53,15 @@ abstract class _PlutoBodyRowsStateWithChange
 }
 
 class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
-  ScrollController verticalScroll;
+  ScrollController? verticalScroll;
 
-  ScrollController horizontalScroll;
+  ScrollController? horizontalScroll;
 
   @override
   void dispose() {
-    verticalScroll.dispose();
+    verticalScroll!.dispose();
 
-    horizontalScroll.dispose();
+    horizontalScroll!.dispose();
 
     super.dispose();
   }
@@ -70,34 +70,35 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
   void initState() {
     super.initState();
 
-    horizontalScroll = widget.stateManager.scroll.horizontal.addAndGet();
+    horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
 
-    widget.stateManager.scroll.setBodyRowsHorizontal(horizontalScroll);
+    widget.stateManager.scroll!.setBodyRowsHorizontal(horizontalScroll);
 
-    verticalScroll = widget.stateManager.scroll.vertical.addAndGet();
+    verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
 
-    widget.stateManager.scroll.setBodyRowsVertical(verticalScroll);
+    widget.stateManager.scroll!.setBodyRowsVertical(verticalScroll);
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScrollbar(
       verticalController:
-          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
               ? verticalScroll
               : null,
       horizontalController:
-          widget.stateManager.configuration.scrollbarConfig.draggableScrollbar
+          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
               ? horizontalScroll
               : null,
       isAlwaysShown:
-          widget.stateManager.configuration.scrollbarConfig.isAlwaysShown,
+          widget.stateManager.configuration!.scrollbarConfig.isAlwaysShown,
       thickness:
-          widget.stateManager.configuration.scrollbarConfig.scrollbarThickness,
-      thicknessWhileDragging: widget.stateManager.configuration.scrollbarConfig
+          widget.stateManager.configuration!.scrollbarConfig.scrollbarThickness,
+      thicknessWhileDragging: widget.stateManager.configuration!.scrollbarConfig
           .scrollbarThicknessWhileDragging,
-      radius: widget.stateManager.configuration.scrollbarConfig.scrollbarRadius,
-      radiusWhileDragging: widget.stateManager.configuration.scrollbarConfig
+      radius:
+          widget.stateManager.configuration!.scrollbarConfig.scrollbarRadius,
+      radiusWhileDragging: widget.stateManager.configuration!.scrollbarConfig
           .scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(
         controller: horizontalScroll,
@@ -109,14 +110,14 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
-            itemCount: rows.length,
+            itemCount: rows!.length,
             itemExtent: widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
-                key: ValueKey('body_row_${rows[i].key}'),
+                key: ValueKey('body_row_${rows![i]!.key}'),
                 stateManager: widget.stateManager,
                 rowIdx: i,
-                row: rows[i],
+                row: rows![i],
                 columns: columns,
               );
             },

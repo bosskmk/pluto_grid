@@ -3,15 +3,15 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseCell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-  final PlutoCell cell;
-  final double width;
-  final double height;
-  final PlutoColumn column;
-  final int rowIdx;
+  final PlutoCell? cell;
+  final double? width;
+  final double? height;
+  final PlutoColumn? column;
+  final int? rowIdx;
 
   PlutoBaseCell({
-    Key key,
-    this.stateManager,
+    Key? key,
+    required this.stateManager,
     this.cell,
     this.width,
     this.height,
@@ -27,34 +27,34 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
     extends PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
   dynamic cellValue;
 
-  bool isCurrentCell;
+  bool? isCurrentCell;
 
-  bool isEditing;
+  bool? isEditing;
 
-  PlutoGridSelectingMode selectingMode;
+  PlutoGridSelectingMode? selectingMode;
 
-  bool isSelectedCell;
+  bool? isSelectedCell;
 
-  bool hasFocus;
+  bool? hasFocus;
 
   @override
   void onChange() {
     resetState((update) {
-      cellValue = update<dynamic>(cellValue, widget.cell.value);
+      cellValue = update<dynamic>(cellValue, widget.cell!.value);
 
-      isCurrentCell = update<bool>(
+      isCurrentCell = update<bool?>(
         isCurrentCell,
         widget.stateManager.isCurrentCell(widget.cell),
       );
 
-      isEditing = update<bool>(isEditing, widget.stateManager.isEditing);
+      isEditing = update<bool?>(isEditing, widget.stateManager.isEditing);
 
-      selectingMode = update<PlutoGridSelectingMode>(
+      selectingMode = update<PlutoGridSelectingMode?>(
         selectingMode,
         widget.stateManager.selectingMode,
       );
 
-      isSelectedCell = update<bool>(
+      isSelectedCell = update<bool?>(
         isSelectedCell,
         widget.stateManager.isSelectedCell(
           widget.cell,
@@ -63,13 +63,13 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
         ),
       );
 
-      hasFocus = update<bool>(
+      hasFocus = update<bool?>(
         hasFocus,
-        isCurrentCell && widget.stateManager.hasFocus,
+        isCurrentCell! && widget.stateManager.hasFocus,
       );
 
       if (widget.stateManager.mode.isNormal) {
-        setKeepAlive(isCurrentCell);
+        setKeepAlive(isCurrentCell!);
       }
     });
   }
@@ -77,7 +77,7 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 
 class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
-    widget.stateManager.eventManager.addEvent(
+    widget.stateManager.eventManager!.addEvent(
       PlutoGridCellGestureEvent(
         gestureType: gestureType,
         offset: offset,
@@ -118,7 +118,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
       onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
       onLongPressEnd: _handleOnLongPressEnd,
       child: _CellContainer(
-        readOnly: widget.column.type.readOnly,
+        readOnly: widget.column!.type!.readOnly,
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
@@ -141,16 +141,16 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
 }
 
 class _CellContainer extends StatelessWidget {
-  final bool readOnly;
-  final Widget child;
-  final double width;
-  final double height;
-  final bool hasFocus;
-  final bool isCurrentCell;
-  final bool isEditing;
-  final PlutoGridSelectingMode selectingMode;
-  final bool isSelectedCell;
-  final PlutoGridConfiguration configuration;
+  final bool? readOnly;
+  final Widget? child;
+  final double? width;
+  final double? height;
+  final bool? hasFocus;
+  final bool? isCurrentCell;
+  final bool? isEditing;
+  final PlutoGridSelectingMode? selectingMode;
+  final bool? isSelectedCell;
+  final PlutoGridConfiguration? configuration;
 
   _CellContainer({
     this.readOnly,
@@ -165,43 +165,43 @@ class _CellContainer extends StatelessWidget {
     this.configuration,
   });
 
-  Color _currentCellColor() {
-    if (!hasFocus) {
+  Color? _currentCellColor() {
+    if (!hasFocus!) {
       return null;
     }
 
-    if (!isEditing) {
-      return selectingMode.isRow ? configuration.activatedColor : null;
+    if (!isEditing!) {
+      return selectingMode!.isRow ? configuration!.activatedColor : null;
     }
 
     return readOnly == true
-        ? configuration.cellColorInReadOnlyState
-        : configuration.cellColorInEditState;
+        ? configuration!.cellColorInReadOnlyState
+        : configuration!.cellColorInEditState;
   }
 
   BoxDecoration _boxDecoration() {
-    if (isCurrentCell) {
+    if (isCurrentCell!) {
       return BoxDecoration(
         color: _currentCellColor(),
         border: Border.all(
-          color: configuration.activatedBorderColor,
+          color: configuration!.activatedBorderColor,
           width: 1,
         ),
       );
-    } else if (isSelectedCell) {
+    } else if (isSelectedCell!) {
       return BoxDecoration(
-        color: configuration.activatedColor,
+        color: configuration!.activatedColor,
         border: Border.all(
-          color: configuration.activatedBorderColor,
+          color: configuration!.activatedBorderColor,
           width: 1,
         ),
       );
     } else {
-      return configuration.enableColumnBorder
+      return configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(
                 right: BorderSide(
-                  color: configuration.borderColor,
+                  color: configuration!.borderColor,
                   width: 1.0,
                 ),
               ),
@@ -232,15 +232,15 @@ class _CellContainer extends StatelessWidget {
 }
 
 class _BuildCell extends StatelessWidget {
-  final PlutoGridStateManager stateManager;
-  final int rowIdx;
-  final PlutoColumn column;
-  final PlutoCell cell;
-  final bool isCurrentCell;
-  final bool isEditing;
+  final PlutoGridStateManager? stateManager;
+  final int? rowIdx;
+  final PlutoColumn? column;
+  final PlutoCell? cell;
+  final bool? isCurrentCell;
+  final bool? isEditing;
 
   const _BuildCell({
-    Key key,
+    Key? key,
     this.stateManager,
     this.rowIdx,
     this.column,
@@ -251,32 +251,32 @@ class _BuildCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isCurrentCell && isEditing && column.enableEditingMode == true) {
-      if (column.type.isSelect) {
+    if (isCurrentCell! && isEditing! && column!.enableEditingMode == true) {
+      if (column!.type.isSelect) {
         return PlutoSelectCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
         );
-      } else if (column.type.isNumber) {
+      } else if (column!.type.isNumber) {
         return PlutoNumberCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
         );
-      } else if (column.type.isDate) {
+      } else if (column!.type.isDate) {
         return PlutoDateCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
         );
-      } else if (column.type.isTime) {
+      } else if (column!.type.isTime) {
         return PlutoTimeCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
         );
-      } else if (column.type.isText) {
+      } else if (column!.type.isText) {
         return PlutoTextCell(
           stateManager: stateManager,
           cell: cell,
@@ -286,7 +286,7 @@ class _BuildCell extends StatelessWidget {
     }
 
     return PlutoDefaultCell(
-      stateManager: stateManager,
+      stateManager: stateManager!,
       cell: cell,
       column: column,
       rowIdx: rowIdx,
@@ -300,7 +300,7 @@ enum CellEditingStatus {
   updated,
 }
 
-extension CellEditingStatusExtension on CellEditingStatus {
+extension CellEditingStatusExtension on CellEditingStatus? {
   bool get isChanged {
     return CellEditingStatus.changed == this;
   }

@@ -31,7 +31,7 @@ void main() {
       );
 
       // when
-      PlutoGridCellPosition currentCellPosition =
+      PlutoGridCellPosition? currentCellPosition =
           stateManager.currentCellPosition;
 
       // when
@@ -66,7 +66,7 @@ void main() {
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
       PlutoGridCellPosition currentCellPosition =
-          stateManager.currentCellPosition;
+          stateManager.currentCellPosition!;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -102,7 +102,7 @@ void main() {
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
       PlutoGridCellPosition currentCellPosition =
-          stateManager.currentCellPosition;
+          stateManager.currentCellPosition!;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -140,7 +140,7 @@ void main() {
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
 
       PlutoGridCellPosition currentCellPosition =
-          stateManager.currentCellPosition;
+          stateManager.currentCellPosition!;
 
       // when
       expect(currentCellPosition, isNot(null));
@@ -179,8 +179,8 @@ void main() {
           PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.columnIdx, 0);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         // when
         stateManager.setCurrentCellPosition(
@@ -220,8 +220,8 @@ void main() {
           PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.columnIdx, 0);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         // when
         stateManager.setCurrentCellPosition(
@@ -270,8 +270,8 @@ void main() {
           PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.columnIdx, 0);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         // when
         stateManager.setCurrentCellPosition(
@@ -297,7 +297,7 @@ void main() {
   });
 
   group('cellPositionByCellKey', () {
-    testWidgets('should be caused AssertionError', (WidgetTester tester) async {
+    testWidgets('should be returned null', (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 10, width: 150),
@@ -314,9 +314,7 @@ void main() {
 
       // when
       // then
-      expect(() {
-        stateManager.cellPositionByCellKey(null);
-      }, throwsA(isA<AssertionError>()));
+      expect(stateManager.cellPositionByCellKey(null), isNull);
     });
 
     testWidgets('should be returned null', (WidgetTester tester) async {
@@ -364,9 +362,9 @@ void main() {
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
-      final Key cellKey = rows.first.cells['body0'].key;
+      final Key cellKey = rows.first.cells['body0']!.key;
 
-      final cellPosition = stateManager.cellPositionByCellKey(cellKey);
+      final cellPosition = stateManager.cellPositionByCellKey(cellKey)!;
 
       // then
       expect(cellPosition.columnIdx, 0);
@@ -393,9 +391,9 @@ void main() {
           .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
       // when
-      final Key cellKey = rows[7].cells['body3'].key;
+      final Key cellKey = rows[7].cells['body3']!.key;
 
-      final cellPosition = stateManager.cellPositionByCellKey(cellKey);
+      final cellPosition = stateManager.cellPositionByCellKey(cellKey)!;
 
       // then
       expect(cellPosition.columnIdx, 3);

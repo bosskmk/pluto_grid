@@ -7,7 +7,7 @@ class PlutoExampleButton extends StatelessWidget {
   final String url;
 
   PlutoExampleButton({
-    this.url,
+    required this.url,
   }) : assert(url.isNotEmpty);
 
   @override

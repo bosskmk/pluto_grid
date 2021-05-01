@@ -1,31 +1,38 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../matcher/pluto_object_matcher.dart';
-import '../../mock/mock_pluto_event_manager.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import 'pluto_base_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
-  PlutoGridEventManager eventManager;
+  late MockPlutoGridStateManager stateManager;
+  MockPlutoGridEventManager? eventManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
+    when(stateManager.canRowDrag).thenReturn(true);
+    when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
   });
 
   testWidgets(
@@ -382,11 +389,11 @@ void main() {
 
       await tester.tap(gesture);
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnTapUp &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);
@@ -429,11 +436,11 @@ void main() {
 
       await tester.longPress(gesture);
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressStart &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);
@@ -490,11 +497,11 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
-      verify(eventManager.addEvent(
+      verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressMoveUpdate &&
-              object.cell.key == cell.key &&
-              object.column.key == column.key &&
+              object.cell!.key == cell.key &&
+              object.column!.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);
@@ -583,7 +590,7 @@ void main() {
   group('configuration', () {
     PlutoCell cell;
 
-    PlutoColumn column;
+    PlutoColumn? column;
 
     int rowIdx;
 
@@ -640,7 +647,7 @@ void main() {
     ).test(
       'if readOnly is true, should be set the color to cellColorInReadOnlyState.',
       (tester) async {
-        expect(column.type.readOnly, true);
+        expect(column!.type!.readOnly, true);
 
         final target = find.descendant(
           of: find.byType(GestureDetector),
@@ -651,9 +658,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Color color = decoration.color;
+        final Color? color = decoration.color;
 
-        expect(color, stateManager.configuration.cellColorInReadOnlyState);
+        expect(color, stateManager.configuration!.cellColorInReadOnlyState);
       },
     );
 
@@ -680,7 +687,7 @@ void main() {
 
         final Border border = decoration.border as Border;
 
-        expect(border.right.color, stateManager.configuration.borderColor);
+        expect(border.right.color, stateManager.configuration!.borderColor);
       },
     );
 
@@ -705,7 +712,7 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final Border? border = decoration.border as Border?;
 
         expect(border, isNull);
       },

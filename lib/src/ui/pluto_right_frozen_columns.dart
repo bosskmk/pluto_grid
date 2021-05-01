@@ -14,20 +14,20 @@ class PlutoRightFrozenColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoRightFrozenColumnsStateWithChange
     extends PlutoStateWithChange<PlutoRightFrozenColumns> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  double width;
+  double? width;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>>(
+      columns = update<List<PlutoColumn>?>(
         columns,
         widget.stateManager.rightFrozenColumns,
         compare: listEquals,
       );
 
-      width = update<double>(
+      width = update<double?>(
         width,
         widget.stateManager.rightFrozenColumnsWidth,
       );
@@ -44,11 +44,11 @@ class _PlutoRightFrozenColumnsState
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: columns.length,
+        itemCount: columns!.length,
         itemBuilder: (ctx, i) {
           return PlutoBaseColumn(
             stateManager: widget.stateManager,
-            column: columns[i],
+            column: columns![i],
           );
         },
       ),

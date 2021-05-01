@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -145,7 +146,7 @@ class PlutoGridConfiguration {
   }
 
   /// Fired when setConfiguration is called in [PlutoGridStateManager]'s constructor.
-  void applyColumnFilter(List<PlutoColumn> refColumns) {
+  void applyColumnFilter(List<PlutoColumn>? refColumns) {
     if (refColumns == null || refColumns.isEmpty) {
       return;
     }
@@ -162,25 +163,25 @@ class PlutoGridConfiguration {
   }
 
   PlutoGridConfiguration copyWith({
-    bool enableColumnBorder,
-    Color gridBackgroundColor,
-    Color gridBorderColor,
-    Color activatedColor,
-    Color activatedBorderColor,
-    Color checkedColor,
-    Color borderColor,
-    Color cellColorInEditState,
-    Color cellColorInReadOnlyState,
-    TextStyle columnTextStyle,
-    TextStyle cellTextStyle,
-    Color iconColor,
-    Color menuBackgroundColor,
-    double rowHeight,
-    bool enableMoveDownAfterSelecting,
-    PlutoGridEnterKeyAction enterKeyAction,
-    PlutoGridLocaleText localeText,
-    PlutoGridScrollbarConfig scrollbarConfig,
-    PlutoGridColumnFilterConfig columnFilterConfig,
+    bool? enableColumnBorder,
+    Color? gridBackgroundColor,
+    Color? gridBorderColor,
+    Color? activatedColor,
+    Color? activatedBorderColor,
+    Color? checkedColor,
+    Color? borderColor,
+    Color? cellColorInEditState,
+    Color? cellColorInReadOnlyState,
+    TextStyle? columnTextStyle,
+    TextStyle? cellTextStyle,
+    Color? iconColor,
+    Color? menuBackgroundColor,
+    double? rowHeight,
+    bool? enableMoveDownAfterSelecting,
+    PlutoGridEnterKeyAction? enterKeyAction,
+    PlutoGridLocaleText? localeText,
+    PlutoGridScrollbarConfig? scrollbarConfig,
+    PlutoGridColumnFilterConfig? columnFilterConfig,
   }) {
     return PlutoGridConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -469,7 +470,7 @@ extension PlutoGridEnterKeyActionExtension on PlutoGridEnterKeyAction {
 
   bool get isToggleEditing => this == PlutoGridEnterKeyAction.toggleEditing;
 
-  bool get isNone => this == null || this == PlutoGridEnterKeyAction.none;
+  bool get isNone => this == PlutoGridEnterKeyAction.none;
 }
 
 /// Allows to customise scrollbars "look and feel"
@@ -553,36 +554,35 @@ class PlutoGridColumnFilterConfig {
   /// }
   /// ```
   const PlutoGridColumnFilterConfig({
-    List<PlutoFilterType> filters,
-    PlutoGridResolveDefaultColumnFilter resolveDefaultColumnFilter,
+    List<PlutoFilterType>? filters,
+    PlutoGridResolveDefaultColumnFilter? resolveDefaultColumnFilter,
   })  : _userFilters = filters,
         _userResolveDefaultColumnFilter = resolveDefaultColumnFilter;
 
-  final List<PlutoFilterType> _userFilters;
+  final List<PlutoFilterType>? _userFilters;
 
-  final PlutoGridResolveDefaultColumnFilter _userResolveDefaultColumnFilter;
+  final PlutoGridResolveDefaultColumnFilter? _userResolveDefaultColumnFilter;
 
-  bool get hasUserFilter => _userFilters != null && _userFilters.isNotEmpty;
+  bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
 
-  List<PlutoFilterType> get filters =>
+  List<PlutoFilterType>? get filters =>
       hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
 
   PlutoFilterType resolver<T>() {
-    return filters.firstWhere(
+    return filters!.firstWhereOrNull(
           (element) => element.runtimeType == T,
-          orElse: () => null,
         ) ??
-        filters.first;
+        filters!.first;
   }
 
   PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
     if (_userResolveDefaultColumnFilter == null) {
-      return filters.first;
+      return filters!.first;
     }
 
-    var resolvedFilter = _userResolveDefaultColumnFilter(column, resolver);
+    var resolvedFilter = _userResolveDefaultColumnFilter!(column, resolver);
 
-    assert(filters.contains(resolvedFilter));
+    assert(filters!.contains(resolvedFilter));
 
     return resolvedFilter;
   }

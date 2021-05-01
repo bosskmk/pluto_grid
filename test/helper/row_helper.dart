@@ -6,24 +6,24 @@ class RowHelper {
   /// cell value format : '$columnFieldName value $rowIdx'
   static List<PlutoRow> count(
     int count,
-    List<PlutoColumn> columns, {
+    List<PlutoColumn>? columns, {
     bool checked = false,
   }) {
     return Iterable<int>.generate(count)
         .map((rowIdx) => PlutoRow(
               sortIdx: rowIdx,
               cells: Map.fromIterable(
-                columns,
+                columns!,
                 key: (dynamic column) => column.field.toString(),
                 value: (dynamic column) {
                   if ((column as PlutoColumn).type.isText) {
-                    return cellOfTextColumn(column as PlutoColumn, rowIdx);
-                  } else if ((column as PlutoColumn).type.isDate) {
-                    return cellOfDateColumn(column as PlutoColumn, rowIdx);
-                  } else if ((column as PlutoColumn).type.isTime) {
-                    return cellOfTimeColumn(column as PlutoColumn, rowIdx);
-                  } else if ((column as PlutoColumn).type.isSelect) {
-                    return cellOfTimeColumn(column as PlutoColumn, rowIdx);
+                    return cellOfTextColumn(column, rowIdx);
+                  } else if (column.type.isDate) {
+                    return cellOfDateColumn(column, rowIdx);
+                  } else if (column.type.isTime) {
+                    return cellOfTimeColumn(column, rowIdx);
+                  } else if (column.type.isSelect) {
+                    return cellOfTimeColumn(column, rowIdx);
                   }
 
                   throw Exception('Column is not implemented.');
@@ -54,7 +54,7 @@ class RowHelper {
 
   static PlutoCell cellOfSelectColumn(PlutoColumn column, int rowIdx) {
     return PlutoCell(
-        value: (column.type.select.items.toList()..shuffle()).first);
+        value: (column.type.select!.items!.toList()..shuffle()).first);
   }
 
   static double resolveRowTotalHeight(double rowHeight) {

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class PlutoExpansionTile extends StatelessWidget {
   final String title;
 
-  final List<Widget> children;
+  final List<Widget>? children;
 
-  final List<Widget> buttons;
+  final List<Widget>? buttons;
 
   PlutoExpansionTile({
-    this.title,
+    required this.title,
     this.children,
     this.buttons,
   }) : assert(title.isNotEmpty);
@@ -29,12 +29,12 @@ class PlutoExpansionTile extends StatelessWidget {
         expandedAlignment: Alignment.topLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (children != null) ...children,
+          if (children != null) ...children!,
           if (buttons != null)
             Container(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Wrap(
-                children: buttons,
+                children: buttons!,
               ),
             ),
         ],

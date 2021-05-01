@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_text_cell_test.mocks.dart';
 
+@GenerateMocks(
+  [],
+  customMocks: [
+    MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  ],
+)
 void main() {
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
-    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager.keepFocus).thenReturn(true);
-    when(stateManager.hasFocus).thenReturn(true);
+    stateManager = MockPlutoGridStateManager();
+    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager!.keepFocus).thenReturn(true);
+    when(stateManager!.hasFocus).thenReturn(true);
   });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {

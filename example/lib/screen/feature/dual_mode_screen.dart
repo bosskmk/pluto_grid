@@ -16,21 +16,21 @@ class DualModeScreen extends StatefulWidget {
 }
 
 class _DualModeScreenState extends State<DualModeScreen> {
-  List<PlutoColumn> gridAColumns;
+  List<PlutoColumn>? gridAColumns;
 
-  List<PlutoRow> gridARows;
+  List<PlutoRow>? gridARows;
 
-  List<PlutoColumn> gridBColumns;
+  List<PlutoColumn>? gridBColumns;
 
-  List<PlutoRow> gridBRows;
+  List<PlutoRow>? gridBRows;
 
-  PlutoGridStateManager gridAStateManager;
+  PlutoGridStateManager? gridAStateManager;
 
-  PlutoGridStateManager gridBStateManager;
+  PlutoGridStateManager? gridBStateManager;
 
-  Key currentRowKey;
+  Key? currentRowKey;
 
-  Timer _debounce;
+  Timer? _debounce;
 
   @override
   void dispose() {
@@ -88,14 +88,14 @@ class _DualModeScreenState extends State<DualModeScreen> {
   }
 
   void gridAHandler() {
-    if (gridAStateManager.currentRow == null) {
+    if (gridAStateManager!.currentRow == null) {
       return;
     }
 
-    if (gridAStateManager.currentRow.key != currentRowKey) {
-      currentRowKey = gridAStateManager.currentRow.key;
+    if (gridAStateManager!.currentRow!.key != currentRowKey) {
+      currentRowKey = gridAStateManager!.currentRow!.key;
 
-      gridBStateManager.setShowLoading(true);
+      gridBStateManager!.setShowLoading(true);
 
       fetchUserActivity();
     }
@@ -104,7 +104,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
   void fetchUserActivity() {
     // This is just an example to reproduce the server load time.
     if (_debounce?.isActive ?? false) {
-      _debounce.cancel();
+      _debounce!.cancel();
     }
 
     _debounce = Timer(const Duration(milliseconds: 300), () {
@@ -115,12 +115,12 @@ class _DualModeScreenState extends State<DualModeScreen> {
             columns: gridBColumns,
           );
 
-          gridBStateManager.removeRows(gridBStateManager.rows);
-          gridBStateManager.resetCurrentState();
-          gridBStateManager.appendRows(rows);
+          gridBStateManager!.removeRows(gridBStateManager!.rows);
+          gridBStateManager!.resetCurrentState();
+          gridBStateManager!.appendRows(rows);
         });
 
-        gridBStateManager.setShowLoading(false);
+        gridBStateManager!.setShowLoading(false);
       });
     });
   }
@@ -152,7 +152,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             gridAStateManager = event.stateManager;
-            event.stateManager.addListener(gridAHandler);
+            event.stateManager!.addListener(gridAHandler);
           },
         ),
         gridPropsB: PlutoDualGridProps(

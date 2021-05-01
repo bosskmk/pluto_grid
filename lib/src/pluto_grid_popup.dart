@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridPopup {
-  final BuildContext context;
-  final List<PlutoColumn> columns;
-  final List<PlutoRow> rows;
-  final PlutoGridMode mode;
-  final PlutoOnLoadedEventCallback onLoaded;
-  final PlutoOnChangedEventCallback onChanged;
-  final PlutoOnSelectedEventCallback onSelected;
-  final double width;
-  final double height;
-  final CreateHeaderCallBack createHeader;
-  final CreateFooterCallBack createFooter;
-  final PlutoGridConfiguration configuration;
+  final BuildContext? context;
+  final List<PlutoColumn>? columns;
+  final List<PlutoRow?>? rows;
+  final PlutoGridMode? mode;
+  final PlutoOnLoadedEventCallback? onLoaded;
+  final PlutoOnChangedEventCallback? onChanged;
+  final PlutoOnSelectedEventCallback? onSelected;
+  final double? width;
+  final double? height;
+  final CreateHeaderCallBack? createHeader;
+  final CreateFooterCallBack? createFooter;
+  final PlutoGridConfiguration? configuration;
 
   PlutoGridPopup({
     this.context,
@@ -33,9 +33,9 @@ class PlutoGridPopup {
   }
 
   Future<void> open() async {
-    PlutoGridOnSelectedEvent selected =
+    PlutoGridOnSelectedEvent? selected =
         await showDialog<PlutoGridOnSelectedEvent>(
-            context: context,
+            context: context!,
             builder: (BuildContext ctx) {
               return Dialog(
                 child: LayoutBuilder(
@@ -62,8 +62,8 @@ class PlutoGridPopup {
                 ),
               );
             });
-    if (onSelected != null) {
-      onSelected(selected);
+    if (onSelected != null && selected != null) {
+      onSelected!(selected);
     }
   }
 }

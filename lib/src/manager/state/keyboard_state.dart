@@ -76,7 +76,7 @@ mixin KeyboardState implements IPlutoGridState {
   }
 
   PlutoGridCellPosition cellPositionToMove(
-    PlutoGridCellPosition cellPosition,
+    PlutoGridCellPosition? cellPosition,
     PlutoMoveDirection direction,
   ) {
     final columnIndexes = columnIndexesByShowFrozen;
@@ -84,26 +84,25 @@ mixin KeyboardState implements IPlutoGridState {
     switch (direction) {
       case PlutoMoveDirection.left:
         return PlutoGridCellPosition(
-          columnIdx: columnIndexes[cellPosition.columnIdx - 1],
+          columnIdx: columnIndexes[cellPosition!.columnIdx! - 1],
           rowIdx: cellPosition.rowIdx,
         );
       case PlutoMoveDirection.right:
         return PlutoGridCellPosition(
-          columnIdx: columnIndexes[cellPosition.columnIdx + 1],
+          columnIdx: columnIndexes[cellPosition!.columnIdx! + 1],
           rowIdx: cellPosition.rowIdx,
         );
       case PlutoMoveDirection.up:
         return PlutoGridCellPosition(
-          columnIdx: columnIndexes[cellPosition.columnIdx],
-          rowIdx: cellPosition.rowIdx - 1,
+          columnIdx: columnIndexes[cellPosition!.columnIdx!],
+          rowIdx: cellPosition.rowIdx! - 1,
         );
       case PlutoMoveDirection.down:
         return PlutoGridCellPosition(
-          columnIdx: columnIndexes[cellPosition.columnIdx],
-          rowIdx: cellPosition.rowIdx + 1,
+          columnIdx: columnIndexes[cellPosition!.columnIdx!],
+          rowIdx: cellPosition.rowIdx! + 1,
         );
     }
-    throw Exception('PlutoMoveDirection case was not handled.');
   }
 
   void moveCurrentCell(
@@ -137,7 +136,7 @@ mixin KeyboardState implements IPlutoGridState {
     final cellPosition = currentCellPosition;
 
     if (canNotMoveCell(cellPosition, direction)) {
-      eventManager.addEvent(
+      eventManager!.addEvent(
         PlutoGridCannotMoveCurrentCellEvent(
           cellPosition: cellPosition,
           direction: direction,
@@ -153,14 +152,14 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     setCurrentCell(
-        refRows[toMove.rowIdx].cells[refColumns[toMove.columnIdx].field],
+        refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
         toMove.rowIdx,
         notify: notify);
 
     if (direction.horizontal) {
-      moveScrollByColumn(direction, cellPosition.columnIdx);
+      moveScrollByColumn(direction, cellPosition!.columnIdx);
     } else if (direction.vertical) {
-      moveScrollByRow(direction, cellPosition.rowIdx);
+      moveScrollByRow(direction, cellPosition!.rowIdx);
     }
     return;
   }
@@ -187,16 +186,16 @@ mixin KeyboardState implements IPlutoGridState {
     final int columnIdx =
         direction.isLeft ? columnIndexes.first : columnIndexes.last;
 
-    final column = refColumns[columnIdx];
+    final column = refColumns![columnIdx];
 
-    final cellToMove = currentRow.cells[column.field];
+    final cellToMove = currentRow!.cells[column.field];
 
     setCurrentCell(cellToMove, currentRowIdx, notify: notify);
 
-    if (!showFrozenColumn || column.frozen.isFrozen != true) {
+    if (!showFrozenColumn! || column.frozen.isFrozen != true) {
       direction.isLeft
-          ? scroll.horizontal.jumpTo(0)
-          : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
+          ? scroll!.horizontal!.jumpTo(0)
+          : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
     }
   }
 
@@ -215,15 +214,15 @@ mixin KeyboardState implements IPlutoGridState {
 
     final field = currentColumnField ?? columns.first.field;
 
-    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows!.length - 1;
 
-    final cellToMove = refRows[rowIdx].cells[field];
+    final cellToMove = refRows![rowIdx]!.cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
     direction.isUp
-        ? scroll.vertical.jumpTo(0)
-        : scroll.vertical.jumpTo(scroll.maxScrollVertical);
+        ? scroll!.vertical!.jumpTo(0)
+        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
   }
 
   void moveCurrentCellByRowIdx(
@@ -239,13 +238,13 @@ mixin KeyboardState implements IPlutoGridState {
       rowIdx = 0;
     }
 
-    if (rowIdx > refRows.length - 1) {
-      rowIdx = refRows.length - 1;
+    if (rowIdx > refRows!.length - 1) {
+      rowIdx = refRows!.length - 1;
     }
 
-    final field = currentColumnField ?? refColumns.first.field;
+    final field = currentColumnField ?? refColumns!.first.field;
 
-    final cellToMove = refRows[rowIdx].cells[field];
+    final cellToMove = refRows![rowIdx]!.cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
@@ -253,7 +252,7 @@ mixin KeyboardState implements IPlutoGridState {
   }
 
   void moveSelectingCell(PlutoMoveDirection direction) {
-    final PlutoGridCellPosition cellPosition =
+    final PlutoGridCellPosition? cellPosition =
         currentSelectingPosition ?? currentCellPosition;
 
     if (canNotMoveCell(cellPosition, direction)) {
@@ -262,10 +261,10 @@ mixin KeyboardState implements IPlutoGridState {
 
     setCurrentSelectingPosition(
       cellPosition: PlutoGridCellPosition(
-        columnIdx: cellPosition.columnIdx +
+        columnIdx: cellPosition!.columnIdx! +
             (direction.horizontal ? direction.offset : 0),
         rowIdx:
-            cellPosition.rowIdx + (direction.vertical ? direction.offset : 0),
+            cellPosition.rowIdx! + (direction.vertical ? direction.offset : 0),
       ),
     );
 
@@ -293,11 +292,11 @@ mixin KeyboardState implements IPlutoGridState {
       return;
     }
 
-    final int columnIdx = direction.isLeft ? 0 : refColumns.length - 1;
+    final int columnIdx = direction.isLeft ? 0 : refColumns!.length - 1;
 
-    final int rowIdx = hasCurrentSelectingPosition
-        ? currentSelectingPosition.rowIdx
-        : currentCellPosition.rowIdx;
+    final int? rowIdx = hasCurrentSelectingPosition
+        ? currentSelectingPosition!.rowIdx
+        : currentCellPosition!.rowIdx;
 
     setCurrentSelectingPosition(
       cellPosition: PlutoGridCellPosition(
@@ -308,8 +307,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isLeft
-        ? scroll.horizontal.jumpTo(0)
-        : scroll.horizontal.jumpTo(scroll.maxScrollHorizontal);
+        ? scroll!.horizontal!.jumpTo(0)
+        : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
   }
 
   void moveSelectingCellToEdgeOfRows(
@@ -330,10 +329,10 @@ mixin KeyboardState implements IPlutoGridState {
     }
 
     final columnIdx = hasCurrentSelectingPosition
-        ? currentSelectingPosition.columnIdx
-        : currentCellPosition.columnIdx;
+        ? currentSelectingPosition!.columnIdx
+        : currentCellPosition!.columnIdx;
 
-    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows!.length - 1;
 
     setCurrentSelectingPosition(
       cellPosition: PlutoGridCellPosition(
@@ -344,8 +343,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isUp
-        ? scroll.vertical.jumpTo(0)
-        : scroll.vertical.jumpTo(scroll.maxScrollVertical);
+        ? scroll!.vertical!.jumpTo(0)
+        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
   }
 
   void moveSelectingCellByRowIdx(
@@ -357,17 +356,17 @@ mixin KeyboardState implements IPlutoGridState {
       rowIdx = 0;
     }
 
-    if (rowIdx > refRows.length - 1) {
-      rowIdx = refRows.length - 1;
+    if (rowIdx > refRows!.length - 1) {
+      rowIdx = refRows!.length - 1;
     }
 
     if (currentCell == null) {
       return;
     }
 
-    int columnIdx = hasCurrentSelectingPosition
-        ? currentSelectingPosition.columnIdx
-        : currentCellPosition.columnIdx;
+    int? columnIdx = hasCurrentSelectingPosition
+        ? currentSelectingPosition!.columnIdx
+        : currentCellPosition!.columnIdx;
 
     setCurrentSelectingPosition(
       cellPosition: PlutoGridCellPosition(

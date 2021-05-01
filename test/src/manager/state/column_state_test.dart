@@ -403,7 +403,7 @@ void main() {
     );
 
     // when
-    PlutoColumn currentColumn = stateManager.currentColumn;
+    PlutoColumn? currentColumn = stateManager.currentColumn;
 
     // when
     expect(currentColumn, null);
@@ -435,7 +435,7 @@ void main() {
     String selectColumnField = 'body2';
     stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
 
-    PlutoColumn currentColumn = stateManager.currentColumn;
+    PlutoColumn currentColumn = stateManager.currentColumn!;
 
     // when
     expect(currentColumn, isNot(null));
@@ -464,7 +464,7 @@ void main() {
     );
 
     // when
-    String currentColumnField = stateManager.currentColumnField;
+    String? currentColumnField = stateManager.currentColumnField;
 
     // when
     expect(currentColumnField, null);
@@ -497,7 +497,7 @@ void main() {
     String selectColumnField = 'body1';
     stateManager.setCurrentCell(rows[2].cells[selectColumnField], 2);
 
-    String currentColumnField = stateManager.currentColumnField;
+    String? currentColumnField = stateManager.currentColumnField;
 
     // when
     expect(currentColumnField, isNot(null));
@@ -815,7 +815,7 @@ void main() {
       stateManager.hideColumn(columns.first.key, true);
 
       // then
-      expect(stateManager.refColumns.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
     });
 
     testWidgets(
@@ -841,7 +841,7 @@ void main() {
       );
 
       // when
-      expect(stateManager.refColumns.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
 
       stateManager.hideColumn(columns.first.key, false);
 

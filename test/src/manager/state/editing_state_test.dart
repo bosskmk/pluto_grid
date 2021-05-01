@@ -55,9 +55,9 @@ void main() {
       [0, 1, 5, 6, 7, 8, 9].forEach((rowIdx) {
         ['left', 'body', 'right'].forEach((column) {
           [0, 1, 2].forEach((idx) {
-            expect(rows[rowIdx].cells['$column$idx'].value,
+            expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
-            expect(rows[rowIdx].cells['$column$idx'].value, isNot('changed'));
+            expect(rows[rowIdx].cells['$column$idx']!.value, isNot('changed'));
           });
         });
       });
@@ -65,7 +65,7 @@ void main() {
       [2, 3, 4].forEach((rowIdx) {
         ['left', 'body', 'right'].forEach((column) {
           [0, 1, 2].forEach((idx) {
-            expect(rows[rowIdx].cells['$column$idx'].value, 'changed');
+            expect(rows[rowIdx].cells['$column$idx']!.value, 'changed');
           });
         });
       });
@@ -117,35 +117,35 @@ void main() {
       [0, 1, 4, 5, 6, 7, 8, 9].forEach((rowIdx) {
         ['left', 'body', 'right'].forEach((column) {
           [0, 1, 2].forEach((idx) {
-            expect(rows[rowIdx].cells['$column$idx'].value,
+            expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
           });
         });
       });
 
-      expect(rows[2].cells['left0'].value, 'left0 value 2');
-      expect(rows[2].cells['left1'].value, 'left1 value 2');
-      expect(rows[2].cells['left2'].value, 'left2 value 2');
+      expect(rows[2].cells['left0']!.value, 'left0 value 2');
+      expect(rows[2].cells['left1']!.value, 'left1 value 2');
+      expect(rows[2].cells['left2']!.value, 'left2 value 2');
 
-      expect(rows[2].cells['body0'].value, 'body0 value 2');
-      expect(rows[2].cells['body1'].value, 'body1 value 2');
-      expect(rows[2].cells['body2'].value, 'changed1-1');
+      expect(rows[2].cells['body0']!.value, 'body0 value 2');
+      expect(rows[2].cells['body1']!.value, 'body1 value 2');
+      expect(rows[2].cells['body2']!.value, 'changed1-1');
 
-      expect(rows[2].cells['right0'].value, 'changed1-2');
-      expect(rows[2].cells['right1'].value, 'right1 value 2');
-      expect(rows[2].cells['right2'].value, 'right2 value 2');
+      expect(rows[2].cells['right0']!.value, 'changed1-2');
+      expect(rows[2].cells['right1']!.value, 'right1 value 2');
+      expect(rows[2].cells['right2']!.value, 'right2 value 2');
 
-      expect(rows[3].cells['left0'].value, 'left0 value 3');
-      expect(rows[3].cells['left1'].value, 'left1 value 3');
-      expect(rows[3].cells['left2'].value, 'left2 value 3');
+      expect(rows[3].cells['left0']!.value, 'left0 value 3');
+      expect(rows[3].cells['left1']!.value, 'left1 value 3');
+      expect(rows[3].cells['left2']!.value, 'left2 value 3');
 
-      expect(rows[3].cells['body0'].value, 'body0 value 3');
-      expect(rows[3].cells['body1'].value, 'body1 value 3');
-      expect(rows[3].cells['body2'].value, 'changed2-1');
+      expect(rows[3].cells['body0']!.value, 'body0 value 3');
+      expect(rows[3].cells['body1']!.value, 'body1 value 3');
+      expect(rows[3].cells['body2']!.value, 'changed2-1');
 
-      expect(rows[3].cells['right0'].value, 'changed2-2');
-      expect(rows[3].cells['right1'].value, 'right1 value 3');
-      expect(rows[3].cells['right2'].value, 'right2 value 3');
+      expect(rows[3].cells['right0']!.value, 'changed2-2');
+      expect(rows[3].cells['right1']!.value, 'right1 value 3');
+      expect(rows[3].cells['right2']!.value, 'right2 value 3');
     });
 
     testWidgets(
@@ -201,61 +201,61 @@ void main() {
       [0, 1, 5, 6, 7, 8, 9].forEach((rowIdx) {
         ['left', 'body', 'right'].forEach((column) {
           [0, 1, 2].forEach((idx) {
-            expect(rows[rowIdx].cells['$column$idx'].value,
+            expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
           });
         });
       });
 
-      expect(rows[2].cells['left0'].value, 'left0 value 2');
-      expect(rows[2].cells['left1'].value, 'left1 value 2');
-      expect(rows[2].cells['left2'].value, 'left2 value 2');
+      expect(rows[2].cells['left0']!.value, 'left0 value 2');
+      expect(rows[2].cells['left1']!.value, 'left1 value 2');
+      expect(rows[2].cells['left2']!.value, 'left2 value 2');
 
-      expect(rows[2].cells['body0'].value, 'body0 value 2');
-      expect(rows[2].cells['body1'].value, 'body1 value 2');
-      expect(rows[2].cells['body2'].value, 'changed1-1');
+      expect(rows[2].cells['body0']!.value, 'body0 value 2');
+      expect(rows[2].cells['body1']!.value, 'body1 value 2');
+      expect(rows[2].cells['body2']!.value, 'changed1-1');
 
-      expect(rows[2].cells['right0'].value, 'changed1-2');
-      expect(rows[2].cells['right1'].value, 'right1 value 2');
-      expect(rows[2].cells['right2'].value, 'right2 value 2');
+      expect(rows[2].cells['right0']!.value, 'changed1-2');
+      expect(rows[2].cells['right1']!.value, 'right1 value 2');
+      expect(rows[2].cells['right2']!.value, 'right2 value 2');
 
-      expect(rows[3].cells['left0'].value, 'left0 value 3');
-      expect(rows[3].cells['left1'].value, 'left1 value 3');
-      expect(rows[3].cells['left2'].value, 'left2 value 3');
+      expect(rows[3].cells['left0']!.value, 'left0 value 3');
+      expect(rows[3].cells['left1']!.value, 'left1 value 3');
+      expect(rows[3].cells['left2']!.value, 'left2 value 3');
 
-      expect(rows[3].cells['body0'].value, 'body0 value 3');
-      expect(rows[3].cells['body1'].value, 'body1 value 3');
-      expect(rows[3].cells['body2'].value, 'changed2-1');
+      expect(rows[3].cells['body0']!.value, 'body0 value 3');
+      expect(rows[3].cells['body1']!.value, 'body1 value 3');
+      expect(rows[3].cells['body2']!.value, 'changed2-1');
 
-      expect(rows[3].cells['right0'].value, 'changed2-2');
-      expect(rows[3].cells['right1'].value, 'right1 value 3');
-      expect(rows[3].cells['right2'].value, 'right2 value 3');
+      expect(rows[3].cells['right0']!.value, 'changed2-2');
+      expect(rows[3].cells['right1']!.value, 'right1 value 3');
+      expect(rows[3].cells['right2']!.value, 'right2 value 3');
 
-      expect(rows[4].cells['left0'].value, 'left0 value 4');
-      expect(rows[4].cells['left1'].value, 'left1 value 4');
-      expect(rows[4].cells['left2'].value, 'left2 value 4');
+      expect(rows[4].cells['left0']!.value, 'left0 value 4');
+      expect(rows[4].cells['left1']!.value, 'left1 value 4');
+      expect(rows[4].cells['left2']!.value, 'left2 value 4');
 
-      expect(rows[4].cells['body0'].value, 'body0 value 4');
-      expect(rows[4].cells['body1'].value, 'body1 value 4');
-      expect(rows[4].cells['body2'].value, 'changed1-1');
+      expect(rows[4].cells['body0']!.value, 'body0 value 4');
+      expect(rows[4].cells['body1']!.value, 'body1 value 4');
+      expect(rows[4].cells['body2']!.value, 'changed1-1');
 
-      expect(rows[4].cells['right0'].value, 'changed1-2');
-      expect(rows[4].cells['right1'].value, 'right1 value 4');
-      expect(rows[4].cells['right2'].value, 'right2 value 4');
+      expect(rows[4].cells['right0']!.value, 'changed1-2');
+      expect(rows[4].cells['right1']!.value, 'right1 value 4');
+      expect(rows[4].cells['right2']!.value, 'right2 value 4');
     });
   });
 
   group('setEditing', () {
-    MockOnChangeListener mock;
+    MockOnChangeListener? mock;
     List<PlutoColumn> columns;
     List<PlutoRow> rows;
-    PlutoGridStateManager stateManager;
+    late PlutoGridStateManager stateManager;
 
-    Function({
-      PlutoGridMode mode,
-      bool enableEditingMode,
-      bool setCurrentCell,
-      bool setIsEditing,
+    late Function({
+      PlutoGridMode? mode,
+      bool? enableEditingMode,
+      bool? setCurrentCell,
+      bool? setIsEditing,
     }) buildState;
 
     setUp(() {
@@ -286,16 +286,16 @@ void main() {
           mode: mode,
         );
 
-        stateManager.addListener(mock.onChangeVoidNoParamListener);
+        stateManager.addListener(mock!.onChangeVoidNoParamListener);
 
         stateManager
             .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
 
-        if (setCurrentCell) {
+        if (setCurrentCell!) {
           stateManager.setCurrentCell(rows.first.cells['column'], 0);
         }
 
-        if (setIsEditing) {
+        if (setIsEditing!) {
           stateManager.setEditing(true);
         }
 
@@ -322,7 +322,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock.onChangeVoidNoParamListener());
+        verifyNever(mock!.onChangeVoidNoParamListener());
       },
     );
 
@@ -345,7 +345,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verify(mock.onChangeVoidNoParamListener()).called(1);
+        verify(mock!.onChangeVoidNoParamListener()).called(1);
       },
     );
 
@@ -368,7 +368,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock.onChangeVoidNoParamListener());
+        verifyNever(mock!.onChangeVoidNoParamListener());
       },
     );
 
@@ -391,7 +391,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock.onChangeVoidNoParamListener());
+        verifyNever(mock!.onChangeVoidNoParamListener());
       },
     );
   });
@@ -427,7 +427,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0'].key,
+          rows.first.cells['column0']!.key,
           'DEF',
           // force: false,
         );
@@ -460,7 +460,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0'].key,
+          rows.first.cells['column0']!.key,
           'DEF',
           force: true,
         );

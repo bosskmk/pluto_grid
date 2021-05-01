@@ -12,11 +12,11 @@ class ColumnHidingScreen extends StatefulWidget {
 }
 
 class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   @override
   void initState() {
@@ -66,13 +66,13 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
   }
 
   void handleToggleColumnA() {
-    var firstColumn = stateManager.refColumns.originalList.first;
+    var firstColumn = stateManager!.refColumns!.originalList.first;
 
-    stateManager.hideColumn(firstColumn.key, !firstColumn.hide);
+    stateManager!.hideColumn(firstColumn.key, !firstColumn.hide);
   }
 
   void handleShowPopup(BuildContext context) {
-    stateManager.showSetColumnsPopup(context);
+    stateManager!.showSetColumnsPopup(context);
   }
 
   @override

@@ -13,9 +13,9 @@ class ColumnFreezingScreen extends StatefulWidget {
 }
 
 class _ColumnFreezingScreenState extends State<ColumnFreezingScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _ColumnFreezingScreenState extends State<ColumnFreezingScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
+          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.cell);
         },
       ),
     );

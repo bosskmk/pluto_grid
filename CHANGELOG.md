@@ -1,3 +1,17 @@
+## [2.0.0] - 2021. 5. 1
+
+* Fix errors of tests on null-safety.
+* Fix focus problems on web.
+
+## [2.0.0-nullsafety.1] - 2021. 4. 15
+
+* Edit dependency.
+
+## [2.0.0-nullsafety.0] - 2021. 4. 9
+
+* Null safety version.
+* Fix CupertinoScrollBar error.(In flutter 2.1.0.xxx)
+
 ## [1.2.0] - 2021. 3. 13
 
 * Add moveRowsByIndex.

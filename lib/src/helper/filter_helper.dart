@@ -1,10 +1,11 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 typedef SetFilterPopupHandler = void Function(
-    PlutoGridStateManager stateManager);
+    PlutoGridStateManager? stateManager);
 
 class FilterHelper {
   /// A value to identify all column searches when searching filters.
@@ -35,9 +36,9 @@ class FilterHelper {
 
   /// Create a row to contain filter information.
   static PlutoRow createFilterRow({
-    String columnField,
-    PlutoFilterType filterType,
-    String filterValue,
+    String? columnField,
+    PlutoFilterType? filterType,
+    String? filterValue,
   }) {
     return PlutoRow(
       cells: {
@@ -51,36 +52,36 @@ class FilterHelper {
   }
 
   /// Converts rows containing filter information into comparison functions.
-  static FilteredListFilter<PlutoRow> convertRowsToFilter(
-    List<PlutoRow> rows,
-    List<PlutoColumn> enabledFilterColumns,
+  static FilteredListFilter<PlutoRow?>? convertRowsToFilter(
+    List<PlutoRow?> rows,
+    List<PlutoColumn>? enabledFilterColumns,
   ) {
     if (rows.isEmpty) {
       return null;
     }
 
-    return (PlutoRow row) {
-      bool flag;
+    return (PlutoRow? row) {
+      bool? flag;
 
       for (var _row in rows) {
-        final filterType = _row.cells[filterFieldType].value as PlutoFilterType;
+        final filterType =
+            _row!.cells[filterFieldType]!.value as PlutoFilterType?;
 
-        if (_row.cells[filterFieldColumn].value == filterFieldAllColumns) {
-          bool flagAllColumns;
+        if (_row.cells[filterFieldColumn]!.value == filterFieldAllColumns) {
+          bool? flagAllColumns;
 
-          row.cells.forEach((key, value) {
-            var foundColumn = enabledFilterColumns.firstWhere(
+          row!.cells.forEach((key, value) {
+            var foundColumn = enabledFilterColumns!.firstWhereOrNull(
               (element) => element.field == key,
-              orElse: () => null,
             );
 
             if (foundColumn != null) {
               flagAllColumns = compareOr(
                 flagAllColumns,
                 compareByFilterType(
-                  filterType: filterType,
+                  filterType: filterType!,
                   base: value.value.toString(),
-                  search: _row.cells[filterFieldValue].value.toString(),
+                  search: _row.cells[filterFieldValue]!.value.toString(),
                   column: foundColumn,
                 ),
               );
@@ -89,19 +90,18 @@ class FilterHelper {
 
           flag = compareAnd(flag, flagAllColumns);
         } else {
-          var foundColumn = enabledFilterColumns.firstWhere(
-            (element) => element.field == _row.cells[filterFieldColumn].value,
-            orElse: () => null,
+          var foundColumn = enabledFilterColumns!.firstWhereOrNull(
+            (element) => element.field == _row.cells[filterFieldColumn]!.value,
           );
 
           if (foundColumn != null) {
             flag = compareAnd(
               flag,
               compareByFilterType(
-                filterType: filterType,
-                base: row.cells[_row.cells[filterFieldColumn].value].value
+                filterType: filterType!,
+                base: row!.cells[_row.cells[filterFieldColumn]!.value]!.value
                     .toString(),
-                search: _row.cells[filterFieldValue].value.toString(),
+                search: _row.cells[filterFieldValue]!.value.toString(),
                 column: foundColumn,
               ),
             );
@@ -120,17 +120,15 @@ class FilterHelper {
   /// it is regarded as a filtering column.
   static bool isFilteredColumn(
     PlutoColumn column,
-    List<PlutoRow> filteredRows,
+    List<PlutoRow?>? filteredRows,
   ) {
-    assert(column != null);
-
     if (filteredRows == null || filteredRows.isEmpty) {
       return false;
     }
 
     for (var row in filteredRows) {
-      if (row.cells[filterFieldColumn].value == filterFieldAllColumns ||
-          row.cells[filterFieldColumn].value == column.field) {
+      if (row!.cells[filterFieldColumn]!.value == filterFieldAllColumns ||
+          row.cells[filterFieldColumn]!.value == column.field) {
         return true;
       }
     }
@@ -156,21 +154,21 @@ class FilterHelper {
   }
 
   /// 'or' comparison with null values
-  static bool compareOr(bool a, bool b) {
+  static bool compareOr(bool? a, bool b) {
     return a != true ? a == true || b : true;
   }
 
   /// 'and' comparison with null values
-  static bool compareAnd(bool a, bool b) {
+  static bool? compareAnd(bool? a, bool? b) {
     return a != false ? b : false;
   }
 
   /// Compare [base] and [search] with [PlutoFilterType.compare].
   static bool compareByFilterType({
-    @required PlutoFilterType filterType,
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required PlutoFilterType filterType,
+    required String base,
+    required String search,
+    required PlutoColumn? column,
   }) {
     return filterType.compare(
       base: base,
@@ -181,85 +179,85 @@ class FilterHelper {
 
   /// Whether [search] is contains in [base].
   static bool compareContains({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
     return _compareWithRegExp(
-      RegExp.escape(search),
-      base,
+      RegExp.escape(search!),
+      base!,
     );
   }
 
   /// Whether [search] is equals to [base].
   static bool compareEquals({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
-      r'^' + RegExp.escape(search) + r'$',
-      base,
+      r'^' + RegExp.escape(search!) + r'$',
+      base!,
     );
   }
 
   /// Whether [base] starts with [search].
   static bool compareStartsWith({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
-      r'^' + RegExp.escape(search),
-      base,
+      r'^' + RegExp.escape(search!),
+      base!,
     );
   }
 
   /// Whether [base] ends with [search].
   static bool compareEndsWith({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
-      RegExp.escape(search) + r'$',
-      base,
+      RegExp.escape(search!) + r'$',
+      base!,
     );
   }
 
   static bool compareGreaterThan({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
-    return column.type.compare(base, search) == 1;
+    return column!.type!.compare(base, search) == 1;
   }
 
   static bool compareGreaterThanOrEqualTo({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
-    return column.type.compare(base, search) > -1;
+    return column!.type!.compare(base, search) > -1;
   }
 
   static bool compareLessThan({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
-    return column.type.compare(base, search) == -1;
+    return column!.type!.compare(base, search) == -1;
   }
 
   static bool compareLessThanOrEqualTo({
-    @required String base,
-    @required String search,
-    @required PlutoColumn column,
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
   }) {
-    return column.type.compare(base, search) < 1;
+    return column!.type!.compare(base, search) < 1;
   }
 
   static bool _compareWithRegExp(
@@ -289,10 +287,10 @@ class FilterPopupState {
   final SetFilterPopupHandler handleApplyFilter;
 
   /// List of columns to be filtered.
-  final List<PlutoColumn> columns;
+  final List<PlutoColumn>? columns;
 
   /// List with filtering condition information
-  final List<PlutoRow> filterRows;
+  final List<PlutoRow?> filterRows;
 
   /// The filter popup opens and focuses on the filter value in the first row.
   final bool focusFirstFilterValue;
@@ -304,45 +302,39 @@ class FilterPopupState {
   final double height;
 
   FilterPopupState({
-    @required this.context,
-    @required this.configuration,
-    @required this.handleAddNewFilter,
-    @required this.handleApplyFilter,
-    @required this.columns,
-    @required this.filterRows,
-    @required this.focusFirstFilterValue,
+    required this.context,
+    required this.configuration,
+    required this.handleAddNewFilter,
+    required this.handleApplyFilter,
+    required this.columns,
+    required this.filterRows,
+    required this.focusFirstFilterValue,
     this.width = 600,
     this.height = 450,
-  })  : assert(context != null),
-        assert(configuration != null),
-        assert(handleAddNewFilter != null),
-        assert(handleApplyFilter != null),
-        assert(columns != null && columns.isNotEmpty),
-        assert(filterRows != null),
-        assert(focusFirstFilterValue != null),
+  })  : assert(columns != null && columns.isNotEmpty),
         _previousFilterRows = [...filterRows];
 
-  PlutoGridStateManager _stateManager;
-  List<PlutoRow> _previousFilterRows;
+  PlutoGridStateManager? _stateManager;
+  List<PlutoRow?> _previousFilterRows;
 
   void onLoaded(PlutoGridOnLoadedEvent e) {
     _stateManager = e.stateManager;
 
-    _stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+    _stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
 
-    if (focusFirstFilterValue && _stateManager.rows.isNotEmpty) {
-      _stateManager.setKeepFocus(true);
+    if (focusFirstFilterValue && _stateManager!.rows.isNotEmpty) {
+      _stateManager!.setKeepFocus(true);
 
-      _stateManager.setCurrentCell(
-        _stateManager.rows.first.cells[FilterHelper.filterFieldValue],
+      _stateManager!.setCurrentCell(
+        _stateManager!.rows.first!.cells[FilterHelper.filterFieldValue],
         0,
         notify: false,
       );
 
-      _stateManager.setEditing(true);
+      _stateManager!.setEditing(true);
     }
 
-    _stateManager.addListener(stateListener);
+    _stateManager!.addListener(stateListener);
   }
 
   void onChanged(PlutoGridOnChangedEvent e) {
@@ -350,12 +342,12 @@ class FilterPopupState {
   }
 
   void onSelected(PlutoGridOnSelectedEvent e) {
-    _stateManager.removeListener(stateListener);
+    _stateManager!.removeListener(stateListener);
   }
 
   void stateListener() {
-    if (listEquals(_previousFilterRows, _stateManager.rows) == false) {
-      _previousFilterRows = [..._stateManager.rows];
+    if (listEquals(_previousFilterRows, _stateManager!.rows) == false) {
+      _previousFilterRows = [..._stateManager!.rows];
       applyFilter();
     }
   }
@@ -373,12 +365,12 @@ class FilterPopupState {
   }
 
   List<PlutoColumn> makeColumns() {
-    return _makeFilterColumns(configuration: configuration, columns: columns);
+    return _makeFilterColumns(configuration: configuration, columns: columns!);
   }
 
   Map<String, String> _makeFilterColumnMap({
-    @required PlutoGridConfiguration configuration,
-    @required List<PlutoColumn> columns,
+    required PlutoGridConfiguration configuration,
+    required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = {
       FilterHelper.filterFieldAllColumns:
@@ -393,8 +385,8 @@ class FilterPopupState {
   }
 
   List<PlutoColumn> _makeFilterColumns({
-    @required PlutoGridConfiguration configuration,
-    @required List<PlutoColumn> columns,
+    required PlutoGridConfiguration configuration,
+    required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = _makeFilterColumnMap(
       configuration: configuration,
@@ -433,34 +425,34 @@ class FilterPopupState {
 }
 
 class _FilterPopupHeader extends StatelessWidget {
-  final PlutoGridStateManager stateManager;
-  final PlutoGridConfiguration configuration;
-  final SetFilterPopupHandler handleAddNewFilter;
+  final PlutoGridStateManager? stateManager;
+  final PlutoGridConfiguration? configuration;
+  final SetFilterPopupHandler? handleAddNewFilter;
 
   const _FilterPopupHeader({
-    Key key,
+    Key? key,
     this.stateManager,
     this.configuration,
     this.handleAddNewFilter,
   }) : super(key: key);
 
   void handleAddButton() {
-    handleAddNewFilter(stateManager);
+    handleAddNewFilter!(stateManager);
   }
 
   void handleRemoveButton() {
-    if (stateManager.currentSelectingRows.isEmpty) {
-      stateManager.removeCurrentRow();
+    if (stateManager!.currentSelectingRows.isEmpty) {
+      stateManager!.removeCurrentRow();
     } else {
-      stateManager.removeRows(stateManager.currentSelectingRows);
+      stateManager!.removeRows(stateManager!.currentSelectingRows);
     }
   }
 
   void handleClearButton() {
-    if (stateManager.rows.isEmpty) {
-      Navigator.of(stateManager.gridFocusNode.context).pop();
+    if (stateManager!.rows.isEmpty) {
+      Navigator.of(stateManager!.gridFocusNode!.context!).pop();
     } else {
-      stateManager.removeRows(stateManager.rows);
+      stateManager!.removeRows(stateManager!.rows);
     }
   }
 
@@ -472,20 +464,20 @@ class _FilterPopupHeader extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.add),
-            color: configuration.iconColor,
-            iconSize: configuration.iconSize,
+            color: configuration!.iconColor,
+            iconSize: configuration!.iconSize,
             onPressed: handleAddButton,
           ),
           IconButton(
             icon: const Icon(Icons.remove),
-            color: configuration.iconColor,
-            iconSize: configuration.iconSize,
+            color: configuration!.iconColor,
+            iconSize: configuration!.iconSize,
             onPressed: handleRemoveButton,
           ),
           IconButton(
             icon: const Icon(Icons.clear_sharp),
             color: Colors.red,
-            iconSize: configuration.iconSize,
+            iconSize: configuration!.iconSize,
             onPressed: handleClearButton,
           ),
         ],
@@ -497,9 +489,9 @@ class _FilterPopupHeader extends StatelessWidget {
 /// [base] is the cell values of the column on which the search is based.
 /// [search] is the value entered by the user to search.
 typedef PlutoCompareFunction = bool Function({
-  String base,
-  String search,
-  PlutoColumn column,
+  required String? base,
+  required String? search,
+  required PlutoColumn? column,
 });
 
 abstract class PlutoFilterType {

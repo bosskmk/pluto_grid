@@ -8,7 +8,7 @@ import '../../../helper/row_helper.dart';
 
 void main() {
   group('속성 값 테스트.', () {
-    PlutoGridStateManager stateManager;
+    late PlutoGridStateManager stateManager;
 
     List<PlutoColumn> columns;
 
@@ -84,7 +84,7 @@ void main() {
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
-          stateManager.gridGlobalOffset.dx +
+          stateManager.gridGlobalOffset!.dx +
               PlutoGridSettings.gridPadding +
               PlutoGridSettings.gridBorderWidth +
               stateManager.leftFrozenColumnsWidth +
@@ -98,7 +98,7 @@ void main() {
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
-          (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
+          (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
               stateManager.rightFrozenColumnsWidth -
               PlutoGridSettings.offsetScrollingFromEdge,
         );
@@ -135,7 +135,7 @@ void main() {
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
-          stateManager.gridGlobalOffset.dx +
+          stateManager.gridGlobalOffset!.dx +
               PlutoGridSettings.gridPadding +
               PlutoGridSettings.gridBorderWidth +
               // stateManager.leftFrozenColumnsWidth +
@@ -149,7 +149,7 @@ void main() {
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
-          (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
+          (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
               // stateManager.rightFrozenColumnsWidth -
               PlutoGridSettings.offsetScrollingFromEdge,
         );

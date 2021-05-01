@@ -13,11 +13,11 @@ class RowWithCheckboxScreen extends StatefulWidget {
 }
 
 class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

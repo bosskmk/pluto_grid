@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rainbow_color/rainbow_color.dart';
 
 class PlutoTextColorAnimation extends StatefulWidget {
-  final String text;
-  final double fontSize;
-  final FontWeight fontWeight;
+  final String? text;
+  final double? fontSize;
+  final FontWeight? fontWeight;
 
   PlutoTextColorAnimation({
     this.text,
@@ -19,8 +19,8 @@ class PlutoTextColorAnimation extends StatefulWidget {
 
 class _PlutoTextColorAnimationState extends State<PlutoTextColorAnimation>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<Color> _colorAnim;
+  late AnimationController controller;
+  late Animation<Color> _colorAnim;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _PlutoTextColorAnimationState extends State<PlutoTextColorAnimation>
   @override
   Widget build(BuildContext context) {
     return Text(
-      widget.text,
+      widget.text!,
       style: TextStyle(
         color: _colorAnim.value,
         fontSize: widget.fontSize,

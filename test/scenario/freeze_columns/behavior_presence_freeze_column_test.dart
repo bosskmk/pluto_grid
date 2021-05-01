@@ -18,7 +18,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -38,35 +38,35 @@ void main() {
     );
 
     // 세번 째 컬럼 왼쪽 고정
-    stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
     // 첫번 째 컬럼의 첫번 째 셀
-    Finder firstCell = find.byKey(rows.first.cells['headerL0'].key);
+    Finder firstCell = find.byKey(rows.first.cells['headerL0']!.key);
 
     // 셀 선택
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     // 첫번 째 셀 값 확인
-    expect(stateManager.currentCell.value, 'headerL0 value 0');
+    expect(stateManager!.currentCell!.value, 'headerL0 value 0');
 
     // 셀 우측 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
     // 왼쪽 고정 시킨 두번 째 컬럼(headerB1)의 첫번 째 셀 값 확인
-    expect(stateManager.currentCell.value, 'headerB1 value 0');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 0');
 
     // 셀 우측 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
     // 왼쪽 고정 컬럼 두개 다음에 Body 의 첫번 째 컬럼의 값 확인
-    expect(stateManager.currentCell.value, 'headerB0 value 0');
+    expect(stateManager!.currentCell!.value, 'headerB0 value 0');
 
     // 셀 다시 왼쪽 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
 
     // 고정 컬럼 두번 째 셀 값 확인
-    expect(stateManager.currentCell.value, 'headerB1 value 0');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 0');
 
     // 셀 우측 끝으로 이동해서 우측 고정 된 셀 값 확인
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -74,13 +74,13 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
     // 우측 끝 고정 컬럼 값 확인
-    expect(stateManager.currentCell.value, 'headerR0 value 0');
+    expect(stateManager!.currentCell!.value, 'headerR0 value 0');
 
     // 셀 다시 왼쪽 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
 
     // 우측 고정 컬럼 바로 전 컬럼인 Body 의 마지막 컬럼 셀 값 확인
-    expect(stateManager.currentCell.value, 'headerB2 value 0');
+    expect(stateManager!.currentCell!.value, 'headerB2 value 0');
   });
 
   testWidgets(
@@ -93,7 +93,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -113,34 +113,34 @@ void main() {
 
     // when
     // first cell of first column
-    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+    Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
     // select first cell
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     // Check first cell value of first column
-    expect(stateManager.currentCell.value, 'header0 value 0');
+    expect(stateManager!.currentCell!.value, 'header0 value 0');
 
     // Check showFrozenColumn before freezing column.
-    expect(stateManager.showFrozenColumn, false);
+    expect(stateManager!.showFrozenColumn, false);
 
     // Freeze the 3rd column
-    stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
+    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
 
     // Await re-build by toggleFrozenColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
     // Check showFrozenColumn after freezing column.
-    expect(stateManager.showFrozenColumn, true);
+    expect(stateManager!.showFrozenColumn, true);
 
     // Move current cell position to 3rd column (0 -> 1 -> 2)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
     // Check currentColumn
-    expect(stateManager.currentColumn.title, isNot('header2'));
-    expect(stateManager.currentColumn.title, 'header3');
+    expect(stateManager!.currentColumn!.title, isNot('header2'));
+    expect(stateManager!.currentColumn!.title, 'header3');
 
     // Move current cell position to 10rd column (2 -> 9)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -152,6 +152,6 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
     // Check currentColumn
-    expect(stateManager.currentColumn.title, 'header2');
+    expect(stateManager!.currentColumn!.title, 'header2');
   });
 }

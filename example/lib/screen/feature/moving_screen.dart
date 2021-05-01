@@ -13,9 +13,9 @@ class MovingScreen extends StatefulWidget {
 }
 
 class _MovingScreenState extends State<MovingScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

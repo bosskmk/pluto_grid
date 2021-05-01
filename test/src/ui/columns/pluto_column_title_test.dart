@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_column_filter_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
     when(stateManager.hasFilter).thenReturn(false);
+    when(stateManager.columnHeight).thenReturn(45);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
@@ -586,7 +591,7 @@ void main() {
     )).test(
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
-        expect(stateManager.configuration.enableColumnBorder, true);
+        expect(stateManager.configuration!.enableColumnBorder, true);
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -610,7 +615,7 @@ void main() {
     )).test(
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
-        expect(stateManager.configuration.enableColumnBorder, false);
+        expect(stateManager.configuration!.enableColumnBorder, false);
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -621,7 +626,7 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final Border? border = decoration.border as Border?;
 
         expect(border, null);
       },

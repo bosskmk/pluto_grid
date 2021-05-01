@@ -15,13 +15,13 @@ class ListingModeScreen extends StatefulWidget {
 }
 
 class _ListingModeScreenState extends State<ListingModeScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
-  StreamSubscription removeKeyboardListener;
+  late StreamSubscription removeKeyboardListener;
 
   @override
   void dispose() {
@@ -73,7 +73,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
   }
 
   void openNewRecord() async {
-    String value = await showDialog(
+    String? value = await showDialog(
         context: context,
         builder: (BuildContext ctx) {
           final textController = TextEditingController();
@@ -150,13 +150,13 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       },
     );
 
-    stateManager.prependRows([newRow]);
-    stateManager.moveScrollByRow(PlutoMoveDirection.up, 1);
-    stateManager.setCurrentCell(newRow.cells.entries.first.value, 0);
+    stateManager!.prependRows([newRow]);
+    stateManager!.moveScrollByRow(PlutoMoveDirection.up, 1);
+    stateManager!.setCurrentCell(newRow.cells.entries.first.value, 0);
   }
 
-  void openDetail(PlutoRow row) async {
-    String value = await showDialog(
+  void openDetail(PlutoRow? row) async {
+    String? value = await showDialog(
         context: context,
         builder: (BuildContext ctx) {
           final textController = TextEditingController();
@@ -179,7 +179,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                           autofocus: true,
                         ),
                         const SizedBox(height: 20),
-                        ...row.cells.entries
+                        ...row!.cells.entries
                             .map((e) => Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(e.value.value.toString()),
@@ -229,8 +229,8 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       return;
     }
 
-    stateManager.changeCellValue(
-      stateManager.currentRow.cells['column_1'].key,
+    stateManager!.changeCellValue(
+      stateManager!.currentRow!.cells['column_1']!.key,
       value,
       force: true,
     );
@@ -256,16 +256,14 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoGridOnChangedEvent event) {
-          print(event);
-        },
+        onChanged: print,
         onLoaded: (PlutoGridOnLoadedEvent event) {
           stateManager = event.stateManager;
 
           removeKeyboardListener =
-              stateManager.keyManager.subject.stream.listen(handleKeyboard);
+              stateManager!.keyManager!.subject.stream.listen(handleKeyboard);
 
-          stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+          stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
         },
         onSelected: (PlutoGridOnSelectedEvent event) {
           if (event.row != null) {

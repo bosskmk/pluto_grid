@@ -2,11 +2,11 @@ import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DummyData {
-  List<PlutoColumn> columns;
-  List<PlutoRow> rows;
+  List<PlutoColumn>? columns;
+  List<PlutoRow>? rows;
 
   DummyData(int columnLength, int rowLength) {
-    var faker = const Faker();
+    var faker = Faker();
 
     columns = List<int>.generate(columnLength, (index) => index).map((i) {
       return PlutoColumn(
@@ -36,7 +36,7 @@ class DummyData {
         frozen: (int i) {
           if (i < 1) return PlutoColumnFrozen.left;
           if (i > columnLength - 2) return PlutoColumnFrozen.right;
-          return null;
+          return PlutoColumnFrozen.none;
         }(i),
       );
     }).toList();
@@ -44,9 +44,10 @@ class DummyData {
     rows = rowsByColumns(length: rowLength, columns: columns);
   }
 
-  static List<PlutoRow> rowsByColumns({int length, List<PlutoColumn> columns}) {
+  static List<PlutoRow> rowsByColumns(
+      {required int length, List<PlutoColumn>? columns}) {
     return List<int>.generate(length, (index) => ++index).map((rowIndex) {
-      return rowByColumns(columns);
+      return rowByColumns(columns!);
     }).toList();
   }
 
@@ -59,7 +60,7 @@ class DummyData {
           if (element.type.isNumber)
             return faker.randomGenerator.decimal(scale: 1000000000);
           else if (element.type.isSelect)
-            return (element.type.select.items.toList()..shuffle()).first;
+            return (element.type.select!.items!.toList()..shuffle()).first;
           else if (element.type.isDate)
             return DateTime.now()
                 .add(Duration(

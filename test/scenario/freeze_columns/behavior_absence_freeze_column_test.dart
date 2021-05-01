@@ -13,7 +13,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final toLeftColumn1 = PlutoWidgetTestHelper(
       '1번 컬럼의 셀 하나를 선택하고 1번 컬럼을 왼쪽 고정',
@@ -42,15 +42,16 @@ void main() {
 
         await tester.tap(find.text('header1 value 3'));
 
-        stateManager.toggleFrozenColumn(columns[1].key, PlutoColumnFrozen.left);
+        stateManager!
+            .toggleFrozenColumn(columns[1].key, PlutoColumnFrozen.left);
       },
     );
 
     toLeftColumn1.test(
       'currentCellPosition 의 columnIdx 가 0 이어야 한다.',
       (tester) async {
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
       },
     );
 
@@ -59,8 +60,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
       },
     );
 
@@ -69,8 +70,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
-        expect(stateManager.currentCellPosition.columnIdx, 1);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        expect(stateManager!.currentCellPosition!.columnIdx, 1);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
       },
     );
 
@@ -79,8 +80,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 4);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 4);
       },
     );
 
@@ -89,8 +90,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 2);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 2);
       },
     );
 
@@ -99,8 +100,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
 
-        expect(stateManager.currentCellPosition.columnIdx, 1);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        expect(stateManager!.currentCellPosition!.columnIdx, 1);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
       },
     );
 
@@ -111,8 +112,8 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
         await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-        expect(stateManager.currentCellPosition.columnIdx, 0);
-        expect(stateManager.currentCellPosition.rowIdx, 3);
+        expect(stateManager!.currentCellPosition!.columnIdx, 0);
+        expect(stateManager!.currentCellPosition!.rowIdx, 3);
       },
     );
   });
@@ -122,7 +123,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     final toLeftColumn1 = PlutoWidgetTestHelper(
       '3번 컬럼의 셀 하나를 선택하고 3번 컬럼을 오른쪽 고정',
@@ -151,16 +152,16 @@ void main() {
 
         await tester.tap(find.text('header3 value 5'));
 
-        stateManager.toggleFrozenColumn(
-            columns[3].key, PlutoColumnFrozen.right);
+        stateManager!
+            .toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.right);
       },
     );
 
     toLeftColumn1.test(
       'currentCellPosition 의 columnIdx 가 9 이어야 한다.',
       (tester) async {
-        expect(stateManager.currentCellPosition.columnIdx, 9);
-        expect(stateManager.currentCellPosition.rowIdx, 5);
+        expect(stateManager!.currentCellPosition!.columnIdx, 9);
+        expect(stateManager!.currentCellPosition!.rowIdx, 5);
       },
     );
 
@@ -169,8 +170,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
 
-        expect(stateManager.currentCellPosition.columnIdx, 8);
-        expect(stateManager.currentCellPosition.rowIdx, 5);
+        expect(stateManager!.currentCellPosition!.columnIdx, 8);
+        expect(stateManager!.currentCellPosition!.rowIdx, 5);
       },
     );
 
@@ -179,8 +180,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
-        expect(stateManager.currentCellPosition.columnIdx, 9);
-        expect(stateManager.currentCellPosition.rowIdx, 5);
+        expect(stateManager!.currentCellPosition!.columnIdx, 9);
+        expect(stateManager!.currentCellPosition!.rowIdx, 5);
       },
     );
 
@@ -189,8 +190,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
 
-        expect(stateManager.currentCellPosition.columnIdx, 9);
-        expect(stateManager.currentCellPosition.rowIdx, 6);
+        expect(stateManager!.currentCellPosition!.columnIdx, 9);
+        expect(stateManager!.currentCellPosition!.rowIdx, 6);
       },
     );
 
@@ -199,8 +200,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
 
-        expect(stateManager.currentCellPosition.columnIdx, 9);
-        expect(stateManager.currentCellPosition.rowIdx, 4);
+        expect(stateManager!.currentCellPosition!.columnIdx, 9);
+        expect(stateManager!.currentCellPosition!.rowIdx, 4);
       },
     );
 
@@ -209,8 +210,8 @@ void main() {
       (tester) async {
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
 
-        expect(stateManager.currentCellPosition.columnIdx, 9);
-        expect(stateManager.currentCellPosition.rowIdx, 5);
+        expect(stateManager!.currentCellPosition!.columnIdx, 9);
+        expect(stateManager!.currentCellPosition!.rowIdx, 5);
       },
     );
 
@@ -221,8 +222,8 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
         await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
 
-        expect(stateManager.currentCellPosition.columnIdx, 8);
-        expect(stateManager.currentCellPosition.rowIdx, 5);
+        expect(stateManager!.currentCellPosition!.columnIdx, 8);
+        expect(stateManager!.currentCellPosition!.rowIdx, 5);
       },
     );
   });

@@ -64,8 +64,8 @@ void main() {
   group(
     '그리드간 셀 이동 테스트',
     () {
-      PlutoGridStateManager stateManagerA;
-      PlutoGridStateManager stateManagerB;
+      PlutoGridStateManager? stateManagerA;
+      PlutoGridStateManager? stateManagerB;
 
       group('왼쪽 그리드의', () {
         final leftGridCellSelected =
@@ -113,18 +113,18 @@ void main() {
             // 1 > 2
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
-            expect(stateManagerA.gridFocusNode.hasFocus, isTrue);
-            expect(stateManagerB.gridFocusNode.hasFocus, isFalse);
+            expect(stateManagerA!.gridFocusNode!.hasFocus, isTrue);
+            expect(stateManagerB!.gridFocusNode!.hasFocus, isFalse);
 
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
 
-            expect(stateManagerA.gridFocusNode.hasFocus, isFalse);
-            expect(stateManagerB.gridFocusNode.hasFocus, isTrue);
+            expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
+            expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
 
             // right grid > 0
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
-            expect(stateManagerB.currentCell.value, 'headerB0 value 0');
+            expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
           },
         );
 
@@ -141,12 +141,12 @@ void main() {
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
 
-            expect(stateManagerA.gridFocusNode.hasFocus, isFalse);
-            expect(stateManagerB.gridFocusNode.hasFocus, isTrue);
+            expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
+            expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
 
             // right grid > 0
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
-            expect(stateManagerB.currentCell.value, 'headerB0 value 0');
+            expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
           },
         );
 
@@ -165,22 +165,22 @@ void main() {
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
 
-            expect(stateManagerA.gridFocusNode.hasFocus, isFalse);
-            expect(stateManagerB.gridFocusNode.hasFocus, isTrue);
+            expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
+            expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
 
             // right grid > 0
             await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
             await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
-            expect(stateManagerB.currentCell.value, 'headerB0 value 0');
+            expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
 
             // right grid > left grid
             await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
             await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-            expect(stateManagerA.gridFocusNode.hasFocus, isTrue);
-            expect(stateManagerB.gridFocusNode.hasFocus, isFalse);
+            expect(stateManagerA!.gridFocusNode!.hasFocus, isTrue);
+            expect(stateManagerB!.gridFocusNode!.hasFocus, isFalse);
           },
         );
       });

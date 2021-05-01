@@ -12,9 +12,9 @@ class ColumnSortingScreen extends StatefulWidget {
 }
 
 class _ColumnSortingScreenState extends State<ColumnSortingScreen> {
-  List<PlutoColumn> columns;
+  List<PlutoColumn>? columns;
 
-  List<PlutoRow> rows;
+  List<PlutoRow>? rows;
 
   @override
   void initState() {

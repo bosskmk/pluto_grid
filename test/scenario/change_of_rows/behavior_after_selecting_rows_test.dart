@@ -10,7 +10,7 @@ import '../../helper/row_helper.dart';
 void main() {
   final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
-  PlutoGridStateManager stateManager;
+  PlutoGridStateManager? stateManager;
 
   final buildRowsWithSelectingRows = ({
     int numberOfRows = 10,
@@ -33,8 +33,8 @@ void main() {
                   rows: rows,
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
-                    stateManager.setSelectingMode(selectingMode);
-                    stateManager.setCurrentSelectingRowsByRange(from, to);
+                    stateManager!.setSelectingMode(selectingMode);
+                    stateManager!.setCurrentSelectingRowsByRange(from, to);
                   },
                 ),
               ),
@@ -42,7 +42,7 @@ void main() {
           ),
         );
 
-        final selectingRows = stateManager.currentSelectingRows;
+        final selectingRows = stateManager!.currentSelectingRows;
 
         final int length = (from - to).abs() + 1;
 
@@ -71,17 +71,17 @@ void main() {
         '0번 행을 삭제하면, '
         '0 ~ 2 번 index 의 행이 선택 상태가 되어야 한다.',
         (tester) async {
-          final rowToRemove = stateManager.rows.first;
+          final rowToRemove = stateManager!.rows.first;
 
-          stateManager.removeRows([rowToRemove]);
+          stateManager!.removeRows([rowToRemove]);
 
-          final selectedRows = stateManager.currentSelectingRows;
-          final selectedRowKeys = selectedRows.map((e) => e.key);
+          final selectedRows = stateManager!.currentSelectingRows;
+          final selectedRowKeys = selectedRows.map((e) => e!.key);
 
           expect(selectedRows.length, countSelectedRows);
-          expect(selectedRowKeys.contains(stateManager.rows[0].key), isTrue);
-          expect(selectedRowKeys.contains(stateManager.rows[1].key), isTrue);
-          expect(selectedRowKeys.contains(stateManager.rows[2].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[0]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[1]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[2]!.key), isTrue);
         },
       );
 
@@ -89,19 +89,19 @@ void main() {
         '선택 된 1 ~3번 행 앞쪽인 1번에 새로운 행을 추가하면, '
         '2 ~ 4번 행이 선택 상태가 되어야 한다.',
         (tester) async {
-          final rowToRemove = stateManager.rows.first;
+          final rowToRemove = stateManager!.rows.first;
 
-          stateManager.insertRows(1, [rowToRemove]);
+          stateManager!.insertRows(1, [rowToRemove]);
 
-          expect(stateManager.rows.length, countTotalRows + 1);
+          expect(stateManager!.rows.length, countTotalRows + 1);
 
-          final selectedRows = stateManager.currentSelectingRows;
-          final selectedRowKeys = selectedRows.map((e) => e.key);
+          final selectedRows = stateManager!.currentSelectingRows;
+          final selectedRowKeys = selectedRows.map((e) => e!.key);
 
           expect(selectedRows.length, countSelectedRows);
-          expect(selectedRowKeys.contains(stateManager.rows[2].key), isTrue);
-          expect(selectedRowKeys.contains(stateManager.rows[3].key), isTrue);
-          expect(selectedRowKeys.contains(stateManager.rows[4].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[2]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[3]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[4]!.key), isTrue);
         },
       );
     },

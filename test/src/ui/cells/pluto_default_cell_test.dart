@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../matcher/pluto_object_matcher.dart';
-import '../../../mock/mock_pluto_event_manager.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_default_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
-  PlutoGridEventManager eventManager;
+  late MockPlutoGridStateManager stateManager;
+  MockPlutoGridEventManager? eventManager;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    eventManager = MockPlutoEventManager();
+    stateManager = MockPlutoGridStateManager();
+    eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration.rowHeight),
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.canRowDrag).thenReturn(true);
+    when(stateManager.rowHeight).thenReturn(0);
   });
 
   group('기본 셀 테스트', () {
@@ -113,7 +119,7 @@ void main() {
 
     final renderTextWithCellValue = buildCellWidgetWithRenderer(
         (PlutoColumnRendererContext rendererContext) {
-      return Text(rendererContext.cell.value.toString());
+      return Text(rendererContext.cell!.value.toString());
     });
 
     renderTextWithCellValue.test(
@@ -134,11 +140,11 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: 'default cell value');
 
-    final cellWidget = ({
-      bool canRowDrag,
+    final PlutoWidgetTestHelper Function({bool canRowDrag}) cellWidget = ({
+      bool? canRowDrag,
     }) {
       return PlutoWidgetTestHelper('cell widget', (tester) async {
-        when(stateManager.canRowDrag).thenReturn(canRowDrag);
+        when(stateManager.canRowDrag).thenReturn(canRowDrag!);
 
         await tester.pumpWidget(
           MaterialApp(
@@ -182,7 +188,7 @@ void main() {
         // tester.tap triggers onDragStarted, onDragEnd.
         // It only needs to be called Update, so it is ignored.
 
-        verifyNever(eventManager.addEvent(
+        verifyNever(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate;
           })),
@@ -202,29 +208,29 @@ void main() {
 
         await tester.drag(find.byType(Icon), offset);
 
-        verify(eventManager.addEvent(
+        verify(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isStart &&
-                object.rows.length == 1 &&
-                object.rows.first.key == row.key;
+                object.rows!.length == 1 &&
+                object.rows!.first!.key == row.key;
           })),
         )).called(1);
 
-        verify(eventManager.addEvent(
+        verify(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
-                object.offset.dy > 100 &&
-                object.rows.length == 1 &&
-                object.rows.first.key == row.key;
+                object.offset!.dy > 100 &&
+                object.rows!.length == 1 &&
+                object.rows!.first!.key == row.key;
           })),
         )).called(greaterThan(1));
 
-        verify(eventManager.addEvent(
+        verify(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.offset.dy > 100 &&
+            return object.offset!.dy > 100 &&
                 object.dragType.isEnd &&
-                object.rows.length == 1 &&
-                object.rows.first.key == row.key;
+                object.rows!.length == 1 &&
+                object.rows!.first!.key == row.key;
           })),
         )).called(1);
       },
@@ -248,14 +254,14 @@ void main() {
 
         await tester.drag(find.byType(Icon), offset);
 
-        verify(eventManager.addEvent(
+        verify(eventManager!.addEvent(
           argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
             return object.dragType.isUpdate &&
-                object.offset.dy > 100 &&
-                object.rows.length == 3 &&
-                object.rows[0].key == rows[0].key &&
-                object.rows[1].key == rows[1].key &&
-                object.rows[1].key == rows[1].key;
+                object.offset!.dy > 100 &&
+                object.rows!.length == 3 &&
+                object.rows![0]!.key == rows[0].key &&
+                object.rows![1]!.key == rows[1].key &&
+                object.rows![1]!.key == rows[1].key;
           })),
         )).called(greaterThan(1));
       },
@@ -263,7 +269,7 @@ void main() {
   });
 
   group('enableRowChecked', () {
-    PlutoRow row;
+    PlutoRow? row;
 
     final buildCellWidget = (bool checked) {
       return PlutoWidgetTestHelper('cell widget', (tester) async {
@@ -311,7 +317,7 @@ void main() {
       (tester) async {
         await tester.tap(find.byType(Checkbox));
 
-        expect(row.checked, isTrue);
+        expect(row!.checked, isTrue);
 
         verify(stateManager.setRowChecked(row, false)).called(1);
       },
@@ -324,7 +330,7 @@ void main() {
       (tester) async {
         await tester.tap(find.byType(Checkbox));
 
-        expect(row.checked, isFalse);
+        expect(row!.checked, isFalse);
 
         verify(stateManager.setRowChecked(row, true)).called(1);
       },

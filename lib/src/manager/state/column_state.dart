@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -8,7 +9,7 @@ abstract class IColumnState {
   /// Columns provided at grid start.
   List<PlutoColumn> get columns;
 
-  FilteredList<PlutoColumn> refColumns;
+  FilteredList<PlutoColumn>? refColumns;
 
   /// Column index list.
   List<int> get columnIndexes;
@@ -48,20 +49,20 @@ abstract class IColumnState {
   double get bodyColumnsWidth;
 
   /// Column of currently selected cell.
-  PlutoColumn get currentColumn;
+  PlutoColumn? get currentColumn;
 
   /// Column field name of currently selected cell.
-  String get currentColumnField;
+  String? get currentColumnField;
 
   bool get hasSortedColumn;
 
-  PlutoColumn get getSortedColumn;
+  PlutoColumn? get getSortedColumn;
 
   /// Column Index List by frozen Column
   List<int> get columnIndexesByShowFrozen;
 
   /// Whether a frozen column is displayed in the screen width.
-  bool isShowFrozenColumn(double maxWidth);
+  bool isShowFrozenColumn(double? maxWidth);
 
   /// Toggle whether the column is frozen or not.
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
@@ -79,7 +80,7 @@ abstract class IColumnState {
   ///
   /// Depending on the state of the frozen column, the column order index
   /// must be referenced with the columnIndexesByShowFrozen function.
-  int columnIndex(PlutoColumn column);
+  int? columnIndex(PlutoColumn? column);
 
   /// Change column position.
   void moveColumn(Key columnKey, double offset);
@@ -105,18 +106,18 @@ abstract class IColumnState {
 }
 
 mixin ColumnState implements IPlutoGridState {
-  List<PlutoColumn> get columns => [...refColumns];
+  List<PlutoColumn> get columns => [...refColumns!];
 
-  FilteredList<PlutoColumn> get refColumns => _refColumns;
+  FilteredList<PlutoColumn>? get refColumns => _refColumns;
 
-  set refColumns(FilteredList<PlutoColumn> setColumns) {
+  set refColumns(FilteredList<PlutoColumn>? setColumns) {
     _refColumns = setColumns;
-    _refColumns.setFilter((element) => element.hide == false);
+    _refColumns!.setFilter((element) => element.hide == false);
   }
 
-  FilteredList<PlutoColumn> _refColumns;
+  FilteredList<PlutoColumn>? _refColumns;
 
-  List<int> get columnIndexes => refColumns.asMap().keys.toList();
+  List<int> get columnIndexes => refColumns!.asMap().keys.toList();
 
   List<int> get columnIndexesForShowFrozen {
     return [
@@ -127,17 +128,18 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   double get columnsWidth {
-    return refColumns.fold(0, (double value, element) => value + element.width);
+    return refColumns!
+        .fold(0, (double value, element) => value + element.width);
   }
 
   List<PlutoColumn> get leftFrozenColumns {
-    return refColumns.where((e) => e.frozen.isLeft).toList();
+    return refColumns!.where((e) => e.frozen.isLeft).toList();
   }
 
   List<int> get leftFrozenColumnIndexes {
-    return refColumns.fold<List<int>>([], (List<int> previousValue, element) {
+    return refColumns!.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.frozen.isLeft) {
-        return [...previousValue, refColumns.indexOf(element)];
+        return [...previousValue, refColumns!.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -149,13 +151,13 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   List<PlutoColumn> get rightFrozenColumns {
-    return refColumns.where((e) => e.frozen.isRight).toList();
+    return refColumns!.where((e) => e.frozen.isRight).toList();
   }
 
   List<int> get rightFrozenColumnIndexes {
-    return refColumns.fold<List<int>>([], (List<int> previousValue, element) {
+    return refColumns!.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.frozen.isRight) {
-        return [...previousValue, refColumns.indexOf(element)];
+        return [...previousValue, refColumns!.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -167,13 +169,13 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   List<PlutoColumn> get bodyColumns {
-    return refColumns.where((e) => e.frozen.isNone).toList();
+    return refColumns!.where((e) => e.frozen.isNone).toList();
   }
 
   List<int> get bodyColumnIndexes {
     return bodyColumns.fold<List<int>>([], (List<int> previousValue, element) {
       if (element.frozen.isNone) {
-        return [...previousValue, refColumns.indexOf(element)];
+        return [...previousValue, refColumns!.indexOf(element)];
       }
       return previousValue;
     }).toList();
@@ -184,48 +186,45 @@ mixin ColumnState implements IPlutoGridState {
         0, (double value, element) => value + element.width);
   }
 
-  PlutoColumn get currentColumn {
+  PlutoColumn? get currentColumn {
     if (currentColumnField == null) {
       return null;
     }
 
-    return refColumns
+    return refColumns!
         .where((element) => element.field == currentColumnField)
-        ?.first;
+        .first;
   }
 
-  String get currentColumnField {
+  String? get currentColumnField {
     if (currentRow == null) {
       return null;
     }
 
-    return currentRow.cells.keys.firstWhere(
-        (key) => currentRow.cells[key].key == currentCell?.key,
-        orElse: () => null);
+    return currentRow!.cells.keys.firstWhereOrNull(
+        (key) => currentRow!.cells[key]!.key == currentCell?.key);
   }
 
   bool get hasSortedColumn =>
-      refColumns.firstWhere(
+      refColumns!.firstWhereOrNull(
         (element) => !element.sort.isNone,
-        orElse: () => null,
       ) !=
       null;
 
-  PlutoColumn get getSortedColumn => refColumns.firstWhere(
+  PlutoColumn? get getSortedColumn => refColumns!.firstWhereOrNull(
         (element) => !element.sort.isNone,
-        orElse: () => null,
       );
 
   List<int> get columnIndexesByShowFrozen {
-    return showFrozenColumn ? columnIndexesForShowFrozen : columnIndexes;
+    return showFrozenColumn! ? columnIndexesForShowFrozen : columnIndexes;
   }
 
-  bool isShowFrozenColumn(double maxWidth) {
+  bool isShowFrozenColumn(double? maxWidth) {
     final bool hasFrozenColumn =
         leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 
     return hasFrozenColumn &&
-        maxWidth >
+        maxWidth! >
             (leftFrozenColumnsWidth +
                 rightFrozenColumnsWidth +
                 PlutoGridSettings.bodyMinWidth +
@@ -233,10 +232,10 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
-    for (var i = 0; i < refColumns.length; i += 1) {
-      if (refColumns[i].key == columnKey) {
-        refColumns[i].frozen =
-            refColumns[i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
+    for (var i = 0; i < refColumns!.length; i += 1) {
+      if (refColumns![i].key == columnKey) {
+        refColumns![i].frozen =
+            refColumns![i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
         break;
       }
     }
@@ -247,8 +246,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void toggleSortColumn(Key columnKey) {
-    for (var i = 0; i < refColumns.length; i += 1) {
-      PlutoColumn column = refColumns[i];
+    for (var i = 0; i < refColumns!.length; i += 1) {
+      PlutoColumn column = refColumns![i];
 
       if (column.key == columnKey) {
         if (column.sort.isNone) {
@@ -277,7 +276,7 @@ mixin ColumnState implements IPlutoGridState {
   double columnsWidthAtColumnIdx(int columnIdx) {
     double width = 0.0;
     columnIndexes.getRange(0, columnIdx).forEach((idx) {
-      width += refColumns[idx].width;
+      width += refColumns![idx].width;
     });
     return width;
   }
@@ -285,16 +284,16 @@ mixin ColumnState implements IPlutoGridState {
   double bodyColumnsWidthAtColumnIdx(int columnIdx) {
     double width = 0.0;
     bodyColumnIndexes.getRange(0, columnIdx).forEach((idx) {
-      width += refColumns[idx].width;
+      width += refColumns![idx].width;
     });
     return width;
   }
 
-  int columnIndex(PlutoColumn column) {
+  int? columnIndex(PlutoColumn? column) {
     final columnIndexes = columnIndexesByShowFrozen;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      if (refColumns[columnIndexes[i]].field == column.field) {
+      if (refColumns![columnIndexes[i]].field == column!.field) {
         return i;
       }
     }
@@ -303,22 +302,22 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void moveColumn(Key columnKey, double offset) {
-    offset -= gridGlobalOffset.dx;
+    offset -= gridGlobalOffset!.dx;
 
     final List<int> columnIndexes = columnIndexesByShowFrozen;
 
-    int Function(int i) findColumnIndex = (int i) {
-      if (refColumns[columnIndexes[i]].key == columnKey) {
+    int? Function(int i) findColumnIndex = (int i) {
+      if (refColumns![columnIndexes[i]].key == columnKey) {
         return columnIndexes[i];
       }
       return null;
     };
 
-    int Function(int i) findIndexToMove = () {
-      final double minLeft = showFrozenColumn ? leftFrozenColumnsWidth : 0;
+    int? Function(int i) findIndexToMove = () {
+      final double minLeft = showFrozenColumn! ? leftFrozenColumnsWidth : 0;
 
       final double minRight =
-          showFrozenColumn ? maxWidth - rightFrozenColumnsWidth : maxWidth;
+          showFrozenColumn! ? maxWidth! - rightFrozenColumnsWidth : maxWidth!;
 
       double currentOffset = 0.0;
 
@@ -326,9 +325,9 @@ mixin ColumnState implements IPlutoGridState {
 
       if (minRight < offset) {
         currentOffset = minRight;
-        startIndexToMove = refColumns.length - rightFrozenColumns.length;
+        startIndexToMove = refColumns!.length - rightFrozenColumns.length;
       } else if (minLeft < offset) {
-        currentOffset -= scroll.horizontal.offset;
+        currentOffset -= scroll!.horizontal!.offset;
       }
 
       return (int i) {
@@ -336,11 +335,11 @@ mixin ColumnState implements IPlutoGridState {
           if (currentOffset < offset &&
               offset <
                   currentOffset +
-                      refColumns[columnIndexes[startIndexToMove]].width) {
+                      refColumns![columnIndexes[startIndexToMove]].width) {
             return columnIndexes[startIndexToMove];
           }
 
-          currentOffset += refColumns[columnIndexes[startIndexToMove]].width;
+          currentOffset += refColumns![columnIndexes[startIndexToMove]].width;
           ++startIndexToMove;
         }
 
@@ -348,8 +347,8 @@ mixin ColumnState implements IPlutoGridState {
       };
     }();
 
-    int columnIndex;
-    int indexToMove;
+    int? columnIndex;
+    int? indexToMove;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
       columnIndex ??= findColumnIndex(i);
@@ -368,13 +367,13 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     // 컬럼의 순서 변경
-    refColumns[columnIndex].frozen = refColumns[indexToMove].frozen;
+    refColumns![columnIndex].frozen = refColumns![indexToMove].frozen;
 
-    var columnToMove = refColumns[columnIndex];
+    var columnToMove = refColumns![columnIndex];
 
-    refColumns.removeAt(columnIndex);
+    refColumns!.removeAt(columnIndex);
 
-    refColumns.insert(indexToMove, columnToMove);
+    refColumns!.insert(indexToMove, columnToMove);
 
     updateCurrentCellPosition(notify: false);
 
@@ -382,8 +381,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void resizeColumn(Key columnKey, double offset) {
-    for (var i = 0; i < refColumns.length; i += 1) {
-      final column = refColumns[i];
+    for (var i = 0; i < refColumns!.length; i += 1) {
+      final column = refColumns![i];
 
       if (column.key == columnKey) {
         final setWidth = column.width + offset;
@@ -399,8 +398,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void autoFitColumn(BuildContext context, PlutoColumn column) {
-    final String maxValue = refRows.fold('', (previousValue, element) {
-      final value = element.cells.entries
+    final String maxValue = refRows!.fold('', (previousValue, element) {
+      final value = element!.cells.entries
           .firstWhere((element) => element.key == column.field)
           .value
           .value
@@ -441,9 +440,8 @@ mixin ColumnState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    var found = refColumns.originalList.firstWhere(
+    var found = refColumns!.originalList.firstWhereOrNull(
       (element) => element.key == columnKey,
-      orElse: () => null,
     );
 
     if (found == null || found.hide == flag) {
@@ -452,7 +450,7 @@ mixin ColumnState implements IPlutoGridState {
 
     found.hide = flag;
 
-    refColumns.update();
+    refColumns!.update();
 
     resetCurrentState(notify: false);
 
@@ -462,43 +460,43 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void sortAscending(PlutoColumn column) {
-    refRows.sort(
-      (a, b) => column.type.compare(
-        a.cells[column.field].valueForSorting,
-        b.cells[column.field].valueForSorting,
+    refRows!.sort(
+      (a, b) => column.type!.compare(
+        a!.cells[column.field]!.valueForSorting,
+        b!.cells[column.field]!.valueForSorting,
       ),
     );
   }
 
   void sortDescending(PlutoColumn column) {
-    refRows.sort(
-      (b, a) => column.type.compare(
-        a.cells[column.field].valueForSorting,
-        b.cells[column.field].valueForSorting,
+    refRows!.sort(
+      (b, a) => column.type!.compare(
+        a!.cells[column.field]!.valueForSorting,
+        b!.cells[column.field]!.valueForSorting,
       ),
     );
   }
 
   void sortBySortIdx() {
-    refRows.sort((a, b) {
-      if (a.sortIdx == null || b.sortIdx == null) {
-        if (a.sortIdx == null && b.sortIdx == null) {
+    refRows!.sort((a, b) {
+      if (a!.sortIdx == null || b!.sortIdx == null) {
+        if (a.sortIdx == null && b!.sortIdx == null) {
           return 0;
         }
 
         return a.sortIdx == null ? -1 : 1;
       }
 
-      return a.sortIdx.compareTo(b.sortIdx);
+      return a.sortIdx!.compareTo(b.sortIdx!);
     });
   }
 
-  void showSetColumnsPopup(BuildContext context) {
+  void showSetColumnsPopup(BuildContext? context) {
     const columnField = 'field';
 
     var columns = [
       PlutoColumn(
-        title: configuration.localeText.setColumnsTitle,
+        title: configuration!.localeText.setColumnsTitle,
         field: 'title',
         type: PlutoColumnType.text(),
         enableRowChecked: true,
@@ -524,19 +522,18 @@ mixin ColumnState implements IPlutoGridState {
       );
     };
 
-    var rows = refColumns.originalList.map(toRow).toList();
+    var rows = refColumns!.originalList.map(toRow).toList();
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     var handleLister = () {
-      stateManager.refRows.forEach((row) {
-        var found = refColumns.originalList.firstWhere(
-          (column) => column.field == row.cells[columnField].value.toString(),
-          orElse: () => null,
+      stateManager!.refRows!.forEach((row) {
+        var found = refColumns!.originalList.firstWhereOrNull(
+          (column) => column.field == row!.cells[columnField]!.value.toString(),
         );
 
         if (found != null) {
-          hideColumn(found.key, row.checked != true, notify: false);
+          hideColumn(found.key, row!.checked != true, notify: false);
         }
       });
 
@@ -552,8 +549,8 @@ mixin ColumnState implements IPlutoGridState {
       height: 500,
       onLoaded: (e) {
         stateManager = e.stateManager;
-        stateManager.setSelectingMode(PlutoGridSelectingMode.none);
-        stateManager.addListener(handleLister);
+        stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
+        stateManager!.addListener(handleLister);
       },
     );
   }

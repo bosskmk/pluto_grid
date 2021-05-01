@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
-import '../../mock/mock_pluto_state_manager.dart';
+import 'pluto_base_cell_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
+  MockPlutoGridStateManager? stateManager;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
-    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    stateManager = MockPlutoGridStateManager();
+    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager!.rowHeight).thenReturn(45);
+    when(stateManager!.isSelecting).thenReturn(true);
+    when(stateManager!.hasCurrentSelectingPosition).thenReturn(true);
+    when(stateManager!.isEditing).thenReturn(true);
+    when(stateManager!.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
+    when(stateManager!.hasFocus).thenReturn(true);
+    when(stateManager!.canRowDrag).thenReturn(true);
   });
 
   final buildRowWidget = ({
@@ -32,14 +43,14 @@ void main() {
     return PlutoWidgetTestHelper(
       'build row widget.',
       (tester) async {
-        when(stateManager.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
-        when(stateManager.isRowIdxTopDragTarget(any))
+        when(stateManager!.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
+        when(stateManager!.isRowIdxTopDragTarget(any))
             .thenReturn(isTopDragTarget);
-        when(stateManager.isRowIdxBottomDragTarget(any))
+        when(stateManager!.isRowIdxBottomDragTarget(any))
             .thenReturn(isBottomDragTarget);
-        when(stateManager.isSelectedRow(any)).thenReturn(isSelectedRow);
-        when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
-        when(stateManager.isSelectedCell(any, any, any))
+        when(stateManager!.isSelectedRow(any)).thenReturn(isSelectedRow);
+        when(stateManager!.isCurrentCell(any)).thenReturn(isCurrentCell);
+        when(stateManager!.isSelectedCell(any, any, any))
             .thenReturn(isSelectedCell);
 
         // given
@@ -111,7 +122,7 @@ void main() {
           rowContainerWidget.decoration as BoxDecoration;
 
       expect(
-        rowContainerDecoration.border.top.width,
+        rowContainerDecoration.border!.top.width,
         PlutoGridSettings.rowBorderWidth,
       );
     },
@@ -130,7 +141,7 @@ void main() {
           rowContainerWidget.decoration as BoxDecoration;
 
       expect(
-        rowContainerDecoration.border.bottom.width,
+        rowContainerDecoration.border!.bottom.width,
         PlutoGridSettings.rowBorderWidth,
       );
     },

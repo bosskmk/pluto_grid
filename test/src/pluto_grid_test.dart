@@ -51,7 +51,7 @@ void main() {
               columns: columns,
               rows: rows,
               onLoaded: (event) {
-                event.stateManager.setShowLoading(true);
+                event.stateManager!.setShowLoading(true);
               },
             ),
           ),
@@ -121,21 +121,21 @@ void main() {
     // then
     await tester.tap(headerInkWell);
     // Ascending
-    expect(rows[0].cells['header0'].value, 'header0 value 0');
-    expect(rows[1].cells['header0'].value, 'header0 value 1');
-    expect(rows[2].cells['header0'].value, 'header0 value 2');
+    expect(rows[0].cells['header0']!.value, 'header0 value 0');
+    expect(rows[1].cells['header0']!.value, 'header0 value 1');
+    expect(rows[2].cells['header0']!.value, 'header0 value 2');
 
     await tester.tap(headerInkWell);
     // Descending
-    expect(rows[0].cells['header0'].value, 'header0 value 2');
-    expect(rows[1].cells['header0'].value, 'header0 value 1');
-    expect(rows[2].cells['header0'].value, 'header0 value 0');
+    expect(rows[0].cells['header0']!.value, 'header0 value 2');
+    expect(rows[1].cells['header0']!.value, 'header0 value 1');
+    expect(rows[2].cells['header0']!.value, 'header0 value 0');
 
     await tester.tap(headerInkWell);
     // Original
-    expect(rows[0].cells['header0'].value, 'header0 value 0');
-    expect(rows[1].cells['header0'].value, 'header0 value 1');
-    expect(rows[2].cells['header0'].value, 'header0 value 2');
+    expect(rows[0].cells['header0']!.value, 'header0 value 0');
+    expect(rows[1].cells['header0']!.value, 'header0 value 1');
+    expect(rows[2].cells['header0']!.value, 'header0 value 2');
   });
 
   testWidgets('셀 값 변경 후 헤더를 탭하면 변경 된 값에 맞게 정렬 되어야 한다.',
@@ -144,7 +144,7 @@ void main() {
     final columns = ColumnHelper.textColumn('header');
     final rows = RowHelper.count(3, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -163,20 +163,20 @@ void main() {
       ),
     );
 
-    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+    Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
     // 셀 선택
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     // 수정 상태로 변경
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     // 수정 상태 확인
-    expect(stateManager.isEditing, true);
+    expect(stateManager!.isEditing, true);
 
     // TODO : 셀 값 변경 (1) 안되서 (2) 강제로
     // (1)
@@ -186,36 +186,36 @@ void main() {
     //     find.descendant(of: firstCell, matching: find.byType(TextField)),
     //     'cell value4');
     // (2)
-    stateManager.changeCellValue(
-        stateManager.currentCell.key, 'header0 value 4');
+    stateManager!
+        .changeCellValue(stateManager!.currentCell!.key, 'header0 value 4');
 
     // 다음 행으로 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
 
-    expect(rows[0].cells['header0'].value, 'header0 value 4');
-    expect(rows[1].cells['header0'].value, 'header0 value 1');
-    expect(rows[2].cells['header0'].value, 'header0 value 2');
+    expect(rows[0].cells['header0']!.value, 'header0 value 4');
+    expect(rows[1].cells['header0']!.value, 'header0 value 1');
+    expect(rows[2].cells['header0']!.value, 'header0 value 2');
 
     Finder headerInkWell = find.descendant(
         of: find.byKey(columns.first.key), matching: find.byType(InkWell));
 
     await tester.tap(headerInkWell);
     // Ascending
-    expect(rows[0].cells['header0'].value, 'header0 value 1');
-    expect(rows[1].cells['header0'].value, 'header0 value 2');
-    expect(rows[2].cells['header0'].value, 'header0 value 4');
+    expect(rows[0].cells['header0']!.value, 'header0 value 1');
+    expect(rows[1].cells['header0']!.value, 'header0 value 2');
+    expect(rows[2].cells['header0']!.value, 'header0 value 4');
 
     await tester.tap(headerInkWell);
     // Descending
-    expect(rows[0].cells['header0'].value, 'header0 value 4');
-    expect(rows[1].cells['header0'].value, 'header0 value 2');
-    expect(rows[2].cells['header0'].value, 'header0 value 1');
+    expect(rows[0].cells['header0']!.value, 'header0 value 4');
+    expect(rows[1].cells['header0']!.value, 'header0 value 2');
+    expect(rows[2].cells['header0']!.value, 'header0 value 1');
 
     await tester.tap(headerInkWell);
     // Original
-    expect(rows[0].cells['header0'].value, 'header0 value 4');
-    expect(rows[1].cells['header0'].value, 'header0 value 1');
-    expect(rows[2].cells['header0'].value, 'header0 value 2');
+    expect(rows[0].cells['header0']!.value, 'header0 value 4');
+    expect(rows[1].cells['header0']!.value, 'header0 value 1');
+    expect(rows[2].cells['header0']!.value, 'header0 value 2');
   });
 
   testWidgets(
@@ -227,7 +227,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -247,20 +247,20 @@ void main() {
 
     // when
     // first cell of first column
-    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+    Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
     // select first cell
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     Offset selectedCellOffset =
-        tester.getCenter(find.byKey(rows[7].cells['header5'].key));
+        tester.getCenter(find.byKey(rows[7].cells['header5']!.key));
 
-    stateManager.setCurrentSelectingPositionWithOffset(selectedCellOffset);
+    stateManager!.setCurrentSelectingPositionWithOffset(selectedCellOffset);
 
     // then
-    expect(stateManager.currentSelectingPosition.rowIdx, 7);
-    expect(stateManager.currentSelectingPosition.columnIdx, 5);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 7);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 5);
   });
 
   testWidgets(
@@ -272,7 +272,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -293,20 +293,20 @@ void main() {
 
     // when
     // first cell of first column
-    Finder firstCell = find.byKey(rows.first.cells['header0'].key);
+    Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
     // select first cell
     await tester.tap(
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     Offset selectedCellOffset =
-        tester.getCenter(find.byKey(rows[5].cells['header3'].key));
+        tester.getCenter(find.byKey(rows[5].cells['header3']!.key));
 
-    stateManager.setCurrentSelectingPositionWithOffset(selectedCellOffset);
+    stateManager!.setCurrentSelectingPositionWithOffset(selectedCellOffset);
 
     // then
-    expect(stateManager.currentSelectingPosition.rowIdx, 5);
-    expect(stateManager.currentSelectingPosition.columnIdx, 3);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 5);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 3);
   });
 
   group('applyColumnRowOnInit', () {
@@ -333,7 +333,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -353,12 +353,12 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].cells['header'].value, 0);
-      expect(stateManager.rows[1].cells['header'].value, 12);
-      expect(stateManager.rows[2].cells['header'].value, 12);
-      expect(stateManager.rows[3].cells['header'].value, -10);
-      expect(stateManager.rows[4].cells['header'].value, 1234567);
-      expect(stateManager.rows[5].cells['header'].value, 12);
+      expect(stateManager!.rows[0]!.cells['header']!.value, 0);
+      expect(stateManager!.rows[1]!.cells['header']!.value, 12);
+      expect(stateManager!.rows[2]!.cells['header']!.value, 12);
+      expect(stateManager!.rows[3]!.cells['header']!.value, -10);
+      expect(stateManager!.rows[4]!.cells['header']!.value, 1234567);
+      expect(stateManager!.rows[5]!.cells['header']!.value, 12);
     });
 
     testWidgets(
@@ -384,7 +384,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 12.12345)}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -404,12 +404,12 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].cells['header'].value, 'not a number');
-      expect(stateManager.rows[1].cells['header'].value, 12);
-      expect(stateManager.rows[2].cells['header'].value, '12');
-      expect(stateManager.rows[3].cells['header'].value, -10);
-      expect(stateManager.rows[4].cells['header'].value, 1234567);
-      expect(stateManager.rows[5].cells['header'].value, 12.12345);
+      expect(stateManager!.rows[0]!.cells['header']!.value, 'not a number');
+      expect(stateManager!.rows[1]!.cells['header']!.value, 12);
+      expect(stateManager!.rows[2]!.cells['header']!.value, '12');
+      expect(stateManager!.rows[3]!.cells['header']!.value, -10);
+      expect(stateManager!.rows[4]!.cells['header']!.value, 1234567);
+      expect(stateManager!.rows[5]!.cells['header']!.value, 12.12345);
     });
 
     testWidgets(
@@ -433,7 +433,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: 1234567.123456)}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -453,10 +453,10 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].cells['header'].value, 1234567);
-      expect(stateManager.rows[1].cells['header'].value, 1234567.1234);
-      expect(stateManager.rows[2].cells['header'].value, 1234567.12345);
-      expect(stateManager.rows[3].cells['header'].value, 1234567.12346);
+      expect(stateManager!.rows[0]!.cells['header']!.value, 1234567);
+      expect(stateManager!.rows[1]!.cells['header']!.value, 1234567.1234);
+      expect(stateManager!.rows[2]!.cells['header']!.value, 1234567.12345);
+      expect(stateManager!.rows[3]!.cells['header']!.value, 1234567.12346);
     });
 
     testWidgets(
@@ -482,7 +482,7 @@ void main() {
         PlutoRow(cells: {'header': PlutoCell(value: -0)}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -502,12 +502,12 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].cells['header'].value, 12345);
-      expect(stateManager.rows[1].cells['header'].value, 0);
-      expect(stateManager.rows[2].cells['header'].value, 333);
-      expect(stateManager.rows[3].cells['header'].value, 0);
-      expect(stateManager.rows[4].cells['header'].value, 0);
-      expect(stateManager.rows[5].cells['header'].value, 0);
+      expect(stateManager!.rows[0]!.cells['header']!.value, 12345);
+      expect(stateManager!.rows[1]!.cells['header']!.value, 0);
+      expect(stateManager!.rows[2]!.cells['header']!.value, 333);
+      expect(stateManager!.rows[3]!.cells['header']!.value, 0);
+      expect(stateManager!.rows[4]!.cells['header']!.value, 0);
+      expect(stateManager!.rows[5]!.cells['header']!.value, 0);
     });
 
     testWidgets(
@@ -525,7 +525,7 @@ void main() {
         PlutoRow(cells: {'header0': PlutoCell(value: 'value')}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -546,11 +546,11 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].sortIdx, 0);
-      expect(stateManager.rows[1].sortIdx, 1);
-      expect(stateManager.rows[2].sortIdx, 2);
-      expect(stateManager.rows[3].sortIdx, 3);
-      expect(stateManager.rows[4].sortIdx, 4);
+      expect(stateManager!.rows[0]!.sortIdx, 0);
+      expect(stateManager!.rows[1]!.sortIdx, 1);
+      expect(stateManager!.rows[2]!.sortIdx, 2);
+      expect(stateManager!.rows[3]!.sortIdx, 3);
+      expect(stateManager!.rows[4]!.sortIdx, 4);
     });
 
     testWidgets(
@@ -568,7 +568,7 @@ void main() {
         PlutoRow(sortIdx: 9, cells: {'header0': PlutoCell(value: 'value')}),
       ];
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -589,11 +589,11 @@ void main() {
       );
 
       // then
-      expect(stateManager.rows[0].sortIdx, 5);
-      expect(stateManager.rows[1].sortIdx, 6);
-      expect(stateManager.rows[2].sortIdx, 7);
-      expect(stateManager.rows[3].sortIdx, 8);
-      expect(stateManager.rows[4].sortIdx, 9);
+      expect(stateManager!.rows[0]!.sortIdx, 5);
+      expect(stateManager!.rows[1]!.sortIdx, 6);
+      expect(stateManager!.rows[2]!.sortIdx, 7);
+      expect(stateManager!.rows[3]!.sortIdx, 8);
+      expect(stateManager!.rows[4]!.sortIdx, 9);
     });
   });
 
@@ -608,7 +608,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -628,7 +628,7 @@ void main() {
       );
 
       // when
-      stateManager.moveColumn(columns[0].key, 250);
+      stateManager!.moveColumn(columns[0].key, 250);
 
       // then
       expect(columns[0].title, 'body1');
@@ -646,7 +646,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -666,7 +666,7 @@ void main() {
       );
 
       // when
-      stateManager.moveColumn(columns[9].key, 50);
+      stateManager!.moveColumn(columns[9].key, 50);
 
       // then
       expect(columns[0].title, 'body9');
@@ -693,7 +693,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -714,11 +714,11 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
+      stateManager!.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager.moveColumn(columns[5].key, 50);
+      stateManager!.moveColumn(columns[5].key, 50);
       //
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -753,7 +753,7 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
-      PlutoGridStateManager stateManager;
+      PlutoGridStateManager? stateManager;
 
       // when
       await tester.pumpWidget(
@@ -773,18 +773,18 @@ void main() {
         ),
       );
 
-      stateManager
+      stateManager!
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
+      stateManager!.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager
+      stateManager!
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
-      stateManager.moveColumn(columns[5].key, 50);
+      stateManager!.moveColumn(columns[5].key, 50);
       //
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -819,7 +819,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoGridStateManager stateManager;
+        PlutoGridStateManager? stateManager;
 
         // when
         await tester.pumpWidget(
@@ -838,20 +838,20 @@ void main() {
           ),
         );
 
-        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
 
         // 셀 선택
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
-        expect(stateManager.isEditing, false);
+        expect(stateManager!.isEditing, false);
 
         // 수정 상태로 변경
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
         // 수정 상태 확인
-        expect(stateManager.isEditing, true);
+        expect(stateManager!.isEditing, true);
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -863,7 +863,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -885,7 +885,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         expect(currentDate.add(const Duration(days: -7)), selectedDate);
       });
@@ -900,7 +900,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoGridStateManager stateManager;
+        PlutoGridStateManager? stateManager;
 
         // when
         await tester.pumpWidget(
@@ -919,20 +919,20 @@ void main() {
           ),
         );
 
-        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
 
         // 셀 선택
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
-        expect(stateManager.isEditing, false);
+        expect(stateManager!.isEditing, false);
 
         // 수정 상태로 변경
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
         // 수정 상태 확인
-        expect(stateManager.isEditing, true);
+        expect(stateManager!.isEditing, true);
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -944,7 +944,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -971,7 +971,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         expect(currentDate.add(const Duration(days: -(7 * 6))), selectedDate);
       });
@@ -986,7 +986,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoGridStateManager stateManager;
+        PlutoGridStateManager? stateManager;
 
         // when
         await tester.pumpWidget(
@@ -1005,20 +1005,20 @@ void main() {
           ),
         );
 
-        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
 
         // 셀 선택
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
-        expect(stateManager.isEditing, false);
+        expect(stateManager!.isEditing, false);
 
         // 수정 상태로 변경
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
         // 수정 상태 확인
-        expect(stateManager.isEditing, true);
+        expect(stateManager!.isEditing, true);
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -1030,7 +1030,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -1054,7 +1054,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         expect(currentDate.add(const Duration(days: -(7 * 10))), selectedDate);
       });
@@ -1069,7 +1069,7 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoGridStateManager stateManager;
+        PlutoGridStateManager? stateManager;
 
         // when
         await tester.pumpWidget(
@@ -1088,20 +1088,20 @@ void main() {
           ),
         );
 
-        Finder firstCell = find.byKey(rows.first.cells['date0'].key);
+        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
 
         // 셀 선택
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
-        expect(stateManager.isEditing, false);
+        expect(stateManager!.isEditing, false);
 
         // 수정 상태로 변경
         await tester.tap(find.descendant(
             of: firstCell, matching: find.byType(GestureDetector)));
 
         // 수정 상태 확인
-        expect(stateManager.isEditing, true);
+        expect(stateManager!.isEditing, true);
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -1113,7 +1113,7 @@ void main() {
 
         // 현재 선택 된 날짜
         final DateTime currentDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         // 선택 된 날짜의 day 렌더링
         Finder popupCell = find.text(DateFormat('d').format(currentDate));
@@ -1137,7 +1137,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 1));
 
         final DateTime selectedDate =
-            DateTime.parse(stateManager.currentCell.value.toString());
+            DateTime.parse(stateManager!.currentCell!.value.toString());
 
         expect(currentDate.add(const Duration(days: 7 * 10)), selectedDate);
       });
@@ -1154,7 +1154,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1178,28 +1178,28 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
-    expect(stateManager.isEditing, true);
+    expect(stateManager!.isEditing, true);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
-    expect(stateManager.currentSelectingPosition, null);
+    expect(stateManager!.currentSelectingPosition, null);
     // 이동도 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태에서 shift + 좌측 방향키 입력 시 셀이 선택 되지 않아야 한다.',
@@ -1212,7 +1212,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1236,28 +1236,28 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
-    expect(stateManager.isEditing, true);
+    expect(stateManager!.isEditing, true);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
-    expect(stateManager.currentSelectingPosition, null);
+    expect(stateManager!.currentSelectingPosition, null);
     // 이동도 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태에서 shift + 위쪽 방향키 입력 시 셀이 선택 되지 않아야 한다.',
@@ -1270,7 +1270,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1294,28 +1294,28 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
-    expect(stateManager.isEditing, true);
+    expect(stateManager!.isEditing, true);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
-    expect(stateManager.currentSelectingPosition, null);
+    expect(stateManager!.currentSelectingPosition, null);
     // 이동도 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태에서 shift + 아래쪽 방향키 입력 시 셀이 선택 되지 않아야 한다.',
@@ -1328,7 +1328,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1352,28 +1352,28 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
-    expect(stateManager.isEditing, true);
+    expect(stateManager!.isEditing, true);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태에서 shift + 방향키 입력 시 셀이 선택 되지 않아야 한다.
-    expect(stateManager.currentSelectingPosition, null);
+    expect(stateManager!.currentSelectingPosition, null);
     // 이동도 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태가 아니면, shift + 우측 방향키 입력 시 셀이 선택 되어야 한다.',
@@ -1386,7 +1386,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1410,23 +1410,23 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
-    expect(stateManager.currentSelectingPosition.columnIdx, 3);
-    expect(stateManager.currentSelectingPosition.rowIdx, 1);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 3);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 1);
     // 현재 선택 셀은 이동 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태가 아니면, shift + 좌측 방향키 입력 시 셀이 선택 되어야 한다.',
@@ -1439,7 +1439,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1463,23 +1463,23 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
-    expect(stateManager.currentSelectingPosition.columnIdx, 1);
-    expect(stateManager.currentSelectingPosition.rowIdx, 1);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 1);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 1);
     // 현재 선택 셀은 이동 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태가 아니면, shift + 위쪽 방향키 입력 시 셀이 선택 되어야 한다.',
@@ -1492,7 +1492,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1516,23 +1516,23 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
-    expect(stateManager.currentSelectingPosition.columnIdx, 2);
-    expect(stateManager.currentSelectingPosition.rowIdx, 0);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 2);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 0);
     // 현재 선택 셀은 이동 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets('editing 상태가 아니면, shift + 아래쪽 방향키 입력 시 셀이 선택 되어야 한다.',
@@ -1545,7 +1545,7 @@ void main() {
     ];
     final rows = RowHelper.count(10, columns);
 
-    PlutoGridStateManager stateManager;
+    PlutoGridStateManager? stateManager;
 
     // when
     await tester.pumpWidget(
@@ -1569,23 +1569,23 @@ void main() {
 
     await tester.tap(currentCell);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
 
     // editing true
-    expect(stateManager.isEditing, false);
+    expect(stateManager!.isEditing, false);
 
     // 쉬프트 + 우측 키 입력
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
-    expect(stateManager.currentCell.value, 'headerB1 value 1');
+    expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
-    expect(stateManager.currentSelectingPosition.columnIdx, 2);
-    expect(stateManager.currentSelectingPosition.rowIdx, 2);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 2);
+    expect(stateManager!.currentSelectingPosition!.rowIdx, 2);
     // 현재 선택 셀은 이동 되지 않아야 한다.
-    expect(stateManager.currentCellPosition.columnIdx, 2);
-    expect(stateManager.currentCellPosition.rowIdx, 1);
+    expect(stateManager!.currentCellPosition!.columnIdx, 2);
+    expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
   testWidgets(

@@ -3,10 +3,10 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ILayoutState {
   /// Screen width
-  double get maxWidth;
+  double? get maxWidth;
 
   /// Screen height
-  double get maxHeight;
+  double? get maxHeight;
 
   /// grid header height
   double get headerHeight;
@@ -17,12 +17,12 @@ abstract class ILayoutState {
   double get offsetHeight;
 
   /// Global offset of Grid.
-  Offset get gridGlobalOffset;
+  Offset? get gridGlobalOffset;
 
   /// Whether to apply a frozen column according to the screen size.
   /// true : If there is a frozen column, the frozen column is exposed.
   /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
-  bool get showFrozenColumn;
+  bool? get showFrozenColumn;
 
   bool get showColumnFilter;
 
@@ -84,13 +84,13 @@ abstract class ILayoutState {
 }
 
 mixin LayoutState implements IPlutoGridState {
-  double get maxWidth => _maxWidth;
+  double? get maxWidth => _maxWidth;
 
-  double _maxWidth;
+  double? _maxWidth;
 
-  double get maxHeight => _maxHeight;
+  double? get maxHeight => _maxHeight;
 
-  double _maxHeight;
+  double? _maxHeight;
 
   double get headerHeight =>
       createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
@@ -98,15 +98,15 @@ mixin LayoutState implements IPlutoGridState {
   double get footerHeight =>
       createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
-  double get offsetHeight => maxHeight - headerHeight - footerHeight;
+  double get offsetHeight => maxHeight! - headerHeight - footerHeight;
 
-  Offset get gridGlobalOffset {
+  Offset? get gridGlobalOffset {
     if (gridKey == null) {
       return _gridGlobalOffset;
     }
 
-    final RenderBox gridRenderBox =
-        gridKey.currentContext?.findRenderObject() as RenderBox;
+    final RenderBox? gridRenderBox =
+        gridKey!.currentContext?.findRenderObject() as RenderBox?;
 
     if (gridRenderBox == null) {
       return _gridGlobalOffset;
@@ -117,15 +117,15 @@ mixin LayoutState implements IPlutoGridState {
     return _gridGlobalOffset;
   }
 
-  Offset _gridGlobalOffset;
+  Offset? _gridGlobalOffset;
 
-  bool get showFrozenColumn => _showFrozenColumn;
+  bool? get showFrozenColumn => _showFrozenColumn;
 
-  bool _showFrozenColumn;
+  bool? _showFrozenColumn;
 
   bool get showColumnFilter => _showColumnFilter == true;
 
-  bool _showColumnFilter;
+  bool? _showColumnFilter;
 
   bool get showHeader => headerHeight > 0;
 
@@ -133,16 +133,16 @@ mixin LayoutState implements IPlutoGridState {
 
   bool get showLoading => _showLoading == true;
 
-  bool _showLoading;
+  bool? _showLoading;
 
   bool get hasLeftFrozenColumns => leftFrozenColumnsWidth > 0;
 
   bool get hasRightFrozenColumns => rightFrozenColumnsWidth > 0;
 
-  double get headerBottomOffset => maxHeight - headerHeight;
+  double get headerBottomOffset => maxHeight! - headerHeight;
 
   double get footerTopOffset =>
-      maxHeight - footerHeight - PlutoGridSettings.totalShadowLineWidth;
+      maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
   // todo : set columnHeight from configuration.
   double get columnHeight => PlutoGridSettings.rowTotalHeight;
@@ -152,34 +152,34 @@ mixin LayoutState implements IPlutoGridState {
 
   double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
 
-  double get rowHeight => configuration.rowHeight;
+  double get rowHeight => configuration!.rowHeight;
 
   double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;
 
   double get bodyTopOffset =>
-      gridGlobalOffset.dy +
+      gridGlobalOffset!.dy +
       headerHeight +
       PlutoGridSettings.gridBorderWidth +
       columnHeight +
       columnFilterHeight;
 
   double get bodyLeftOffset {
-    return (showFrozenColumn && leftFrozenColumnsWidth > 0)
+    return (showFrozenColumn! && leftFrozenColumnsWidth > 0)
         ? leftFrozenColumnsWidth + 1
         : 0;
   }
 
   double get bodyRightOffset {
-    return (showFrozenColumn && rightFrozenColumnsWidth > 0)
+    return (showFrozenColumn! && rightFrozenColumnsWidth > 0)
         ? rightFrozenColumnsWidth + 1
         : 0;
   }
 
   double get bodyLeftScrollOffset {
     final double leftFrozenColumnWidth =
-        showFrozenColumn ? leftFrozenColumnsWidth : 0;
+        showFrozenColumn! ? leftFrozenColumnsWidth : 0;
 
-    return gridGlobalOffset.dx +
+    return gridGlobalOffset!.dx +
         PlutoGridSettings.gridPadding +
         PlutoGridSettings.gridBorderWidth +
         leftFrozenColumnWidth +
@@ -188,9 +188,9 @@ mixin LayoutState implements IPlutoGridState {
 
   double get bodyRightScrollOffset {
     final double rightFrozenColumnWidth =
-        showFrozenColumn ? rightFrozenColumnsWidth : 0;
+        showFrozenColumn! ? rightFrozenColumnsWidth : 0;
 
-    return (gridGlobalOffset.dx + maxWidth) -
+    return (gridGlobalOffset!.dx + maxWidth!) -
         rightFrozenColumnWidth -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
@@ -200,25 +200,25 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   double get bodyDownScrollOffset {
-    return gridGlobalOffset.dy +
-        maxHeight -
+    return gridGlobalOffset!.dy +
+        maxHeight! -
         footerHeight -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   double get rightFrozenLeftOffset =>
-      maxWidth - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
+      maxWidth! - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
 
   double get rightBlankOffset =>
       rightFrozenLeftOffset -
       leftFrozenColumnsWidth -
       bodyColumnsWidth +
-      scroll.horizontal.offset;
+      scroll!.horizontal!.offset;
 
   double get scrollOffsetByFrozenColumn {
     double offset = 0;
 
-    if (_showFrozenColumn) {
+    if (_showFrozenColumn!) {
       offset += leftFrozenColumnsWidth > 0 ? 1 : 0;
       offset += rightFrozenColumnsWidth > 0 ? 1 : 0;
     }
@@ -240,7 +240,7 @@ mixin LayoutState implements IPlutoGridState {
     updateCurrentCellPosition(notify: false);
 
     if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         notifyListeners();
       });
     }

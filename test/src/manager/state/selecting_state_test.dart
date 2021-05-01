@@ -131,13 +131,13 @@ void main() {
           PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(transformedSelectingText[0][0], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text2'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text2']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text2'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text2']!.value);
     });
 
     testWidgets(
@@ -176,20 +176,20 @@ void main() {
           PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(transformedSelectingText[0][0], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text2'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text2']!.value);
 
       expect(
-          transformedSelectingText[1][0], isNot(rows[2].cells['text0'].value));
+          transformedSelectingText[1][0], isNot(rows[2].cells['text0']!.value));
       expect(
-          transformedSelectingText[1][1], isNot(rows[2].cells['text1'].value));
+          transformedSelectingText[1][1], isNot(rows[2].cells['text1']!.value));
       expect(
-          transformedSelectingText[1][2], isNot(rows[2].cells['text2'].value));
+          transformedSelectingText[1][2], isNot(rows[2].cells['text2']!.value));
 
-      expect(transformedSelectingText[1][0], rows[3].cells['text0'].value);
-      expect(transformedSelectingText[1][1], rows[3].cells['text1'].value);
-      expect(transformedSelectingText[1][2], rows[3].cells['text2'].value);
+      expect(transformedSelectingText[1][0], rows[3].cells['text0']!.value);
+      expect(transformedSelectingText[1][1], rows[3].cells['text1']!.value);
+      expect(transformedSelectingText[1][2], rows[3].cells['text2']!.value);
     });
 
     testWidgets(
@@ -255,7 +255,7 @@ void main() {
 
       stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
-      final currentCell = rows[3].cells['text2'];
+      final currentCell = rows[3].cells['text2']!;
 
       stateManager.setCurrentCell(currentCell, 3);
 
@@ -317,17 +317,17 @@ void main() {
       // then
       expect(stateManager.showFrozenColumn, true);
 
-      expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][3], rows[1].cells['text2'].value);
-      expect(transformedSelectingText[0][4], rows[1].cells['right0'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['left0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][3], rows[1].cells['text2']!.value);
+      expect(transformedSelectingText[0][4], rows[1].cells['right0']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['left0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][3], rows[2].cells['text2'].value);
-      expect(transformedSelectingText[1][4], rows[2].cells['right0'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['left0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][3], rows[2].cells['text2']!.value);
+      expect(transformedSelectingText[1][4], rows[2].cells['right0']!.value);
     });
 
     testWidgets(
@@ -381,17 +381,17 @@ void main() {
       // then
       expect(stateManager.showFrozenColumn, false);
 
-      expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][3], rows[1].cells['text2'].value);
-      expect(transformedSelectingText[0][4], rows[1].cells['right0'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['left0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][3], rows[1].cells['text2']!.value);
+      expect(transformedSelectingText[0][4], rows[1].cells['right0']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['left0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][3], rows[2].cells['text2'].value);
-      expect(transformedSelectingText[1][4], rows[2].cells['right0'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['left0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][3], rows[2].cells['text2']!.value);
+      expect(transformedSelectingText[1][4], rows[2].cells['right0']!.value);
     });
 
     testWidgets(
@@ -778,8 +778,8 @@ void main() {
 
       // then
       expect(stateManager.currentCell, rows.first.cells['text0']);
-      expect(stateManager.currentSelectingPosition.rowIdx, 4);
-      expect(stateManager.currentSelectingPosition.columnIdx, 2);
+      expect(stateManager.currentSelectingPosition!.rowIdx, 4);
+      expect(stateManager.currentSelectingPosition!.columnIdx, 2);
     });
 
     testWidgets(
@@ -811,9 +811,9 @@ void main() {
       stateManager.setAllCurrentSelecting();
 
       // then
-      expect(stateManager.currentCell.value, rows.first.cells['text0'].value);
-      expect(stateManager.currentSelectingPosition.columnIdx, 2);
-      expect(stateManager.currentSelectingPosition.rowIdx, 4);
+      expect(stateManager.currentCell!.value, rows.first.cells['text0']!.value);
+      expect(stateManager.currentSelectingPosition!.columnIdx, 2);
+      expect(stateManager.currentSelectingPosition!.rowIdx, 4);
       expect(stateManager.currentSelectingRows.length, 5);
     });
 
@@ -891,7 +891,7 @@ void main() {
         expect(stateManager.currentSelectingRows.length, 2);
 
         final List<Key> keys =
-            stateManager.currentSelectingRows.map((e) => e.key).toList();
+            stateManager.currentSelectingRows.map((e) => e!.key).toList();
 
         expect(keys.contains(rows[3].key), isTrue);
         expect(keys.contains(rows[4].key), isTrue);
@@ -1310,15 +1310,15 @@ void main() {
         );
 
         // when
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         stateManager.handleAfterSelectingRow(
-          rows[1].cells['text1'],
+          rows[1].cells['text1']!,
           'new value',
         );
 
         // then
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
       },
     );
 
@@ -1364,15 +1364,15 @@ void main() {
         );
 
         // when
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         stateManager.handleAfterSelectingRow(
-          rows[1].cells['text1'],
+          rows[1].cells['text1']!,
           'new value',
         );
 
         // then
-        expect(stateManager.currentCellPosition.rowIdx, 2);
+        expect(stateManager.currentCellPosition!.rowIdx, 2);
       },
     );
   });

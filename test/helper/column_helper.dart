@@ -25,8 +25,8 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    DateTime startDate,
-    DateTime endDate,
+    DateTime? startDate,
+    DateTime? endDate,
     String format = 'yyyy-MM-dd',
     bool applyFormatOnInit = true,
   }) {

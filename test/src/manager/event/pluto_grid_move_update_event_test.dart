@@ -1,33 +1,37 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../../mock/mock_pluto_scroll_controller.dart';
-import '../../../mock/mock_pluto_state_manager.dart';
+import 'pluto_grid_move_update_event_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+])
 void main() {
-  PlutoGridStateManager stateManager;
+  MockPlutoGridStateManager? stateManager;
   PlutoGridScrollController scrollController;
-  LinkedScrollControllerGroup vertical;
-  LinkedScrollControllerGroup horizontal;
+  MockLinkedScrollControllerGroup? vertical;
+  MockLinkedScrollControllerGroup? horizontal;
 
   var eventBuilder = ({
-    Offset offset,
+    Offset? offset,
   }) =>
       PlutoGridMoveUpdateEvent(
         offset: offset,
       );
 
   setUp(() {
-    stateManager = MockPlutoStateManager();
+    stateManager = MockPlutoGridStateManager();
     vertical = MockLinkedScrollControllerGroup();
     horizontal = MockLinkedScrollControllerGroup();
     scrollController = PlutoGridScrollController(
       vertical: vertical,
       horizontal: horizontal,
     );
-    when(stateManager.scroll).thenReturn(scrollController);
+    when(stateManager!.scroll).thenReturn(scrollController);
   });
 
   group('인수 값 테스트', () {
@@ -37,8 +41,8 @@ void main() {
         var event = eventBuilder(offset: null);
         event.handler(stateManager);
 
-        verifyNever(stateManager.needMovingScroll(any, any));
-        verifyNever(horizontal.animateTo(
+        verifyNever(stateManager!.needMovingScroll(any, any));
+        verifyNever(horizontal!.animateTo(
           any,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
@@ -49,12 +53,12 @@ void main() {
     test(
       'offset 이 null 가 아니면 needMovingScroll 이 호출 되어야 한다.',
       () {
-        when(stateManager.needMovingScroll(any, any)).thenReturn(false);
+        when(stateManager!.needMovingScroll(any, any)).thenReturn(false);
 
         var event = eventBuilder(offset: const Offset(0, 0));
         event.handler(stateManager);
 
-        verify(stateManager.needMovingScroll(any, any)).called(4);
+        verify(stateManager!.needMovingScroll(any, any)).called(4);
       },
     );
 
@@ -65,21 +69,21 @@ void main() {
         final offset = const Offset(10, 10);
         final scrollOffset = 0.0;
 
-        when(horizontal.offset).thenReturn(scrollOffset);
+        when(horizontal!.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
         event.handler(stateManager);
 
-        verify(horizontal.animateTo(
+        verify(horizontal!.animateTo(
           scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
@@ -94,21 +98,21 @@ void main() {
         final offset = const Offset(10, 10);
         final scrollOffset = 0.0;
 
-        when(horizontal.offset).thenReturn(scrollOffset);
+        when(horizontal!.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
         event.handler(stateManager);
 
-        verify(horizontal.animateTo(
+        verify(horizontal!.animateTo(
           scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
@@ -123,21 +127,21 @@ void main() {
         final offset = const Offset(10, 10);
         final scrollOffset = 0.0;
 
-        when(vertical.offset).thenReturn(scrollOffset);
+        when(vertical!.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(true);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(false);
 
         var event = eventBuilder(offset: offset);
         event.handler(stateManager);
 
-        verify(vertical.animateTo(
+        verify(vertical!.animateTo(
           scrollOffset - PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),
@@ -152,21 +156,21 @@ void main() {
         final offset = const Offset(10, 10);
         final scrollOffset = 0.0;
 
-        when(vertical.offset).thenReturn(scrollOffset);
+        when(vertical!.offset).thenReturn(scrollOffset);
 
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.right))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.right))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.up))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.up))
             .thenReturn(false);
-        when(stateManager.needMovingScroll(offset, PlutoMoveDirection.down))
+        when(stateManager!.needMovingScroll(offset, PlutoMoveDirection.down))
             .thenReturn(true);
 
         var event = eventBuilder(offset: offset);
         event.handler(stateManager);
 
-        verify(vertical.animateTo(
+        verify(vertical!.animateTo(
           scrollOffset + PlutoGridSettings.offsetScrollingFromEdgeAtOnce,
           curve: anyNamed('curve'),
           duration: anyNamed('duration'),

@@ -12,7 +12,7 @@ abstract class ISelectingState {
 
   /// Current position of multi-select cell.
   /// Calculate the currently selected cell and its multi-selection range.
-  PlutoGridCellPosition get currentSelectingPosition;
+  PlutoGridCellPosition? get currentSelectingPosition;
 
   /// Position list of currently selected.
   /// Only valid in [PlutoGridSelectingMode.cell].
@@ -28,7 +28,7 @@ abstract class ISelectingState {
 
   /// Rows of currently selected.
   /// Only valid in [PlutoGridSelectingMode.row].
-  List<PlutoRow> get currentSelectingRows;
+  List<PlutoRow?> get currentSelectingRows;
 
   /// String of multi-selected cells.
   /// Preserves the structure of the cells selected by the tabs and the enter key.
@@ -43,12 +43,12 @@ abstract class ISelectingState {
 
   /// Sets the position of a multi-selected cell.
   void setCurrentSelectingPosition({
-    PlutoGridCellPosition cellPosition,
+    PlutoGridCellPosition? cellPosition,
     bool notify = true,
   });
 
   void setCurrentSelectingPositionByCellKey(
-    Key cellKey, {
+    Key? cellKey, {
     bool notify = true,
   });
 
@@ -87,10 +87,10 @@ mixin SelectingState implements IPlutoGridState {
 
   PlutoGridSelectingMode _selectingMode = PlutoGridSelectingMode.cell;
 
-  PlutoGridCellPosition get currentSelectingPosition =>
+  PlutoGridCellPosition? get currentSelectingPosition =>
       _currentSelectingPosition;
 
-  PlutoGridCellPosition _currentSelectingPosition;
+  PlutoGridCellPosition? _currentSelectingPosition;
 
   List<PlutoGridSelectingCellPosition> get currentSelectingPositionList {
     if (!_selectingMode.isCell ||
@@ -101,23 +101,23 @@ mixin SelectingState implements IPlutoGridState {
 
     final columnIndexes = columnIndexesByShowFrozen;
 
-    int columnStartIdx =
-        min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnStartIdx = min(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
-    int columnEndIdx =
-        max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnEndIdx = max(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
     int rowStartIdx =
-        min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
     int rowEndIdx =
-        max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
     List<PlutoGridSelectingCellPosition> positions = [];
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = refColumns[columnIndexes[j]].field;
+        final String field = refColumns![columnIndexes[j]].field;
 
         positions.add(PlutoGridSelectingCellPosition(
           rowIdx: i,
@@ -131,9 +131,9 @@ mixin SelectingState implements IPlutoGridState {
 
   bool get hasCurrentSelectingPosition => _currentSelectingPosition != null;
 
-  List<PlutoRow> get currentSelectingRows => _currentSelectingRows;
+  List<PlutoRow?> get currentSelectingRows => _currentSelectingRows;
 
-  List<PlutoRow> _currentSelectingRows = [];
+  List<PlutoRow?> _currentSelectingRows = [];
 
   String get currentSelectingText {
     final bool fromSelectingRows =
@@ -188,7 +188,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void setAllCurrentSelecting() {
-    if (refRows == null || refRows.isEmpty) {
+    if (refRows == null || refRows!.isEmpty) {
       return;
     }
 
@@ -199,8 +199,8 @@ mixin SelectingState implements IPlutoGridState {
 
         setCurrentSelectingPosition(
           cellPosition: PlutoGridCellPosition(
-            columnIdx: refColumns.length - 1,
-            rowIdx: refRows.length - 1,
+            columnIdx: refColumns!.length - 1,
+            rowIdx: refRows!.length - 1,
           ),
         );
         break;
@@ -210,11 +210,11 @@ mixin SelectingState implements IPlutoGridState {
         }
 
         _currentSelectingPosition = PlutoGridCellPosition(
-          columnIdx: refColumns.length - 1,
-          rowIdx: refRows.length - 1,
+          columnIdx: refColumns!.length - 1,
+          rowIdx: refRows!.length - 1,
         );
 
-        setCurrentSelectingRowsByRange(0, refRows.length - 1);
+        setCurrentSelectingRowsByRange(0, refRows!.length - 1);
         break;
       case PlutoGridSelectingMode.none:
       default:
@@ -223,7 +223,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void setCurrentSelectingPosition({
-    PlutoGridCellPosition cellPosition,
+    PlutoGridCellPosition? cellPosition,
     bool notify = true,
   }) {
     if (_selectingMode.isNone) {
@@ -240,7 +240,7 @@ mixin SelectingState implements IPlutoGridState {
     if (_currentSelectingPosition != null && _selectingMode.isRow) {
       setCurrentSelectingRowsByRange(
         currentRowIdx,
-        _currentSelectingPosition.rowIdx,
+        _currentSelectingPosition!.rowIdx,
         notify: false,
       );
     }
@@ -251,7 +251,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void setCurrentSelectingPositionByCellKey(
-    Key cellKey, {
+    Key? cellKey, {
     bool notify = true,
   }) {
     if (cellKey == null) {
@@ -264,52 +264,48 @@ mixin SelectingState implements IPlutoGridState {
     );
   }
 
-  void setCurrentSelectingPositionWithOffset(Offset offset) {
+  void setCurrentSelectingPositionWithOffset(Offset? offset) {
     if (currentCell == null) {
       return;
     }
 
-    final double gridBodyOffsetDy = gridGlobalOffset.dy +
+    final double gridBodyOffsetDy = gridGlobalOffset!.dy +
         PlutoGridSettings.gridBorderWidth +
         headerHeight +
         columnHeight +
         columnFilterHeight;
 
-    double currentCellOffsetDy = (currentRowIdx * rowTotalHeight) +
+    double currentCellOffsetDy = (currentRowIdx! * rowTotalHeight) +
         gridBodyOffsetDy -
-        scroll.vertical.offset;
+        scroll!.vertical!.offset;
 
-    if (gridBodyOffsetDy > offset.dy) {
+    if (gridBodyOffsetDy > offset!.dy) {
       return;
     }
 
     int rowIdx = (((currentCellOffsetDy - offset.dy) / rowTotalHeight).ceil() -
-            currentRowIdx)
+            currentRowIdx!)
         .abs();
 
-    if (rowIdx == null) {
-      return;
-    }
-
-    int columnIdx;
+    int? columnIdx;
 
     double currentWidth = 0.0;
-    currentWidth += gridGlobalOffset.dx;
+    currentWidth += gridGlobalOffset!.dx;
     currentWidth += PlutoGridSettings.gridPadding;
     currentWidth += PlutoGridSettings.gridBorderWidth;
 
     final columnIndexes = columnIndexesByShowFrozen;
 
     final _rightBlankOffset = rightBlankOffset;
-    final _horizontalScrollOffset = scroll.horizontal.offset;
+    final _horizontalScrollOffset = scroll!.horizontal!.offset;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      final column = refColumns[columnIndexes[i]];
+      final column = refColumns![columnIndexes[i]];
 
       currentWidth += column.width;
 
       final rightFrozenColumnOffset =
-          column.frozen.isRight && showFrozenColumn ? _rightBlankOffset : 0;
+          column.frozen.isRight && showFrozenColumn! ? _rightBlankOffset : 0;
 
       if (currentWidth + rightFrozenColumnOffset >
           offset.dx + _horizontalScrollOffset) {
@@ -330,20 +326,21 @@ mixin SelectingState implements IPlutoGridState {
     );
   }
 
-  void setCurrentSelectingRowsByRange(int from, int to, {bool notify = true}) {
+  void setCurrentSelectingRowsByRange(int? from, int? to,
+      {bool notify = true}) {
     if (!_selectingMode.isRow) {
       return;
     }
 
-    final _from = min(from, to);
+    final _from = min(from!, to!);
 
     final _to = max(from, to) + 1;
 
-    if (_from < 0 || _to > refRows.length) {
+    if (_from < 0 || _to > refRows!.length) {
       return;
     }
 
-    _currentSelectingRows = refRows.getRange(_from, _to).toList();
+    _currentSelectingRows = refRows!.getRange(_from, _to).toList();
 
     if (notify) {
       notifyListeners();
@@ -363,7 +360,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void clearCurrentSelectingRows({bool notify = true}) {
-    if (_currentSelectingRows == null || _currentSelectingRows.isEmpty) {
+    if (_currentSelectingRows.isEmpty) {
       return;
     }
 
@@ -374,27 +371,27 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
-  void toggleSelectingRow(int rowIdx, {notify = true}) {
+  void toggleSelectingRow(int? rowIdx, {notify = true}) {
     if (!_selectingMode.isRow) {
       return;
     }
 
-    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows.length - 1) {
+    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows!.length - 1) {
       return;
     }
 
-    final PlutoRow row = refRows[rowIdx];
+    final PlutoRow row = refRows![rowIdx]!;
 
     final keys =
-        _currentSelectingRows.map((e) => e.key).toList(growable: false);
+        _currentSelectingRows.map((e) => e!.key).toList(growable: false);
 
     if (keys.contains(row.key)) {
-      _currentSelectingRows.removeWhere((element) => element.key == row.key);
+      _currentSelectingRows.removeWhere((element) => element!.key == row.key);
     } else {
       _currentSelectingRows.add(row);
     }
 
-    if (notify != null) {
+    if (notify) {
       notifyListeners();
     }
   }
@@ -405,7 +402,7 @@ mixin SelectingState implements IPlutoGridState {
         currentCell != null;
   }
 
-  bool isSelectedRow(Key rowKey) {
+  bool isSelectedRow(Key? rowKey) {
     if (rowKey == null ||
         !_selectingMode.isRow ||
         _currentSelectingRows.isEmpty) {
@@ -413,14 +410,14 @@ mixin SelectingState implements IPlutoGridState {
     }
 
     return _currentSelectingRows.firstWhere(
-          (element) => element.key == rowKey,
+          (element) => element!.key == rowKey,
           orElse: () => null,
         ) !=
         null;
   }
 
   // todo : code cleanup
-  bool isSelectedCell(PlutoCell cell, PlutoColumn column, int rowIdx) {
+  bool isSelectedCell(PlutoCell? cell, PlutoColumn? column, int? rowIdx) {
     if (_selectingMode.isNone) {
       return false;
     }
@@ -434,28 +431,29 @@ mixin SelectingState implements IPlutoGridState {
     }
 
     if (_selectingMode.isCell) {
-      final bool inRangeOfRows = min(currentCellPosition.rowIdx,
-                  _currentSelectingPosition.rowIdx) <=
-              rowIdx &&
+      final bool inRangeOfRows = min(currentCellPosition!.rowIdx as num,
+                  _currentSelectingPosition!.rowIdx as num) <=
+              rowIdx! &&
           rowIdx <=
-              max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+              max(currentCellPosition!.rowIdx!,
+                  _currentSelectingPosition!.rowIdx!);
 
       if (inRangeOfRows == false) {
         return false;
       }
 
-      final int columnIdx = columnIndex(column);
+      final int? columnIdx = columnIndex(column);
 
       if (columnIdx == null) {
         return false;
       }
 
-      final bool inRangeOfColumns = min(currentCellPosition.columnIdx,
-                  currentSelectingPosition.columnIdx) <=
+      final bool inRangeOfColumns = min(currentCellPosition!.columnIdx as num,
+                  currentSelectingPosition!.columnIdx as num) <=
               columnIdx &&
           columnIdx <=
-              max(currentCellPosition.columnIdx,
-                  currentSelectingPosition.columnIdx);
+              max(currentCellPosition!.columnIdx!,
+                  currentSelectingPosition!.columnIdx!);
 
       if (inRangeOfColumns == false) {
         return false;
@@ -464,42 +462,42 @@ mixin SelectingState implements IPlutoGridState {
       return true;
     } else if (_selectingMode.isHorizontal) {
       int startRowIdx =
-          min(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+          min(currentCellPosition!.rowIdx!, _currentSelectingPosition!.rowIdx!);
 
       int endRowIdx =
-          max(currentCellPosition.rowIdx, _currentSelectingPosition.rowIdx);
+          max(currentCellPosition!.rowIdx!, _currentSelectingPosition!.rowIdx!);
 
-      final int columnIdx = columnIndex(column);
+      final int? columnIdx = columnIndex(column);
 
       if (columnIdx == null) {
         return false;
       }
 
-      int startColumnIdx;
+      int? startColumnIdx;
 
-      int endColumnIdx;
+      int? endColumnIdx;
 
-      if (currentCellPosition.rowIdx < _currentSelectingPosition.rowIdx) {
-        startColumnIdx = currentCellPosition.columnIdx;
-        endColumnIdx = _currentSelectingPosition.columnIdx;
-      } else if (currentCellPosition.rowIdx >
-          _currentSelectingPosition.rowIdx) {
-        startColumnIdx = _currentSelectingPosition.columnIdx;
-        endColumnIdx = currentCellPosition.columnIdx;
+      if (currentCellPosition!.rowIdx! < _currentSelectingPosition!.rowIdx!) {
+        startColumnIdx = currentCellPosition!.columnIdx;
+        endColumnIdx = _currentSelectingPosition!.columnIdx;
+      } else if (currentCellPosition!.rowIdx! >
+          _currentSelectingPosition!.rowIdx!) {
+        startColumnIdx = _currentSelectingPosition!.columnIdx;
+        endColumnIdx = currentCellPosition!.columnIdx;
       } else {
-        startColumnIdx = min(
-            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
-        endColumnIdx = max(
-            currentCellPosition.columnIdx, _currentSelectingPosition.columnIdx);
+        startColumnIdx = min(currentCellPosition!.columnIdx!,
+            _currentSelectingPosition!.columnIdx!);
+        endColumnIdx = max(currentCellPosition!.columnIdx!,
+            _currentSelectingPosition!.columnIdx!);
       }
 
       if (rowIdx == startRowIdx && startRowIdx == endRowIdx) {
-        return !(columnIdx < startColumnIdx || columnIdx > endColumnIdx);
-      } else if (rowIdx == startRowIdx && columnIdx >= startColumnIdx) {
+        return !(columnIdx < startColumnIdx! || columnIdx > endColumnIdx!);
+      } else if (rowIdx == startRowIdx && columnIdx >= startColumnIdx!) {
         return true;
-      } else if (rowIdx == endRowIdx && columnIdx <= endColumnIdx) {
+      } else if (rowIdx == endRowIdx && columnIdx <= endColumnIdx!) {
         return true;
-      } else if (rowIdx > startRowIdx && rowIdx < endRowIdx) {
+      } else if (rowIdx! > startRowIdx && rowIdx < endRowIdx) {
         return true;
       }
 
@@ -514,7 +512,7 @@ mixin SelectingState implements IPlutoGridState {
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
     changeCellValue(cell.key, value, notify: false);
 
-    if (configuration.enableMoveDownAfterSelecting) {
+    if (configuration!.enableMoveDownAfterSelecting) {
       moveCurrentCell(PlutoMoveDirection.down, notify: false);
 
       setEditing(true, notify: false);
@@ -534,9 +532,9 @@ mixin SelectingState implements IPlutoGridState {
       List<String> columnText = [];
 
       for (var i = 0; i < columnIndexes.length; i += 1) {
-        final String field = refColumns[columnIndexes[i]].field;
+        final String field = refColumns![columnIndexes[i]].field;
 
-        columnText.add(row.cells[field].value.toString());
+        columnText.add(row!.cells[field]!.value.toString());
       }
 
       rowText.add(columnText.join('\t'));
@@ -550,25 +548,25 @@ mixin SelectingState implements IPlutoGridState {
 
     List<String> rowText = [];
 
-    int columnStartIdx =
-        min(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnStartIdx = min(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
-    int columnEndIdx =
-        max(currentCellPosition.columnIdx, currentSelectingPosition.columnIdx);
+    int columnEndIdx = max(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
     int rowStartIdx =
-        min(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
     int rowEndIdx =
-        max(currentCellPosition.rowIdx, currentSelectingPosition.rowIdx);
+        max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       List<String> columnText = [];
 
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = refColumns[columnIndexes[j]].field;
+        final String field = refColumns![columnIndexes[j]].field;
 
-        columnText.add(refRows[i].cells[field].value.toString());
+        columnText.add(refRows![i]!.cells[field]!.value.toString());
       }
 
       rowText.add(columnText.join('\t'));
@@ -578,6 +576,6 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   String _selectingTextFromCurrentCell() {
-    return currentCell.value.toString();
+    return currentCell!.value.toString();
   }
 }
