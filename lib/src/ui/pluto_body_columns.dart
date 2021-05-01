@@ -67,7 +67,7 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
       child: ListView.builder(
         controller: scroll,
         scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         itemCount: columns!.length,
         itemBuilder: (ctx, i) {
           return PlutoBaseColumn(
