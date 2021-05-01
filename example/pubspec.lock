@@ -155,7 +155,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.0.0-nullsafety.1"
+    version: "2.0.0"
   pluto_inside:
     dependency: transitive
     description:

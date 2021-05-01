@@ -1,3 +1,8 @@
+## [2.0.0] - 2021. 5. 1
+
+* Fix errors of tests on null-safety.
+* Fix focus problems on web.
+
 ## [2.0.0-nullsafety.1] - 2021. 4. 15
 
 * Edit dependency.

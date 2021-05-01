@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v1.2.0 (2.0.0-nullsafety.1)
+## PlutoGrid for flutter - v2.0.0
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
@@ -6,10 +6,6 @@
 
 PlutoGrid is a dataGrid that can be controlled by the keyboard on desktop and web.  
 Of course, it works well on Android and IOS.
-> ## Pre version.
-> If you are running into errors with CupertinoScrollbar issues on the flutter master channel (2.1.0.xxx), you can try version `2.0.0-nullsafety.0`.
-> However, there may be a problem with the operation. Please use 1.x version (flutter 2.0.x)
-> https://github.com/bosskmk/pluto_grid/issues/174
 
 <br>
 
