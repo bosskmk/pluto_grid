@@ -1793,6 +1793,44 @@ void main() {
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
+
+    testWidgets(
+      '행 2개가 있는 상태에서 0번 컬럼을 1번으로 이동 할 경우 타입에러가 발생되지 않고 이동 되어야 한다.',
+      (WidgetTester tester) async {
+        // given
+        List<PlutoColumn> columns = [
+          ...ColumnHelper.textColumn('text', count: 3, width: 150),
+        ];
+
+        List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        final scroll = MockPlutoScrollController();
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        final listener = MockOnChangeListener();
+
+        stateManager.addListener(listener.onChangeVoidNoParamListener);
+
+        // when
+        final rowKey = rows[0].key;
+
+        stateManager.moveRowsByIndex(
+          [rows[0]],
+          1,
+        );
+
+        // then
+        expect(stateManager.rows.length, 2);
+        expect(stateManager.rows[1]!.key, rowKey);
+        verify(listener.onChangeVoidNoParamListener()).called(1);
+      },
+    );
   });
 
   group('toggleAllRowChecked', () {
