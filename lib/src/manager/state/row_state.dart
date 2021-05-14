@@ -441,7 +441,7 @@ mixin RowState implements IPlutoGridState {
       refRows!.remove(row);
     });
 
-    refRows!.insertAll(indexToMove, rows);
+    refRows!.insertAll(indexToMove, rows.cast<PlutoRow>());
 
     int sortIdx = 0;
 
@@ -480,6 +480,6 @@ mixin RowState implements IPlutoGridState {
       }
     }
 
-    refRows!.insertAll(index, rows);
+    refRows!.insertAll(index, rows.cast<PlutoRow>());
   }
 }

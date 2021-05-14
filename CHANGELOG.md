@@ -1,3 +1,9 @@
+## [2.0.0] - 2021. 5. 14
+
+* Change scroll physics.
+* Fix a bug when dragging rows. 
+* Stable release.
+
 ## [2.0.0-nullsafety.2] - 2021. 5. 1
 
 * Fix errors of tests on null-safety.

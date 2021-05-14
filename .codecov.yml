@@ -11,13 +11,10 @@ parsers:
     branch_detection:
       conditional: yes
       loop: yes
-      method: no
+      method: nod
       macro: no
 
 comment:
   layout: "reach,diff,flags,files,footer"
   behavior: default
   require_changes: false
-
-ignore:
-  - "lib/src/widget/pluto_scrollbar.dart"
