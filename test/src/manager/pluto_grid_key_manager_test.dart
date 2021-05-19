@@ -13,7 +13,7 @@ import 'pluto_grid_key_manager_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
 ])
 void main() {
-  MockPlutoGridStateManager? stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   PlutoGridConfiguration configuration;
 
@@ -22,14 +22,14 @@ void main() {
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     configuration = PlutoGridConfiguration();
-    when(stateManager!.configuration).thenReturn(configuration);
-    when(stateManager!.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager!.configuration!.rowHeight),
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.rowTotalHeight).thenReturn(
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
-    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager!.gridFocusNode).thenReturn(FocusNode());
-    when(stateManager!.keepFocus).thenReturn(true);
-    when(stateManager!.hasFocus).thenReturn(true);
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager.gridFocusNode).thenReturn(FocusNode());
+    when(stateManager.keepFocus).thenReturn(true);
+    when(stateManager.hasFocus).thenReturn(true);
 
     keyboardFocusNode = FocusNode();
   });
@@ -61,8 +61,8 @@ void main() {
         ),
       );
 
-      when(stateManager!.isEditing).thenReturn(false);
-      when(stateManager!.currentSelectingText).thenReturn('copied');
+      when(stateManager.isEditing).thenReturn(false);
+      when(stateManager.currentSelectingText).thenReturn('copied');
 
       String? copied;
 
@@ -113,10 +113,10 @@ void main() {
         ),
       );
 
-      when(stateManager!.currentSelectingText).thenReturn('copied');
+      when(stateManager.currentSelectingText).thenReturn('copied');
 
-      when(stateManager!.isEditing).thenReturn(true);
-      expect(stateManager!.isEditing, true);
+      when(stateManager.isEditing).thenReturn(true);
+      expect(stateManager.isEditing, true);
 
       String? copied;
 
@@ -165,8 +165,8 @@ void main() {
         ),
       );
 
-      when(stateManager!.currentCell).thenReturn(PlutoCell(value: 'test'));
-      when(stateManager!.isEditing).thenReturn(false);
+      when(stateManager.currentCell).thenReturn(PlutoCell(value: 'test'));
+      when(stateManager.isEditing).thenReturn(false);
 
       SystemChannels.platform
           .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -184,9 +184,9 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      expect(stateManager!.currentCell, isNotNull);
-      expect(stateManager!.isEditing, false);
-      verify(stateManager!.pasteCellValue([
+      expect(stateManager.currentCell, isNotNull);
+      expect(stateManager.isEditing, false);
+      verify(stateManager.pasteCellValue([
         ['pasted']
       ])).called(1);
     },
@@ -219,8 +219,8 @@ void main() {
         ),
       );
 
-      when(stateManager!.currentCell).thenReturn(null);
-      when(stateManager!.isEditing).thenReturn(false);
+      when(stateManager.currentCell).thenReturn(null);
+      when(stateManager.isEditing).thenReturn(false);
 
       SystemChannels.platform
           .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -238,9 +238,9 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      expect(stateManager!.currentCell, null);
-      expect(stateManager!.isEditing, false);
-      verifyNever(stateManager!.pasteCellValue([
+      expect(stateManager.currentCell, null);
+      expect(stateManager.isEditing, false);
+      verifyNever(stateManager.pasteCellValue([
         ['pasted']
       ]));
     },
@@ -273,8 +273,8 @@ void main() {
         ),
       );
 
-      when(stateManager!.currentCell).thenReturn(PlutoCell(value: 'test'));
-      when(stateManager!.isEditing).thenReturn(true);
+      when(stateManager.currentCell).thenReturn(PlutoCell(value: 'test'));
+      when(stateManager.isEditing).thenReturn(true);
 
       SystemChannels.platform
           .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -292,9 +292,9 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      expect(stateManager!.currentCell, isNotNull);
-      expect(stateManager!.isEditing, true);
-      verifyNever(stateManager!.pasteCellValue([
+      expect(stateManager.currentCell, isNotNull);
+      expect(stateManager.isEditing, true);
+      verifyNever(stateManager.pasteCellValue([
         ['pasted']
       ]));
     },
@@ -337,7 +337,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.home);
 
       // then
-      verify(stateManager!
+      verify(stateManager
               .moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.left))
           .called(1);
     });
@@ -349,7 +349,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!
+      verify(stateManager
               .moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.left))
           .called(1);
     });
@@ -361,7 +361,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager!.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.up))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -374,7 +374,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.up))
+      verify(stateManager.moveSelectingCellToEdgeOfRows(PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -383,7 +383,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.end);
 
       // then
-      verify(stateManager!
+      verify(stateManager
               .moveCurrentCellToEdgeOfColumns(PlutoMoveDirection.right))
           .called(1);
     });
@@ -395,7 +395,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!
+      verify(stateManager
               .moveSelectingCellToEdgeOfColumns(PlutoMoveDirection.right))
           .called(1);
     });
@@ -407,7 +407,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.control);
 
       // then
-      verify(stateManager!.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.down))
+      verify(stateManager.moveCurrentCellToEdgeOfRows(PlutoMoveDirection.down))
           .called(1);
     });
 
@@ -420,7 +420,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!
+      verify(stateManager
               .moveSelectingCellToEdgeOfRows(PlutoMoveDirection.down))
           .called(1);
     });
@@ -435,8 +435,8 @@ void main() {
 
       keyManager.init();
 
-      when(stateManager!.offsetHeight).thenReturn(230);
-      when(stateManager!.currentRowIdx).thenReturn(0);
+      when(stateManager.offsetHeight).thenReturn(230);
+      when(stateManager.currentRowIdx).thenReturn(0);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -466,7 +466,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageUp);
 
       // then
-      verify(stateManager!.moveCurrentCellByRowIdx(-5, PlutoMoveDirection.up))
+      verify(stateManager.moveCurrentCellByRowIdx(-5, PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -477,7 +477,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!.moveSelectingCellByRowIdx(-5, PlutoMoveDirection.up))
+      verify(stateManager.moveSelectingCellByRowIdx(-5, PlutoMoveDirection.up))
           .called(1);
     });
 
@@ -486,7 +486,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.pageDown);
 
       // then
-      verify(stateManager!.moveCurrentCellByRowIdx(5, PlutoMoveDirection.down))
+      verify(stateManager.moveCurrentCellByRowIdx(5, PlutoMoveDirection.down))
           .called(1);
     });
 
@@ -497,8 +497,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // then
-      verify(stateManager!
-              .moveSelectingCellByRowIdx(5, PlutoMoveDirection.down))
+      verify(stateManager.moveSelectingCellByRowIdx(5, PlutoMoveDirection.down))
           .called(1);
     });
   });

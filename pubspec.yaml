@@ -15,7 +15,6 @@ dependencies:
   rxdart: ^0.27.0
   linked_scroll_controller: ^0.2.0
   pluto_filtered_list: ^0.2.0
-  pluto_inside: ^0.2.0
   collection: ^1.15.0
 
 dev_dependencies:

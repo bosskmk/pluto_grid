@@ -11,6 +11,7 @@ import 'package:flutter/src/widgets/focus_manager.dart' as _i13;
 import 'package:flutter/src/widgets/framework.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_filtered_list/pluto_filtered_list.dart' as _i8;
+import 'package:pluto_grid/src/helper/pluto_move_direction.dart' as _i11;
 import 'package:pluto_grid/src/manager/event/pluto_grid_event.dart' as _i19;
 import 'package:pluto_grid/src/manager/pluto_grid_event_manager.dart' as _i15;
 import 'package:pluto_grid/src/manager/pluto_grid_key_manager.dart' as _i14;
@@ -20,7 +21,6 @@ import 'package:pluto_grid/src/model/pluto_column.dart' as _i7;
 import 'package:pluto_grid/src/model/pluto_row.dart' as _i4;
 import 'package:pluto_grid/src/pluto_grid.dart' as _i16;
 import 'package:pluto_grid/src/pluto_grid_configuration.dart' as _i2;
-import 'package:pluto_inside/src/helpers/pluto_move_direction.dart' as _i11;
 import 'package:rxdart/src/subjects/publish_subject.dart' as _i5;
 
 // ignore_for_file: comment_references
@@ -837,6 +837,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#notifyListeners, []),
           returnValueForMissingStub: null);
   @override
+  void notifyListenersOnPostFrame() =>
+      super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
+          returnValueForMissingStub: null);
+  @override
   void addListener(_i18.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
@@ -888,10 +892,10 @@ class MockStreamSubscription<T> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isPaused), returnValue: false)
           as bool);
   @override
-  _i6.Future<void> cancel() =>
-      (super.noSuchMethod(Invocation.method(#cancel, []),
-          returnValue: Future<void>.value(null),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  _i6.Future<void> cancel() => (super.noSuchMethod(
+      Invocation.method(#cancel, []),
+      returnValue: Future<void>.value(null),
+      returnValueForMissingStub: Future<dynamic>.value()) as _i6.Future<void>);
   @override
   void onData(void Function(T)? handleData) =>
       super.noSuchMethod(Invocation.method(#onData, [handleData]),
