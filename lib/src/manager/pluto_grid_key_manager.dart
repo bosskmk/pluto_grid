@@ -177,8 +177,9 @@ class PlutoGridKeyManager {
 
       if (kIsWeb &&
           lastChildContext is StatefulElement &&
-          lastChildContext.dirty != true &&
-          lastChildContext.widget is EditableText) {
+          lastChildContext.state.widget is Focus &&
+          (lastChildContext.state.widget as Focus).focusNode?.hasPrimaryFocus ==
+              false) {
         PlutoLog(
           'Enter twice when entering Korean on the web.',
           type: PlutoLogType.todo,
@@ -290,11 +291,6 @@ class PlutoGridKeyManager {
   void _handleCharacter(PlutoKeyManagerEvent plutoKeyManagerEvent) {
     if (stateManager.isEditing != true && stateManager.currentCell != null) {
       stateManager.setEditing(true);
-
-      print(plutoKeyManagerEvent.event.logicalKey.keyId);
-      print(LogicalKeyboardKey.shift.keyId);
-      print(LogicalKeyboardKey.shiftLeft.keyId);
-      print(LogicalKeyboardKey.shiftRight.keyId);
 
       stateManager.changeCellValue(
         stateManager.currentCell!.key,
