@@ -14,6 +14,7 @@ import 'package:flutter/src/widgets/scroll_controller.dart' as _i5;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i18;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_filtered_list/pluto_filtered_list.dart' as _i7;
+import 'package:pluto_grid/src/helper/pluto_move_direction.dart' as _i10;
 import 'package:pluto_grid/src/manager/pluto_grid_event_manager.dart' as _i14;
 import 'package:pluto_grid/src/manager/pluto_grid_key_manager.dart' as _i13;
 import 'package:pluto_grid/src/manager/pluto_grid_state_manager.dart' as _i3;
@@ -22,7 +23,6 @@ import 'package:pluto_grid/src/model/pluto_column.dart' as _i6;
 import 'package:pluto_grid/src/model/pluto_row.dart' as _i4;
 import 'package:pluto_grid/src/pluto_grid.dart' as _i15;
 import 'package:pluto_grid/src/pluto_grid_configuration.dart' as _i2;
-import 'package:pluto_inside/src/helpers/pluto_move_direction.dart' as _i10;
 
 // ignore_for_file: comment_references
 // ignore_for_file: unnecessary_parenthesis
@@ -834,6 +834,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#notifyListeners, []),
           returnValueForMissingStub: null);
   @override
+  void notifyListenersOnPostFrame() =>
+      super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
+          returnValueForMissingStub: null);
+  @override
   void addListener(_i17.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
@@ -871,7 +875,7 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
               Invocation.method(
                   #animateTo, [offset], {#curve: curve, #duration: duration}),
               returnValue: Future<void>.value(null),
-              returnValueForMissingStub: Future<void>.value())
+              returnValueForMissingStub: Future<dynamic>.value())
           as _i19.Future<void>);
   @override
   void jumpTo(double? value) =>

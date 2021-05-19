@@ -1,3 +1,7 @@
+## [2.1.0] - 2021. 5. 19
+
+* flutter 2.2.x compatible
+
 ## [2.0.0] - 2021. 5. 14
 
 * Change scroll physics.

@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/focus_manager.dart' as _i11;
 import 'package:flutter/src/widgets/framework.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_filtered_list/pluto_filtered_list.dart' as _i6;
+import 'package:pluto_grid/src/helper/pluto_move_direction.dart' as _i9;
 import 'package:pluto_grid/src/manager/pluto_grid_event_manager.dart' as _i13;
 import 'package:pluto_grid/src/manager/pluto_grid_key_manager.dart' as _i12;
 import 'package:pluto_grid/src/manager/pluto_grid_state_manager.dart' as _i3;
@@ -18,7 +19,6 @@ import 'package:pluto_grid/src/model/pluto_column.dart' as _i5;
 import 'package:pluto_grid/src/model/pluto_row.dart' as _i4;
 import 'package:pluto_grid/src/pluto_grid.dart' as _i14;
 import 'package:pluto_grid/src/pluto_grid_configuration.dart' as _i2;
-import 'package:pluto_inside/src/helpers/pluto_move_direction.dart' as _i9;
 
 // ignore_for_file: comment_references
 // ignore_for_file: unnecessary_parenthesis
@@ -825,6 +825,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void notifyListeners() =>
       super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListenersOnPostFrame() =>
+      super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
           returnValueForMissingStub: null);
   @override
   void addListener(_i16.VoidCallback? listener) =>
