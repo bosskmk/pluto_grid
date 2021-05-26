@@ -78,6 +78,10 @@ mixin GridState implements IPlutoGridState {
 
   PlutoOnSelectedEventCallback? _onSelected;
 
+  PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
+
+  PlutoOnRowCheckedEventCallback? _onRowChecked;
+
   CreateHeaderCallBack? get createHeader => _createHeader;
 
   CreateHeaderCallBack? _createHeader;
@@ -106,6 +110,10 @@ mixin GridState implements IPlutoGridState {
 
   void setOnSelected(PlutoOnSelectedEventCallback? onSelected) {
     _onSelected = onSelected;
+  }
+
+  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked) {
+    _onRowChecked = onRowChecked;
   }
 
   void setCreateHeader(CreateHeaderCallBack? createHeader) {

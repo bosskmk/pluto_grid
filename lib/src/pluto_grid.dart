@@ -11,6 +11,9 @@ typedef PlutoOnChangedEventCallback = void Function(
 typedef PlutoOnSelectedEventCallback = void Function(
     PlutoGridOnSelectedEvent event);
 
+typedef PlutoOnRowCheckedEventCallback = void Function(
+    PlutoGridOnRowCheckedEvent event);
+
 typedef CreateHeaderCallBack = Widget Function(
     PlutoGridStateManager stateManager);
 
@@ -27,6 +30,8 @@ class PlutoGrid extends StatefulWidget {
   final PlutoOnChangedEventCallback? onChanged;
 
   final PlutoOnSelectedEventCallback? onSelected;
+
+  final PlutoOnRowCheckedEventCallback? onRowChecked;
 
   final CreateHeaderCallBack? createHeader;
 
@@ -49,6 +54,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.onRowChecked,
     this.createHeader,
     this.createFooter,
     this.configuration,
@@ -130,6 +136,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
+      onRowCheckedEventCallback: widget.onRowChecked,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
@@ -462,6 +469,16 @@ class PlutoGridOnSelectedEvent {
     this.row,
     this.cell,
   });
+}
+
+
+class PlutoGridOnRowCheckedEvent {
+  final PlutoRow? row;
+  final bool? isChecked;
+
+  PlutoGridOnRowCheckedEvent({
+    this.row,
+    this.isChecked});
 }
 
 class PlutoGridSettings {
