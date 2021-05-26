@@ -91,7 +91,7 @@ void main() {
         (tester) async {
           final rowToRemove = stateManager!.rows.first;
 
-          stateManager!.insertRows(1, [rowToRemove]);
+          stateManager!.insertRows(1, [rowToRemove!]);
 
           expect(stateManager!.rows.length, countTotalRows + 1);
 

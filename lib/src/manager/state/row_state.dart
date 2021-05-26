@@ -221,7 +221,7 @@ mixin RowState implements IPlutoGridState {
     }
   }
 
-  void insertRows(int rowIdx, List<PlutoRow?>? rows) {
+  void insertRows(int rowIdx, List<PlutoRow>? rows) {
     if (rows == null || rows.isEmpty) {
       return;
     }
@@ -343,7 +343,7 @@ mixin RowState implements IPlutoGridState {
     appendRows(getNewRows(count: count));
   }
 
-  void appendRows(List<PlutoRow?> rows) {
+  void appendRows(List<PlutoRow> rows) {
     if (rows.isEmpty) {
       return;
     }
