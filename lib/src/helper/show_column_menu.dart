@@ -69,6 +69,7 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
         buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToRight,
           child: buildTextItem(localeText.freezeColumnToRight),
+
         ),
       ],
       const PopupMenuDivider(),

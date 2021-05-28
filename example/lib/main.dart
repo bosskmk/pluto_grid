@@ -1,3 +1,4 @@
+import 'package:example/screen/test_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -38,8 +39,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute:
-          kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
+          kReleaseMode ? HomeScreen.routeName : ColumnFilteringScreen.routeName,
+          // TestScreen.routeName,
       routes: {
+        TestScreen.routeName: (context) => TestScreen(),
         HomeScreen.routeName: (context) => HomeScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
         ColumnFreezingScreen.routeName: (context) => ColumnFreezingScreen(),

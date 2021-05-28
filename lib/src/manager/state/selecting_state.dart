@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/lac/excel_filters.dart';
 
 abstract class ISelectingState {
   /// Multi-selection state.
@@ -79,6 +80,92 @@ abstract class ISelectingState {
 }
 
 mixin SelectingState implements IPlutoGridState {
+
+  //todo: LAC added
+  Map<String, Map<String, String>> _filtersNew = <String, Map<String, String>> {};
+  Map<String, Map<String, String>> get filtersNew => _filtersNew;
+  void setFiltersNew(Map<String, Map<String, String>> filters){_filtersNew = filters;}
+
+  List<String> _filtersNewColumns = <String> [];
+  List<String> get filtersNewColumns => _filtersNewColumns;
+  void setFiltersNewColumns(List<String>filters){_filtersNewColumns = filters;}
+
+  void applyFiltersNew(Map<String, Map<String, String>> filterData){
+
+    print('Apply Filters Called');
+
+    _filtersNew = filterData;
+
+    List<int> filterIndex = [];
+
+    // eventManager!.stateManager!.columns[0].fil
+
+    // eventManager!.stateManager!.setShowColumnFilter(true);
+
+
+    eventManager!.stateManager!.refRows!.originalList.forEach((row) {
+      filterIndex.add(row!.sortIdx as int);
+    });
+
+    late ExcelFilters excelFilters = ExcelFilters(stateManager: eventManager!.stateManager);
+    // filterIndex =
+
+    print("Row Count");
+    print(excelFilters.rows.length);
+
+    filterData.forEach((column, filterMap) {
+      print('Column: $column');
+      // Use the text field to filter the current column
+        int beforeUnix = 0;
+        int afterUnix = 0;
+
+        filterMap.forEach((key, value) {
+          print('Key: $key');
+          print('Value: $value');
+
+          if (key == 'Contains') {
+            filterIndex = excelFilters.containsFilter(filterValue: value, filterIndex: filterIndex, column: column);
+            print(filterIndex);
+          } else if (key == 'Greater') {
+            filterIndex = excelFilters.numberFilter(filterValue: value, filterIndex: filterIndex, isGreater: true, column: column);
+          } else if (key == 'Lesser') {
+            filterIndex = excelFilters.numberFilter(filterValue: value, filterIndex: filterIndex, isGreater: false, column: column);
+          } else if (key == 'BeforeMin') {
+            beforeUnix += (double.parse(value) * 60 * 1000).toInt();
+          } else if (key == 'BeforeHour') {
+            beforeUnix += (double.parse(value) * 60 * 60 * 1000).toInt();
+          } else if (key == 'BeforeDay') {
+            beforeUnix += (double.parse(value) * 24 * 60 * 60 * 1000).toInt();
+          } else if (key == 'AfterMin') {
+            afterUnix += (double.parse(value) * 60 * 1000).toInt();
+          } else if (key == 'AfterHour') {
+            afterUnix += (double.parse(value) * 60 * 60 * 1000).toInt();
+          } else if (key == 'AfterDay') {
+            afterUnix += (double.parse(value) * 24 * 60 * 60 * 1000).toInt();
+          }
+        });
+
+        if (beforeUnix != 0) {
+          filterIndex = excelFilters.dateFilter(filterValue: beforeUnix + DateTime.now().millisecondsSinceEpoch, filterIndex: filterIndex, isBefore: true, column: column);
+        }
+
+        if (afterUnix != 0) {
+          filterIndex = excelFilters.dateFilter(filterValue: afterUnix + DateTime.now().millisecondsSinceEpoch, filterIndex: filterIndex, isBefore: false, column: column);
+        }
+    });
+
+    print(filterIndex);
+    eventManager!.stateManager!.setFilter((element) {
+      if (!filterIndex.contains(element!.sortIdx)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+  }
+
+
   bool get isSelecting => _isSelecting;
 
   bool _isSelecting = false;

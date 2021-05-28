@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/lac/excel_menu.dart';
 
 class PlutoColumnTitle extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
@@ -16,8 +17,7 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
 }
 
-abstract class _PlutoColumnTitleStateWithChange
-    extends PlutoStateWithChange<PlutoColumnTitle> {
+abstract class _PlutoColumnTitleStateWithChange extends PlutoStateWithChange<PlutoColumnTitle> {
   PlutoColumnSort? sort;
 
   @override
@@ -32,51 +32,64 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   late Offset _currentPosition;
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
+    await showDialog<void>(
       context: context,
-      position: position,
-      stateManager: widget.stateManager,
-      column: widget.column,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+          child: ExcelMenu(
+        context: context,
+        stateManager: widget.stateManager,
+        column: widget.column,
+      )),
     );
 
-    switch (selectedMenu) {
-      case PlutoGridColumnMenuItem.unfreeze:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.none);
-        break;
-      case PlutoGridColumnMenuItem.freezeToLeft:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.left);
-        break;
-      case PlutoGridColumnMenuItem.freezeToRight:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.right);
-        break;
-      case PlutoGridColumnMenuItem.autoFit:
-        widget.stateManager.autoFitColumn(context, widget.column);
-        break;
-      case PlutoGridColumnMenuItem.hideColumn:
-        widget.stateManager.hideColumn(widget.column.key, true);
-        break;
-      case PlutoGridColumnMenuItem.setColumns:
-        widget.stateManager.showSetColumnsPopup(context);
-        break;
-      case PlutoGridColumnMenuItem.setFilter:
-        widget.stateManager.showFilterPopup(
-          context,
-          calledColumn: widget.column,
-        );
-        break;
-      case PlutoGridColumnMenuItem.resetFilter:
-        widget.stateManager.setFilter(null);
-        break;
-      default:
-        break;
-    }
+    // final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
+    //   context: context,
+    //   position: position,
+    //   stateManager: widget.stateManager,
+    //   column: widget.column,
+    // );
+    //
+    // switch (selectedMenu) {
+    //   case PlutoGridColumnMenuItem.unfreeze:
+    //     widget.stateManager
+    //         .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.none);
+    //     break;
+    //   case PlutoGridColumnMenuItem.freezeToLeft:
+    //     widget.stateManager
+    //         .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.left);
+    //     break;
+    //   case PlutoGridColumnMenuItem.freezeToRight:
+    //     widget.stateManager
+    //         .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.right);
+    //     break;
+    //   case PlutoGridColumnMenuItem.autoFit:
+    //     widget.stateManager.autoFitColumn(context, widget.column);
+    //     break;
+    //   case PlutoGridColumnMenuItem.hideColumn:
+    //     widget.stateManager.hideColumn(widget.column.key, true);
+    //     break;
+    //   case PlutoGridColumnMenuItem.setColumns:
+    //     widget.stateManager.showSetColumnsPopup(context);
+    //     break;
+    //   case PlutoGridColumnMenuItem.setFilter:
+    //     widget.stateManager.showFilterPopup(
+    //       context,
+    //       calledColumn: widget.column,
+    //     );
+    //     break;
+    //   case PlutoGridColumnMenuItem.resetFilter:
+    //     widget.stateManager.setFilter(null);
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   void _handleOnTapUpContextMenu(TapUpDetails details) {
     _showContextMenu(context, details.globalPosition);
+
+    // showFilterMenu
   }
 
   void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
@@ -84,8 +97,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   }
 
   void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager
-        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
+    widget.stateManager.resizeColumn(widget.column.key, _currentPosition.dx - 20);
   }
 
   @override
@@ -128,9 +140,9 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
             right: -3,
             child: widget.column.enableContextMenu
                 ? GestureDetector(
+                    // todo: Show LAC filter
                     onTapUp: _handleOnTapUpContextMenu,
-                    onHorizontalDragUpdate:
-                        _handleOnHorizontalDragUpdateContextMenu,
+                    onHorizontalDragUpdate: _handleOnHorizontalDragUpdateContextMenu,
                     onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
                     child: _contextMenuIcon,
                   )
@@ -191,8 +203,7 @@ class _BuildDraggableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Draggable(
       onDragEnd: (dragDetails) {
-        stateManager!.moveColumn(
-            column!.key, dragDetails.offset.dx + (column!.width / 2));
+        stateManager!.moveColumn(column!.key, dragDetails.offset.dx + (column!.width / 2));
       },
       feedback: PlutoShadowContainer(
         width: column!.width,
@@ -252,8 +263,7 @@ class _BuildColumnWidget extends StatelessWidget {
     return Container(
       width: column!.width,
       height: PlutoGridSettings.rowHeight,
-      padding:
-          const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
+      padding: const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
       decoration: stateManager!.configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(
@@ -296,12 +306,10 @@ class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   });
 
   @override
-  __CheckboxAllSelectionWidgetState createState() =>
-      __CheckboxAllSelectionWidgetState();
+  __CheckboxAllSelectionWidgetState createState() => __CheckboxAllSelectionWidgetState();
 }
 
-abstract class __CheckboxAllSelectionWidgetStateWithChange
-    extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
+abstract class __CheckboxAllSelectionWidgetStateWithChange extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
   bool? checked;
 
   bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
@@ -319,8 +327,7 @@ abstract class __CheckboxAllSelectionWidgetStateWithChange
   }
 }
 
-class __CheckboxAllSelectionWidgetState
-    extends __CheckboxAllSelectionWidgetStateWithChange {
+class __CheckboxAllSelectionWidgetState extends __CheckboxAllSelectionWidgetStateWithChange {
   void _handleOnChanged(bool? changed) {
     if (changed == checked) {
       return;
@@ -366,8 +373,7 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
   __ColumnTextWidgetState createState() => __ColumnTextWidgetState();
 }
 
-abstract class __ColumnTextWidgetStateWithChange
-    extends PlutoStateWithChange<_ColumnTextWidget> {
+abstract class __ColumnTextWidgetStateWithChange extends PlutoStateWithChange<_ColumnTextWidget> {
   bool? isFilteredList;
 
   @override
@@ -380,22 +386,34 @@ abstract class __ColumnTextWidgetStateWithChange
     });
   }
 
-  void handleOnPressedFilter() {
-    widget.stateManager.showFilterPopup(
-      context,
-      calledColumn: widget.column,
+  Future<void> handleOnPressedFilter() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+          child: ExcelMenu(
+        context: context,
+        stateManager: widget.stateManager,
+        column: widget.column,
+      )),
     );
+
+    // widget.stateManager.showFilterPopup(
+    //   context,
+    //   calledColumn: widget.column,
+    // );
   }
 }
 
 class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
   @override
   Widget build(BuildContext context) {
+    print("BUILD CALLED!!!!");
     return Text.rich(
       TextSpan(
         text: widget.column!.title,
         children: [
-          if (isFilteredList!)
+          if (isFilteredList! || widget.stateManager.filtersNewColumns.contains(widget.column!.field))
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: IconButton(

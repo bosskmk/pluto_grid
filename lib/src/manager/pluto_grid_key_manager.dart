@@ -35,6 +35,7 @@ class PlutoGridKeyManager {
       if (plutoKeyManagerEvent.isMoving) {
         _handleMoving(plutoKeyManagerEvent);
       } else if (plutoKeyManagerEvent.isEnter) {
+        print("Enter Pressed");
         _handleEnter(plutoKeyManagerEvent);
       } else if (plutoKeyManagerEvent.isTab) {
         _handleTab(plutoKeyManagerEvent);

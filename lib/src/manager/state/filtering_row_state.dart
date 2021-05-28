@@ -65,6 +65,10 @@ mixin FilteringRowState implements IPlutoGridState {
   }
 
   void setFilterRows(List<PlutoRow?> rows) {
+
+    print("FilterHelper.filterFieldValue");
+    print(FilterHelper.filterFieldValue);
+
     _filterRows = rows
         .where(
           (element) => element!.cells[FilterHelper.filterFieldValue]!.value
