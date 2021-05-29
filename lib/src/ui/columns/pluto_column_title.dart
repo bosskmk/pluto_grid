@@ -334,6 +334,12 @@ class __CheckboxAllSelectionWidgetState
 
     widget.stateManager.toggleAllRowChecked(changed);
 
+    if (widget.stateManager.onRowChecked != null) {
+      widget.stateManager.onRowChecked!(
+        PlutoGridOnRowCheckedAllEvent(isChecked: changed),
+      );
+    }
+
     setState(() {
       checked = changed;
     });

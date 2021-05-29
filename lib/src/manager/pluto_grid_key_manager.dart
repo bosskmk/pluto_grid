@@ -179,7 +179,8 @@ class PlutoGridKeyManager {
           lastChildContext is StatefulElement &&
           lastChildContext.state.widget is Focus &&
           (lastChildContext.state.widget as Focus).focusNode?.hasPrimaryFocus ==
-              false) {
+              false &&
+          stateManager.currentColumn?.type! is PlutoColumnTypeText) {
         PlutoLog(
           'Enter twice when entering Korean on the web.',
           type: PlutoLogType.todo,

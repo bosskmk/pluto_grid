@@ -252,6 +252,12 @@ class __CheckboxSelectionWidgetState
 
     widget.stateManager.setRowChecked(widget.row, changed);
 
+    if (widget.stateManager.onRowChecked != null) {
+      widget.stateManager.onRowChecked!(
+        PlutoGridOnRowCheckedOneEvent(row: widget.row, isChecked: changed),
+      );
+    }
+
     setState(() {
       checked = changed;
     });
