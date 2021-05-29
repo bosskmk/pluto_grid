@@ -149,6 +149,16 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     stateManager!.setShowColumnFilter(!stateManager!.showColumnFilter);
   }
 
+  void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
+    if (event.isRow) {
+      print('Toggled A Row.');
+      print(event.row?.cells['column1']?.value);
+    } else {
+      print('Toggled All Rows.');
+      print(stateManager?.checkedRows.length);
+    }
+  }
+
   void setGridSelectingMode(PlutoGridSelectingMode? mode) {
     if (gridSelectingMode == mode) {
       return;
@@ -176,6 +186,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager!.setSelectingMode(gridSelectingMode!);
             stateManager!.setShowColumnFilter(true);
           },
+          onRowChecked: handleOnRowChecked,
           createHeader: (PlutoGridStateManager stateManager) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,

@@ -19,6 +19,8 @@ abstract class IGridState {
   /// when the grid mode is selectRow.
   PlutoOnSelectedEventCallback? get onSelected;
 
+  PlutoOnRowCheckedEventCallback? get onRowChecked;
+
   CreateHeaderCallBack? get createHeader;
 
   CreateFooterCallBack? get createFooter;

@@ -471,14 +471,30 @@ class PlutoGridOnSelectedEvent {
   });
 }
 
+abstract class PlutoGridOnRowCheckedEvent {
+  bool get isAll => runtimeType == PlutoGridOnRowCheckedAllEvent;
+  bool get isRow => runtimeType == PlutoGridOnRowCheckedOneEvent;
 
-class PlutoGridOnRowCheckedEvent {
   final PlutoRow? row;
   final bool? isChecked;
 
   PlutoGridOnRowCheckedEvent({
     this.row,
-    this.isChecked});
+    this.isChecked,
+  });
+}
+
+class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
+  PlutoGridOnRowCheckedOneEvent({
+    PlutoRow? row,
+    bool? isChecked,
+  }) : super(row: row, isChecked: isChecked);
+}
+
+class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
+  PlutoGridOnRowCheckedAllEvent({
+    bool? isChecked,
+  }) : super(row: null, isChecked: isChecked);
 }
 
 class PlutoGridSettings {
