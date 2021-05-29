@@ -19,6 +19,8 @@ abstract class IGridState {
   /// when the grid mode is selectRow.
   PlutoOnSelectedEventCallback? get onSelected;
 
+  PlutoOnRowCheckedEventCallback? get onRowChecked;
+
   CreateHeaderCallBack? get createHeader;
 
   CreateFooterCallBack? get createFooter;
@@ -78,6 +80,10 @@ mixin GridState implements IPlutoGridState {
 
   PlutoOnSelectedEventCallback? _onSelected;
 
+  PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
+
+  PlutoOnRowCheckedEventCallback? _onRowChecked;
+
   CreateHeaderCallBack? get createHeader => _createHeader;
 
   CreateHeaderCallBack? _createHeader;
@@ -106,6 +112,10 @@ mixin GridState implements IPlutoGridState {
 
   void setOnSelected(PlutoOnSelectedEventCallback? onSelected) {
     _onSelected = onSelected;
+  }
+
+  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked) {
+    _onRowChecked = onRowChecked;
   }
 
   void setCreateHeader(CreateHeaderCallBack? createHeader) {
