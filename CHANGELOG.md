@@ -1,3 +1,7 @@
+## [2.2.0] - 2021. 5. 29
+
+* Add callback to row checks developed by https://github.com/MrCasCode.
+
 ## [2.1.0] - 2021. 5. 19
 
 * flutter 2.2.x compatible

@@ -43,6 +43,8 @@ abstract class IGridState {
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
 
+  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked);
+
   void setConfiguration(PlutoGridConfiguration configuration);
 
   void resetCurrentState({bool notify = true});
