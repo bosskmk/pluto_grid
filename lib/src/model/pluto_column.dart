@@ -56,6 +56,10 @@ class PlutoColumn {
   /// Displays the right icon of the column title.
   bool enableContextMenu;
 
+  /// Diaplay the right icon for drop to resize the column
+  /// Valid only when [enableContextMenu] is noactivated.
+  bool enableDropToResize;
+
   /// Displays filter-related menus in the column context menu.
   /// Valid only when [enableContextMenu] is activated.
   bool enableFilterMenuItem;
@@ -91,6 +95,7 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
+    this.enableDropToResize = false,
     this.enableFilterMenuItem = true,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,

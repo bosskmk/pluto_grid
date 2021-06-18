@@ -79,6 +79,20 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     _showContextMenu(context, details.globalPosition);
   }
 
+  void _handleOnHorizontalResizeDragStart(DragStartDetails details) {
+    _currentPosition = details.localPosition;
+  }
+
+  void _handleOnHorizontalResizeDragUpdate(DragUpdateDetails details) {
+    _currentPosition = details.localPosition;
+    widget.stateManager.resizeColumn(widget.column.key, details.delta.dx);
+  }
+
+  void _handleOnHorizontalResizeDragEnd(DragEndDetails details) {
+    widget.stateManager
+        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
+  }
+
   void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
     _currentPosition = details.localPosition;
   }
@@ -136,6 +150,22 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                   )
                 : _contextMenuIcon,
           ),
+        if (!(widget.column.enableContextMenu || !widget.column.sort.isNone) &&
+            widget.column.enableDropToResize)
+          Positioned(
+              right: -1,
+              child: GestureDetector(
+                onHorizontalDragStart: _handleOnHorizontalResizeDragStart,
+                onHorizontalDragUpdate: _handleOnHorizontalResizeDragUpdate,
+                child: Container(
+                    height: widget.stateManager.columnHeight,
+                    alignment: Alignment.center,
+                    child: IconButton(
+                      icon: const Icon(Icons.code_sharp),
+                      iconSize: widget.stateManager.configuration!.iconSize,
+                      onPressed: null,
+                    )),
+              )),
       ],
     );
   }
