@@ -68,6 +68,8 @@ class PlutoScrollbar extends StatefulWidget {
 
   final Radius radius;
 
+  final bool onlyDraggingThumb = true;
+
   final Radius radiusWhileDragging;
 
   @override
@@ -376,6 +378,7 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
       () => _ThumbPressGestureRecognizer(
         debugOwner: this,
         customPaintKey: _customPaintKey,
+        onlyDraggingThumb: widget.onlyDraggingThumb,
       ),
       (_ThumbPressGestureRecognizer instance) {
         instance
@@ -424,6 +427,7 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
     PointerDeviceKind? kind,
     required Object debugOwner,
     required GlobalKey customPaintKey,
+    this.onlyDraggingThumb = false,
   })  : _customPaintKey = customPaintKey,
         super(
           postAcceptSlopTolerance: postAcceptSlopTolerance,
@@ -433,10 +437,12 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
         );
 
   final GlobalKey _customPaintKey;
+  final bool onlyDraggingThumb;
 
   @override
   bool isPointerAllowed(PointerDownEvent event) {
-    if (!_hitTestInteractive(_customPaintKey, event.position, event.kind)) {
+    if (!_hitTestInteractive(
+        _customPaintKey, event.position, event.kind, onlyDraggingThumb)) {
       return false;
     }
     return super.isPointerAllowed(event);
@@ -446,8 +452,8 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
 // foregroundPainter also hit tests its children by default, but the
 // scrollbar should only respond to a gesture directly on its thumb, so
 // manually check for a hit on the thumb here.
-bool _hitTestInteractive(
-    GlobalKey customPaintKey, Offset offset, PointerDeviceKind kind) {
+bool _hitTestInteractive(GlobalKey customPaintKey, Offset offset,
+    PointerDeviceKind kind, bool onlyDraggingThumb) {
   if (customPaintKey.currentContext == null) {
     return false;
   }
@@ -456,9 +462,10 @@ bool _hitTestInteractive(
   final ScrollbarPainter painter =
       customPaint.foregroundPainter! as ScrollbarPainter;
   final Offset localOffset = _getLocalOffset(customPaintKey, offset);
-  // We only receive track taps that are not on the thumb.
-  return painter.hitTestInteractive(localOffset, kind) &&
-      !painter.hitTestOnlyThumbInteractive(localOffset, kind);
+  // We can only receive track taps that are on the thumb.
+  return onlyDraggingThumb
+      ? painter.hitTestOnlyThumbInteractive(localOffset, kind)
+      : painter.hitTestInteractive(localOffset, kind);
 }
 
 Offset _getLocalOffset(GlobalKey scrollbarPainterKey, Offset position) {
