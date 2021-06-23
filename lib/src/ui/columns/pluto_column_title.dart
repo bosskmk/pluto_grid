@@ -153,15 +153,20 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
         if (!(widget.column.enableContextMenu || !widget.column.sort.isNone) &&
             widget.column.enableDropToResize)
           Positioned(
-              right: -1,
+              right: 0,
               child: GestureDetector(
                 onHorizontalDragStart: _handleOnHorizontalResizeDragStart,
                 onHorizontalDragUpdate: _handleOnHorizontalResizeDragUpdate,
                 child: Container(
                     height: widget.stateManager.columnHeight,
-                    alignment: Alignment.center,
+                    width: 8,
+                    alignment: Alignment.centerRight,
                     child: IconButton(
-                      icon: const Icon(Icons.code_sharp),
+                      mouseCursor: SystemMouseCursors.resizeLeftRight,
+                      icon: const Icon(
+                        Icons.code_sharp,
+                        color: Color.fromARGB(0, 0, 0, 0),
+                      ),
                       iconSize: widget.stateManager.configuration!.iconSize,
                       onPressed: null,
                     )),
@@ -281,7 +286,7 @@ class _BuildColumnWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: column!.width,
-      height: PlutoGridSettings.rowHeight,
+      height: stateManager!.configuration!.columnHeight,
       padding:
           const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
       decoration: stateManager!.configuration!.enableColumnBorder
