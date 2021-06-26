@@ -1,0 +1,23 @@
+name: PullRequest
+
+on:
+  pull_request:
+    branches:
+      - 'develop/**'
+      - 'master/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # Without this, there are no files in the directory.
+    - uses: actions/checkout@v2
+
+    # using flutter
+    - uses: subosito/flutter-action@v1
+    - run: flutter channel stable
+    - run: flutter upgrade
+    - run: dart --version
+    - run: flutter --version
+    - run: flutter pub get
+    - run: flutter test
