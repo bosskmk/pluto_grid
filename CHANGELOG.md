@@ -1,3 +1,8 @@
+## [2.2.1] - 2021. 6. 26
+
+* Added enableDropToResize option when creating a column. (enables an icon for adjusting the width of a column when there is no context menu)
+* Fix scroll bar drag behavior
+
 ## [2.2.0] - 2021. 5. 29
 
 * Add callback to row checks developed by https://github.com/MrCasCode.
