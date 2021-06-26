@@ -261,7 +261,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
             scrollbarConfig: const PlutoGridScrollbarConfig(
-              isAlwaysShown: true,
+              isAlwaysShown: false,
+              scrollbarThickness: 8,
+              scrollbarThicknessWhileDragging: 10,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
             columnFilterConfig: PlutoGridColumnFilterConfig(
