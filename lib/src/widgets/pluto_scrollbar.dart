@@ -349,7 +349,6 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
     _currentAxis = axisDirectionToAxis(metrics.axisDirection);
 
     if (notification is ScrollUpdateNotification ||
-        notification is UserScrollNotification ||
         notification is OverscrollNotification) {
       // Any movements always makes the scrollbar start showing up.
       if (_fadeoutAnimationController.status != AnimationStatus.forward) {
