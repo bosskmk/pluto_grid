@@ -3,8 +3,8 @@ name: PullRequest
 on:
   pull_request:
     branches:
-      - 'develop/**'
-      - 'master/**'
+      - 'master'
+      - 'develop'
 
 jobs:
   build:
