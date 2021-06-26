@@ -79,20 +79,6 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     _showContextMenu(context, details.globalPosition);
   }
 
-  void _handleOnHorizontalResizeDragStart(DragStartDetails details) {
-    _currentPosition = details.localPosition;
-  }
-
-  void _handleOnHorizontalResizeDragUpdate(DragUpdateDetails details) {
-    _currentPosition = details.localPosition;
-    widget.stateManager.resizeColumn(widget.column.key, details.delta.dx);
-  }
-
-  void _handleOnHorizontalResizeDragEnd(DragEndDetails details) {
-    widget.stateManager
-        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
-  }
-
   void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
     _currentPosition = details.localPosition;
   }
@@ -104,6 +90,13 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
 
   @override
   Widget build(BuildContext context) {
+    final _showContextIcon = widget.column.enableContextMenu ||
+        widget.column.enableDropToResize ||
+        !widget.column.sort.isNone;
+
+    final _enableGesture =
+        widget.column.enableContextMenu || widget.column.enableDropToResize;
+
     final _columnWidget = _BuildSortableWidget(
       stateManager: widget.stateManager,
       column: widget.column,
@@ -120,8 +113,13 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
         icon: PlutoGridColumnIcon(
           sort: widget.column.sort,
           color: widget.stateManager.configuration!.iconColor,
+          icon:
+              widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
+        mouseCursor: _enableGesture
+            ? SystemMouseCursors.resizeLeftRight
+            : SystemMouseCursors.basic,
         onPressed: null,
       ),
     );
@@ -137,12 +135,14 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                 )
               : _columnWidget,
         ),
-        if (widget.column.enableContextMenu || !widget.column.sort.isNone)
+        if (_showContextIcon)
           Positioned(
             right: -3,
-            child: widget.column.enableContextMenu
+            child: _enableGesture
                 ? GestureDetector(
-                    onTapUp: _handleOnTapUpContextMenu,
+                    onTapUp: widget.column.enableContextMenu
+                        ? _handleOnTapUpContextMenu
+                        : null,
                     onHorizontalDragUpdate:
                         _handleOnHorizontalDragUpdateContextMenu,
                     onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
@@ -150,27 +150,6 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                   )
                 : _contextMenuIcon,
           ),
-        if (!(widget.column.enableContextMenu || !widget.column.sort.isNone) &&
-            widget.column.enableDropToResize)
-          Positioned(
-              right: 0,
-              child: GestureDetector(
-                onHorizontalDragStart: _handleOnHorizontalResizeDragStart,
-                onHorizontalDragUpdate: _handleOnHorizontalResizeDragUpdate,
-                child: Container(
-                    height: widget.stateManager.columnHeight,
-                    width: 8,
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                      mouseCursor: SystemMouseCursors.resizeLeftRight,
-                      icon: const Icon(
-                        Icons.code_sharp,
-                        color: Color.fromARGB(0, 0, 0, 0),
-                      ),
-                      iconSize: widget.stateManager.configuration!.iconSize,
-                      onPressed: null,
-                    )),
-              )),
       ],
     );
   }
@@ -178,11 +157,13 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
 
 class PlutoGridColumnIcon extends StatelessWidget {
   final PlutoColumnSort? sort;
-  final Color? color;
+  final Color color;
+  final IconData icon;
 
   PlutoGridColumnIcon({
     this.sort,
-    this.color,
+    this.color = Colors.black26,
+    this.icon = Icons.dehaze,
   });
 
   @override
@@ -203,8 +184,8 @@ class PlutoGridColumnIcon extends StatelessWidget {
         );
       default:
         return Icon(
-          Icons.dehaze,
-          color: color ?? Colors.black26,
+          icon,
+          color: color,
         );
     }
   }
@@ -286,7 +267,7 @@ class _BuildColumnWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: column!.width,
-      height: stateManager!.configuration!.columnHeight,
+      height: PlutoGridSettings.rowHeight,
       padding:
           const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
       decoration: stateManager!.configuration!.enableColumnBorder

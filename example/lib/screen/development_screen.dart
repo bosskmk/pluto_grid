@@ -31,6 +31,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         type: PlutoColumnType.text(),
         enableRowDrag: true,
         enableRowChecked: true,
+        enableContextMenu: false,
+        enableDropToResize: true,
         width: 250,
         minWidth: 175,
         renderer: (rendererContext) {
@@ -76,6 +78,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoColumn(
         title: 'column2',
         field: 'column2',
+        enableContextMenu: false,
         type: PlutoColumnType.select(<String>['red', 'blue', 'green']),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
