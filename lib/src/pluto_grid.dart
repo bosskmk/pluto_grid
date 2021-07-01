@@ -273,147 +273,157 @@ class _PlutoGridState extends State<PlutoGrid> {
 
               return Focus(
                 focusNode: stateManager.gridFocusNode,
-                child: Container(
-                  padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
-                  decoration: BoxDecoration(
-                    color: stateManager.configuration!.gridBackgroundColor,
-                    border: Border.all(
-                      color: stateManager.configuration!.gridBorderColor,
-                      width: PlutoGridSettings.gridBorderWidth,
-                    ),
+                child: ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(
+                    scrollbars: false,
                   ),
-                  child: Stack(
-                    children: [
-                      if (stateManager.showHeader) ...[
-                        Positioned.fill(
-                          top: 0,
-                          bottom: stateManager.headerBottomOffset,
-                          child: widget.createHeader!(stateManager),
-                        ),
-                        Positioned(
-                          top: stateManager.headerHeight,
-                          left: 0,
-                          right: 0,
-                          child: PlutoShadowLine(
-                            axis: Axis.horizontal,
-                            color: stateManager.configuration!.gridBorderColor,
-                          ),
-                        ),
-                      ],
-                      if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
-                        Positioned.fill(
-                          top: stateManager.headerHeight,
-                          left: 0,
-                          child: PlutoLeftFrozenColumns(stateManager),
-                        ),
-                        Positioned.fill(
-                          top: stateManager.rowsTopOffset,
-                          left: 0,
-                          bottom: stateManager.footerHeight,
-                          child: PlutoLeftFrozenRows(stateManager),
-                        ),
-                      ],
-                      Positioned.fill(
-                        top: stateManager.headerHeight,
-                        left: _bodyLeftOffset,
-                        right: _bodyRightOffset,
-                        child: PlutoBodyColumns(stateManager),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.all(PlutoGridSettings.gridPadding),
+                    decoration: BoxDecoration(
+                      color: stateManager.configuration!.gridBackgroundColor,
+                      border: Border.all(
+                        color: stateManager.configuration!.gridBorderColor,
+                        width: PlutoGridSettings.gridBorderWidth,
                       ),
-                      Positioned.fill(
-                        top: stateManager.rowsTopOffset,
-                        left: _bodyLeftOffset,
-                        right: _bodyRightOffset,
-                        bottom: stateManager.footerHeight,
-                        child: PlutoBodyRows(stateManager),
-                      ),
-                      if (_showFrozenColumn! && _hasRightFrozenColumns!) ...[
-                        Positioned.fill(
-                          top: stateManager.headerHeight,
-                          left: _rightFrozenLeftOffset,
-                          child: PlutoRightFrozenColumns(stateManager),
-                        ),
-                        Positioned.fill(
-                          top: stateManager.rowsTopOffset,
-                          left: _rightFrozenLeftOffset,
-                          bottom: stateManager.footerHeight,
-                          child: PlutoRightFrozenRows(stateManager),
-                        ),
-                      ],
-                      if (_showFrozenColumn! && _hasLeftFrozenColumns!)
-                        Positioned(
-                          top: stateManager.headerHeight,
-                          left: _bodyLeftOffset! - 1,
-                          bottom: stateManager.footerHeight,
-                          child: PlutoShadowLine(
-                            axis: Axis.vertical,
-                            color: stateManager.configuration!.gridBorderColor,
+                    ),
+                    child: Stack(
+                      children: [
+                        if (stateManager.showHeader) ...[
+                          Positioned.fill(
+                            top: 0,
+                            bottom: stateManager.headerBottomOffset,
+                            child: widget.createHeader!(stateManager),
                           ),
-                        ),
-                      if (_showFrozenColumn! && _hasRightFrozenColumns!)
-                        Positioned(
-                          top: stateManager.headerHeight,
-                          left: _rightFrozenLeftOffset! - 1,
-                          bottom: stateManager.footerHeight,
-                          child: PlutoShadowLine(
-                            axis: Axis.vertical,
-                            reverse: true,
-                            color: stateManager.configuration!.gridBorderColor,
-                          ),
-                        ),
-                      Positioned(
-                        top: stateManager.rowsTopOffset - 1,
-                        left: 0,
-                        right: 0,
-                        child: PlutoShadowLine(
-                          axis: Axis.horizontal,
-                          color: stateManager.configuration!.gridBorderColor,
-                        ),
-                      ),
-                      if (stateManager.showFooter) ...[
-                        Positioned(
-                          top: stateManager.footerTopOffset,
-                          left: 0,
-                          right: 0,
-                          child: PlutoShadowLine(
-                            axis: Axis.horizontal,
-                            reverse: true,
-                            color: stateManager.configuration!.gridBorderColor,
-                          ),
-                        ),
-                        Positioned.fill(
-                          top: stateManager.footerTopOffset,
-                          bottom: 0,
-                          child: widget.createFooter!(stateManager),
-                        ),
-                      ],
-                      if (_showColumnFilter!)
-                        Positioned(
-                          top: stateManager.headerHeight +
-                              stateManager.columnHeight,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            height: 1,
-                            decoration: BoxDecoration(
+                          Positioned(
+                            top: stateManager.headerHeight,
+                            left: 0,
+                            right: 0,
+                            child: PlutoShadowLine(
+                              axis: Axis.horizontal,
                               color:
                                   stateManager.configuration!.gridBorderColor,
                             ),
                           ),
-                        ),
-                      if (stateManager.showLoading)
+                        ],
+                        if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
+                          Positioned.fill(
+                            top: stateManager.headerHeight,
+                            left: 0,
+                            child: PlutoLeftFrozenColumns(stateManager),
+                          ),
+                          Positioned.fill(
+                            top: stateManager.rowsTopOffset,
+                            left: 0,
+                            bottom: stateManager.footerHeight,
+                            child: PlutoLeftFrozenRows(stateManager),
+                          ),
+                        ],
                         Positioned.fill(
-                          child: PlutoLoading(
-                            backgroundColor:
-                                stateManager.configuration!.gridBackgroundColor,
-                            indicatorColor:
-                                stateManager.configuration!.cellTextStyle.color,
-                            indicatorText: stateManager
-                                .configuration!.localeText.loadingText,
-                            indicatorSize: stateManager
-                                .configuration!.cellTextStyle.fontSize,
+                          top: stateManager.headerHeight,
+                          left: _bodyLeftOffset,
+                          right: _bodyRightOffset,
+                          child: PlutoBodyColumns(stateManager),
+                        ),
+                        Positioned.fill(
+                          top: stateManager.rowsTopOffset,
+                          left: _bodyLeftOffset,
+                          right: _bodyRightOffset,
+                          bottom: stateManager.footerHeight,
+                          child: PlutoBodyRows(stateManager),
+                        ),
+                        if (_showFrozenColumn! && _hasRightFrozenColumns!) ...[
+                          Positioned.fill(
+                            top: stateManager.headerHeight,
+                            left: _rightFrozenLeftOffset,
+                            child: PlutoRightFrozenColumns(stateManager),
+                          ),
+                          Positioned.fill(
+                            top: stateManager.rowsTopOffset,
+                            left: _rightFrozenLeftOffset,
+                            bottom: stateManager.footerHeight,
+                            child: PlutoRightFrozenRows(stateManager),
+                          ),
+                        ],
+                        if (_showFrozenColumn! && _hasLeftFrozenColumns!)
+                          Positioned(
+                            top: stateManager.headerHeight,
+                            left: _bodyLeftOffset! - 1,
+                            bottom: stateManager.footerHeight,
+                            child: PlutoShadowLine(
+                              axis: Axis.vertical,
+                              color:
+                                  stateManager.configuration!.gridBorderColor,
+                            ),
+                          ),
+                        if (_showFrozenColumn! && _hasRightFrozenColumns!)
+                          Positioned(
+                            top: stateManager.headerHeight,
+                            left: _rightFrozenLeftOffset! - 1,
+                            bottom: stateManager.footerHeight,
+                            child: PlutoShadowLine(
+                              axis: Axis.vertical,
+                              reverse: true,
+                              color:
+                                  stateManager.configuration!.gridBorderColor,
+                            ),
+                          ),
+                        Positioned(
+                          top: stateManager.rowsTopOffset - 1,
+                          left: 0,
+                          right: 0,
+                          child: PlutoShadowLine(
+                            axis: Axis.horizontal,
+                            color: stateManager.configuration!.gridBorderColor,
                           ),
                         ),
-                    ],
+                        if (stateManager.showFooter) ...[
+                          Positioned(
+                            top: stateManager.footerTopOffset,
+                            left: 0,
+                            right: 0,
+                            child: PlutoShadowLine(
+                              axis: Axis.horizontal,
+                              reverse: true,
+                              color:
+                                  stateManager.configuration!.gridBorderColor,
+                            ),
+                          ),
+                          Positioned.fill(
+                            top: stateManager.footerTopOffset,
+                            bottom: 0,
+                            child: widget.createFooter!(stateManager),
+                          ),
+                        ],
+                        if (_showColumnFilter!)
+                          Positioned(
+                            top: stateManager.headerHeight +
+                                stateManager.columnHeight,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 1,
+                              decoration: BoxDecoration(
+                                color:
+                                    stateManager.configuration!.gridBorderColor,
+                              ),
+                            ),
+                          ),
+                        if (stateManager.showLoading)
+                          Positioned.fill(
+                            child: PlutoLoading(
+                              backgroundColor: stateManager
+                                  .configuration!.gridBackgroundColor,
+                              indicatorColor: stateManager
+                                  .configuration!.cellTextStyle.color,
+                              indicatorText: stateManager
+                                  .configuration!.localeText.loadingText,
+                              indicatorSize: stateManager
+                                  .configuration!.cellTextStyle.fontSize,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               );
