@@ -17,6 +17,9 @@ typedef PlutoOnRowCheckedEventCallback = void Function(
 typedef PlutoOnRowDoubleTapEventCallback = void Function(
     PlutoGridOnRowDoubleTapEvent event);
 
+typedef PlutoOnRowSecondaryTapEventCallback = void Function(
+    PlutoGridOnRowSecondaryTapEvent event);
+
 typedef CreateHeaderCallBack = Widget Function(
     PlutoGridStateManager stateManager);
 
@@ -37,6 +40,8 @@ class PlutoGrid extends StatefulWidget {
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
   final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
+
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
 
   final CreateHeaderCallBack? createHeader;
 
@@ -61,6 +66,7 @@ class PlutoGrid extends StatefulWidget {
     this.onSelected,
     this.onRowChecked,
     this.onRowDoubleTap,
+    this.onRowSecondaryTap,
     this.createHeader,
     this.createFooter,
     this.configuration,
@@ -144,6 +150,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       onSelectedEventCallback: widget.onSelected,
       onRowCheckedEventCallback: widget.onRowChecked,
       onRowDoubleTapEventCallback: widget.onRowDoubleTap,
+      onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
@@ -508,6 +515,18 @@ class PlutoGridOnRowDoubleTapEvent {
   PlutoGridOnRowDoubleTapEvent({
     this.row,
     this.cell,
+  });
+}
+
+class PlutoGridOnRowSecondaryTapEvent {
+  final PlutoRow? row;
+  final PlutoCell? cell;
+  final Offset? offset;
+
+  PlutoGridOnRowSecondaryTapEvent({
+    this.row,
+    this.cell,
+    this.offset,
   });
 }
 
