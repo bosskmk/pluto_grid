@@ -111,6 +111,10 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
     _addGestureEvent(PlutoGridGestureType.onDoubleTap, Offset.zero);
   }
 
+  void _handleOnSecondaryTap(TapDownDetails details) {
+    _addGestureEvent(PlutoGridGestureType.onSecondaryTap, details.globalPosition);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -118,6 +122,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onDoubleTap: _handleOnDoubleTap,
+      onSecondaryTapDown: _handleOnSecondaryTap,
       onTapUp: _handleOnTapUp,
       onLongPressStart: _handleOnLongPressStart,
       onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,

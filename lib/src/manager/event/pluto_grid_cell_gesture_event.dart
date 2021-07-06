@@ -42,6 +42,9 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       case PlutoGridGestureType.onDoubleTap:
         _onDoubleTap(stateManager!);
         break;
+      case PlutoGridGestureType.onSecondaryTap:
+        _onSecondaryTap(stateManager!);
+        break;
       default:
     }
   }
@@ -95,6 +98,11 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
         row: stateManager.getRowByIdx(rowIdx), cell: cell));
   }
 
+  void _onSecondaryTap(PlutoGridStateManager stateManager) {
+    stateManager.onRowSecondaryTap!(PlutoGridOnRowSecondaryTapEvent(
+        row: stateManager.getRowByIdx(rowIdx), cell: cell, offset: offset));
+  }
+
   bool _setKeepFocusAndCurrentCell(PlutoGridStateManager stateManager) {
     if (stateManager.hasFocus) {
       return false;
@@ -145,4 +153,5 @@ enum PlutoGridGestureType {
   onLongPressMoveUpdate,
   onLongPressEnd,
   onDoubleTap,
+  onSecondaryTap,
 }
