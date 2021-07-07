@@ -112,7 +112,20 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnSecondaryTap(TapDownDetails details) {
-    _addGestureEvent(PlutoGridGestureType.onSecondaryTap, details.globalPosition);
+    _addGestureEvent(
+        PlutoGridGestureType.onSecondaryTap, details.globalPosition);
+  }
+
+  void Function()? _onDoubleTapOrNull() {
+    return widget.stateManager.onRowDoubleTap == null
+        ? null
+        : _handleOnDoubleTap;
+  }
+
+  void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
+    return widget.stateManager.onRowSecondaryTap == null
+        ? null
+        : _handleOnSecondaryTap;
   }
 
   @override
@@ -121,12 +134,14 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onDoubleTap: _handleOnDoubleTap,
-      onSecondaryTapDown: _handleOnSecondaryTap,
+      // Essential gestures.
       onTapUp: _handleOnTapUp,
       onLongPressStart: _handleOnLongPressStart,
       onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
       onLongPressEnd: _handleOnLongPressEnd,
+      // Optional gestures.
+      onDoubleTap: _onDoubleTapOrNull(),
+      onSecondaryTapDown: _onSecondaryTapOrNull(),
       child: _CellContainer(
         readOnly: widget.column!.type!.readOnly,
         width: widget.width,

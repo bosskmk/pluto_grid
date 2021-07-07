@@ -28,12 +28,8 @@ import 'screen/feature/text_type_column_screen.dart';
 import 'screen/feature/time_type_column_screen.dart';
 import 'screen/feature/value_formatter_screen.dart';
 import 'screen/home_screen.dart';
-import 'dart:html';
 
 void main() {
-  // required to access right click in a browser.
-  // needs removing for desktop etc.
-  document.onContextMenu.listen((event) => event.preventDefault());
   runApp(MyApp());
 }
 
