@@ -190,6 +190,14 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager!.setShowColumnFilter(true);
           },
           onRowChecked: handleOnRowChecked,
+          onRowDoubleTap: (e) {
+            print('Double click A Row.');
+            print(e.row?.cells['column1']?.value);
+          },
+          onRowSecondaryTap: (e) {
+            print('Secondary click A Row.(${e.offset})');
+            print(e.row?.cells['column1']?.value);
+          },
           createHeader: (PlutoGridStateManager stateManager) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,

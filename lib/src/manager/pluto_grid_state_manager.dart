@@ -56,6 +56,8 @@ class PlutoGridStateManager extends PlutoGridState {
     PlutoOnChangedEventCallback? onChangedEventCallback,
     PlutoOnSelectedEventCallback? onSelectedEventCallback,
     PlutoOnRowCheckedEventCallback? onRowCheckedEventCallback,
+    PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
+    PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
@@ -68,6 +70,8 @@ class PlutoGridStateManager extends PlutoGridState {
     setOnChanged(onChangedEventCallback);
     setOnSelected(onSelectedEventCallback);
     setOnRowChecked(onRowCheckedEventCallback);
+    setOnRowDoubleTap(onRowDoubleTapEventCallback);
+    setOnRowSecondaryTap(onRowSecondaryTapEventCallback);
     setCreateHeader(createHeader);
     setCreateFooter(createFooter);
     setConfiguration(configuration);

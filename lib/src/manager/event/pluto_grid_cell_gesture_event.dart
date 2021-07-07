@@ -26,14 +26,26 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       return;
     }
 
-    if (gestureType.isOnTapUp) {
-      _onTapUp(stateManager!);
-    } else if (gestureType.isOnLongPressStart) {
-      _onLongPressStart(stateManager!);
-    } else if (gestureType.isOnLongPressMoveUpdate) {
-      _onLongPressMoveUpdate(stateManager!);
-    } else if (gestureType.isOnLongPressEnd) {
-      _onLongPressEnd(stateManager!);
+    switch (gestureType) {
+      case PlutoGridGestureType.onTapUp:
+        _onTapUp(stateManager!);
+        break;
+      case PlutoGridGestureType.onLongPressStart:
+        _onLongPressStart(stateManager!);
+        break;
+      case PlutoGridGestureType.onLongPressMoveUpdate:
+        _onLongPressMoveUpdate(stateManager!);
+        break;
+      case PlutoGridGestureType.onLongPressEnd:
+        _onLongPressEnd(stateManager!);
+        break;
+      case PlutoGridGestureType.onDoubleTap:
+        _onDoubleTap(stateManager!);
+        break;
+      case PlutoGridGestureType.onSecondaryTap:
+        _onSecondaryTap(stateManager!);
+        break;
+      default:
     }
   }
 
@@ -79,6 +91,16 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(false);
+  }
+
+  void _onDoubleTap(PlutoGridStateManager stateManager) {
+    stateManager.onRowDoubleTap!(PlutoGridOnRowDoubleTapEvent(
+        row: stateManager.getRowByIdx(rowIdx), cell: cell));
+  }
+
+  void _onSecondaryTap(PlutoGridStateManager stateManager) {
+    stateManager.onRowSecondaryTap!(PlutoGridOnRowSecondaryTapEvent(
+        row: stateManager.getRowByIdx(rowIdx), cell: cell, offset: offset));
   }
 
   bool _setKeepFocusAndCurrentCell(PlutoGridStateManager stateManager) {
@@ -130,6 +152,8 @@ enum PlutoGridGestureType {
   onLongPressStart,
   onLongPressMoveUpdate,
   onLongPressEnd,
+  onDoubleTap,
+  onSecondaryTap,
 }
 
 extension PlutoGridGestureTypeExtension on PlutoGridGestureType? {
@@ -141,4 +165,8 @@ extension PlutoGridGestureTypeExtension on PlutoGridGestureType? {
       this == PlutoGridGestureType.onLongPressMoveUpdate;
 
   bool get isOnLongPressEnd => this == PlutoGridGestureType.onLongPressEnd;
+
+  bool get isOnDoubleTap => this == PlutoGridGestureType.onDoubleTap;
+
+  bool get isOnSecondaryTap => this == PlutoGridGestureType.onSecondaryTap;
 }
