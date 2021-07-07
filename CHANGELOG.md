@@ -1,3 +1,8 @@
+## [2.3.0] - 2021. 7. 7
+
+* Added onDoubleTap, onSecondaryTap cell events.
+* Hide secondary scrollbar.
+
 ## [2.2.1] - 2021. 6. 26
 
 * Added enableDropToResize option when creating a column. (enables an icon for adjusting the width of a column when there is no context menu)
