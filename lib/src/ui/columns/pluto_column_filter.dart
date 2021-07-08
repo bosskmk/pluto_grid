@@ -188,7 +188,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   Widget build(BuildContext context) {
     return Container(
       width: widget.column!.width,
-      height: widget.stateManager.columnHeight,
+      height: widget.stateManager.columnFilterHeight,
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Align(
         alignment: Alignment.center,

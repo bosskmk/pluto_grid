@@ -92,11 +92,15 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _maxHeight;
 
-  double get headerHeight =>
-      createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get headerHeight => createHeader == null
+      ? 0
+      : configuration!.createHeaderAreaHeight +
+          PlutoGridSettings.rowBorderWidth;
 
-  double get footerHeight =>
-      createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get footerHeight => createFooter == null
+      ? 0
+      : configuration!.createFooterAreaHeight +
+          PlutoGridSettings.rowBorderWidth;
 
   double get offsetHeight => maxHeight! - headerHeight - footerHeight;
 
@@ -144,11 +148,12 @@ mixin LayoutState implements IPlutoGridState {
   double get footerTopOffset =>
       maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
-  // todo : set columnHeight from configuration.
-  double get columnHeight => PlutoGridSettings.rowTotalHeight;
+  double get columnHeight =>
+      configuration!.columnHeight + PlutoGridSettings.rowBorderWidth;
 
-  double get columnFilterHeight =>
-      showColumnFilter ? PlutoGridSettings.rowTotalHeight : 0;
+  double get columnFilterHeight => showColumnFilter
+      ? configuration!.columnHeight + PlutoGridSettings.rowBorderWidth
+      : 0;
 
   double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
 
