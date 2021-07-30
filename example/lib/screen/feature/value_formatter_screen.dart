@@ -113,15 +113,13 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       topTitle: 'Value formatter',
       topContents: [
         const Text('Formatter for display of cell values.'),
-        const Text(
-            'You can output the desired value, not the actual value, in the view state, not the edit state.'),
+        const Text('You can output the desired value, not the actual value, in the view state, not the edit state.'),
         const Text(
             'In the case of a readonly or popup type column where text cannot be directly edited, if applyFormatterInEditing is set to true, the formatter is applied even in the editing state.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/value_formatter_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/value_formatter_screen.dart',
         ),
       ],
       body: PlutoGrid(

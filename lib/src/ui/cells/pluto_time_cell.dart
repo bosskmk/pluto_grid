@@ -18,8 +18,7 @@ class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
   _PlutoTimeCellState createState() => _PlutoTimeCellState();
 }
 
-class _PlutoTimeCellState extends State<PlutoTimeCell>
-    with MixinPopupCell<PlutoTimeCell> {
+class _PlutoTimeCellState extends State<PlutoTimeCell> with MixinPopupCell<PlutoTimeCell> {
   PlutoGridStateManager? popupStateManager;
 
   List<PlutoColumn>? popupColumns = [];
@@ -84,13 +83,10 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
           for (var i = 0; i < event.stateManager!.refRows!.length; i += 1) {
-            if (event.stateManager!.refRows![i]!.cells['hour']!.value ==
-                cellHour) {
-              event.stateManager!.setCurrentCell(
-                  event.stateManager!.refRows![i]!.cells['hour'], i);
+            if (event.stateManager!.refRows![i]!.cells['hour']!.value == cellHour) {
+              event.stateManager!.setCurrentCell(event.stateManager!.refRows![i]!.cells['hour'], i);
 
-              event.stateManager!.moveScrollByRow(
-                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+              event.stateManager!.moveScrollByRow(PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }
@@ -120,13 +116,10 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
           for (var i = 0; i < event.stateManager!.refRows!.length; i += 1) {
-            if (event.stateManager!.refRows![i]!.cells['minute']!.value ==
-                cellMinute) {
-              event.stateManager!.setCurrentCell(
-                  event.stateManager!.refRows![i]!.cells['minute'], i);
+            if (event.stateManager!.refRows![i]!.cells['minute']!.value == cellMinute) {
+              event.stateManager!.setCurrentCell(event.stateManager!.refRows![i]!.cells['minute'], i);
 
-              event.stateManager!.moveScrollByRow(
-                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+              event.stateManager!.moveScrollByRow(PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
               return;
             }
           }

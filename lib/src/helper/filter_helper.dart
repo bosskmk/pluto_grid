@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef SetFilterPopupHandler = void Function(
-    PlutoGridStateManager? stateManager);
+typedef SetFilterPopupHandler = void Function(PlutoGridStateManager? stateManager);
 
 class FilterHelper {
   /// A value to identify all column searches when searching filters.
@@ -42,10 +41,8 @@ class FilterHelper {
   }) {
     return PlutoRow(
       cells: {
-        filterFieldColumn:
-            PlutoCell(value: columnField ?? filterFieldAllColumns),
-        filterFieldType:
-            PlutoCell(value: filterType ?? const PlutoFilterTypeContains()),
+        filterFieldColumn: PlutoCell(value: columnField ?? filterFieldAllColumns),
+        filterFieldType: PlutoCell(value: filterType ?? const PlutoFilterTypeContains()),
         filterFieldValue: PlutoCell(value: filterValue ?? ''),
       },
     );
@@ -64,8 +61,7 @@ class FilterHelper {
       bool? flag;
 
       for (var _row in rows) {
-        final filterType =
-            _row!.cells[filterFieldType]!.value as PlutoFilterType?;
+        final filterType = _row!.cells[filterFieldType]!.value as PlutoFilterType?;
 
         if (_row.cells[filterFieldColumn]!.value == filterFieldAllColumns) {
           bool? flagAllColumns;
@@ -99,8 +95,7 @@ class FilterHelper {
               flag,
               compareByFilterType(
                 filterType: filterType!,
-                base: row!.cells[_row.cells[filterFieldColumn]!.value]!.value
-                    .toString(),
+                base: row!.cells[_row.cells[filterFieldColumn]!.value]!.value.toString(),
                 search: _row.cells[filterFieldValue]!.value.toString(),
                 column: foundColumn,
               ),
@@ -127,8 +122,7 @@ class FilterHelper {
     }
 
     for (var row in filteredRows) {
-      if (row!.cells[filterFieldColumn]!.value == filterFieldAllColumns ||
-          row.cells[filterFieldColumn]!.value == column.field) {
+      if (row!.cells[filterFieldColumn]!.value == filterFieldAllColumns || row.cells[filterFieldColumn]!.value == column.field) {
         return true;
       }
     }
@@ -373,8 +367,7 @@ class FilterPopupState {
     required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = {
-      FilterHelper.filterFieldAllColumns:
-          configuration.localeText.filterAllColumns,
+      FilterHelper.filterFieldAllColumns: configuration.localeText.filterAllColumns,
     };
 
     columns.where((element) => element.enableFilterMenuItem).forEach((element) {

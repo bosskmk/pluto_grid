@@ -3,8 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 typedef PlutoColumnValueFormatter = String Function(dynamic value);
 
-typedef PlutoColumnRenderer = Widget Function(
-    PlutoColumnRendererContext rendererContext);
+typedef PlutoColumnRenderer = Widget Function(PlutoColumnRendererContext rendererContext);
 
 class PlutoColumn {
   /// A title to be displayed on the screen.
@@ -118,8 +117,7 @@ class PlutoColumn {
 
   PlutoFilterType? _defaultFilter;
 
-  PlutoFilterType get defaultFilter =>
-      _defaultFilter ?? const PlutoFilterTypeContains();
+  PlutoFilterType get defaultFilter => _defaultFilter ?? const PlutoFilterTypeContains();
 
   void setFilterFocusNode(FocusNode? node) {
     _filterFocusNode = node;
@@ -147,8 +145,7 @@ class PlutoColumn {
 
   String formattedValueForDisplayInEditing(dynamic value) {
     if (formatter != null) {
-      final bool allowFormatting =
-          type!.readOnly! || type.isSelect || type.isTime || type.isDate;
+      final bool allowFormatting = type!.readOnly! || type.isSelect || type.isTime || type.isDate;
 
       if (applyFormatterInEditing && allowFormatting) {
         return formatter!(value).toString();
@@ -186,9 +183,7 @@ enum PlutoColumnTextAlign {
 
 extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
-    return this == PlutoColumnTextAlign.right
-        ? TextAlign.right
-        : TextAlign.left;
+    return this == PlutoColumnTextAlign.right ? TextAlign.right : TextAlign.left;
   }
 
   bool get isLeft => this == PlutoColumnTextAlign.left;

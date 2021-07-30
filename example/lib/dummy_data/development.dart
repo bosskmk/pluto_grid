@@ -24,8 +24,7 @@ class DummyData {
           else if (i == 4)
             return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
           else if (i == 5)
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three'],
-                readOnly: true);
+            return PlutoColumnType.select(<String>['One', 'Two', 'Three'], readOnly: true);
           else if (i == 6)
             return PlutoColumnType.date();
           else if (i == 7)
@@ -44,8 +43,7 @@ class DummyData {
     rows = rowsByColumns(length: rowLength, columns: columns);
   }
 
-  static List<PlutoRow> rowsByColumns(
-      {required int length, List<PlutoColumn>? columns}) {
+  static List<PlutoRow> rowsByColumns({required int length, List<PlutoColumn>? columns}) {
     return List<int>.generate(length, (index) => ++index).map((rowIndex) {
       return rowByColumns(columns!);
     }).toList();
@@ -62,10 +60,7 @@ class DummyData {
           else if (element.type.isSelect)
             return (element.type.select!.items!.toList()..shuffle()).first;
           else if (element.type.isDate)
-            return DateTime.now()
-                .add(Duration(
-                    days: faker.randomGenerator.integer(365, min: -365)))
-                .toString();
+            return DateTime.now().add(Duration(days: faker.randomGenerator.integer(365, min: -365))).toString();
           else if (element.type.isTime)
             return '00:00';
           else

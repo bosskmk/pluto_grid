@@ -96,25 +96,20 @@ mixin EditingState implements IPlutoGridState {
         // No cell selection : Paste in order based on the current cell
         columnStartIdx = currentCellPosition!.columnIdx;
 
-        columnEndIdx =
-            currentCellPosition!.columnIdx! + textList.first.length - 1;
+        columnEndIdx = currentCellPosition!.columnIdx! + textList.first.length - 1;
 
         rowStartIdx = currentCellPosition!.rowIdx;
 
         rowEndIdx = currentCellPosition!.rowIdx! + textList.length - 1;
       } else {
         // If there are selected cells : Paste in order from selected cell range
-        columnStartIdx = min(currentCellPosition!.columnIdx!,
-            currentSelectingPosition!.columnIdx!);
+        columnStartIdx = min(currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
-        columnEndIdx = max(currentCellPosition!.columnIdx!,
-            currentSelectingPosition!.columnIdx!);
+        columnEndIdx = max(currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
 
-        rowStartIdx = min(
-            currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+        rowStartIdx = min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
-        rowEndIdx = max(
-            currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+        rowEndIdx = max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
       }
 
       _pasteCellValueInOrder(
@@ -144,9 +139,7 @@ mixin EditingState implements IPlutoGridState {
     bool notify = true,
   }) {
     for (var rowIdx = 0; rowIdx < refRows!.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
+      for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
         final field = refColumns![columnIndexes[columnIdx]].field;
 
         if (refRows![rowIdx]!.cells[field]!.key == cellKey) {
@@ -171,8 +164,7 @@ mixin EditingState implements IPlutoGridState {
 
           refRows![rowIdx]!.setState(PlutoRowState.updated);
 
-          refRows![rowIdx]!.cells[field]!.value =
-              value = castValueByColumnType(value, currentColumn);
+          refRows![rowIdx]!.cells[field]!.value = value = castValueByColumnType(value, currentColumn);
 
           if (callOnChangedEvent == true && onChanged != null) {
             onChanged!(PlutoGridOnChangedEvent(
@@ -200,8 +192,7 @@ mixin EditingState implements IPlutoGridState {
 
     int columnEndIdx = refColumns!.length - 1;
 
-    final List<Key> selectingRowKeys =
-        currentSelectingRows.map((e) => e!.key).toList();
+    final List<Key> selectingRowKeys = currentSelectingRows.map((e) => e!.key).toList();
 
     List<int> rowIdxList = [];
 
@@ -249,9 +240,7 @@ mixin EditingState implements IPlutoGridState {
         textRowIdx = 0;
       }
 
-      for (var columnIdx = columnStartIdx!;
-          columnIdx <= columnEndIdx!;
-          columnIdx += 1) {
+      for (var columnIdx = columnStartIdx!; columnIdx <= columnEndIdx!; columnIdx += 1) {
         if (columnIdx > columnIndexes.length - 1) {
           break;
         }
@@ -285,8 +274,7 @@ mixin EditingState implements IPlutoGridState {
 
         refRows![rowIdx]!.setState(PlutoRowState.updated);
 
-        currentRow.value =
-            newValue = castValueByColumnType(newValue, currentColumn);
+        currentRow.value = newValue = castValueByColumnType(newValue, currentColumn);
 
         if (onChanged != null) {
           onChanged!(PlutoGridOnChangedEvent(

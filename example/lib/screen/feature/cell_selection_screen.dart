@@ -34,12 +34,9 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
     String value = '';
 
     stateManager!.currentSelectingPositionList.forEach((element) {
-      final cellValue = stateManager!
-          .rows[element.rowIdx!]!.cells[element.field!]!.value
-          .toString();
+      final cellValue = stateManager!.rows[element.rowIdx!]!.cells[element.field!]!.value.toString();
 
-      value +=
-          'rowIdx: ${element.rowIdx}, field: ${element.field}, value: $cellValue\n';
+      value += 'rowIdx: ${element.rowIdx}, field: ${element.field}, value: $cellValue\n';
     });
 
     if (value.isEmpty) {
@@ -78,13 +75,11 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       title: 'Cell selection',
       topTitle: 'Cell selection',
       topContents: [
-        const Text(
-            'In cell selection mode, Shift + tap or long tap and then move to select cells.'),
+        const Text('In cell selection mode, Shift + tap or long tap and then move to select cells.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_selection_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_selection_screen.dart',
         ),
       ],
       body: Column(
@@ -108,8 +103,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
-                event.stateManager!
-                    .setSelectingMode(PlutoGridSelectingMode.cell);
+                event.stateManager!.setSelectingMode(PlutoGridSelectingMode.cell);
 
                 stateManager = event.stateManager;
               },

@@ -75,13 +75,11 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
       title: 'Row selection',
       topTitle: 'Row selection',
       topContents: [
-        const Text(
-            'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.'),
+        const Text('In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_selection_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_selection_screen.dart',
         ),
       ],
       body: Column(
@@ -105,8 +103,7 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
                 print(event);
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
-                event.stateManager!
-                    .setSelectingMode(PlutoGridSelectingMode.row);
+                event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
 
                 stateManager = event.stateManager;
               },

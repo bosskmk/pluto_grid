@@ -78,8 +78,7 @@ class PlutoGridStateManager extends PlutoGridState {
     setGridKey(GlobalKey());
   }
 
-  static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.none.items;
+  static List<PlutoGridSelectingMode> get selectingModes => PlutoGridSelectingMode.none.items;
 
   static void initializeRows(
     List<PlutoColumn>? refColumns,
@@ -88,10 +87,7 @@ class PlutoGridStateManager extends PlutoGridState {
     bool increase = true,
     int? start = 0,
   }) {
-    if (refColumns == null ||
-        refColumns.isEmpty ||
-        refRows == null ||
-        refRows.isEmpty) {
+    if (refColumns == null || refColumns.isEmpty || refRows == null || refRows.isEmpty) {
       return;
     }
 
@@ -286,9 +282,7 @@ class _ApplyCellForFormat implements _Apply {
   ) {
     assert(refColumns.isNotEmpty);
 
-    columnsToApply = refColumns
-        .where((element) => element.type.applyFormatOnInit!)
-        .toList(growable: false);
+    columnsToApply = refColumns.where((element) => element.type.applyFormatOnInit!).toList(growable: false);
   }
 
   late List<PlutoColumn> columnsToApply;
@@ -297,8 +291,7 @@ class _ApplyCellForFormat implements _Apply {
 
   void execute(PlutoRow? row) {
     columnsToApply.forEach((column) {
-      row!.cells[column.field]!.value =
-          column.type.applyFormat(row.cells[column.field]!.value);
+      row!.cells[column.field]!.value = column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {
         row.cells[column.field]!.value = num.tryParse(

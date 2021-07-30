@@ -55,8 +55,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager!
-                      .removeRows([rendererContext.row]);
+                  rendererContext.stateManager!.removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
                 color: Colors.red,
@@ -64,9 +63,7 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
               ),
               Expanded(
                 child: Text(
-                  rendererContext
-                      .row!.cells[rendererContext.column!.field]!.value
-                      .toString(),
+                  rendererContext.row!.cells[rendererContext.column!.field]!.value.toString(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -129,13 +126,11 @@ class _CellRendererScreenState extends State<CellRendererScreen> {
       title: 'Cell renderer',
       topTitle: 'Cell renderer',
       topContents: [
-        const Text(
-            'You can change the widget of the cell through the renderer.'),
+        const Text('You can change the widget of the cell through the renderer.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_renderer_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_renderer_screen.dart',
         ),
       ],
       body: PlutoGrid(

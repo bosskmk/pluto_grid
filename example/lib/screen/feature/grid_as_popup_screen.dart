@@ -60,8 +60,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
   }
 
   void openGridPopup(BuildContext context, String selectFieldName) {
-    final controller =
-        selectFieldName == 'name' ? _nameController : _moneyController;
+    final controller = selectFieldName == 'name' ? _nameController : _moneyController;
 
     PlutoGridPopup(
       context: context,
@@ -75,8 +74,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
 
           if (cell.value.toString() == controller!.text) {
             event.stateManager!.setCurrentCell(cell, element.key);
-            event.stateManager!
-                .moveScrollByRow(PlutoMoveDirection.up, element.key + 1);
+            event.stateManager!.moveScrollByRow(PlutoMoveDirection.up, element.key + 1);
           }
         });
       },
@@ -92,17 +90,14 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       title: 'Grid as Popup',
       topTitle: 'Grid as Popup',
       topContents: [
-        const Text(
-            'You can call the popup with the desired data and select a value from the called list.'),
-        const Text(
-            'Click the magnifying glass icon on the right side of the TextField to call the popup.'),
+        const Text('You can call the popup with the desired data and select a value from the called list.'),
+        const Text('Click the magnifying glass icon on the right side of the TextField to call the popup.'),
         const Text(
             'And when you tap one of the list in the pop-up or press Enter key, the item is selected and the value is automatically entered.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/grid_as_popup_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/grid_as_popup_screen.dart',
         ),
       ],
       body: Column(

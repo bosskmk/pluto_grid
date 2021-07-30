@@ -17,8 +17,7 @@ class PlutoColumnFilter extends PlutoStatefulWidget {
   _PlutoColumnFilterState createState() => _PlutoColumnFilterState();
 }
 
-abstract class _PlutoColumnFilterStateWithChange
-    extends PlutoStateWithChange<PlutoColumnFilter> {
+abstract class _PlutoColumnFilterStateWithChange extends PlutoStateWithChange<PlutoColumnFilter> {
   FocusNode? focusNode;
 
   TextEditingController? controller;
@@ -32,17 +31,11 @@ abstract class _PlutoColumnFilterStateWithChange
   late StreamSubscription event;
 
   String get filterValue {
-    return filterRows!.isEmpty
-        ? ''
-        : filterRows!.first!.cells[FilterHelper.filterFieldValue]!.value
-            .toString();
+    return filterRows!.isEmpty ? '' : filterRows!.first!.cells[FilterHelper.filterFieldValue]!.value.toString();
   }
 
   bool get hasCompositeFilter {
-    return filterRows!.length > 1 ||
-        widget.stateManager
-            .filterRowsByField(FilterHelper.filterFieldAllColumns)
-            .isNotEmpty;
+    return filterRows!.length > 1 || widget.stateManager.filterRowsByField(FilterHelper.filterFieldAllColumns).isNotEmpty;
   }
 
   @override
@@ -115,8 +108,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
           return KeyEventResult.handled;
         }
-      } else if (keyManager.isTab ||
-          (controller!.text.isEmpty && keyManager.isHorizontal)) {
+      } else if (keyManager.isTab || (controller!.text.isEmpty && keyManager.isHorizontal)) {
         widget.stateManager.nextFocusOfColumnFilter(
           widget.column!,
           reversed: keyManager.isLeft || keyManager.isShiftPressed,
@@ -134,14 +126,10 @@ abstract class _PlutoColumnFilterStateWithChange
       return;
     }
 
-    if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent &&
-        plutoEvent.direction!.isUp) {
-      var isCurrentColumn = widget
-              .stateManager
-              .refColumns![widget.stateManager.columnIndexesByShowFrozen[
-                  plutoEvent.cellPosition!.columnIdx!]]
-              .key ==
-          widget.column!.key;
+    if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent && plutoEvent.direction!.isUp) {
+      var isCurrentColumn =
+          widget.stateManager.refColumns![widget.stateManager.columnIndexesByShowFrozen[plutoEvent.cellPosition!.columnIdx!]].key ==
+              widget.column!.key;
 
       if (isCurrentColumn) {
         widget.stateManager.clearCurrentCell(notify: false);
@@ -154,21 +142,17 @@ abstract class _PlutoColumnFilterStateWithChange
 
 class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   InputBorder get border => OutlineInputBorder(
-        borderSide: BorderSide(
-            color: widget.stateManager.configuration!.borderColor, width: 0.0),
+        borderSide: BorderSide(color: widget.stateManager.configuration!.borderColor, width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   InputBorder get enabledBorder => OutlineInputBorder(
-        borderSide: BorderSide(
-            color: widget.stateManager.configuration!.activatedBorderColor,
-            width: 0.0),
+        borderSide: BorderSide(color: widget.stateManager.configuration!.activatedBorderColor, width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
-  Color get textFieldColor => enabled!
-      ? widget.stateManager.configuration!.cellColorInEditState
-      : widget.stateManager.configuration!.cellColorInReadOnlyState;
+  Color get textFieldColor =>
+      enabled! ? widget.stateManager.configuration!.cellColorInEditState : widget.stateManager.configuration!.cellColorInReadOnlyState;
 
   void handleOnTap() {
     widget.stateManager.setKeepFocus(false);

@@ -57,8 +57,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager!
-                      .removeRows([rendererContext.row]);
+                  rendererContext.stateManager!.removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
                 color: Colors.red,
@@ -133,9 +132,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   }
 
   void handleAddRowButton({int? count}) {
-    final List<PlutoRow> rows = count == null
-        ? [DummyData.rowByColumns(columns!)]
-        : DummyData.rowsByColumns(length: count, columns: columns);
+    final List<PlutoRow> rows =
+        count == null ? [DummyData.rowByColumns(columns!)] : DummyData.rowsByColumns(length: count, columns: columns);
 
     stateManager!.prependRows(rows);
   }
@@ -239,10 +237,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       child: DropdownButton(
                         value: gridSelectingMode,
                         items: PlutoGridStateManager.selectingModes
-                            .map<DropdownMenuItem<PlutoGridSelectingMode>>(
-                                (PlutoGridSelectingMode item) {
-                          final color =
-                              gridSelectingMode == item ? Colors.blue : null;
+                            .map<DropdownMenuItem<PlutoGridSelectingMode>>((PlutoGridSelectingMode item) {
+                          final color = gridSelectingMode == item ? Colors.blue : null;
 
                           return DropdownMenuItem<PlutoGridSelectingMode>(
                             value: item,
@@ -281,8 +277,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ],
               resolveDefaultColumnFilter: (column, resolver) {
                 if (column.field == 'column3') {
-                  return resolver<PlutoFilterTypeGreaterThan>()
-                      as PlutoFilterType;
+                  return resolver<PlutoFilterTypeGreaterThan>() as PlutoFilterType;
                 }
 
                 return resolver<PlutoFilterTypeContains>() as PlutoFilterType;

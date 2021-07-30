@@ -56,8 +56,7 @@ mixin FilteringRowState implements IPlutoGridState {
   void setFilterWithFilterRows(List<PlutoRow?> rows) {
     setFilterRows(rows);
 
-    var enabledFilterColumnFields =
-        refColumns!.where((element) => element.enableFilterMenuItem).toList();
+    var enabledFilterColumnFields = refColumns!.where((element) => element.enableFilterMenuItem).toList();
 
     setFilter(
       FilterHelper.convertRowsToFilter(_filterRows, enabledFilterColumnFields),
@@ -67,9 +66,7 @@ mixin FilteringRowState implements IPlutoGridState {
   void setFilterRows(List<PlutoRow?> rows) {
     _filterRows = rows
         .where(
-          (element) => element!.cells[FilterHelper.filterFieldValue]!.value
-              .toString()
-              .isNotEmpty,
+          (element) => element!.cells[FilterHelper.filterFieldValue]!.value.toString().isNotEmpty,
         )
         .toList();
   }
@@ -77,25 +74,20 @@ mixin FilteringRowState implements IPlutoGridState {
   List<PlutoRow?> filterRowsByField(String columnField) {
     return _filterRows
         .where(
-          (element) =>
-              element!.cells[FilterHelper.filterFieldColumn]!.value ==
-              columnField,
+          (element) => element!.cells[FilterHelper.filterFieldColumn]!.value == columnField,
         )
         .toList();
   }
 
   bool isFilteredColumn(PlutoColumn? column) {
-    return hasFilter &&
-        _filterRows.isNotEmpty &&
-        FilterHelper.isFilteredColumn(column!, _filterRows);
+    return hasFilter && _filterRows.isNotEmpty && FilterHelper.isFilteredColumn(column!, _filterRows);
   }
 
   void showFilterPopup(
     BuildContext context, {
     PlutoColumn? calledColumn,
   }) {
-    var shouldProvideDefaultFilterRow =
-        _filterRows.isEmpty && calledColumn != null;
+    var shouldProvideDefaultFilterRow = _filterRows.isEmpty && calledColumn != null;
 
     var rows = shouldProvideDefaultFilterRow
         ? [

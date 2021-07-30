@@ -34,11 +34,9 @@ abstract class ICellState {
   });
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
-  bool canMoveCell(
-      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction);
+  bool canMoveCell(PlutoGridCellPosition cellPosition, PlutoMoveDirection direction);
 
-  bool canNotMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction);
+  bool canNotMoveCell(PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction);
 
   /// Whether the cell is in a mutable state
   bool canChangeCellValue({
@@ -178,12 +176,7 @@ mixin CellState implements IPlutoGridState {
     int? rowIdx, {
     bool notify = true,
   }) {
-    if (cell == null ||
-        rowIdx == null ||
-        refRows == null ||
-        refRows!.isEmpty ||
-        rowIdx < 0 ||
-        rowIdx > refRows!.length - 1) {
+    if (cell == null || rowIdx == null || refRows == null || refRows!.isEmpty || rowIdx < 0 || rowIdx > refRows!.length - 1) {
       return;
     }
 
@@ -209,8 +202,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
-  bool canMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
+  bool canMoveCell(PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
     switch (direction) {
       case PlutoMoveDirection.left:
         return cellPosition!.columnIdx! > 0;
@@ -223,8 +215,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
-  bool canNotMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
+  bool canNotMoveCell(PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
     return !canMoveCell(cellPosition, direction);
   }
 
@@ -265,16 +256,13 @@ mixin CellState implements IPlutoGridState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.type.isSelect &&
-        column.type.select!.items!.contains(newValue) != true) {
+    if (column!.type.isSelect && column.type.select!.items!.contains(newValue) != true) {
       newValue = oldValue;
     } else if (column.type.isDate) {
       try {
-        final parseNewValue = intl.DateFormat(column.type.date!.format)
-            .parseStrict(newValue.toString());
+        final parseNewValue = intl.DateFormat(column.type.date!.format).parseStrict(newValue.toString());
 
-        newValue =
-            intl.DateFormat(column.type.date!.format).format(parseNewValue);
+        newValue = intl.DateFormat(column.type.date!.format).format(parseNewValue);
       } catch (e) {
         newValue = oldValue;
       }

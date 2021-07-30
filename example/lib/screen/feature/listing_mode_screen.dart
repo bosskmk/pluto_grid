@@ -118,8 +118,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                   ),
                                 ),
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),
@@ -207,8 +206,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                   ),
                                 ),
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),
@@ -244,13 +242,11 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       topContents: [
         const Text('Listing mode to open or navigate to the Detail page.'),
         const Text('Press Enter or tap to call up the Detail popup.'),
-        const Text(
-            'Pressing the Ctrl(Meta on MacOS) + C keys can invoke a popup to enter a new record.'),
+        const Text('Pressing the Ctrl(Meta on MacOS) + C keys can invoke a popup to enter a new record.'),
       ],
       topButtons: [
         PlutoExampleButton(
-          url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/listing_mode_screen.dart',
+          url: 'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/listing_mode_screen.dart',
         ),
       ],
       body: PlutoGrid(
@@ -260,8 +256,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
         onLoaded: (PlutoGridOnLoadedEvent event) {
           stateManager = event.stateManager;
 
-          removeKeyboardListener =
-              stateManager!.keyManager!.subject.stream.listen(handleKeyboard);
+          removeKeyboardListener = stateManager!.keyManager!.subject.stream.listen(handleKeyboard);
 
           stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
         },
