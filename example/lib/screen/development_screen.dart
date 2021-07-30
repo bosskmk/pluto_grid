@@ -190,14 +190,14 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager!.setShowColumnFilter(true);
           },
           onRowChecked: handleOnRowChecked,
-          onRowDoubleTap: (e) {
-            print('Double click A Row.');
-            print(e.row?.cells['column1']?.value);
-          },
-          onRowSecondaryTap: (e) {
-            print('Secondary click A Row.(${e.offset})');
-            print(e.row?.cells['column1']?.value);
-          },
+          // onRowDoubleTap: (e) {
+          //   print('Double click A Row.');
+          //   print(e.row?.cells['column1']?.value);
+          // },
+          // onRowSecondaryTap: (e) {
+          //   print('Secondary click A Row.(${e.offset})');
+          //   print(e.row?.cells['column1']?.value);
+          // },
           createHeader: (PlutoGridStateManager stateManager) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -274,20 +274,20 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               scrollbarThicknessWhileDragging: 10,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
-            columnFilterConfig: PlutoGridColumnFilterConfig(
-              filters: const [
-                ...FilterHelper.defaultFilters,
-                ClassYouImplemented(),
-              ],
-              resolveDefaultColumnFilter: (column, resolver) {
-                if (column.field == 'column3') {
-                  return resolver<PlutoFilterTypeGreaterThan>()
-                      as PlutoFilterType;
-                }
-
-                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-              },
-            ),
+            // columnFilterConfig: PlutoGridColumnFilterConfig(
+            //   filters: const [
+            //     ...FilterHelper.defaultFilters,
+            //     ClassYouImplemented(),
+            //   ],
+            //   resolveDefaultColumnFilter: (column, resolver) {
+            //     if (column.field == 'column3') {
+            //       return resolver<PlutoFilterTypeGreaterThan>()
+            //           as PlutoFilterType;
+            //     }
+            //
+            //     return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+            //   },
+            // ),
           ),
         ),
       ),

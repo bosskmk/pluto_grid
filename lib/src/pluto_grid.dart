@@ -590,6 +590,8 @@ class PlutoGridSettings {
 
   /// Size that scrolls from the edge at once when selecting multiple
   static const double offsetScrollingFromEdgeAtOnce = 200.0;
+
+  static const int debounceMillisecondsForColumnFilter = 300;
 }
 
 enum PlutoGridMode {

@@ -556,17 +556,27 @@ class PlutoGridColumnFilterConfig {
   const PlutoGridColumnFilterConfig({
     List<PlutoFilterType>? filters,
     PlutoGridResolveDefaultColumnFilter? resolveDefaultColumnFilter,
+    int? debounceMilliseconds,
   })  : _userFilters = filters,
-        _userResolveDefaultColumnFilter = resolveDefaultColumnFilter;
+        _userResolveDefaultColumnFilter = resolveDefaultColumnFilter,
+        _debounceMilliseconds = debounceMilliseconds == null
+            ? PlutoGridSettings.debounceMillisecondsForColumnFilter
+            : debounceMilliseconds < 0
+                ? 0
+                : debounceMilliseconds;
 
   final List<PlutoFilterType>? _userFilters;
 
   final PlutoGridResolveDefaultColumnFilter? _userResolveDefaultColumnFilter;
 
+  final int _debounceMilliseconds;
+
   bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
 
   List<PlutoFilterType>? get filters =>
       hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
+
+  int get debounceMilliseconds => _debounceMilliseconds;
 
   PlutoFilterType resolver<T>() {
     return filters!.firstWhereOrNull(

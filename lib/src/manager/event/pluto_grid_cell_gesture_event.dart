@@ -14,7 +14,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     this.cell,
     this.column,
     this.rowIdx,
-  });
+  }) : super();
 
   @override
   void handler(PlutoGridStateManager? stateManager) {
