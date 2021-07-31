@@ -20,17 +20,26 @@ class PlutoGridEventManager {
   }
 
   void init() {
-    bool Function(PlutoGridEvent event) isThrottle = (event) {
-      return event is PlutoGridMoveUpdateEvent;
-    };
+    final normalStream = _subject.stream.where((event) => event.type.isNormal);
 
-    final stream = _subject.stream.where((event) => !isThrottle(event));
+    final throttleStream =
+        _subject.stream.where((event) => event.type.isThrottle).transform(
+              ThrottleStreamTransformer(
+                (_) => TimerStream<PlutoGridEvent>(_, _.duration as Duration),
+                trailing: true,
+                leading: false,
+              ),
+            );
 
-    final throttleStream = _subject.stream
-        .where((event) => isThrottle(event))
-        .throttleTime(const Duration(milliseconds: 800));
+    final debounceStream =
+        _subject.stream.where((event) => event.type.isDebounce).transform(
+              DebounceStreamTransformer(
+                (_) => TimerStream<PlutoGridEvent>(_, _.duration as Duration),
+              ),
+            );
 
-    MergeStream([stream, throttleStream]).listen(_handler);
+    MergeStream([normalStream, throttleStream, debounceStream])
+        .listen(_handler);
   }
 
   void addEvent(PlutoGridEvent event) {

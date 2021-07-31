@@ -180,6 +180,8 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
         column: widget.column,
         filterType: widget.column!.defaultFilter,
         filterValue: changed,
+        debounceMilliseconds: widget.stateManager.configuration!
+            .columnFilterConfig.debounceMilliseconds,
       ),
     );
   }

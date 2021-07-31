@@ -21,6 +21,7 @@ import 'screen/feature/listing_mode_screen.dart';
 import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
 import 'screen/feature/row_moving_screen.dart';
+import 'screen/feature/row_pagination_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/row_with_checkbox_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         ValueFormatterScreen.routeName: (context) => ValueFormatterScreen(),
         RowSelectionScreen.routeName: (context) => RowSelectionScreen(),
         RowMovingScreen.routeName: (context) => RowMovingScreen(),
+        RowPaginationScreen.routeName: (context) => RowPaginationScreen(),
         RowWithCheckboxScreen.routeName: (context) => RowWithCheckboxScreen(),
         CellSelectionScreen.routeName: (context) => CellSelectionScreen(),
         CellRendererScreen.routeName: (context) => CellRendererScreen(),

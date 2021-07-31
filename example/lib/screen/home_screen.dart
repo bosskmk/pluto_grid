@@ -28,6 +28,7 @@ import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
 import 'feature/number_type_column_screen.dart';
 import 'feature/row_moving_screen.dart';
+import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/row_with_checkbox_screen.dart';
 import 'feature/selection_type_column_screen.dart';
@@ -282,6 +283,13 @@ class PlutoFeatures extends StatelessWidget {
             description: 'You can move the row by dragging it.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowMovingScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Row pagination',
+            description: 'You can paginate the rows.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowPaginationScreen.routeName);
             },
           ),
           PlutoListTile(

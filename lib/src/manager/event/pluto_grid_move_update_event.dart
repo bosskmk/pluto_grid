@@ -8,7 +8,10 @@ class PlutoGridMoveUpdateEvent extends PlutoGridEvent {
 
   PlutoGridMoveUpdateEvent({
     this.offset,
-  });
+  }) : super(
+          type: PlutoGridEventType.throttle,
+          duration: const Duration(milliseconds: 800),
+        );
 
   void handler(PlutoGridStateManager? stateManager) {
     if (offset == null) {

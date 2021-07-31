@@ -6,12 +6,23 @@ class PlutoGridChangeColumnFilterEvent extends PlutoGridEvent {
   final PlutoColumn? column;
   final PlutoFilterType? filterType;
   final String? filterValue;
+  final int? debounceMilliseconds;
 
   PlutoGridChangeColumnFilterEvent({
     this.column,
     this.filterType,
     this.filterValue,
-  });
+    this.debounceMilliseconds,
+  }) : super(
+          type: PlutoGridEventType.debounce,
+          duration: Duration(
+            milliseconds: debounceMilliseconds == null
+                ? PlutoGridSettings.debounceMillisecondsForColumnFilter
+                : debounceMilliseconds < 0
+                    ? 0
+                    : debounceMilliseconds,
+          ),
+        );
 
   void handler(PlutoGridStateManager? stateManager) {
     List<PlutoRow?> foundFilterRows =

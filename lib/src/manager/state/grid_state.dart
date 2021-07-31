@@ -47,7 +47,8 @@ abstract class IGridState {
 
   void setOnRowDoubleTap(PlutoOnRowDoubleTapEventCallback? onDoubleTap);
 
-  void setOnRowSecondaryTap(PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
+  void setOnRowSecondaryTap(
+      PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
 
   void setConfiguration(PlutoGridConfiguration configuration);
 
@@ -94,7 +95,8 @@ mixin GridState implements IPlutoGridState {
 
   PlutoOnRowDoubleTapEventCallback? _onRowDoubleTap;
 
-  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap => _onRowSecondaryTap;
+  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap =>
+      _onRowSecondaryTap;
 
   PlutoOnRowSecondaryTapEventCallback? _onRowSecondaryTap;
 
@@ -136,7 +138,8 @@ mixin GridState implements IPlutoGridState {
     _onRowDoubleTap = onRowDoubleTap;
   }
 
-  void setOnRowSecondaryTap(PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) {
+  void setOnRowSecondaryTap(
+      PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) {
     _onRowSecondaryTap = onRowSecondaryTap;
   }
 

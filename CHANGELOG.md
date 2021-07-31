@@ -1,3 +1,8 @@
+## [2.4.0] - 2021. 7. 31
+
+* Added pagination. 
+* Added debounce on keyboard input in filter.
+
 ## [2.3.0] - 2021. 7. 7
 
 * Added onDoubleTap, onSecondaryTap cell events.

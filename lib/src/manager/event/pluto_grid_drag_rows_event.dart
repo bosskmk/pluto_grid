@@ -11,7 +11,7 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
     this.offset,
     this.dragType,
     this.rows,
-  });
+  }) : super();
 
   void handler(PlutoGridStateManager? stateManager) {
     if (dragType == null ||

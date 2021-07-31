@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IRowState {
@@ -395,15 +394,14 @@ mixin RowState implements IPlutoGridState {
     Key? selectingCellKey;
 
     if (hasCurrentSelectingPosition) {
-      selectingCellKey = refRows![currentSelectingPosition!.rowIdx!]!
-          .cells
-          .entries
+      selectingCellKey = refRows!
+          .originalList[currentSelectingPosition!.rowIdx!]!.cells.entries
           .elementAt(currentSelectingPosition!.columnIdx!)
           .value
           .key;
     }
 
-    refRows!.removeWhere((row) => removeKeys.contains(row!.key));
+    refRows!.removeWhereFromOriginal((row) => removeKeys.contains(row!.key));
 
     updateCurrentCellPosition(notify: false);
 
@@ -433,19 +431,25 @@ mixin RowState implements IPlutoGridState {
   }) {
     if (indexToMove == null) {
       return;
-    } else if (indexToMove + rows!.length > refRows!.length) {
-      indexToMove = refRows!.length - rows.length;
+    }
+
+    if (page > 1) {
+      indexToMove += (page - 1) * pageSize;
+    }
+
+    if (indexToMove + rows!.length > refRows!.originalLength) {
+      indexToMove = refRows!.originalLength - rows.length;
     }
 
     rows.forEach((row) {
-      refRows!.remove(row);
+      refRows!.removeFromOriginal(row);
     });
 
     refRows!.insertAll(indexToMove, rows.cast<PlutoRow>());
 
     int sortIdx = 0;
 
-    refRows!.forEach((element) {
+    refRows!.originalList.forEach((element) {
       element!.sortIdx = sortIdx++;
     });
 
