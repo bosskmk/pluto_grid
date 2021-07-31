@@ -36,6 +36,64 @@ void main() {
     expect(footer, findsOneWidget);
   });
 
+  testWidgets(
+      'header 에 PlutoPagination 을 설정 한 경우 PlutoPagination 가 렌더링 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = ColumnHelper.textColumn('header');
+    final rows = RowHelper.count(3, columns);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              createHeader: (stateManager) {
+                return PlutoPagination(stateManager);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // then
+    final found = find.byType(PlutoPagination);
+    expect(found, findsOneWidget);
+  });
+
+  testWidgets(
+      'footer 에 PlutoPagination 을 설정 한 경우 PlutoPagination 가 렌더링 되어야 한다.',
+      (WidgetTester tester) async {
+    // given
+    final columns = ColumnHelper.textColumn('header');
+    final rows = RowHelper.count(3, columns);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: Container(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              createFooter: (stateManager) {
+                return PlutoPagination(stateManager);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // then
+    final found = find.byType(PlutoPagination);
+    expect(found, findsOneWidget);
+  });
+
   testWidgets('showLoading 을 설정 한 경우 PlutoLoadingWidget 이 출력 되어야 한다.',
       (WidgetTester tester) async {
     // given

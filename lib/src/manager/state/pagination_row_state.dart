@@ -28,9 +28,7 @@ mixin PaginationRowState implements IPlutoGridState {
 
   int get pageSize => _pageSize;
 
-  int get totalPage {
-    return (_length / _pageSize).ceil();
-  }
+  int get totalPage => (_length / _pageSize).ceil();
 
   void setPageSize(int pageSize, {bool notify = true}) {
     _pageSize = pageSize;
