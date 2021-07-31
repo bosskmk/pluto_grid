@@ -291,6 +291,10 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowPaginationScreen.routeName);
             },
+            trailing: const Icon(
+              Icons.fiber_new,
+              color: Colors.deepOrange,
+            ),
           ),
           PlutoListTile(
             title: 'Row with checkbox',
@@ -383,9 +387,7 @@ class PlutoContributors extends StatelessWidget {
         runSpacing: 10,
         children: [
           PlutoContributorTile(
-            name: 'Kim Manki',
-            description:
-                'My hobby is creating flutter packages for managers or business applications.',
+            name: 'Manki Kim',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/bosskmk');
@@ -393,7 +395,6 @@ class PlutoContributors extends StatelessWidget {
           ),
           PlutoContributorTile(
             name: 'Alexey Volkov',
-            description: 'First contributor.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/ASGAlex');
@@ -401,7 +402,6 @@ class PlutoContributors extends StatelessWidget {
           ),
           PlutoContributorTile(
             name: 'MrCasCode',
-            description: 'Second contributor.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/MrCasCode');
@@ -409,7 +409,6 @@ class PlutoContributors extends StatelessWidget {
           ),
           PlutoContributorTile(
             name: 'Wang Chuanbin',
-            description: 'Third contributor.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/Chuanbin-Wang');
@@ -417,7 +416,6 @@ class PlutoContributors extends StatelessWidget {
           ),
           PlutoContributorTile(
             name: 'sheentim',
-            description: 'Fourth contributor.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/sheentim');
@@ -425,8 +423,6 @@ class PlutoContributors extends StatelessWidget {
           ),
           PlutoContributorTile.invisible(
             name: 'And you.',
-            description:
-                'Anyone can contribute, code, tests, bug reports, documentation, etc.',
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/bosskmk/pluto_grid');

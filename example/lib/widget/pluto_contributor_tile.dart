@@ -36,8 +36,8 @@ class PlutoContributorTile extends StatelessWidget {
       constraints: const BoxConstraints(
         minWidth: 300,
         maxWidth: 300,
-        minHeight: 180,
-        maxHeight: 180,
+        minHeight: 100,
+        maxHeight: 100,
       ),
       child: Card(
         color: _color,
@@ -66,17 +66,18 @@ class PlutoContributorTile extends StatelessWidget {
                         ),
                     ],
                   ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    description!,
-                    style: TextStyle(
-                      color: _fontColor,
-                      fontWeight: FontWeight.w600,
-                      height: 1.6,
+                if (description != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      description!,
+                      style: TextStyle(
+                        color: _fontColor,
+                        fontWeight: FontWeight.w600,
+                        height: 1.6,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             contentPadding: const EdgeInsets.all(15),

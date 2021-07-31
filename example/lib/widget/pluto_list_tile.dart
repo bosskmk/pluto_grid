@@ -11,11 +11,14 @@ class PlutoListTile extends StatelessWidget {
 
   final Function()? onTapLiveDemo;
 
+  final Widget? trailing;
+
   PlutoListTile({
     required this.title,
     this.description,
     this.onTapPreview,
     this.onTapLiveDemo,
+    this.trailing,
   })  : _color = Colors.white,
         _fontColor = PlutoGridExampleColors.fontColor;
 
@@ -24,6 +27,7 @@ class PlutoListTile extends StatelessWidget {
     this.description,
     this.onTapPreview,
     this.onTapLiveDemo,
+    this.trailing,
   })  : _color = Colors.black87,
         _fontColor = Colors.white70;
 
@@ -44,6 +48,7 @@ class PlutoListTile extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: ListTile(
+            trailing: trailing,
             title: Text(
               title,
               style: const TextStyle(
