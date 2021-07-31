@@ -142,20 +142,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  pluto_filtered_list:
-    dependency: transitive
-    description:
-      name: pluto_filtered_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   pluto_grid:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "2.3.0"
+    version: "2.4.0"
   rainbow_color:
     dependency: "direct main"
     description:
@@ -176,7 +169,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.0"
+    version: "0.27.1"
   sky_engine:
     dependency: transitive
     description: flutter

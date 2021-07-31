@@ -129,7 +129,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+    rows = DummyData.rowsByColumns(length: 100, columns: columns);
   }
 
   void handleAddRowButton({int? count}) {
@@ -266,6 +266,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
             );
           },
+          createFooter: (stateManager) => PlutoPagination(stateManager),
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
             scrollbarConfig: const PlutoGridScrollbarConfig(

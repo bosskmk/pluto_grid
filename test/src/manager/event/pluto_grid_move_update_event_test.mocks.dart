@@ -13,7 +13,7 @@ import 'package:flutter/src/widgets/framework.dart' as _i11;
 import 'package:flutter/src/widgets/scroll_controller.dart' as _i5;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i18;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:pluto_filtered_list/pluto_filtered_list.dart' as _i7;
+import 'package:pluto_grid/src/helper/filtered_list.dart' as _i7;
 import 'package:pluto_grid/src/helper/pluto_move_direction.dart' as _i10;
 import 'package:pluto_grid/src/manager/pluto_grid_event_manager.dart' as _i14;
 import 'package:pluto_grid/src/manager/pluto_grid_key_manager.dart' as _i13;
@@ -253,6 +253,13 @@ class MockPlutoGridStateManager extends _i1.Mock
   double get scrollOffsetByFrozenColumn =>
       (super.noSuchMethod(Invocation.getter(#scrollOffsetByFrozenColumn),
           returnValue: 0.0) as double);
+  @override
+  int get page =>
+      (super.noSuchMethod(Invocation.getter(#page), returnValue: 0) as int);
+  @override
+  int get totalPage =>
+      (super.noSuchMethod(Invocation.getter(#totalPage), returnValue: 0)
+          as int);
   @override
   List<_i4.PlutoRow?> get rows => (super.noSuchMethod(Invocation.getter(#rows),
       returnValue: <_i4.PlutoRow?>[]) as List<_i4.PlutoRow?>);
@@ -542,6 +549,22 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setOnSelected, [onSelected]),
           returnValueForMissingStub: null);
   @override
+  void setOnRowChecked(_i15.PlutoOnRowCheckedEventCallback? onRowChecked) =>
+      super.noSuchMethod(Invocation.method(#setOnRowChecked, [onRowChecked]),
+          returnValueForMissingStub: null);
+  @override
+  void setOnRowDoubleTap(
+          _i15.PlutoOnRowDoubleTapEventCallback? onRowDoubleTap) =>
+      super.noSuchMethod(
+          Invocation.method(#setOnRowDoubleTap, [onRowDoubleTap]),
+          returnValueForMissingStub: null);
+  @override
+  void setOnRowSecondaryTap(
+          _i15.PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) =>
+      super.noSuchMethod(
+          Invocation.method(#setOnRowSecondaryTap, [onRowSecondaryTap]),
+          returnValueForMissingStub: null);
+  @override
   void setCreateHeader(_i15.CreateHeaderCallBack? createHeader) =>
       super.noSuchMethod(Invocation.method(#setCreateHeader, [createHeader]),
           returnValueForMissingStub: null);
@@ -656,6 +679,14 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
+  void setPageSize(int? pageSize, {bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#setPageSize, [pageSize], {#notify: notify}),
+      returnValueForMissingStub: null);
+  @override
+  void setPage(int? page, {bool? notify = true}) =>
+      super.noSuchMethod(Invocation.method(#setPage, [page], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
   int? getRowIdxByOffset(double? offset) =>
       (super.noSuchMethod(Invocation.method(#getRowIdxByOffset, [offset]))
           as int?);
@@ -680,7 +711,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setRowChecked, [row, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void insertRows(int? rowIdx, List<_i4.PlutoRow?>? rows) =>
+  void insertRows(int? rowIdx, List<_i4.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#insertRows, [rowIdx, rows]),
           returnValueForMissingStub: null);
   @override
@@ -696,7 +727,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#appendNewRows, [], {#count: count}),
           returnValueForMissingStub: null);
   @override
-  void appendRows(List<_i4.PlutoRow?>? rows) =>
+  void appendRows(List<_i4.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#appendRows, [rows]),
           returnValueForMissingStub: null);
   @override
