@@ -123,7 +123,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
           isCurrentIndex ? widget.stateManager.configuration!.iconSize : null,
       color: isCurrentIndex
           ? widget.stateManager.configuration!.activatedBorderColor
-          : widget.stateManager.configuration!.gridBorderColor,
+          : widget.stateManager.configuration!.iconColor,
     );
   }
 
@@ -146,7 +146,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   @override
   Widget build(BuildContext context) {
-    final Color _iconColor = widget.stateManager.configuration!.gridBorderColor;
+    final Color _iconColor = widget.stateManager.configuration!.iconColor;
 
     return Center(
       child: Padding(

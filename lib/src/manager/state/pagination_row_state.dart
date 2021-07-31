@@ -3,6 +3,8 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IPaginationRowState {
   int get page;
 
+  int get pageSize;
+
   int get totalPage;
 
   void setPageSize(int pageSize, {bool notify = true});
@@ -22,12 +24,12 @@ mixin PaginationRowState implements IPlutoGridState {
   int get _length =>
       hasFilter ? refRows!.filteredList.length : refRows!.originalList.length;
 
-  int get _lastIndex => _length - 1;
-
   int get page => _page;
 
+  int get pageSize => _pageSize;
+
   int get totalPage {
-    return (_length / _pageSize).round();
+    return (_length / _pageSize).ceil();
   }
 
   void setPageSize(int pageSize, {bool notify = true}) {
@@ -45,8 +47,8 @@ mixin PaginationRowState implements IPlutoGridState {
 
     int to = page * _pageSize;
 
-    if (to > _lastIndex) {
-      to = _lastIndex;
+    if (to > _length) {
+      to = _length;
     }
 
     _range.setRange(from, to);

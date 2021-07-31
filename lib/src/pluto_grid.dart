@@ -91,13 +91,24 @@ class _PlutoGridState extends State<PlutoGrid> {
   PlutoGridEventManager? eventManager;
 
   bool? _showFrozenColumn;
+
   bool? _hasLeftFrozenColumns;
+
   double? _bodyLeftOffset;
+
   double? _bodyRightOffset;
+
   bool? _hasRightFrozenColumns;
+
   double? _rightFrozenLeftOffset;
+
   bool? _showColumnFilter;
+
   bool? _showLoading;
+
+  Widget? _header;
+
+  Widget? _footer;
 
   List<Function()> disposeList = [];
 
@@ -125,6 +136,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     initOnLoadedEvent();
 
     initSelectMode();
+
+    initHeaderFooter();
   }
 
   void initProperties() {
@@ -222,6 +235,20 @@ class _PlutoGridState extends State<PlutoGrid> {
     });
   }
 
+  void initHeaderFooter() {
+    if (stateManager.showHeader) {
+      _header = stateManager.createHeader!(stateManager);
+    }
+
+    if (stateManager.showFooter) {
+      _footer = stateManager.createFooter!(stateManager);
+    }
+
+    if (_header is PlutoPagination || _footer is PlutoPagination) {
+      stateManager.setPage(1, notify: false);
+    }
+  }
+
   void changeStateListener() {
     if (_showFrozenColumn != stateManager.showFrozenColumn ||
         _hasLeftFrozenColumns != stateManager.hasLeftFrozenColumns ||
@@ -307,7 +334,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           Positioned.fill(
                             top: 0,
                             bottom: stateManager.headerBottomOffset,
-                            child: widget.createHeader!(stateManager),
+                            child: _header!,
                           ),
                           Positioned(
                             top: stateManager.headerHeight,
@@ -406,7 +433,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           Positioned.fill(
                             top: stateManager.footerTopOffset,
                             bottom: 0,
-                            child: widget.createFooter!(stateManager),
+                            child: _footer!,
                           ),
                         ],
                         if (_showColumnFilter!)

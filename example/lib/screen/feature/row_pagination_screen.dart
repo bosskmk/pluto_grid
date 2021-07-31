@@ -56,6 +56,7 @@ class _RowPaginationScreenState extends State<RowPaginationScreen> {
         },
         configuration: PlutoGridConfiguration(),
         createFooter: (stateManager) {
+          stateManager.setPageSize(100, notify: false); // default 40
           return PlutoPagination(stateManager);
         },
       ),

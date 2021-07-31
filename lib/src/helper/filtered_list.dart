@@ -91,22 +91,30 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   FilteredListRange? _range;
 
   int get _safetyFrom {
-    if (_range == null) {
+    if (_range == null || _range!.from < 0) {
       return 0;
     }
 
-    return _safetyNumberByMaxLength(_range!.from);
+    if (_range!.from > _maxLength - 1) {
+      return _maxLength;
+    }
+
+    return _range!.from;
   }
 
   int get _safetyTo {
-    if (_range == null) {
+    if (_range == null || _range!.to < 0) {
       return 0;
     }
 
-    return _safetyNumberByMaxLength(_range!.to);
+    if (_range!.to > _maxLength) {
+      return _maxLength;
+    }
+
+    return _range!.to;
   }
 
-  int get _maxLength => (hasFilter ? _filteredList.length : _list.length) - 1;
+  int get _maxLength => hasFilter ? _filteredList.length : _list.length;
 
   List<E> get _effectiveList => hasFilter
       ? hasRange
@@ -132,6 +140,8 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
 
   @override
   int get length => _effectiveList.length;
+
+  int get originalLength => _list.length;
 
   @override
   set length(int length) {
@@ -440,10 +450,11 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   int _toOriginalIndexForInsert(int index) {
     var lastIndex = _effectiveList.length - 1;
 
-    var greaterThanLast = index > lastIndex;
+    var greaterThanLast = index > lastIndex + (_range?.from ?? 0);
 
-    var originalIndex =
-        greaterThanLast ? _toOriginalIndex(lastIndex) : _toOriginalIndex(index);
+    var originalIndex = greaterThanLast
+        ? _toOriginalIndex(lastIndex + (_range?.from ?? 0))
+        : _toOriginalIndex(index);
 
     if (greaterThanLast) {
       ++originalIndex;
@@ -454,13 +465,5 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
 
   void _updateFilteredList() {
     _filteredList = _filter == null ? [] : _list.where(_filter!).toList();
-  }
-
-  int _safetyNumberByMaxLength(int number) {
-    return number > _maxLength
-        ? _maxLength < 0
-            ? 0
-            : _maxLength
-        : number;
   }
 }
