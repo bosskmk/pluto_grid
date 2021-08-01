@@ -10,6 +10,8 @@ abstract class IPaginationRowState {
   void setPageSize(int pageSize, {bool notify = true});
 
   void setPage(int page, {bool notify = true});
+
+  void resetPage({bool notify = true});
 }
 
 mixin PaginationRowState implements IPlutoGridState {
@@ -23,6 +25,18 @@ mixin PaginationRowState implements IPlutoGridState {
 
   int get _length =>
       hasFilter ? refRows!.filteredList.length : refRows!.originalList.length;
+
+  int get _adjustPage {
+    if (page > totalPage) {
+      return totalPage;
+    }
+
+    if (page < 1 && totalPage > 0) {
+      return 1;
+    }
+
+    return page;
+  }
 
   int get page => _page;
 
@@ -56,5 +70,9 @@ mixin PaginationRowState implements IPlutoGridState {
     if (notify) {
       notifyListeners();
     }
+  }
+
+  void resetPage({bool notify = true}) {
+    setPage(_adjustPage, notify: notify);
   }
 }

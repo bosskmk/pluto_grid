@@ -498,12 +498,17 @@ class MockPlutoGridStateManager extends _i1.Mock
           }),
           returnValueForMissingStub: null);
   @override
-  void setFilter(_i2.FilteredListFilter<_i2.PlutoRow?>? filter) =>
-      super.noSuchMethod(Invocation.method(#setFilter, [filter]),
+  void setFilter(_i2.FilteredListFilter<_i2.PlutoRow?>? filter,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setFilter, [filter], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setFilterWithFilterRows(List<_i2.PlutoRow?>? rows) =>
-      super.noSuchMethod(Invocation.method(#setFilterWithFilterRows, [rows]),
+  void setFilterWithFilterRows(List<_i2.PlutoRow?>? rows,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #setFilterWithFilterRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void setFilterRows(List<_i2.PlutoRow?>? rows) =>
@@ -695,6 +700,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void setPage(int? page, {bool? notify = true}) =>
       super.noSuchMethod(Invocation.method(#setPage, [page], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  void resetPage({bool? notify = true}) =>
+      super.noSuchMethod(Invocation.method(#resetPage, [], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   int? getRowIdxByOffset(double? offset) =>

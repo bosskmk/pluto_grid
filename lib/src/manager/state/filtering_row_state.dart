@@ -7,9 +7,9 @@ abstract class IFilteringRowState {
 
   bool get hasFilter;
 
-  void setFilter(FilteredListFilter filter);
+  void setFilter(FilteredListFilter<PlutoRow?>? filter, {bool notify = true});
 
-  void setFilterWithFilterRows(List<PlutoRow> rows);
+  void setFilterWithFilterRows(List<PlutoRow?> rows, {bool notify = true});
 
   void setFilterRows(List<PlutoRow> rows);
 
@@ -30,7 +30,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   bool get hasFilter => refRows!.hasFilter;
 
-  void setFilter(FilteredListFilter<PlutoRow?>? filter) {
+  void setFilter(FilteredListFilter<PlutoRow?>? filter, {bool notify = true}) {
     for (var row in refRows!.originalList) {
       row!.setState(PlutoRowState.none);
     }
@@ -49,10 +49,12 @@ mixin FilteringRowState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void setFilterWithFilterRows(List<PlutoRow?> rows) {
+  void setFilterWithFilterRows(List<PlutoRow?> rows, {bool notify = true}) {
     setFilterRows(rows);
 
     var enabledFilterColumnFields =
@@ -60,6 +62,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
     setFilter(
       FilterHelper.convertRowsToFilter(_filterRows, enabledFilterColumnFields),
+      notify: notify,
     );
   }
 

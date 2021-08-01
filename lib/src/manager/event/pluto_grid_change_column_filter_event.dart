@@ -24,24 +24,33 @@ class PlutoGridChangeColumnFilterEvent extends PlutoGridEvent {
           ),
         );
 
-  void handler(PlutoGridStateManager? stateManager) {
+  List<PlutoRow?> _getFilterRows(PlutoGridStateManager? stateManager) {
     List<PlutoRow?> foundFilterRows =
         stateManager!.filterRowsByField(column!.field);
 
     if (foundFilterRows.isEmpty) {
-      stateManager.setFilterWithFilterRows([
+      return [
         ...stateManager.filterRows,
         FilterHelper.createFilterRow(
           columnField: column!.field,
           filterType: filterType,
           filterValue: filterValue,
         ),
-      ]);
-    } else {
-      foundFilterRows.first!.cells[FilterHelper.filterFieldValue]!.value =
-          filterValue;
-
-      stateManager.setFilterWithFilterRows(stateManager.filterRows);
+      ];
     }
+
+    foundFilterRows.first!.cells[FilterHelper.filterFieldValue]!.value =
+        filterValue;
+
+    return stateManager.filterRows;
+  }
+
+  void handler(PlutoGridStateManager? stateManager) {
+    stateManager!.setFilterWithFilterRows(
+      _getFilterRows(stateManager),
+      notify: false,
+    );
+
+    stateManager.resetPage();
   }
 }
