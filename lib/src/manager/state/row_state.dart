@@ -225,18 +225,22 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    if (rowIdx < 0 || refRows!.length < rowIdx) {
+    if (page > 1) {
+      rowIdx += (page - 1) * pageSize;
+    }
+
+    if (rowIdx < 0 || refRows!.originalLength < rowIdx) {
       return;
     } else if (rowIdx == 0) {
       prependRows(rows);
       return;
-    } else if (refRows!.length == rowIdx) {
+    } else if (refRows!.originalLength == rowIdx) {
       appendRows(rows);
       return;
     }
 
     if (hasSortedColumn) {
-      final int? sortIdx = refRows![rowIdx]!.sortIdx;
+      final int? sortIdx = refRows!.originalList[rowIdx]!.sortIdx;
 
       PlutoGridStateManager.initializeRows(
         refColumns,
@@ -244,9 +248,10 @@ mixin RowState implements IPlutoGridState {
         start: sortIdx,
       );
 
-      for (var i = 0; i < refRows!.length; i += 1) {
-        if (sortIdx! <= refRows![i]!.sortIdx!) {
-          refRows![i]!.sortIdx = refRows![i]!.sortIdx! + rows.length;
+      for (var i = 0; i < refRows!.originalLength; i += 1) {
+        if (sortIdx! <= refRows!.originalList[i]!.sortIdx!) {
+          refRows!.originalList[i]!.sortIdx =
+              refRows!.originalList[i]!.sortIdx! + rows.length;
         }
       }
 
@@ -256,7 +261,7 @@ mixin RowState implements IPlutoGridState {
 
       PlutoGridStateManager.initializeRows(
         refColumns,
-        refRows,
+        refRows!.originalList,
         forceApplySortIdx: true,
       );
     }
