@@ -148,7 +148,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.4.0"
+    version: "2.4.1"
   rainbow_color:
     dependency: "direct main"
     description:

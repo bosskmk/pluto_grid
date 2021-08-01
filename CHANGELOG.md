@@ -1,3 +1,7 @@
+## [2.4.1] - 2021. 8. 1
+
+* Fix pagination bug.
+
 ## [2.4.0] - 2021. 7. 31
 
 * Added pagination. 
