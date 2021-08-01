@@ -46,11 +46,6 @@ class PlutoGridChangeColumnFilterEvent extends PlutoGridEvent {
   }
 
   void handler(PlutoGridStateManager? stateManager) {
-    stateManager!.setFilterWithFilterRows(
-      _getFilterRows(stateManager),
-      notify: false,
-    );
-
-    stateManager.resetPage();
+    stateManager!.setFilterWithFilterRows(_getFilterRows(stateManager));
   }
 }

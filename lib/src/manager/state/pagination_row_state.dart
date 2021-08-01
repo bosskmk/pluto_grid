@@ -7,6 +7,8 @@ abstract class IPaginationRowState {
 
   int get totalPage;
 
+  bool get isPaginated;
+
   void setPageSize(int pageSize, {bool notify = true});
 
   void setPage(int page, {bool notify = true});
@@ -43,6 +45,8 @@ mixin PaginationRowState implements IPlutoGridState {
   int get pageSize => _pageSize;
 
   int get totalPage => (_length / _pageSize).ceil();
+
+  bool get isPaginated => refRows!.hasRange;
 
   void setPageSize(int pageSize, {bool notify = true}) {
     _pageSize = pageSize;

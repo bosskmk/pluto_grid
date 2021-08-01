@@ -62,8 +62,12 @@ mixin FilteringRowState implements IPlutoGridState {
 
     setFilter(
       FilterHelper.convertRowsToFilter(_filterRows, enabledFilterColumnFields),
-      notify: notify,
+      notify: isPaginated ? false : notify,
     );
+
+    if (isPaginated) {
+      resetPage();
+    }
   }
 
   void setFilterRows(List<PlutoRow?> rows) {
