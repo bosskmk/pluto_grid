@@ -452,6 +452,86 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Načítání...',
   });
+
+  const PlutoGridLocaleText.brazilianPortuguese({
+    // Column menu
+    this.unfreezeColumn = 'Descongelar',
+    this.freezeColumnToLeft = 'Congelar à esquerda',
+    this.freezeColumnToRight = 'Congelar à direita',
+    this.autoFitColumn = 'Auto Ajustar',
+    this.hideColumn = 'Esconder coluna',
+    this.setColumns = 'Definir coluneas',
+    this.setFilter = 'Definir fitros',
+    this.resetFilter = 'Limpar filtros',
+    // SetColumns popup
+    this.setColumnsTitle = 'Título da coluna',
+    // Filter popup
+    this.filterColumn = 'Coluna',
+    this.filterType = 'Tipo',
+    this.filterValue = 'Valor',
+    this.filterAllColumns = 'Todas as colunas',
+    this.filterContains = 'Contenha',
+    this.filterEquals = 'Igual',
+    this.filterStartsWith = 'Iniciar com',
+    this.filterEndsWith = 'Terminar com',
+    this.filterGreaterThan = 'Maior que',
+    this.filterGreaterThanOrEqualTo = 'Maior ou igual que',
+    this.filterLessThan = 'Menor que',
+    this.filterLessThanOrEqualTo = 'Menor ou igual que',
+    // Date popup
+    this.sunday = 'Dom',
+    this.monday = 'Seg',
+    this.tuesday = 'Ter',
+    this.wednesday = 'Qua',
+    this.thursday = 'Qui',
+    this.friday = 'Sex',
+    this.saturday = 'Sab',
+    // Time column popup
+    this.hour = 'Hora',
+    this.minute = 'Minuto',
+    // Common
+    this.loadingText = 'Carregando...',
+  });
+
+  const PlutoGridLocaleText.spanish({
+    // Column menu
+    this.unfreezeColumn = 'Descongelar',
+    this.freezeColumnToLeft = 'Congelar a la izquierda',
+    this.freezeColumnToRight = 'Congelar a la derecha',
+    this.autoFitColumn = 'Autoajuste',
+    this.hideColumn = 'Ocultar columna',
+    this.setColumns = 'Eligir columnas',
+    this.setFilter = 'Definir fitros',
+    this.resetFilter = 'Limpiar filtros',
+    // SetColumns popup
+    this.setColumnsTitle = 'Título de la columna',
+    // Filter popup
+    this.filterColumn = 'Columna',
+    this.filterType = 'Tipo',
+    this.filterValue = 'Valor',
+    this.filterAllColumns = 'Todas las columnas',
+    this.filterContains = 'Contenga',
+    this.filterEquals = 'Igual',
+    this.filterStartsWith = 'Empezar con',
+    this.filterEndsWith = 'Terminar con',
+    this.filterGreaterThan = 'Más grande que',
+    this.filterGreaterThanOrEqualTo = 'Más grande o igual que',
+    this.filterLessThan = 'Más pequeño que',
+    this.filterLessThanOrEqualTo = 'Más pequeño o igual que',
+    // Date popup
+    this.sunday = 'Dom',
+    this.monday = 'Lu',
+    this.tuesday = 'Ma',
+    this.wednesday = 'Mi',
+    this.thursday = 'Ju',
+    this.friday = 'Vi',
+    this.saturday = 'Sa',
+    // Time column popup
+    this.hour = 'Hora',
+    this.minute = 'Minuto',
+    // Common
+    this.loadingText = 'Cargando...',
+  });
 }
 
 enum PlutoGridEnterKeyAction {
