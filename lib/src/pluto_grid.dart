@@ -344,6 +344,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               axis: Axis.horizontal,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         ],
@@ -395,6 +397,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               axis: Axis.vertical,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!)
@@ -407,6 +411,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               reverse: true,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         Positioned(
@@ -416,6 +422,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                           child: PlutoShadowLine(
                             axis: Axis.horizontal,
                             color: stateManager.configuration!.gridBorderColor,
+                            shadow: stateManager
+                                .configuration!.enableGridBorderShadow,
                           ),
                         ),
                         if (stateManager.showFooter) ...[
@@ -428,6 +436,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               reverse: true,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                           Positioned.fill(

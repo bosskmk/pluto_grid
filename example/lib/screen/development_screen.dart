@@ -270,6 +270,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
             enableColumnBorder: true,
+            enableGridBorderShadow: true,
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,
