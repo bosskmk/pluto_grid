@@ -269,6 +269,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           createFooter: (stateManager) => PlutoPagination(stateManager),
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
+            enableColumnBorder: true,
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,
