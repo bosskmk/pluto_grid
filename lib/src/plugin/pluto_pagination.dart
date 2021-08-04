@@ -44,7 +44,7 @@ abstract class _PlutoPaginationStateWithChange
 }
 
 class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
-  int get _startPaging {
+  int get _startPage {
     var start = page - 4;
 
     if (page + 3 > totalPage) {
@@ -54,7 +54,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
     return start < 0 ? 0 : start;
   }
 
-  int get _endPaging {
+  int get _endPage {
     var end = page + 3;
 
     if (page - 4 < 0) {
@@ -62,6 +62,13 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
     }
 
     return end > totalPage ? totalPage : end;
+  }
+
+  List<int> get _pageNumbers {
+    return List.generate(
+      _endPage - _startPage,
+      (index) => _startPage + index,
+    );
   }
 
   void _firstPage() {
@@ -174,12 +181,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      ...List.generate(
-                        totalPage,
-                        _makeNumberButton,
-                      ).getRange(_startPaging, _endPaging),
-                    ],
+                    children: _pageNumbers.map(_makeNumberButton).toList(),
                   ),
                 ),
               ),
