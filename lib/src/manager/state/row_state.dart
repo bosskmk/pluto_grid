@@ -93,15 +93,13 @@ mixin RowState implements IPlutoGridState {
 
   FilteredList<PlutoRow?>? _refRows;
 
-  List<PlutoRow?> get checkedRows =>
-      refRows!.where((row) => row!.checked!).toList(
-            growable: false,
-          );
+  List<PlutoRow?> get checkedRows => refRows!.where((row) => row!.checked!).toList(
+        growable: false,
+      );
 
-  List<PlutoRow?> get unCheckedRows =>
-      refRows!.where((row) => !row!.checked!).toList(
-            growable: false,
-          );
+  List<PlutoRow?> get unCheckedRows => refRows!.where((row) => !row!.checked!).toList(
+        growable: false,
+      );
 
   bool get hasCheckedRow =>
       refRows!.firstWhere(
@@ -270,8 +268,7 @@ mixin RowState implements IPlutoGridState {
     }
 
     /// Update currentSelectingPosition
-    if (currentSelectingPosition != null &&
-        rowIdx <= currentSelectingPosition!.rowIdx!) {
+    if (currentSelectingPosition != null && rowIdx <= currentSelectingPosition!.rowIdx!) {
       setCurrentSelectingPosition(
         cellPosition: PlutoGridCellPosition(
           columnIdx: currentSelectingPosition!.columnIdx,
@@ -295,10 +292,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    final start = (refRows!.isNotEmpty
-            ? refRows!.map((row) => row!.sortIdx ?? 0).reduce(min)
-            : 0) -
-        rows.length;
+    final start = (refRows!.isNotEmpty ? refRows!.map((row) => row!.sortIdx ?? 0).reduce(min) : 0) - rows.length;
 
     PlutoGridStateManager.initializeRows(
       refColumns,
@@ -348,9 +342,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    final start = refRows!.isNotEmpty
-        ? refRows!.map((row) => row!.sortIdx ?? 0).reduce(max) + 1
-        : 0;
+    final start = refRows!.isNotEmpty ? refRows!.map((row) => row!.sortIdx ?? 0).reduce(max) + 1 : 0;
 
     PlutoGridStateManager.initializeRows(
       refColumns,
@@ -375,6 +367,51 @@ mixin RowState implements IPlutoGridState {
     notifyListeners();
   }
 
+  void removeRowAt(
+    int rowIdx, {
+    bool notify = true,
+  }) {
+    if (currentRowIdx == rowIdx) resetCurrentState(notify: false);
+
+    Key? selectingCellKey;
+
+    if (hasCurrentSelectingPosition)
+      selectingCellKey = refRows![currentSelectingPosition!.rowIdx!]!
+          .cells
+          .entries
+          .elementAt(currentSelectingPosition!.columnIdx!)
+          .value
+          .key;
+
+    refRows!.removeAt(rowIdx);
+
+    updateCurrentCellPosition(notify: false);
+
+    if (selectingCellKey != null) setCurrentSelectingPositionByCellKey(selectingCellKey, notify: false);
+
+    if (notify) notifyListeners();
+  }
+
+  void modifyRowAt(int rowIdx, PlutoRow row, {bool notify = true}) {
+    PlutoGridStateManager.initializeRows(refColumns, [row]);
+
+    final existingCells = refRows![rowIdx]?.cells;
+
+    if (existingCells == null) throw Exception();
+
+    if (currentRowIdx == rowIdx) resetCurrentState(notify: false);
+
+    for (final e in row.cells.entries) {
+      if (existingCells.containsKey(e.key)) {
+        existingCells[e.key]!.value = e.value.value;
+      } else {
+        existingCells[e.key] = e.value;
+      }
+    }
+
+    if (notify) notifyListeners();
+  }
+
   void removeRows(
     List<PlutoRow?>? rows, {
     bool notify = true,
@@ -383,8 +420,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    final List<Key> removeKeys =
-        rows.map((e) => e!.key).toList(growable: false);
+    final List<Key> removeKeys = rows.map((e) => e!.key).toList(growable: false);
 
     if (currentRowIdx != null &&
         refRows!.length > currentRowIdx! &&
