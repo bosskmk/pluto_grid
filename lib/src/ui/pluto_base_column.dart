@@ -14,8 +14,7 @@ class PlutoBaseColumn extends PlutoStatefulWidget {
   _PlutoBaseColumnState createState() => _PlutoBaseColumnState();
 }
 
-abstract class _PlutoBaseColumnStateWithChange
-    extends PlutoStateWithChange<PlutoBaseColumn> {
+abstract class _PlutoBaseColumnStateWithChange extends PlutoStateWithChange<PlutoBaseColumn> {
   bool? showColumnFilter;
 
   @override

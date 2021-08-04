@@ -35,7 +35,8 @@ abstract class _PlutoColumnFilterStateWithChange extends PlutoStateWithChange<Pl
   }
 
   bool get hasCompositeFilter {
-    return filterRows!.length > 1 || widget.stateManager.filterRowsByField(FilterHelper.filterFieldAllColumns).isNotEmpty;
+    return filterRows!.length > 1 ||
+        widget.stateManager.filterRowsByField(FilterHelper.filterFieldAllColumns).isNotEmpty;
   }
 
   @override
@@ -127,9 +128,9 @@ abstract class _PlutoColumnFilterStateWithChange extends PlutoStateWithChange<Pl
     }
 
     if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent && plutoEvent.direction!.isUp) {
-      var isCurrentColumn =
-          widget.stateManager.refColumns![widget.stateManager.columnIndexesByShowFrozen[plutoEvent.cellPosition!.columnIdx!]].key ==
-              widget.column!.key;
+      var isCurrentColumn = widget.stateManager
+              .refColumns![widget.stateManager.columnIndexesByShowFrozen[plutoEvent.cellPosition!.columnIdx!]].key ==
+          widget.column!.key;
 
       if (isCurrentColumn) {
         widget.stateManager.clearCurrentCell(notify: false);
@@ -151,8 +152,9 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
         borderRadius: BorderRadius.zero,
       );
 
-  Color get textFieldColor =>
-      enabled! ? widget.stateManager.configuration!.cellColorInEditState : widget.stateManager.configuration!.cellColorInReadOnlyState;
+  Color get textFieldColor => enabled!
+      ? widget.stateManager.configuration!.cellColorInEditState
+      : widget.stateManager.configuration!.cellColorInReadOnlyState;
 
   void handleOnTap() {
     widget.stateManager.setKeepFocus(false);
@@ -173,7 +175,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     return Container(
       width: widget.column!.width,
       height: widget.stateManager.columnHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
       child: Align(
         alignment: Alignment.center,
         child: Stack(
@@ -193,7 +195,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
                 border: border,
                 enabledBorder: border,
                 focusedBorder: enabledBorder,
-                contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               ),
             ),
           ],

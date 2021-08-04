@@ -395,7 +395,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                             child: widget.createFooter!(stateManager),
                           ),
                         ],
-                        if (_showColumnFilter!)
+                        /*if (_showColumnFilter!)
                           Positioned(
                             top: stateManager.headerHeight + stateManager.columnHeight,
                             left: 0,
@@ -406,7 +406,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                                 color: stateManager.configuration!.gridBorderColor,
                               ),
                             ),
-                          ),
+                          ),*/
                         if (stateManager.showLoading)
                           Positioned.fill(
                             child: PlutoLoading(
@@ -530,6 +530,8 @@ class PlutoGridSettings {
 
   /// Default column width
   static const double columnWidth = 200.0;
+
+  static const double columnHeight = 30.0;
 
   /// Column width
   static const double minColumnWidth = 80.0;

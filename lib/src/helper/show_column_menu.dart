@@ -4,16 +4,15 @@ import 'package:pluto_grid/pluto_grid.dart';
 /// Open the context menu on the right side of the column.
 Future<PlutoGridColumnMenuItem?>? showColumnMenu({
   BuildContext? context,
-  Offset? position,
+  required Offset position,
   PlutoGridStateManager? stateManager,
   PlutoColumn? column,
 }) {
-  if (position == null) {
+  /*if (position == null) {
     return null;
-  }
+  }*/
 
-  final RenderBox overlay =
-      Overlay.of(context!)!.context.findRenderObject() as RenderBox;
+  final RenderBox overlay = Overlay.of(context!)!.context.findRenderObject() as RenderBox;
 
   final Color? textColor = stateManager!.configuration!.cellTextStyle.color;
 
@@ -32,10 +31,8 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     );
   };
 
-  final PopupMenuItem<PlutoGridColumnMenuItem> Function<
-              PlutoGridColumnMenuItem>(
-          {Widget child, bool enabled, PlutoGridColumnMenuItem value})
-      buildMenuItem = <PlutoGridColumnMenuItem>({
+  final PopupMenuItem<PlutoGridColumnMenuItem> Function<PlutoGridColumnMenuItem>(
+      {Widget child, bool enabled, PlutoGridColumnMenuItem value}) buildMenuItem = <PlutoGridColumnMenuItem>({
     PlutoGridColumnMenuItem? value,
     Widget? child,
     bool enabled = true,
@@ -50,11 +47,21 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
 
   final localeText = stateManager.localeText;
 
+  final screenSize = MediaQuery.of(context).size;
+
   return showMenu<PlutoGridColumnMenuItem>(
     context: context,
     color: backgroundColor,
-    position: RelativeRect.fromRect(
-        position & const Size(40, 40), Offset.zero & overlay.size),
+    position: RelativeRect.fromLTRB(
+      position.dx - 10,
+      position.dy - 180,
+      screenSize.width - position.dx,
+      screenSize.height - position.dy,
+    ),
+    /*position: RelativeRect.fromRect(
+      position & const Size(40, 40),
+      Offset.zero & overlay.size,
+    ),*/
     items: [
       if (column!.frozen.isFrozen == true)
         buildMenuItem(
