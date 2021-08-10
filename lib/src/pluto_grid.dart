@@ -49,6 +49,8 @@ class PlutoGrid extends StatefulWidget {
   /// you can receive the selected row and cell from the onSelected callback.
   final PlutoGridMode? mode;
 
+  final bool showColumnFilters;
+
   const PlutoGrid({
     Key? key,
     required this.columns,
@@ -63,6 +65,7 @@ class PlutoGrid extends StatefulWidget {
     this.createFooter,
     this.configuration,
     this.mode = PlutoGridMode.normal,
+    this.showColumnFilters = false,
   }) : super(key: key);
 
   @override
@@ -146,6 +149,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
+      showColumnFilter: widget.showColumnFilters,
     );
 
     stateManager.addListener(changeStateListener);
@@ -395,7 +399,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                             child: widget.createFooter!(stateManager),
                           ),
                         ],
-                        /*if (_showColumnFilter!)
+                        //This is the line between the column filters and the column headers
+                        /* if (_showColumnFilter!)
                           Positioned(
                             top: stateManager.headerHeight + stateManager.columnHeight,
                             left: 0,

@@ -61,9 +61,11 @@ class PlutoGridStateManager extends PlutoGridState {
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
+    bool? showColumnFilter,
   }) {
     refColumns = FilteredList(initialList: columns);
     refRows = FilteredList(initialList: rows);
+    if (showColumnFilter != null) setShowColumnFilter(showColumnFilter);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
     setGridMode(mode);

@@ -120,7 +120,7 @@ mixin LayoutState implements IPlutoGridState {
 
   bool? _showFrozenColumn;
 
-  bool get showColumnFilter => _showColumnFilter != false;
+  bool get showColumnFilter => _showColumnFilter == true;
 
   bool? _showColumnFilter;
 
@@ -143,7 +143,7 @@ mixin LayoutState implements IPlutoGridState {
   // todo : set columnHeight from configuration.
   double get columnHeight => PlutoGridSettings.columnHeight;
 
-  double get columnFilterHeight => showColumnFilter ? PlutoGridSettings.rowTotalHeight : 0;
+  double get columnFilterHeight => showColumnFilter ? PlutoGridSettings.columnHeight : 0;
 
   double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
 
@@ -231,7 +231,7 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   void setShowColumnFilter(bool flag) {
-    if (_showColumnFilter == flag) {
+    if (showColumnFilter == flag) {
       return;
     }
 
