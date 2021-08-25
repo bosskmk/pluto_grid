@@ -137,8 +137,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
         ),
         if (_showContextIcon)
           Positioned(
-            top: 9,
-            right: -3,
+            top: 0,
+            right: -20,
             child: _enableGesture
                 ? GestureDetector(
                     onTapUp: widget.column.enableContextMenu

@@ -271,7 +271,12 @@ class _ApplyCellForSetColumn implements _Apply {
 
   void execute(PlutoRow? row) {
     refColumns.forEach((element) {
-      row!.cells[element.field]!.setColumn(element);
+      try {
+        row!.cells[element.field]!.setColumn(element);
+      } catch (err, stack) {
+        print('Error Access Field: (${element.field})');
+        rethrow;
+      }
     });
   }
 }
