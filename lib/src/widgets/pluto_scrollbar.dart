@@ -423,14 +423,14 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
 class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
   _ThumbPressGestureRecognizer({
     double? postAcceptSlopTolerance,
-    PointerDeviceKind? kind,
+    Set<PointerDeviceKind>? supportedDevices,
     required Object debugOwner,
     required GlobalKey customPaintKey,
     this.onlyDraggingThumb = false,
   })  : _customPaintKey = customPaintKey,
         super(
           postAcceptSlopTolerance: postAcceptSlopTolerance,
-          kind: kind,
+          supportedDevices: supportedDevices,
           debugOwner: debugOwner,
           duration: const Duration(milliseconds: 100),
         );
