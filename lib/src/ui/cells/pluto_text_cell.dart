@@ -21,7 +21,6 @@ class PlutoTextCell extends StatefulWidget implements AbstractMixinTextCell {
 class _PlutoTextCellState extends State<PlutoTextCell>
     with MixinTextCell<PlutoTextCell> {
   @override
-  @override
   Widget build(BuildContext context) {
     if (widget.stateManager!.keepFocus) {
       cellFocus!.requestFocus();
