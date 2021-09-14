@@ -27,6 +27,9 @@ class PlutoColumnGroup with IterableMixin<PlutoColumn> {
     }
   }
 
+  double get minWidth => columns.fold(0, (sum, col) => sum + col.minWidth);
+  double get width => columns.fold(0, (sum, col) => sum + col.width);
+
   @override
   Iterator<PlutoColumn> get iterator => columns.iterator;
 }
