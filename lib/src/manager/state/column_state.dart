@@ -107,9 +107,10 @@ abstract class IColumnState {
 
 mixin ColumnState implements IPlutoGridState {
   List<PlutoColumn> get columns => [...refColumns!];
-
+ 
   FilteredList<PlutoColumnGroup>? _refColumnGroups;
   FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
+
   set refColumnGroups(FilteredList<PlutoColumnGroup>? columnGroups) {
     _refColumnGroups = columnGroups;
     _refColumnGroups!.setFilter((element) => element.hide == false);
@@ -418,6 +419,30 @@ mixin ColumnState implements IPlutoGridState {
       column.key,
       textPainter.width - column.width + (PlutoGridSettings.cellPadding * 2) + 10,
     );
+  }
+
+  void hideColumnGroup(
+    Key columnKey,
+    bool flag, {
+    bool notify = true,
+  }) {
+    var found = refColumnGroups!.originalList.firstWhereOrNull(
+      (element) => element.key == columnKey,
+    );
+
+    if (found == null || found.hide == flag) {
+      return;
+    }
+
+    found.hide = flag;
+
+    refColumns!.update();
+
+    resetCurrentState(notify: false);
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void hideColumn(

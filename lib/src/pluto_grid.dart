@@ -352,10 +352,32 @@ class _PlutoGridState extends State<PlutoGrid> {
                             ),
                           ),
                         ],
+                        if (stateManager.refColumnGroups != null)
+                          Positioned.fill(
+                            top: stateManager.headerHeight,
+                            bottom: stateManager.headerBottomOffset - stateManager.headerHeight,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              children: stateManager.refColumnGroups!
+                                  .map(
+                                    (e) => e.hide
+                                        ? const SizedBox()
+                                        : ConstrainedBox(
+                                            constraints: BoxConstraints.tight(
+                                              Size.fromWidth(e.width),
+                                            ),
+                                            child: e.title,
+                                          ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        
                         // TODO: Add column groups below header
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
                           Positioned.fill(
-                            top: stateManager.headerHeight,
+                            top: stateManager.totalHeaderHeight,
                             left: 0,
                             child: PlutoLeftFrozenColumns(stateManager),
                           ),
@@ -366,8 +388,9 @@ class _PlutoGridState extends State<PlutoGrid> {
                             child: PlutoLeftFrozenRows(stateManager),
                           ),
                         ],
+                        
                         Positioned.fill(
-                          top: stateManager.headerHeight,
+                          top: stateManager.headerHeight * 2,
                           left: _bodyLeftOffset,
                           right: _bodyRightOffset,
                           child: PlutoBodyColumns(stateManager),
@@ -381,7 +404,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                         ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!) ...[
                           Positioned.fill(
-                            top: stateManager.headerHeight,
+                            top: stateManager.totalHeaderHeight,
                             left: _rightFrozenLeftOffset,
                             child: PlutoRightFrozenColumns(stateManager),
                           ),
@@ -394,7 +417,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                         ],
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!)
                           Positioned(
-                            top: stateManager.headerHeight,
+                            top: stateManager.totalHeaderHeight + 1,
                             left: _bodyLeftOffset! - 1,
                             bottom: stateManager.footerHeight,
                             child: PlutoShadowLine(
@@ -404,7 +427,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!)
                           Positioned(
-                            top: stateManager.headerHeight,
+                            top: stateManager.totalHeaderHeight + 1,
                             left: _rightFrozenLeftOffset! - 1,
                             bottom: stateManager.footerHeight,
                             child: PlutoShadowLine(

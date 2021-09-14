@@ -20,6 +20,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
 
+  List<bool> hideGroups = [false, false, false];
+
   @override
   void initState() {
     super.initState();
@@ -57,8 +59,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager!
-                      .removeRows([rendererContext.row]);
+                  rendererContext.stateManager!.removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
                 color: Colors.red,
@@ -179,7 +180,28 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       body: Container(
         padding: const EdgeInsets.all(15),
         child: PlutoGrid(
-          columns: columns,
+          
+          columnGroups: [
+            PlutoColumnGroup(
+              columns: columns!.sublist(0, 2),
+              title: const Align(
+                child: Text('test 1'),
+              ),
+            ),
+            PlutoColumnGroup(
+              columns: columns!.sublist(2, 4),
+              title: const Align(
+                child: Text('test 2'),
+              ),
+            ),
+            PlutoColumnGroup(
+              columns: columns!.sublist(4, 6),
+              title: const Align(
+                child: Text('test 3'),
+              ),
+            ),
+          ],
+          // columns: columns,
           rows: rows,
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
@@ -198,7 +220,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print('Secondary click A Row.(${e.offset})');
           //   print(e.row?.cells['column1']?.value);
           // },
+          
+
           createHeader: (PlutoGridStateManager stateManager) {
+            // print(stateManager.refColumnGroups);
+            print('rebuild');
+            
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
@@ -207,6 +234,31 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   spacing: 10,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
+                    
+                    ElevatedButton(
+                      child: const Text('hide group 1'),
+                      onPressed: () {
+                        final colGroup = stateManager.refColumnGroups![0];
+                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
+                        setState(() {});
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('hide group 2'),
+                      onPressed: () {
+                        final colGroup = stateManager.refColumnGroups![1];
+                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
+                        setState(() {});
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('hide group 3'),
+                      onPressed: () {
+                        final colGroup = stateManager.refColumnGroups![2];
+                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
+                        // setState(() {});
+                      },
+                    ),
                     ElevatedButton(
                       child: const Text('Go Home'),
                       onPressed: () {
@@ -241,8 +293,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                         items: PlutoGridStateManager.selectingModes
                             .map<DropdownMenuItem<PlutoGridSelectingMode>>(
                                 (PlutoGridSelectingMode item) {
-                          final color =
-                              gridSelectingMode == item ? Colors.blue : null;
+                          final color = gridSelectingMode == item ? Colors.blue : null;
 
                           return DropdownMenuItem<PlutoGridSelectingMode>(
                             value: item,
@@ -269,11 +320,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           createFooter: (stateManager) => PlutoPagination(stateManager),
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
+            
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
             ),
+            
             // localeText: const PlutoGridLocaleText.korean(),
             // columnFilterConfig: PlutoGridColumnFilterConfig(
             //   filters: const [

@@ -96,11 +96,15 @@ mixin LayoutState implements IPlutoGridState {
 
   // TODO: Somewhere here we should have `columnGroupsHeaderHeight`.
 
+  double get columnGroupHeaderHeight => PlutoGridSettings.rowHeight;
+
+  double get totalHeaderHeight => headerHeight + columnGroupHeaderHeight;
+
   double get headerHeight => createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
   double get footerHeight => createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
-  double get offsetHeight => maxHeight! - headerHeight - footerHeight;
+  double get offsetHeight => maxHeight! - headerHeight - footerHeight - columnGroupHeaderHeight;
 
   Offset? get gridGlobalOffset {
     if (gridKey == null) {
@@ -149,7 +153,8 @@ mixin LayoutState implements IPlutoGridState {
 
   double get columnFilterHeight => showColumnFilter ? PlutoGridSettings.rowTotalHeight : 0;
 
-  double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
+  double get rowsTopOffset =>
+      headerHeight + columnHeight + columnFilterHeight + columnGroupHeaderHeight;
 
   double get rowHeight => configuration!.rowHeight;
 

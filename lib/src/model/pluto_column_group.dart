@@ -10,7 +10,7 @@ class PlutoColumnGroup with IterableMixin<PlutoColumn> {
   })  : _hide = false,
         _key = UniqueKey();
 
-  final String title;
+  final Widget title;
   final List<PlutoColumn> columns;
 
   /// Column key
