@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/model/pluto_column_group.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_state.dart';
@@ -51,6 +52,7 @@ class PlutoGridState extends PlutoChangeNotifier
 class PlutoGridStateManager extends PlutoGridState {
   PlutoGridStateManager({
     required List<PlutoColumn>? columns,
+    required List<PlutoColumnGroup>? columnGroups,
     required List<PlutoRow?>? rows,
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController? scroll,
@@ -65,6 +67,7 @@ class PlutoGridStateManager extends PlutoGridState {
     PlutoGridConfiguration? configuration,
   }) {
     refColumns = FilteredList(initialList: columns);
+    refColumnGroups = FilteredList(initialList: columnGroups);
     refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
@@ -80,8 +83,7 @@ class PlutoGridStateManager extends PlutoGridState {
     setGridKey(GlobalKey());
   }
 
-  static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.none.items;
+  static List<PlutoGridSelectingMode> get selectingModes => PlutoGridSelectingMode.none.items;
 
   static void initializeRows(
     List<PlutoColumn>? refColumns,
@@ -90,10 +92,7 @@ class PlutoGridStateManager extends PlutoGridState {
     bool increase = true,
     int? start = 0,
   }) {
-    if (refColumns == null ||
-        refColumns.isEmpty ||
-        refRows == null ||
-        refRows.isEmpty) {
+    if (refColumns == null || refColumns.isEmpty || refRows == null || refRows.isEmpty) {
       return;
     }
 
@@ -288,9 +287,8 @@ class _ApplyCellForFormat implements _Apply {
   ) {
     assert(refColumns.isNotEmpty);
 
-    columnsToApply = refColumns
-        .where((element) => element.type.applyFormatOnInit!)
-        .toList(growable: false);
+    columnsToApply =
+        refColumns.where((element) => element.type.applyFormatOnInit!).toList(growable: false);
   }
 
   late List<PlutoColumn> columnsToApply;
@@ -299,8 +297,7 @@ class _ApplyCellForFormat implements _Apply {
 
   void execute(PlutoRow? row) {
     columnsToApply.forEach((column) {
-      row!.cells[column.field]!.value =
-          column.type.applyFormat(row.cells[column.field]!.value);
+      row!.cells[column.field]!.value = column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {
         row.cells[column.field]!.value = num.tryParse(
