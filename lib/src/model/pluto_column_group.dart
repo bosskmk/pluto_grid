@@ -38,3 +38,10 @@ extension PlutoColumnGroupsX on List<PlutoColumnGroup> {
   List<PlutoColumn> get expandedColumns => [...expand((group) => group)];
   int get expandedLength => fold(0, (n, group) => n + group.length);
 }
+
+
+/// PSUEDOCODE
+/// final expandedCols = groups.expandedColumns;
+/// for (int i=0; i<expandedCols.length; i++) {
+///   assert(expandedCols[i] == columns[i]);
+/// }

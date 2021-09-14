@@ -53,6 +53,7 @@ class PlutoGrid extends StatefulWidget {
   /// you can receive the selected row and cell from the onSelected callback.
   final PlutoGridMode? mode;
 
+  // TODO: Consider an alternative which allows us to make [PlutoGrid] const.
   PlutoGrid({
     Key? key,
     required this.rows,
