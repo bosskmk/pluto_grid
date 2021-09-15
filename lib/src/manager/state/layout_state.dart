@@ -94,9 +94,7 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _maxHeight;
 
-  // TODO: Somewhere here we should have `columnGroupsHeaderHeight`.
-
-  double get columnGroupHeaderHeight => PlutoGridSettings.rowHeight;
+  double get columnGroupHeaderHeight => showColumnGroupHeader ? PlutoGridSettings.rowHeight : 0;
 
   double get totalHeaderHeight => headerHeight + columnGroupHeaderHeight;
 

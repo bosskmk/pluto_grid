@@ -56,6 +56,7 @@ class PlutoGridStateManager extends PlutoGridState {
     ///Removed required to fix test cases
     ///TODO add to test cases and put required if necessary
     List<PlutoColumnGroup>? columnGroups,
+    bool showColumnGroupHeader = false,
     required List<PlutoRow?>? rows,
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController? scroll,
@@ -83,6 +84,7 @@ class PlutoGridStateManager extends PlutoGridState {
     setCreateHeader(createHeader);
     setCreateFooter(createFooter);
     setConfiguration(configuration);
+    setShowColumnGroupHeader(showColumnGroupHeader);
     setGridKey(GlobalKey());
   }
 

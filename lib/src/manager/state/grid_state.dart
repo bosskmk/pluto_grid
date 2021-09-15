@@ -23,10 +23,13 @@ abstract class IGridState {
 
   CreateHeaderCallBack? get createHeader;
 
-
   CreateFooterCallBack? get createFooter;
 
   PlutoGridLocaleText get localeText;
+
+  bool get showColumnGroupHeader;
+
+  void setShowColumnGroupHeader(bool show);
 
   void setGridKey(GlobalKey key);
 
@@ -103,12 +106,18 @@ mixin GridState implements IPlutoGridState {
 
   CreateHeaderCallBack? _createHeader;
 
-
   CreateFooterCallBack? get createFooter => _createFooter;
 
   CreateFooterCallBack? _createFooter;
 
   PlutoGridLocaleText get localeText => configuration!.localeText;
+
+  bool? _showColumnGroupHeader;
+  bool get showColumnGroupHeader => _showColumnGroupHeader ?? false;
+
+  void setShowColumnGroupHeader(bool show) {
+    _showColumnGroupHeader = show;
+  }
 
   void setKeyManager(PlutoGridKeyManager? keyManager) {
     _keyManager = keyManager;
@@ -145,8 +154,6 @@ mixin GridState implements IPlutoGridState {
   void setCreateHeader(CreateHeaderCallBack? createHeader) {
     _createHeader = createHeader;
   }
-
-  
 
   void setCreateFooter(CreateFooterCallBack? createFooter) {
     _createFooter = createFooter;

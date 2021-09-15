@@ -46,6 +46,8 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoGridConfiguration? configuration;
 
+  final bool? showColumnHeader;
+
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
   ///
@@ -69,6 +71,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
+    this.showColumnHeader,
     this.mode = PlutoGridMode.normal,
   })  : assert(
           columns != null || columnGroups != null,
@@ -159,6 +162,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   void initStateManager() {
     stateManager = PlutoGridStateManager(
+      showColumnGroupHeader: widget.showColumnHeader ?? false,
       columns: widget.columns,
       columnGroups: widget.columnGroups,
       rows: widget.rows,
@@ -353,7 +357,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                             ),
                           ),
                         ],
-                        if (stateManager.refColumnGroups != null)
+                        if (stateManager.showColumnGroupHeader) ...[
                           Positioned.fill(
                             top: stateManager.headerHeight,
                             bottom: stateManager.headerBottomOffset - stateManager.headerHeight,
@@ -361,6 +365,16 @@ class _PlutoGridState extends State<PlutoGrid> {
                             right: 0,
                             child: PlutoBodyColumnGroups(stateManager),
                           ),
+                          Positioned(
+                            top: stateManager.totalHeaderHeight,
+                            left: 0,
+                            right: 0,
+                            child: PlutoShadowLine(
+                              axis: Axis.horizontal,
+                              color: stateManager.configuration!.gridBorderColor,
+                            ),
+                          ),
+                        ],
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
                           Positioned.fill(
                             top: stateManager.totalHeaderHeight,

@@ -180,7 +180,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       body: Container(
         padding: const EdgeInsets.all(15),
         child: PlutoGrid(
-          
+          showColumnHeader: true,
           columnGroups: [
             PlutoColumnGroup(
               columns: columns!.sublist(0, 2),
@@ -238,7 +238,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     ElevatedButton(
                       child: const Text('hide group 1'),
                       onPressed: () {
-                        final colGroup = stateManager.refColumnGroups![0];
+                        final colGroup = stateManager.refColumnGroups!.originalList[0];
                         stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
                         // setState(() {});
                       },
@@ -246,7 +246,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     ElevatedButton(
                       child: const Text('hide group 2'),
                       onPressed: () {
-                        final colGroup = stateManager.refColumnGroups![1];
+                        final colGroup = stateManager.refColumnGroups!.originalList[1];
                         stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
                         // setState(() {});
                       },
@@ -254,7 +254,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                     ElevatedButton(
                       child: const Text('hide group 3'),
                       onPressed: () {
-                        final colGroup = stateManager.refColumnGroups![2];
+                        final colGroup = stateManager.refColumnGroups!.originalList[2];
                         stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
                         // setState(() {});
                       },
