@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/manager/state/column_group_state.dart';
 import 'package:pluto_grid/src/model/pluto_column_group.dart';
 
 import 'state/cell_state.dart';
@@ -21,6 +22,7 @@ abstract class IPlutoGridState extends PlutoChangeNotifier
     implements
         ICellState,
         IColumnState,
+        IColumnGroupState,
         IDraggingRowState,
         IEditingState,
         IFilteringRowState,
@@ -37,6 +39,7 @@ class PlutoGridState extends PlutoChangeNotifier
     with
         CellState,
         ColumnState,
+        ColumnGroupState,
         DraggingRowState,
         EditingState,
         FilteringRowState,
@@ -52,9 +55,6 @@ class PlutoGridState extends PlutoChangeNotifier
 class PlutoGridStateManager extends PlutoGridState {
   PlutoGridStateManager({
     required List<PlutoColumn>? columns,
-
-    ///Removed required to fix test cases
-    ///TODO add to test cases and put required if necessary
     List<PlutoColumnGroup>? columnGroups,
     bool showColumnGroupHeader = false,
     required List<PlutoRow?>? rows,

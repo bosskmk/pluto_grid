@@ -24,6 +24,8 @@ typedef CreateFooterCallBack = Widget Function(PlutoGridStateManager stateManage
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn>? columns;
 
+  /// Use this instead of `columns` to group columns together.
+  /// TODO: add to test cases
   final List<PlutoColumnGroup>? columnGroups;
 
   final List<PlutoRow?>? rows;
@@ -46,7 +48,8 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoGridConfiguration? configuration;
 
-  final bool? showColumnHeader;
+  /// Whether to display the [PlutoColumnGroup] header.
+  final bool showColumnHeader;
 
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
@@ -71,7 +74,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    this.showColumnHeader,
+    bool showColumnHeader = true,
     this.mode = PlutoGridMode.normal,
   })  : assert(
           columns != null || columnGroups != null,
@@ -82,6 +85,7 @@ class PlutoGrid extends StatefulWidget {
           '`columns` and `columnGroups` cannot both be null.',
         ),
         columns = columns ?? columnGroups!.expandedColumns,
+        showColumnHeader = columnGroups != null && showColumnHeader,
         super(key: key);
 
   @override
@@ -162,7 +166,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   void initStateManager() {
     stateManager = PlutoGridStateManager(
-      showColumnGroupHeader: widget.showColumnHeader ?? false,
+      showColumnGroupHeader: widget.showColumnHeader,
       columns: widget.columns,
       columnGroups: widget.columnGroups,
       rows: widget.rows,

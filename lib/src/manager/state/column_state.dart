@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/model/pluto_column_group.dart';
 
 import '../pluto_grid_state_manager.dart';
 
@@ -107,18 +106,11 @@ abstract class IColumnState {
 
 mixin ColumnState implements IPlutoGridState {
   List<PlutoColumn> get columns => [...refColumns!];
-  List<PlutoColumnGroup>? get columnGroups =>
-      refColumnGroups == null ? null : [...refColumnGroups!];
-
-  FilteredList<PlutoColumnGroup>? _refColumnGroups;
-  FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
-  set refColumnGroups(FilteredList<PlutoColumnGroup>? columnGroups) {
-    _refColumnGroups = columnGroups;
-    _refColumnGroups!.setFilter((element) => element.hide == false);
-  }
 
   FilteredList<PlutoColumn>? _refColumns;
+
   FilteredList<PlutoColumn>? get refColumns => _refColumns;
+
   set refColumns(FilteredList<PlutoColumn>? setColumns) {
     _refColumns = setColumns;
     _refColumns!.setFilter((element) => element.hide == false);
@@ -420,31 +412,6 @@ mixin ColumnState implements IPlutoGridState {
       column.key,
       textPainter.width - column.width + (PlutoGridSettings.cellPadding * 2) + 10,
     );
-  }
-
-  void hideColumnGroup(
-    Key columnKey,
-    bool flag, {
-    bool notify = true,
-  }) {
-    var found = refColumnGroups!.originalList.firstWhereOrNull(
-      (element) => element.key == columnKey,
-    );
-
-    if (found == null || found.hide == flag) {
-      return;
-    }
-
-    found.hide = flag;
-
-    refColumnGroups!.update();
-    refColumns!.update();
-
-    resetCurrentState(notify: false);
-
-    if (notify) {
-      notifyListeners();
-    }
   }
 
   void hideColumn(
