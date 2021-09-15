@@ -11,8 +11,7 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
   _PlutoBodyColumnsState createState() => _PlutoBodyColumnsState();
 }
 
-abstract class _PlutoBodyColumnsStateWithChange
-    extends PlutoStateWithChange<PlutoBodyColumns> {
+abstract class _PlutoBodyColumnsStateWithChange extends PlutoStateWithChange<PlutoBodyColumns> {
   List<PlutoColumn>? columns;
 
   double? width;

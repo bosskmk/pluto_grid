@@ -13,21 +13,19 @@ typedef _UpdateStateFunction = T Function<T>(
 
 typedef _CompareFunction<T> = bool Function(T a, T b);
 
-abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier>
-    extends StatefulWidget implements _HasPlutoStateManager<StateManager> {
+abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier> extends StatefulWidget
+    implements _HasPlutoStateManager<StateManager> {
   PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
-abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
-    extends State<T> {
+abstract class PlutoStateWithChange<T extends PlutoStatefulWidget> extends State<T> {
   bool _initialized = false;
 
   bool _changed = false;
 
   bool get changed => _changed;
 
-  StatefulElement? get _statefulElement =>
-      mounted ? context as StatefulElement? : null;
+  StatefulElement? get _statefulElement => mounted ? context as StatefulElement? : null;
 
   void onChange();
 
@@ -64,9 +62,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     bool? destructureList = false,
   }) {
     if (_changed == false) {
-      _changed = compare == null
-          ? oldValue != newValue
-          : compare(oldValue, newValue) == false;
+      _changed = compare == null ? oldValue != newValue : compare(oldValue, newValue) == false;
     }
 
     if (destructureList!) {

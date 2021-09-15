@@ -107,10 +107,11 @@ abstract class IColumnState {
 
 mixin ColumnState implements IPlutoGridState {
   List<PlutoColumn> get columns => [...refColumns!];
- 
+  List<PlutoColumnGroup>? get columnGroups =>
+      refColumnGroups == null ? null : [...refColumnGroups!];
+
   FilteredList<PlutoColumnGroup>? _refColumnGroups;
   FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
-
   set refColumnGroups(FilteredList<PlutoColumnGroup>? columnGroups) {
     _refColumnGroups = columnGroups;
     _refColumnGroups!.setFilter((element) => element.hide == false);
@@ -436,6 +437,7 @@ mixin ColumnState implements IPlutoGridState {
 
     found.hide = flag;
 
+    refColumnGroups!.update();
     refColumns!.update();
 
     resetCurrentState(notify: false);

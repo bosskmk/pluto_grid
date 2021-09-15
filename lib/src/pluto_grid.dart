@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/pluto_body_column_groups.dart';
 
 import 'model/pluto_column_group.dart';
 
@@ -264,11 +265,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         _hasRightFrozenColumns != stateManager.hasRightFrozenColumns ||
         _rightFrozenLeftOffset != stateManager.rightFrozenLeftOffset ||
         _showColumnFilter != stateManager.showColumnFilter ||
-        _showLoading != stateManager.showLoading ||
-        //TODO put a better condition to restate the header
-        widget.columnGroups != stateManager.refColumnGroups ||
-        stateManager.columns.length !=
-            stateManager.refColumnGroups!.fold<int>(0, (s, t) => s + t.columns.length)) {
+        _showLoading != stateManager.showLoading) {
       setState(resetState);
     }
   }
@@ -362,20 +359,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                             bottom: stateManager.headerBottomOffset - stateManager.headerHeight,
                             left: 0,
                             right: 0,
-                            child: Row(
-                              children: stateManager.refColumnGroups!
-                                  .map(
-                                    (e) => e.hide
-                                        ? const SizedBox()
-                                        : ConstrainedBox(
-                                            constraints: BoxConstraints.tight(
-                                              Size.fromWidth(e.width),
-                                            ),
-                                            child: e.title,
-                                          ),
-                                  )
-                                  .toList(),
-                            ),
+                            child: PlutoBodyColumnGroups(stateManager),
                           ),
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
                           Positioned.fill(
