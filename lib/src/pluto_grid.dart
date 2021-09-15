@@ -264,7 +264,11 @@ class _PlutoGridState extends State<PlutoGrid> {
         _hasRightFrozenColumns != stateManager.hasRightFrozenColumns ||
         _rightFrozenLeftOffset != stateManager.rightFrozenLeftOffset ||
         _showColumnFilter != stateManager.showColumnFilter ||
-        _showLoading != stateManager.showLoading) {
+        _showLoading != stateManager.showLoading ||
+        //TODO put a better condition to restate the header
+        widget.columnGroups != stateManager.refColumnGroups ||
+        stateManager.columns.length !=
+            stateManager.refColumnGroups!.fold<int>(0, (s, t) => s + t.columns.length)) {
       setState(resetState);
     }
   }
@@ -373,8 +377,6 @@ class _PlutoGridState extends State<PlutoGrid> {
                                   .toList(),
                             ),
                           ),
-                        
-                        // TODO: Add column groups below header
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
                           Positioned.fill(
                             top: stateManager.totalHeaderHeight,
@@ -388,9 +390,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                             child: PlutoLeftFrozenRows(stateManager),
                           ),
                         ],
-                        
                         Positioned.fill(
-                          top: stateManager.headerHeight * 2,
+                          top: stateManager.totalHeaderHeight,
                           left: _bodyLeftOffset,
                           right: _bodyRightOffset,
                           child: PlutoBodyColumns(stateManager),

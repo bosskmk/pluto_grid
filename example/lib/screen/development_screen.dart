@@ -240,7 +240,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       onPressed: () {
                         final colGroup = stateManager.refColumnGroups![0];
                         stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
-                        setState(() {});
+                        // setState(() {});
                       },
                     ),
                     ElevatedButton(
@@ -248,7 +248,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       onPressed: () {
                         final colGroup = stateManager.refColumnGroups![1];
                         stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
-                        setState(() {});
+                        // setState(() {});
                       },
                     ),
                     ElevatedButton(
