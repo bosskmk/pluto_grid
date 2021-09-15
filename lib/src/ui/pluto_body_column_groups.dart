@@ -41,6 +41,7 @@ class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
         children: columnGroups!
             .map(
