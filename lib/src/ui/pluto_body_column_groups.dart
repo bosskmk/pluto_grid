@@ -27,9 +27,7 @@ abstract class _PlutoBodyColumnGroupsStateWithChange
     });
   }
 
-  List<PlutoColumnGroup> _getColumnGroups() {
-    return widget.stateManager.columnGroups!;
-  }
+  List<PlutoColumnGroup> _getColumnGroups() => widget.stateManager.columnGroups;
 }
 
 class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange {

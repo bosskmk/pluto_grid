@@ -12,6 +12,8 @@ class DevelopmentScreen extends StatefulWidget {
 }
 
 class _DevelopmentScreenState extends State<DevelopmentScreen> {
+  final GlobalKey<PopupMenuButtonState> _popupMenuKey = GlobalKey<PopupMenuButtonState>();
+
   List<PlutoColumn>? columns;
 
   List<PlutoRow>? rows;
@@ -19,8 +21,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   PlutoGridStateManager? stateManager;
 
   PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
-
-  List<bool> hideGroups = [false, false, false];
 
   @override
   void initState() {
@@ -220,12 +220,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print('Secondary click A Row.(${e.offset})');
           //   print(e.row?.cells['column1']?.value);
           // },
-          
 
           createHeader: (PlutoGridStateManager stateManager) {
-            // print(stateManager.refColumnGroups);
-            print('rebuild');
-            
+            final colGroups = stateManager.refColumnGroups!.originalList;
+
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
@@ -234,31 +232,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   spacing: 10,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    
-                    ElevatedButton(
-                      child: const Text('hide group 1'),
-                      onPressed: () {
-                        final colGroup = stateManager.refColumnGroups!.originalList[0];
-                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
-                        // setState(() {});
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('hide group 2'),
-                      onPressed: () {
-                        final colGroup = stateManager.refColumnGroups!.originalList[1];
-                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
-                        // setState(() {});
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('hide group 3'),
-                      onPressed: () {
-                        final colGroup = stateManager.refColumnGroups!.originalList[2];
-                        stateManager.hideColumnGroup(colGroup.key, !colGroup.hide, notify: true);
-                        // setState(() {});
-                      },
-                    ),
                     ElevatedButton(
                       child: const Text('Go Home'),
                       onPressed: () {
@@ -312,6 +285,33 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       child: const Text('Toggle filter'),
                       onPressed: handleToggleColumnFilter,
                     ),
+                    PopupMenuButton<Key>(
+                      key: _popupMenuKey,
+                      child: ElevatedButton(
+                        child: const Text('Toggle column groups'),
+                        onPressed: () => _popupMenuKey.currentState?.showButtonMenu(),
+                      ),
+                      onSelected: (key) => stateManager.hideColumnGroup(
+                        key,
+                        !colGroups.firstWhere((cg) => cg.key == key).hide,
+                      ),
+                      itemBuilder: (context) => [
+                        for (final cg in colGroups)
+                          PopupMenuItem(
+                            value: cg.key,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  cg.hide ? Icons.close : Icons.check,
+                                  color: cg.hide ? Colors.red : Colors.green,
+                                ),
+                                const SizedBox(width: 15),
+                                cg.title,
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -320,13 +320,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           createFooter: (stateManager) => PlutoPagination(stateManager),
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
-            
+
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
             ),
-            
+
             // localeText: const PlutoGridLocaleText.korean(),
             // columnFilterConfig: PlutoGridColumnFilterConfig(
             //   filters: const [
