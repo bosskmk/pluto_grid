@@ -48,7 +48,7 @@ class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange 
                   ? const SizedBox()
                   : ConstrainedBox(
                       constraints: BoxConstraints.tight(
-                        Size.fromWidth(e.width),
+                        Size(e.width, widget.stateManager.columnGroupHeaderHeight),
                       ),
                       child: e.title,
                     ),
