@@ -40,19 +40,21 @@ class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange 
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: columnGroups!
-          .map(
-            (e) => e.hide
-                ? const SizedBox()
-                : ConstrainedBox(
-                    constraints: BoxConstraints.tight(
-                      Size.fromWidth(e.width),
+    return SingleChildScrollView(
+      child: Row(
+        children: columnGroups!
+            .map(
+              (e) => e.hide
+                  ? const SizedBox()
+                  : ConstrainedBox(
+                      constraints: BoxConstraints.tight(
+                        Size.fromWidth(e.width),
+                      ),
+                      child: e.title,
                     ),
-                    child: e.title,
-                  ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }
