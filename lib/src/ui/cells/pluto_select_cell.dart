@@ -34,8 +34,10 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
 
     popupHeight = ((widget.column!.type.select!.items!.length + 1) *
             widget.stateManager!.rowTotalHeight) +
-        PlutoGridSettings.shadowLineSize +
-        PlutoGridSettings.gridInnerSpacing;
+        (widget.stateManager!.configuration?.settings.shadowLineSize ??
+            PlutoGridSettings.defaultShadowLineSize) +
+        (widget.stateManager!.configuration?.settings.gridInnerSpacing ??
+            PlutoGridSettings.defaultGridInnerSpacing);
 
     fieldOnSelected = widget.column!.title;
 

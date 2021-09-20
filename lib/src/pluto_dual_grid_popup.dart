@@ -10,6 +10,7 @@ class PlutoDualGridPopup {
   final PlutoDualGridDisplay display;
   final double? width;
   final double? height;
+  final PlutoGridConfiguration? configuration;
 
   PlutoDualGridPopup({
     this.context,
@@ -20,6 +21,7 @@ class PlutoDualGridPopup {
     this.display = const PlutoDualGridDisplayRatio(),
     this.width,
     this.height,
+    this.configuration,
   }) {
     open();
   }
@@ -34,7 +36,8 @@ class PlutoDualGridPopup {
                   builder: (ctx, size) {
                     return Container(
                       width: (width ?? size.maxWidth) +
-                          PlutoGridSettings.gridInnerSpacing,
+                          (configuration?.settings.gridInnerSpacing ??
+                              PlutoGridSettings.defaultGridInnerSpacing),
                       height: height ?? size.maxHeight,
                       child: PlutoDualGrid(
                         gridPropsA: gridPropsA,

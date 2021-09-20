@@ -169,13 +169,14 @@ class __RowContainerWidgetState
         border: Border(
           top: isDragTarget! && isTopDragTarget!
               ? BorderSide(
-                  width: PlutoGridSettings.rowBorderWidth,
+                  width: widget
+                      .stateManager.configuration!.settings.rowBorderWidth,
                   color:
                       widget.stateManager.configuration!.activatedBorderColor,
                 )
               : BorderSide.none,
           bottom: BorderSide(
-            width: PlutoGridSettings.rowBorderWidth,
+            width: widget.stateManager.configuration!.settings.rowBorderWidth,
             color: isDragTarget! && isBottomDragTarget!
                 ? widget.stateManager.configuration!.activatedBorderColor
                 : widget.stateManager.configuration!.borderColor,
