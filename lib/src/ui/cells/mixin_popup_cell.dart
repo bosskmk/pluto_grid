@@ -94,7 +94,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
       configuration: widget.column!.type.isSelect
           ? widget.stateManager!.configuration
           : widget.stateManager!.configuration!.copyWith(
-              rowHeight: PlutoGridSettings.rowHeight,
+              rowHeight: widget.stateManager!.configuration!.settings.rowHeight,
             ),
     );
   }

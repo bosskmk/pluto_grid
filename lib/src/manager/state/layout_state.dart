@@ -92,9 +92,15 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _maxHeight;
 
-  double get headerHeight => createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get headerHeight => createHeader == null
+      ? 0
+      : configuration?.settings.rowTotalHeight ??
+          PlutoGridSettings.defaultRowTotalHeight;
 
-  double get footerHeight => createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get footerHeight => createFooter == null
+      ? 0
+      : configuration?.settings.rowTotalHeight ??
+          PlutoGridSettings.defaultRowTotalHeight;
 
   double get offsetHeight => maxHeight! - headerHeight - footerHeight;
 
@@ -103,7 +109,8 @@ mixin LayoutState implements IPlutoGridState {
       return _gridGlobalOffset;
     }
 
-    final RenderBox? gridRenderBox = gridKey!.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? gridRenderBox =
+        gridKey!.currentContext?.findRenderObject() as RenderBox?;
 
     if (gridRenderBox == null) {
       return _gridGlobalOffset;
@@ -138,58 +145,101 @@ mixin LayoutState implements IPlutoGridState {
 
   double get headerBottomOffset => maxHeight! - headerHeight;
 
-  double get footerTopOffset => maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
+  double get footerTopOffset =>
+      maxHeight! -
+      footerHeight -
+      (configuration?.settings.totalShadowLineWidth ??
+          PlutoGridSettings.defaultTotalShadowLineWidth);
 
   // todo : set columnHeight from configuration.
-  double get columnHeight => PlutoGridSettings.columnHeight;
+  double get columnHeight =>
+      configuration?.settings.columnHeight ??
+      PlutoGridSettings.defaultColumnHeight;
 
-  double get columnFilterHeight => showColumnFilter ? PlutoGridSettings.columnHeight : 0;
+  double get columnFilterHeight => showColumnFilter
+      ? (configuration?.settings.columnHeight ??
+          PlutoGridSettings.defaultColumnHeight)
+      : 0;
 
   double get rowsTopOffset => headerHeight + columnHeight + columnFilterHeight;
 
   double get rowHeight => configuration!.rowHeight;
 
-  double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;
+  double get rowTotalHeight =>
+      rowHeight +
+      (configuration?.settings.rowBorderWidth ??
+          PlutoGridSettings.defaultRowBorderWidth);
 
   double get bodyTopOffset =>
-      gridGlobalOffset!.dy + headerHeight + PlutoGridSettings.gridBorderWidth + columnHeight + columnFilterHeight;
+      gridGlobalOffset!.dy +
+      headerHeight +
+      (configuration?.settings.gridBorderWidth ??
+          PlutoGridSettings.defaultGridBorderWidth) +
+      columnHeight +
+      columnFilterHeight;
 
   double get bodyLeftOffset {
-    return (showFrozenColumn! && leftFrozenColumnsWidth > 0) ? leftFrozenColumnsWidth + 1 : 0;
+    return (showFrozenColumn! && leftFrozenColumnsWidth > 0)
+        ? leftFrozenColumnsWidth + 1
+        : 0;
   }
 
   double get bodyRightOffset {
-    return (showFrozenColumn! && rightFrozenColumnsWidth > 0) ? rightFrozenColumnsWidth + 1 : 0;
+    return (showFrozenColumn! && rightFrozenColumnsWidth > 0)
+        ? rightFrozenColumnsWidth + 1
+        : 0;
   }
 
   double get bodyLeftScrollOffset {
-    final double leftFrozenColumnWidth = showFrozenColumn! ? leftFrozenColumnsWidth : 0;
+    final double leftFrozenColumnWidth =
+        showFrozenColumn! ? leftFrozenColumnsWidth : 0;
 
     return gridGlobalOffset!.dx +
-        PlutoGridSettings.gridPadding +
-        PlutoGridSettings.gridBorderWidth +
+        (configuration?.settings.gridPadding ??
+            PlutoGridSettings.defaultGridPadding) +
+        (configuration?.settings.gridBorderWidth ??
+            PlutoGridSettings.defaultGridBorderWidth) +
         leftFrozenColumnWidth +
-        PlutoGridSettings.offsetScrollingFromEdge;
+        (configuration?.settings.offsetScrollingFromEdge ??
+            PlutoGridSettings.defaultOffsetScrollingFromEdge);
   }
 
   double get bodyRightScrollOffset {
-    final double rightFrozenColumnWidth = showFrozenColumn! ? rightFrozenColumnsWidth : 0;
+    final double rightFrozenColumnWidth =
+        showFrozenColumn! ? rightFrozenColumnsWidth : 0;
 
-    return (gridGlobalOffset!.dx + maxWidth!) - rightFrozenColumnWidth - PlutoGridSettings.offsetScrollingFromEdge;
+    return (gridGlobalOffset!.dx + maxWidth!) -
+        rightFrozenColumnWidth -
+        (configuration?.settings.offsetScrollingFromEdge ??
+            PlutoGridSettings.defaultOffsetScrollingFromEdge);
   }
 
   double get bodyUpScrollOffset {
-    return bodyTopOffset + PlutoGridSettings.offsetScrollingFromEdge;
+    return bodyTopOffset +
+        (configuration?.settings.offsetScrollingFromEdge ??
+            PlutoGridSettings.defaultOffsetScrollingFromEdge);
   }
 
   double get bodyDownScrollOffset {
-    return gridGlobalOffset!.dy + maxHeight! - footerHeight - PlutoGridSettings.offsetScrollingFromEdge;
+    return gridGlobalOffset!.dy +
+        maxHeight! -
+        footerHeight -
+        (configuration?.settings.offsetScrollingFromEdge ??
+            PlutoGridSettings.defaultOffsetScrollingFromEdge);
   }
 
-  double get rightFrozenLeftOffset => maxWidth! - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
+  double get rightFrozenLeftOffset =>
+      maxWidth! -
+      bodyRightOffset -
+      (configuration?.settings.totalShadowLineWidth ??
+          PlutoGridSettings.defaultTotalShadowLineWidth) +
+      1;
 
   double get rightBlankOffset =>
-      rightFrozenLeftOffset - leftFrozenColumnsWidth - bodyColumnsWidth + scroll!.horizontal!.offset;
+      rightFrozenLeftOffset -
+      leftFrozenColumnsWidth -
+      bodyColumnsWidth +
+      scroll!.horizontal!.offset;
 
   double get scrollOffsetByFrozenColumn {
     double offset = 0;

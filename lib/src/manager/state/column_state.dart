@@ -120,11 +120,16 @@ mixin ColumnState implements IPlutoGridState {
   List<int> get columnIndexes => refColumns!.asMap().keys.toList();
 
   List<int> get columnIndexesForShowFrozen {
-    return [...leftFrozenColumnIndexes, ...bodyColumnIndexes, ...rightFrozenColumnIndexes];
+    return [
+      ...leftFrozenColumnIndexes,
+      ...bodyColumnIndexes,
+      ...rightFrozenColumnIndexes
+    ];
   }
 
   double get columnsWidth {
-    return refColumns!.fold(0, (double value, element) => value + element.width);
+    return refColumns!
+        .fold(0, (double value, element) => value + element.width);
   }
 
   List<PlutoColumn> get leftFrozenColumns {
@@ -141,7 +146,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   double get leftFrozenColumnsWidth {
-    return leftFrozenColumns.fold(0, (double value, element) => value + element.width);
+    return leftFrozenColumns.fold(
+        0, (double value, element) => value + element.width);
   }
 
   List<PlutoColumn> get rightFrozenColumns {
@@ -158,7 +164,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   double get rightFrozenColumnsWidth {
-    return rightFrozenColumns.fold(0, (double value, element) => value + element.width);
+    return rightFrozenColumns.fold(
+        0, (double value, element) => value + element.width);
   }
 
   List<PlutoColumn> get bodyColumns {
@@ -175,7 +182,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   double get bodyColumnsWidth {
-    return bodyColumns.fold(0, (double value, element) => value + element.width);
+    return bodyColumns.fold(
+        0, (double value, element) => value + element.width);
   }
 
   PlutoColumn? get currentColumn {
@@ -183,7 +191,9 @@ mixin ColumnState implements IPlutoGridState {
       return null;
     }
 
-    return refColumns!.where((element) => element.field == currentColumnField).first;
+    return refColumns!
+        .where((element) => element.field == currentColumnField)
+        .first;
   }
 
   String? get currentColumnField {
@@ -191,7 +201,8 @@ mixin ColumnState implements IPlutoGridState {
       return null;
     }
 
-    return currentRow!.cells.keys.firstWhereOrNull((key) => currentRow!.cells[key]!.key == currentCell?.key);
+    return currentRow!.cells.keys.firstWhereOrNull(
+        (key) => currentRow!.cells[key]!.key == currentCell?.key);
   }
 
   bool get hasSortedColumn =>
@@ -209,20 +220,24 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   bool isShowFrozenColumn(double? maxWidth) {
-    final bool hasFrozenColumn = leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
+    final bool hasFrozenColumn =
+        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 
     return hasFrozenColumn &&
         maxWidth! >
             (leftFrozenColumnsWidth +
                 rightFrozenColumnsWidth +
-                PlutoGridSettings.bodyMinWidth +
-                PlutoGridSettings.totalShadowLineWidth);
+                (configuration?.settings.bodyMinWidth ??
+                    PlutoGridSettings.defaultBodyMinWidth) +
+                (configuration?.settings.totalShadowLineWidth ??
+                    PlutoGridSettings.defaultTotalShadowLineWidth));
   }
 
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
     for (var i = 0; i < refColumns!.length; i += 1) {
       if (refColumns![i].key == columnKey) {
-        refColumns![i].frozen = refColumns![i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
+        refColumns![i].frozen =
+            refColumns![i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
         break;
       }
     }
@@ -303,7 +318,8 @@ mixin ColumnState implements IPlutoGridState {
     int? Function(int i) findIndexToMove = () {
       final double minLeft = showFrozenColumn! ? leftFrozenColumnsWidth : 0;
 
-      final double minRight = showFrozenColumn! ? maxWidth! - rightFrozenColumnsWidth : maxWidth!;
+      final double minRight =
+          showFrozenColumn! ? maxWidth! - rightFrozenColumnsWidth : maxWidth!;
 
       double currentOffset = 0.0;
 
@@ -318,7 +334,10 @@ mixin ColumnState implements IPlutoGridState {
 
       return (int i) {
         if (i == startIndexToMove) {
-          if (currentOffset < offset && offset < currentOffset + refColumns![columnIndexes[startIndexToMove]].width) {
+          if (currentOffset < offset &&
+              offset <
+                  currentOffset +
+                      refColumns![columnIndexes[startIndexToMove]].width) {
             return columnIndexes[startIndexToMove];
           }
 
@@ -343,7 +362,9 @@ mixin ColumnState implements IPlutoGridState {
       }
     }
 
-    if (columnIndex == indexToMove || columnIndex == null || indexToMove == null) {
+    if (columnIndex == indexToMove ||
+        columnIndex == null ||
+        indexToMove == null) {
       return;
     }
 
@@ -380,7 +401,11 @@ mixin ColumnState implements IPlutoGridState {
 
   void autoFitColumn(BuildContext context, PlutoColumn column) {
     final String maxValue = refRows!.fold('', (previousValue, element) {
-      final value = element!.cells.entries.firstWhere((element) => element.key == column.field).value.value.toString();
+      final value = element!.cells.entries
+          .firstWhere((element) => element.key == column.field)
+          .value
+          .value
+          .toString();
 
       if (previousValue.toString().length < value.toString().length) {
         return value.toString();
@@ -405,7 +430,12 @@ mixin ColumnState implements IPlutoGridState {
 
     resizeColumn(
       column.key,
-      textPainter.width - column.width + (PlutoGridSettings.cellPadding * 2) + 10,
+      textPainter.width -
+          column.width +
+          ((configuration?.settings.cellPadding ??
+                  PlutoGridSettings.defaultCellPadding) *
+              2) +
+          10,
     );
   }
 

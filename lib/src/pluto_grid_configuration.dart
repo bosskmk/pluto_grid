@@ -67,6 +67,9 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  /// Customise filter of columns
+  final PlutoGridSettings settings;
+
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.gridBackgroundColor = Colors.white,
@@ -90,12 +93,13 @@ class PlutoGridConfiguration {
     this.iconColor = Colors.black26,
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
-    this.rowHeight = PlutoGridSettings.rowHeight,
+    this.rowHeight = PlutoGridSettings.defaultRowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.settings = const PlutoGridSettings(),
   }) {
     _init();
   }
@@ -123,12 +127,13 @@ class PlutoGridConfiguration {
     this.iconColor = Colors.white38,
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
-    this.rowHeight = PlutoGridSettings.rowHeight,
+    this.rowHeight = PlutoGridSettings.defaultRowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.settings = const PlutoGridSettings(),
   }) {
     _init();
   }
