@@ -79,6 +79,8 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
                 .moveScrollByRow(PlutoMoveDirection.up, element.key + 1);
           }
         });
+
+        event.stateManager!.setShowColumnFilter(true);
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         controller!.text = event.row!.cells[selectFieldName]!.value.toString();

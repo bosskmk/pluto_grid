@@ -28,12 +28,23 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
     Icons.arrow_drop_down,
   );
 
+  late bool enableColumnFilter;
+
   @override
   void initState() {
     super.initState();
 
-    popupHeight = ((widget.column!.type.select!.items!.length + 1) *
-            widget.stateManager!.rowTotalHeight) +
+    enableColumnFilter = widget.column!.type.select!.enableColumnFilter == null
+        ? false
+        : widget.column!.type.select!.enableColumnFilter as bool;
+
+    int itemLength = (widget.column!.type.select!.items!.length + 1);
+
+    if (enableColumnFilter) {
+      itemLength += 1;
+    }
+
+    popupHeight = (itemLength * widget.stateManager!.rowTotalHeight) +
         PlutoGridSettings.shadowLineSize +
         PlutoGridSettings.gridInnerSpacing;
 
@@ -45,7 +56,7 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
         field: widget.column!.title,
         type: PlutoColumnType.text(readOnly: true),
         formatter: widget.column!.formatter,
-        enableFilterMenuItem: false,
+        enableFilterMenuItem: enableColumnFilter,
         enableHideColumnMenuItem: false,
         enableSetColumnsMenuItem: false,
       )
@@ -62,6 +73,10 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
 
   @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
+    if (enableColumnFilter) {
+      event.stateManager!.setShowColumnFilter(true, notify: false);
+    }
+
     event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
 
     super.onLoaded(event);

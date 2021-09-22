@@ -75,7 +75,7 @@ abstract class ILayoutState {
 
   void resetShowFrozenColumn({bool notify = true});
 
-  void setShowColumnFilter(bool flag);
+  void setShowColumnFilter(bool flag, {bool notify = true});
 
   void setShowLoading(bool flag);
 
@@ -254,14 +254,16 @@ mixin LayoutState implements IPlutoGridState {
     }
   }
 
-  void setShowColumnFilter(bool flag) {
+  void setShowColumnFilter(bool flag, {bool notify = true}) {
     if (_showColumnFilter == flag) {
       return;
     }
 
     _showColumnFilter = flag;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void setShowLoading(bool flag) {

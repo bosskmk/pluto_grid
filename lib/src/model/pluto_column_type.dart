@@ -46,11 +46,13 @@ abstract class PlutoColumnType {
     List<dynamic>? items, {
     bool readOnly = false,
     dynamic defaultValue = '',
+    bool enableColumnFilter = false,
   }) {
     return PlutoColumnTypeSelect(
       readOnly: readOnly,
       defaultValue: defaultValue,
       items: items,
+      enableColumnFilter: enableColumnFilter,
     );
   }
 
@@ -264,10 +266,13 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
 
   List<dynamic>? items;
 
+  bool? enableColumnFilter;
+
   PlutoColumnTypeSelect({
     this.readOnly,
     this.defaultValue,
     this.items,
+    this.enableColumnFilter,
   });
 
   bool isValid(dynamic value) => items!.contains(value) == true;

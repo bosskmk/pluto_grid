@@ -79,7 +79,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column2',
         field: 'column2',
         enableContextMenu: false,
-        type: PlutoColumnType.select(<String>['red', 'blue', 'green']),
+        type: PlutoColumnType.select(
+          <String>['red', 'blue', 'green'],
+          enableColumnFilter: true,
+        ),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 

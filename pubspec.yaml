@@ -12,12 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  rxdart: ^0.27.1
+  rxdart: ^0.27.2
   linked_scroll_controller: ^0.2.0
   collection: ^1.15.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.0.13
-  build_runner: ^2.0.6
+  mockito: ^5.0.16
+  build_runner: ^2.1.2
