@@ -25,50 +25,62 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
       PlutoColumn(
         title: 'Select A',
         field: 'select_a',
-        type: PlutoColumnType.select(<String>[
-          'One',
-          'Two',
-          'Three',
-        ]),
+        type: PlutoColumnType.select(
+          <String>[
+            'One',
+            'Two',
+            'Three',
+          ],
+          enableColumnFilter: true,
+        ),
       ),
       PlutoColumn(
         title: 'Select B',
         field: 'select_b',
-        type: PlutoColumnType.select(<String>[
-          'Mercury',
-          'Venus',
-          'Earth',
-          'Mars',
-          'Jupiter',
-          'Saturn',
-          'Uranus',
-          'Neptune',
-          'Pluto',
-        ]),
+        type: PlutoColumnType.select(
+          <String>[
+            'Mercury',
+            'Venus',
+            'Earth',
+            'Mars',
+            'Jupiter',
+            'Saturn',
+            'Uranus',
+            'Neptune',
+            'Pluto',
+          ],
+          enableColumnFilter: true,
+        ),
       ),
       PlutoColumn(
         title: 'Select C',
         field: 'select_c',
-        type: PlutoColumnType.select(<String>[
-          '9.01',
-          '30.02',
-          '100.001',
-        ]),
+        type: PlutoColumnType.select(
+          <String>[
+            '9.01',
+            '30.02',
+            '100.001',
+          ],
+          enableColumnFilter: true,
+        ),
       ),
       PlutoColumn(
         title: 'Select D',
         field: 'select_d',
-        type: PlutoColumnType.select(<String>[
-          '一',
-          '二',
-          '三',
-          '四',
-          '五',
-          '六',
-          '七',
-          '八',
-          '九',
-        ]),
+        type: PlutoColumnType.select(
+          <String>[
+            '一',
+            '二',
+            '三',
+            '四',
+            '五',
+            '六',
+            '七',
+            '八',
+            '九',
+          ],
+          enableColumnFilter: true,
+        ),
       ),
     ];
 

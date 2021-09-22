@@ -192,6 +192,16 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
       width: widget.column!.width,
       height: widget.stateManager.columnHeight,
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      decoration: widget.stateManager.configuration!.enableColumnBorder
+          ? BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: widget.stateManager.configuration!.borderColor,
+                  width: 1.0,
+                ),
+              ),
+            )
+          : const BoxDecoration(),
       child: Align(
         alignment: Alignment.center,
         child: Stack(

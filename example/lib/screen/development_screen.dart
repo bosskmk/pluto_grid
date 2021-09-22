@@ -79,7 +79,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column2',
         field: 'column2',
         enableContextMenu: false,
-        type: PlutoColumnType.select(<String>['red', 'blue', 'green']),
+        type: PlutoColumnType.select(
+          <String>['red', 'blue', 'green'],
+          enableColumnFilter: true,
+        ),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
@@ -129,7 +132,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 100, columns: columns);
+    rows = DummyData.rowsByColumns(length: 400, columns: columns);
   }
 
   void handleAddRowButton({int? count}) {
@@ -269,6 +272,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           createFooter: (stateManager) => PlutoPagination(stateManager),
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
+            enableColumnBorder: true,
+            enableGridBorderShadow: true,
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,

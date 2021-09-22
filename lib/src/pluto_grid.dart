@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -315,7 +317,7 @@ class _PlutoGridState extends State<PlutoGrid> {
               return Focus(
                 focusNode: stateManager.gridFocusNode,
                 child: ScrollConfiguration(
-                  behavior: const ScrollBehavior().copyWith(
+                  behavior: const PlutoScrollBehavior().copyWith(
                     scrollbars: false,
                   ),
                   child: Container(
@@ -344,6 +346,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               axis: Axis.horizontal,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         ],
@@ -395,6 +399,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               axis: Axis.vertical,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!)
@@ -407,6 +413,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               reverse: true,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                         Positioned(
@@ -416,6 +424,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                           child: PlutoShadowLine(
                             axis: Axis.horizontal,
                             color: stateManager.configuration!.gridBorderColor,
+                            shadow: stateManager
+                                .configuration!.enableGridBorderShadow,
                           ),
                         ),
                         if (stateManager.showFooter) ...[
@@ -428,6 +438,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                               reverse: true,
                               color:
                                   stateManager.configuration!.gridBorderColor,
+                              shadow: stateManager
+                                  .configuration!.enableGridBorderShadow,
                             ),
                           ),
                           Positioned.fill(
@@ -619,6 +631,16 @@ class PlutoGridSettings {
   static const double offsetScrollingFromEdgeAtOnce = 200.0;
 
   static const int debounceMillisecondsForColumnFilter = 300;
+}
+
+class PlutoScrollBehavior extends MaterialScrollBehavior {
+  const PlutoScrollBehavior() : super();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 enum PlutoGridMode {
