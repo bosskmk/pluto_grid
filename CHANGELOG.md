@@ -1,3 +1,9 @@
+## [2.5.0] - 2021. 9. 22
+
+* flutter 2.5 compatible.
+* Added enableGridBorderShadow option to PlutoGridConfiguration.
+* Added enableColumnFilter option to Select column.
+
 ## [2.4.1] - 2021. 8. 1
 
 * Fix pagination bug.
