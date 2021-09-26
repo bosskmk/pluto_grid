@@ -365,8 +365,8 @@ class _PlutoGridState extends State<PlutoGrid> {
                           Positioned.fill(
                             top: stateManager.headerHeight,
                             bottom: stateManager.headerBottomOffset - stateManager.headerHeight,
-                            left: 0,
-                            right: 0,
+                            left: _bodyLeftOffset,
+                            right: _bodyRightOffset,
                             child: PlutoBodyColumnGroups(stateManager),
                           ),
                         ],
