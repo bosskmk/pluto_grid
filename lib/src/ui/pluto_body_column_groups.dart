@@ -31,16 +31,18 @@ abstract class _PlutoBodyColumnGroupsStateWithChange
 }
 
 class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange {
+  ScrollController? scroll;
+
   @override
   void initState() {
     super.initState();
-    // TODO: For some reason, this is required in order for the [PlutoStateWithChange]
-    // logic to be executed. Whack
+    scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: scroll,
       scrollDirection: Axis.horizontal,
       child: Row(
         children: columnGroups!
