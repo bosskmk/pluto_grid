@@ -23,7 +23,7 @@ class PlutoImageCell extends StatefulWidget implements AbstractMixinTextCell {
 class _PlutoImageCellState extends State<PlutoImageCell> {
   @override
   Widget build(BuildContext context) {
-    if (widget.column?.type?.isValid(widget.cell) != true || widget.column?.type is! PlutoColumnTypeImage)
+    if (widget.column?.type?.isValid(widget.cell?.value) != true || widget.column?.type is! PlutoColumnTypeImage)
       return Container();
 
     PlutoColumnTypeImage type = widget.column!.type as PlutoColumnTypeImage;
