@@ -364,10 +364,19 @@ class _PlutoGridState extends State<PlutoGrid> {
                         if (stateManager.showColumnGroupHeader) ...[
                           Positioned.fill(
                             top: stateManager.headerHeight,
-                            bottom: stateManager.headerBottomOffset - stateManager.headerHeight,
+                            bottom: stateManager.headerBottomOffset - stateManager.headerHeight - 6,
                             left: _bodyLeftOffset,
                             right: _bodyRightOffset,
                             child: PlutoBodyColumnGroups(stateManager),
+                          ),
+                          Positioned(
+                            bottom: stateManager.headerBottomOffset - stateManager.headerHeight - 7,
+                            left: 0,
+                            right: 0,
+                            child: PlutoShadowLine(
+                              axis: Axis.horizontal,
+                              color: stateManager.configuration!.gridBorderColor,
+                            ),
                           ),
                         ],
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[

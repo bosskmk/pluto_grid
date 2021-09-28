@@ -41,23 +41,35 @@ class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange 
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ListView.separated(
       controller: scroll,
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: columnGroups!
-            .map(
-              (e) => e.hide
-                  ? const SizedBox()
-                  : ConstrainedBox(
-                      constraints: BoxConstraints.tight(
-                        Size(e.width, widget.stateManager.columnGroupHeaderHeight),
-                      ),
-                      child: e.title,
-                    ),
-            )
-            .toList(),
-      ),
+      itemCount: columnGroups!.length,
+      itemBuilder: (context, index) {
+        final columnGroup = columnGroups![index];
+
+        if (columnGroup.hide) {
+          return const SizedBox();
+        }
+        return ConstrainedBox(
+          constraints: BoxConstraints.tight(
+            Size(columnGroup.width, widget.stateManager.columnGroupHeaderHeight),
+          ),
+          child: columnGroup.title,
+        );
+      },
+      separatorBuilder: (context, _) {
+        if (widget.stateManager.configuration?.enableColumnGroupBorder ?? false) {
+          return VerticalDivider(
+            width: 1,
+            indent: 0,
+            endIndent: 0,
+            color: widget.stateManager.configuration!.gridBorderColor,
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
 }

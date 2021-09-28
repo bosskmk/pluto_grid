@@ -9,6 +9,9 @@ class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
 
+  /// border between column groups
+  final bool enableColumnGroupBorder;
+
   final Color gridBackgroundColor;
 
   /// Grid border color. (Grid outline color, Frozen column division line color)
@@ -69,6 +72,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
+    this.enableColumnGroupBorder = false,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -102,6 +106,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
+    this.enableColumnGroupBorder = false,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
@@ -139,8 +144,7 @@ class PlutoGridConfiguration {
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;
     PlutoFilterTypeEndsWith.name = localeText.filterEndsWith;
     PlutoFilterTypeGreaterThan.name = localeText.filterGreaterThan;
-    PlutoFilterTypeGreaterThanOrEqualTo.name =
-        localeText.filterGreaterThanOrEqualTo;
+    PlutoFilterTypeGreaterThanOrEqualTo.name = localeText.filterGreaterThanOrEqualTo;
     PlutoFilterTypeLessThan.name = localeText.filterLessThan;
     PlutoFilterTypeLessThanOrEqualTo.name = localeText.filterLessThanOrEqualTo;
   }
@@ -192,8 +196,7 @@ class PlutoGridConfiguration {
       checkedColor: checkedColor ?? this.checkedColor,
       borderColor: borderColor ?? this.borderColor,
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
-      cellColorInReadOnlyState:
-          cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
+      cellColorInReadOnlyState: cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
       columnTextStyle: columnTextStyle ?? this.columnTextStyle,
       cellTextStyle: cellTextStyle ?? this.cellTextStyle,
       iconColor: iconColor ?? this.iconColor,
@@ -542,11 +545,9 @@ enum PlutoGridEnterKeyAction {
 }
 
 extension PlutoGridEnterKeyActionExtension on PlutoGridEnterKeyAction {
-  bool get isEditingAndMoveDown =>
-      this == PlutoGridEnterKeyAction.editingAndMoveDown;
+  bool get isEditingAndMoveDown => this == PlutoGridEnterKeyAction.editingAndMoveDown;
 
-  bool get isEditingAndMoveRight =>
-      this == PlutoGridEnterKeyAction.editingAndMoveRight;
+  bool get isEditingAndMoveRight => this == PlutoGridEnterKeyAction.editingAndMoveRight;
 
   bool get isToggleEditing => this == PlutoGridEnterKeyAction.toggleEditing;
 
@@ -562,11 +563,9 @@ class PlutoGridScrollbarConfig {
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
     this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
-    this.scrollbarRadiusWhileDragging =
-        CupertinoScrollbar.defaultRadiusWhileDragging,
+    this.scrollbarRadiusWhileDragging = CupertinoScrollbar.defaultRadiusWhileDragging,
     this.scrollbarThickness = CupertinoScrollbar.defaultThickness,
-    this.scrollbarThicknessWhileDragging =
-        CupertinoScrollbar.defaultThicknessWhileDragging,
+    this.scrollbarThicknessWhileDragging = CupertinoScrollbar.defaultThicknessWhileDragging,
   });
 
   final bool draggableScrollbar;
@@ -653,8 +652,7 @@ class PlutoGridColumnFilterConfig {
 
   bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
 
-  List<PlutoFilterType>? get filters =>
-      hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
+  List<PlutoFilterType>? get filters => hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
 
   int get debounceMilliseconds => _debounceMilliseconds;
 
