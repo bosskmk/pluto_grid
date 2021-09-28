@@ -51,20 +51,23 @@ class _PlutoBodyColumnGroupsState extends _PlutoBodyColumnGroupsStateWithChange 
         if (columnGroup.hide) {
           return const SizedBox();
         }
-        return ConstrainedBox(
-          constraints: BoxConstraints.tight(
-            Size(columnGroup.width, widget.stateManager.columnGroupHeaderHeight),
+        return Align(
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tight(
+              Size(columnGroup.width - 0.4, widget.stateManager.columnGroupHeaderHeight),
+            ),
+            child: columnGroup.title,
           ),
-          child: columnGroup.title,
         );
       },
       separatorBuilder: (context, _) {
         if (widget.stateManager.configuration?.enableColumnGroupBorder ?? false) {
           return VerticalDivider(
-            width: 1,
+            width: 0,
             indent: 0,
             endIndent: 0,
             color: widget.stateManager.configuration!.gridBorderColor,
+            thickness: 1,
           );
         } else {
           return const SizedBox();
