@@ -412,13 +412,23 @@ class PlutoColumnTypeImage implements PlutoColumnType {
   });
 
   bool isValid(dynamic value) {
-    return value is Uint8List || value is String;
+    return value is String ||
+        value is Uint8List ||
+        value is Future<String> ||
+        value is Future<String?> ||
+        value is Future<Uint8List> ||
+        value is Future<Uint8List?>;
   }
 
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () {
-      if (a is Uint8List && b is Uint8List) return a == b ? 0 : -1;
       if (a is String && b is String) return a.compareTo(b);
+      if (a is Uint8List && b is Uint8List ||
+          a is Future<String> && b is Future<String> ||
+          a is Future<String?> && b is Future<String?> ||
+          a is Future<Uint8List> && b is Future<Uint8List> ||
+          a is Future<Uint8List?> && b is Future<Uint8List?>) return a == b ? 0 : -1;
+
       return -1;
     });
   }
