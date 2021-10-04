@@ -124,17 +124,31 @@ abstract class _PlutoColumnFilterStateWithChange
 
         return KeyEventResult.handled;
       }
-    } else if (keyManager.isBackspace ||
-        event.logicalKey == LogicalKeyboardKey.delete) {
+    } else if ((keyManager.isBackspace ||
+            event.logicalKey == LogicalKeyboardKey.delete) &&
+        controller!.text.isNotEmpty) {
       final start = keyManager.isBackspace
           ? controller!.selection.extentOffset - 1
           : controller!.selection.extentOffset;
       final end = keyManager.isBackspace
           ? controller!.selection.extentOffset
           : controller!.selection.extentOffset + 1;
+      if (end > controller!.text.length)
+        return KeyEventResult.skipRemainingHandlers;
       controller!.text = controller!.text.replaceRange(start, end, '');
       controller?.selection =
           TextSelection.fromPosition(TextPosition(offset: start));
+
+      widget.stateManager.eventManager!.addEvent(
+        PlutoGridChangeColumnFilterEvent(
+          column: widget.column,
+          filterType: widget.column!.defaultFilter,
+          filterValue: controller!.text,
+          debounceMilliseconds: widget.stateManager.configuration!
+              .columnFilterConfig.debounceMilliseconds,
+        ),
+      );
+
       return KeyEventResult.handled;
     } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
         event.logicalKey == LogicalKeyboardKey.arrowRight) {
