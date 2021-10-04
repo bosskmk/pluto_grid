@@ -124,6 +124,25 @@ abstract class _PlutoColumnFilterStateWithChange
 
         return KeyEventResult.handled;
       }
+    } else if (keyManager.isBackspace ||
+        event.logicalKey == LogicalKeyboardKey.delete) {
+      final start = keyManager.isBackspace
+          ? controller!.selection.extentOffset - 1
+          : controller!.selection.extentOffset;
+      final end = keyManager.isBackspace
+          ? controller!.selection.extentOffset
+          : controller!.selection.extentOffset + 1;
+      controller!.text = controller!.text.replaceRange(start, end, '');
+      controller?.selection =
+          TextSelection.fromPosition(TextPosition(offset: start));
+      return KeyEventResult.handled;
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+        event.logicalKey == LogicalKeyboardKey.arrowRight) {
+      controller?.selection = TextSelection.fromPosition(TextPosition(
+          offset: event.logicalKey == LogicalKeyboardKey.arrowLeft
+              ? controller!.selection.extentOffset - 1
+              : controller!.selection.extentOffset + 1));
+      return KeyEventResult.handled;
     }
 
     return KeyEventResult.skipRemainingHandlers;
