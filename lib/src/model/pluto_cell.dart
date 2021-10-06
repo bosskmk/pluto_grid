@@ -5,7 +5,7 @@ import 'pluto_column.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
-  })  : _key = UniqueKey(),
+  })  : _key = GlobalKey(),
         _value = value;
 
   /// cell key
