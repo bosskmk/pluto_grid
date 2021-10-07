@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 abstract class PlutoColumnType {
@@ -91,6 +94,24 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.image({
+    bool readOnly = true,
+    dynamic defaultValue,
+    bool isAsset = false,
+    BoxFit? fit,
+    BoxDecoration? decoration,
+    double? aspect,
+  }) {
+    return PlutoColumnTypeImage(
+      readOnly: readOnly,
+      defaultValue: defaultValue,
+      isAsset: isAsset,
+      fit: fit,
+      decoration: decoration,
+      aspect: aspect,
+    );
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -108,6 +129,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
   bool get isDate => this is PlutoColumnTypeDate;
 
   bool get isTime => this is PlutoColumnTypeTime;
+
+  bool get isImage => this is PlutoColumnTypeImage;
 
   PlutoColumnTypeText? get text {
     return this is PlutoColumnTypeText ? this as PlutoColumnTypeText? : throw TypeError();
@@ -127,6 +150,10 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
 
   PlutoColumnTypeTime? get time {
     return this is PlutoColumnTypeTime ? this as PlutoColumnTypeTime? : throw TypeError();
+  }
+
+  PlutoColumnTypeImage? get image {
+    return this is PlutoColumnTypeImage ? this as PlutoColumnTypeImage? : throw TypeError();
   }
 
   bool get hasFormat => this is _PlutoColumnTypeHasFormat;
@@ -355,6 +382,55 @@ class PlutoColumnTypeTime implements PlutoColumnType {
 
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v;
+  }
+}
+
+class PlutoColumnTypeImage implements PlutoColumnType {
+  bool? readOnly;
+
+  dynamic defaultValue;
+
+  bool isAsset;
+
+  BoxFit? fit;
+
+  BoxDecoration? decoration;
+
+  double? aspect;
+
+  PlutoColumnTypeImage({
+    this.readOnly,
+    this.defaultValue,
+    this.isAsset = false,
+    this.fit,
+    this.decoration,
+    this.aspect,
+  });
+
+  bool isValid(dynamic value) {
+    return value is String ||
+        value is Uint8List ||
+        value is Future<String> ||
+        value is Future<String?> ||
+        value is Future<Uint8List> ||
+        value is Future<Uint8List?>;
+  }
+
+  int compare(dynamic a, dynamic b) {
+    return compareWithNull(a, b, () {
+      if (a is String && b is String) return a.compareTo(b);
+      if (a is Uint8List && b is Uint8List ||
+          a is Future<String> && b is Future<String> ||
+          a is Future<String?> && b is Future<String?> ||
+          a is Future<Uint8List> && b is Future<Uint8List> ||
+          a is Future<Uint8List?> && b is Future<Uint8List?>) return a == b ? 0 : -1;
+
+      return -1;
+    });
   }
 
   dynamic makeCompareValue(dynamic v) {

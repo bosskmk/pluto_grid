@@ -29,6 +29,7 @@ export './src/pluto_grid_configuration.dart';
 export './src/pluto_grid_popup.dart';
 export './src/ui/cells/pluto_date_cell.dart';
 export './src/ui/cells/pluto_default_cell.dart';
+export './src/ui/cells/pluto_image_cell.dart';
 export './src/ui/cells/pluto_number_cell.dart';
 export './src/ui/cells/pluto_select_cell.dart';
 export './src/ui/cells/pluto_text_cell.dart';

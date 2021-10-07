@@ -310,6 +310,14 @@ class _BuildCell extends StatelessWidget {
       }
     }
 
+    if (column!.type.isImage) {
+      return PlutoImageCell(
+        stateManager: stateManager,
+        cell: cell,
+        column: column,
+      );
+    }
+
     return PlutoDefaultCell(
       stateManager: stateManager!,
       cell: cell,
