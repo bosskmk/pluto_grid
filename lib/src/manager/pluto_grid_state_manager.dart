@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_filtered_list/pluto_filtered_list.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/manager/state/optimisation_state.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_state.dart';
@@ -29,7 +30,8 @@ abstract class IPlutoGridState extends PlutoChangeNotifier
         ILayoutState,
         IRowState,
         IScrollState,
-        ISelectingState {}
+        ISelectingState,
+        IOptimisationState {}
 
 class PlutoGridState extends PlutoChangeNotifier
     with
@@ -44,7 +46,8 @@ class PlutoGridState extends PlutoChangeNotifier
         LayoutState,
         RowState,
         ScrollState,
-        SelectingState {}
+        SelectingState,
+        OptimisationState {}
 
 class PlutoGridStateManager extends PlutoGridState {
   PlutoGridStateManager({

@@ -101,6 +101,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   double? _rightFrozenLeftOffset;
   bool? _showColumnFilter;
   bool? _showLoading;
+  bool? _optimiseRowHeight;
 
   List<Function()> disposeList = [];
 
@@ -234,7 +235,8 @@ class _PlutoGridState extends State<PlutoGrid> {
         _hasRightFrozenColumns != stateManager.hasRightFrozenColumns ||
         _rightFrozenLeftOffset != stateManager.rightFrozenLeftOffset ||
         _showColumnFilter != stateManager.showColumnFilter ||
-        _showLoading != stateManager.showLoading) {
+        _showLoading != stateManager.showLoading ||
+        _optimiseRowHeight != stateManager.optimiseRowHeight) {
       setState(resetState);
     }
   }
@@ -270,6 +272,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     _showColumnFilter = stateManager.showColumnFilter;
 
     _showLoading = stateManager.showLoading;
+
+    _optimiseRowHeight = stateManager.optimiseRowHeight;
   }
 
   @override

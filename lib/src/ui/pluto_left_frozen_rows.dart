@@ -60,7 +60,7 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
       itemCount: rows!.length,
-      itemExtent: widget.stateManager.rowTotalHeight,
+      itemExtent: widget.stateManager.optimiseRowHeight ?? true ? widget.stateManager.rowTotalHeight : null,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
           key: ValueKey('left_frozen_row_${rows![i]!.key}'),

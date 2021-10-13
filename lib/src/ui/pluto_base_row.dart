@@ -22,19 +22,21 @@ class PlutoBaseRow extends StatelessWidget {
       rowIdx: rowIdx,
       row: row,
       columns: columns,
-      child: Row(
-        children: columns!.map((column) {
-          return PlutoBaseCell(
-            key: row!.cells[column.field]!.key,
-            stateManager: stateManager!,
-            cell: row!.cells[column.field],
-            width: column.width,
-            height: stateManager!.rowHeight,
-            column: column,
-            rowIdx: rowIdx,
-          );
-        }).toList(growable: false),
-      ),
+      child: row!.renderer != null
+          ? row!.renderer!.call(PlutoRowRendererContext(row: row, rowIdx: rowIdx, stateManager: stateManager))
+          : Row(
+              children: columns!.map((column) {
+                return PlutoBaseCell(
+                  key: row!.cells[column.field]!.key,
+                  stateManager: stateManager!,
+                  cell: row!.cells[column.field],
+                  width: column.width,
+                  height: stateManager!.rowHeight,
+                  column: column,
+                  rowIdx: rowIdx,
+                );
+              }).toList(growable: false),
+            ),
     );
   }
 }

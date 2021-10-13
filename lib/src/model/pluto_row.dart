@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+typedef PlutoRowRenderer = Widget Function(PlutoRowRendererContext rendererContext);
+
+class PlutoRowRendererContext {
+  final int? rowIdx;
+
+  final PlutoRow? row;
+
+  final PlutoGridStateManager? stateManager;
+
+  PlutoRowRendererContext({
+    this.rowIdx,
+    this.row,
+    this.stateManager,
+  });
+}
+
 class PlutoRow {
   /// List of row
   Map<String, PlutoCell> cells;
@@ -9,9 +25,13 @@ class PlutoRow {
   /// If there is no value, it is automatically set when loading the grid.
   int? sortIdx;
 
+  /// Rendering for row widget.
+  PlutoRowRenderer? renderer;
+
   PlutoRow({
     required this.cells,
     this.sortIdx,
+    this.renderer,
     bool checked = false,
     Key? key,
   })  : _checked = checked,
