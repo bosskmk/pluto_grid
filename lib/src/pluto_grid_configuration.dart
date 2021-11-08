@@ -53,6 +53,15 @@ class PlutoGridConfiguration {
   /// Height of a row.
   final double rowHeight;
 
+  /// Height of the column header. (grid header)
+  final double columnHeight;
+
+  /// Height of the createHeader area. it's out of the grid.
+  final double createHeaderAreaHeight;
+
+  /// Height of the createFooter area. it's out of the grid.
+  final double createFooterAreaHeight;
+
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
 
@@ -95,6 +104,9 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.createHeaderAreaHeight = PlutoGridSettings.rowHeight,
+    this.createFooterAreaHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
@@ -129,6 +141,9 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.createHeaderAreaHeight = PlutoGridSettings.rowHeight,
+    this.createFooterAreaHeight = PlutoGridSettings.rowHeight,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
