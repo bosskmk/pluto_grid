@@ -217,6 +217,7 @@ class _BuildDraggableWidget extends StatelessWidget {
         borderColor: stateManager!.configuration!.gridBorderColor,
         child: Text(
           column!.title,
+          textAlign: column!.titleTextAlign,
           style: stateManager!.configuration!.columnTextStyle,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,

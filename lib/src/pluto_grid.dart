@@ -53,8 +53,6 @@ class PlutoGrid extends StatefulWidget {
 
   final BorderRadiusGeometry? borderRadius;
 
-  final Color? rowBackgroundColor;
-
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
   ///
@@ -77,7 +75,6 @@ class PlutoGrid extends StatefulWidget {
     this.createFooter,
     this.configuration,
     this.borderRadius,
-    this.rowBackgroundColor,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
