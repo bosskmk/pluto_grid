@@ -6,7 +6,6 @@ class PlutoBaseRow extends StatelessWidget {
   final int? rowIdx;
   final PlutoRow? row;
   final List<PlutoColumn>? columns;
-  final Color? backgroundColor;
 
   PlutoBaseRow({
     Key? key,
@@ -14,13 +13,11 @@ class PlutoBaseRow extends StatelessWidget {
     this.rowIdx,
     this.row,
     this.columns,
-    this.backgroundColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _RowContainerWidget(
-      backgroundColor: backgroundColor,
       stateManager: stateManager!,
       rowIdx: rowIdx,
       row: row,
@@ -48,7 +45,6 @@ class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoRow? row;
   final List<PlutoColumn>? columns;
   final Widget? child;
-  final Color? backgroundColor;
 
   _RowContainerWidget({
     required this.stateManager,
@@ -56,7 +52,6 @@ class _RowContainerWidget extends PlutoStatefulWidget {
     this.row,
     this.columns,
     this.child,
-    this.backgroundColor,
   });
 
   @override
@@ -144,22 +139,22 @@ class __RowContainerWidgetState
         widget.stateManager.isSelectedRow(widget.row!.key);
 
     if (!checkCurrentRow && !checkSelectedRow) {
-      return widget.backgroundColor ?? Colors.transparent;
+      return Colors.transparent;
     }
 
     if (widget.stateManager.selectingMode.isRow) {
       return checkSelectedRow
           ? widget.stateManager.configuration!.activatedColor
-          : widget.backgroundColor ?? Colors.transparent;
+          : Colors.transparent;
     }
 
     if (!hasFocus!) {
-      return widget.backgroundColor ?? Colors.transparent;
+      return Colors.transparent;
     }
 
     return checkCurrentRow
         ? widget.stateManager.configuration!.activatedColor
-        : widget.backgroundColor ?? Colors.transparent;
+        : Colors.transparent;
   }
 
   @override
