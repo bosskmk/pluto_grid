@@ -185,19 +185,24 @@ class PlutoColumnRendererContext {
 
 enum PlutoColumnTextAlign {
   left,
+  center,
   right,
 }
 
 extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
-    return this == PlutoColumnTextAlign.right
-        ? TextAlign.right
-        : TextAlign.left;
+    return this == PlutoColumnTextAlign.left
+        ? TextAlign.left
+        : this == PlutoColumnTextAlign.right
+            ? TextAlign.right
+            : TextAlign.center;
   }
 
   bool get isLeft => this == PlutoColumnTextAlign.left;
 
   bool get isRight => this == PlutoColumnTextAlign.right;
+
+  bool get isCenter => this == PlutoColumnTextAlign.center;
 }
 
 enum PlutoColumnFrozen {

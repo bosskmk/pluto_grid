@@ -79,6 +79,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column2',
         field: 'column2',
         enableContextMenu: false,
+        textAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -100,22 +101,26 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               color: textColor,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: rendererContext.column!.textAlign.value,
           );
         },
       ),
       PlutoColumn(
         title: 'column3',
         field: 'column3',
+        textAlign: PlutoColumnTextAlign.left,
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
         title: 'column4',
         field: 'column4',
+        textAlign: PlutoColumnTextAlign.center,
         type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
         field: 'column5',
+        textAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.number(
           negative: true,
         ),
