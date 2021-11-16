@@ -27,6 +27,7 @@ import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
 import 'feature/number_type_column_screen.dart';
+import 'feature/row_color_screen.dart';
 import 'feature/row_moving_screen.dart';
 import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
@@ -176,6 +177,11 @@ class HomeScreen extends StatelessWidget {
 }
 
 class PlutoFeatures extends StatelessWidget {
+  final Icon newIcon = const Icon(
+    Icons.fiber_new,
+    color: Colors.deepOrange,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -271,6 +277,14 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Row color',
+            description: 'Dynamically change the background color of row.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowColorScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Row selection',
             description:
                 'In Row selection mode, Shift + tap or long tap and then move or Control + tap to select a row.',
@@ -291,10 +305,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowPaginationScreen.routeName);
             },
-            trailing: const Icon(
-              Icons.fiber_new,
-              color: Colors.deepOrange,
-            ),
+            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Row with checkbox',
@@ -419,6 +430,13 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/sheentim');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Christian Arduino',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/christianarduino');
             },
           ),
           PlutoContributorTile.invisible(

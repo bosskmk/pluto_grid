@@ -5,12 +5,18 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import 'helper/filter_helper.dart';
 
+typedef PlutoRowColorCallback = Color Function(
+  PlutoRowColorContext rowColorContext,
+);
+
 class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
 
   /// Activate the shadow that separates each area of the grid.
   final bool enableGridBorderShadow;
+
+  final BorderRadiusGeometry gridBorderRadius;
 
   final Color gridBackgroundColor;
 
@@ -70,9 +76,12 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  final PlutoRowColorCallback? rowColorCallback;
+
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
+    this.gridBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -100,6 +109,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.rowColorCallback,
   }) {
     _init();
   }
@@ -107,6 +117,7 @@ class PlutoGridConfiguration {
   PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
+    this.gridBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
@@ -134,6 +145,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.rowColorCallback,
   }) {
     _init();
   }
@@ -681,4 +693,18 @@ class PlutoGridColumnFilterConfig {
 
     return resolvedFilter;
   }
+}
+
+class PlutoRowColorContext {
+  final PlutoRow row;
+
+  final int rowIdx;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoRowColorContext({
+    required this.row,
+    required this.rowIdx,
+    required this.stateManager,
+  });
 }

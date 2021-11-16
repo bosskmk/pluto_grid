@@ -21,8 +21,11 @@ class PlutoColumn {
 
   double minWidth;
 
-  /// Text alignment in Cell. (Left, Right)
+  /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
+
+  /// Text alignment in Title. (Left, Right, Center)
+  PlutoColumnTextAlign titleTextAlign;
 
   /// Freeze the column to the left and right.
   PlutoColumnFrozen frozen;
@@ -85,6 +88,7 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.textAlign = PlutoColumnTextAlign.left,
+    this.titleTextAlign = PlutoColumnTextAlign.left,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
@@ -120,6 +124,9 @@ class PlutoColumn {
 
   PlutoFilterType get defaultFilter =>
       _defaultFilter ?? const PlutoFilterTypeContains();
+
+  bool get isShowRightIcon =>
+      enableContextMenu || !sort.isNone || enableRowDrag;
 
   void setFilterFocusNode(FocusNode? node) {
     _filterFocusNode = node;
@@ -181,19 +188,32 @@ class PlutoColumnRendererContext {
 
 enum PlutoColumnTextAlign {
   left,
+  center,
   right,
 }
 
 extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
-    return this == PlutoColumnTextAlign.right
-        ? TextAlign.right
-        : TextAlign.left;
+    return this == PlutoColumnTextAlign.left
+        ? TextAlign.left
+        : this == PlutoColumnTextAlign.right
+            ? TextAlign.right
+            : TextAlign.center;
+  }
+
+  AlignmentGeometry get alignmentValue {
+    return this == PlutoColumnTextAlign.left
+        ? Alignment.centerLeft
+        : this == PlutoColumnTextAlign.right
+            ? Alignment.centerRight
+            : Alignment.center;
   }
 
   bool get isLeft => this == PlutoColumnTextAlign.left;
 
   bool get isRight => this == PlutoColumnTextAlign.right;
+
+  bool get isCenter => this == PlutoColumnTextAlign.center;
 }
 
 enum PlutoColumnFrozen {

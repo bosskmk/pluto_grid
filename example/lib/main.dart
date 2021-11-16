@@ -20,6 +20,7 @@ import 'screen/feature/grid_as_popup_screen.dart';
 import 'screen/feature/listing_mode_screen.dart';
 import 'screen/feature/moving_screen.dart';
 import 'screen/feature/number_type_column_screen.dart';
+import 'screen/feature/row_color_screen.dart';
 import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_pagination_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         ColumnFilteringScreen.routeName: (context) => ColumnFilteringScreen(),
         ColumnHidingScreen.routeName: (context) => ColumnHidingScreen(),
         TextTypeColumnScreen.routeName: (context) => TextTypeColumnScreen(),
+        RowColorScreen.routeName: (context) => RowColorScreen(),
         NumberTypeColumnScreen.routeName: (context) => NumberTypeColumnScreen(),
         DateTypeColumnScreen.routeName: (context) => DateTypeColumnScreen(),
         TimeTypeColumnScreen.routeName: (context) => TimeTypeColumnScreen(),

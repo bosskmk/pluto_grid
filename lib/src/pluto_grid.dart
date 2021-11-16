@@ -325,6 +325,9 @@ class _PlutoGridState extends State<PlutoGrid> {
                         const EdgeInsets.all(PlutoGridSettings.gridPadding),
                     decoration: BoxDecoration(
                       color: stateManager.configuration!.gridBackgroundColor,
+                      borderRadius: widget.mode.isNormal
+                          ? stateManager.configuration!.gridBorderRadius
+                          : BorderRadius.zero,
                       border: Border.all(
                         color: stateManager.configuration!.gridBorderColor,
                         width: PlutoGridSettings.gridBorderWidth,

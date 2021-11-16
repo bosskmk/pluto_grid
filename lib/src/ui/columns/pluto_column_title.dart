@@ -211,6 +211,7 @@ class _BuildDraggableWidget extends StatelessWidget {
             column!.key, dragDetails.offset.dx + (column!.width / 2));
       },
       feedback: PlutoShadowContainer(
+        alignment: column!.titleTextAlign.alignmentValue,
         width: column!.width,
         height: PlutoGridSettings.rowHeight,
         backgroundColor: stateManager!.configuration!.gridBackgroundColor,
@@ -295,6 +296,8 @@ class _BuildColumnWidget extends StatelessWidget {
                 stateManager: stateManager!,
               ),
             ),
+            if (column!.isShowRightIcon && column!.titleTextAlign.isRight)
+              SizedBox(width: stateManager!.configuration!.iconSize),
           ],
         ),
       ),
@@ -435,6 +438,7 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
       overflow: TextOverflow.ellipsis,
       softWrap: false,
       maxLines: 1,
+      textAlign: widget.column!.titleTextAlign.value,
     );
   }
 }

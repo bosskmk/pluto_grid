@@ -230,7 +230,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
         ),
         Positioned(
           top: -14,
-          right: widget.column!.textAlign.isLeft ? -10 : null,
+          right: !widget.column!.textAlign.isRight ? -10 : null,
           left: widget.column!.textAlign.isRight ? -10 : null,
           child: IconButton(
             icon: icon!,

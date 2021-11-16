@@ -33,6 +33,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
+        titleTextAlign: PlutoColumnTextAlign.right,
         width: 250,
         minWidth: 175,
         renderer: (rendererContext) {
@@ -79,6 +80,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column2',
         field: 'column2',
         enableContextMenu: false,
+        textAlign: PlutoColumnTextAlign.right,
+        titleTextAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -100,22 +103,29 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               color: textColor,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: rendererContext.column!.textAlign.value,
           );
         },
       ),
       PlutoColumn(
         title: 'column3',
         field: 'column3',
+        textAlign: PlutoColumnTextAlign.left,
+        titleTextAlign: PlutoColumnTextAlign.center,
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
         title: 'column4',
         field: 'column4',
+        textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
         field: 'column5',
+        textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.left,
         type: PlutoColumnType.number(
           negative: true,
         ),
@@ -274,11 +284,17 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // rowHeight: 30.0,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
+            gridBorderRadius: BorderRadius.circular(10),
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
             ),
+            rowColorCallback: (rowColorContext) {
+              return rowColorContext.row.cells['column2']!.value == 'red'
+                  ? const Color(0xFFFFB0B0)
+                  : Colors.transparent;
+            },
             // localeText: const PlutoGridLocaleText.korean(),
             // columnFilterConfig: PlutoGridColumnFilterConfig(
             //   filters: const [
