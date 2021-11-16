@@ -5,6 +5,10 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import 'helper/filter_helper.dart';
 
+typedef PlutoRowColorCallback = Color Function(
+  PlutoRowColorContext rowColorContext,
+);
+
 class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
@@ -72,6 +76,8 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  final PlutoRowColorCallback? rowColorCallback;
+
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
@@ -103,6 +109,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.rowColorCallback,
   }) {
     _init();
   }
@@ -138,6 +145,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.rowColorCallback,
   }) {
     _init();
   }
@@ -685,4 +693,18 @@ class PlutoGridColumnFilterConfig {
 
     return resolvedFilter;
   }
+}
+
+class PlutoRowColorContext {
+  final PlutoRow row;
+
+  final int rowIdx;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoRowColorContext({
+    required this.row,
+    required this.rowIdx,
+    required this.stateManager,
+  });
 }

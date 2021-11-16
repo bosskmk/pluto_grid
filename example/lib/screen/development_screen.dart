@@ -290,6 +290,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
             ),
+            rowColorCallback: (rowColorContext) {
+              return rowColorContext.row.cells['column2']!.value == 'red'
+                  ? const Color(0xFFFFB0B0)
+                  : Colors.transparent;
+            },
             // localeText: const PlutoGridLocaleText.korean(),
             // columnFilterConfig: PlutoGridColumnFilterConfig(
             //   filters: const [
