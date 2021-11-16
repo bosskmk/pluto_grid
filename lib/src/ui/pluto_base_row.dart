@@ -134,6 +134,13 @@ class __RowContainerWidgetState
       return Colors.transparent;
     }
 
+    // If rowColorCallback that changes the background color is called in the select popup,
+    // an out of index error may occur when accessing row.
+    // cells because it is not the actual cells.
+    if (widget.stateManager.mode.isSelect) {
+      return Colors.transparent;
+    }
+
     return widget.stateManager.configuration!.rowColorCallback!(
       PlutoRowColorContext(
         rowIdx: widget.rowIdx!,
