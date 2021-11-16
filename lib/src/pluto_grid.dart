@@ -383,8 +383,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           right: _bodyRightOffset,
                           bottom: stateManager.footerHeight,
                           child: PlutoBodyRows(
-                            stateManager,
-                            backgroundColor: widget.rowBackgroundColor,
+                            stateManager
                           ),
                         ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!) ...[

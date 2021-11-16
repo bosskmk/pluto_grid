@@ -9,9 +9,12 @@ class PlutoRow {
   /// If there is no value, it is automatically set when loading the grid.
   int? sortIdx;
 
+  Color? backgroundColor;
+
   PlutoRow({
     required this.cells,
     this.sortIdx,
+    this.backgroundColor,
     bool checked = false,
     Key? key,
   })  : _checked = checked,
