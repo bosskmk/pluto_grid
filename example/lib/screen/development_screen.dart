@@ -33,6 +33,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
+        titleTextAlign: PlutoColumnTextAlign.right,
         width: 250,
         minWidth: 175,
         renderer: (rendererContext) {
@@ -80,6 +81,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         field: 'column2',
         enableContextMenu: false,
         textAlign: PlutoColumnTextAlign.right,
+        titleTextAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -109,18 +111,21 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'column3',
         field: 'column3',
         textAlign: PlutoColumnTextAlign.left,
+        titleTextAlign: PlutoColumnTextAlign.center,
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
         title: 'column4',
         field: 'column4',
         textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.right,
         type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
         field: 'column5',
-        textAlign: PlutoColumnTextAlign.right,
+        textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.left,
         type: PlutoColumnType.number(
           negative: true,
         ),

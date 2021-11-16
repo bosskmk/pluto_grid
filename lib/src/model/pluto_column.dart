@@ -21,8 +21,11 @@ class PlutoColumn {
 
   double minWidth;
 
-  /// Text alignment in Cell. (Left, Right)
+  /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
+
+  /// Text alignment in Title. (Left, Right, Center)
+  PlutoColumnTextAlign titleTextAlign;
 
   /// Freeze the column to the left and right.
   PlutoColumnFrozen frozen;
@@ -78,9 +81,6 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
-  /// Align text title
-  AlignmentGeometry contentAlign;
-
   PlutoColumn({
     required this.title,
     required this.field,
@@ -88,6 +88,7 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.textAlign = PlutoColumnTextAlign.left,
+    this.titleTextAlign = PlutoColumnTextAlign.left,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
@@ -104,7 +105,6 @@ class PlutoColumn {
     this.enableSetColumnsMenuItem = true,
     this.enableEditingMode = true,
     this.hide = false,
-    this.contentAlign = Alignment.centerLeft,
   }) : _key = UniqueKey();
 
   /// Column key
@@ -124,6 +124,9 @@ class PlutoColumn {
 
   PlutoFilterType get defaultFilter =>
       _defaultFilter ?? const PlutoFilterTypeContains();
+
+  bool get isShowRightIcon =>
+      enableContextMenu || !sort.isNone || enableRowDrag;
 
   void setFilterFocusNode(FocusNode? node) {
     _filterFocusNode = node;
@@ -196,6 +199,14 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
         : this == PlutoColumnTextAlign.right
             ? TextAlign.right
             : TextAlign.center;
+  }
+
+  AlignmentGeometry get alignmentValue {
+    return this == PlutoColumnTextAlign.left
+        ? Alignment.centerLeft
+        : this == PlutoColumnTextAlign.right
+            ? Alignment.centerRight
+            : Alignment.center;
   }
 
   bool get isLeft => this == PlutoColumnTextAlign.left;
