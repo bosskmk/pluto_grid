@@ -51,6 +51,8 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoGridConfiguration? configuration;
 
+  final BorderRadiusGeometry? borderRadius;
+
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
   ///
@@ -72,6 +74,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
+    this.borderRadius,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
@@ -325,6 +328,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                         const EdgeInsets.all(PlutoGridSettings.gridPadding),
                     decoration: BoxDecoration(
                       color: stateManager.configuration!.gridBackgroundColor,
+                      borderRadius: widget.borderRadius,
                       border: Border.all(
                         color: stateManager.configuration!.gridBorderColor,
                         width: PlutoGridSettings.gridBorderWidth,
