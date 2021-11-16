@@ -4,8 +4,12 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
+  final Color? backgroundColor;
 
-  PlutoBodyRows(this.stateManager);
+  PlutoBodyRows(
+    this.stateManager, {
+    this.backgroundColor,
+  });
 
   @override
   _PlutoBodyRowsState createState() => _PlutoBodyRowsState();
@@ -114,7 +118,7 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
             itemExtent: widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
-                backgroundColor: rows![i]!.backgroundColor,
+                backgroundColor: widget.backgroundColor,
                 key: ValueKey('body_row_${rows![i]!.key}'),
                 stateManager: widget.stateManager,
                 rowIdx: i,
