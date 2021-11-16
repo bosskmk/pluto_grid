@@ -12,6 +12,8 @@ class PlutoGridConfiguration {
   /// Activate the shadow that separates each area of the grid.
   final bool enableGridBorderShadow;
 
+  final BorderRadiusGeometry gridBorderRadius;
+
   final Color gridBackgroundColor;
 
   /// Grid border color. (Grid outline color, Frozen column division line color)
@@ -73,6 +75,7 @@ class PlutoGridConfiguration {
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
+    this.gridBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -107,6 +110,7 @@ class PlutoGridConfiguration {
   PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
+    this.gridBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),

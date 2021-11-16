@@ -51,8 +51,6 @@ class PlutoGrid extends StatefulWidget {
 
   final PlutoGridConfiguration? configuration;
 
-  final BorderRadiusGeometry? borderRadius;
-
   /// [PlutoGridMode.normal]
   /// Normal grid with cell editing.
   ///
@@ -74,7 +72,6 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.configuration,
-    this.borderRadius,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
@@ -328,7 +325,9 @@ class _PlutoGridState extends State<PlutoGrid> {
                         const EdgeInsets.all(PlutoGridSettings.gridPadding),
                     decoration: BoxDecoration(
                       color: stateManager.configuration!.gridBackgroundColor,
-                      borderRadius: widget.borderRadius,
+                      borderRadius: widget.mode.isNormal
+                          ? stateManager.configuration!.gridBorderRadius
+                          : BorderRadius.zero,
                       border: Border.all(
                         color: stateManager.configuration!.gridBorderColor,
                         width: PlutoGridSettings.gridBorderWidth,
@@ -379,9 +378,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           left: _bodyLeftOffset,
                           right: _bodyRightOffset,
                           bottom: stateManager.footerHeight,
-                          child: PlutoBodyRows(
-                            stateManager
-                          ),
+                          child: PlutoBodyRows(stateManager),
                         ),
                         if (_showFrozenColumn! && _hasRightFrozenColumns!) ...[
                           Positioned.fill(
