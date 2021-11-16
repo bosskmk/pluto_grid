@@ -79,7 +79,7 @@ class PlutoColumn {
   bool hide;
 
   /// Align text title
-  TextAlign? titleTextAlign;
+  AlignmentGeometry contentAlign;
 
   PlutoColumn({
     required this.title,
@@ -104,7 +104,7 @@ class PlutoColumn {
     this.enableSetColumnsMenuItem = true,
     this.enableEditingMode = true,
     this.hide = false,
-    this.titleTextAlign = TextAlign.left,
+    this.contentAlign = Alignment.centerLeft,
   }) : _key = UniqueKey();
 
   /// Column key

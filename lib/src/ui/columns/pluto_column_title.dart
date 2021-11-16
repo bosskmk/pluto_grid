@@ -211,13 +211,13 @@ class _BuildDraggableWidget extends StatelessWidget {
             column!.key, dragDetails.offset.dx + (column!.width / 2));
       },
       feedback: PlutoShadowContainer(
+        alignment: column!.contentAlign,
         width: column!.width,
         height: PlutoGridSettings.rowHeight,
         backgroundColor: stateManager!.configuration!.gridBackgroundColor,
         borderColor: stateManager!.configuration!.gridBorderColor,
         child: Text(
           column!.title,
-          textAlign: column!.titleTextAlign,
           style: stateManager!.configuration!.columnTextStyle,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
