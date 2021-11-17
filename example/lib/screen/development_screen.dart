@@ -18,7 +18,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoGridStateManager? stateManager;
 
-  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
+  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.cell;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 onPressed: () {
                   rendererContext.stateManager!.insertRows(
                     rendererContext.rowIdx!,
-                    rendererContext.stateManager!.getNewRows(count: 3),
+                    rendererContext.stateManager!.getNewRows(count: 1),
                   );
                 },
                 iconSize: 18,
@@ -142,7 +142,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 400, columns: columns);
+    rows = DummyData.rowsByColumns(length: 15, columns: columns);
   }
 
   void handleAddRowButton({int? count}) {
@@ -279,7 +279,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
             );
           },
-          createFooter: (stateManager) => PlutoPagination(stateManager),
+          createFooter: (stateManager) {
+            stateManager.setPageSize(10, notify: false);
+            return PlutoPagination(stateManager);
+          },
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
             enableColumnBorder: true,

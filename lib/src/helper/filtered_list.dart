@@ -421,7 +421,7 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   }
 
   int _toOriginalIndex(int index) {
-    if (!hasFilter) {
+    if (!hasFilter && !hasRange) {
       return index;
     }
 
