@@ -33,7 +33,9 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
      */
     if (_cellEditingStatus.isChanged) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
-        _changeValue();
+        _changeValue(notify: false);
+
+        widget.stateManager!.notifyListenersOnPostFrame();
       });
     }
 
@@ -53,9 +55,12 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     _cellEditingStatus = CellEditingStatus.init;
   }
 
-  void _changeValue() {
-    widget.stateManager!
-        .changeCellValue(widget.cell!.key, _textController.text);
+  void _changeValue({bool notify = true}) {
+    widget.stateManager!.changeCellValue(
+      widget.cell!.key,
+      _textController.text,
+      notify: notify,
+    );
   }
 
   void _handleOnChanged(String value) {
@@ -101,7 +106,15 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     // 이동 및 엔터키, 수정불가 셀의 좌우 이동을 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
     if (skip) {
-      return KeyEventResult.skipRemainingHandlers;
+      /// 2021-11-19
+      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
+      /// 이슈 해결 후 :
+      /// ```dart
+      /// return KeyEventResult.skipRemainingHandlers;
+      /// ```
+      return widget.stateManager!.keyManager!.eventResult.skip(
+        KeyEventResult.ignored,
+      );
     }
 
     // 엔터키는 그리드 포커스 핸들러로 전파 한다.

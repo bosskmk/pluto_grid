@@ -273,12 +273,29 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   KeyEventResult handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    keyManager!.subject.add(PlutoKeyManagerEvent(
-      focusNode: focusNode,
-      event: event,
-    ));
+    /// 2021-11-19
+    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
+    /// 이슈 해결 후 :
+    /// ```dart
+    /// keyManager!.subject.add(PlutoKeyManagerEvent(
+    ///   focusNode: focusNode,
+    ///   event: event,
+    /// ));
+    /// ```
+    if (keyManager!.eventResult.isSkip == false) {
+      keyManager!.subject.add(PlutoKeyManagerEvent(
+        focusNode: focusNode,
+        event: event,
+      ));
+    }
 
-    return KeyEventResult.handled;
+    /// 2021-11-19
+    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
+    /// 이슈 해결 후 :
+    /// ```dart
+    /// return KeyEventResult.handled;
+    /// ```
+    return keyManager!.eventResult.consume(KeyEventResult.handled);
   }
 
   void setLayout(BoxConstraints size) {
