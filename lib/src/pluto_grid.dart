@@ -671,13 +671,17 @@ class PlutoRowColorContext {
 enum PlutoGridMode {
   normal,
   select,
+  selectWithOneTap,
   popup,
 }
 
 extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isNormal => this == PlutoGridMode.normal;
 
-  bool get isSelect => this == PlutoGridMode.select;
+  bool get isSelect =>
+      this == PlutoGridMode.select || this == PlutoGridMode.selectWithOneTap;
+
+  bool get isSelectModeWithOneTap => this == PlutoGridMode.selectWithOneTap;
 
   bool get isPopup => this == PlutoGridMode.popup;
 }

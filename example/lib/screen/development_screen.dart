@@ -194,6 +194,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         child: PlutoGrid(
           columns: columns,
           rows: rows,
+          // mode: PlutoGridMode.selectWithOneTap,
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
@@ -202,6 +203,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager!.setSelectingMode(gridSelectingMode!);
             stateManager!.setShowColumnFilter(true);
           },
+          // onSelected: (event) {
+          //   print(event.cell!.value);
+          // },
           onRowChecked: handleOnRowChecked,
           // onRowDoubleTap: (e) {
           //   print('Double click A Row.');
