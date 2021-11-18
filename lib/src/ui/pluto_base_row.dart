@@ -130,18 +130,11 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 class __RowContainerWidgetState
     extends __RowContainerWidgetStateWithChangeKeepAlive {
   Color getDefaultRowColor() {
-    if (widget.stateManager.configuration!.rowColorCallback == null) {
+    if (widget.stateManager.rowColorCallback == null) {
       return Colors.transparent;
     }
 
-    // If rowColorCallback that changes the background color is called in the select popup,
-    // an out of index error may occur when accessing row.
-    // cells because it is not the actual cells.
-    if (widget.stateManager.mode.isSelect) {
-      return Colors.transparent;
-    }
-
-    return widget.stateManager.configuration!.rowColorCallback!(
+    return widget.stateManager.rowColorCallback!(
       PlutoRowColorContext(
         rowIdx: widget.rowIdx!,
         row: widget.row!,

@@ -283,6 +283,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager.setPageSize(10, notify: false);
             return PlutoPagination(stateManager);
           },
+          rowColorCallback: (rowColorContext) {
+            return rowColorContext.row.cells['column2']!.value == 'red'
+                ? const Color(0xFFFFB0B0)
+                : Colors.transparent;
+          },
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
             enableColumnBorder: true,
@@ -293,11 +298,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
             ),
-            rowColorCallback: (rowColorContext) {
-              return rowColorContext.row.cells['column2']!.value == 'red'
-                  ? const Color(0xFFFFB0B0)
-                  : Colors.transparent;
-            },
             // localeText: const PlutoGridLocaleText.korean(),
             // columnFilterConfig: PlutoGridColumnFilterConfig(
             //   filters: const [

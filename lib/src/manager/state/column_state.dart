@@ -546,6 +546,7 @@ mixin ColumnState implements IPlutoGridState {
       rows: rows,
       width: 200,
       height: 500,
+      mode: PlutoGridMode.popup,
       onLoaded: (e) {
         stateManager = e.stateManager;
         stateManager!.setSelectingMode(PlutoGridSelectingMode.none);

@@ -28,6 +28,9 @@ typedef CreateHeaderCallBack = Widget Function(
 typedef CreateFooterCallBack = Widget Function(
     PlutoGridStateManager stateManager);
 
+typedef PlutoRowColorCallback = Color Function(
+    PlutoRowColorContext rowColorContext);
+
 class PlutoGrid extends StatefulWidget {
   final List<PlutoColumn>? columns;
 
@@ -48,6 +51,8 @@ class PlutoGrid extends StatefulWidget {
   final CreateHeaderCallBack? createHeader;
 
   final CreateFooterCallBack? createFooter;
+
+  final PlutoRowColorCallback? rowColorCallback;
 
   final PlutoGridConfiguration? configuration;
 
@@ -71,6 +76,7 @@ class PlutoGrid extends StatefulWidget {
     this.onRowSecondaryTap,
     this.createHeader,
     this.createFooter,
+    this.rowColorCallback,
     this.configuration,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
@@ -172,6 +178,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     );
 
     stateManager.addListener(changeStateListener);
+
+    stateManager.setRowColorCallback(widget.rowColorCallback);
 
     // Dispose
     disposeList.add(() {
@@ -644,6 +652,20 @@ class PlutoScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
       };
+}
+
+class PlutoRowColorContext {
+  final PlutoRow row;
+
+  final int rowIdx;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoRowColorContext({
+    required this.row,
+    required this.rowIdx,
+    required this.stateManager,
+  });
 }
 
 enum PlutoGridMode {

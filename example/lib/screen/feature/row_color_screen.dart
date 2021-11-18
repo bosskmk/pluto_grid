@@ -58,22 +58,20 @@ class _RowColorScreenState extends State<RowColorScreen> {
 
           stateManager = event.stateManager;
         },
-        configuration: PlutoGridConfiguration(
-          rowColorCallback: (rowColorContext) {
-            if (rowColorContext.row.cells.entries.elementAt(4).value.value ==
-                'One') {
-              return Colors.blueAccent;
-            } else if (rowColorContext.row.cells.entries
-                    .elementAt(4)
-                    .value
-                    .value ==
-                'Two') {
-              return Colors.cyanAccent;
-            }
+        rowColorCallback: (rowColorContext) {
+          if (rowColorContext.row.cells.entries.elementAt(4).value.value ==
+              'One') {
+            return Colors.blueAccent;
+          } else if (rowColorContext.row.cells.entries
+                  .elementAt(4)
+                  .value
+                  .value ==
+              'Two') {
+            return Colors.cyanAccent;
+          }
 
-            return Colors.deepOrange;
-          },
-        ),
+          return Colors.deepOrange;
+        },
       ),
     );
   }

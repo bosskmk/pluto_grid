@@ -20,6 +20,8 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow? get currentRow;
 
+  PlutoRowColorCallback? get rowColorCallback;
+
   int? getRowIdxByOffset(double offset);
 
   PlutoRow? getRowByIdx(int rowIdx);
@@ -76,6 +78,9 @@ abstract class IRowState {
     bool flag, {
     bool notify = true,
   });
+
+  /// Dynamically change the background color of row by implementing a callback function.
+  void setRowColorCallback(PlutoRowColorCallback rowColorCallback);
 }
 
 mixin RowState implements IPlutoGridState {
@@ -122,6 +127,12 @@ mixin RowState implements IPlutoGridState {
     }
 
     return refRows![currentRowIdx!];
+  }
+
+  PlutoRowColorCallback? _rowColorCallback;
+
+  PlutoRowColorCallback? get rowColorCallback {
+    return _rowColorCallback;
   }
 
   int? getRowIdxByOffset(double offset) {
@@ -510,5 +521,9 @@ mixin RowState implements IPlutoGridState {
     if (isPaginated) {
       setPage(page, notify: false);
     }
+  }
+
+  void setRowColorCallback(PlutoRowColorCallback? rowColorCallback) {
+    _rowColorCallback = rowColorCallback;
   }
 }
