@@ -145,13 +145,33 @@ class PlutoGridKeyManager {
       rowIdx += plutoKeyManagerEvent.isPageUp ? -moveCount : moveCount;
 
       stateManager.moveSelectingCellByRowIdx(rowIdx, direction);
-    } else {
-      int rowIdx = stateManager.currentRowIdx!;
 
-      rowIdx += plutoKeyManagerEvent.isPageUp ? -moveCount : moveCount;
-
-      stateManager.moveCurrentCellByRowIdx(rowIdx, direction);
+      return;
     }
+
+    if (plutoKeyManagerEvent.isAltPressed && stateManager.isPaginated) {
+      int toPage = plutoKeyManagerEvent.isPageUp
+          ? stateManager.page - 1
+          : stateManager.page + 1;
+
+      if (toPage < 1) {
+        toPage = 1;
+      } else if (toPage > stateManager.totalPage) {
+        toPage = stateManager.totalPage;
+      }
+
+      stateManager.setPage(toPage, notify: false);
+
+      stateManager.setCurrentCell(stateManager.firstCell, 0);
+
+      return;
+    }
+
+    int rowIdx = stateManager.currentRowIdx!;
+
+    rowIdx += plutoKeyManagerEvent.isPageUp ? -moveCount : moveCount;
+
+    stateManager.moveCurrentCellByRowIdx(rowIdx, direction);
   }
 
   void _handleEnter(PlutoKeyManagerEvent plutoKeyManagerEvent) {

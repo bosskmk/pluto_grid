@@ -95,6 +95,10 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
   bool get isCtrlPressed {
     return event.isMetaPressed || event.isControlPressed;
   }
+
+  bool get isAltPressed {
+    return event.isAltPressed;
+  }
 }
 
 const characters = [
