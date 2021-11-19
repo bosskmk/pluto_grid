@@ -150,6 +150,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
         enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,
+        textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.center,
         formatter: (dynamic value) {
           if (value == null || value.toString().isEmpty) {
             return '';
