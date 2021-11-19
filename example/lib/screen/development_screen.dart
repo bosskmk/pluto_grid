@@ -1,8 +1,9 @@
-import 'package:example/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../dummy_data/development.dart';
+import 'empty_screen.dart';
+import 'home_screen.dart';
 
 class DevelopmentScreen extends StatefulWidget {
   static const routeName = 'development';
@@ -232,6 +233,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                       child: const Text('Go Home'),
                       onPressed: () {
                         Navigator.pushNamed(context, HomeScreen.routeName);
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('Go Empty'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, EmptyScreen.routeName);
                       },
                     ),
                     ElevatedButton(

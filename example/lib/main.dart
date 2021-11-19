@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'constants/pluto_grid_example_colors.dart';
 import 'screen/development_screen.dart';
+import 'screen/empty_screen.dart';
 import 'screen/feature/add_and_remove_rows_screen.dart';
 import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         ListingModeScreen.routeName: (context) => ListingModeScreen(),
         DarkModeScreen.routeName: (context) => DarkModeScreen(),
         // only development
+        EmptyScreen.routeName: (context) => EmptyScreen(),
         DevelopmentScreen.routeName: (context) => DevelopmentScreen(),
       },
       theme: ThemeData(
