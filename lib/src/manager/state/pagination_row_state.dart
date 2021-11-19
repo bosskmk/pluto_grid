@@ -75,6 +75,8 @@ mixin PaginationRowState implements IPlutoGridState {
 
     refRows!.setFilterRange(_range);
 
+    clearCurrentCell(notify: false);
+
     if (notify) {
       notifyListeners();
     }

@@ -196,9 +196,7 @@ class PlutoGridKeyManager {
         toPage = stateManager.totalPage;
       }
 
-      stateManager.setPage(toPage, notify: false);
-
-      stateManager.setCurrentCell(stateManager.firstCell, 0);
+      stateManager.setPage(toPage);
 
       return;
     }
