@@ -21,6 +21,12 @@ abstract class IGridState {
 
   PlutoOnRowCheckedEventCallback? get onRowChecked;
 
+  PlutoOnRowDoubleTapEventCallback? get onRowDoubleTap;
+
+  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap;
+
+  PlutoOnRowsMovedEventCallback? get onRowsMoved;
+
   CreateHeaderCallBack? get createHeader;
 
   CreateFooterCallBack? get createFooter;
@@ -49,6 +55,8 @@ abstract class IGridState {
 
   void setOnRowSecondaryTap(
       PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
+
+  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
 
   void setConfiguration(PlutoGridConfiguration configuration);
 
@@ -100,6 +108,10 @@ mixin GridState implements IPlutoGridState {
 
   PlutoOnRowSecondaryTapEventCallback? _onRowSecondaryTap;
 
+  PlutoOnRowsMovedEventCallback? get onRowsMoved => _onRowsMoved;
+
+  PlutoOnRowsMovedEventCallback? _onRowsMoved;
+
   CreateHeaderCallBack? get createHeader => _createHeader;
 
   CreateHeaderCallBack? _createHeader;
@@ -141,6 +153,10 @@ mixin GridState implements IPlutoGridState {
   void setOnRowSecondaryTap(
       PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) {
     _onRowSecondaryTap = onRowSecondaryTap;
+  }
+
+  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved) {
+    _onRowsMoved = onRowsMoved;
   }
 
   void setCreateHeader(CreateHeaderCallBack? createHeader) {

@@ -207,6 +207,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(event.cell!.value);
           // },
           onRowChecked: handleOnRowChecked,
+          onRowsMoved: (event) {
+            print(event.idx);
+            print(event.rows);
+          },
           // onRowDoubleTap: (e) {
           //   print('Double click A Row.');
           //   print(e.row?.cells['column1']?.value);

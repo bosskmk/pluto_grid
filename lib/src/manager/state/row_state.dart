@@ -481,6 +481,13 @@ mixin RowState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
+    if (onRowsMoved != null) {
+      onRowsMoved!(PlutoGridOnRowsMovedEvent(
+        idx: indexToMove,
+        rows: rows,
+      ));
+    }
+
     if (notify) {
       notifyListeners();
     }

@@ -67,6 +67,8 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
         const Text('You can drag the icon to move the row up and down.'),
         const Text(
             'In Selecting Row mode, you can move all the selected rows.'),
+        const Text(
+            'You can receive the moved rows passed to the onRowsMoved callback.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -85,7 +87,16 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
 
           stateManager = event.stateManager;
         },
-        // configuration: PlutoConfiguration.dark(),
+        onRowsMoved: (PlutoGridOnRowsMovedEvent event) {
+          // Moved index.
+          // In the state of pagination, filtering, and sorting,
+          // this is the index of the currently displayed row range.
+          print(event.idx);
+
+          // Shift (Control) + Click or Shift + Move keys
+          // allows you to select multiple rows and move them at the same time.
+          print(event.rows!.first!.cells['column1']!.value);
+        },
       ),
     );
   }
