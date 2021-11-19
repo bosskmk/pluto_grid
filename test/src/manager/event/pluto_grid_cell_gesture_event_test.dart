@@ -407,8 +407,8 @@ void main() {
 
         // then
         verify(stateManager!.setCurrentSelectingPositionWithOffset(offset));
-        verify(eventManager!.addEvent(
-            argThat(PlutoObjectMatcher<PlutoGridMoveUpdateEvent>(rule: (event) {
+        verify(eventManager!.addEvent(argThat(
+            PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (event) {
           return event.offset == offset;
         }))));
       },

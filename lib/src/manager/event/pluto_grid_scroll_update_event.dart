@@ -3,10 +3,10 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// An event that occurs when dragging or moving after a long tap.
-class PlutoGridMoveUpdateEvent extends PlutoGridEvent {
+class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
   final Offset? offset;
 
-  PlutoGridMoveUpdateEvent({
+  PlutoGridScrollUpdateEvent({
     this.offset,
   }) : super(
           type: PlutoGridEventType.throttle,

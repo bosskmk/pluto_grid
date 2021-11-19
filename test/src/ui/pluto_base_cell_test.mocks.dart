@@ -787,6 +787,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#toggleAllRowChecked, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
+  void setRowColorCallback(_i2.PlutoRowColorCallback? rowColorCallback) => super
+      .noSuchMethod(Invocation.method(#setRowColorCallback, [rowColorCallback]),
+          returnValueForMissingStub: null);
+  @override
   void setScroll(_i2.PlutoGridScrollController? scroll) =>
       super.noSuchMethod(Invocation.method(#setScroll, [scroll]),
           returnValueForMissingStub: null);

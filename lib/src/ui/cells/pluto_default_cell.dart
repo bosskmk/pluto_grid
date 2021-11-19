@@ -69,7 +69,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
       offset: offset,
     );
 
-    widget.stateManager.eventManager!.addEvent(PlutoGridMoveUpdateEvent(
+    widget.stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
       offset: offset,
     ));
   }

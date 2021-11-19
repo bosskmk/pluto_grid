@@ -4,7 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'pluto_grid_move_update_event_test.mocks.dart';
+import 'pluto_grid_scroll_update_event_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
@@ -19,7 +19,7 @@ void main() {
   var eventBuilder = ({
     Offset? offset,
   }) =>
-      PlutoGridMoveUpdateEvent(
+      PlutoGridScrollUpdateEvent(
         offset: offset,
       );
 
