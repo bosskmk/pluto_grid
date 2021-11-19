@@ -594,6 +594,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setOnRowSecondaryTap, [onRowSecondaryTap]),
           returnValueForMissingStub: null);
   @override
+  void setOnRowsMoved(_i2.PlutoOnRowsMovedEventCallback? onRowsMoved) =>
+      super.noSuchMethod(Invocation.method(#setOnRowsMoved, [onRowsMoved]),
+          returnValueForMissingStub: null);
+  @override
   void setConfiguration(_i2.PlutoGridConfiguration? configuration) =>
       super.noSuchMethod(Invocation.method(#setConfiguration, [configuration]),
           returnValueForMissingStub: null);
