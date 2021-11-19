@@ -1,3 +1,15 @@
+## [2.6.0] - 2021. 11. 19
+
+* Added dynamically row background color.
+* Added optional border radius.
+* Added align column title text.
+* Added to receive the moved row to onRowsMoved callback when a row is moved by dragging, etc.
+* Added shortcuts. (Alt + PageUp or PageDown. Moving a page in the paging state.)
+* Modified so that onSelected callback is called with one tap in PlutoGridMode.select mode.
+* Fixed an error where arrow keys and backspace keys did not work in Desktop.
+* Fixed insert, append, prepend rows bug.
+* Renamed PlutoGridMoveUpdateEvent to PlutoGridScrollUpdateEvent.
+
 ## [2.5.0] - 2021. 9. 22
 
 * flutter 2.5 compatible.

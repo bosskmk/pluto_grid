@@ -1,4 +1,4 @@
-name: Publish
+name: Release
 
 on:
   push:
@@ -25,12 +25,6 @@ jobs:
     - run: dart --version
     - run: flutter --version
     - run: flutter pub get
-#    - run: flutter test
-
-    # delete unnecessary directories
-    - run: |
-        rm -rf ./test
-        rm -rf ./tool
 
     # formatting
     - run: flutter format .
@@ -43,12 +37,3 @@ jobs:
         git commit -m "$VERSION_NAME"
         git tag "$VERSION_NAME"
         git push origin "$VERSION_NAME"
-
-    # publish to pub.dev
-    - name: publish
-      uses: sakebook/actions-flutter-pub-publisher@v1.3.1
-      with:
-        credential: ${{ secrets.PUB_CREDENTIAL_JSON }}
-        flutter_package: true
-        skip_test: true
-        dry_run: false

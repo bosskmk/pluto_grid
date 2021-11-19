@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v2.5.0
+## PlutoGrid for flutter - v2.6.0
 
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
 
