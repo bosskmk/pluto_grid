@@ -39,6 +39,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       });
     }
 
+    widget.stateManager!.textEditingController = null;
+
     super.dispose();
   }
 
@@ -47,6 +49,12 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     super.initState();
 
     cellFocus = FocusNode(onKey: _handleOnKey);
+
+    _textController.addListener(() {
+      _cellEditingStatus = CellEditingStatus.changed;
+    });
+
+    widget.stateManager!.textEditingController = _textController;
 
     _textController.text = widget.column!.formattedValueForDisplayInEditing(
       widget.cell!.value,

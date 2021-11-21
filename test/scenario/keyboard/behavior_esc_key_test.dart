@@ -82,9 +82,9 @@ void main() {
 
         await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
 
-        expect(stateManager!.currentCell!.value, 'a');
-
         await tester.pumpAndSettle();
+
+        expect(stateManager!.textEditingController!.text, 'a');
 
         await tester.sendKeyEvent(LogicalKeyboardKey.escape);
 

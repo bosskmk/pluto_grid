@@ -347,10 +347,16 @@ class PlutoGridKeyManager {
     if (stateManager.isEditing != true && stateManager.currentCell != null) {
       stateManager.setEditing(true);
 
-      stateManager.changeCellValue(
-        stateManager.currentCell!.key,
-        plutoKeyManagerEvent.event.character,
-      );
+      if (plutoKeyManagerEvent.event.character == null) {
+        return;
+      }
+
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        if (stateManager.textEditingController != null) {
+          stateManager.textEditingController!.text =
+              plutoKeyManagerEvent.event.character!;
+        }
+      });
     }
   }
 }

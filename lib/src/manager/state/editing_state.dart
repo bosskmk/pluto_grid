@@ -10,6 +10,8 @@ abstract class IEditingState {
   /// pre-modification cell value
   dynamic get cellValueBeforeEditing;
 
+  TextEditingController? textEditingController;
+
   /// Change the editing status of the current cell.
   void setEditing(
     bool flag, {
@@ -44,6 +46,8 @@ mixin EditingState implements IPlutoGridState {
   dynamic get cellValueBeforeEditing => _cellValueBeforeEditing;
 
   dynamic _cellValueBeforeEditing;
+
+  TextEditingController? textEditingController;
 
   void setEditing(
     bool flag, {

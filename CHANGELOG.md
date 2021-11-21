@@ -1,3 +1,7 @@
+## [2.6.1] - 2021. 11. 22
+
+* Fixed so that the onChanged callback is not called when text is entered while the cell is not in the edit state.
+
 ## [2.6.0] - 2021. 11. 19
 
 * Added dynamically row background color.
