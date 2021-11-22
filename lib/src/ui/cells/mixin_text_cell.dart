@@ -19,6 +19,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
   CellEditingStatus? _cellEditingStatus;
 
+  dynamic _initialCellValue;
+
   FocusNode? cellFocus;
 
   @override
@@ -60,10 +62,16 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       widget.cell!.value,
     );
 
+    _initialCellValue = widget.cell!.value;
+
     _cellEditingStatus = CellEditingStatus.init;
   }
 
   void _changeValue({bool notify = true}) {
+    if (widget.cell!.value.toString() == _textController.text) {
+      return;
+    }
+
     widget.stateManager!.changeCellValue(
       widget.cell!.key,
       _textController.text,
@@ -86,12 +94,11 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   }
 
   void _restoreText() {
-    _textController.text =
-        widget.stateManager!.cellValueBeforeEditing.toString();
+    _textController.text = _initialCellValue.toString();
 
     widget.stateManager!.changeCellValue(
       widget.stateManager!.currentCell!.key,
-      widget.stateManager!.cellValueBeforeEditing,
+      _initialCellValue,
       notify: false,
     );
   }
