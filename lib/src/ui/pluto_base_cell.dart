@@ -152,6 +152,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
         selectingMode: selectingMode,
         isSelectedCell: isSelectedCell,
         configuration: widget.stateManager.configuration,
+        cellPadding: widget.column!.cellPadding,
         child: _BuildCell(
           stateManager: widget.stateManager,
           rowIdx: widget.rowIdx,
@@ -176,6 +177,7 @@ class _CellContainer extends StatelessWidget {
   final PlutoGridSelectingMode? selectingMode;
   final bool? isSelectedCell;
   final PlutoGridConfiguration? configuration;
+  final double? cellPadding;
 
   _CellContainer({
     this.readOnly,
@@ -188,6 +190,7 @@ class _CellContainer extends StatelessWidget {
     this.selectingMode,
     this.isSelectedCell,
     this.configuration,
+    this.cellPadding,
   });
 
   Color? _currentCellColor() {
@@ -242,8 +245,9 @@ class _CellContainer extends StatelessWidget {
       height: height,
       decoration: _boxDecoration(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: PlutoGridSettings.cellPadding),
+        // New - Customisable cellPadding
+        padding: EdgeInsets.symmetric(
+            horizontal: cellPadding ?? configuration!.cellPadding),
         child: Container(
           clipBehavior: Clip.hardEdge,
           height: height,

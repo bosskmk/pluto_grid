@@ -81,6 +81,9 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
+  /// Customisable cellPadding.
+  double? cellPadding;
+
   PlutoColumn({
     required this.title,
     required this.field,
@@ -105,6 +108,7 @@ class PlutoColumn {
     this.enableSetColumnsMenuItem = true,
     this.enableEditingMode = true,
     this.hide = false,
+    this.cellPadding,
   }) : _key = UniqueKey();
 
   /// Column key
