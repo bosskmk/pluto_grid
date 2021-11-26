@@ -72,6 +72,12 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  /// Customise headerCellPadding
+  final double headerCellPadding;
+
+  /// Customise cellPadding
+  final double cellPadding;
+
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = true,
@@ -103,6 +109,8 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.headerCellPadding = PlutoGridSettings.cellPadding,
+    this.cellPadding = PlutoGridSettings.cellPadding,
   }) {
     _init();
   }
@@ -138,6 +146,8 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.headerCellPadding = PlutoGridSettings.cellPadding,
+    this.cellPadding = PlutoGridSettings.cellPadding,
   }) {
     _init();
   }
