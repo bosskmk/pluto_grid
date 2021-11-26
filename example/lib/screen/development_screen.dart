@@ -322,9 +322,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
-            // NEW: Customizable dataCellPadding
+            // NEW: Customisable dataCellPadding
             cellPadding: 15,
-            // NEW: Customizable headerCellPadding
+            // NEW: Customisable headerCellPadding
             headerCellPadding: 15,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
