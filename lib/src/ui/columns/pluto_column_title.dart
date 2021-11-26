@@ -270,7 +270,7 @@ class _BuildColumnWidget extends StatelessWidget {
       width: column!.width,
       height: PlutoGridSettings.rowHeight,
       padding:
-          const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
+          EdgeInsets.symmetric(horizontal: stateManager!.configuration!.headerCellPadding),
       decoration: stateManager!.configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(
