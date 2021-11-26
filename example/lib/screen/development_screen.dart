@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-
 import '../dummy_data/development.dart';
 import 'empty_screen.dart';
 import 'home_screen.dart';
@@ -139,8 +138,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableFilterMenuItem: false,
         enableEditingMode: false,
         renderer: (rendererContext) {
-          return Image.asset('assets/images/cat.jpg',
-          fit: BoxFit.fitWidth,);
+          return Image.asset(
+            'assets/images/cat.jpg',
+            fit: BoxFit.fitWidth,
+          );
         },
       ),
       PlutoColumn(
@@ -154,7 +155,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         width: 80,
         renderer: (rendererContext) {
           return Container(
-            color: rendererContext.cell!.value % 2 == 0 ? Colors.yellow : Colors.teal,
+            color: rendererContext.cell!.value % 2 == 0
+                ? Colors.yellow
+                : Colors.teal,
           );
         },
       ),
@@ -322,10 +325,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
-            // NEW: Customisable dataCellPadding
-            cellPadding: 15,
-            // NEW: Customisable headerCellPadding
-            headerCellPadding: 15,
+            defaultCellPadding: 15,
+            defaultColumnTitlePadding: 15,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
             gridBorderRadius: BorderRadius.circular(10),

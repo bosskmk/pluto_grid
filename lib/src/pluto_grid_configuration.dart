@@ -55,6 +55,16 @@ class PlutoGridConfiguration {
   /// Height of a row.
   final double rowHeight;
 
+  /// Customise column title padding
+  /// If there is no titlePadding of PlutoColumn,
+  /// it is the title padding of the default column. (Horizontal only)
+  final double defaultColumnTitlePadding;
+
+  /// Customise cell padding
+  /// If there is no cellPadding of PlutoColumn,
+  /// it is the padding value of cell. (Horizontal only)
+  final double defaultCellPadding;
+
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
 
@@ -71,12 +81,6 @@ class PlutoGridConfiguration {
 
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
-
-  /// Customise headerCellPadding
-  final double headerCellPadding;
-
-  /// Customise cellPadding
-  final double cellPadding;
 
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
@@ -104,13 +108,13 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-    this.headerCellPadding = PlutoGridSettings.cellPadding,
-    this.cellPadding = PlutoGridSettings.cellPadding,
   }) {
     _init();
   }
@@ -141,13 +145,13 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-    this.headerCellPadding = PlutoGridSettings.cellPadding,
-    this.cellPadding = PlutoGridSettings.cellPadding,
   }) {
     _init();
   }

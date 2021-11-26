@@ -247,7 +247,8 @@ class _CellContainer extends StatelessWidget {
       child: Padding(
         // New - Customisable cellPadding
         padding: EdgeInsets.symmetric(
-            horizontal: cellPadding ?? configuration!.cellPadding),
+          horizontal: cellPadding ?? configuration!.defaultCellPadding,
+        ),
         child: Container(
           clipBehavior: Clip.hardEdge,
           height: height,
