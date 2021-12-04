@@ -177,6 +177,10 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return KeyEventResult.handled;
   }
 
+  void _handleOnTap() {
+    widget.stateManager!.setKeepFocus(true);
+  }
+
   TextField buildTextField({
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
@@ -194,6 +198,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       readOnly: widget.column!.type!.readOnly!,
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
+      onTap: _handleOnTap,
       style: style ?? widget.stateManager!.configuration!.cellTextStyle,
       decoration: decoration,
       maxLines: maxLines,
