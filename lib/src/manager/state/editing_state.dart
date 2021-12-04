@@ -7,10 +7,18 @@ abstract class IEditingState {
   /// Editing status of the current.
   bool get isEditing;
 
+  /// Automatically set to editing state when cell is selected.
+  bool get autoEditing;
+
   TextEditingController? textEditingController;
 
   /// Change the editing status of the current cell.
   void setEditing(
+    bool flag, {
+    bool notify = true,
+  });
+
+  void setAutoEditing(
     bool flag, {
     bool notify = true,
   });
@@ -40,6 +48,10 @@ mixin EditingState implements IPlutoGridState {
 
   bool _isEditing = false;
 
+  bool get autoEditing => _autoEditing;
+
+  bool _autoEditing = false;
+
   TextEditingController? textEditingController;
 
   void setEditing(
@@ -61,6 +73,21 @@ mixin EditingState implements IPlutoGridState {
     _isEditing = flag;
 
     clearCurrentSelectingPosition(notify: false);
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void setAutoEditing(
+    bool flag, {
+    bool notify = true,
+  }) {
+    if (_autoEditing == flag) {
+      return;
+    }
+
+    _autoEditing = flag;
 
     if (notify) {
       notifyListeners();

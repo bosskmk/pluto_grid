@@ -202,7 +202,7 @@ mixin CellState implements IPlutoGridState {
 
     clearCurrentSelectingRows(notify: false);
 
-    setEditing(false, notify: false);
+    setEditing(autoEditing, notify: false);
 
     if (notify) {
       notifyListeners();

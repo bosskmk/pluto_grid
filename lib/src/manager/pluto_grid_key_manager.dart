@@ -275,6 +275,12 @@ class PlutoGridKeyManager {
       }
     }
 
+    if (stateManager.autoEditing && stateManager.isEditing) {
+      stateManager.notifyListeners();
+
+      return;
+    }
+
     stateManager.toggleEditing();
   }
 
@@ -284,7 +290,7 @@ class PlutoGridKeyManager {
       return;
     }
 
-    final saveIsEditing = stateManager.isEditing;
+    final saveIsEditing = stateManager.autoEditing || stateManager.isEditing;
 
     if (plutoKeyManagerEvent.event.isShiftPressed) {
       stateManager.moveCurrentCell(PlutoMoveDirection.left, force: true);

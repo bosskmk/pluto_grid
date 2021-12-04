@@ -221,8 +221,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
+
+            stateManager!.setShowColumnFilter(true, notify: false);
+
+            stateManager!.setAutoEditing(true, notify: false);
+
             stateManager!.setSelectingMode(gridSelectingMode!);
-            stateManager!.setShowColumnFilter(true);
           },
           // onSelected: (event) {
           //   print(event.cell!.value);
