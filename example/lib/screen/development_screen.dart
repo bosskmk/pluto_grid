@@ -335,6 +335,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             defaultColumnTitlePadding: 15,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
+            enableMoveHorizontalInEditing: true,
             gridBorderRadius: BorderRadius.circular(10),
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,

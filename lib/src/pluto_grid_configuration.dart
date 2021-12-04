@@ -68,6 +68,9 @@ class PlutoGridConfiguration {
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
 
+  /// Moves the current cell when focus reaches the left or right edge in the edit state.
+  final bool enableMoveHorizontalInEditing;
+
   /// PlutoEnterKeyAction.EditingAndMoveDown : It switches to the editing state, and moves down in the editing state.
   /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
   /// PlutoEnterKeyAction.ToggleEditing : The editing state is toggled and cells are not moved.
@@ -111,6 +114,7 @@ class PlutoGridConfiguration {
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
+    this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -148,6 +152,7 @@ class PlutoGridConfiguration {
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
+    this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),

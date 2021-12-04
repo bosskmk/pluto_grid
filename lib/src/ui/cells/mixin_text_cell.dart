@@ -103,6 +103,34 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     );
   }
 
+  bool _moveHorizontal(PlutoKeyManagerEvent keyManager) {
+    if (!keyManager.isHorizontal) {
+      return false;
+    }
+
+    if (widget.column!.type!.readOnly == true) {
+      return true;
+    }
+
+    final selection = _textController.selection;
+
+    if (selection.baseOffset != selection.extentOffset) {
+      return false;
+    }
+
+    if (selection.baseOffset == 0 && keyManager.isLeft) {
+      return true;
+    }
+
+    final textLength = _textController.text.length;
+
+    if (selection.baseOffset == textLength && keyManager.isRight) {
+      return true;
+    }
+
+    return false;
+  }
+
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
@@ -114,7 +142,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     }
 
     final skip = !(keyManager.isVertical ||
-        (keyManager.isHorizontal && widget.column!.type!.readOnly == true) ||
+        _moveHorizontal(keyManager) ||
         keyManager.isEsc ||
         keyManager.isTab ||
         keyManager.isEnter);
