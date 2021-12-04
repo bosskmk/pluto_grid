@@ -23,6 +23,7 @@ import 'feature/copy_and_paste_screen.dart';
 import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
 import 'feature/dual_mode_screen.dart';
+import 'feature/editing_state_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
@@ -347,6 +348,13 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Editing state',
+            description: 'Controls the editing state of a cell.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, EditingStateScreen.routeName);
+            },
+          ),
+          PlutoListTile(
             title: 'Add and Remove Rows',
             description: 'You can add or delete rows.',
             onTapLiveDemo: () {
@@ -437,6 +445,13 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/christianarduino');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Enrique Cardona',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/henry2man');
             },
           ),
           PlutoContributorTile.invisible(

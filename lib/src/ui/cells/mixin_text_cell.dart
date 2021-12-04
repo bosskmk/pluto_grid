@@ -19,6 +19,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
   CellEditingStatus? _cellEditingStatus;
 
+  dynamic _initialCellValue;
+
   FocusNode? cellFocus;
 
   @override
@@ -60,10 +62,16 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       widget.cell!.value,
     );
 
+    _initialCellValue = widget.cell!.value;
+
     _cellEditingStatus = CellEditingStatus.init;
   }
 
   void _changeValue({bool notify = true}) {
+    if (widget.cell!.value.toString() == _textController.text) {
+      return;
+    }
+
     widget.stateManager!.changeCellValue(
       widget.cell!.key,
       _textController.text,
@@ -86,14 +94,41 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   }
 
   void _restoreText() {
-    _textController.text =
-        widget.stateManager!.cellValueBeforeEditing.toString();
+    _textController.text = _initialCellValue.toString();
 
     widget.stateManager!.changeCellValue(
       widget.stateManager!.currentCell!.key,
-      widget.stateManager!.cellValueBeforeEditing,
+      _initialCellValue,
       notify: false,
     );
+  }
+
+  bool _moveHorizontal(PlutoKeyManagerEvent keyManager) {
+    if (!keyManager.isHorizontal) {
+      return false;
+    }
+
+    if (widget.column!.type!.readOnly == true) {
+      return true;
+    }
+
+    final selection = _textController.selection;
+
+    if (selection.baseOffset != selection.extentOffset) {
+      return false;
+    }
+
+    if (selection.baseOffset == 0 && keyManager.isLeft) {
+      return true;
+    }
+
+    final textLength = _textController.text.length;
+
+    if (selection.baseOffset == textLength && keyManager.isRight) {
+      return true;
+    }
+
+    return false;
   }
 
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
@@ -107,7 +142,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     }
 
     final skip = !(keyManager.isVertical ||
-        (keyManager.isHorizontal && widget.column!.type!.readOnly == true) ||
+        _moveHorizontal(keyManager) ||
         keyManager.isEsc ||
         keyManager.isTab ||
         keyManager.isEnter);
@@ -142,6 +177,10 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return KeyEventResult.handled;
   }
 
+  void _handleOnTap() {
+    widget.stateManager!.setKeepFocus(true);
+  }
+
   TextField buildTextField({
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
@@ -159,6 +198,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       readOnly: widget.column!.type!.readOnly!,
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
+      onTap: _handleOnTap,
       style: style ?? widget.stateManager!.configuration!.cellTextStyle,
       decoration: decoration,
       maxLines: maxLines,

@@ -666,6 +666,9 @@ class PlutoGridSettings {
   /// Cell - padding
   static const double cellPadding = 10;
 
+  /// Column title - padding
+  static const double columnTitlePadding = 10;
+
   /// Cell - fontSize
   static const double cellFontSize = 14;
 

@@ -55,8 +55,21 @@ class PlutoGridConfiguration {
   /// Height of a row.
   final double rowHeight;
 
+  /// Customise column title padding
+  /// If there is no titlePadding of PlutoColumn,
+  /// it is the title padding of the default column. (Horizontal only)
+  final double defaultColumnTitlePadding;
+
+  /// Customise cell padding
+  /// If there is no cellPadding of PlutoColumn,
+  /// it is the padding value of cell. (Horizontal only)
+  final double defaultCellPadding;
+
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
+
+  /// Moves the current cell when focus reaches the left or right edge in the edit state.
+  final bool enableMoveHorizontalInEditing;
 
   /// PlutoEnterKeyAction.EditingAndMoveDown : It switches to the editing state, and moves down in the editing state.
   /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
@@ -98,7 +111,10 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
+    this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -133,7 +149,10 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
+    this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),

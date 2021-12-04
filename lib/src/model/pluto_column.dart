@@ -21,6 +21,14 @@ class PlutoColumn {
 
   double minWidth;
 
+  /// Customisable title padding.
+  /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
+  double? titlePadding;
+
+  /// Customisable cell padding.
+  /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
+  double? cellPadding;
+
   /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
 
@@ -75,6 +83,8 @@ class PlutoColumn {
   /// Valid only when [enableContextMenu] is activated.
   bool enableSetColumnsMenuItem;
 
+  bool enableAutoEditing;
+
   /// Entering the Enter key or tapping the cell enters the Editing mode.
   bool? enableEditingMode;
 
@@ -87,6 +97,8 @@ class PlutoColumn {
     required this.type,
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
+    this.titlePadding,
+    this.cellPadding,
     this.textAlign = PlutoColumnTextAlign.left,
     this.titleTextAlign = PlutoColumnTextAlign.left,
     this.frozen = PlutoColumnFrozen.none,
@@ -103,6 +115,7 @@ class PlutoColumn {
     this.enableFilterMenuItem = true,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,
+    this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
   }) : _key = UniqueKey();

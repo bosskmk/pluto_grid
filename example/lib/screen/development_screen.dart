@@ -34,6 +34,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
+        enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
         width: 250,
         minWidth: 175,
@@ -113,6 +114,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         field: 'column3',
         textAlign: PlutoColumnTextAlign.left,
         titleTextAlign: PlutoColumnTextAlign.center,
+        enableAutoEditing: true,
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
@@ -138,7 +140,27 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableFilterMenuItem: false,
         enableEditingMode: false,
         renderer: (rendererContext) {
-          return Image.asset('assets/images/cat.jpg');
+          return Image.asset(
+            'assets/images/cat.jpg',
+            fit: BoxFit.fitWidth,
+          );
+        },
+      ),
+      PlutoColumn(
+        title: 'column7',
+        field: 'column7',
+        type: PlutoColumnType.number(),
+        enableFilterMenuItem: false,
+        enableEditingMode: false,
+        // NEW Custom cellPadding
+        cellPadding: 0,
+        width: 80,
+        renderer: (rendererContext) {
+          return Container(
+            color: rendererContext.cell!.value % 2 == 0
+                ? Colors.yellow
+                : Colors.teal,
+          );
         },
       ),
     ];
@@ -201,8 +223,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
+
+            stateManager!.setShowColumnFilter(true, notify: false);
+
+            // stateManager!.setAutoEditing(true, notify: false);
+
             stateManager!.setSelectingMode(gridSelectingMode!);
-            stateManager!.setShowColumnFilter(true);
           },
           // onSelected: (event) {
           //   print(event.cell!.value);
@@ -305,8 +331,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           configuration: PlutoGridConfiguration(
             // rowHeight: 30.0,
+            defaultCellPadding: 15,
+            defaultColumnTitlePadding: 15,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
+            enableMoveHorizontalInEditing: true,
             gridBorderRadius: BorderRadius.circular(10),
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,

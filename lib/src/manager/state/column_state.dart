@@ -398,17 +398,18 @@ mixin ColumnState implements IPlutoGridState {
 
   void autoFitColumn(BuildContext context, PlutoColumn column) {
     final String maxValue = refRows!.fold('', (previousValue, element) {
-      final value = element!.cells.entries
-          .firstWhere((element) => element.key == column.field)
-          .value
-          .value
-          .toString();
+      final value = column.formattedValueForDisplay(
+        element!.cells.entries
+            .firstWhere((element) => element.key == column.field)
+            .value
+            .value,
+      );
 
-      if (previousValue.toString().length < value.toString().length) {
-        return value.toString();
+      if (previousValue.length < value.length) {
+        return value;
       }
 
-      return previousValue.toString();
+      return previousValue;
     });
 
     // Get size after rendering virtually
@@ -425,12 +426,14 @@ mixin ColumnState implements IPlutoGridState {
 
     textPainter.layout();
 
+    // todo : Apply (popup type icon, checkbox, drag indicator, renderer)
+
+    double cellPadding =
+        column.cellPadding ?? configuration!.defaultCellPadding;
+
     resizeColumn(
       column.key,
-      textPainter.width -
-          column.width +
-          (PlutoGridSettings.cellPadding * 2) +
-          10,
+      textPainter.width - column.width + (cellPadding * 2) + 2,
     );
   }
 

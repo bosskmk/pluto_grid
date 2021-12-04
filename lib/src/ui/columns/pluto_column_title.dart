@@ -264,13 +264,21 @@ class _BuildColumnWidget extends StatelessWidget {
     this.column,
   }) : super(key: key);
 
+  double get padding =>
+      column!.titlePadding ??
+      stateManager!.configuration!.defaultColumnTitlePadding;
+
+  bool get showSizedBoxForIcon =>
+      column!.isShowRightIcon && column!.titleTextAlign.isRight;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: column!.width,
       height: PlutoGridSettings.rowHeight,
-      padding:
-          const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
+      padding: EdgeInsets.symmetric(
+        horizontal: padding,
+      ),
       decoration: stateManager!.configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(
@@ -296,7 +304,7 @@ class _BuildColumnWidget extends StatelessWidget {
                 stateManager: stateManager!,
               ),
             ),
-            if (column!.isShowRightIcon && column!.titleTextAlign.isRight)
+            if (showSizedBoxForIcon)
               SizedBox(width: stateManager!.configuration!.iconSize),
           ],
         ),

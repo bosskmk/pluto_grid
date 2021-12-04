@@ -296,8 +296,9 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   Widget build(BuildContext context) {
     return Container(
       height: widget.stateManager.rowTotalHeight,
-      padding:
-          const EdgeInsets.symmetric(horizontal: PlutoGridSettings.cellPadding),
+      padding: const EdgeInsets.symmetric(
+        horizontal: PlutoGridSettings.cellPadding,
+      ),
       alignment: Alignment.center,
       child: Align(
         alignment: Alignment.center,
