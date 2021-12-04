@@ -290,7 +290,7 @@ class PlutoGridKeyManager {
       return;
     }
 
-    final saveIsEditing = stateManager.autoEditing || stateManager.isEditing;
+    final saveIsEditing = stateManager.isEditing;
 
     if (plutoKeyManagerEvent.event.isShiftPressed) {
       stateManager.moveCurrentCell(PlutoMoveDirection.left, force: true);
@@ -298,7 +298,7 @@ class PlutoGridKeyManager {
       stateManager.moveCurrentCell(PlutoMoveDirection.right, force: true);
     }
 
-    stateManager.setEditing(saveIsEditing);
+    stateManager.setEditing(stateManager.autoEditing || saveIsEditing);
   }
 
   void _handleEsc(PlutoKeyManagerEvent plutoKeyManagerEvent) {

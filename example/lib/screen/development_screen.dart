@@ -34,6 +34,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
+        enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
         width: 250,
         minWidth: 175,
@@ -113,6 +114,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         field: 'column3',
         textAlign: PlutoColumnTextAlign.left,
         titleTextAlign: PlutoColumnTextAlign.center,
+        enableAutoEditing: true,
         type: PlutoColumnType.date(),
       ),
       PlutoColumn(
@@ -224,7 +226,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
             stateManager!.setShowColumnFilter(true, notify: false);
 
-            stateManager!.setAutoEditing(true, notify: false);
+            // stateManager!.setAutoEditing(true, notify: false);
 
             stateManager!.setSelectingMode(gridSelectingMode!);
           },

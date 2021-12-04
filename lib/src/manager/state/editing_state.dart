@@ -48,7 +48,8 @@ mixin EditingState implements IPlutoGridState {
 
   bool _isEditing = false;
 
-  bool get autoEditing => _autoEditing;
+  bool get autoEditing =>
+      _autoEditing || currentColumn?.enableAutoEditing == true;
 
   bool _autoEditing = false;
 

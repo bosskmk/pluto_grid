@@ -83,6 +83,8 @@ class PlutoColumn {
   /// Valid only when [enableContextMenu] is activated.
   bool enableSetColumnsMenuItem;
 
+  bool enableAutoEditing;
+
   /// Entering the Enter key or tapping the cell enters the Editing mode.
   bool? enableEditingMode;
 
@@ -113,6 +115,7 @@ class PlutoColumn {
     this.enableFilterMenuItem = true,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,
+    this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
   }) : _key = UniqueKey();
