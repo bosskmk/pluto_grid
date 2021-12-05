@@ -36,6 +36,18 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableDropToResize: true,
         enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
+        titleSpan: const TextSpan(
+          children: [
+            WidgetSpan(
+              child: Text(
+                '* ',
+                style: TextStyle(color: Colors.red),
+              ),
+              alignment: PlaceholderAlignment.bottom,
+            ),
+            TextSpan(text: 'column1'),
+          ],
+        ),
         width: 250,
         minWidth: 175,
         renderer: (rendererContext) {

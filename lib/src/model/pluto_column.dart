@@ -8,6 +8,7 @@ typedef PlutoColumnRenderer = Widget Function(
 
 class PlutoColumn {
   /// A title to be displayed on the screen.
+  /// If a titleSpan value is set, the title value is not displayed.
   String title;
 
   /// Specifies the field name of the row to be connected to the column.
@@ -24,6 +25,23 @@ class PlutoColumn {
   /// Customisable title padding.
   /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
   double? titlePadding;
+
+  /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
+  ///
+  /// ```
+  /// titleSpan: const TextSpan(
+  ///   children: [
+  ///     WidgetSpan(
+  ///       child: Text(
+  ///         '* ',
+  ///         style: TextStyle(color: Colors.red),
+  ///       ),
+  ///     ),
+  ///     TextSpan(text: 'column title'),
+  ///   ],
+  /// ),
+  /// ```
+  InlineSpan? titleSpan;
 
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
@@ -98,6 +116,7 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
+    this.titleSpan,
     this.cellPadding,
     this.textAlign = PlutoColumnTextAlign.left,
     this.titleTextAlign = PlutoColumnTextAlign.left,
