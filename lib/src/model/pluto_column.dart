@@ -85,8 +85,8 @@ class PlutoColumn {
   /// Displays the right icon of the column title.
   bool enableContextMenu;
 
-  /// Diaplay the right icon for drop to resize the column
-  /// Valid only when [enableContextMenu] is noactivated.
+  /// Display the right icon for drop to resize the column
+  /// Valid only when [enableContextMenu] is disabled.
   bool enableDropToResize;
 
   /// Displays filter-related menus in the column context menu.
