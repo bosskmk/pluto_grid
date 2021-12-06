@@ -9,6 +9,7 @@ typedef _UpdateStateFunction = T Function<T>(
   T newValue, {
   _CompareFunction<T>? compare,
   bool? destructureList,
+  bool? ignoreChange,
 });
 
 typedef _CompareFunction<T> = bool Function(T a, T b);
@@ -62,8 +63,9 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     T newValue, {
     _CompareFunction<T>? compare,
     bool? destructureList = false,
+    bool? ignoreChange = false,
   }) {
-    if (_changed == false) {
+    if (ignoreChange == false && _changed == false) {
       _changed = compare == null
           ? oldValue != newValue
           : compare(oldValue, newValue) == false;

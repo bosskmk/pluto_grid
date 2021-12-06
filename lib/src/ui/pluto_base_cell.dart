@@ -47,7 +47,11 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
         widget.stateManager.isCurrentCell(widget.cell),
       );
 
-      isEditing = update<bool?>(isEditing, widget.stateManager.isEditing);
+      isEditing = update<bool?>(
+        isEditing,
+        widget.stateManager.isEditing,
+        ignoreChange: isCurrentCell != true,
+      );
 
       selectingMode = update<PlutoGridSelectingMode?>(
         selectingMode,
