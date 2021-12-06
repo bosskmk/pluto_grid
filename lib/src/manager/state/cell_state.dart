@@ -43,12 +43,14 @@ abstract class ICellState {
   /// Whether the cell is in a mutable state
   bool canChangeCellValue({
     PlutoColumn? column,
+    PlutoRow? row,
     dynamic newValue,
     dynamic oldValue,
   });
 
   bool canNotChangeCellValue({
     PlutoColumn? column,
+    PlutoRow? row,
     dynamic newValue,
     dynamic oldValue,
   });
@@ -230,10 +232,12 @@ mixin CellState implements IPlutoGridState {
 
   bool canChangeCellValue({
     PlutoColumn? column,
+    PlutoRow? row,
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.readOnly || column.enableEditingMode != true) {
+    if (column!.checkReadOnly(row, row?.cells[column.field]) ||
+        column.enableEditingMode != true) {
       return false;
     }
 
@@ -250,11 +254,13 @@ mixin CellState implements IPlutoGridState {
 
   bool canNotChangeCellValue({
     PlutoColumn? column,
+    PlutoRow? row,
     dynamic newValue,
     dynamic oldValue,
   }) {
     return !canChangeCellValue(
       column: column,
+      row: row,
       newValue: newValue,
       oldValue: oldValue,
     );

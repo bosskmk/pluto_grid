@@ -47,6 +47,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -62,6 +68,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -88,6 +95,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -102,6 +115,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -128,6 +142,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -142,6 +162,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -168,6 +189,12 @@ void main() {
       type: PlutoColumnType.time(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -182,6 +209,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -208,6 +236,12 @@ void main() {
       type: PlutoColumnType.date(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -222,6 +256,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -249,6 +284,12 @@ void main() {
       type: PlutoColumnType.number(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -263,6 +304,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -290,6 +332,12 @@ void main() {
       type: PlutoColumnType.select(<String>['one', 'two', 'three']),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -304,6 +352,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -330,6 +379,12 @@ void main() {
         type: PlutoColumnType.text(),
       );
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
+      );
+
       final rowIdx = 0;
 
       // when
@@ -345,6 +400,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -377,6 +433,12 @@ void main() {
         type: PlutoColumnType.text(),
       );
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
+      );
+
       final rowIdx = 0;
 
       // when
@@ -392,6 +454,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -425,6 +488,12 @@ void main() {
         type: PlutoColumnType.text(),
       );
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
+      );
+
       final rowIdx = 0;
 
       when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -443,6 +512,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -502,6 +572,12 @@ void main() {
           enableEditingMode: enableEditingMode,
         );
 
+        final PlutoRow row = PlutoRow(
+          cells: {
+            'header': cell,
+          },
+        );
+
         rowIdx = 0;
 
         await tester.pumpWidget(
@@ -512,6 +588,7 @@ void main() {
                 cell: cell,
                 column: column,
                 rowIdx: rowIdx,
+                row: row,
               ),
             ),
           ),
@@ -580,6 +657,12 @@ void main() {
           type: PlutoColumnType.text(),
         );
 
+        final PlutoRow row = PlutoRow(
+          cells: {
+            'header': cell,
+          },
+        );
+
         rowIdx = 0;
 
         when(stateManager.configuration).thenReturn(configuration);
@@ -592,6 +675,7 @@ void main() {
                 cell: cell,
                 column: column,
                 rowIdx: rowIdx,
+                row: row,
               ),
             ),
           ),

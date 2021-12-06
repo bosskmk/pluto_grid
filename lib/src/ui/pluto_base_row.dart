@@ -32,6 +32,7 @@ class PlutoBaseRow extends StatelessWidget {
             height: stateManager!.rowHeight,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           );
         }).toList(growable: false),
       ),

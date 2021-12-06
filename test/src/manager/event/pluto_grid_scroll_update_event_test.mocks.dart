@@ -115,8 +115,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#canRowDrag), returnValue: false)
           as bool);
   @override
+  set textEditingController(
+          _i3.TextEditingController? _textEditingController) =>
+      super.noSuchMethod(
+          Invocation.setter(#textEditingController, _textEditingController),
+          returnValueForMissingStub: null);
+  @override
   bool get isEditing =>
       (super.noSuchMethod(Invocation.getter(#isEditing), returnValue: false)
+          as bool);
+  @override
+  bool get autoEditing =>
+      (super.noSuchMethod(Invocation.getter(#autoEditing), returnValue: false)
           as bool);
   @override
   List<_i2.PlutoRow?> get filterRows =>
@@ -369,17 +379,31 @@ class MockPlutoGridStateManager extends _i1.Mock
           returnValue: false) as bool);
   @override
   bool canChangeCellValue(
-          {_i2.PlutoColumn? column, dynamic newValue, dynamic oldValue}) =>
+          {_i2.PlutoColumn? column,
+          _i2.PlutoRow? row,
+          dynamic newValue,
+          dynamic oldValue}) =>
       (super.noSuchMethod(
-          Invocation.method(#canChangeCellValue, [],
-              {#column: column, #newValue: newValue, #oldValue: oldValue}),
+          Invocation.method(#canChangeCellValue, [], {
+            #column: column,
+            #row: row,
+            #newValue: newValue,
+            #oldValue: oldValue
+          }),
           returnValue: false) as bool);
   @override
   bool canNotChangeCellValue(
-          {_i2.PlutoColumn? column, dynamic newValue, dynamic oldValue}) =>
+          {_i2.PlutoColumn? column,
+          _i2.PlutoRow? row,
+          dynamic newValue,
+          dynamic oldValue}) =>
       (super.noSuchMethod(
-          Invocation.method(#canNotChangeCellValue, [],
-              {#column: column, #newValue: newValue, #oldValue: oldValue}),
+          Invocation.method(#canNotChangeCellValue, [], {
+            #column: column,
+            #row: row,
+            #newValue: newValue,
+            #oldValue: oldValue
+          }),
           returnValue: false) as bool);
   @override
   bool isCurrentCell(_i2.PlutoCell? cell) =>
@@ -476,6 +500,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void setEditing(bool? flag, {bool? notify = true}) => super.noSuchMethod(
       Invocation.method(#setEditing, [flag], {#notify: notify}),
+      returnValueForMissingStub: null);
+  @override
+  void setAutoEditing(bool? flag, {bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#setAutoEditing, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
   void toggleEditing() =>

@@ -6,6 +6,11 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
+typedef PlutoColumnCheckReadOnly = bool Function(
+  PlutoRow row,
+  PlutoCell cell,
+);
+
 class PlutoColumn {
   /// A title to be displayed on the screen.
   /// If a titleSpan value is set, the title value is not displayed.
@@ -116,6 +121,7 @@ class PlutoColumn {
     required this.field,
     required this.type,
     this.readOnly = false,
+    PlutoColumnCheckReadOnly? checkReadOnly,
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
@@ -140,14 +146,19 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
-  }) : _key = UniqueKey();
+  })  : _key = UniqueKey(),
+        _checkReadOnly = checkReadOnly;
 
   /// Column key
   final Key _key;
 
+  final PlutoColumnCheckReadOnly? _checkReadOnly;
+
   Key get key => _key;
 
   bool get hasRenderer => renderer != null;
+
+  bool get hasCheckReadOnly => _checkReadOnly != null;
 
   FocusNode? _filterFocusNode;
 
@@ -162,6 +173,14 @@ class PlutoColumn {
 
   bool get isShowRightIcon =>
       enableContextMenu || !sort.isNone || enableRowDrag;
+
+  bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
+    if (!hasCheckReadOnly || row == null || cell == null) {
+      return readOnly;
+    }
+
+    return _checkReadOnly!(row, cell);
+  }
 
   void setFilterFocusNode(FocusNode? node) {
     _filterFocusNode = node;

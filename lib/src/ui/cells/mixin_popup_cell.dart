@@ -5,11 +5,13 @@ abstract class AbstractMixinPopupCell extends StatefulWidget {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   AbstractMixinPopupCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 }
 
@@ -71,7 +73,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
   }
 
   void openPopup() {
-    if (widget.column!.readOnly) {
+    if (widget.column!.checkReadOnly(widget.row!, widget.cell!)) {
       return;
     }
 

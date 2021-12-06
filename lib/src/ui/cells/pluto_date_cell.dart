@@ -10,11 +10,13 @@ class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   PlutoDateCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 
   @override
