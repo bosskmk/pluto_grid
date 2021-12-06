@@ -232,7 +232,7 @@ class FilterHelper {
     required String? search,
     required PlutoColumn? column,
   }) {
-    return column!.type!.compare(base, search) == 1;
+    return column!.type.compare(base, search) == 1;
   }
 
   static bool compareGreaterThanOrEqualTo({
@@ -240,7 +240,7 @@ class FilterHelper {
     required String? search,
     required PlutoColumn? column,
   }) {
-    return column!.type!.compare(base, search) > -1;
+    return column!.type.compare(base, search) > -1;
   }
 
   static bool compareLessThan({
@@ -248,7 +248,7 @@ class FilterHelper {
     required String? search,
     required PlutoColumn? column,
   }) {
-    return column!.type!.compare(base, search) == -1;
+    return column!.type.compare(base, search) == -1;
   }
 
   static bool compareLessThanOrEqualTo({
@@ -256,7 +256,7 @@ class FilterHelper {
     required String? search,
     required PlutoColumn? column,
   }) {
-    return column!.type!.compare(base, search) < 1;
+    return column!.type.compare(base, search) < 1;
   }
 
   static bool _compareWithRegExp(

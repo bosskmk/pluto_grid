@@ -15,7 +15,9 @@ class PlutoColumn {
   String field;
 
   /// Set the column type.
-  PlutoColumnType? type;
+  PlutoColumnType type;
+
+  bool readOnly;
 
   /// Set the width of the column.
   double width;
@@ -113,6 +115,7 @@ class PlutoColumn {
     required this.title,
     required this.field,
     required this.type,
+    this.readOnly = false,
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
@@ -187,7 +190,7 @@ class PlutoColumn {
   String formattedValueForDisplayInEditing(dynamic value) {
     if (formatter != null) {
       final bool allowFormatting =
-          type!.readOnly! || type.isSelect || type.isTime || type.isDate;
+          readOnly || type.isSelect || type.isTime || type.isDate;
 
       if (applyFormatterInEditing && allowFormatting) {
         return formatter!(value).toString();

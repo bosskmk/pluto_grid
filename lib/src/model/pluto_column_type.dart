@@ -1,17 +1,13 @@
 import 'package:intl/intl.dart' as intl;
 
 abstract class PlutoColumnType {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   /// Set as a string column.
   factory PlutoColumnType.text({
-    bool readOnly = false,
     dynamic defaultValue = '',
   }) {
     return PlutoColumnTypeText(
-      readOnly: readOnly,
       defaultValue: defaultValue,
     );
   }
@@ -26,14 +22,12 @@ abstract class PlutoColumnType {
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   factory PlutoColumnType.number({
-    bool readOnly = false,
     dynamic defaultValue = 0,
     bool negative = true,
     String format = '#,###',
     bool applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeNumber(
-      readOnly: readOnly,
       defaultValue: defaultValue,
       format: format,
       negative: negative,
@@ -44,12 +38,10 @@ abstract class PlutoColumnType {
   /// Provides a selection list and sets it as a selection column.
   factory PlutoColumnType.select(
     List<dynamic>? items, {
-    bool readOnly = false,
     dynamic defaultValue = '',
     bool enableColumnFilter = false,
   }) {
     return PlutoColumnTypeSelect(
-      readOnly: readOnly,
       defaultValue: defaultValue,
       items: items,
       enableColumnFilter: enableColumnFilter,
@@ -66,7 +58,6 @@ abstract class PlutoColumnType {
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   factory PlutoColumnType.date({
-    bool readOnly = false,
     dynamic defaultValue = '',
     DateTime? startDate,
     DateTime? endDate,
@@ -74,7 +65,6 @@ abstract class PlutoColumnType {
     bool applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeDate(
-      readOnly: readOnly,
       defaultValue: defaultValue,
       startDate: startDate,
       endDate: endDate,
@@ -84,11 +74,9 @@ abstract class PlutoColumnType {
   }
 
   factory PlutoColumnType.time({
-    bool readOnly = false,
     dynamic defaultValue = '00:00',
   }) {
     return PlutoColumnTypeTime(
-      readOnly: readOnly,
       defaultValue: defaultValue,
     );
   }
@@ -168,12 +156,9 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
 }
 
 class PlutoColumnTypeText implements PlutoColumnType {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   PlutoColumnTypeText({
-    this.readOnly,
     this.defaultValue,
   });
 
@@ -192,8 +177,6 @@ class PlutoColumnTypeText implements PlutoColumnType {
 
 class PlutoColumnTypeNumber
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   bool? negative;
@@ -203,7 +186,6 @@ class PlutoColumnTypeNumber
   bool? applyFormatOnInit;
 
   PlutoColumnTypeNumber({
-    this.readOnly,
     this.defaultValue,
     this.negative,
     this.format,
@@ -260,8 +242,6 @@ class PlutoColumnTypeNumber
 }
 
 class PlutoColumnTypeSelect implements PlutoColumnType {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   List<dynamic>? items;
@@ -269,7 +249,6 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
   bool? enableColumnFilter;
 
   PlutoColumnTypeSelect({
-    this.readOnly,
     this.defaultValue,
     this.items,
     this.enableColumnFilter,
@@ -294,8 +273,6 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
 
 class PlutoColumnTypeDate
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   DateTime? startDate;
@@ -307,7 +284,6 @@ class PlutoColumnTypeDate
   bool? applyFormatOnInit;
 
   PlutoColumnTypeDate({
-    this.readOnly,
     this.defaultValue,
     this.startDate,
     this.endDate,
@@ -363,12 +339,9 @@ class PlutoColumnTypeDate
 }
 
 class PlutoColumnTypeTime implements PlutoColumnType {
-  bool? readOnly;
-
   dynamic defaultValue;
 
   PlutoColumnTypeTime({
-    this.readOnly,
     this.defaultValue,
   });
 

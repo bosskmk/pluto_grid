@@ -71,7 +71,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
   }
 
   void openPopup() {
-    if (widget.column!.type!.readOnly!) {
+    if (widget.column!.readOnly) {
       return;
     }
 

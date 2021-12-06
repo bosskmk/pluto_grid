@@ -143,7 +143,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
       onDoubleTap: _onDoubleTapOrNull(),
       onSecondaryTapDown: _onSecondaryTapOrNull(),
       child: _CellContainer(
-        readOnly: widget.column!.type!.readOnly,
+        readOnly: widget.column!.readOnly,
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,

@@ -108,7 +108,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       return false;
     }
 
-    if (widget.column!.type!.readOnly == true) {
+    if (widget.column!.readOnly == true) {
       return true;
     }
 
@@ -195,7 +195,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
-      readOnly: widget.column!.type!.readOnly!,
+      readOnly: widget.column!.readOnly,
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
       onTap: _handleOnTap,

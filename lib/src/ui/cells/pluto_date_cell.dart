@@ -145,7 +145,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       return PlutoColumn(
         title: e[0],
         field: e[1],
-        type: PlutoColumnType.text(readOnly: true),
+        readOnly: true,
+        type: PlutoColumnType.text(),
         width: 45,
         enableColumnDrag: false,
         enableSorting: false,

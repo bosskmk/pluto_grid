@@ -233,7 +233,7 @@ mixin CellState implements IPlutoGridState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.type!.readOnly! || column.enableEditingMode != true) {
+    if (column!.readOnly || column.enableEditingMode != true) {
       return false;
     }
 

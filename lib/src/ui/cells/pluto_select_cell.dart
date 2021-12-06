@@ -54,7 +54,8 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
       PlutoColumn(
         title: widget.column!.title,
         field: widget.column!.title,
-        type: PlutoColumnType.text(readOnly: true),
+        readOnly: true,
+        type: PlutoColumnType.text(),
         formatter: widget.column!.formatter,
         enableFilterMenuItem: enableColumnFilter,
         enableHideColumnMenuItem: false,

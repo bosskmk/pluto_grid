@@ -463,7 +463,7 @@ mixin ColumnState implements IPlutoGridState {
 
   void sortAscending(PlutoColumn column) {
     refRows!.sort(
-      (a, b) => column.type!.compare(
+      (a, b) => column.type.compare(
         a!.cells[column.field]!.valueForSorting,
         b!.cells[column.field]!.valueForSorting,
       ),
@@ -472,7 +472,7 @@ mixin ColumnState implements IPlutoGridState {
 
   void sortDescending(PlutoColumn column) {
     refRows!.sort(
-      (b, a) => column.type!.compare(
+      (b, a) => column.type.compare(
         a!.cells[column.field]!.valueForSorting,
         b!.cells[column.field]!.valueForSorting,
       ),

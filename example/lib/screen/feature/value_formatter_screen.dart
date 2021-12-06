@@ -36,9 +36,8 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       PlutoColumn(
         title: 'Permission readonly',
         field: 'permission_readonly',
-        type: PlutoColumnType.number(
-          readOnly: true,
-        ),
+        readOnly: true,
+        type: PlutoColumnType.number(),
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
           if (value.toString() == '1') {

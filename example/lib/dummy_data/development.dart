@@ -12,20 +12,20 @@ class DummyData {
       return PlutoColumn(
         title: faker.food.cuisine(),
         field: i.toString(),
+        readOnly: [1, 3, 5].contains(i),
         type: (int i) {
           if (i == 0)
             return PlutoColumnType.number();
           else if (i == 1)
-            return PlutoColumnType.number(readOnly: true);
+            return PlutoColumnType.number();
           else if (i == 2)
             return PlutoColumnType.text();
           else if (i == 3)
-            return PlutoColumnType.text(readOnly: true);
+            return PlutoColumnType.text();
           else if (i == 4)
             return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
           else if (i == 5)
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three'],
-                readOnly: true);
+            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
           else if (i == 6)
             return PlutoColumnType.date();
           else if (i == 7)

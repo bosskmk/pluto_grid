@@ -115,16 +115,16 @@ mixin KeyboardState implements IPlutoGridState {
     // @formatter:off
     if (!force && isEditing && direction.horizontal) {
       // Select type column can be moved left or right even in edit state
-      if (currentColumn?.type?.isSelect == true) {
+      if (currentColumn?.type.isSelect == true) {
       }
       // Date type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.isDate == true) {
+      else if (currentColumn?.type.isDate == true) {
       }
       // Time type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.isTime == true) {
+      else if (currentColumn?.type.isTime == true) {
       }
       // Read only type column can be moved left or right even in edit state
-      else if (currentColumn?.type?.readOnly == true) {
+      else if (currentColumn?.readOnly == true) {
       }
       // Unable to move left and right in other modified states
       else {
