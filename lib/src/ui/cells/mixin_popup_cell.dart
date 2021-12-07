@@ -70,6 +70,19 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
           widget.column!.formattedValueForDisplayInEditing(widget.cell!.value);
 
     _textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+
+    widget.stateManager!.setConfiguration(
+      widget.stateManager?.configuration?.copyWith(
+        gridBorderRadius:
+            widget.stateManager!.configuration?.gridPopupBorderRadius ??
+                BorderRadius.zero,
+        defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+        defaultCellPadding: PlutoGridSettings.cellPadding,
+        rowHeight: widget.column!.type.isSelect
+            ? widget.stateManager!.configuration!.rowHeight
+            : PlutoGridSettings.rowHeight,
+      ),
+    );
   }
 
   void openPopup() {

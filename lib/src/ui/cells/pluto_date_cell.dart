@@ -87,6 +87,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
   @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
+    super.onLoaded(event);
+
     popupStateManager = event.stateManager;
 
     popupStateManager!.setSelectingMode(PlutoGridSelectingMode.none);
@@ -99,8 +101,6 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     keyManagerStream = popupStateManager!.keyManager!.subject.stream
         .listen(_handleGridFocusOnKey);
-
-    super.onLoaded(event);
   }
 
   void _handleGridFocusOnKey(PlutoKeyManagerEvent keyManagerEvent) {

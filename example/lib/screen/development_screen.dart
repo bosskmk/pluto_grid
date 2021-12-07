@@ -349,6 +349,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             gridBorderRadius: BorderRadius.circular(10),
+            gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,

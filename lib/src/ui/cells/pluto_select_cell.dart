@@ -76,12 +76,12 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
 
   @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
+    super.onLoaded(event);
+
     if (enableColumnFilter) {
       event.stateManager!.setShowColumnFilter(true, notify: false);
     }
 
     event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
-
-    super.onLoaded(event);
   }
 }
