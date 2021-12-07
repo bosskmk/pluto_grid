@@ -36,6 +36,18 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableDropToResize: true,
         enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
+        titleSpan: const TextSpan(
+          children: [
+            WidgetSpan(
+              child: Text(
+                '* ',
+                style: TextStyle(color: Colors.red),
+              ),
+              alignment: PlaceholderAlignment.bottom,
+            ),
+            TextSpan(text: 'column1'),
+          ],
+        ),
         width: 250,
         minWidth: 175,
         renderer: (rendererContext) {
@@ -337,6 +349,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             gridBorderRadius: BorderRadius.circular(10),
+            gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
               isAlwaysShown: false,
               scrollbarThickness: 8,

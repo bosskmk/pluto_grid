@@ -39,6 +39,12 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: '12:30');
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
     // when
     await tester.pumpWidget(
       MaterialApp(
@@ -47,6 +53,7 @@ void main() {
             stateManager: stateManager,
             cell: cell,
             column: column,
+            row: row,
           ),
         ),
       ),

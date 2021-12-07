@@ -29,7 +29,8 @@ class _TextTypeColumnScreenState extends State<TextTypeColumnScreen> {
       PlutoColumn(
         title: 'Readonly',
         field: 'readonly',
-        type: PlutoColumnType.text(readOnly: true),
+        readOnly: true,
+        type: PlutoColumnType.text(),
       ),
     ];
 

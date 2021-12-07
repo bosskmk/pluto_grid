@@ -6,11 +6,13 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   AbstractMixinTextCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 }
 
@@ -108,7 +110,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       return false;
     }
 
-    if (widget.column!.type!.readOnly == true) {
+    if (widget.column!.readOnly == true) {
       return true;
     }
 
@@ -195,7 +197,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
-      readOnly: widget.column!.type!.readOnly!,
+      readOnly: widget.column!.checkReadOnly(widget.row!, widget.cell!),
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
       onTap: _handleOnTap,

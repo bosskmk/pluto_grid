@@ -7,11 +7,13 @@ class PlutoSelectCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   PlutoSelectCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 
   @override
@@ -54,7 +56,8 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
       PlutoColumn(
         title: widget.column!.title,
         field: widget.column!.title,
-        type: PlutoColumnType.text(readOnly: true),
+        readOnly: true,
+        type: PlutoColumnType.text(),
         formatter: widget.column!.formatter,
         enableFilterMenuItem: enableColumnFilter,
         enableHideColumnMenuItem: false,
@@ -73,12 +76,12 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
 
   @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
+    super.onLoaded(event);
+
     if (enableColumnFilter) {
       event.stateManager!.setShowColumnFilter(true, notify: false);
     }
 
     event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
-
-    super.onLoaded(event);
   }
 }

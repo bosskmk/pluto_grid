@@ -39,7 +39,7 @@ class PlutoCell {
   dynamic _getValueForSorting() {
     assert(_column != null);
 
-    _valueForSorting ??= _column!.type!.makeCompareValue(_value);
+    _valueForSorting ??= _column!.type.makeCompareValue(_value);
 
     return _valueForSorting;
   }

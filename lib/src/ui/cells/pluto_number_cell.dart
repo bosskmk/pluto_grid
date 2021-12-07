@@ -8,11 +8,13 @@ class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   PlutoNumberCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 
   @override

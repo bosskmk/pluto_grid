@@ -409,7 +409,8 @@ void main() {
       return PlutoColumn(
         title: 'title',
         field: 'field',
-        type: PlutoColumnType.text(readOnly: readonly),
+        readOnly: readonly,
+        type: PlutoColumnType.text(),
         enableEditingMode: enableEditingMode,
       );
     };

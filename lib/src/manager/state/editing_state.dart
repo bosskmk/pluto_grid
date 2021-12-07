@@ -184,6 +184,7 @@ mixin EditingState implements IPlutoGridState {
           if (force == false &&
               canNotChangeCellValue(
                 column: currentColumn,
+                row: refRows![rowIdx]!,
                 newValue: value,
                 oldValue: oldValue,
               )) {
@@ -283,11 +284,11 @@ mixin EditingState implements IPlutoGridState {
 
         final currentColumn = refColumns![columnIndexes[columnIdx]];
 
-        final currentRow = refRows![rowIdx]!.cells[currentColumn.field]!;
+        final currentCell = refRows![rowIdx]!.cells[currentColumn.field]!;
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
-        final dynamic oldValue = currentRow.value;
+        final dynamic oldValue = currentCell.value;
 
         newValue = filteredCellValue(
           column: currentColumn,
@@ -297,6 +298,7 @@ mixin EditingState implements IPlutoGridState {
 
         if (canNotChangeCellValue(
           column: currentColumn,
+          row: refRows![rowIdx]!,
           newValue: newValue,
           oldValue: oldValue,
         )) {
@@ -306,7 +308,7 @@ mixin EditingState implements IPlutoGridState {
 
         refRows![rowIdx]!.setState(PlutoRowState.updated);
 
-        currentRow.value =
+        currentCell.value =
             newValue = castValueByColumnType(newValue, currentColumn);
 
         if (onChanged != null) {

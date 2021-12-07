@@ -169,7 +169,7 @@ mixin RowState implements IPlutoGridState {
 
     refColumns!.forEach((PlutoColumn column) {
       cells[column.field] = PlutoCell(
-        value: column.type!.defaultValue,
+        value: column.type.defaultValue,
       );
     });
 

@@ -47,6 +47,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -62,6 +68,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -88,6 +95,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -102,6 +115,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -128,6 +142,12 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -142,6 +162,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -168,6 +189,12 @@ void main() {
       type: PlutoColumnType.time(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -182,6 +209,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -208,6 +236,12 @@ void main() {
       type: PlutoColumnType.date(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -222,6 +256,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -249,6 +284,12 @@ void main() {
       type: PlutoColumnType.number(),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -263,6 +304,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -290,6 +332,12 @@ void main() {
       type: PlutoColumnType.select(<String>['one', 'two', 'three']),
     );
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'header': cell,
+      },
+    );
+
     final rowIdx = 0;
 
     // when
@@ -304,6 +352,7 @@ void main() {
             cell: cell,
             column: column,
             rowIdx: rowIdx,
+            row: row,
           ),
         ),
       ),
@@ -319,41 +368,6 @@ void main() {
   });
 
   testWidgets(
-      'WHEN If there is no type'
-      'THEN An exception should be thrown.', (WidgetTester tester) async {
-    // given
-    final PlutoCell cell = PlutoCell(value: 'one');
-
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: null,
-    );
-
-    final rowIdx = 0;
-
-    // when
-    when(stateManager.isCurrentCell(any)).thenReturn(true);
-    when(stateManager.isEditing).thenReturn(true);
-
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            stateManager: stateManager,
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-          ),
-        ),
-      ),
-    );
-
-    // then
-    expect(tester.takeException(), isInstanceOf<Error>());
-  });
-
-  testWidgets(
     '셀을 탭하면 PlutoCellGestureEvent 이벤트가 OnTapUp 으로 호출 되어야 한다.',
     (WidgetTester tester) async {
       // given
@@ -363,6 +377,12 @@ void main() {
         title: 'header',
         field: 'header',
         type: PlutoColumnType.text(),
+      );
+
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
       );
 
       final rowIdx = 0;
@@ -380,6 +400,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -412,6 +433,12 @@ void main() {
         type: PlutoColumnType.text(),
       );
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
+      );
+
       final rowIdx = 0;
 
       // when
@@ -427,6 +454,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -460,6 +488,12 @@ void main() {
         type: PlutoColumnType.text(),
       );
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'header': cell,
+        },
+      );
+
       final rowIdx = 0;
 
       when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -478,6 +512,7 @@ void main() {
               cell: cell,
               column: column,
               rowIdx: rowIdx,
+              row: row,
             ),
           ),
         ),
@@ -532,10 +567,15 @@ void main() {
         column = PlutoColumn(
           title: 'header',
           field: 'header',
-          type: PlutoColumnType.text(
-            readOnly: readOnly,
-          ),
+          readOnly: readOnly,
+          type: PlutoColumnType.text(),
           enableEditingMode: enableEditingMode,
+        );
+
+        final PlutoRow row = PlutoRow(
+          cells: {
+            'header': cell,
+          },
         );
 
         rowIdx = 0;
@@ -548,6 +588,7 @@ void main() {
                 cell: cell,
                 column: column,
                 rowIdx: rowIdx,
+                row: row,
               ),
             ),
           ),
@@ -612,9 +653,14 @@ void main() {
         column = PlutoColumn(
           title: 'header',
           field: 'header',
-          type: PlutoColumnType.text(
-            readOnly: readOnly,
-          ),
+          readOnly: readOnly,
+          type: PlutoColumnType.text(),
+        );
+
+        final PlutoRow row = PlutoRow(
+          cells: {
+            'header': cell,
+          },
         );
 
         rowIdx = 0;
@@ -629,6 +675,7 @@ void main() {
                 cell: cell,
                 column: column,
                 rowIdx: rowIdx,
+                row: row,
               ),
             ),
           ),
@@ -647,7 +694,7 @@ void main() {
     ).test(
       'if readOnly is true, should be set the color to cellColorInReadOnlyState.',
       (tester) async {
-        expect(column!.type!.readOnly, true);
+        expect(column!.readOnly, true);
 
         final target = find.descendant(
           of: find.byType(GestureDetector),

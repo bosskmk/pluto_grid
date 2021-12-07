@@ -41,6 +41,12 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: 'default cell value');
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
     final cellWidget = PlutoWidgetTestHelper('cell widget', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -49,6 +55,7 @@ void main() {
               stateManager: stateManager,
               cell: cell,
               column: column,
+              row: row,
             ),
           ),
         ),

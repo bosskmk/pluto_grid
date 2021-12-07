@@ -6,12 +6,14 @@ class PlutoDefaultCell extends PlutoStatefulWidget {
   final PlutoCell? cell;
   final PlutoColumn? column;
   final int? rowIdx;
+  final PlutoRow? row;
 
   PlutoDefaultCell({
     required this.stateManager,
     this.cell,
     this.column,
     this.rowIdx,
+    this.row,
   });
 
   @override

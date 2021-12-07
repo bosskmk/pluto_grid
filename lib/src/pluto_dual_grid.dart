@@ -202,4 +202,24 @@ class PlutoDualGridProps {
     this.createFooter,
     this.configuration,
   });
+
+  PlutoDualGridProps copyWith({
+    List<PlutoColumn>? columns,
+    List<PlutoRow>? rows,
+    PlutoOnLoadedEventCallback? onLoaded,
+    PlutoOnChangedEventCallback? onChanged,
+    CreateHeaderCallBack? createHeader,
+    CreateFooterCallBack? createFooter,
+    PlutoGridConfiguration? configuration,
+  }) {
+    return PlutoDualGridProps(
+      columns: columns ?? this.columns,
+      rows: rows ?? this.rows,
+      onLoaded: onLoaded ?? this.onLoaded,
+      onChanged: onChanged ?? this.onChanged,
+      createHeader: createHeader ?? this.createHeader,
+      createFooter: createFooter ?? this.createFooter,
+      configuration: configuration ?? this.configuration,
+    );
+  }
 }

@@ -422,25 +422,31 @@ abstract class __ColumnTextWidgetStateWithChange
 }
 
 class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
+  String? get _title =>
+      widget.column!.titleSpan == null ? widget.column!.title : null;
+
+  List<InlineSpan>? get _children => [
+        if (widget.column!.titleSpan != null) widget.column!.titleSpan!,
+        if (isFilteredList!)
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: IconButton(
+              icon: Icon(
+                Icons.filter_alt_outlined,
+                color: widget.stateManager.configuration!.iconColor,
+                size: widget.stateManager.configuration!.iconSize,
+              ),
+              onPressed: handleOnPressedFilter,
+            ),
+          ),
+      ];
+
   @override
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        text: widget.column!.title,
-        children: [
-          if (isFilteredList!)
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: IconButton(
-                icon: Icon(
-                  Icons.filter_alt_outlined,
-                  color: widget.stateManager.configuration!.iconColor,
-                  size: widget.stateManager.configuration!.iconSize,
-                ),
-                onPressed: handleOnPressedFilter,
-              ),
-            ),
-        ],
+        text: _title,
+        children: _children,
       ),
       style: widget.stateManager.configuration!.columnTextStyle,
       overflow: TextOverflow.ellipsis,

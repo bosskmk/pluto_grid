@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
 
@@ -21,23 +22,133 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
 
   PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
 
+  bool checkReadOnly(PlutoRow row, PlutoCell cell) {
+    return row.cells['status']!.value != 'created';
+  }
+
   @override
   void initState() {
     super.initState();
 
-    final dummyData = DummyData(10, 100);
+    columns = [
+      PlutoColumn(
+        title: 'Id',
+        field: 'id',
+        type: PlutoColumnType.text(),
+        readOnly: true,
+        checkReadOnly: checkReadOnly,
+        titleSpan: const TextSpan(children: [
+          WidgetSpan(
+              child: Icon(
+            Icons.lock_outlined,
+            size: 17,
+          )),
+          TextSpan(text: 'Id'),
+        ]),
+      ),
+      PlutoColumn(
+        title: 'Name',
+        field: 'name',
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'Status',
+        field: 'status',
+        type: PlutoColumnType.select(<String>[
+          'saved',
+          'edited',
+          'created',
+        ]),
+        enableEditingMode: false,
+        titleSpan: const TextSpan(children: [
+          WidgetSpan(
+              child: Icon(
+            Icons.lock,
+            size: 17,
+          )),
+          TextSpan(text: 'Status'),
+        ]),
+        renderer: (rendererContext) {
+          Color textColor = Colors.black;
 
-    columns = dummyData.columns;
+          if (rendererContext.cell!.value == 'saved') {
+            textColor = Colors.green;
+          } else if (rendererContext.cell!.value == 'edited') {
+            textColor = Colors.red;
+          } else if (rendererContext.cell!.value == 'created') {
+            textColor = Colors.blue;
+          }
 
-    rows = [];
+          return Text(
+            rendererContext.cell!.value.toString(),
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        },
+      ),
+    ];
+
+    rows = [
+      PlutoRow(cells: {
+        'id': PlutoCell(value: 'user1'),
+        'name': PlutoCell(value: 'user name 1'),
+        'status': PlutoCell(value: 'saved'),
+      }),
+      PlutoRow(cells: {
+        'id': PlutoCell(value: 'user2'),
+        'name': PlutoCell(value: 'user name 2'),
+        'status': PlutoCell(value: 'saved'),
+      }),
+      PlutoRow(cells: {
+        'id': PlutoCell(value: 'user3'),
+        'name': PlutoCell(value: 'user name 3'),
+        'status': PlutoCell(value: 'saved'),
+      }),
+    ];
   }
 
-  void handleAddRowButton({int? count}) {
-    final List<PlutoRow> rows = count == null
-        ? [DummyData.rowByColumns(columns!)]
-        : DummyData.rowsByColumns(length: count, columns: columns);
+  void handleNewRows({int? count}) {
+    final newRows = stateManager!.getNewRow();
+    newRows.cells['status']!.value = 'created';
 
-    stateManager!.appendRows(rows);
+    stateManager!.appendRows([newRows]);
+
+    stateManager!.setCurrentCell(
+      newRows.cells['id'],
+      stateManager!.refRows!.length - 1,
+      notify: false,
+    );
+
+    stateManager!.moveScrollByRow(
+      PlutoMoveDirection.down,
+      stateManager!.refRows!.length - 2,
+    );
+
+    stateManager!.setKeepFocus(true);
+  }
+
+  void handleSaveAll() {
+    stateManager!.setShowLoading(true);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      stateManager!.refRows!.forEach((row) {
+        if (row!.cells['status']!.value != 'saved') {
+          row.cells['status']!.value = 'saved';
+        }
+
+        if (row.cells['id']!.value == '') {
+          row.cells['id']!.value = 'guest';
+        }
+
+        if (row.cells['name']!.value == '') {
+          row.cells['name']!.value = 'anonymous';
+        }
+      });
+
+      stateManager!.setShowLoading(false);
+    });
   }
 
   void handleRemoveCurrentRowButton() {
@@ -72,6 +183,8 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
         const Text('You can add or delete rows.'),
         const Text(
             'Remove selected Rows is only deleted if there is a row selected in Row mode.'),
+        const Text(
+            'If you are adding a new row, you can edit the cell regardless of the readOnly of column.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -88,12 +201,12 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                 spacing: 10,
                 children: [
                   ElevatedButton(
-                    child: const Text('Add a Row'),
-                    onPressed: handleAddRowButton,
+                    child: const Text('Add a new row'),
+                    onPressed: handleNewRows,
                   ),
                   ElevatedButton(
-                    child: const Text('Add 100 Rows'),
-                    onPressed: () => handleAddRowButton(count: 100),
+                    child: const Text('Save all'),
+                    onPressed: handleSaveAll,
                   ),
                   ElevatedButton(
                     child: const Text('Remove Current Row'),
@@ -138,6 +251,12 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                 rows: rows,
                 onChanged: (PlutoGridOnChangedEvent event) {
                   print(event);
+
+                  if (event.row!.cells['status']!.value == 'saved') {
+                    event.row!.cells['status']!.value = 'edited';
+                  }
+
+                  stateManager!.notifyListeners();
                 },
                 onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;

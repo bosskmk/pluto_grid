@@ -14,7 +14,8 @@ class ColumnHelper {
               field: '$title$e',
               width: width,
               frozen: frozen,
-              type: PlutoColumnType.text(readOnly: readOnly),
+              readOnly: readOnly,
+              type: PlutoColumnType.text(),
             ))
         .toList();
   }
@@ -36,8 +37,8 @@ class ColumnHelper {
               field: '$title$e',
               width: width,
               frozen: frozen,
+              readOnly: readOnly,
               type: PlutoColumnType.date(
-                readOnly: readOnly,
                 startDate: startDate,
                 endDate: endDate,
                 format: format,
@@ -61,8 +62,8 @@ class ColumnHelper {
               field: '$title$e',
               width: width,
               frozen: frozen,
+              readOnly: readOnly,
               type: PlutoColumnType.time(
-                readOnly: readOnly,
                 defaultValue: defaultValue,
               ),
             ))

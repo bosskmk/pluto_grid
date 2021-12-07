@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../helper/row_helper.dart';
+
 void main() {
   group(
     'PlutoColumnTextAlign',
@@ -772,6 +774,98 @@ void main() {
         );
 
         expect(column.formattedValueForDisplay(12345), '\$ 12345');
+      },
+    );
+  });
+
+  group('checkReadOnly', () {
+    final makeColumn = ({
+      required bool readOnly,
+      PlutoColumnCheckReadOnly? checkReadOnly,
+    }) {
+      return PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        readOnly: readOnly,
+        checkReadOnly: checkReadOnly,
+      );
+    };
+
+    final makeRow = (PlutoColumn column) {
+      return RowHelper.count(1, [column]).first;
+    };
+
+    test('readOnly = false, checkReadOnly = 미설정 이면 false 를 반환해야 한다.', () {
+      final column = makeColumn(readOnly: false);
+
+      expect(column.readOnly, false);
+    });
+
+    test('readOnly = true, checkReadOnly = 미설정 이면 true 를 반환해야 한다.', () {
+      final column = makeColumn(readOnly: true);
+
+      expect(column.readOnly, true);
+    });
+
+    test('readOnly = false, checkReadOnly = true 이면 true 를 반환해야 한다.', () {
+      final column =
+          makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+      final row = makeRow(column);
+
+      final cell = row.cells['field'];
+
+      expect(column.checkReadOnly(row, cell), true);
+    });
+
+    test('readOnly = true, checkReadOnly = false 이면 false 를 반환해야 한다.', () {
+      final column =
+          makeColumn(readOnly: true, checkReadOnly: (_, __) => false);
+
+      final row = makeRow(column);
+
+      final cell = row.cells['field'];
+
+      expect(column.checkReadOnly(row, cell), false);
+    });
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 row 가 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        final row = makeRow(column);
+
+        final cell = row.cells['field'];
+
+        expect(column.checkReadOnly(null, cell), false);
+      },
+    );
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 cell 이 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        final row = makeRow(column);
+
+        expect(column.checkReadOnly(row, null), false);
+      },
+    );
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 row, cell 이 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        expect(column.checkReadOnly(null, null), false);
       },
     );
   });

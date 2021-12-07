@@ -183,6 +183,11 @@ class PlutoFeatures extends StatelessWidget {
     color: Colors.deepOrange,
   );
 
+  final Icon updateIcon = const Icon(
+    Icons.update,
+    color: Colors.deepOrange,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -360,6 +365,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, AddAndRemoveRowsScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Dual mode',

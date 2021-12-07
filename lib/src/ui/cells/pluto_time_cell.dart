@@ -7,11 +7,13 @@ class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
+  final PlutoRow? row;
 
   PlutoTimeCell({
     this.stateManager,
     this.cell,
     this.column,
+    this.row,
   });
 
   @override
@@ -35,7 +37,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
   String get cellMinute => widget.cell!.value.toString().substring(3, 5);
 
   void openPopup() {
-    if (widget.column!.type!.readOnly!) {
+    if (widget.column!.readOnly) {
       return;
     }
 
@@ -66,7 +68,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           PlutoColumn(
             title: localeText.hour,
             field: 'hour',
-            type: PlutoColumnType.text(readOnly: true),
+            readOnly: true,
+            type: PlutoColumnType.text(),
             enableSorting: false,
             enableColumnDrag: false,
             enableContextMenu: false,
@@ -104,7 +107,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
           PlutoColumn(
             title: localeText.minute,
             field: 'minute',
-            type: PlutoColumnType.text(readOnly: true),
+            readOnly: true,
+            type: PlutoColumnType.text(),
             enableSorting: false,
             enableColumnDrag: false,
             enableContextMenu: false,
