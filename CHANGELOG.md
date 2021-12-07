@@ -1,3 +1,7 @@
+## [2.7.1] - 2021. 12. 8
+
+* Fixed an error where the row height of the popup did not change when the rowHeight value was changed. 
+
 ## [2.7.0] - 2021. 12. 7
 
 * Added to be able to set the left and right padding of the cell.
