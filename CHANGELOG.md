@@ -1,3 +1,13 @@
+## [2.7.0] - 2021. 12. 7
+
+* Added to be able to set the left and right padding of the cell.
+* Added option to automatically enter edit state when selecting a cell.
+* Added keyboard move option with left and right arrow keys when reaching the left and right ends of text in edit state.
+* Added titleSpan property to custom text or icon in column title.
+* Removed readOnly property of PlutoColumnType and added to PlutoColumn.
+* Added checkReadOnly callback to dynamically manipulate readOnly property.
+* Added gridPopupBorderRadius property to round the corners of popups used inside the grid.
+
 ## [2.6.1] - 2021. 11. 22
 
 * Fixed so that the onChanged callback is not called when text is entered while the cell is not in the edit state.

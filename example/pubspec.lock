@@ -148,7 +148,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.6.1"
+    version: "2.7.0"
   rainbow_color:
     dependency: "direct main"
     description:
@@ -169,7 +169,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.2"
+    version: "0.27.3"
   sky_engine:
     dependency: transitive
     description: flutter
