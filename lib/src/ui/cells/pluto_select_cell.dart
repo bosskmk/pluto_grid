@@ -36,17 +36,17 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
   void initState() {
     super.initState();
 
-    enableColumnFilter = widget.column!.type.select!.enableColumnFilter == null
-        ? false
-        : widget.column!.type.select!.enableColumnFilter as bool;
+    enableColumnFilter =
+        widget.column!.type.select!.enableColumnFilter ?? false;
 
-    int itemLength = (widget.column!.type.select!.items!.length + 1);
+    double rowsHeight = widget.column!.type.select!.items!.length *
+        widget.stateManager!.rowTotalHeight;
 
-    if (enableColumnFilter) {
-      itemLength += 1;
-    }
+    double headerHeight =
+        PlutoGridSettings.rowHeight * (enableColumnFilter ? 2 : 1);
 
-    popupHeight = (itemLength * widget.stateManager!.rowTotalHeight) +
+    popupHeight = rowsHeight +
+        headerHeight +
         PlutoGridSettings.shadowLineSize +
         PlutoGridSettings.gridInnerSpacing;
 
