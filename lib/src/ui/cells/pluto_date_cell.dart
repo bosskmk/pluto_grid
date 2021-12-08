@@ -54,8 +54,11 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   void initState() {
     super.initState();
 
-    popupHeight = (8 * PlutoGridSettings.rowTotalHeight) +
-        PlutoGridSettings.shadowLineSize +
+    final rowsHeight = 5 * widget.stateManager!.rowTotalHeight;
+
+    popupHeight = PlutoGridSettings.rowTotalHeight +
+        widget.stateManager!.columnHeight +
+        rowsHeight +
         PlutoGridSettings.gridInnerSpacing;
 
     offsetOfScrollRowIdx = 3;

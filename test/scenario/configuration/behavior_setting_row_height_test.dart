@@ -129,8 +129,8 @@ void main() {
       rowHeight: rowHeight,
       columns: ColumnHelper.dateColumn('header', count: 10),
     ).test(
-      'CellWidget 의 높이를 설정해도 dateColumn 의 팝업의 셀 높이는 '
-      'PlutoDefaultSettings.rowHeight 값으로 설정 되어야 한다.',
+      'CellWidget 의 높이를 설정하면 dateColumn 의 팝업의 셀 높이는 '
+      '설정한 값으로 설정 되어야 한다.',
       (tester) async {
         // Editing 상태로 설정
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
@@ -158,7 +158,7 @@ void main() {
             .evaluate()
             .first
             .widget as PlutoBaseCell;
-        expect(cellWidget.height, PlutoGridSettings.rowHeight);
+        expect(cellWidget.height, rowHeight);
       },
     );
 
@@ -166,8 +166,8 @@ void main() {
       rowHeight: rowHeight,
       columns: ColumnHelper.timeColumn('header', count: 10),
     ).test(
-      'CellWidget 의 높이를 설정해도 timeColumn 의 팝업의 셀 높이는 '
-      'PlutoDefaultSettings.rowHeight 값으로 설정 되어야 한다.',
+      'CellWidget 의 높이를 설정하면 timeColumn 의 팝업의 셀 높이는 '
+      '설정한 값으로 설정 되어야 한다.',
       (tester) async {
         // Editing 상태로 설정
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
@@ -195,7 +195,7 @@ void main() {
             .evaluate()
             .first
             .widget as PlutoBaseCell;
-        expect(cellWidget.height, PlutoGridSettings.rowHeight);
+        expect(cellWidget.height, rowHeight);
       },
     );
   });

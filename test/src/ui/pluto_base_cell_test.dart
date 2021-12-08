@@ -23,6 +23,15 @@ void main() {
     eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager.rowHeight).thenReturn(
+      stateManager.configuration!.rowHeight,
+    );
+    when(stateManager.columnHeight).thenReturn(
+      stateManager.configuration!.columnHeight,
+    );
+    when(stateManager.columnFilterHeight).thenReturn(
+      stateManager.configuration!.columnHeight,
+    );
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );

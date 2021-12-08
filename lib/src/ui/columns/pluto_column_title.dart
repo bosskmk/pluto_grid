@@ -213,7 +213,7 @@ class _BuildDraggableWidget extends StatelessWidget {
       feedback: PlutoShadowContainer(
         alignment: column!.titleTextAlign.alignmentValue,
         width: column!.width,
-        height: PlutoGridSettings.rowHeight,
+        height: stateManager!.configuration!.columnHeight,
         backgroundColor: stateManager!.configuration!.gridBackgroundColor,
         borderColor: stateManager!.configuration!.gridBorderColor,
         child: Text(
@@ -275,7 +275,7 @@ class _BuildColumnWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: column!.width,
-      height: PlutoGridSettings.rowHeight,
+      height: stateManager!.configuration!.columnHeight,
       padding: EdgeInsets.symmetric(
         horizontal: padding,
       ),
@@ -437,6 +437,10 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
                 size: widget.stateManager.configuration!.iconSize,
               ),
               onPressed: handleOnPressedFilter,
+              constraints: BoxConstraints(
+                maxHeight: widget.stateManager.columnHeight +
+                    (PlutoGridSettings.rowBorderWidth * 2),
+              ),
             ),
           ),
       ];

@@ -59,6 +59,12 @@ class PlutoGridConfiguration {
   /// Height of a row.
   final double rowHeight;
 
+  /// Height of column.
+  final double columnHeight;
+
+  /// Height of column filter.
+  final double columnFilterHeight;
+
   /// Customise column title padding
   /// If there is no titlePadding of PlutoColumn,
   /// it is the title padding of the default column. (Horizontal only)
@@ -116,6 +122,8 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
@@ -155,6 +163,8 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
@@ -215,6 +225,8 @@ class PlutoGridConfiguration {
     double? iconSize,
     Color? menuBackgroundColor,
     double? rowHeight,
+    double? columnHeight,
+    double? columnFilterHeight,
     double? defaultColumnTitlePadding,
     double? defaultCellPadding,
     bool? enableMoveDownAfterSelecting,
@@ -246,6 +258,8 @@ class PlutoGridConfiguration {
       iconSize: iconSize ?? this.iconSize,
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       rowHeight: rowHeight ?? this.rowHeight,
+      columnHeight: columnHeight ?? this.columnHeight,
+      columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,

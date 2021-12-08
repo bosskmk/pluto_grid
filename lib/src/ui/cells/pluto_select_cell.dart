@@ -39,15 +39,16 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
     enableColumnFilter =
         widget.column!.type.select!.enableColumnFilter ?? false;
 
-    double rowsHeight = widget.column!.type.select!.items!.length *
+    final columnFilterHeight = enableColumnFilter
+        ? widget.stateManager!.configuration!.columnFilterHeight
+        : 0;
+
+    final rowsHeight = widget.column!.type.select!.items!.length *
         widget.stateManager!.rowTotalHeight;
 
-    double headerHeight =
-        PlutoGridSettings.rowHeight * (enableColumnFilter ? 2 : 1);
-
-    popupHeight = rowsHeight +
-        headerHeight +
-        PlutoGridSettings.shadowLineSize +
+    popupHeight = widget.stateManager!.columnHeight +
+        columnFilterHeight +
+        rowsHeight +
         PlutoGridSettings.gridInnerSpacing;
 
     fieldOnSelected = widget.column!.title;

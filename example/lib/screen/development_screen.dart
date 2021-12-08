@@ -342,9 +342,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 : Colors.transparent;
           },
           configuration: PlutoGridConfiguration(
+            // columnHeight: 30.0,
+            // columnFilterHeight: 30.0,
             // rowHeight: 30.0,
-            defaultCellPadding: 15,
-            defaultColumnTitlePadding: 15,
+            // defaultCellPadding: 15,
+            // defaultColumnTitlePadding: 15,
+            // iconSize: 15,
             enableColumnBorder: true,
             enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
