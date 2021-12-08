@@ -92,7 +92,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   Widget build(BuildContext context) {
     final _showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !widget.column.sort.isNone;
+        !sort!.isNone;
 
     final _enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
@@ -111,7 +111,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       alignment: Alignment.center,
       child: IconButton(
         icon: PlutoGridColumnIcon(
-          sort: widget.column.sort,
+          sort: sort,
           color: widget.stateManager.configuration!.iconColor,
           icon:
               widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
@@ -246,7 +246,7 @@ class _BuildSortableWidget extends StatelessWidget {
     return column!.enableSorting
         ? InkWell(
             onTap: () {
-              stateManager!.toggleSortColumn(column!.key);
+              stateManager!.toggleSortColumn(column!);
             },
             child: child,
           )

@@ -67,7 +67,7 @@ abstract class IColumnState {
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
 
   /// Toggle column sorting.
-  void toggleSortColumn(Key columnKey);
+  void toggleSortColumn(PlutoColumn column);
 
   /// Column width to index location based on full column.
   double columnsWidthAtColumnIdx(int columnIdx);
@@ -95,11 +95,11 @@ abstract class IColumnState {
     bool notify = true,
   });
 
-  void sortAscending(PlutoColumn column);
+  void sortAscending(PlutoColumn column, {bool notify = true});
 
-  void sortDescending(PlutoColumn column);
+  void sortDescending(PlutoColumn column, {bool notify = true});
 
-  void sortBySortIdx();
+  void sortBySortIdx(PlutoColumn column, {bool notify = true});
 
   void showSetColumnsPopup(BuildContext context);
 }
@@ -244,27 +244,13 @@ mixin ColumnState implements IPlutoGridState {
     notifyListeners();
   }
 
-  void toggleSortColumn(Key columnKey) {
-    for (var i = 0; i < refColumns!.length; i += 1) {
-      PlutoColumn column = refColumns![i];
-
-      if (column.key == columnKey) {
-        if (column.sort.isNone) {
-          column.sort = PlutoColumnSort.ascending;
-
-          sortAscending(column);
-        } else if (column.sort.isAscending) {
-          column.sort = PlutoColumnSort.descending;
-
-          sortDescending(column);
-        } else {
-          column.sort = PlutoColumnSort.none;
-
-          sortBySortIdx();
-        }
-      } else {
-        column.sort = PlutoColumnSort.none;
-      }
+  void toggleSortColumn(PlutoColumn column) {
+    if (column.sort.isNone) {
+      sortAscending(column, notify: false);
+    } else if (column.sort.isAscending) {
+      sortDescending(column, notify: false);
+    } else {
+      sortBySortIdx(column, notify: false);
     }
 
     updateCurrentCellPosition(notify: false);
@@ -461,25 +447,43 @@ mixin ColumnState implements IPlutoGridState {
     }
   }
 
-  void sortAscending(PlutoColumn column) {
+  void sortAscending(PlutoColumn column, {bool notify = true}) {
+    _resetColumnSort();
+
+    column.sort = PlutoColumnSort.ascending;
+
     refRows!.sort(
       (a, b) => column.type.compare(
         a!.cells[column.field]!.valueForSorting,
         b!.cells[column.field]!.valueForSorting,
       ),
     );
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void sortDescending(PlutoColumn column) {
+  void sortDescending(PlutoColumn column, {bool notify = true}) {
+    _resetColumnSort();
+
+    column.sort = PlutoColumnSort.descending;
+
     refRows!.sort(
       (b, a) => column.type.compare(
         a!.cells[column.field]!.valueForSorting,
         b!.cells[column.field]!.valueForSorting,
       ),
     );
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
-  void sortBySortIdx() {
+  void sortBySortIdx(PlutoColumn column, {bool notify = true}) {
+    _resetColumnSort();
+
     refRows!.sort((a, b) {
       if (a!.sortIdx == null || b!.sortIdx == null) {
         if (a.sortIdx == null && b!.sortIdx == null) {
@@ -491,6 +495,10 @@ mixin ColumnState implements IPlutoGridState {
 
       return a.sortIdx!.compareTo(b.sortIdx!);
     });
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void showSetColumnsPopup(BuildContext? context) {
@@ -556,5 +564,11 @@ mixin ColumnState implements IPlutoGridState {
         stateManager!.addListener(handleLister);
       },
     );
+  }
+
+  void _resetColumnSort() {
+    for (var i = 0; i < refColumns!.originalList.length; i += 1) {
+      refColumns!.originalList[i].sort = PlutoColumnSort.none;
+    }
   }
 }
