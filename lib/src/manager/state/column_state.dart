@@ -2,8 +2,6 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../pluto_grid_state_manager.dart';
-
 abstract class IColumnState {
   /// Columns provided at grid start.
   List<PlutoColumn> get columns;

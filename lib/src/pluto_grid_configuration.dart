@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'helper/filter_helper.dart';
-
 class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
