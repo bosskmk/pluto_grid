@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/manager/state/column_group_state.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_state.dart';
@@ -19,6 +20,7 @@ import 'state/selecting_state.dart';
 abstract class IPlutoGridState extends PlutoChangeNotifier
     implements
         ICellState,
+        IColumnGroupState,
         IColumnState,
         IDraggingRowState,
         IEditingState,
@@ -35,6 +37,7 @@ abstract class IPlutoGridState extends PlutoChangeNotifier
 class PlutoGridState extends PlutoChangeNotifier
     with
         CellState,
+        ColumnGroupState,
         ColumnState,
         DraggingRowState,
         EditingState,
@@ -54,6 +57,7 @@ class PlutoGridStateManager extends PlutoGridState {
     required List<PlutoRow?>? rows,
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController? scroll,
+    List<PlutoColumnGroup>? columnGroups,
     PlutoGridMode? mode,
     PlutoOnChangedEventCallback? onChangedEventCallback,
     PlutoOnSelectedEventCallback? onSelectedEventCallback,
@@ -67,6 +71,7 @@ class PlutoGridStateManager extends PlutoGridState {
   }) {
     refColumns = FilteredList(initialList: columns);
     refRows = FilteredList(initialList: rows);
+    refColumnGroups = FilteredList(initialList: columnGroups);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
     setGridMode(mode);

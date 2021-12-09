@@ -39,6 +39,8 @@ class PlutoGrid extends StatefulWidget {
 
   final List<PlutoRow?>? rows;
 
+  final List<PlutoColumnGroup>? columnGroups;
+
   final PlutoOnLoadedEventCallback? onLoaded;
 
   final PlutoOnChangedEventCallback? onChanged;
@@ -73,6 +75,7 @@ class PlutoGrid extends StatefulWidget {
     Key? key,
     required this.columns,
     required this.rows,
+    this.columnGroups,
     this.onLoaded,
     this.onChanged,
     this.onSelected,
@@ -172,6 +175,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         vertical: verticalScroll,
         horizontal: horizontalScroll,
       ),
+      columnGroups: widget.columnGroups,
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
@@ -485,6 +489,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                         if (_showColumnFilter!)
                           Positioned(
                             top: stateManager.headerHeight +
+                                stateManager.columnGroupHeight +
                                 stateManager.columnHeight,
                             left: 0,
                             right: 0,

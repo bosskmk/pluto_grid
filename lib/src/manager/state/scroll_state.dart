@@ -63,6 +63,7 @@ mixin ScrollState implements IPlutoGridState {
 
     final double screenOffset = _scroll!.verticalOffset +
         offsetHeight -
+        columnGroupHeight -
         columnHeight -
         columnFilterHeight -
         gridOffset;

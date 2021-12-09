@@ -125,6 +125,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     );
 
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Positioned(
           child: widget.column.enableColumnDrag

@@ -15,6 +15,10 @@ abstract class _PlutoBodyColumnsStateWithChange
     extends PlutoStateWithChange<PlutoBodyColumns> {
   List<PlutoColumn>? columns;
 
+  List<PlutoColumnGroupPair>? columnGroups;
+
+  int? itemCount;
+
   double? width;
 
   @override
@@ -26,6 +30,17 @@ abstract class _PlutoBodyColumnsStateWithChange
         compare: listEquals,
       );
 
+      columnGroups = update<List<PlutoColumnGroupPair>?>(
+        columnGroups,
+        PlutoColumnGroupHelper.separateLinkedGroup(
+          columnGroupList: widget.stateManager.refColumnGroups!,
+          columns: columns!,
+        ),
+        compare: listEquals,
+      );
+
+      itemCount = update<int?>(itemCount, _getItemCount());
+
       width = update<double?>(width, _getWidth());
     });
   }
@@ -34,6 +49,12 @@ abstract class _PlutoBodyColumnsStateWithChange
     return widget.stateManager.showFrozenColumn!
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
+  }
+
+  int _getItemCount() {
+    return widget.stateManager.hasColumnGroups
+        ? columnGroups!.length
+        : columns!.length;
   }
 
   double _getWidth() {
@@ -68,12 +89,21 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
         controller: scroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        itemCount: columns!.length,
+        itemCount: itemCount,
         itemBuilder: (ctx, i) {
-          return PlutoBaseColumn(
-            stateManager: widget.stateManager,
-            column: columns![i],
-          );
+          return widget.stateManager.hasColumnGroups
+              ? PlutoBaseColumnGroup(
+                  stateManager: widget.stateManager,
+                  group: columnGroups![i].group,
+                  columns: columnGroups![i].columns,
+                  depth: PlutoColumnGroupHelper.maxDepth(
+                    columnGroupList: widget.stateManager.refColumnGroups!,
+                  ),
+                )
+              : PlutoBaseColumn(
+                  stateManager: widget.stateManager,
+                  column: columns![i],
+                );
         },
       ),
     );
