@@ -166,6 +166,7 @@ Widget build(BuildContext context) {
 | Flutter         | PlutoGrid       |
 |-----------------|-----------------|
 | 2.5.0 or higher | 2.5.0 or higher |
+
 For other versions, contact the issue
 
 <br>
