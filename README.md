@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v2.7.1
+## PlutoGrid for flutter - v2.8.0
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -9,7 +9,7 @@
 `PlutoGrid` is a `DataGrid` that can be operated with the keyboard in various situations such as moving cells.  
 It is developed with priority on the web and desktop.  
 Improvements such as UI on mobile are being considered.  
-If you comment on an issue, mobile improvements can be made quickly.  
+If you comment on an issue, mobile improvements can be made quickly.
 
 <br>
 
@@ -36,43 +36,33 @@ If you comment on an issue, mobile improvements can be made quickly.
 
 ### [Issue](https://github.com/bosskmk/pluto_grid/issues)
 > Report any questions or errors.
-  
+
 <br>
-  
+
 ### Screenshots
 
-#### Frozen columns on the left and right.
-![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_1.jpg)
+#### Change the color of the rows or make the cells look the way you want them.
+![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_01.png)
 
 <br>
 
-#### Popup for select list type columns.
-![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_2.jpg)
+#### Date type input can be easily selected by pop-up and keyboard.
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_02.png)
 
 <br>
 
-#### Popup for select date type columns.
-![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_3.jpg)
+#### The selection type column can be easily selected using a pop-up and keyboard.
+![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_03.png)
 
 <br>
 
-#### Cell renderer.
-![PlutoGrid Cell renderer](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_4.jpg)
+#### Group columns by desired depth.
+![PlutoGrid Cell renderer](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_04.png)
 
 <br>
 
-#### Multi select. (Cells or Rows)
-![PlutoGrid Multi select](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_5.jpg)
-
-<br>
-
-#### Dual grid. (Moving between grids.)
-![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_6.jpg)
-
-<br>
-
-#### A Dark mode.
-![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_7.jpg)
+#### Grid can be expressed in dark mode or a combination of desired colors. Also, freeze the column, move it by dragging, or adjust the size.
+![PlutoGrid Multi select](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_05.png)
 
 <br>
 
@@ -147,14 +137,14 @@ List<PlutoRow> rows = [
 Create a grid with the data created above.
 ```dart
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PlutoGrid Demo'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(30),
-        child: PlutoGrid(
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('PlutoGrid Demo'),
+    ),
+    body: Container(
+      padding: const EdgeInsets.all(30),
+      child: PlutoGrid(
           columns: columns,
           rows: rows,
           onChanged: (PlutoGridOnChangedEvent event) {
@@ -163,10 +153,10 @@ Create a grid with the data created above.
           onLoaded: (PlutoGridOnLoadedEvent event) {
             print(event);
           }
-        ),
       ),
-    );
-  }
+    ),
+  );
+}
 ```
 
 <br>
