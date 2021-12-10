@@ -6,6 +6,22 @@ abstract class IColumnGroupState {
   FilteredList<PlutoColumnGroup>? refColumnGroups;
 
   bool get hasColumnGroups;
+
+  bool get showColumnGroups;
+
+  void setShowColumnGroups(bool flag, {bool notify = true});
+
+  int countLinkedGroup({
+    required List<PlutoColumnGroup> columnGroupList,
+    required List<PlutoColumn> columns,
+  });
+
+  List<PlutoColumnGroupPair> separateLinkedGroup({
+    required List<PlutoColumnGroup> columnGroupList,
+    required List<PlutoColumn> columns,
+  });
+
+  int columnGroupDepth(List<PlutoColumnGroup> groups);
 }
 
 mixin ColumnGroupState implements IPlutoGridState {
@@ -14,6 +30,10 @@ mixin ColumnGroupState implements IPlutoGridState {
   FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
 
   set refColumnGroups(FilteredList<PlutoColumnGroup>? setColumnGroups) {
+    if (setColumnGroups != null && setColumnGroups.isNotEmpty) {
+      _showColumnGroups = true;
+    }
+
     _refColumnGroups = setColumnGroups;
   }
 
@@ -21,4 +41,46 @@ mixin ColumnGroupState implements IPlutoGridState {
 
   bool get hasColumnGroups =>
       refColumnGroups != null && refColumnGroups!.isNotEmpty;
+
+  bool get showColumnGroups => _showColumnGroups == true && hasColumnGroups;
+
+  bool? _showColumnGroups;
+
+  void setShowColumnGroups(bool flag, {bool notify = true}) {
+    if (_showColumnGroups == flag) {
+      return;
+    }
+
+    _showColumnGroups = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  int countLinkedGroup({
+    required List<PlutoColumnGroup> columnGroupList,
+    required List<PlutoColumn> columns,
+  }) {
+    return PlutoColumnGroupHelper.countLinkedGroup(
+      columnGroupList: columnGroupList,
+      columns: columns,
+    );
+  }
+
+  List<PlutoColumnGroupPair> separateLinkedGroup({
+    required List<PlutoColumnGroup> columnGroupList,
+    required List<PlutoColumn> columns,
+  }) {
+    return PlutoColumnGroupHelper.separateLinkedGroup(
+      columnGroupList: columnGroupList,
+      columns: columns,
+    );
+  }
+
+  int columnGroupDepth(List<PlutoColumnGroup> columnGroupList) {
+    return PlutoColumnGroupHelper.maxDepth(
+      columnGroupList: columnGroupList,
+    );
+  }
 }

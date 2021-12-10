@@ -148,9 +148,8 @@ mixin LayoutState implements IPlutoGridState {
 
   double get columnHeight => configuration!.columnHeight;
 
-  double get columnGroupHeight => hasColumnGroups
-      ? PlutoColumnGroupHelper.maxDepth(columnGroupList: columnGroups) *
-          PlutoGridSettings.rowHeight
+  double get columnGroupHeight => showColumnGroups
+      ? columnGroupDepth(columnGroups) * PlutoGridSettings.rowHeight
       : 0;
 
   double get columnFilterHeight =>

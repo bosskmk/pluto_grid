@@ -13,8 +13,6 @@ class EmptyScreen extends StatefulWidget {
 class _EmptyScreenState extends State<EmptyScreen> {
   List<PlutoColumn>? columns;
 
-  List<PlutoColumnGroup>? columnGroups;
-
   List<PlutoRow>? rows;
 
   PlutoGridStateManager? stateManager;
@@ -37,40 +35,7 @@ class _EmptyScreenState extends State<EmptyScreen> {
       PlutoColumn(
         title: 'column3',
         field: 'column3',
-        type: PlutoColumnType.date(),
-      ),
-      PlutoColumn(
-        title: 'column4',
-        field: 'column4',
-        type: PlutoColumnType.time(),
-      ),
-      PlutoColumn(
-        title: 'column5',
-        field: 'column5',
-        type: PlutoColumnType.select(
-          <String>['One', 'Two', 'Three'],
-          enableColumnFilter: true,
-        ),
-      ),
-    ];
-
-    columnGroups = [
-      PlutoColumnGroup(
-        title: 'user info',
-        fields: ['column1', 'column2'],
-      ),
-      PlutoColumnGroup(
-        title: 'user detail',
-        children: [
-          PlutoColumnGroup(title: 'detail a', fields: ['column3']),
-          PlutoColumnGroup(
-            title: 'detail b',
-            children: [
-              PlutoColumnGroup(title: 'detail b-1', fields: ['column4']),
-              PlutoColumnGroup(title: 'detail b-2', fields: ['column5']),
-            ],
-          ),
-        ],
+        type: PlutoColumnType.text(),
       ),
     ];
 
@@ -85,13 +50,11 @@ class _EmptyScreenState extends State<EmptyScreen> {
         child: PlutoGrid(
           columns: columns,
           rows: rows,
-          columnGroups: columnGroups,
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
-            stateManager!.setShowColumnFilter(true);
           },
           configuration: PlutoGridConfiguration(),
         ),

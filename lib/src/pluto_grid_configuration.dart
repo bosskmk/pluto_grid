@@ -95,7 +95,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
-    this.enableGridBorderShadow = true,
+    this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = Colors.white,
@@ -136,7 +136,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
-    this.enableGridBorderShadow = true,
+    this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = const Color(0xFF111111),
@@ -206,6 +206,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration copyWith({
     bool? enableColumnBorder,
+    bool? enableColumnGroupBorder,
     bool? enableGridBorderShadow,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,

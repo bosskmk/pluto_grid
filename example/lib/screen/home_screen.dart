@@ -14,6 +14,7 @@ import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
 import 'feature/column_freezing_screen.dart';
+import 'feature/column_group_screen.dart';
 import 'feature/column_hiding_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
@@ -153,8 +154,8 @@ class HomeScreen extends StatelessWidget {
                               onTap: () {
                                 launchUrl('https://www.buymeacoffee.com/manki');
                               },
-                              child: Image.network(
-                                'https://cdn.buymeacoffee.com/buttons/v2/default-white.png',
+                              child: Image.asset(
+                                'assets/images/buy_me_a_coffee.png',
                                 height: 60,
                               ),
                             ),
@@ -208,6 +209,14 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnFreezingScreen.routeName);
             },
+          ),
+          PlutoListTile(
+            title: 'Column group',
+            description: 'Group columns by the desired depth.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnGroupScreen.routeName);
+            },
+            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Column resizing',

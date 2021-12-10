@@ -81,6 +81,10 @@ class PlutoColumnGroupHelper {
     required List<PlutoColumnGroup> columnGroupList,
     required List<PlutoColumn> columns,
   }) {
+    if (columnGroupList.isEmpty || columns.isEmpty) {
+      return [];
+    }
+
     List<PlutoColumnGroupPair> separatedColumns = [];
 
     PlutoColumnGroup? previousGroup;

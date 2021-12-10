@@ -125,7 +125,6 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     );
 
     return Stack(
-      clipBehavior: Clip.none,
       children: [
         Positioned(
           child: widget.column.enableColumnDrag
@@ -277,9 +276,7 @@ class _BuildColumnWidget extends StatelessWidget {
     return Container(
       width: column!.width,
       height: stateManager!.configuration!.columnHeight,
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: padding),
       decoration: stateManager!.configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(

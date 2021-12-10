@@ -9,6 +9,7 @@ import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
 import 'screen/feature/column_filtering_screen.dart';
 import 'screen/feature/column_freezing_screen.dart';
+import 'screen/feature/column_group_screen.dart';
 import 'screen/feature/column_hiding_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
@@ -41,12 +42,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : EmptyScreen.routeName,
+      initialRoute:
+          kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         EditingStateScreen.routeName: (context) => EditingStateScreen(),
         ColumnMovingScreen.routeName: (context) => ColumnMovingScreen(),
         ColumnFreezingScreen.routeName: (context) => ColumnFreezingScreen(),
+        ColumnGroupScreen.routeName: (context) => ColumnGroupScreen(),
         ColumnResizingScreen.routeName: (context) => ColumnResizingScreen(),
         ColumnSortingScreen.routeName: (context) => ColumnSortingScreen(),
         ColumnFilteringScreen.routeName: (context) => ColumnFilteringScreen(),
