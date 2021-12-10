@@ -66,8 +66,8 @@ class _ColumnGroupTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double groupTitleHeight = columnGroup.group.hasChildren
-        ? (depth - childrenDepth) * PlutoGridSettings.rowHeight
-        : depth * PlutoGridSettings.rowHeight;
+        ? (depth - childrenDepth) * stateManager.columnHeight
+        : depth * stateManager.columnHeight;
 
     final double groupTitleWidth = columnGroup.columns.fold<double>(
       0,

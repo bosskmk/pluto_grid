@@ -45,38 +45,6 @@ class PlutoColumnGroupHelper {
     return null;
   }
 
-  static int countLinkedGroup({
-    required List<PlutoColumnGroup> columnGroupList,
-    required List<PlutoColumn> columns,
-  }) {
-    int count = 0;
-
-    PlutoColumnGroup? previousGroup;
-
-    for (int i = 0; i < columns.length; i += 1) {
-      final field = columns[i].field;
-
-      final foundGroup = getGroupIfExistsFromList(
-        field: field,
-        columnGroupList: columnGroupList,
-      );
-
-      if (foundGroup == null) {
-        continue;
-      }
-
-      if (previousGroup?.key == foundGroup.key) {
-        continue;
-      }
-
-      count += 1;
-
-      previousGroup = foundGroup;
-    }
-
-    return count;
-  }
-
   static List<PlutoColumnGroupPair> separateLinkedGroup({
     required List<PlutoColumnGroup> columnGroupList,
     required List<PlutoColumn> columns,
@@ -97,13 +65,10 @@ class PlutoColumnGroupHelper {
       final field = column.field;
 
       final foundGroup = getGroupIfExistsFromList(
-        field: field,
-        columnGroupList: columnGroupList,
-      );
-
-      if (foundGroup == null) {
-        continue;
-      }
+            field: field,
+            columnGroupList: columnGroupList,
+          ) ??
+          PlutoColumnGroup(title: field, fields: [field]);
 
       previousGroup ??= foundGroup;
 

@@ -11,11 +11,6 @@ abstract class IColumnGroupState {
 
   void setShowColumnGroups(bool flag, {bool notify = true});
 
-  int countLinkedGroup({
-    required List<PlutoColumnGroup> columnGroupList,
-    required List<PlutoColumn> columns,
-  });
-
   List<PlutoColumnGroupPair> separateLinkedGroup({
     required List<PlutoColumnGroup> columnGroupList,
     required List<PlutoColumn> columns,
@@ -56,16 +51,6 @@ mixin ColumnGroupState implements IPlutoGridState {
     if (notify) {
       notifyListeners();
     }
-  }
-
-  int countLinkedGroup({
-    required List<PlutoColumnGroup> columnGroupList,
-    required List<PlutoColumn> columns,
-  }) {
-    return PlutoColumnGroupHelper.countLinkedGroup(
-      columnGroupList: columnGroupList,
-      columns: columns,
-    );
   }
 
   List<PlutoColumnGroupPair> separateLinkedGroup({

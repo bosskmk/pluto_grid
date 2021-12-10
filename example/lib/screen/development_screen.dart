@@ -17,6 +17,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   List<PlutoRow>? rows;
 
+  List<PlutoColumnGroup>? columnGroups;
+
   PlutoGridStateManager? stateManager;
 
   PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.cell;
@@ -177,6 +179,21 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
+    columnGroups = [
+      PlutoColumnGroup(
+        title: 'Group A',
+        fields: ['column1', 'column2', 'column3'],
+      ),
+      PlutoColumnGroup(
+        title: 'Group B',
+        fields: ['column4', 'column5', 'column6'],
+      ),
+      PlutoColumnGroup(
+        title: 'Group C',
+        fields: ['column7'],
+      ),
+    ];
+
     rows = DummyData.rowsByColumns(length: 100, columns: columns);
   }
 
@@ -229,6 +246,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         child: PlutoGrid(
           columns: columns,
           rows: rows,
+          columnGroups: columnGroups,
           // mode: PlutoGridMode.selectWithOneTap,
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
@@ -349,7 +367,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // defaultColumnTitlePadding: 15,
             // iconSize: 15,
             enableColumnBorder: true,
-            enableGridBorderShadow: true,
+            // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
