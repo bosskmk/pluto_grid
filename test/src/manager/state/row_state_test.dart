@@ -815,7 +815,7 @@ void main() {
           scroll: null,
         );
 
-        stateManager.toggleSortColumn(columns.first.key);
+        stateManager.toggleSortColumn(columns.first);
         expect(stateManager.hasSortedColumn, isTrue);
         expect(stateManager.rows[0]!.sortIdx, 1);
         expect(stateManager.rows[1]!.sortIdx, 2);

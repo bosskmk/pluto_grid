@@ -1,3 +1,10 @@
+## [2.8.0] - 2021. 12. 10
+
+* Added column group.
+* Added columnHeight, columnFilterHeight.
+* Changed the default value of enableGridBorderShadow from true to false.
+* Changed interface of toggleSortColumn, sortAscending, sortDescending, sortBySortIdx methods.
+
 ## [2.7.1] - 2021. 12. 8
 
 * Fixed an error where the row height of the popup did not change when the rowHeight value was changed. 

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
@@ -185,6 +184,10 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
       ? widget.stateManager.configuration!.cellColorInEditState
       : widget.stateManager.configuration!.cellColorInReadOnlyState;
 
+  double get padding =>
+      widget.column!.titlePadding ??
+      widget.stateManager.configuration!.defaultColumnTitlePadding;
+
   void handleOnTap() {
     widget.stateManager.setKeepFocus(false);
   }
@@ -205,8 +208,8 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   Widget build(BuildContext context) {
     return Container(
       width: widget.column!.width,
-      height: widget.stateManager.columnHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      height: widget.stateManager.columnFilterHeight,
+      padding: EdgeInsets.symmetric(horizontal: padding),
       decoration: widget.stateManager.configuration!.enableColumnBorder
           ? BoxDecoration(
               border: Border(

@@ -426,8 +426,8 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
           returnValueForMissingStub: null);
   @override
-  void toggleSortColumn(_i5.Key? columnKey) =>
-      super.noSuchMethod(Invocation.method(#toggleSortColumn, [columnKey]),
+  void toggleSortColumn(_i2.PlutoColumn? column) =>
+      super.noSuchMethod(Invocation.method(#toggleSortColumn, [column]),
           returnValueForMissingStub: null);
   @override
   double columnsWidthAtColumnIdx(int? columnIdx) => (super.noSuchMethod(
@@ -455,16 +455,19 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#hideColumn, [columnKey, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void sortAscending(_i2.PlutoColumn? column) =>
-      super.noSuchMethod(Invocation.method(#sortAscending, [column]),
+  void sortAscending(_i2.PlutoColumn? column, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#sortAscending, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void sortDescending(_i2.PlutoColumn? column) =>
-      super.noSuchMethod(Invocation.method(#sortDescending, [column]),
+  void sortDescending(_i2.PlutoColumn? column, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#sortDescending, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void sortBySortIdx() =>
-      super.noSuchMethod(Invocation.method(#sortBySortIdx, []),
+  void sortBySortIdx(_i2.PlutoColumn? column, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#sortBySortIdx, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void showSetColumnsPopup(_i5.BuildContext? context) =>

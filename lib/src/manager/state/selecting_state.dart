@@ -272,6 +272,7 @@ mixin SelectingState implements IPlutoGridState {
     final double gridBodyOffsetDy = gridGlobalOffset!.dy +
         PlutoGridSettings.gridBorderWidth +
         headerHeight +
+        columnGroupHeight +
         columnHeight +
         columnFilterHeight;
 

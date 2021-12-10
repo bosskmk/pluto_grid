@@ -13,22 +13,49 @@ class PlutoLeftFrozenColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoLeftFrozenColumnsStateWithChange
     extends PlutoStateWithChange<PlutoLeftFrozenColumns> {
+  bool? showColumnGroups;
+
   List<PlutoColumn>? columns;
+
+  List<PlutoColumnGroupPair>? columnGroups;
+
+  int? itemCount;
 
   double? width;
 
   @override
   void onChange() {
     resetState((update) {
+      showColumnGroups = update<bool?>(
+        showColumnGroups,
+        widget.stateManager.showColumnGroups,
+      );
+
       columns = update<List<PlutoColumn>?>(
         columns,
         widget.stateManager.leftFrozenColumns,
         compare: listEquals,
       );
 
+      columnGroups = update<List<PlutoColumnGroupPair>?>(
+        columnGroups,
+        widget.stateManager.separateLinkedGroup(
+          columnGroupList: widget.stateManager.refColumnGroups!,
+          columns: columns!,
+        ),
+        compare: listEquals,
+        ignoreChange: showColumnGroups != true,
+      );
+
+      itemCount = update<int?>(itemCount, _getItemCount());
+
       width =
           update<double?>(width, widget.stateManager.leftFrozenColumnsWidth);
     });
+  }
+
+  int _getItemCount() {
+    return showColumnGroups == true ? columnGroups!.length : columns!.length;
   }
 }
 
@@ -41,12 +68,20 @@ class _PlutoLeftFrozenColumnsState
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: columns!.length,
+        itemCount: itemCount,
         itemBuilder: (ctx, i) {
-          return PlutoBaseColumn(
-            stateManager: widget.stateManager,
-            column: columns![i],
-          );
+          return showColumnGroups == true
+              ? PlutoBaseColumnGroup(
+                  stateManager: widget.stateManager,
+                  columnGroup: columnGroups![i],
+                  depth: widget.stateManager.columnGroupDepth(
+                    widget.stateManager.refColumnGroups!,
+                  ),
+                )
+              : PlutoBaseColumn(
+                  stateManager: widget.stateManager,
+                  column: columns![i],
+                );
         },
       ),
     );

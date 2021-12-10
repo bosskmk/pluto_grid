@@ -13,18 +13,41 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoBodyColumnsStateWithChange
     extends PlutoStateWithChange<PlutoBodyColumns> {
+  bool? showColumnGroups;
+
   List<PlutoColumn>? columns;
+
+  List<PlutoColumnGroupPair>? columnGroups;
+
+  int? itemCount;
 
   double? width;
 
   @override
   void onChange() {
     resetState((update) {
+      showColumnGroups = update<bool?>(
+        showColumnGroups,
+        widget.stateManager.showColumnGroups,
+      );
+
       columns = update<List<PlutoColumn>?>(
         columns,
         _getColumns(),
         compare: listEquals,
       );
+
+      columnGroups = update<List<PlutoColumnGroupPair>?>(
+        columnGroups,
+        widget.stateManager.separateLinkedGroup(
+          columnGroupList: widget.stateManager.refColumnGroups!,
+          columns: columns!,
+        ),
+        compare: listEquals,
+        ignoreChange: showColumnGroups != true,
+      );
+
+      itemCount = update<int?>(itemCount, _getItemCount());
 
       width = update<double?>(width, _getWidth());
     });
@@ -34,6 +57,10 @@ abstract class _PlutoBodyColumnsStateWithChange
     return widget.stateManager.showFrozenColumn!
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
+  }
+
+  int _getItemCount() {
+    return showColumnGroups == true ? columnGroups!.length : columns!.length;
   }
 
   double _getWidth() {
@@ -68,12 +95,20 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
         controller: scroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        itemCount: columns!.length,
+        itemCount: itemCount,
         itemBuilder: (ctx, i) {
-          return PlutoBaseColumn(
-            stateManager: widget.stateManager,
-            column: columns![i],
-          );
+          return showColumnGroups == true
+              ? PlutoBaseColumnGroup(
+                  stateManager: widget.stateManager,
+                  columnGroup: columnGroups![i],
+                  depth: widget.stateManager.columnGroupDepth(
+                    widget.stateManager.refColumnGroups!,
+                  ),
+                )
+              : PlutoBaseColumn(
+                  stateManager: widget.stateManager,
+                  column: columns![i],
+                );
         },
       ),
     );

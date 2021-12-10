@@ -28,7 +28,12 @@ void main() {
     when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
-    when(stateManager.columnHeight).thenReturn(0);
+    when(stateManager.columnHeight).thenReturn(
+      stateManager.configuration!.columnHeight,
+    );
+    when(stateManager.columnFilterHeight).thenReturn(
+      stateManager.configuration!.columnFilterHeight,
+    );
 
     when(eventManager!.listener(any)).thenReturn(streamSubscription);
   });

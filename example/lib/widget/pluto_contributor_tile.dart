@@ -36,8 +36,8 @@ class PlutoContributorTile extends StatelessWidget {
       constraints: const BoxConstraints(
         minWidth: 300,
         maxWidth: 300,
-        minHeight: 100,
-        maxHeight: 100,
+        minHeight: 110,
+        maxHeight: 110,
       ),
       child: Card(
         color: _color,

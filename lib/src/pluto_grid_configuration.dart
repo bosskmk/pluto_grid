@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'helper/filter_helper.dart';
-
 class PlutoGridConfiguration {
   /// border between columns.
   final bool enableColumnBorder;
@@ -59,6 +57,12 @@ class PlutoGridConfiguration {
   /// Height of a row.
   final double rowHeight;
 
+  /// Height of column.
+  final double columnHeight;
+
+  /// Height of column filter.
+  final double columnFilterHeight;
+
   /// Customise column title padding
   /// If there is no titlePadding of PlutoColumn,
   /// it is the title padding of the default column. (Horizontal only)
@@ -91,7 +95,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration({
     this.enableColumnBorder = false,
-    this.enableGridBorderShadow = true,
+    this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = Colors.white,
@@ -116,6 +120,8 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
@@ -130,7 +136,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
-    this.enableGridBorderShadow = true,
+    this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.gridBackgroundColor = const Color(0xFF111111),
@@ -155,6 +161,8 @@ class PlutoGridConfiguration {
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
@@ -198,6 +206,7 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration copyWith({
     bool? enableColumnBorder,
+    bool? enableColumnGroupBorder,
     bool? enableGridBorderShadow,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
@@ -215,6 +224,8 @@ class PlutoGridConfiguration {
     double? iconSize,
     Color? menuBackgroundColor,
     double? rowHeight,
+    double? columnHeight,
+    double? columnFilterHeight,
     double? defaultColumnTitlePadding,
     double? defaultCellPadding,
     bool? enableMoveDownAfterSelecting,
@@ -246,6 +257,8 @@ class PlutoGridConfiguration {
       iconSize: iconSize ?? this.iconSize,
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       rowHeight: rowHeight ?? this.rowHeight,
+      columnHeight: columnHeight ?? this.columnHeight,
+      columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,
