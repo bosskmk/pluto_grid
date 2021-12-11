@@ -37,7 +37,7 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
         compare: listEquals,
       );
 
-      if (changed) {
+      if (changed && showColumnGroups == true) {
         columnGroups = widget.stateManager.separateLinkedGroup(
           columnGroupList: widget.stateManager.refColumnGroups!,
           columns: columns!,
