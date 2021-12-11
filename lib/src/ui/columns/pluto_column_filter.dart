@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -74,6 +75,7 @@ abstract class _PlutoColumnFilterStateWithChange
       filterRows = update<List<PlutoRow?>?>(
         filterRows,
         widget.stateManager.filterRowsByField(widget.column!.field),
+        compare: listEquals,
       );
 
       if (focusNode?.hasPrimaryFocus != true) {
