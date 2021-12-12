@@ -8,10 +8,10 @@ class PlutoColumnGroup {
 
   final List<PlutoColumnGroup>? children;
 
-  double? titlePadding;
+  final double? titlePadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
-  PlutoColumnTextAlign titleTextAlign;
+  final PlutoColumnTextAlign titleTextAlign;
 
   /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
   ///
@@ -28,7 +28,12 @@ class PlutoColumnGroup {
   ///   ],
   /// ),
   /// ```
-  InlineSpan? titleSpan;
+  final InlineSpan? titleSpan;
+
+  /// It shows only one column.
+  /// he height is set to the maximum depth of the group.
+  /// The group title is not shown.
+  final bool? expandedColumn;
 
   PlutoColumnGroup({
     required this.title,
@@ -37,9 +42,13 @@ class PlutoColumnGroup {
     this.titlePadding,
     this.titleSpan,
     this.titleTextAlign = PlutoColumnTextAlign.center,
+    this.expandedColumn = false,
   })  : assert(fields == null
             ? (children != null && children.isNotEmpty)
             : fields.isNotEmpty),
+        assert(expandedColumn == true
+            ? fields?.length == 1 && children == null
+            : true),
         _key = UniqueKey() {
     hasFields = fields != null;
 

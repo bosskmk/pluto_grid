@@ -27,7 +27,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
 
     columns = [
       PlutoColumn(
-        title: 'Column1',
+        title: 'ExpandedColumn1',
         field: 'column1',
         type: PlutoColumnType.text(),
         titleTextAlign: PlutoColumnTextAlign.center,
@@ -69,7 +69,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         titleTextAlign: PlutoColumnTextAlign.center,
       ),
       PlutoColumn(
-        title: 'Column8',
+        title: 'ExpandedColumn8',
         field: 'column8',
         type: PlutoColumnType.text(),
         titleTextAlign: PlutoColumnTextAlign.center,
@@ -80,25 +80,26 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
 
     columnGroups = [
       PlutoColumnGroup(
-        title: 'Group A',
+        title: 'Expanded',
         fields: ['column1'],
+        expandedColumn: true,
       ),
       PlutoColumnGroup(
-        title: 'Group B',
+        title: 'Group A',
         children: [
           PlutoColumnGroup(
-            title: 'B - 1',
+            title: 'A - 1',
             fields: ['column2', 'column3'],
           ),
           PlutoColumnGroup(
-            title: 'B - 2',
+            title: 'A - 2',
             children: [
               PlutoColumnGroup(
-                title: 'B - 2 - 1',
+                title: 'A - 2 - 1',
                 fields: ['column4'],
               ),
               PlutoColumnGroup(
-                title: 'B - 2 - 2',
+                title: 'A - 2 - 2',
                 fields: ['column5'],
               ),
             ],
@@ -106,27 +107,28 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         ],
       ),
       PlutoColumnGroup(
-        title: 'Group C',
+        title: 'Group B',
         children: [
           PlutoColumnGroup(
-            title: 'C - 1',
+            title: 'B - 1',
             children: [
               PlutoColumnGroup(
-                title: 'C - 1 - 1',
+                title: 'B - 1 - 1',
                 children: [
                   PlutoColumnGroup(
-                    title: 'C - 1 - 1 - 1',
+                    title: 'B - 1 - 1 - 1',
                     fields: ['column6'],
                   ),
                   PlutoColumnGroup(
-                    title: 'C - 1 - 1 - 2',
+                    title: 'B - 1 - 1 - 2',
                     fields: ['column7'],
                   ),
                 ],
               ),
               PlutoColumnGroup(
-                title: 'C - 1 - 2',
+                title: 'Expanded',
                 fields: ['column8'],
+                expandedColumn: true,
               ),
             ],
           ),

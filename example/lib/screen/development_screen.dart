@@ -181,8 +181,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
     columnGroups = [
       PlutoColumnGroup(
+        title: 'Expanded Column Group',
+        fields: ['column1'],
+        expandedColumn: true,
+      ),
+      PlutoColumnGroup(
         title: 'Group A',
-        fields: ['column1', 'column2', 'column3'],
+        fields: ['column2', 'column3'],
       ),
       PlutoColumnGroup(
         title: 'Group B',

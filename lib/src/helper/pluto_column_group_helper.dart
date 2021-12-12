@@ -68,7 +68,11 @@ class PlutoColumnGroupHelper {
             field: field,
             columnGroupList: columnGroupList,
           ) ??
-          PlutoColumnGroup(title: field, fields: [field]);
+          PlutoColumnGroup(
+            title: field,
+            fields: [field],
+            expandedColumn: true,
+          );
 
       previousGroup ??= foundGroup;
 
