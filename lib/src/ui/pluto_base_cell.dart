@@ -161,12 +161,12 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
         cellPadding: widget.column!.cellPadding,
         child: _BuildCell(
           stateManager: widget.stateManager,
-          rowIdx: widget.rowIdx,
-          column: widget.column,
-          row: widget.row,
-          cell: widget.cell,
-          isCurrentCell: isCurrentCell,
-          isEditing: isEditing,
+          rowIdx: widget.rowIdx!,
+          column: widget.column!,
+          row: widget.row!,
+          cell: widget.cell!,
+          isCurrentCell: isCurrentCell!,
+          isEditing: isEditing!,
         ),
       ),
     );
@@ -269,57 +269,57 @@ class _CellContainer extends StatelessWidget {
 }
 
 class _BuildCell extends StatelessWidget {
-  final PlutoGridStateManager? stateManager;
-  final int? rowIdx;
-  final PlutoRow? row;
-  final PlutoColumn? column;
-  final PlutoCell? cell;
-  final bool? isCurrentCell;
-  final bool? isEditing;
+  final PlutoGridStateManager stateManager;
+  final int rowIdx;
+  final PlutoRow row;
+  final PlutoColumn column;
+  final PlutoCell cell;
+  final bool isCurrentCell;
+  final bool isEditing;
 
   const _BuildCell({
+    required this.stateManager,
+    required this.rowIdx,
+    required this.row,
+    required this.column,
+    required this.cell,
+    required this.isCurrentCell,
+    required this.isEditing,
     Key? key,
-    this.stateManager,
-    this.rowIdx,
-    this.row,
-    this.column,
-    this.cell,
-    this.isCurrentCell,
-    this.isEditing,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (isCurrentCell! && isEditing! && column!.enableEditingMode == true) {
-      if (column!.type.isSelect) {
+    if (isCurrentCell && isEditing && column.enableEditingMode == true) {
+      if (column.type.isSelect) {
         return PlutoSelectCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
           row: row,
         );
-      } else if (column!.type.isNumber) {
+      } else if (column.type.isNumber) {
         return PlutoNumberCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
           row: row,
         );
-      } else if (column!.type.isDate) {
+      } else if (column.type.isDate) {
         return PlutoDateCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
           row: row,
         );
-      } else if (column!.type.isTime) {
+      } else if (column.type.isTime) {
         return PlutoTimeCell(
           stateManager: stateManager,
           cell: cell,
           column: column,
           row: row,
         );
-      } else if (column!.type.isText) {
+      } else if (column.type.isText) {
         return PlutoTextCell(
           stateManager: stateManager,
           cell: cell,
@@ -330,7 +330,7 @@ class _BuildCell extends StatelessWidget {
     }
 
     return PlutoDefaultCell(
-      stateManager: stateManager!,
+      stateManager: stateManager,
       cell: cell,
       column: column,
       rowIdx: rowIdx,

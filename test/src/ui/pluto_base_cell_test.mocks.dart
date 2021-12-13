@@ -983,6 +983,11 @@ class MockPlutoGridEventManager extends _i1.Mock
               returnValue: _FakePublishSubject_4<_i2.PlutoGridEvent>())
           as _i3.PublishSubject<_i2.PlutoGridEvent>);
   @override
+  _i4.StreamSubscription<dynamic> get subscription =>
+      (super.noSuchMethod(Invocation.getter(#subscription),
+              returnValue: _FakeStreamSubscription_5<dynamic>())
+          as _i4.StreamSubscription<dynamic>);
+  @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);
   @override

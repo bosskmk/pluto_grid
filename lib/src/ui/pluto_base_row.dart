@@ -17,25 +17,57 @@ class PlutoBaseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _RowContainerWidget(
-      stateManager: stateManager!,
-      rowIdx: rowIdx,
-      row: row,
-      columns: columns,
-      child: Row(
-        children: columns!.map((column) {
-          return PlutoBaseCell(
-            key: row!.cells[column.field]!.key,
-            stateManager: stateManager!,
-            cell: row!.cells[column.field],
-            width: column.width,
-            height: stateManager!.rowHeight,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          );
-        }).toList(growable: false),
-      ),
+    return DragTarget(
+      onWillAccept: (List<PlutoRow?>? draggingRows) {
+        if (draggingRows == null || draggingRows.isEmpty) {
+          return false;
+        }
+
+        final selectedRows = stateManager!.currentSelectingRows.isNotEmpty
+            ? stateManager!.currentSelectingRows
+            : draggingRows;
+
+        return selectedRows.firstWhere(
+              (element) => element?.key == row?.key,
+              orElse: () => null,
+            ) ==
+            null;
+      },
+      onMove: (DragTargetDetails details) async {
+        final draggingRows = stateManager!.currentSelectingRows.isNotEmpty
+            ? stateManager!.currentSelectingRows
+            : details.data as List<PlutoRow?>;
+
+        stateManager!.eventManager!.addEvent(
+          PlutoGridDragRowsEvent(
+            rows: draggingRows,
+            targetIdx: rowIdx!,
+            offset: details.offset,
+          ),
+        );
+      },
+      builder: (dragContext, candidate, rejected) {
+        return _RowContainerWidget(
+          stateManager: stateManager!,
+          rowIdx: rowIdx,
+          row: row,
+          columns: columns,
+          child: Row(
+            children: columns!.map((column) {
+              return PlutoBaseCell(
+                key: row!.cells[column.field]!.key,
+                stateManager: stateManager!,
+                cell: row!.cells[column.field],
+                width: column.width,
+                height: stateManager!.rowHeight,
+                column: column,
+                rowIdx: rowIdx,
+                row: row,
+              );
+            }).toList(growable: false),
+          ),
+        );
+      },
     );
   }
 }
@@ -96,9 +128,14 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
       isCheckedRow = update<bool?>(isCheckedRow, widget.row!.checked);
 
+      final alreadyTarget = widget.stateManager.dragRows?.firstWhere(
+              (element) => element?.key == widget.row?.key,
+              orElse: () => null) !=
+          null;
+
       isDragTarget = update<bool?>(
         isDragTarget,
-        widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
+        !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
       );
 
       isTopDragTarget = update<bool?>(
@@ -147,7 +184,8 @@ class __RowContainerWidgetState
   Color rowColor() {
     final Color defaultColor = getDefaultRowColor();
 
-    if (isDragTarget!) return widget.stateManager.configuration!.checkedColor;
+    if (isDragTarget!)
+      return widget.stateManager.configuration!.cellColorInReadOnlyState;
 
     final bool checkCurrentRow =
         isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
@@ -186,7 +224,7 @@ class __RowContainerWidgetState
             ? Color.alphaBlend(const Color(0x11757575), _rowColor)
             : _rowColor,
         border: Border(
-          top: isDragTarget! && isTopDragTarget!
+          top: isTopDragTarget!
               ? BorderSide(
                   width: PlutoGridSettings.rowBorderWidth,
                   color:
@@ -195,7 +233,7 @@ class __RowContainerWidgetState
               : BorderSide.none,
           bottom: BorderSide(
             width: PlutoGridSettings.rowBorderWidth,
-            color: isDragTarget! && isBottomDragTarget!
+            color: isBottomDragTarget!
                 ? widget.stateManager.configuration!.activatedBorderColor
                 : widget.stateManager.configuration!.borderColor,
           ),

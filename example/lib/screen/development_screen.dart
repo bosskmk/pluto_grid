@@ -21,7 +21,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoGridStateManager? stateManager;
 
-  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.cell;
+  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
 
   @override
   void initState() {

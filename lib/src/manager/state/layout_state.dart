@@ -163,6 +163,7 @@ mixin LayoutState implements IPlutoGridState {
 
   double get bodyTopOffset =>
       gridGlobalOffset!.dy +
+      PlutoGridSettings.gridPadding +
       headerHeight +
       PlutoGridSettings.gridBorderWidth +
       columnGroupHeight +
