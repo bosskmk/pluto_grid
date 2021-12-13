@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseRow extends StatelessWidget {
-  final PlutoGridStateManager? stateManager;
-  final int? rowIdx;
-  final PlutoRow? row;
-  final List<PlutoColumn>? columns;
+  final PlutoGridStateManager stateManager;
+  final int rowIdx;
+  final PlutoRow row;
+  final List<PlutoColumn> columns;
 
   PlutoBaseRow({
+    required this.stateManager,
+    required this.rowIdx,
+    required this.row,
+    required this.columns,
     Key? key,
-    this.stateManager,
-    this.rowIdx,
-    this.row,
-    this.columns,
   }) : super(key: key);
 
   @override
@@ -23,43 +23,43 @@ class PlutoBaseRow extends StatelessWidget {
           return false;
         }
 
-        final selectedRows = stateManager!.currentSelectingRows.isNotEmpty
-            ? stateManager!.currentSelectingRows
+        final selectedRows = stateManager.currentSelectingRows.isNotEmpty
+            ? stateManager.currentSelectingRows
             : draggingRows;
 
         return selectedRows.firstWhere(
-              (element) => element?.key == row?.key,
+              (element) => element?.key == row.key,
               orElse: () => null,
             ) ==
             null;
       },
       onMove: (DragTargetDetails details) async {
-        final draggingRows = stateManager!.currentSelectingRows.isNotEmpty
-            ? stateManager!.currentSelectingRows
+        final draggingRows = stateManager.currentSelectingRows.isNotEmpty
+            ? stateManager.currentSelectingRows
             : details.data as List<PlutoRow?>;
 
-        stateManager!.eventManager!.addEvent(
+        stateManager.eventManager!.addEvent(
           PlutoGridDragRowsEvent(
             rows: draggingRows,
-            targetIdx: rowIdx!,
+            targetIdx: rowIdx,
             offset: details.offset,
           ),
         );
       },
       builder: (dragContext, candidate, rejected) {
         return _RowContainerWidget(
-          stateManager: stateManager!,
+          stateManager: stateManager,
           rowIdx: rowIdx,
           row: row,
           columns: columns,
           child: Row(
-            children: columns!.map((column) {
+            children: columns.map((column) {
               return PlutoBaseCell(
-                key: row!.cells[column.field]!.key,
-                stateManager: stateManager!,
-                cell: row!.cells[column.field],
+                key: row.cells[column.field]!.key,
+                stateManager: stateManager,
+                cell: row.cells[column.field]!,
                 width: column.width,
-                height: stateManager!.rowHeight,
+                height: stateManager.rowHeight,
                 column: column,
                 rowIdx: rowIdx,
                 row: row,
@@ -74,17 +74,17 @@ class PlutoBaseRow extends StatelessWidget {
 
 class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-  final int? rowIdx;
-  final PlutoRow? row;
-  final List<PlutoColumn>? columns;
-  final Widget? child;
+  final int rowIdx;
+  final PlutoRow row;
+  final List<PlutoColumn> columns;
+  final Widget child;
 
   _RowContainerWidget({
     required this.stateManager,
-    this.rowIdx,
-    this.row,
-    this.columns,
-    this.child,
+    required this.rowIdx,
+    required this.row,
+    required this.columns,
+    required this.child,
   });
 
   @override
@@ -121,15 +121,15 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
       isSelectedRow = update<bool?>(
         isSelectedRow,
-        widget.stateManager.isSelectedRow(widget.row!.key),
+        widget.stateManager.isSelectedRow(widget.row.key),
       );
 
       isSelecting = update<bool?>(isSelecting, widget.stateManager.isSelecting);
 
-      isCheckedRow = update<bool?>(isCheckedRow, widget.row!.checked);
+      isCheckedRow = update<bool?>(isCheckedRow, widget.row.checked);
 
       final alreadyTarget = widget.stateManager.dragRows?.firstWhere(
-              (element) => element?.key == widget.row?.key,
+              (element) => element?.key == widget.row.key,
               orElse: () => null) !=
           null;
 
@@ -159,7 +159,7 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
       );
 
       if (widget.stateManager.mode.isNormal) {
-        setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row!.key));
+        setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
       }
     });
   }
@@ -174,8 +174,8 @@ class __RowContainerWidgetState
 
     return widget.stateManager.rowColorCallback!(
       PlutoRowColorContext(
-        rowIdx: widget.rowIdx!,
-        row: widget.row!,
+        rowIdx: widget.rowIdx,
+        row: widget.row,
         stateManager: widget.stateManager,
       ),
     );
@@ -191,7 +191,7 @@ class __RowContainerWidgetState
         isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
 
     final bool checkSelectedRow =
-        widget.stateManager.isSelectedRow(widget.row!.key);
+        widget.stateManager.isSelectedRow(widget.row.key);
 
     if (!checkCurrentRow && !checkSelectedRow) {
       return defaultColor;
@@ -236,15 +236,39 @@ class __RowContainerWidgetState
       ),
     );
 
-    return widget.stateManager.configuration!.enableRowColorAnimation
+    return _AnimatedOrNormalContainer(
+      enable: widget.stateManager.configuration!.enableRowColorAnimation,
+      child: widget.child,
+      decoration: decoration,
+    );
+  }
+}
+
+class _AnimatedOrNormalContainer extends StatelessWidget {
+  final bool enable;
+
+  final Widget child;
+
+  final BoxDecoration decoration;
+
+  const _AnimatedOrNormalContainer({
+    required this.enable,
+    required this.child,
+    required this.decoration,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return enable
         ? AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             decoration: decoration,
-            child: widget.child,
+            child: child,
           )
         : Container(
             decoration: decoration,
-            child: widget.child,
+            child: child,
           );
   }
 }

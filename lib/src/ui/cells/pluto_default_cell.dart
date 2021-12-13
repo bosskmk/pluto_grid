@@ -215,25 +215,25 @@ class __CheckboxSelectionWidgetState
 }
 
 class _BuildDefaultCellWidget extends StatelessWidget {
-  final PlutoGridStateManager? stateManager;
-  final int? rowIdx;
-  final PlutoRow? row;
-  final PlutoColumn? column;
-  final PlutoCell? cell;
+  final PlutoGridStateManager stateManager;
+  final int rowIdx;
+  final PlutoRow row;
+  final PlutoColumn column;
+  final PlutoCell cell;
 
   const _BuildDefaultCellWidget({
+    required this.stateManager,
+    required this.rowIdx,
+    required this.row,
+    required this.column,
+    required this.cell,
     Key? key,
-    this.stateManager,
-    this.rowIdx,
-    this.row,
-    this.column,
-    this.cell,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return column!.hasRenderer
-        ? column!.renderer!(PlutoColumnRendererContext(
+    return column.hasRenderer
+        ? column.renderer!(PlutoColumnRendererContext(
             column: column,
             rowIdx: rowIdx,
             row: row,
@@ -241,13 +241,13 @@ class _BuildDefaultCellWidget extends StatelessWidget {
             stateManager: stateManager,
           ))
         : Text(
-            column!.formattedValueForDisplay(cell!.value),
-            style: stateManager!.configuration!.cellTextStyle.copyWith(
+            column.formattedValueForDisplay(cell.value),
+            style: stateManager.configuration!.cellTextStyle.copyWith(
               decoration: TextDecoration.none,
               fontWeight: FontWeight.normal,
             ),
             overflow: TextOverflow.ellipsis,
-            textAlign: column!.textAlign.value,
+            textAlign: column.textAlign.value,
           );
   }
 }

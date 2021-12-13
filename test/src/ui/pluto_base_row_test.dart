@@ -68,7 +68,7 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoBaseRow(
-                stateManager: stateManager,
+                stateManager: stateManager!,
                 rowIdx: rowIdx,
                 row: row,
                 columns: columns,

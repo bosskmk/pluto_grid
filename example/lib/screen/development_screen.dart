@@ -271,6 +271,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableColumnBorder: true,
             // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
+            // enableRowColorAnimation: false,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
@@ -441,6 +442,14 @@ class _HeaderState extends State<_Header> {
             ElevatedButton(
               child: const Text('Toggle filter'),
               onPressed: handleToggleColumnFilter,
+            ),
+            ElevatedButton(
+              child: const Text('Toggle group'),
+              onPressed: () {
+                widget.stateManager.setShowColumnGroups(
+                  !widget.stateManager.showColumnGroups,
+                );
+              },
             ),
           ],
         ),

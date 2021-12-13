@@ -6,11 +6,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
   PlutoColumnFilter({
     required this.stateManager,
-    this.column,
+    required this.column,
   });
 
   @override
@@ -51,7 +51,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
     focusNode = FocusNode(onKey: handleOnKey);
 
-    widget.column!.setFilterFocusNode(focusNode);
+    widget.column.setFilterFocusNode(focusNode);
 
     controller = TextEditingController(text: filterValue);
 
@@ -74,7 +74,7 @@ abstract class _PlutoColumnFilterStateWithChange
     resetState((update) {
       filterRows = update<List<PlutoRow?>?>(
         filterRows,
-        widget.stateManager.filterRowsByField(widget.column!.field),
+        widget.stateManager.filterRowsByField(widget.column.field),
         compare: listEquals,
       );
 
@@ -88,7 +88,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
       enabled = update<bool?>(
         enabled,
-        widget.column!.enableFilterMenuItem && !hasCompositeFilter,
+        widget.column.enableFilterMenuItem && !hasCompositeFilter,
       );
     });
   }
@@ -106,7 +106,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
           if (widget.stateManager.currentCell == null) {
             widget.stateManager.setCurrentCell(
-              widget.stateManager.refRows!.first!.cells[widget.column!.field],
+              widget.stateManager.refRows!.first!.cells[widget.column.field],
               0,
               notify: false,
             );
@@ -119,7 +119,7 @@ abstract class _PlutoColumnFilterStateWithChange
       } else if (keyManager.isTab ||
           (controller!.text.isEmpty && keyManager.isHorizontal)) {
         widget.stateManager.nextFocusOfColumnFilter(
-          widget.column!,
+          widget.column,
           reversed: keyManager.isLeft || keyManager.isShiftPressed,
         );
 
@@ -157,7 +157,7 @@ abstract class _PlutoColumnFilterStateWithChange
               .refColumns![widget.stateManager.columnIndexesByShowFrozen[
                   plutoEvent.cellPosition!.columnIdx!]]
               .key ==
-          widget.column!.key;
+          widget.column.key;
 
       if (isCurrentColumn) {
         widget.stateManager.clearCurrentCell(notify: false);
@@ -187,7 +187,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
       : widget.stateManager.configuration!.cellColorInReadOnlyState;
 
   double get padding =>
-      widget.column!.titlePadding ??
+      widget.column.titlePadding ??
       widget.stateManager.configuration!.defaultColumnTitlePadding;
 
   void handleOnTap() {
@@ -198,7 +198,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     widget.stateManager.eventManager!.addEvent(
       PlutoGridChangeColumnFilterEvent(
         column: widget.column,
-        filterType: widget.column!.defaultFilter,
+        filterType: widget.column.defaultFilter,
         filterValue: changed,
         debounceMilliseconds: widget.stateManager.configuration!
             .columnFilterConfig.debounceMilliseconds,
@@ -209,7 +209,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.column!.width,
+      width: widget.column.width,
       height: widget.stateManager.columnFilterHeight,
       padding: EdgeInsets.symmetric(horizontal: padding),
       decoration: widget.stateManager.configuration!.enableColumnBorder
@@ -234,7 +234,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               onTap: handleOnTap,
               onChanged: handleOnChanged,
               decoration: InputDecoration(
-                hintText: enabled! ? widget.column!.defaultFilter.title : '',
+                hintText: enabled! ? widget.column.defaultFilter.title : '',
                 isDense: true,
                 filled: true,
                 fillColor: textFieldColor,

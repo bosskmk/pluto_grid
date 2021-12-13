@@ -67,20 +67,48 @@ class _PlutoLeftFrozenColumnsState
         physics: const NeverScrollableScrollPhysics(),
         itemCount: itemCount,
         itemBuilder: (ctx, i) {
-          return showColumnGroups == true
-              ? PlutoBaseColumnGroup(
-                  stateManager: widget.stateManager,
-                  columnGroup: columnGroups![i],
-                  depth: widget.stateManager.columnGroupDepth(
-                    widget.stateManager.refColumnGroups!,
-                  ),
-                )
-              : PlutoBaseColumn(
-                  stateManager: widget.stateManager,
-                  column: columns![i],
-                );
+          return _ColumnOrColumnGroup(
+            stateManager: widget.stateManager,
+            columnGroup: columnGroups?[i],
+            column: columns?[i],
+            showColumnGroup: showColumnGroups == true,
+          );
         },
       ),
     );
+  }
+}
+
+class _ColumnOrColumnGroup extends StatelessWidget {
+  final PlutoGridStateManager stateManager;
+
+  final PlutoColumnGroupPair? columnGroup;
+
+  final PlutoColumn? column;
+
+  final bool showColumnGroup;
+
+  const _ColumnOrColumnGroup({
+    required this.stateManager,
+    required this.columnGroup,
+    required this.column,
+    required this.showColumnGroup,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return showColumnGroup
+        ? PlutoBaseColumnGroup(
+            stateManager: stateManager,
+            columnGroup: columnGroup!,
+            depth: stateManager.columnGroupDepth(
+              stateManager.refColumnGroups!,
+            ),
+          )
+        : PlutoBaseColumn(
+            stateManager: stateManager,
+            column: column!,
+          );
   }
 }

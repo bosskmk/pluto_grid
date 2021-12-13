@@ -3,22 +3,22 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseCell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-  final PlutoCell? cell;
-  final double? width;
-  final double? height;
-  final PlutoColumn? column;
-  final int? rowIdx;
-  final PlutoRow? row;
+  final PlutoCell cell;
+  final PlutoColumn column;
+  final int rowIdx;
+  final PlutoRow row;
+  final double width;
+  final double height;
 
   PlutoBaseCell({
     Key? key,
     required this.stateManager,
-    this.cell,
-    this.width,
-    this.height,
-    this.column,
-    this.rowIdx,
-    this.row,
+    required this.cell,
+    required this.column,
+    required this.rowIdx,
+    required this.row,
+    this.width = PlutoGridSettings.columnWidth,
+    this.height = PlutoGridSettings.rowHeight,
   }) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
   @override
   void onChange() {
     resetState((update) {
-      cellValue = update<dynamic>(cellValue, widget.cell!.value);
+      cellValue = update<dynamic>(cellValue, widget.cell.value);
 
       isCurrentCell = update<bool?>(
         isCurrentCell,
@@ -161,22 +161,23 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
       onDoubleTap: _onDoubleTapOrNull(),
       onSecondaryTapDown: _onSecondaryTapOrNull(),
       child: _CellContainer(
-        readOnly: widget.column!.checkReadOnly(widget.row!, widget.cell!),
+        readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
-        isCurrentCell: isCurrentCell,
-        isEditing: isEditing,
-        selectingMode: selectingMode,
-        isSelectedCell: isSelectedCell,
-        configuration: widget.stateManager.configuration,
-        cellPadding: widget.column!.cellPadding,
+        isCurrentCell: isCurrentCell!,
+        isEditing: isEditing!,
+        selectingMode: selectingMode!,
+        isSelectedCell: isSelectedCell!,
+        configuration: widget.stateManager.configuration!,
+        cellPadding: widget.column.cellPadding ??
+            widget.stateManager.configuration!.defaultCellPadding,
         child: _BuildCell(
           stateManager: widget.stateManager,
-          rowIdx: widget.rowIdx!,
-          column: widget.column!,
-          row: widget.row!,
-          cell: widget.cell!,
+          rowIdx: widget.rowIdx,
+          column: widget.column,
+          row: widget.row,
+          cell: widget.cell,
           isCurrentCell: isCurrentCell!,
           isEditing: isEditing!,
         ),
@@ -186,69 +187,69 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
 }
 
 class _CellContainer extends StatelessWidget {
-  final bool? readOnly;
-  final Widget? child;
-  final double? width;
-  final double? height;
-  final bool? hasFocus;
-  final bool? isCurrentCell;
-  final bool? isEditing;
-  final PlutoGridSelectingMode? selectingMode;
-  final bool? isSelectedCell;
-  final PlutoGridConfiguration? configuration;
-  final double? cellPadding;
+  final bool readOnly;
+  final Widget child;
+  final double width;
+  final double height;
+  final bool hasFocus;
+  final bool isCurrentCell;
+  final bool isEditing;
+  final PlutoGridSelectingMode selectingMode;
+  final bool isSelectedCell;
+  final PlutoGridConfiguration configuration;
+  final double cellPadding;
 
   _CellContainer({
-    this.readOnly,
-    this.child,
-    this.width,
-    this.height,
-    this.hasFocus,
-    this.isCurrentCell,
-    this.isEditing,
-    this.selectingMode,
-    this.isSelectedCell,
-    this.configuration,
-    this.cellPadding,
+    required this.readOnly,
+    required this.child,
+    required this.width,
+    required this.height,
+    required this.hasFocus,
+    required this.isCurrentCell,
+    required this.isEditing,
+    required this.selectingMode,
+    required this.isSelectedCell,
+    required this.configuration,
+    required this.cellPadding,
   });
 
   Color? _currentCellColor() {
-    if (!hasFocus!) {
+    if (!hasFocus) {
       return null;
     }
 
-    if (!isEditing!) {
-      return selectingMode!.isRow ? configuration!.activatedColor : null;
+    if (!isEditing) {
+      return selectingMode.isRow ? configuration.activatedColor : null;
     }
 
     return readOnly == true
-        ? configuration!.cellColorInReadOnlyState
-        : configuration!.cellColorInEditState;
+        ? configuration.cellColorInReadOnlyState
+        : configuration.cellColorInEditState;
   }
 
   BoxDecoration _boxDecoration() {
-    if (isCurrentCell!) {
+    if (isCurrentCell) {
       return BoxDecoration(
         color: _currentCellColor(),
         border: Border.all(
-          color: configuration!.activatedBorderColor,
+          color: configuration.activatedBorderColor,
           width: 1,
         ),
       );
-    } else if (isSelectedCell!) {
+    } else if (isSelectedCell) {
       return BoxDecoration(
-        color: configuration!.activatedColor,
+        color: configuration.activatedColor,
         border: Border.all(
-          color: configuration!.activatedBorderColor,
+          color: configuration.activatedBorderColor,
           width: 1,
         ),
       );
     } else {
-      return configuration!.enableColumnBorder
+      return configuration.enableColumnBorder
           ? BoxDecoration(
               border: Border(
                 right: BorderSide(
-                  color: configuration!.borderColor,
+                  color: configuration.borderColor,
                   width: 1.0,
                 ),
               ),
@@ -266,7 +267,7 @@ class _CellContainer extends StatelessWidget {
       child: Padding(
         // New - Customisable cellPadding
         padding: EdgeInsets.symmetric(
-          horizontal: cellPadding ?? configuration!.defaultCellPadding,
+          horizontal: cellPadding,
         ),
         child: Container(
           clipBehavior: Clip.hardEdge,
