@@ -169,7 +169,7 @@ class __RowContainerWidgetState
     extends __RowContainerWidgetStateWithChangeKeepAlive {
   Color getDefaultRowColor() {
     if (widget.stateManager.rowColorCallback == null) {
-      return Colors.transparent;
+      return widget.stateManager.configuration!.gridBackgroundColor;
     }
 
     return widget.stateManager.rowColorCallback!(
@@ -216,30 +216,35 @@ class __RowContainerWidgetState
   Widget build(BuildContext context) {
     super.build(context);
 
-    final Color _rowColor = rowColor();
-
-    return Container(
-      decoration: BoxDecoration(
-        color: isCheckedRow!
-            ? Color.alphaBlend(const Color(0x11757575), _rowColor)
-            : _rowColor,
-        border: Border(
-          top: isTopDragTarget!
-              ? BorderSide(
-                  width: PlutoGridSettings.rowBorderWidth,
-                  color:
-                      widget.stateManager.configuration!.activatedBorderColor,
-                )
-              : BorderSide.none,
-          bottom: BorderSide(
-            width: PlutoGridSettings.rowBorderWidth,
-            color: isBottomDragTarget!
-                ? widget.stateManager.configuration!.activatedBorderColor
-                : widget.stateManager.configuration!.borderColor,
-          ),
+    final decoration = BoxDecoration(
+      color: isCheckedRow!
+          ? Color.alphaBlend(const Color(0x11757575), rowColor())
+          : rowColor(),
+      border: Border(
+        top: isTopDragTarget!
+            ? BorderSide(
+                width: PlutoGridSettings.rowBorderWidth,
+                color: widget.stateManager.configuration!.activatedBorderColor,
+              )
+            : BorderSide.none,
+        bottom: BorderSide(
+          width: PlutoGridSettings.rowBorderWidth,
+          color: isBottomDragTarget!
+              ? widget.stateManager.configuration!.activatedBorderColor
+              : widget.stateManager.configuration!.borderColor,
         ),
       ),
-      child: widget.child,
     );
+
+    return widget.stateManager.configuration!.enableRowColorAnimation
+        ? AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: decoration,
+            child: widget.child,
+          )
+        : Container(
+            decoration: decoration,
+            child: widget.child,
+          );
   }
 }

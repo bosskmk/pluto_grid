@@ -79,6 +79,9 @@ class PlutoGridConfiguration {
   /// Moves the current cell when focus reaches the left or right edge in the edit state.
   final bool enableMoveHorizontalInEditing;
 
+  /// Animation of background color transition of rows, such as when the current row or rows are dragged.
+  final bool enableRowColorAnimation;
+
   /// PlutoEnterKeyAction.EditingAndMoveDown : It switches to the editing state, and moves down in the editing state.
   /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
   /// PlutoEnterKeyAction.ToggleEditing : The editing state is toggled and cells are not moved.
@@ -126,6 +129,7 @@ class PlutoGridConfiguration {
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
     this.enableMoveHorizontalInEditing = false,
+    this.enableRowColorAnimation = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -167,6 +171,7 @@ class PlutoGridConfiguration {
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.enableMoveDownAfterSelecting = true,
     this.enableMoveHorizontalInEditing = false,
+    this.enableRowColorAnimation = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -230,6 +235,7 @@ class PlutoGridConfiguration {
     double? defaultCellPadding,
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
+    bool? enableRowColorAnimation,
     PlutoGridEnterKeyAction? enterKeyAction,
     PlutoGridLocaleText? localeText,
     PlutoGridScrollbarConfig? scrollbarConfig,
@@ -266,6 +272,8 @@ class PlutoGridConfiguration {
           enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
       enableMoveHorizontalInEditing:
           enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      enableRowColorAnimation:
+          enableRowColorAnimation ?? this.enableRowColorAnimation,
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,

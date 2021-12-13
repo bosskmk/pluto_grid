@@ -523,7 +523,9 @@ mixin ColumnState implements IPlutoGridState {
 
     PlutoGridPopup(
       context: context,
-      configuration: configuration,
+      configuration: configuration!.copyWith(
+        enableRowColorAnimation: false,
+      ),
       columns: columns,
       rows: rows,
       width: 200,

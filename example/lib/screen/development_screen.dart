@@ -252,15 +252,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               columns: columns!,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(10, notify: false);
-            return PlutoPagination(stateManager);
-          },
-          rowColorCallback: (rowColorContext) {
-            return rowColorContext.row.cells['column2']!.value == 'red'
-                ? const Color(0xFFFFB0B0)
-                : Colors.transparent;
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(10, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
+          // rowColorCallback: (rowColorContext) {
+          //   return rowColorContext.row.cells['column2']!.value == 'red'
+          //       ? const Color(0xFFFFB0B0)
+          //       : Colors.white;
+          // },
           configuration: PlutoGridConfiguration(
             // columnHeight: 30.0,
             // columnFilterHeight: 30.0,

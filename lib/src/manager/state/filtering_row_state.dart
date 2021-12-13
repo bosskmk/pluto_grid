@@ -114,7 +114,9 @@ mixin FilteringRowState implements IPlutoGridState {
     FilterHelper.filterPopup(
       FilterPopupState(
         context: context,
-        configuration: configuration!,
+        configuration: configuration!.copyWith(
+          enableRowColorAnimation: false,
+        ),
         handleAddNewFilter: (filterState) {
           filterState!.appendRows([FilterHelper.createFilterRow()]);
         },

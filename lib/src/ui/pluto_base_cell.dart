@@ -99,16 +99,28 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnLongPressStart(LongPressStartDetails details) {
+    if (widget.stateManager.selectingMode.isNone) {
+      return;
+    }
+
     _addGestureEvent(
         PlutoGridGestureType.onLongPressStart, details.globalPosition);
   }
 
   void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    if (widget.stateManager.selectingMode.isNone) {
+      return;
+    }
+
     _addGestureEvent(
         PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
   }
 
   void _handleOnLongPressEnd(LongPressEndDetails details) {
+    if (widget.stateManager.selectingMode.isNone) {
+      return;
+    }
+
     _addGestureEvent(
         PlutoGridGestureType.onLongPressEnd, details.globalPosition);
   }
