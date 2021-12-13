@@ -681,7 +681,7 @@ void main() {
               child: PlutoBaseCell(
                 stateManager: stateManager,
                 cell: cell,
-                column: column,
+                column: column!,
                 rowIdx: rowIdx,
                 row: row,
               ),

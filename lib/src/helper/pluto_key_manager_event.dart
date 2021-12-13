@@ -70,8 +70,7 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
       event.logicalKey.keyId == LogicalKeyboardKey.controlLeft.keyId ||
       event.logicalKey.keyId == LogicalKeyboardKey.controlRight.keyId;
 
-  bool get isCharacter =>
-      event.character != null && characters.contains(event.logicalKey.keyId);
+  bool get isCharacter => characters.contains(event.logicalKey.keyId);
 
   bool get isCtrlC {
     return isCtrlPressed &&

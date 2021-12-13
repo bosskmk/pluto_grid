@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -80,7 +82,10 @@ abstract class IColumnState {
   int? columnIndex(PlutoColumn? column);
 
   /// Change column position.
-  void moveColumn(Key columnKey, double offset);
+  void moveColumn({
+    required PlutoColumn column,
+    required PlutoColumn targetColumn,
+  });
 
   /// Change column size
   void resizeColumn(Key columnKey, double offset);
@@ -284,79 +289,47 @@ mixin ColumnState implements IPlutoGridState {
     return null;
   }
 
-  void moveColumn(Key columnKey, double offset) {
-    offset -= gridGlobalOffset!.dx;
+  void moveColumn({
+    required PlutoColumn column,
+    required PlutoColumn targetColumn,
+  }) {
+    final foundIndexes = _findIndexOfColumns([column, targetColumn]);
 
-    final List<int> columnIndexes = columnIndexesByShowFrozen;
-
-    int? Function(int i) findColumnIndex = (int i) {
-      if (refColumns![columnIndexes[i]].key == columnKey) {
-        return columnIndexes[i];
-      }
-      return null;
-    };
-
-    int? Function(int i) findIndexToMove = () {
-      final double minLeft = showFrozenColumn! ? leftFrozenColumnsWidth : 0;
-
-      final double minRight =
-          showFrozenColumn! ? maxWidth! - rightFrozenColumnsWidth : maxWidth!;
-
-      double currentOffset = 0.0;
-
-      int startIndexToMove = 0;
-
-      if (minRight < offset) {
-        currentOffset = minRight;
-        startIndexToMove = refColumns!.length - rightFrozenColumns.length;
-      } else if (minLeft < offset) {
-        currentOffset -= scroll!.horizontal!.offset;
-      }
-
-      return (int i) {
-        if (i == startIndexToMove) {
-          if (currentOffset < offset &&
-              offset <
-                  currentOffset +
-                      refColumns![columnIndexes[startIndexToMove]].width) {
-            return columnIndexes[startIndexToMove];
-          }
-
-          currentOffset += refColumns![columnIndexes[startIndexToMove]].width;
-          ++startIndexToMove;
-        }
-
-        return null;
-      };
-    }();
-
-    int? columnIndex;
-    int? indexToMove;
-
-    for (var i = 0; i < columnIndexes.length; i += 1) {
-      columnIndex ??= findColumnIndex(i);
-
-      indexToMove ??= findIndexToMove(i);
-
-      if (indexToMove != null && columnIndex != null) {
-        break;
-      }
-    }
-
-    if (columnIndex == indexToMove ||
-        columnIndex == null ||
-        indexToMove == null) {
+    if (foundIndexes.length != 2) {
       return;
     }
 
-    // 컬럼의 순서 변경
-    refColumns![columnIndex].frozen = refColumns![indexToMove].frozen;
+    int index = foundIndexes[0];
 
-    var columnToMove = refColumns![columnIndex];
+    int targetIndex = foundIndexes[1];
 
-    refColumns!.removeAt(columnIndex);
+    final frozen = refColumns![index].frozen;
 
-    refColumns!.insert(indexToMove, columnToMove);
+    final targetFrozen = refColumns![targetIndex].frozen;
+
+    bool moveColumn = true;
+
+    if (frozen != targetFrozen) {
+      if (targetFrozen.isRight && index > targetIndex) {
+        moveColumn = false;
+      } else if (targetFrozen.isLeft && index < targetIndex) {
+        moveColumn = false;
+      } else if (frozen.isLeft && index > targetIndex) {
+        targetIndex += 1;
+      } else if (frozen.isRight && index < targetIndex) {
+        targetIndex -= 1;
+      }
+    }
+
+    refColumns![index].frozen = targetFrozen;
+
+    if (moveColumn) {
+      var columnToMove = refColumns![index];
+
+      refColumns!.removeAt(index);
+
+      refColumns!.insert(targetIndex, columnToMove);
+    }
 
     updateCurrentCellPosition(notify: false);
 
@@ -550,7 +523,9 @@ mixin ColumnState implements IPlutoGridState {
 
     PlutoGridPopup(
       context: context,
-      configuration: configuration,
+      configuration: configuration!.copyWith(
+        enableRowColorAnimation: false,
+      ),
       columns: columns,
       rows: rows,
       width: 200,
@@ -568,5 +543,24 @@ mixin ColumnState implements IPlutoGridState {
     for (var i = 0; i < refColumns!.originalList.length; i += 1) {
       refColumns!.originalList[i].sort = PlutoColumnSort.none;
     }
+  }
+
+  List<int> _findIndexOfColumns(List<PlutoColumn> findColumns) {
+    SplayTreeMap<int, int> found = SplayTreeMap();
+
+    for (int i = 0; i < refColumns!.length; i += 1) {
+      for (int j = 0; j < findColumns.length; j += 1) {
+        if (findColumns[j].key == refColumns![i].key) {
+          found[j] = i;
+          continue;
+        }
+      }
+
+      if (findColumns.length == found.length) {
+        break;
+      }
+    }
+
+    return found.values.toList();
   }
 }

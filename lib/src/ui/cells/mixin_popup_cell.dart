@@ -100,6 +100,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
         defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
         defaultCellPadding: PlutoGridSettings.cellPadding,
         rowHeight: widget.stateManager!.configuration!.rowHeight,
+        enableRowColorAnimation: false,
       ),
     );
   }

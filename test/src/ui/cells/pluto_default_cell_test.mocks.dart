@@ -46,6 +46,23 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
   @override
+  set refColumnGroups(
+          _i2.FilteredList<_i2.PlutoColumnGroup>? setColumnGroups) =>
+      super.noSuchMethod(Invocation.setter(#refColumnGroups, setColumnGroups),
+          returnValueForMissingStub: null);
+  @override
+  List<_i2.PlutoColumnGroup> get columnGroups =>
+      (super.noSuchMethod(Invocation.getter(#columnGroups),
+          returnValue: <_i2.PlutoColumnGroup>[]) as List<_i2.PlutoColumnGroup>);
+  @override
+  bool get hasColumnGroups => (super
+          .noSuchMethod(Invocation.getter(#hasColumnGroups), returnValue: false)
+      as bool);
+  @override
+  bool get showColumnGroups =>
+      (super.noSuchMethod(Invocation.getter(#showColumnGroups),
+          returnValue: false) as bool);
+  @override
   set refColumns(_i2.FilteredList<_i2.PlutoColumn>? setColumns) =>
       super.noSuchMethod(Invocation.setter(#refColumns, setColumns),
           returnValueForMissingStub: null);
@@ -203,6 +220,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   double get columnHeight =>
       (super.noSuchMethod(Invocation.getter(#columnHeight), returnValue: 0.0)
           as double);
+  @override
+  double get columnGroupHeight => (super
+          .noSuchMethod(Invocation.getter(#columnGroupHeight), returnValue: 0.0)
+      as double);
   @override
   double get columnFilterHeight =>
       (super.noSuchMethod(Invocation.getter(#columnFilterHeight),
@@ -417,6 +438,24 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#isInvalidCellPosition, [cellPosition]),
           returnValue: false) as bool);
   @override
+  void setShowColumnGroups(bool? flag, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setShowColumnGroups, [flag], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  List<_i2.PlutoColumnGroupPair> separateLinkedGroup(
+          {List<_i2.PlutoColumnGroup>? columnGroupList,
+          List<_i2.PlutoColumn>? columns}) =>
+      (super.noSuchMethod(
+              Invocation.method(#separateLinkedGroup, [],
+                  {#columnGroupList: columnGroupList, #columns: columns}),
+              returnValue: <_i2.PlutoColumnGroupPair>[])
+          as List<_i2.PlutoColumnGroupPair>);
+  @override
+  int columnGroupDepth(List<_i2.PlutoColumnGroup>? columnGroupList) => (super
+      .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
+          returnValue: 0) as int);
+  @override
   bool isShowFrozenColumn(double? maxWidth) =>
       (super.noSuchMethod(Invocation.method(#isShowFrozenColumn, [maxWidth]),
           returnValue: false) as bool);
@@ -438,8 +477,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#bodyColumnsWidthAtColumnIdx, [columnIdx]),
       returnValue: 0.0) as double);
   @override
-  void moveColumn(_i5.Key? columnKey, double? offset) =>
-      super.noSuchMethod(Invocation.method(#moveColumn, [columnKey, offset]),
+  void moveColumn({_i2.PlutoColumn? column, _i2.PlutoColumn? targetColumn}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #moveColumn, [], {#column: column, #targetColumn: targetColumn}),
           returnValueForMissingStub: null);
   @override
   void resizeColumn(_i5.Key? columnKey, double? offset) =>
@@ -941,6 +982,11 @@ class MockPlutoGridEventManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#subject),
               returnValue: _FakePublishSubject_4<_i2.PlutoGridEvent>())
           as _i3.PublishSubject<_i2.PlutoGridEvent>);
+  @override
+  _i4.StreamSubscription<dynamic> get subscription =>
+      (super.noSuchMethod(Invocation.getter(#subscription),
+              returnValue: _FakeStreamSubscription_5<dynamic>())
+          as _i4.StreamSubscription<dynamic>);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);

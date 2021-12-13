@@ -102,7 +102,8 @@ mixin DraggingRowState implements IPlutoGridState {
   bool isRowIdxTopDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
-        _dragTargetRowIdx == rowIdx;
+        _dragTargetRowIdx == rowIdx &&
+        rowIdx + _dragRows!.length <= refRows!.length;
   }
 
   bool isRowIdxBottomDragTarget(int? rowIdx) {

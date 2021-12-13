@@ -38,15 +38,12 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
         compare: listEquals,
       );
 
-      columnGroups = update<List<PlutoColumnGroupPair>?>(
-        columnGroups,
-        widget.stateManager.separateLinkedGroup(
+      if (changed && showColumnGroups == true) {
+        columnGroups = widget.stateManager.separateLinkedGroup(
           columnGroupList: widget.stateManager.refColumnGroups!,
           columns: columns!,
-        ),
-        compare: listEquals,
-        ignoreChange: showColumnGroups != true,
-      );
+        );
+      }
 
       itemCount = update<int?>(itemCount, _getItemCount());
 

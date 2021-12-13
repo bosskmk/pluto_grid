@@ -6,6 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../helper/test_helper_util.dart';
 import '../../../matcher/pluto_object_matcher.dart';
 import 'pluto_default_cell_test.mocks.dart';
 
@@ -30,6 +31,7 @@ void main() {
     when(stateManager.hasFocus).thenReturn(true);
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.rowHeight).thenReturn(0);
+    when(stateManager.currentSelectingRows).thenReturn([]);
   });
 
   group('기본 셀 테스트', () {
@@ -56,6 +58,7 @@ void main() {
               cell: cell,
               column: column,
               row: row,
+              rowIdx: 0,
             ),
           ),
         ),
@@ -97,6 +100,12 @@ void main() {
 
       final PlutoCell cell = PlutoCell(value: 'default cell value');
 
+      final PlutoRow row = PlutoRow(
+        cells: {
+          'column_field_name': cell,
+        },
+      );
+
       return PlutoWidgetTestHelper('cell widget', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
@@ -105,6 +114,8 @@ void main() {
                 stateManager: stateManager,
                 cell: cell,
                 column: column,
+                row: row,
+                rowIdx: 0,
               ),
             ),
           ),
@@ -147,6 +158,12 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: 'default cell value');
 
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
     final PlutoWidgetTestHelper Function({bool canRowDrag}) cellWidget = ({
       bool? canRowDrag,
     }) {
@@ -160,6 +177,8 @@ void main() {
                 stateManager: stateManager,
                 cell: cell,
                 column: column,
+                row: row,
+                rowIdx: 0,
               ),
             ),
           ),
@@ -170,22 +189,26 @@ void main() {
     cellWidget(canRowDrag: true).test(
       'canRowDrag 가 true 인 경우 Draggable 위젯이 렌더링 되어야 한다.',
       (tester) async {
-        expect(find.byType(Draggable), findsOneWidget);
+        expect(
+          find.byType(TestHelperUtil.typeOf<Draggable<List<PlutoRow?>>>()),
+          findsOneWidget,
+        );
       },
     );
 
     cellWidget(canRowDrag: false).test(
       'canRowDrag 가 false 인 경우 Draggable 위젯이 렌더링 되지 않아야 한다.',
       (tester) async {
-        expect(find.byType(Draggable), findsNothing);
+        expect(
+          find.byType(TestHelperUtil.typeOf<Draggable<List<PlutoRow?>>>()),
+          findsNothing,
+        );
       },
     );
 
     cellWidget(canRowDrag: true).test(
-      'Draggable 아이콘을 드래그 하지 않으면 PlutoDragRowsEvent 가 호출 되지 않아야 한다.',
+      'Draggable 아이콘을 드래그 하지 않으면 PlutoGridScrollUpdateEvent 가 호출 되지 않아야 한다.',
       (tester) async {
-        final row = PlutoRow(cells: {});
-
         when(stateManager.getRowByIdx(any)).thenReturn(row);
         when(stateManager.isSelectedRow(any)).thenReturn(false);
 
@@ -196,81 +219,40 @@ void main() {
         // It only needs to be called Update, so it is ignored.
 
         verifyNever(eventManager!.addEvent(
-          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.dragType.isUpdate;
+          argThat(
+              PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
+            return object.offset is Offset;
           })),
         ));
       },
     );
 
     cellWidget(canRowDrag: true).test(
-      'Draggable 아이콘을 드래그 하면 PlutoDragRowsEvent 가 호출 되어야 한다.',
+      'Draggable 아이콘을 드래그 하면 PlutoGridScrollUpdateEvent 가 호출 되어야 한다.',
       (tester) async {
         final offset = const Offset(0.0, 100);
-
-        final row = PlutoRow(cells: {});
 
         when(stateManager.getRowByIdx(any)).thenReturn(row);
         when(stateManager.isSelectedRow(any)).thenReturn(false);
 
         await tester.drag(find.byType(Icon), offset);
 
-        verify(eventManager!.addEvent(
-          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.dragType.isStart &&
-                object.rows!.length == 1 &&
-                object.rows!.first!.key == row.key;
-          })),
+        verify(stateManager.setIsDraggingRow(true, notify: false)).called(1);
+
+        verify(stateManager.setDragRows(
+          [row],
         )).called(1);
 
         verify(eventManager!.addEvent(
-          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.dragType.isUpdate &&
-                object.offset!.dy > 100 &&
-                object.rows!.length == 1 &&
-                object.rows!.first!.key == row.key;
+          argThat(
+              PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
+            return object.offset is Offset;
           })),
         )).called(greaterThan(1));
 
-        verify(eventManager!.addEvent(
-          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.offset!.dy > 100 &&
-                object.dragType.isEnd &&
-                object.rows!.length == 1 &&
-                object.rows!.first!.key == row.key;
-          })),
-        )).called(1);
-      },
-    );
+        verify(stateManager.getRowIdxByOffset(any)).called(greaterThan(1));
 
-    cellWidget(canRowDrag: true).test(
-      'Draggable 아이콘을 드래그 하면 isCurrentRowSelected 이 true 인 경우'
-      'currentSelectingRows 로 PlutoDragRowsEvent 가 호출 되어야 한다.',
-      (tester) async {
-        final offset = const Offset(0.0, 100);
-
-        final rows = [
-          PlutoRow(cells: {}),
-          PlutoRow(cells: {}),
-          PlutoRow(cells: {}),
-        ];
-
-        when(stateManager.getRowByIdx(any)).thenReturn(rows.first);
-        when(stateManager.isSelectedRow(any)).thenReturn(true);
-        when(stateManager.currentSelectingRows).thenReturn(rows);
-
-        await tester.drag(find.byType(Icon), offset);
-
-        verify(eventManager!.addEvent(
-          argThat(PlutoObjectMatcher<PlutoGridDragRowsEvent>(rule: (object) {
-            return object.dragType.isUpdate &&
-                object.offset!.dy > 100 &&
-                object.rows!.length == 3 &&
-                object.rows![0]!.key == rows[0].key &&
-                object.rows![1]!.key == rows[1].key &&
-                object.rows![1]!.key == rows[1].key;
-          })),
-        )).called(greaterThan(1));
+        verify(stateManager.setDragTargetRowIdx(any)).called(greaterThan(1));
       },
     );
   });
@@ -303,6 +285,8 @@ void main() {
                 stateManager: stateManager,
                 cell: cell,
                 column: column,
+                row: row!,
+                rowIdx: 0,
               ),
             ),
           ),

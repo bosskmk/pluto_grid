@@ -66,8 +66,8 @@ class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
           key: ValueKey('right_frozen_row_${rows![i]!.key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
-          row: rows![i],
-          columns: columns,
+          row: rows![i]!,
+          columns: columns!,
         );
       },
     );

@@ -4,10 +4,12 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoBaseColumn extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
   final PlutoColumn column;
+  final double? columnTitleHeight;
 
   PlutoBaseColumn({
     required this.stateManager,
     required this.column,
+    this.columnTitleHeight,
   }) : super(key: column.key);
 
   @override
@@ -37,6 +39,7 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
         PlutoColumnTitle(
           stateManager: widget.stateManager,
           column: widget.column,
+          height: widget.columnTitleHeight ?? widget.stateManager.columnHeight,
         ),
         if (showColumnFilter!)
           PlutoColumnFilter(

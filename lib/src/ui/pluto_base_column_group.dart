@@ -18,20 +18,49 @@ class PlutoBaseColumnGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _ColumnGroupTitle(
-          stateManager: stateManager,
-          columnGroup: columnGroup,
-          depth: depth,
-          childrenDepth: childrenDepth,
-        ),
-        _ColumnGroup(
-          stateManager: stateManager,
-          columnGroup: columnGroup,
-          depth: childrenDepth,
-        ),
-      ],
+    return columnGroup.group.expandedColumn == true
+        ? _ExpandedColumn(
+            stateManager: stateManager,
+            column: columnGroup.columns.first,
+            height: (depth + 1) * stateManager.columnHeight,
+          )
+        : Column(
+            children: [
+              _ColumnGroupTitle(
+                stateManager: stateManager,
+                columnGroup: columnGroup,
+                depth: depth,
+                childrenDepth: childrenDepth,
+              ),
+              _ColumnGroup(
+                stateManager: stateManager,
+                columnGroup: columnGroup,
+                depth: childrenDepth,
+              ),
+            ],
+          );
+  }
+}
+
+class _ExpandedColumn extends StatelessWidget {
+  final PlutoGridStateManager stateManager;
+
+  final PlutoColumn column;
+
+  final double height;
+
+  _ExpandedColumn({
+    required this.stateManager,
+    required this.column,
+    required this.height,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PlutoBaseColumn(
+      stateManager: stateManager,
+      column: column,
+      columnTitleHeight: height,
     );
   }
 }

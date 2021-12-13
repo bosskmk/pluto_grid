@@ -68,7 +68,7 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoBaseRow(
-                stateManager: stateManager,
+                stateManager: stateManager!,
                 rowIdx: rowIdx,
                 row: row,
                 columns: columns,
@@ -91,7 +91,7 @@ void main() {
 
       expect(
         rowContainerDecoration.color,
-        Color.alphaBlend(const Color(0x11757575), Colors.transparent),
+        Color.alphaBlend(const Color(0x11757575), Colors.white),
       );
     },
   );
@@ -105,7 +105,7 @@ void main() {
       final rowContainerDecoration =
           rowContainerWidget.decoration as BoxDecoration;
 
-      expect(rowContainerDecoration.color, Colors.transparent);
+      expect(rowContainerDecoration.color, Colors.white);
     },
   );
 

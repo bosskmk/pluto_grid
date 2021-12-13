@@ -45,7 +45,9 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
 
     final localeText = widget.stateManager!.localeText;
 
-    final configuration = widget.stateManager!.configuration!.copyWith();
+    final configuration = widget.stateManager!.configuration!.copyWith(
+      enableRowColorAnimation: false,
+    );
 
     PlutoDualGridPopup(
       context: context,

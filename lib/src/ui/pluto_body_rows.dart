@@ -117,8 +117,8 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
                 key: ValueKey('body_row_${rows![i]!.key}'),
                 stateManager: widget.stateManager,
                 rowIdx: i,
-                row: rows![i],
-                columns: columns,
+                row: rows![i]!,
+                columns: columns!,
               );
             },
           ),

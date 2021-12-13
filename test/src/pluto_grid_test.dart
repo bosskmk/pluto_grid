@@ -686,7 +686,7 @@ void main() {
       );
 
       // when
-      stateManager!.moveColumn(columns[0].key, 250);
+      stateManager!.moveColumn(column: columns[0], targetColumn: columns[2]);
 
       // then
       expect(columns[0].title, 'body1');
@@ -724,7 +724,7 @@ void main() {
       );
 
       // when
-      stateManager!.moveColumn(columns[9].key, 50);
+      stateManager!.moveColumn(column: columns[9], targetColumn: columns[0]);
 
       // then
       expect(columns[0].title, 'body9');
@@ -737,66 +737,6 @@ void main() {
       expect(columns[7].title, 'body6');
       expect(columns[8].title, 'body7');
       expect(columns[9].title, 'body8');
-    });
-
-    testWidgets(
-        '넓이가 충분하고 '
-        '고정 컬럼이 없는 상태에서 '
-        '3번 컬럼을 고정 왼쪽 토글 하고 '
-        '5번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
-      // given
-      List<PlutoColumn> columns = [
-        ...ColumnHelper.textColumn('body', count: 10, width: 100),
-      ];
-
-      List<PlutoRow> rows = RowHelper.count(10, columns);
-
-      PlutoGridStateManager? stateManager;
-
-      // when
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: Container(
-              width: 500,
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
-            ),
-          ),
-        ),
-      );
-
-      // when
-      stateManager!.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
-
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      stateManager!.moveColumn(columns[5].key, 50);
-      //
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      // 3번 컬럼을 토글하면 컬럼 위치는 바뀌지 않고 고정 컬럼으로 상태만 바뀜.
-      // 그리고 5번 컬럼을 이동 시키면 고정 컬럼이 노출 되는 상태에서 3번 컬럼 앞으로 이동.
-      // 0, 1, 2, 5, 3, 4, 6, 7, 8, 9 상태가 됨.
-
-      // then
-      expect(columns[0].title, 'body0');
-      expect(columns[1].title, 'body1');
-      expect(columns[2].title, 'body2');
-      expect(columns[3].title, 'body5');
-      expect(columns[3].frozen, PlutoColumnFrozen.left);
-      expect(columns[4].title, 'body3');
-      expect(columns[4].frozen, PlutoColumnFrozen.left);
-      expect(columns[5].title, 'body4');
-      expect(columns[6].title, 'body6');
-      expect(columns[7].title, 'body7');
-      expect(columns[8].title, 'body8');
-      expect(columns[9].title, 'body9');
     });
 
     testWidgets(
@@ -842,7 +782,7 @@ void main() {
       stateManager!
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
-      stateManager!.moveColumn(columns[5].key, 50);
+      stateManager!.moveColumn(column: columns[5], targetColumn: columns[0]);
       //
       await tester.pumpAndSettle(const Duration(seconds: 1));
 

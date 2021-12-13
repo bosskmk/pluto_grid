@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
+import '../../../helper/test_helper_util.dart';
 import 'pluto_column_filter_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -185,7 +186,9 @@ void main() {
     );
 
     // then
-    final draggable = find.byType(Draggable);
+    final draggable = find.byType(
+      TestHelperUtil.typeOf<Draggable<PlutoColumn>>(),
+    );
 
     expect(draggable, findsOneWidget);
   });
@@ -502,11 +505,20 @@ void main() {
       );
     });
 
-    aColumn.test('should be called moveColumn. ', (tester) async {
-      await tester.drag(find.byType(Draggable), const Offset(50.0, 0.0));
+    aColumn.test(
+      'When dragging and dropping to the same column, moveColumn should not be called.',
+      (tester) async {
+        await tester.drag(
+          find.byType(TestHelperUtil.typeOf<Draggable<PlutoColumn>>()),
+          const Offset(50.0, 0.0),
+        );
 
-      verify(stateManager.moveColumn(column.key, 50.0 + (column.width / 2)));
-    });
+        verifyNever(stateManager.moveColumn(
+          column: column,
+          targetColumn: column,
+        ));
+      },
+    );
   });
 
   group('Drag a button', () {

@@ -15,7 +15,13 @@ class PlutoGridEventManager {
 
   PublishSubject<PlutoGridEvent> get subject => _subject;
 
+  late final StreamSubscription _subscription;
+
+  StreamSubscription get subscription => _subscription;
+
   void dispose() {
+    _subscription.cancel();
+
     _subject.close();
   }
 
@@ -38,7 +44,7 @@ class PlutoGridEventManager {
               ),
             );
 
-    MergeStream([normalStream, throttleStream, debounceStream])
+    _subscription = MergeStream([normalStream, throttleStream, debounceStream])
         .listen(_handler);
   }
 

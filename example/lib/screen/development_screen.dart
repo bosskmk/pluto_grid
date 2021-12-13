@@ -21,8 +21,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   PlutoGridStateManager? stateManager;
 
-  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.cell;
-
   @override
   void initState() {
     super.initState();
@@ -181,8 +179,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
     columnGroups = [
       PlutoColumnGroup(
+        title: 'Expanded Column Group',
+        fields: ['column1'],
+        expandedColumn: true,
+      ),
+      PlutoColumnGroup(
         title: 'Group A',
-        fields: ['column1', 'column2', 'column3'],
+        fields: ['column2', 'column3'],
       ),
       PlutoColumnGroup(
         title: 'Group B',
@@ -197,26 +200,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     rows = DummyData.rowsByColumns(length: 100, columns: columns);
   }
 
-  void handleAddRowButton({int? count}) {
-    final List<PlutoRow> rows = count == null
-        ? [DummyData.rowByColumns(columns!)]
-        : DummyData.rowsByColumns(length: count, columns: columns);
-
-    stateManager!.prependRows(rows);
-  }
-
-  void handleRemoveCurrentRowButton() {
-    stateManager!.removeCurrentRow();
-  }
-
-  void handleRemoveSelectedRowsButton() {
-    stateManager!.removeRows(stateManager!.currentSelectingRows);
-  }
-
-  void handleToggleColumnFilter() {
-    stateManager!.setShowColumnFilter(!stateManager!.showColumnFilter);
-  }
-
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
     if (event.isRow) {
       print('Toggled A Row.');
@@ -225,17 +208,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       print('Toggled All Rows.');
       print(stateManager?.checkedRows.length);
     }
-  }
-
-  void setGridSelectingMode(PlutoGridSelectingMode? mode) {
-    if (gridSelectingMode == mode) {
-      return;
-    }
-
-    setState(() {
-      gridSelectingMode = mode;
-      stateManager!.setSelectingMode(mode!);
-    });
   }
 
   @override
@@ -257,17 +229,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             stateManager!.setShowColumnFilter(true, notify: false);
 
             // stateManager!.setAutoEditing(true, notify: false);
-
-            stateManager!.setSelectingMode(gridSelectingMode!);
           },
           // onSelected: (event) {
           //   print(event.cell!.value);
           // },
-          onRowChecked: handleOnRowChecked,
-          onRowsMoved: (event) {
-            print(event.idx);
-            print(event.rows);
-          },
+          // onRowChecked: handleOnRowChecked,
+          // onRowsMoved: (event) {
+          //   print(event.idx);
+          //   print(event.rows);
+          // },
           // onRowDoubleTap: (e) {
           //   print('Double click A Row.');
           //   print(e.row?.cells['column1']?.value);
@@ -277,88 +247,20 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(e.row?.cells['column1']?.value);
           // },
           createHeader: (PlutoGridStateManager stateManager) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: stateManager.headerHeight,
-                child: Wrap(
-                  spacing: 10,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      child: const Text('Go Home'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, HomeScreen.routeName);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('Go Empty'),
-                      onPressed: () {
-                        Navigator.pushNamed(context, EmptyScreen.routeName);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('Add 10'),
-                      onPressed: () {
-                        handleAddRowButton(count: 10);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('Add 100 Rows'),
-                      onPressed: () => handleAddRowButton(count: 100),
-                    ),
-                    ElevatedButton(
-                      child: const Text('Add 100,000 Rows'),
-                      onPressed: () => handleAddRowButton(count: 100000),
-                    ),
-                    ElevatedButton(
-                      child: const Text('Remove Current Row'),
-                      onPressed: handleRemoveCurrentRowButton,
-                    ),
-                    ElevatedButton(
-                      child: const Text('Remove Selected Rows'),
-                      onPressed: handleRemoveSelectedRowsButton,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        value: gridSelectingMode,
-                        items: PlutoGridStateManager.selectingModes
-                            .map<DropdownMenuItem<PlutoGridSelectingMode>>(
-                                (PlutoGridSelectingMode item) {
-                          final color =
-                              gridSelectingMode == item ? Colors.blue : null;
-
-                          return DropdownMenuItem<PlutoGridSelectingMode>(
-                            value: item,
-                            child: Text(
-                              item.toShortString(),
-                              style: TextStyle(color: color),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (PlutoGridSelectingMode? mode) {
-                          setGridSelectingMode(mode);
-                        },
-                      ),
-                    ),
-                    ElevatedButton(
-                      child: const Text('Toggle filter'),
-                      onPressed: handleToggleColumnFilter,
-                    ),
-                  ],
-                ),
-              ),
+            return _Header(
+              stateManager: stateManager,
+              columns: columns!,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(10, notify: false);
-            return PlutoPagination(stateManager);
-          },
-          rowColorCallback: (rowColorContext) {
-            return rowColorContext.row.cells['column2']!.value == 'red'
-                ? const Color(0xFFFFB0B0)
-                : Colors.transparent;
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(10, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
+          // rowColorCallback: (rowColorContext) {
+          //   return rowColorContext.row.cells['column2']!.value == 'red'
+          //       ? const Color(0xFFFFB0B0)
+          //       : Colors.white;
+          // },
           configuration: PlutoGridConfiguration(
             // columnHeight: 30.0,
             // columnFilterHeight: 30.0,
@@ -369,6 +271,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableColumnBorder: true,
             // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
+            // enableRowColorAnimation: false,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
@@ -377,20 +280,20 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               scrollbarThicknessWhileDragging: 10,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
-            // columnFilterConfig: PlutoGridColumnFilterConfig(
-            //   filters: const [
-            //     ...FilterHelper.defaultFilters,
-            //     ClassYouImplemented(),
-            //   ],
-            //   resolveDefaultColumnFilter: (column, resolver) {
-            //     if (column.field == 'column3') {
-            //       return resolver<PlutoFilterTypeGreaterThan>()
-            //           as PlutoFilterType;
-            //     }
-            //
-            //     return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-            //   },
-            // ),
+            columnFilterConfig: PlutoGridColumnFilterConfig(
+              filters: const [
+                ...FilterHelper.defaultFilters,
+                ClassYouImplemented(),
+              ],
+              resolveDefaultColumnFilter: (column, resolver) {
+                if (column.field == 'column3') {
+                  return resolver<PlutoFilterTypeGreaterThan>()
+                      as PlutoFilterType;
+                }
+
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+              },
+            ),
           ),
         ),
       ),
@@ -412,4 +315,145 @@ class ClassYouImplemented implements PlutoFilterType {
       };
 
   const ClassYouImplemented();
+}
+
+class _Header extends StatefulWidget {
+  final PlutoGridStateManager stateManager;
+
+  final List<PlutoColumn> columns;
+
+  const _Header({
+    required this.stateManager,
+    required this.columns,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _HeaderState createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.stateManager.setSelectingMode(gridSelectingMode);
+  }
+
+  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
+
+  void handleAddRowButton({int? count}) {
+    final List<PlutoRow> rows = count == null
+        ? [DummyData.rowByColumns(widget.columns)]
+        : DummyData.rowsByColumns(length: count, columns: widget.columns);
+
+    widget.stateManager.prependRows(rows);
+  }
+
+  void handleRemoveCurrentRowButton() {
+    widget.stateManager.removeCurrentRow();
+  }
+
+  void handleRemoveSelectedRowsButton() {
+    widget.stateManager.removeRows(widget.stateManager.currentSelectingRows);
+  }
+
+  void handleToggleColumnFilter() {
+    widget.stateManager
+        .setShowColumnFilter(!widget.stateManager.showColumnFilter);
+  }
+
+  void setGridSelectingMode(PlutoGridSelectingMode? mode) {
+    if (gridSelectingMode == mode || mode == null) {
+      return;
+    }
+
+    setState(() {
+      gridSelectingMode = mode;
+      widget.stateManager.setSelectingMode(mode);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        height: widget.stateManager.headerHeight,
+        child: Wrap(
+          spacing: 10,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('Go Home'),
+              onPressed: () {
+                Navigator.pushNamed(context, HomeScreen.routeName);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Go Empty'),
+              onPressed: () {
+                Navigator.pushNamed(context, EmptyScreen.routeName);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Add 10'),
+              onPressed: () {
+                handleAddRowButton(count: 10);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Add 100 Rows'),
+              onPressed: () => handleAddRowButton(count: 100),
+            ),
+            ElevatedButton(
+              child: const Text('Add 100,000 Rows'),
+              onPressed: () => handleAddRowButton(count: 100000),
+            ),
+            ElevatedButton(
+              child: const Text('Remove Current Row'),
+              onPressed: handleRemoveCurrentRowButton,
+            ),
+            ElevatedButton(
+              child: const Text('Remove Selected Rows'),
+              onPressed: handleRemoveSelectedRowsButton,
+            ),
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: gridSelectingMode,
+                items: PlutoGridStateManager.selectingModes
+                    .map<DropdownMenuItem<PlutoGridSelectingMode>>(
+                        (PlutoGridSelectingMode item) {
+                  final color = gridSelectingMode == item ? Colors.blue : null;
+
+                  return DropdownMenuItem<PlutoGridSelectingMode>(
+                    value: item,
+                    child: Text(
+                      item.toShortString(),
+                      style: TextStyle(color: color),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (PlutoGridSelectingMode? mode) {
+                  setGridSelectingMode(mode);
+                },
+              ),
+            ),
+            ElevatedButton(
+              child: const Text('Toggle filter'),
+              onPressed: handleToggleColumnFilter,
+            ),
+            ElevatedButton(
+              child: const Text('Toggle group'),
+              onPressed: () {
+                widget.stateManager.setShowColumnGroups(
+                  !widget.stateManager.showColumnGroups,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
