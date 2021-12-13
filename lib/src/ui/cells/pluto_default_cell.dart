@@ -112,7 +112,6 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
         widget.stateManager.setIsDraggingRow(true, notify: false);
 
         widget.stateManager.setDragRows(draggingRows);
-        print(draggingRows[0]?.cells);
       },
       onPointerMove: (PointerMoveEvent event) {
         widget.stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
