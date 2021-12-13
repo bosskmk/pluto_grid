@@ -212,11 +212,8 @@ class _BuildDraggableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
-      onDragEnd: (dragDetails) {
-        stateManager.moveColumn(
-            column.key, dragDetails.offset.dx + (column.width / 2));
-      },
+    return Draggable<PlutoColumn>(
+      data: column,
       feedback: PlutoShadowContainer(
         alignment: column.titleTextAlign.alignmentValue,
         width: column.width,
@@ -296,26 +293,43 @@ class _BuildColumnWidget extends StatelessWidget {
               ),
             )
           : const BoxDecoration(),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            if (column.enableRowChecked)
-              _CheckboxAllSelectionWidget(
-                column: column,
-                stateManager: stateManager,
-              ),
-            Expanded(
-              child: _ColumnTextWidget(
-                column: column,
-                stateManager: stateManager,
-                height: height,
-              ),
+      child: DragTarget<PlutoColumn>(
+        onWillAccept: (PlutoColumn? columnToDrag) {
+          return columnToDrag != null && columnToDrag.key != column.key;
+        },
+        onMove: (DragTargetDetails details) async {
+          final columnToMove = details.data as PlutoColumn;
+
+          if (columnToMove.key != column.key) {
+            stateManager.eventManager!.addEvent(PlutoGridDragColumnEvent(
+              column: columnToMove,
+              targetColumn: column,
+            ));
+          }
+        },
+        builder: (dragContext, candidate, rejected) {
+          return Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                if (column.enableRowChecked)
+                  _CheckboxAllSelectionWidget(
+                    column: column,
+                    stateManager: stateManager,
+                  ),
+                Expanded(
+                  child: _ColumnTextWidget(
+                    column: column,
+                    stateManager: stateManager,
+                    height: height,
+                  ),
+                ),
+                if (showSizedBoxForIcon)
+                  SizedBox(width: stateManager.configuration!.iconSize),
+              ],
             ),
-            if (showSizedBoxForIcon)
-              SizedBox(width: stateManager.configuration!.iconSize),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
