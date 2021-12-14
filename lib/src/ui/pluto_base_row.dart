@@ -22,8 +22,6 @@ class PlutoBaseRow extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    updateContext();
-
     return DragTarget(
       onWillAccept: (List<PlutoRow?>? draggingRows) {
         if (draggingRows == null || draggingRows.isEmpty) {
