@@ -111,6 +111,8 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
   bool? hasFocus;
 
+  Color? rowColor;
+
   @override
   void onChange() {
     resetState((update) {
@@ -158,15 +160,14 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
         isCurrentRow! && widget.stateManager.hasFocus,
       );
 
+      rowColor = update<Color?>(rowColor, getRowColor());
+
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
       }
     });
   }
-}
 
-class __RowContainerWidgetState
-    extends __RowContainerWidgetStateWithChangeKeepAlive {
   Color getDefaultRowColor() {
     if (widget.stateManager.rowColorCallback == null) {
       return widget.stateManager.configuration!.gridBackgroundColor;
@@ -181,7 +182,7 @@ class __RowContainerWidgetState
     );
   }
 
-  Color rowColor() {
+  Color getRowColor() {
     final Color defaultColor = getDefaultRowColor();
 
     if (isDragTarget!)
@@ -211,15 +212,21 @@ class __RowContainerWidgetState
         ? widget.stateManager.configuration!.activatedColor
         : defaultColor;
   }
+}
 
+class __RowContainerWidgetState
+    extends __RowContainerWidgetStateWithChangeKeepAlive {
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final decoration = BoxDecoration(
       color: isCheckedRow!
-          ? Color.alphaBlend(const Color(0x11757575), rowColor())
-          : rowColor(),
+          ? Color.alphaBlend(
+              widget.stateManager.configuration!.checkedColor,
+              getRowColor(),
+            )
+          : getRowColor(),
       border: Border(
         top: isTopDragTarget!
             ? BorderSide(

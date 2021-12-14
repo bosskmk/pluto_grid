@@ -272,6 +272,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             // enableRowColorAnimation: false,
+            // checkedColor: const Color(0x876FB0FF),
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
