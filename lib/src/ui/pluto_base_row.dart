@@ -73,6 +73,7 @@ class PlutoBaseRow extends StatelessWidget
               );
             }).toList(growable: false),
           ),
+          updateContext: updateContext,
         );
       },
     );
@@ -85,6 +86,7 @@ class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoRow row;
   final List<PlutoColumn> columns;
   final Widget child;
+  final void Function() updateContext;
 
   _RowContainerWidget({
     required this.stateManager,
@@ -92,6 +94,7 @@ class _RowContainerWidget extends PlutoStatefulWidget {
     required this.row,
     required this.columns,
     required this.child,
+    required this.updateContext,
   });
 
   @override
@@ -168,6 +171,10 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
       );
 
       rowColor = update<Color?>(rowColor, getRowColor());
+
+      if (changed) {
+        widget.updateContext();
+      }
 
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));

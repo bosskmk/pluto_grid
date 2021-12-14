@@ -79,6 +79,10 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
         isCurrentCell! && widget.stateManager.hasFocus,
       );
 
+      if (changed) {
+        widget.updateContext();
+      }
+
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(isCurrentCell!);
       }
@@ -154,8 +158,6 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    widget.updateContext();
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
