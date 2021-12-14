@@ -163,35 +163,39 @@ mixin EditingState implements IPlutoGridState {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
-  }) {
+  }) async {
     final dynamic oldValue = cell.value;
 
+    final cellWidget = await cell.resolve();
+
     value = filteredCellValue(
-      column: cell.column,
+      column: cellWidget.column,
       newValue: value,
       oldValue: oldValue,
     );
 
     if (force == false &&
         canNotChangeCellValue(
-          column: cell.column,
-          row: cell.row,
+          column: cellWidget.column,
+          row: cellWidget.row,
           newValue: value,
           oldValue: oldValue,
         )) {
       return;
     }
 
-    cell.row!.setState(PlutoRowState.updated);
+    cellWidget.row.setState(PlutoRowState.updated);
 
-    cell.value = value = castValueByColumnType(value, cell.column!);
+    cell.value = value = castValueByColumnType(value, cellWidget.column);
+
+    final rowWidget = await cellWidget.row.resolve();
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(PlutoGridOnChangedEvent(
-        columnIdx: columnIndex(cell.column!),
-        column: cell.column,
-        rowIdx: cell.row!.index,
-        row: cell.row,
+        columnIdx: columnIndex(cellWidget.column),
+        column: cellWidget.column,
+        rowIdx: rowWidget.rowIdx,
+        row: cellWidget.row,
         value: value,
         oldValue: oldValue,
       ));

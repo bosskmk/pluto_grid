@@ -1,20 +1,19 @@
+import 'package:flutter/widgets.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import 'context_model.dart';
 
-abstract class CellContext implements ContextModel<PlutoBaseCell> {
-  PlutoColumn? get column => _column;
+abstract class CellContext extends ContextModel<PlutoBaseCell> {
+  bool get resolved =>
+      _widget != null && !_widget!.stateManager.hasRemainingFrame;
 
-  PlutoColumn? _column;
+  @protected
+  PlutoBaseCell get widget => _widget!;
 
-  PlutoRow? get row => _row;
-
-  PlutoRow? _row;
+  PlutoBaseCell? _widget;
 
   @override
   void updateContext(PlutoBaseCell widget) {
-    _column = widget.column;
-
-    _row = widget.row;
+    _widget = widget;
   }
 }
