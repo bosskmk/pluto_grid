@@ -220,13 +220,11 @@ class __RowContainerWidgetState
   Widget build(BuildContext context) {
     super.build(context);
 
-    final rowColor = getRowColor();
-
     final decoration = BoxDecoration(
       color: isCheckedRow!
           ? Color.alphaBlend(
               widget.stateManager.configuration!.checkedColor,
-              rowColor,
+              rowColor!,
             )
           : rowColor,
       border: Border(
