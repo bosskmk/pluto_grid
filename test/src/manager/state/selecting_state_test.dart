@@ -1300,6 +1300,14 @@ void main() {
         stateManager
             .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
+        rows[1].cells['text1']!.updateContext(PlutoBaseCell(
+              stateManager: stateManager,
+              cell: rows.first.cells['text1']!,
+              column: columns[1],
+              rowIdx: 1,
+              row: rows[1],
+            ));
+
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
         stateManager.setCurrentSelectingPosition(
@@ -1365,6 +1373,14 @@ void main() {
 
         // when
         expect(stateManager.currentCellPosition!.rowIdx, 1);
+
+        rows[1].cells['text1']!.updateContext(PlutoBaseCell(
+              stateManager: stateManager,
+              cell: rows.first.cells['text1']!,
+              column: columns[1],
+              rowIdx: 1,
+              row: rows[1],
+            ));
 
         stateManager.handleAfterSelectingRow(
           rows[1].cells['text1']!,

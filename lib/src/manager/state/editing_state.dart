@@ -35,7 +35,7 @@ abstract class IEditingState {
   /// Change cell value
   /// [callOnChangedEvent] triggers a [PlutoOnChangedEventCallback] callback.
   void changeCellValue(
-    Key cellKey,
+    PlutoCell cell,
     dynamic value, {
     bool callOnChangedEvent = true,
     bool force = false,
@@ -158,62 +158,47 @@ mixin EditingState implements IPlutoGridState {
   }
 
   void changeCellValue(
-    Key cellKey,
+    PlutoCell cell,
     dynamic value, {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
   }) {
-    for (var rowIdx = 0; rowIdx < refRows!.length; rowIdx += 1) {
-      for (var columnIdx = 0;
-          columnIdx < columnIndexes.length;
-          columnIdx += 1) {
-        final field = refColumns![columnIndexes[columnIdx]].field;
+    final dynamic oldValue = cell.value;
 
-        if (refRows![rowIdx]!.cells[field]!.key == cellKey) {
-          final currentColumn = refColumns![columnIndexes[columnIdx]];
+    value = filteredCellValue(
+      column: cell.column,
+      newValue: value,
+      oldValue: oldValue,
+    );
 
-          final dynamic oldValue = refRows![rowIdx]!.cells[field]!.value;
+    if (force == false &&
+        canNotChangeCellValue(
+          column: cell.column,
+          row: cell.row,
+          newValue: value,
+          oldValue: oldValue,
+        )) {
+      return;
+    }
 
-          value = filteredCellValue(
-            column: currentColumn,
-            newValue: value,
-            oldValue: oldValue,
-          );
+    cell.row!.setState(PlutoRowState.updated);
 
-          if (force == false &&
-              canNotChangeCellValue(
-                column: currentColumn,
-                row: refRows![rowIdx]!,
-                newValue: value,
-                oldValue: oldValue,
-              )) {
-            return;
-          }
+    cell.value = value = castValueByColumnType(value, cell.column!);
 
-          refRows![rowIdx]!.setState(PlutoRowState.updated);
+    if (callOnChangedEvent == true && onChanged != null) {
+      onChanged!(PlutoGridOnChangedEvent(
+        columnIdx: columnIndex(cell.column!),
+        column: cell.column,
+        rowIdx: cell.row!.index,
+        row: cell.row,
+        value: value,
+        oldValue: oldValue,
+      ));
+    }
 
-          refRows![rowIdx]!.cells[field]!.value =
-              value = castValueByColumnType(value, currentColumn);
-
-          if (callOnChangedEvent == true && onChanged != null) {
-            onChanged!(PlutoGridOnChangedEvent(
-              columnIdx: columnIdx,
-              column: currentColumn,
-              rowIdx: rowIdx,
-              row: refRows![rowIdx],
-              value: value,
-              oldValue: oldValue,
-            ));
-          }
-
-          if (notify) {
-            notifyListeners();
-          }
-
-          return;
-        }
-      }
+    if (notify) {
+      notifyListeners();
     }
   }
 

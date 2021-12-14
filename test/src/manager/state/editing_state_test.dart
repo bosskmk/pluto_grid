@@ -403,6 +403,17 @@ void main() {
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
 
+    PlutoBaseCell Function(PlutoGridStateManager stateManager) getCellWidget =
+        (PlutoGridStateManager stateManager) {
+      return PlutoBaseCell(
+        stateManager: stateManager,
+        cell: rows.first.cells['column0']!,
+        column: columns.first,
+        rowIdx: 0,
+        row: rows.first,
+      );
+    };
+
     test(
       'force 가 false(기본값) 일 때, canNotChangeCellValue 가 true 면'
       'onChanged 콜백이 호출 되지 않아야 한다.',
@@ -418,8 +429,17 @@ void main() {
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
+        final columnField = 'column0';
+
+        final rowIdx = 0;
+
+        final column = columns.first;
+
+        rows.first.cells[columnField]!
+            .updateContext(getCellWidget(stateManager));
+
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
-          column: columns.first,
+          column: column,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -427,7 +447,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0']!.key,
+          rows[rowIdx].cells[columnField]!,
           'DEF',
           // force: false,
         );
@@ -451,8 +471,17 @@ void main() {
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
+        final columnField = 'column0';
+
+        final rowIdx = 0;
+
+        final column = columns.first;
+
+        rows.first.cells[columnField]!
+            .updateContext(getCellWidget(stateManager));
+
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
-          column: columns.first,
+          column: column,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -460,7 +489,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0']!.key,
+          rows[rowIdx].cells[columnField]!,
           'DEF',
           force: true,
         );

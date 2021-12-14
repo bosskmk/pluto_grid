@@ -158,7 +158,7 @@ void main() {
         when(stateManager!.isSelectingInteraction()).thenReturn(true);
         when(stateManager!.keyPressed)
             .thenReturn(PlutoGridKeyPressed(shift: true));
-        when(stateManager!.columnIndex(any)).thenReturn(columnIdx);
+        when(stateManager!.columnPosition(any)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
         // when

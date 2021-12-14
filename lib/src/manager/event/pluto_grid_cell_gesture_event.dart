@@ -115,7 +115,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
   void _selecting(PlutoGridStateManager stateManager) {
     if (stateManager.keyPressed.shift) {
-      final int? columnIdx = stateManager.columnIndex(column);
+      final int? columnIdx = stateManager.columnPosition(column);
 
       stateManager.setCurrentSelectingPosition(
         cellPosition: PlutoGridCellPosition(

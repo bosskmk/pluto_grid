@@ -245,7 +245,7 @@ void main() {
     //     'cell value4');
     // (2)
     stateManager!
-        .changeCellValue(stateManager!.currentCell!.key, 'header0 value 4');
+        .changeCellValue(stateManager!.currentCell!, 'header0 value 4');
 
     // 다음 행으로 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);

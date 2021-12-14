@@ -443,7 +443,7 @@ mixin SelectingState implements IPlutoGridState {
         return false;
       }
 
-      final int? columnIdx = columnIndex(column);
+      final int? columnIdx = columnPosition(column);
 
       if (columnIdx == null) {
         return false;
@@ -468,7 +468,7 @@ mixin SelectingState implements IPlutoGridState {
       int endRowIdx =
           max(currentCellPosition!.rowIdx!, _currentSelectingPosition!.rowIdx!);
 
-      final int? columnIdx = columnIndex(column);
+      final int? columnIdx = columnPosition(column);
 
       if (columnIdx == null) {
         return false;
@@ -511,7 +511,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
-    changeCellValue(cell.key, value, notify: false);
+    changeCellValue(cell, value, notify: false);
 
     if (configuration!.enableMoveDownAfterSelecting) {
       moveCurrentCell(PlutoMoveDirection.down, notify: false);

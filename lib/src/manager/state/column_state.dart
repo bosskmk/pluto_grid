@@ -75,11 +75,13 @@ abstract class IColumnState {
   /// Column width to index location based on Body column
   double bodyColumnsWidthAtColumnIdx(int columnIdx);
 
-  /// Index of [column] in [columns]
-  ///
-  /// Depending on the state of the frozen column, the column order index
-  /// must be referenced with the columnIndexesByShowFrozen function.
-  int? columnIndex(PlutoColumn? column);
+  /// It depends on the order in which the columns are displayed.
+  /// (depending on the left and right columns fixed).
+  /// The actual column index can be obtained with the columnIndex value.
+  int? columnPosition(PlutoColumn? column);
+
+  /// Index of columns(refColumns).
+  int? columnIndex(PlutoColumn column);
 
   /// Change column position.
   void moveColumn({
@@ -277,11 +279,25 @@ mixin ColumnState implements IPlutoGridState {
     return width;
   }
 
-  int? columnIndex(PlutoColumn? column) {
+  int? columnPosition(PlutoColumn? column) {
+    if (column == null) {
+      return null;
+    }
+
     final columnIndexes = columnIndexesByShowFrozen;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      if (refColumns![columnIndexes[i]].field == column!.field) {
+      if (refColumns![columnIndexes[i]].field == column.field) {
+        return i;
+      }
+    }
+
+    return null;
+  }
+
+  int? columnIndex(PlutoColumn column) {
+    for (var i = 0; i < refColumns!.length; i += 1) {
+      if (refColumns![i].field == column.field) {
         return i;
       }
     }
