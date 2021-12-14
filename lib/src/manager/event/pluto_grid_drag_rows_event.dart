@@ -20,10 +20,10 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
 
   static const int resumeMilliseconds = debounceMilliseconds + 100;
 
-  static bool pause = false;
+  static bool _pause = false;
 
   void handler(PlutoGridStateManager? stateManager) async {
-    if (pause) {
+    if (_pause) {
       return;
     }
 
@@ -32,11 +32,11 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
       targetIdx,
     );
 
-    pause = true;
+    _pause = true;
 
     await Future.delayed(
       const Duration(milliseconds: resumeMilliseconds),
-      () => pause = false,
+      () => _pause = false,
     );
   }
 }
