@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseRow extends StatelessWidget {
+import '../model/context/context_widget.dart';
+
+class PlutoBaseRow extends StatelessWidget
+    with ContextWidget<PlutoRow, PlutoBaseRow> {
   final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
@@ -15,8 +18,12 @@ class PlutoBaseRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  get model => row;
+
   @override
   Widget build(BuildContext context) {
+    updateContext();
+
     return DragTarget(
       onWillAccept: (List<PlutoRow?>? draggingRows) {
         if (draggingRows == null || draggingRows.isEmpty) {

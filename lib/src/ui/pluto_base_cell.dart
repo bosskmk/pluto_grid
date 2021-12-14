@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseCell extends PlutoStatefulWidget {
+import '../model/context/context_widget.dart';
+
+class PlutoBaseCell extends PlutoStatefulWidget
+    with ContextWidget<PlutoCell, PlutoBaseCell> {
   final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -20,6 +23,8 @@ class PlutoBaseCell extends PlutoStatefulWidget {
     this.width = PlutoGridSettings.columnWidth,
     this.height = PlutoGridSettings.rowHeight,
   }) : super(key: key);
+
+  get model => cell;
 
   @override
   _PlutoBaseCellState createState() => _PlutoBaseCellState();
@@ -149,6 +154,8 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    widget.updateContext();
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

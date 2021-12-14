@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-import 'pluto_column.dart';
+import 'context/cell_context.dart';
 
-class PlutoCell {
+class PlutoCell extends CellContext {
   PlutoCell({
     dynamic value,
   })  : _key = UniqueKey(),

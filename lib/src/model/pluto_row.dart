@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoRow {
+import '../model/context/row_context.dart';
+
+class PlutoRow extends RowContext {
   /// List of row
   Map<String, PlutoCell> cells;
 
