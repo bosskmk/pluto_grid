@@ -166,7 +166,7 @@ mixin EditingState implements IPlutoGridState {
   }) async {
     final dynamic oldValue = cell.value;
 
-    final cellWidget = await cell.resolve();
+    final cellWidget = await cell.resolveWidget();
 
     value = filteredCellValue(
       column: cellWidget.column,
@@ -188,7 +188,7 @@ mixin EditingState implements IPlutoGridState {
 
     cell.value = value = castValueByColumnType(value, cellWidget.column);
 
-    final rowWidget = await cellWidget.row.resolve();
+    final rowWidget = await cellWidget.row.resolveWidget();
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(PlutoGridOnChangedEvent(

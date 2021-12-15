@@ -14,7 +14,7 @@ typedef _UpdateStateFunction = T Function<T>(
 typedef _CompareFunction<T> = bool Function(T a, T b);
 
 abstract class PlutoStatefulWidget extends StatefulWidget
-    implements HasPlutoStateManager<PlutoGridStateManager> {
+    implements HasPlutoStateManager {
   PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
@@ -123,6 +123,6 @@ abstract class PlutoStateWithChangeKeepAlive<T extends PlutoStatefulWidget>
   }
 }
 
-abstract class HasPlutoStateManager<T extends ChangeNotifier> {
-  T get stateManager;
+abstract class HasPlutoStateManager {
+  PlutoGridStateManager get stateManager;
 }

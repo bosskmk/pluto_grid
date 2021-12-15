@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../model/context/context_widget.dart';
-
-class PlutoBaseRow extends StatelessWidget
-    with ContextWidget<PlutoRow, PlutoBaseRow>
-    implements HasPlutoStateManager<PlutoGridStateManager> {
+class PlutoBaseRow extends StatelessWidget implements HasPlutoStateManager {
   final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
@@ -17,9 +13,9 @@ class PlutoBaseRow extends StatelessWidget
     required this.row,
     required this.columns,
     Key? key,
-  }) : super(key: key);
-
-  get model => row;
+  }) : super(key: key) {
+    row.bindWidget(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +73,6 @@ class PlutoBaseRow extends StatelessWidget
               );
             },
           ),
-          updateContext: updateContext,
         );
       },
     );
@@ -90,7 +85,6 @@ class _RowContainerWidget extends PlutoStatefulWidget {
   final PlutoRow row;
   final List<PlutoColumn> columns;
   final Widget child;
-  final void Function() updateContext;
 
   _RowContainerWidget({
     required this.stateManager,
@@ -98,7 +92,6 @@ class _RowContainerWidget extends PlutoStatefulWidget {
     required this.row,
     required this.columns,
     required this.child,
-    required this.updateContext,
   });
 
   @override
@@ -159,14 +152,14 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
       isTopDragTarget = update<bool?>(
         isTopDragTarget,
-        widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
-        ignoreChange: !isDraggingRow,
+        isDraggingRow &&
+            widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
       );
 
       isBottomDragTarget = update<bool?>(
         isBottomDragTarget,
-        widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
-        ignoreChange: !isDraggingRow,
+        isDraggingRow &&
+            widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
       );
 
       hasCurrentSelectingPosition = update<bool?>(
@@ -180,10 +173,6 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
       );
 
       rowColor = update<Color?>(rowColor, getRowColor());
-
-      if (changed) {
-        widget.updateContext();
-      }
 
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));

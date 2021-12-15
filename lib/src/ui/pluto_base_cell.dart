@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../model/context/context_widget.dart';
-
-class PlutoBaseCell extends PlutoStatefulWidget
-    with ContextWidget<PlutoCell, PlutoBaseCell> {
+class PlutoBaseCell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
   final PlutoCell cell;
   final PlutoColumn column;
@@ -22,9 +19,9 @@ class PlutoBaseCell extends PlutoStatefulWidget
     required this.row,
     this.width = PlutoGridSettings.columnWidth,
     this.height = PlutoGridSettings.rowHeight,
-  }) : super(key: key);
-
-  get model => cell;
+  }) : super(key: key) {
+    cell.bindWidget(this);
+  }
 
   @override
   _PlutoBaseCellState createState() => _PlutoBaseCellState();
@@ -78,10 +75,6 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
         hasFocus,
         isCurrentCell! && widget.stateManager.hasFocus,
       );
-
-      if (changed) {
-        widget.updateContext();
-      }
 
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(isCurrentCell!);

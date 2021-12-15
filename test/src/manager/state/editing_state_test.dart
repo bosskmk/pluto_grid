@@ -435,8 +435,7 @@ void main() {
 
         final column = columns.first;
 
-        rows.first.cells[columnField]!
-            .updateContext(getCellWidget(stateManager));
+        rows.first.cells[columnField]!.bindWidget(getCellWidget(stateManager));
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: column,
@@ -477,8 +476,7 @@ void main() {
 
         final column = columns.first;
 
-        rows.first.cells[columnField]!
-            .updateContext(getCellWidget(stateManager));
+        rows.first.cells[columnField]!.bindWidget(getCellWidget(stateManager));
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: column,

@@ -1300,7 +1300,7 @@ void main() {
         stateManager
             .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
-        rows[1].cells['text1']!.updateContext(PlutoBaseCell(
+        rows[1].cells['text1']!.bindWidget(PlutoBaseCell(
               stateManager: stateManager,
               cell: rows.first.cells['text1']!,
               column: columns[1],
@@ -1374,7 +1374,7 @@ void main() {
         // when
         expect(stateManager.currentCellPosition!.rowIdx, 1);
 
-        rows[1].cells['text1']!.updateContext(PlutoBaseCell(
+        rows[1].cells['text1']!.bindWidget(PlutoBaseCell(
               stateManager: stateManager,
               cell: rows.first.cells['text1']!,
               column: columns[1],
