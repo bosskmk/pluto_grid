@@ -279,6 +279,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               isAlwaysShown: false,
               scrollbarThickness: 8,
               scrollbarThicknessWhileDragging: 10,
+              // draggableScrollbar: false,
             ),
             // localeText: const PlutoGridLocaleText.korean(),
             columnFilterConfig: PlutoGridColumnFilterConfig(

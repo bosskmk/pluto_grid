@@ -59,9 +59,9 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
 
   @override
   void dispose() {
-    verticalScroll!.dispose();
+    verticalScroll?.dispose();
 
-    horizontalScroll!.dispose();
+    horizontalScroll?.dispose();
 
     super.dispose();
   }
@@ -70,26 +70,22 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
   void initState() {
     super.initState();
 
-    horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    if (widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar) {
+      horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsHorizontal(horizontalScroll);
+      widget.stateManager.scroll!.setBodyRowsHorizontal(horizontalScroll);
 
-    verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
+      verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsVertical(verticalScroll);
+      widget.stateManager.scroll!.setBodyRowsVertical(verticalScroll);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScrollbar(
-      verticalController:
-          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? verticalScroll
-              : null,
-      horizontalController:
-          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? horizontalScroll
-              : null,
+      verticalController: verticalScroll,
+      horizontalController: horizontalScroll,
       isAlwaysShown:
           widget.stateManager.configuration!.scrollbarConfig.isAlwaysShown,
       thickness:

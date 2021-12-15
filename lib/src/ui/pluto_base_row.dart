@@ -4,7 +4,8 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../model/context/context_widget.dart';
 
 class PlutoBaseRow extends StatelessWidget
-    with ContextWidget<PlutoRow, PlutoBaseRow> {
+    with ContextWidget<PlutoRow, PlutoBaseRow>
+    implements HasPlutoStateManager<PlutoGridStateManager> {
   final PlutoGridStateManager stateManager;
   final int rowIdx;
   final PlutoRow row;
@@ -57,8 +58,13 @@ class PlutoBaseRow extends StatelessWidget
           rowIdx: rowIdx,
           row: row,
           columns: columns,
-          child: Row(
-            children: columns.map((column) {
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: columns.length,
+            itemBuilder: (_, i) {
+              final column = columns[i];
+
               return PlutoBaseCell(
                 key: row.cells[column.field]!.key,
                 stateManager: stateManager,
@@ -69,7 +75,7 @@ class PlutoBaseRow extends StatelessWidget
                 rowIdx: rowIdx,
                 row: row,
               );
-            }).toList(growable: false),
+            },
           ),
           updateContext: updateContext,
         );
@@ -143,19 +149,24 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
               orElse: () => null) !=
           null;
 
+      final isDraggingRow = widget.stateManager.isDraggingRow;
+
       isDragTarget = update<bool?>(
         isDragTarget,
         !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
+        ignoreChange: !isDraggingRow,
       );
 
       isTopDragTarget = update<bool?>(
         isTopDragTarget,
         widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
+        ignoreChange: !isDraggingRow,
       );
 
       isBottomDragTarget = update<bool?>(
         isBottomDragTarget,
         widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
+        ignoreChange: !isDraggingRow,
       );
 
       hasCurrentSelectingPosition = update<bool?>(
@@ -195,34 +206,30 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
   }
 
   Color getRowColor() {
-    final Color defaultColor = getDefaultRowColor();
+    Color color = getDefaultRowColor();
 
-    if (isDragTarget!)
-      return widget.stateManager.configuration!.cellColorInReadOnlyState;
+    if (isDragTarget!) {
+      color = widget.stateManager.configuration!.cellColorInReadOnlyState;
+    } else {
+      final bool checkCurrentRow = hasFocus! &&
+          !widget.stateManager.selectingMode.isRow &&
+          isCurrentRow! &&
+          (!isSelecting! && !hasCurrentSelectingPosition!);
 
-    final bool checkCurrentRow =
-        isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
+      final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
+          widget.stateManager.isSelectedRow(widget.row.key);
 
-    final bool checkSelectedRow =
-        widget.stateManager.isSelectedRow(widget.row.key);
-
-    if (!checkCurrentRow && !checkSelectedRow) {
-      return defaultColor;
+      if (checkCurrentRow || checkSelectedRow) {
+        color = widget.stateManager.configuration!.activatedColor;
+      }
     }
 
-    if (widget.stateManager.selectingMode.isRow) {
-      return checkSelectedRow
-          ? widget.stateManager.configuration!.activatedColor
-          : defaultColor;
-    }
-
-    if (!hasFocus!) {
-      return defaultColor;
-    }
-
-    return checkCurrentRow
-        ? widget.stateManager.configuration!.activatedColor
-        : defaultColor;
+    return isCheckedRow!
+        ? Color.alphaBlend(
+            widget.stateManager.configuration!.checkedColor,
+            color,
+          )
+        : color;
   }
 }
 
@@ -233,12 +240,7 @@ class __RowContainerWidgetState
     super.build(context);
 
     final decoration = BoxDecoration(
-      color: isCheckedRow!
-          ? Color.alphaBlend(
-              widget.stateManager.configuration!.checkedColor,
-              rowColor!,
-            )
-          : rowColor,
+      color: rowColor,
       border: Border(
         top: isTopDragTarget!
             ? BorderSide(

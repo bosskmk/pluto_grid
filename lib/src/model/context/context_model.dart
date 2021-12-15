@@ -1,14 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
-abstract class ContextModel<Widget> {
-  bool get resolved;
+abstract class ContextModel<
+    Widget extends HasPlutoStateManager<PlutoGridStateManager>> {
+  bool get resolved =>
+      _widget != null && !_widget!.stateManager.hasRemainingFrame;
 
   @protected
-  Widget get widget;
+  Widget get widget => _widget!;
 
-  void updateContext(Widget widget);
+  Widget? _widget;
+
+  void updateContext(Widget widget) {
+    _widget = widget;
+  }
 
   Future<Widget> resolve() {
     if (resolved) {

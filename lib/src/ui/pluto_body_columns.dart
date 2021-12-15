@@ -86,6 +86,8 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
 
   @override
   Widget build(BuildContext context) {
+    final showGroup = showColumnGroups == true;
+
     return SizedBox(
       width: width,
       child: ListView.builder(
@@ -94,7 +96,7 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
         physics: const ClampingScrollPhysics(),
         itemCount: itemCount,
         itemBuilder: (ctx, i) {
-          return showColumnGroups == true
+          return showGroup
               ? PlutoBaseColumnGroup(
                   stateManager: widget.stateManager,
                   columnGroup: columnGroups![i],
