@@ -51,7 +51,7 @@ class _MovingScreenState extends State<MovingScreen> {
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
-        configuration: PlutoGridConfiguration(
+        configuration: const PlutoGridConfiguration(
           enableMoveDownAfterSelecting: true,
           enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
         ),

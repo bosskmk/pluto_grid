@@ -21,7 +21,7 @@ void main() {
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.rowHeight).thenReturn(
       stateManager.configuration!.rowHeight,
     );
@@ -694,7 +694,7 @@ void main() {
     };
 
     aCellWithConfiguration(
-      PlutoGridConfiguration(
+      const PlutoGridConfiguration(
         enableColumnBorder: false,
         borderColor: Colors.deepOrange,
       ),
@@ -720,7 +720,7 @@ void main() {
     );
 
     aCellWithConfiguration(
-      PlutoGridConfiguration(
+      const PlutoGridConfiguration(
         enableColumnBorder: true,
         borderColor: Colors.deepOrange,
       ),
@@ -747,7 +747,7 @@ void main() {
     );
 
     aCellWithConfiguration(
-      PlutoGridConfiguration(
+      const PlutoGridConfiguration(
         enableColumnBorder: false,
         borderColor: Colors.deepOrange,
       ),

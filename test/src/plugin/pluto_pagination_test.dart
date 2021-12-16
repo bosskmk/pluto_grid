@@ -15,7 +15,9 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.configuration).thenReturn(
+      const PlutoGridConfiguration(),
+    );
   });
 
   group('렌더링', () {

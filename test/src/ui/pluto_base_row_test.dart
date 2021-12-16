@@ -7,7 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
-import 'pluto_base_cell_test.mocks.dart';
+import 'pluto_base_row_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
@@ -19,7 +19,9 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.configuration).thenReturn(
+      const PlutoGridConfiguration(),
+    );
     when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager!.rowHeight).thenReturn(45);
     when(stateManager!.isSelecting).thenReturn(true);

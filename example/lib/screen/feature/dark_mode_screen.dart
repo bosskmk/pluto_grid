@@ -50,7 +50,7 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          configuration: PlutoGridConfiguration.dark(),
+          configuration: const PlutoGridConfiguration.dark(),
         ),
       ),
     );

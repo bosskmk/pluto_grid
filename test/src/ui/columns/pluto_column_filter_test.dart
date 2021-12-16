@@ -25,7 +25,7 @@ void main() {
     streamSubscription = MockStreamSubscription();
 
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
     when(stateManager.columnHeight).thenReturn(

@@ -1292,7 +1292,7 @@ void main() {
           rows: rows,
           gridFocusNode: FocusNode(),
           scroll: null,
-          configuration: PlutoGridConfiguration(
+          configuration: const PlutoGridConfiguration(
             enableMoveDownAfterSelecting: false,
           ),
         );
@@ -1346,7 +1346,7 @@ void main() {
             vertical: vertical,
             horizontal: MockLinkedScrollControllerGroup(),
           ),
-          configuration: PlutoGridConfiguration(
+          configuration: const PlutoGridConfiguration(
             enableMoveDownAfterSelecting: true,
           ),
         );

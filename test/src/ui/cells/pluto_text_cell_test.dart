@@ -17,7 +17,9 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.configuration).thenReturn(
+      const PlutoGridConfiguration(),
+    );
     when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager!.keepFocus).thenReturn(true);
     when(stateManager!.hasFocus).thenReturn(true);
