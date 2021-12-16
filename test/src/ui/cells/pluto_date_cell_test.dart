@@ -17,7 +17,9 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager!.configuration).thenReturn(
+      const PlutoGridConfiguration(),
+    );
     when(stateManager!.columnHeight).thenReturn(
       stateManager!.configuration!.columnHeight,
     );

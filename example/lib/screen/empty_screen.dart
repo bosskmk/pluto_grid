@@ -56,7 +56,7 @@ class _EmptyScreenState extends State<EmptyScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
           },
-          configuration: PlutoGridConfiguration(),
+          configuration: const PlutoGridConfiguration(),
         ),
       ),
     );

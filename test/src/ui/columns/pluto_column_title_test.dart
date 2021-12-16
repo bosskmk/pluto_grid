@@ -16,7 +16,7 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager.configuration).thenReturn(PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
@@ -596,7 +596,7 @@ void main() {
       });
     };
 
-    aColumnWithConfiguration(PlutoGridConfiguration(
+    aColumnWithConfiguration(const PlutoGridConfiguration(
       enableColumnBorder: true,
       borderColor: Colors.deepOrange,
     )).test(
@@ -620,7 +620,7 @@ void main() {
       },
     );
 
-    aColumnWithConfiguration(PlutoGridConfiguration(
+    aColumnWithConfiguration(const PlutoGridConfiguration(
       enableColumnBorder: false,
       borderColor: Colors.deepOrange,
     )).test(

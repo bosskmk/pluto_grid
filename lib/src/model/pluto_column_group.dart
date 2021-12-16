@@ -45,7 +45,7 @@ class PlutoColumnGroup {
     this.expandedColumn = false,
   })  : assert(fields == null
             ? (children != null && children.isNotEmpty)
-            : fields.isNotEmpty),
+            : fields.isNotEmpty && children == null),
         assert(expandedColumn == true
             ? fields?.length == 1 && children == null
             : true),

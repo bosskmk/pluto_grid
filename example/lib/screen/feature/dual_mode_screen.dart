@@ -164,7 +164,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             gridBStateManager = event.stateManager;
           },
-          configuration: PlutoGridConfiguration(),
+          configuration: const PlutoGridConfiguration(),
         ),
         display: const PlutoDualGridDisplayRatio(ratio: 0.5),
       ),
