@@ -20,21 +20,23 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
 
   static const int resumeMilliseconds = debounceMilliseconds + 100;
 
+  static bool _pause = false;
+
   void handler(PlutoGridStateManager? stateManager) async {
-    if (stateManager!.eventManager!.subscription.isPaused) {
+    if (_pause) {
       return;
     }
 
-    stateManager.moveRowsByIndex(
+    stateManager!.moveRowsByIndex(
       rows,
       targetIdx,
     );
 
-    stateManager.eventManager!.subscription.pause();
+    _pause = true;
 
     await Future.delayed(
       const Duration(milliseconds: resumeMilliseconds),
-      () => stateManager.eventManager!.subscription.resume(),
+      () => _pause = false,
     );
   }
 }

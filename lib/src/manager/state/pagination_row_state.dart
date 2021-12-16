@@ -77,6 +77,10 @@ mixin PaginationRowState implements IPlutoGridState {
 
     clearCurrentCell(notify: false);
 
+    clearCurrentSelectingPosition(notify: false);
+
+    clearCurrentSelectingRows(notify: false);
+
     if (notify) {
       notifyListeners();
     }

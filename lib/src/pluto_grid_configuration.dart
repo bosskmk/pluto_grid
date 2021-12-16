@@ -96,7 +96,7 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
-  PlutoGridConfiguration({
+  const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
@@ -127,18 +127,16 @@ class PlutoGridConfiguration {
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.enableMoveDownAfterSelecting = true,
+    this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
     this.enableRowColorAnimation = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-  }) {
-    _init();
-  }
+  });
 
-  PlutoGridConfiguration.dark({
+  const PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
@@ -169,18 +167,16 @@ class PlutoGridConfiguration {
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.enableMoveDownAfterSelecting = true,
+    this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
     this.enableRowColorAnimation = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-  }) {
-    _init();
-  }
+  });
 
-  void _init() {
+  void updateLocale() {
     PlutoFilterTypeContains.name = localeText.filterContains;
     PlutoFilterTypeEquals.name = localeText.filterEquals;
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;

@@ -54,10 +54,6 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     cellFocus = FocusNode(onKey: _handleOnKey);
 
-    _textController.addListener(() {
-      _cellEditingStatus = CellEditingStatus.changed;
-    });
-
     widget.stateManager!.textEditingController = _textController;
 
     _textController.text = widget.column!.formattedValueForDisplayInEditing(
@@ -67,6 +63,10 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     _initialCellValue = widget.cell!.value;
 
     _cellEditingStatus = CellEditingStatus.init;
+
+    _textController.addListener(() {
+      _handleOnChanged(_textController.text.toString());
+    });
   }
 
   void _changeValue({bool notify = true}) {
@@ -75,31 +75,41 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     }
 
     widget.stateManager!.changeCellValue(
-      widget.cell!.key,
+      widget.cell!,
       _textController.text,
       notify: notify,
     );
   }
 
   void _handleOnChanged(String value) {
-    _cellEditingStatus = CellEditingStatus.changed;
+    _cellEditingStatus = widget.cell!.value.toString() != value.toString()
+        ? CellEditingStatus.changed
+        : _initialCellValue.toString() == value.toString()
+            ? CellEditingStatus.init
+            : CellEditingStatus.updated;
   }
 
   void _handleOnComplete() {
-    _cellEditingStatus = CellEditingStatus.updated;
-
-    cellFocus!.unfocus();
-
-    widget.stateManager!.gridFocusNode!.requestFocus();
+    final old = _textController.text;
 
     _changeValue();
+
+    _handleOnChanged(old);
+
+    if (_cellEditingStatus.isChanged) {
+      _cellEditingStatus = CellEditingStatus.updated;
+    }
   }
 
   void _restoreText() {
+    if (_cellEditingStatus.isNotChanged) {
+      return;
+    }
+
     _textController.text = _initialCellValue.toString();
 
     widget.stateManager!.changeCellValue(
-      widget.stateManager!.currentCell!.key,
+      widget.stateManager!.currentCell!,
       _initialCellValue,
       notify: false,
     );
@@ -147,7 +157,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
         _moveHorizontal(keyManager) ||
         keyManager.isEsc ||
         keyManager.isTab ||
-        keyManager.isEnter);
+        (keyManager.isEnter &&
+            !widget.stateManager!.configuration!.enterKeyAction.isNone));
 
     // 이동 및 엔터키, 수정불가 셀의 좌우 이동을 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
     if (skip) {

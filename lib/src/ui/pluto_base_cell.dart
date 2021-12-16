@@ -359,6 +359,10 @@ enum CellEditingStatus {
 }
 
 extension CellEditingStatusExtension on CellEditingStatus? {
+  bool get isNotChanged {
+    return CellEditingStatus.changed != this;
+  }
+
   bool get isChanged {
     return CellEditingStatus.changed == this;
   }

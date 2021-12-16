@@ -553,9 +553,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setAutoEditing, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void toggleEditing() =>
-      super.noSuchMethod(Invocation.method(#toggleEditing, []),
-          returnValueForMissingStub: null);
+  void toggleEditing({bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#toggleEditing, [], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void pasteCellValue(List<List<String>>? textList) =>
       super.noSuchMethod(Invocation.method(#pasteCellValue, [textList]),
@@ -564,13 +564,13 @@ class MockPlutoGridStateManager extends _i1.Mock
   dynamic castValueByColumnType(dynamic value, _i2.PlutoColumn? column) => super
       .noSuchMethod(Invocation.method(#castValueByColumnType, [value, column]));
   @override
-  void changeCellValue(_i5.Key? cellKey, dynamic value,
+  void changeCellValue(_i2.PlutoCell? cell, dynamic value,
           {bool? callOnChangedEvent = true,
           bool? force = false,
           bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#changeCellValue, [
-            cellKey,
+            cell,
             value
           ], {
             #callOnChangedEvent: callOnChangedEvent,

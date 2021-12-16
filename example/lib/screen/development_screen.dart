@@ -256,11 +256,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   stateManager.setPageSize(10, notify: false);
           //   return PlutoPagination(stateManager);
           // },
-          // rowColorCallback: (rowColorContext) {
-          //   return rowColorContext.row.cells['column2']!.value == 'red'
-          //       ? const Color(0xFFFFB0B0)
-          //       : Colors.white;
-          // },
+          rowColorCallback: (rowColorContext) {
+            return rowColorContext.row.cells['column2']!.value == 'green'
+                ? const Color(0xFFE2F6DF)
+                : Colors.white;
+          },
           configuration: PlutoGridConfiguration(
             // columnHeight: 30.0,
             // columnFilterHeight: 30.0,
@@ -272,6 +272,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             // enableRowColorAnimation: false,
+            // checkedColor: const Color(0x876FB0FF),
+            // enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
+            // enableMoveDownAfterSelecting: false,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(

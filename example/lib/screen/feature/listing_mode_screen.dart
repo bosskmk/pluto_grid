@@ -230,7 +230,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
     }
 
     stateManager!.changeCellValue(
-      stateManager!.currentRow!.cells['column_1']!.key,
+      stateManager!.currentRow!.cells['column_1']!,
       value,
       force: true,
     );

@@ -109,7 +109,9 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
   bool? hasCurrentSelectingPosition;
 
-  bool? hasFocus;
+  bool? isFocusedCurrentRow;
+
+  Color? rowColor;
 
   @override
   void onChange() {
@@ -133,19 +135,24 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
               orElse: () => null) !=
           null;
 
+      final isDraggingRow = widget.stateManager.isDraggingRow;
+
       isDragTarget = update<bool?>(
         isDragTarget,
         !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
+        ignoreChange: !isDraggingRow,
       );
 
       isTopDragTarget = update<bool?>(
         isTopDragTarget,
-        widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
+        isDraggingRow &&
+            widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
       );
 
       isBottomDragTarget = update<bool?>(
         isBottomDragTarget,
-        widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
+        isDraggingRow &&
+            widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
       );
 
       hasCurrentSelectingPosition = update<bool?>(
@@ -153,20 +160,19 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      hasFocus = update<bool?>(
-        hasFocus,
+      isFocusedCurrentRow = update<bool?>(
+        isFocusedCurrentRow,
         isCurrentRow! && widget.stateManager.hasFocus,
       );
+
+      rowColor = update<Color?>(rowColor, getRowColor());
 
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
       }
     });
   }
-}
 
-class __RowContainerWidgetState
-    extends __RowContainerWidgetStateWithChangeKeepAlive {
   Color getDefaultRowColor() {
     if (widget.stateManager.rowColorCallback == null) {
       return widget.stateManager.configuration!.gridBackgroundColor;
@@ -181,45 +187,41 @@ class __RowContainerWidgetState
     );
   }
 
-  Color rowColor() {
-    final Color defaultColor = getDefaultRowColor();
+  Color getRowColor() {
+    Color color = getDefaultRowColor();
 
-    if (isDragTarget!)
-      return widget.stateManager.configuration!.cellColorInReadOnlyState;
+    if (isDragTarget!) {
+      color = widget.stateManager.configuration!.cellColorInReadOnlyState;
+    } else {
+      final bool checkCurrentRow = !widget.stateManager.selectingMode.isRow &&
+          isFocusedCurrentRow! &&
+          (!isSelecting! && !hasCurrentSelectingPosition!);
 
-    final bool checkCurrentRow =
-        isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
+      final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
+          widget.stateManager.isSelectedRow(widget.row.key);
 
-    final bool checkSelectedRow =
-        widget.stateManager.isSelectedRow(widget.row.key);
-
-    if (!checkCurrentRow && !checkSelectedRow) {
-      return defaultColor;
+      if (checkCurrentRow || checkSelectedRow) {
+        color = widget.stateManager.configuration!.activatedColor;
+      }
     }
 
-    if (widget.stateManager.selectingMode.isRow) {
-      return checkSelectedRow
-          ? widget.stateManager.configuration!.activatedColor
-          : defaultColor;
-    }
-
-    if (!hasFocus!) {
-      return defaultColor;
-    }
-
-    return checkCurrentRow
-        ? widget.stateManager.configuration!.activatedColor
-        : defaultColor;
+    return isCheckedRow!
+        ? Color.alphaBlend(
+            widget.stateManager.configuration!.checkedColor,
+            color,
+          )
+        : color;
   }
+}
 
+class __RowContainerWidgetState
+    extends __RowContainerWidgetStateWithChangeKeepAlive {
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final decoration = BoxDecoration(
-      color: isCheckedRow!
-          ? Color.alphaBlend(const Color(0x11757575), rowColor())
-          : rowColor(),
+      color: rowColor,
       border: Border(
         top: isTopDragTarget!
             ? BorderSide(

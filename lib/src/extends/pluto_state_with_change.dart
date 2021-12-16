@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../helper/pluto_log.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 typedef _ResetStateCallback = void Function(_UpdateStateFunction update);
 
@@ -15,7 +14,7 @@ typedef _UpdateStateFunction = T Function<T>(
 typedef _CompareFunction<T> = bool Function(T a, T b);
 
 abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier>
-    extends StatefulWidget implements _HasPlutoStateManager<StateManager> {
+    extends StatefulWidget implements _HasPlutoStateManager {
   PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
@@ -124,10 +123,6 @@ abstract class PlutoStateWithChangeKeepAlive<T extends PlutoStatefulWidget>
   }
 }
 
-abstract class _HasPlutoStateManager<T extends ChangeNotifier> {
-  final T stateManager;
-
-  _HasPlutoStateManager({
-    required this.stateManager,
-  });
+abstract class _HasPlutoStateManager {
+  PlutoGridStateManager get stateManager;
 }
