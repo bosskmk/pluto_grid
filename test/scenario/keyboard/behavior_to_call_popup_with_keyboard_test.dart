@@ -12,6 +12,7 @@ void main() {
   final buildGrid = ({
     int numberOfRows = 10,
     int numberOfColumns = 10,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
   }) {
     // given
     final columns = [
@@ -46,6 +47,7 @@ void main() {
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
+                  configuration: configuration,
                 ),
               ),
             ),
@@ -55,7 +57,11 @@ void main() {
     );
   };
 
-  buildGrid().test(
+  buildGrid(
+    configuration: const PlutoGridConfiguration(
+      enableMoveDownAfterSelecting: true,
+    ),
+  ).test(
     '문자열 입력으로 날짜 팝업을 호출 하고 날짜를 선택하면 다음 행으로 이동 되며, '
     '다음 행에서 다시 문자열 입력으로 팝업을 호출 할 수 있어야 한다.',
     (tester) async {

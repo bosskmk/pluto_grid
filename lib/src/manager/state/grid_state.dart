@@ -168,7 +168,9 @@ mixin GridState implements IPlutoGridState {
   }
 
   void setConfiguration(PlutoGridConfiguration? configuration) {
-    _configuration = configuration ?? PlutoGridConfiguration();
+    _configuration = configuration ?? const PlutoGridConfiguration();
+
+    _configuration!.updateLocale();
 
     _configuration!.applyColumnFilter(refColumns);
   }

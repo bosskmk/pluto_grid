@@ -550,9 +550,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setAutoEditing, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void toggleEditing() =>
-      super.noSuchMethod(Invocation.method(#toggleEditing, []),
-          returnValueForMissingStub: null);
+  void toggleEditing({bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#toggleEditing, [], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void pasteCellValue(List<List<String>>? textList) =>
       super.noSuchMethod(Invocation.method(#pasteCellValue, [textList]),

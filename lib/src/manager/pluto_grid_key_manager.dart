@@ -225,66 +225,26 @@ class PlutoGridKeyManager {
       return;
     }
 
-    // Moves to the lower or upper cell when pressing the Enter key while editing the cell.
-    if (stateManager.isEditing) {
-      // Occurs twice when a key event occurs without change of focus in the state of last inputting Korean
-      // Only problem on the web. Looks like a bug. If fixed, delete the code below.
-      final lastChildContext =
-          plutoKeyManagerEvent.focusNode.children.last.context;
+    if (stateManager.configuration!.enterKeyAction.isToggleEditing) {
+      stateManager.toggleEditing(notify: false);
+    } else {
+      if (stateManager.isEditing == true ||
+          stateManager.currentColumn?.enableEditingMode == false) {
+        final saveIsEditing = stateManager.isEditing;
 
-      if (kIsWeb &&
-          lastChildContext is StatefulElement &&
-          lastChildContext.state.widget is Focus &&
-          (lastChildContext.state.widget as Focus).focusNode?.hasPrimaryFocus ==
-              false &&
-          stateManager.currentColumn?.type is PlutoColumnTypeText) {
-        PlutoLog(
-          'Enter twice when entering Korean on the web.',
-          type: PlutoLogType.todo,
-        );
+        _moveCell(plutoKeyManagerEvent);
 
-        return;
-      }
-
-      if (stateManager.configuration!.enterKeyAction.isToggleEditing) {
-      } else if (stateManager
-          .configuration!.enterKeyAction.isEditingAndMoveDown) {
-        if (plutoKeyManagerEvent.event.isShiftPressed) {
-          stateManager.moveCurrentCell(
-            PlutoMoveDirection.up,
-            notify: false,
-          );
-        } else {
-          stateManager.moveCurrentCell(
-            PlutoMoveDirection.down,
-            notify: false,
-          );
-        }
-      } else if (stateManager
-          .configuration!.enterKeyAction.isEditingAndMoveRight) {
-        if (plutoKeyManagerEvent.event.isShiftPressed) {
-          stateManager.moveCurrentCell(
-            PlutoMoveDirection.left,
-            force: true,
-            notify: false,
-          );
-        } else {
-          stateManager.moveCurrentCell(
-            PlutoMoveDirection.right,
-            force: true,
-            notify: false,
-          );
-        }
+        stateManager.setEditing(saveIsEditing, notify: false);
+      } else {
+        stateManager.toggleEditing(notify: false);
       }
     }
 
-    if (stateManager.autoEditing && stateManager.isEditing) {
-      stateManager.notifyListeners();
-
-      return;
+    if (stateManager.autoEditing) {
+      stateManager.setEditing(true, notify: false);
     }
 
-    stateManager.toggleEditing();
+    stateManager.notifyListeners();
   }
 
   void _handleTab(PlutoKeyManagerEvent plutoKeyManagerEvent) {
@@ -366,6 +326,62 @@ class PlutoGridKeyManager {
               plutoKeyManagerEvent.event.character!;
         }
       });
+    }
+  }
+
+  void _moveCell(PlutoKeyManagerEvent plutoKeyManagerEvent) {
+    final enterKeyAction = stateManager.configuration!.enterKeyAction;
+
+    if (enterKeyAction.isNone) {
+      return;
+    }
+
+    // Occurs twice when a key event occurs without change of focus in the state of last inputting Korean
+    // Only problem on the web. Looks like a bug. If fixed, delete the code below.
+    if (kIsWeb) {
+      final lastChildContext =
+          plutoKeyManagerEvent.focusNode.children.last.context;
+
+      if (lastChildContext is StatefulElement &&
+          lastChildContext.state.widget is Focus &&
+          (lastChildContext.state.widget as Focus).focusNode?.hasPrimaryFocus ==
+              false &&
+          stateManager.currentColumn?.type is PlutoColumnTypeText) {
+        PlutoLog(
+          'Enter twice when entering Korean on the web.',
+          type: PlutoLogType.todo,
+        );
+
+        return;
+      }
+    }
+
+    if (enterKeyAction.isEditingAndMoveDown) {
+      if (plutoKeyManagerEvent.event.isShiftPressed) {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.up,
+          notify: false,
+        );
+      } else {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.down,
+          notify: false,
+        );
+      }
+    } else if (enterKeyAction.isEditingAndMoveRight) {
+      if (plutoKeyManagerEvent.event.isShiftPressed) {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.left,
+          force: true,
+          notify: false,
+        );
+      } else {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.right,
+          force: true,
+          notify: false,
+        );
+      }
     }
   }
 }

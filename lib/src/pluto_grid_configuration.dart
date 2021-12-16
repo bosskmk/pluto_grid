@@ -96,7 +96,7 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
-  PlutoGridConfiguration({
+  const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
@@ -134,11 +134,9 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-  }) {
-    _init();
-  }
+  });
 
-  PlutoGridConfiguration.dark({
+  const PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
     this.gridBorderRadius = BorderRadius.zero,
@@ -176,11 +174,9 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-  }) {
-    _init();
-  }
+  });
 
-  void _init() {
+  void updateLocale() {
     PlutoFilterTypeContains.name = localeText.filterContains;
     PlutoFilterTypeEquals.name = localeText.filterEquals;
     PlutoFilterTypeStartsWith.name = localeText.filterStartsWith;

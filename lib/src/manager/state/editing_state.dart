@@ -24,7 +24,7 @@ abstract class IEditingState {
   });
 
   /// Toggle the editing status of the current cell.
-  void toggleEditing();
+  void toggleEditing({bool notify = true});
 
   /// Paste based on current cell
   void pasteCellValue(List<List<String>> textList);
@@ -95,7 +95,10 @@ mixin EditingState implements IPlutoGridState {
     }
   }
 
-  void toggleEditing() => setEditing(!(_isEditing == true));
+  void toggleEditing({bool notify = true}) => setEditing(
+        !(_isEditing == true),
+        notify: notify,
+      );
 
   void pasteCellValue(List<List<String>> textList) {
     if (currentCellPosition == null) {
