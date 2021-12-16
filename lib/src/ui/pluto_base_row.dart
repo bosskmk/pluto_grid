@@ -116,7 +116,7 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
   bool? hasCurrentSelectingPosition;
 
-  bool? hasFocus;
+  bool? isFocusedCurrentRow;
 
   Color? rowColor;
 
@@ -167,8 +167,8 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      hasFocus = update<bool?>(
-        hasFocus,
+      isFocusedCurrentRow = update<bool?>(
+        isFocusedCurrentRow,
         isCurrentRow! && widget.stateManager.hasFocus,
       );
 
@@ -200,9 +200,8 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
     if (isDragTarget!) {
       color = widget.stateManager.configuration!.cellColorInReadOnlyState;
     } else {
-      final bool checkCurrentRow = hasFocus! &&
-          !widget.stateManager.selectingMode.isRow &&
-          isCurrentRow! &&
+      final bool checkCurrentRow = !widget.stateManager.selectingMode.isRow &&
+          isFocusedCurrentRow! &&
           (!isSelecting! && !hasCurrentSelectingPosition!);
 
       final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
