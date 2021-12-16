@@ -105,7 +105,7 @@ class PlutoGridStateManager extends PlutoGridState {
     }
 
     _ApplyList applyList = _ApplyList([
-      _ApplyCellForSetColumn(refColumns),
+      _ApplyCellForSetColumnRow(refColumns),
       _ApplyCellForFormat(refColumns),
       _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
@@ -122,7 +122,7 @@ class PlutoGridStateManager extends PlutoGridState {
     var rowLength = refRows.length;
 
     for (var rowIdx = 0; rowIdx < rowLength; rowIdx += 1) {
-      applyList.execute(refRows[rowIdx]);
+      applyList.execute(refRows[rowIdx]!);
     }
   }
 }
@@ -252,7 +252,7 @@ extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
 abstract class _Apply {
   bool get apply;
 
-  void execute(PlutoRow? row);
+  void execute(PlutoRow row);
 }
 
 class _ApplyList implements _Apply {
@@ -264,7 +264,7 @@ class _ApplyList implements _Apply {
 
   bool get apply => list.isNotEmpty;
 
-  void execute(PlutoRow? row) {
+  void execute(PlutoRow row) {
     var len = list.length;
 
     for (var i = 0; i < len; i += 1) {
@@ -273,16 +273,20 @@ class _ApplyList implements _Apply {
   }
 }
 
-class _ApplyCellForSetColumn implements _Apply {
+class _ApplyCellForSetColumnRow implements _Apply {
   final List<PlutoColumn> refColumns;
 
-  _ApplyCellForSetColumn(this.refColumns);
+  _ApplyCellForSetColumnRow(this.refColumns);
 
   bool get apply => true;
 
-  void execute(PlutoRow? row) {
+  void execute(PlutoRow row) {
     refColumns.forEach((element) {
-      row!.cells[element.field]!.setColumn(element);
+      final cell = row.cells[element.field]!;
+
+      cell.setColumn(element);
+
+      cell.setRow(row);
     });
   }
 }
@@ -304,9 +308,9 @@ class _ApplyCellForFormat implements _Apply {
 
   bool get apply => columnsToApply.isNotEmpty;
 
-  void execute(PlutoRow? row) {
+  void execute(PlutoRow row) {
     columnsToApply.forEach((column) {
-      row!.cells[column.field]!.value =
+      row.cells[column.field]!.value =
           column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {

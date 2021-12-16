@@ -511,7 +511,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
-    changeCellValue(cell.key, value, notify: false);
+    changeCellValue(cell, value, notify: false);
 
     if (configuration!.enableMoveDownAfterSelecting) {
       moveCurrentCell(PlutoMoveDirection.down, notify: false);

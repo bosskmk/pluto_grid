@@ -28,6 +28,8 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
 
+      PlutoGridStateManager.initializeRows(columns, rows);
+
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
         rows: rows,
@@ -427,7 +429,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0']!.key,
+          rows.first.cells['column0']!,
           'DEF',
           // force: false,
         );
@@ -451,6 +453,8 @@ void main() {
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
+        stateManager.resetShowFrozenColumn(notify: false);
+
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: columns.first,
           newValue: 'abc',
@@ -460,7 +464,7 @@ void main() {
         expect(canNotChangeCellValue, isTrue);
 
         stateManager.changeCellValue(
-          rows.first.cells['column0']!.key,
+          rows.first.cells['column0']!,
           'DEF',
           force: true,
         );
