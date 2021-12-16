@@ -352,7 +352,7 @@ class _PlutoGridState extends State<PlutoGrid> {
               setLayout(size);
 
               if (stateManager.keepFocus) {
-                FocusScope.of(ctx).requestFocus(gridFocusNode);
+                gridFocusNode?.requestFocus();
               }
 
               return Focus(

@@ -252,10 +252,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               columns: columns!,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(10, notify: false);
-            return PlutoPagination(stateManager);
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(10, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
           // rowColorCallback: (rowColorContext) {
           //   return rowColorContext.row.cells['column2']!.value == 'red'
           //       ? const Color(0xFFFFB0B0)
