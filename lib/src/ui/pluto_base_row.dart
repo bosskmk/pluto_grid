@@ -109,7 +109,7 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
   bool? hasCurrentSelectingPosition;
 
-  bool? hasFocus;
+  bool? isFocusedCurrentRow;
 
   Color? rowColor;
 
@@ -135,19 +135,24 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
               orElse: () => null) !=
           null;
 
+      final isDraggingRow = widget.stateManager.isDraggingRow;
+
       isDragTarget = update<bool?>(
         isDragTarget,
         !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
+        ignoreChange: !isDraggingRow,
       );
 
       isTopDragTarget = update<bool?>(
         isTopDragTarget,
-        widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
+        isDraggingRow &&
+            widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
       );
 
       isBottomDragTarget = update<bool?>(
         isBottomDragTarget,
-        widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
+        isDraggingRow &&
+            widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
       );
 
       hasCurrentSelectingPosition = update<bool?>(
@@ -155,8 +160,8 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      hasFocus = update<bool?>(
-        hasFocus,
+      isFocusedCurrentRow = update<bool?>(
+        isFocusedCurrentRow,
         isCurrentRow! && widget.stateManager.hasFocus,
       );
 
@@ -183,34 +188,29 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
   }
 
   Color getRowColor() {
-    final Color defaultColor = getDefaultRowColor();
+    Color color = getDefaultRowColor();
 
-    if (isDragTarget!)
-      return widget.stateManager.configuration!.cellColorInReadOnlyState;
+    if (isDragTarget!) {
+      color = widget.stateManager.configuration!.cellColorInReadOnlyState;
+    } else {
+      final bool checkCurrentRow = !widget.stateManager.selectingMode.isRow &&
+          isFocusedCurrentRow! &&
+          (!isSelecting! && !hasCurrentSelectingPosition!);
 
-    final bool checkCurrentRow =
-        isCurrentRow! && (!isSelecting! && !hasCurrentSelectingPosition!);
+      final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
+          widget.stateManager.isSelectedRow(widget.row.key);
 
-    final bool checkSelectedRow =
-        widget.stateManager.isSelectedRow(widget.row.key);
-
-    if (!checkCurrentRow && !checkSelectedRow) {
-      return defaultColor;
+      if (checkCurrentRow || checkSelectedRow) {
+        color = widget.stateManager.configuration!.activatedColor;
+      }
     }
 
-    if (widget.stateManager.selectingMode.isRow) {
-      return checkSelectedRow
-          ? widget.stateManager.configuration!.activatedColor
-          : defaultColor;
-    }
-
-    if (!hasFocus!) {
-      return defaultColor;
-    }
-
-    return checkCurrentRow
-        ? widget.stateManager.configuration!.activatedColor
-        : defaultColor;
+    return isCheckedRow!
+        ? Color.alphaBlend(
+            widget.stateManager.configuration!.checkedColor,
+            color,
+          )
+        : color;
   }
 }
 
@@ -221,12 +221,7 @@ class __RowContainerWidgetState
     super.build(context);
 
     final decoration = BoxDecoration(
-      color: isCheckedRow!
-          ? Color.alphaBlend(
-              widget.stateManager.configuration!.checkedColor,
-              rowColor!,
-            )
-          : rowColor,
+      color: rowColor,
       border: Border(
         top: isTopDragTarget!
             ? BorderSide(
