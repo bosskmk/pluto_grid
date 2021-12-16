@@ -33,9 +33,11 @@ void main() {
   final buildRowWidget = ({
     int rowIdx = 0,
     bool checked = false,
+    bool isDraggingRow = false,
     bool isDragTarget = false,
     bool isTopDragTarget = false,
     bool isBottomDragTarget = false,
+    List<PlutoRow>? dragRows,
     bool isSelectedRow = false,
     bool isCurrentCell = false,
     bool isSelectedCell = false,
@@ -43,11 +45,13 @@ void main() {
     return PlutoWidgetTestHelper(
       'build row widget.',
       (tester) async {
+        when(stateManager!.isDraggingRow).thenReturn(isDraggingRow);
         when(stateManager!.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
         when(stateManager!.isRowIdxTopDragTarget(any))
             .thenReturn(isTopDragTarget);
         when(stateManager!.isRowIdxBottomDragTarget(any))
             .thenReturn(isBottomDragTarget);
+        when(stateManager!.dragRows).thenReturn(dragRows);
         when(stateManager!.isSelectedRow(any)).thenReturn(isSelectedRow);
         when(stateManager!.isCurrentCell(any)).thenReturn(isCurrentCell);
         when(stateManager!.isSelectedCell(any, any, any))
@@ -110,6 +114,7 @@ void main() {
   );
 
   buildRowWidget(
+    isDraggingRow: true,
     isDragTarget: true,
     isTopDragTarget: true,
   ).test(
