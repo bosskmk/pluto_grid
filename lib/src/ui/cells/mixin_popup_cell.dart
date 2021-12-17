@@ -190,7 +190,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
     widget.stateManager!.handleAfterSelectingRow(widget.cell!, value);
 
     _textController!.text = widget.column!.formattedValueForDisplayInEditing(
-      widget.stateManager!.currentCell!.value,
+      widget.cell!.value,
     );
   }
 
