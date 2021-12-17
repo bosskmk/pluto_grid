@@ -215,7 +215,7 @@ class _CellContainer extends StatelessWidget {
 
   Color? _currentCellColor() {
     if (!hasFocus) {
-      return null;
+      return configuration.gridBackgroundColor;
     }
 
     if (!isEditing) {

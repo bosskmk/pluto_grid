@@ -93,56 +93,69 @@ abstract class _PlutoColumnFilterStateWithChange
     });
   }
 
+  void moveDown() {
+    focusNode?.unfocus();
+
+    if (widget.stateManager.currentCell == null) {
+      widget.stateManager.setCurrentCell(
+        widget.stateManager.refRows!.first!.cells[widget.column.field],
+        0,
+        notify: false,
+      );
+    }
+
+    widget.stateManager.setKeepFocus(true, notify: false);
+
+    widget.stateManager.notifyListeners();
+  }
+
   KeyEventResult handleOnKey(FocusNode node, RawKeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
     );
 
-    if (keyManager.isKeyDownEvent) {
-      if (keyManager.isDown || keyManager.isEnter) {
-        if (widget.stateManager.refRows!.isNotEmpty) {
-          focusNode!.unfocus();
-
-          if (widget.stateManager.currentCell == null) {
-            widget.stateManager.setCurrentCell(
-              widget.stateManager.refRows!.first!.cells[widget.column.field],
-              0,
-              notify: false,
-            );
-          }
-
-          widget.stateManager.setKeepFocus(true);
-
-          return KeyEventResult.handled;
-        }
-      } else if (keyManager.isTab ||
-          (controller!.text.isEmpty && keyManager.isHorizontal)) {
-        widget.stateManager.nextFocusOfColumnFilter(
-          widget.column,
-          reversed: keyManager.isLeft || keyManager.isShiftPressed,
-        );
-
-        return KeyEventResult.handled;
-      }
-    }
-
-    /// 2021-11-19
-    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-    /// 이슈 해결 후 : 삭제
-    if (keyManager.isUp) {
+    if (keyManager.isKeyUpEvent) {
       return KeyEventResult.handled;
     }
 
-    /// 2021-11-19
-    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-    /// 이슈 해결 후 :
-    /// ```dart
-    /// return KeyEventResult.skipRemainingHandlers;
-    /// ```
-    return widget.stateManager.keyManager!.eventResult.skip(
-      KeyEventResult.ignored,
-    );
+    final handleMoveDown = (keyManager.isDown || keyManager.isEnter) &&
+        widget.stateManager.refRows!.isNotEmpty;
+
+    final handleMoveHorizontal = keyManager.isTab ||
+        (controller!.text.isEmpty && keyManager.isHorizontal);
+
+    final skip = !(handleMoveDown || handleMoveHorizontal);
+
+    if (skip) {
+      /// 2021-11-19
+      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
+      /// 이슈 해결 후 : 삭제
+      if (keyManager.isUp) {
+        return KeyEventResult.handled;
+      }
+
+      /// 2021-11-19
+      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
+      /// 이슈 해결 후 :
+      /// ```dart
+      /// return KeyEventResult.skipRemainingHandlers;
+      /// ```
+      return widget.stateManager.keyManager!.eventResult.skip(
+        KeyEventResult.ignored,
+      );
+    }
+
+    if (handleMoveDown) {
+      moveDown();
+    } else if (handleMoveHorizontal) {
+      widget.stateManager.nextFocusOfColumnFilter(
+        widget.column,
+        reversed: keyManager.isLeft || keyManager.isShiftPressed,
+      );
+    }
+
+    return KeyEventResult.handled;
   }
 
   void handleFocusFromRows(PlutoGridEvent plutoEvent) {
@@ -206,6 +219,10 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     );
   }
 
+  void handleOnEditingComplete() {
+    // moveDown();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -233,6 +250,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               style: widget.stateManager.configuration!.cellTextStyle,
               onTap: handleOnTap,
               onChanged: handleOnChanged,
+              onEditingComplete: handleOnEditingComplete,
               decoration: InputDecoration(
                 hintText: enabled! ? widget.column.defaultFilter.title : '',
                 isDense: true,

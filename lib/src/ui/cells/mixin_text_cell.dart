@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,19 +20,17 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
 mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   final _textController = TextEditingController();
 
+  final PlutoDebounceByHashCode _debounce = PlutoDebounceByHashCode();
+
   CellEditingStatus? _cellEditingStatus;
 
   dynamic _initialCellValue;
 
   FocusNode? cellFocus;
 
-  Timer? _debounce;
-
-  int? _previousCall;
-
   @override
   void dispose() {
-    _debounce?.cancel();
+    _debounce.dispose();
 
     _textController.dispose();
 
@@ -120,26 +116,6 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return false;
   }
 
-  /// Prevents double keystrokes due to focus issues when entering Korean on the web.
-  bool _debounced() {
-    if (!kIsWeb) {
-      return false;
-    }
-
-    if (_previousCall == _textController.text.hashCode) {
-      return true;
-    }
-
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1), () {
-      _previousCall = null;
-    });
-
-    _previousCall = _textController.text.hashCode;
-
-    return false;
-  }
-
   void _changeValue({bool notify = true}) {
     if (widget.cell!.value.toString() == _textController.text) {
       return;
@@ -210,7 +186,10 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       );
     }
 
-    if (_debounced()) {
+    if (_debounce.isDebounced(
+      hashCode: _textController.text.hashCode,
+      ignore: !kIsWeb,
+    )) {
       PlutoLog('Event debounced from mixin_text_cell onKey.');
       return KeyEventResult.handled;
     }
