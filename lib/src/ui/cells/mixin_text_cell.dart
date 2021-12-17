@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -25,8 +28,14 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
   FocusNode? cellFocus;
 
+  Timer? _debounce;
+
+  int? _previousCall;
+
   @override
   void dispose() {
+    _debounce?.cancel();
+
     _textController.dispose();
 
     cellFocus!.dispose();
@@ -67,46 +76,6 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     _textController.addListener(() {
       _handleOnChanged(_textController.text.toString());
     });
-  }
-
-  void _changeValue({bool notify = true}) {
-    if (widget.cell!.value.toString() == _textController.text) {
-      return;
-    }
-
-    widget.stateManager!.changeCellValue(
-      widget.cell!,
-      _textController.text,
-      notify: notify,
-    );
-
-    if (notify) {
-      _initialCellValue = widget.cell!.value;
-
-      _textController.text = _initialCellValue.toString();
-
-      _textController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _textController.text.length),
-      );
-
-      _cellEditingStatus = CellEditingStatus.updated;
-    }
-  }
-
-  void _handleOnChanged(String value) {
-    _cellEditingStatus = widget.cell!.value.toString() != value.toString()
-        ? CellEditingStatus.changed
-        : _initialCellValue.toString() == value.toString()
-            ? CellEditingStatus.init
-            : CellEditingStatus.updated;
-  }
-
-  void _handleOnComplete() {
-    final old = _textController.text;
-
-    _changeValue();
-
-    _handleOnChanged(old);
   }
 
   void _restoreText() {
@@ -151,6 +120,66 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     return false;
   }
 
+  /// Prevents double keystrokes due to focus issues when entering Korean on the web.
+  bool _debounced() {
+    if (!kIsWeb) {
+      return false;
+    }
+
+    if (_previousCall == _textController.text.hashCode) {
+      return true;
+    }
+
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1), () {
+      _previousCall = null;
+    });
+
+    _previousCall = _textController.text.hashCode;
+
+    return false;
+  }
+
+  void _changeValue({bool notify = true}) {
+    if (widget.cell!.value.toString() == _textController.text) {
+      return;
+    }
+
+    widget.stateManager!.changeCellValue(
+      widget.cell!,
+      _textController.text,
+      notify: notify,
+    );
+
+    if (notify) {
+      _initialCellValue = widget.cell!.value;
+
+      _textController.text = _initialCellValue.toString();
+
+      _textController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _textController.text.length),
+      );
+
+      _cellEditingStatus = CellEditingStatus.updated;
+    }
+  }
+
+  void _handleOnChanged(String value) {
+    _cellEditingStatus = widget.cell!.value.toString() != value.toString()
+        ? CellEditingStatus.changed
+        : _initialCellValue.toString() == value.toString()
+            ? CellEditingStatus.init
+            : CellEditingStatus.updated;
+  }
+
+  void _handleOnComplete() {
+    final old = _textController.text;
+
+    _changeValue();
+
+    _handleOnChanged(old);
+  }
+
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
@@ -179,6 +208,11 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       return widget.stateManager!.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );
+    }
+
+    if (_debounced()) {
+      PlutoLog('Event debounced from mixin_text_cell onKey.');
+      return KeyEventResult.handled;
     }
 
     // 엔터키는 그리드 포커스 핸들러로 전파 한다.
