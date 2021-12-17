@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -334,26 +333,6 @@ class PlutoGridKeyManager {
 
     if (enterKeyAction.isNone) {
       return;
-    }
-
-    // Occurs twice when a key event occurs without change of focus in the state of last inputting Korean
-    // Only problem on the web. Looks like a bug. If fixed, delete the code below.
-    if (kIsWeb) {
-      final lastChildContext =
-          plutoKeyManagerEvent.focusNode.children.last.context;
-
-      if (lastChildContext is StatefulElement &&
-          lastChildContext.state.widget is Focus &&
-          (lastChildContext.state.widget as Focus).focusNode?.hasPrimaryFocus ==
-              false &&
-          stateManager.currentColumn?.type is PlutoColumnTypeText) {
-        PlutoLog(
-          'Enter twice when entering Korean on the web.',
-          type: PlutoLogType.todo,
-        );
-
-        return;
-      }
     }
 
     if (enterKeyAction.isEditingAndMoveDown) {
