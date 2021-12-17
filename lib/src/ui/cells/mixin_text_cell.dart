@@ -79,6 +79,18 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       _textController.text,
       notify: notify,
     );
+
+    if (notify) {
+      _initialCellValue = widget.cell!.value;
+
+      _textController.text = _initialCellValue.toString();
+
+      _textController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _textController.text.length),
+      );
+
+      _cellEditingStatus = CellEditingStatus.updated;
+    }
   }
 
   void _handleOnChanged(String value) {
@@ -95,11 +107,6 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     _changeValue();
 
     _handleOnChanged(old);
-
-    if (_cellEditingStatus.isUpdated) {
-      _initialCellValue = widget.cell!.value;
-      _cellEditingStatus = CellEditingStatus.updated;
-    }
   }
 
   void _restoreText() {
