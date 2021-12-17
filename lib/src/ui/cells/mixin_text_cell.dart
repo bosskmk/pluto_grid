@@ -96,7 +96,8 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     _handleOnChanged(old);
 
-    if (_cellEditingStatus.isChanged) {
+    if (_cellEditingStatus.isUpdated) {
+      _initialCellValue = widget.cell!.value;
       _cellEditingStatus = CellEditingStatus.updated;
     }
   }
@@ -175,6 +176,7 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
 
     // 엔터키는 그리드 포커스 핸들러로 전파 한다.
     if (keyManager.isEnter) {
+      _handleOnComplete();
       return KeyEventResult.ignored;
     }
 

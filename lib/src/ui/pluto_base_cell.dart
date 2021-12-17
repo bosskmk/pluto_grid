@@ -366,4 +366,8 @@ extension CellEditingStatusExtension on CellEditingStatus? {
   bool get isChanged {
     return CellEditingStatus.changed == this;
   }
+
+  bool get isUpdated {
+    return CellEditingStatus.updated == this;
+  }
 }
