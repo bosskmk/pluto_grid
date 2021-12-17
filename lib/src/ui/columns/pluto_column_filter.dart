@@ -220,7 +220,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   }
 
   void handleOnEditingComplete() {
-    // moveDown();
+    // empty for ignore event of OnEditingComplete.
   }
 
   @override
