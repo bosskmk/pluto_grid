@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -7,9 +9,19 @@ import '../../../helper/column_helper.dart';
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
-import '../../../mock/mock_pluto_scroll_controller.dart';
+import 'row_state_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+])
 void main() {
+  final scroll = MockPlutoGridScrollController();
+
+  final vertical = MockLinkedScrollControllerGroup();
+
+  when(scroll.vertical).thenReturn(vertical);
+
   group('checkedRows', () {
     testWidgets(
       '선택 된 행이 없는 경우 빈 List 를 리턴 해야 한다.',
@@ -24,7 +36,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -48,7 +60,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -78,7 +90,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -102,7 +114,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -132,7 +144,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -156,7 +168,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -180,7 +192,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -206,7 +218,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -230,7 +242,7 @@ void main() {
           columns: columns,
           rows: rows,
           gridFocusNode: null,
-          scroll: null,
+          scroll: scroll,
         );
 
         // when
@@ -258,7 +270,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -285,7 +297,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager.setLayout(const BoxConstraints());
@@ -319,7 +331,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -346,7 +358,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager.setLayout(const BoxConstraints());
@@ -375,8 +387,6 @@ void main() {
         ];
 
         List<PlutoRow> rows = RowHelper.count(rowsLength, columns);
-
-        final scroll = MockPlutoScrollController();
 
         when(scroll.verticalOffset).thenReturn(0);
 
@@ -980,7 +990,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: MockPlutoScrollController(),
+        scroll: scroll,
       );
 
       stateManager.setLayout(const BoxConstraints());
@@ -1023,7 +1033,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: MockPlutoScrollController(),
+        scroll: scroll,
       );
 
       const int rowIdxBeforePrependRows = 3;
@@ -1431,8 +1441,6 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        final scroll = MockPlutoScrollController();
-
         when(scroll.verticalOffset).thenReturn(0);
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
@@ -1480,8 +1488,6 @@ void main() {
         ];
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
-
-        final scroll = MockPlutoScrollController();
 
         when(scroll.verticalOffset).thenReturn(0);
 
@@ -1531,8 +1537,6 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        final scroll = MockPlutoScrollController();
-
         when(scroll.verticalOffset).thenReturn(0);
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
@@ -1581,8 +1585,6 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        final scroll = MockPlutoScrollController();
-
         when(scroll.verticalOffset).thenReturn(0);
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
@@ -1626,8 +1628,6 @@ void main() {
         ];
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
-
-        final scroll = MockPlutoScrollController();
 
         when(scroll.verticalOffset).thenReturn(0);
 
@@ -1673,8 +1673,6 @@ void main() {
         ];
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
-
-        final scroll = MockPlutoScrollController();
 
         when(scroll.verticalOffset).thenReturn(0);
 
@@ -1728,8 +1726,6 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        final scroll = MockPlutoScrollController();
-
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
@@ -1766,8 +1762,6 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        final scroll = MockPlutoScrollController();
-
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
           rows: rows,
@@ -1803,8 +1797,6 @@ void main() {
         ];
 
         List<PlutoRow> rows = RowHelper.count(2, columns);
-
-        final scroll = MockPlutoScrollController();
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,

@@ -22,6 +22,7 @@ void main() {
     when(stateManager.hasUnCheckedRow).thenReturn(false);
     when(stateManager.hasFilter).thenReturn(false);
     when(stateManager.columnHeight).thenReturn(45);
+    when(stateManager.isInvalidHorizontalScroll).thenReturn(false);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
@@ -555,18 +556,26 @@ void main() {
     dragAColumn(
       const Offset(50.0, 0.0),
     ).test(
-      'resizeColumn 이 54로 호출 되어야 한다.',
+      'resizeColumn 이 30 이상으로 호출 되어야 한다.',
       (tester) async {
-        verify(stateManager.resizeColumn(column, 54.0));
+        verify(stateManager.resizeColumn(
+          column,
+          argThat(greaterThanOrEqualTo(30)),
+          ignoreUpdateScroll: true,
+        ));
       },
     );
 
     dragAColumn(
       const Offset(-50.0, 0.0),
     ).test(
-      'resizeColumn 이 -46으로 호출 되어야 한다.',
+      'resizeColumn 이 -30 이하로 호출 되어야 한다.',
       (tester) async {
-        verify(stateManager.resizeColumn(column, -46.0));
+        verify(stateManager.resizeColumn(
+          column,
+          argThat(lessThanOrEqualTo(-30)),
+          ignoreUpdateScroll: true,
+        ));
       },
     );
   });
