@@ -8,11 +8,11 @@ import '../../helper/row_helper.dart';
 
 /// 행 선택(selectingRows) 상태 이후의 동작 테스트
 void main() {
-  final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
+  const PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
   PlutoGridStateManager? stateManager;
 
-  final buildRowsWithSelectingRows = ({
+  buildRowsWithSelectingRows({
     int numberOfRows = 10,
     int from = 0,
     int to = 0,
@@ -27,16 +27,14 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                    stateManager!.setSelectingMode(selectingMode);
-                    stateManager!.setCurrentSelectingRowsByRange(from, to);
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                  stateManager!.setSelectingMode(selectingMode);
+                  stateManager!.setCurrentSelectingRowsByRange(from, to);
+                },
               ),
             ),
           ),
@@ -49,7 +47,7 @@ void main() {
         expect(selectingRows.length, length);
       },
     );
-  };
+  }
 
   group(
     '10개 행에서 3개 행 선택. (1 ~ 3)',
@@ -59,13 +57,13 @@ void main() {
       const from = 1;
       const to = 3;
 
-      final selectRowsFrom1To3 = () {
+      selectRowsFrom1To3() {
         return buildRowsWithSelectingRows(
           numberOfRows: countTotalRows,
           from: from,
           to: to,
         );
-      };
+      }
 
       selectRowsFrom1To3().test(
         '0번 행을 삭제하면, '

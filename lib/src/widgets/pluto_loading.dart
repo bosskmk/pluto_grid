@@ -6,12 +6,13 @@ class PlutoLoading extends StatelessWidget {
   final String? indicatorText;
   final double? indicatorSize;
 
-  PlutoLoading({
+  const PlutoLoading({
     this.backgroundColor,
     this.indicatorColor,
     this.indicatorText,
     this.indicatorSize,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

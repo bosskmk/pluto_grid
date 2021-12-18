@@ -13,7 +13,7 @@ void main() {
         'isLeft',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.isLeft, isTrue);
@@ -24,7 +24,7 @@ void main() {
         'isRight',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.isRight, isTrue);
@@ -35,7 +35,7 @@ void main() {
         'value is TextAlign.left',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.value, TextAlign.left);
@@ -46,7 +46,7 @@ void main() {
         'value is TextAlign.right',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.value, TextAlign.right);
@@ -62,7 +62,7 @@ void main() {
         'isNone',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.none;
+          const PlutoColumnSort columnSort = PlutoColumnSort.none;
           // when
           // then
           expect(columnSort.isNone, isTrue);
@@ -73,7 +73,7 @@ void main() {
         'isAscending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
+          const PlutoColumnSort columnSort = PlutoColumnSort.ascending;
           // when
           // then
           expect(columnSort.isAscending, isTrue);
@@ -84,7 +84,7 @@ void main() {
         'isDescending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.descending;
+          const PlutoColumnSort columnSort = PlutoColumnSort.descending;
           // when
           // then
           expect(columnSort.isDescending, isTrue);
@@ -97,7 +97,7 @@ void main() {
           test(
             'None',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.none;
+              const PlutoColumnSort columnSort = PlutoColumnSort.none;
               expect(columnSort.toShortString(), 'none');
             },
           );
@@ -105,7 +105,7 @@ void main() {
           test(
             'Ascending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
+              const PlutoColumnSort columnSort = PlutoColumnSort.ascending;
               expect(columnSort.toShortString(), 'ascending');
             },
           );
@@ -113,7 +113,7 @@ void main() {
           test(
             'Descending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.descending;
+              const PlutoColumnSort columnSort = PlutoColumnSort.descending;
               expect(columnSort.toShortString(), 'descending');
             },
           );
@@ -779,7 +779,7 @@ void main() {
   });
 
   group('checkReadOnly', () {
-    final makeColumn = ({
+    makeColumn({
       required bool readOnly,
       PlutoColumnCheckReadOnly? checkReadOnly,
     }) {
@@ -790,11 +790,11 @@ void main() {
         readOnly: readOnly,
         checkReadOnly: checkReadOnly,
       );
-    };
+    }
 
-    final makeRow = (PlutoColumn column) {
+    makeRow(PlutoColumn column) {
       return RowHelper.count(1, [column]).first;
-    };
+    }
 
     test('readOnly = false, checkReadOnly = 미설정 이면 false 를 반환해야 한다.', () {
       final column = makeColumn(readOnly: false);

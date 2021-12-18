@@ -9,12 +9,13 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
   final PlutoColumn? column;
   final PlutoRow? row;
 
-  AbstractMixinTextCell({
+  const AbstractMixinTextCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 }
 
 mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {

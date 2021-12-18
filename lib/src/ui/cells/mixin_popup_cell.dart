@@ -7,12 +7,13 @@ abstract class AbstractMixinPopupCell extends StatefulWidget {
   final PlutoColumn? column;
   final PlutoRow? row;
 
-  AbstractMixinPopupCell({
+  const AbstractMixinPopupCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 }
 
 abstract class AbstractPopup {

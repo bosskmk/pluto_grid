@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
 
-  PlutoBodyRows(this.stateManager);
+  const PlutoBodyRows(
+    this.stateManager, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoBodyRowsState createState() => _PlutoBodyRowsState();

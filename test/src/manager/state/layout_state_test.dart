@@ -14,7 +14,7 @@ void main() {
 
     List<PlutoRow> rows;
 
-    final makeFrozenColumnByMaxWidth = (String description, double maxWidth) {
+    makeFrozenColumnByMaxWidth(String description, double maxWidth) {
       return PlutoWidgetTestHelper(
         '고정 컬럼이 있고 $description',
         (tester) async {
@@ -52,7 +52,7 @@ void main() {
           stateManager.setGridGlobalOffset(Offset.zero);
         },
       );
-    };
+    }
 
     final hasFrozenColumnAndWidthEnough = makeFrozenColumnByMaxWidth(
       '넓이가 충분한 경우',

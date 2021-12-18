@@ -44,17 +44,21 @@ abstract class IEditingState {
 }
 
 mixin EditingState implements IPlutoGridState {
+  @override
   bool get isEditing => _isEditing;
 
   bool _isEditing = false;
 
+  @override
   bool get autoEditing =>
       _autoEditing || currentColumn?.enableAutoEditing == true;
 
   bool _autoEditing = false;
 
+  @override
   TextEditingController? textEditingController;
 
+  @override
   void setEditing(
     bool flag, {
     bool notify = true,
@@ -82,6 +86,7 @@ mixin EditingState implements IPlutoGridState {
     }
   }
 
+  @override
   void setAutoEditing(
     bool flag, {
     bool notify = true,
@@ -97,11 +102,13 @@ mixin EditingState implements IPlutoGridState {
     }
   }
 
+  @override
   void toggleEditing({bool notify = true}) => setEditing(
         !(_isEditing == true),
         notify: notify,
       );
 
+  @override
   void pasteCellValue(List<List<String>> textList) {
     if (currentCellPosition == null) {
       return;
@@ -154,6 +161,7 @@ mixin EditingState implements IPlutoGridState {
     notifyListeners();
   }
 
+  @override
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
     if (column.type.isNumber && value.runtimeType != num) {
       return num.tryParse(value.toString()) ?? 0;
@@ -162,6 +170,7 @@ mixin EditingState implements IPlutoGridState {
     return value;
   }
 
+  @override
   void changeCellValue(
     PlutoCell cell,
     dynamic value, {

@@ -16,7 +16,7 @@ void main() {
   MockLinkedScrollControllerGroup? vertical;
   MockLinkedScrollControllerGroup? horizontal;
 
-  var eventBuilder = ({
+  eventBuilder({
     Offset? offset,
   }) =>
       PlutoGridScrollUpdateEvent(
@@ -66,8 +66,8 @@ void main() {
       'needMovingScroll(offset, PlutoMoveDirection.left) 가 true 면, '
       'horizontal scroll 의 animateTo 가 offset 보다 작게 호출 되어야 한다.',
       () {
-        final offset = const Offset(10, 10);
-        final scrollOffset = 0.0;
+        const offset = Offset(10, 10);
+        const scrollOffset = 0.0;
 
         when(horizontal!.offset).thenReturn(scrollOffset);
 
@@ -95,8 +95,8 @@ void main() {
       'needMovingScroll(offset, PlutoMoveDirection.right) 가 true 면, '
       'horizontal scroll 의 animateTo 가 offset 보다 크게 호출 되어야 한다.',
       () {
-        final offset = const Offset(10, 10);
-        final scrollOffset = 0.0;
+        const offset = Offset(10, 10);
+        const scrollOffset = 0.0;
 
         when(horizontal!.offset).thenReturn(scrollOffset);
 
@@ -124,8 +124,8 @@ void main() {
       'needMovingScroll(offset, PlutoMoveDirection.up) 가 true 면, '
       'vertical scroll 의 animateTo 가 offset 보다 작게 호출 되어야 한다.',
       () {
-        final offset = const Offset(10, 10);
-        final scrollOffset = 0.0;
+        const offset = Offset(10, 10);
+        const scrollOffset = 0.0;
 
         when(vertical!.offset).thenReturn(scrollOffset);
 
@@ -153,8 +153,8 @@ void main() {
       'needMovingScroll(offset, PlutoMoveDirection.down) 가 true 면, '
       'vertical scroll 의 animateTo 가 offset 보다 크게 호출 되어야 한다.',
       () {
-        final offset = const Offset(10, 10);
-        final scrollOffset = 0.0;
+        const offset = Offset(10, 10);
+        const scrollOffset = 0.0;
 
         when(vertical!.offset).thenReturn(scrollOffset);
 

@@ -35,20 +35,25 @@ abstract class IDraggingRowState {
 }
 
 mixin DraggingRowState implements IPlutoGridState {
+  @override
   bool get isDraggingRow => _isDraggingRow;
 
   bool _isDraggingRow = false;
 
+  @override
   List<PlutoRow?>? get dragRows => _dragRows;
 
   List<PlutoRow?>? _dragRows;
 
+  @override
   int? get dragTargetRowIdx => _dragTargetRowIdx;
 
   int? _dragTargetRowIdx;
 
+  @override
   bool get canRowDrag => !hasSortedColumn && !hasFilter;
 
+  @override
   void setIsDraggingRow(
     bool flag, {
     bool notify = true,
@@ -66,6 +71,7 @@ mixin DraggingRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void setDragRows(
     List<PlutoRow?>? rows, {
     bool notify = true,
@@ -77,6 +83,7 @@ mixin DraggingRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void setDragTargetRowIdx(
     int? rowIdx, {
     bool notify = true,
@@ -92,6 +99,7 @@ mixin DraggingRowState implements IPlutoGridState {
     }
   }
 
+  @override
   bool isRowIdxDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
@@ -99,6 +107,7 @@ mixin DraggingRowState implements IPlutoGridState {
         rowIdx < _dragTargetRowIdx! + _dragRows!.length;
   }
 
+  @override
   bool isRowIdxTopDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
@@ -106,12 +115,14 @@ mixin DraggingRowState implements IPlutoGridState {
         rowIdx + _dragRows!.length <= refRows!.length;
   }
 
+  @override
   bool isRowIdxBottomDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
         rowIdx == _dragTargetRowIdx! + _dragRows!.length - 1;
   }
 
+  @override
   bool isRowBeingDragged(Key? rowKey) {
     return rowKey != null &&
         _isDraggingRow == true &&

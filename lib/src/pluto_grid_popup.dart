@@ -45,7 +45,7 @@ class PlutoGridPopup {
                     : null,
                 child: LayoutBuilder(
                   builder: (ctx, size) {
-                    return Container(
+                    return SizedBox(
                       width: (width ?? size.maxWidth) +
                           PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,

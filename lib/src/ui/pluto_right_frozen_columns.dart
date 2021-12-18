@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRightFrozenColumns extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
 
-  PlutoRightFrozenColumns(this.stateManager);
+  const PlutoRightFrozenColumns(
+    this.stateManager, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoRightFrozenColumnsState createState() =>

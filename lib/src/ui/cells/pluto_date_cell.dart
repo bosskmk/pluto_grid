@@ -7,17 +7,25 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
+  @override
   final PlutoGridStateManager? stateManager;
+
+  @override
   final PlutoCell? cell;
+
+  @override
   final PlutoColumn? column;
+
+  @override
   final PlutoRow? row;
 
-  PlutoDateCell({
+  const PlutoDateCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoDateCellState createState() => _PlutoDateCellState();
@@ -27,10 +35,13 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     with MixinPopupCell<PlutoDateCell> {
   PlutoGridStateManager? popupStateManager;
 
+  @override
   List<PlutoColumn>? popupColumns = [];
 
+  @override
   List<PlutoRow>? popupRows = [];
 
+  @override
   Icon? icon = const Icon(
     Icons.date_range,
   );
@@ -262,9 +273,10 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 }
 
 class _DateCellHeader extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
 
-  _DateCellHeader({required this.stateManager});
+  const _DateCellHeader({required this.stateManager});
 
   @override
   _DateCellHeaderState createState() => _DateCellHeaderState();

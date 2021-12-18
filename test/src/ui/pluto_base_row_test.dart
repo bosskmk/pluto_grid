@@ -32,7 +32,7 @@ void main() {
     when(stateManager!.canRowDrag).thenReturn(true);
   });
 
-  final buildRowWidget = ({
+  buildRowWidget({
     int rowIdx = 0,
     bool checked = false,
     bool isDraggingRow = false,
@@ -84,7 +84,7 @@ void main() {
         );
       },
     );
-  };
+  }
 
   buildRowWidget(checked: true).test(
     'row 가 checked 가 true 일 때, rowColor 에 alphaBlend 가 적용 되어야 한다.',

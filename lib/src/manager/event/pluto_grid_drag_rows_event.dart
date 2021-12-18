@@ -22,6 +22,7 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
 
   static bool _pause = false;
 
+  @override
   void handler(PlutoGridStateManager? stateManager) async {
     if (_pause) {
       return;

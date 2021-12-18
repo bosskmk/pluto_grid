@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoDefaultCell extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final PlutoCell cell;
+
   final PlutoColumn column;
+
   final int rowIdx;
+
   final PlutoRow row;
 
-  PlutoDefaultCell({
+  const PlutoDefaultCell({
     required this.stateManager,
     required this.cell,
     required this.column,
     required this.rowIdx,
     required this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoDefaultCellState createState() => _PlutoDefaultCellState();
@@ -155,10 +161,13 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
 
 class _CheckboxSelectionWidget extends PlutoStatefulWidget {
   final PlutoColumn? column;
+
   final PlutoRow? row;
+
+  @override
   final PlutoGridStateManager stateManager;
 
-  _CheckboxSelectionWidget({
+  const _CheckboxSelectionWidget({
     this.column,
     this.row,
     required this.stateManager,

@@ -5,17 +5,25 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_text_cell.dart';
 
 class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
+  @override
   final PlutoGridStateManager? stateManager;
+
+  @override
   final PlutoCell? cell;
+
+  @override
   final PlutoColumn? column;
+
+  @override
   final PlutoRow? row;
 
-  PlutoNumberCell({
+  const PlutoNumberCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoNumberCellState createState() => _PlutoNumberCellState();

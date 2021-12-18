@@ -1157,12 +1157,12 @@ void main() {
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           expect(
               stateManager.isSelectedCell(
                   rows[i].cells[column.field], column, i),
               false);
-        });
+        }
       }
     });
 
@@ -1203,7 +1203,7 @@ void main() {
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           if (i == 0 && (column.field == 'text0' || column.field == 'text1')) {
             expect(
                 stateManager.isSelectedCell(
@@ -1215,7 +1215,7 @@ void main() {
                     rows[i].cells[column.field], column, i),
                 false);
           }
-        });
+        }
       }
     });
 
@@ -1256,7 +1256,7 @@ void main() {
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           if ((i >= 1 && i <= 3) &&
               (column.field == 'text1' || column.field == 'text2')) {
             expect(
@@ -1269,7 +1269,7 @@ void main() {
                     rows[i].cells[column.field], column, i),
                 false);
           }
-        });
+        }
       }
     });
   });

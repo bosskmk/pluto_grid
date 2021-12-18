@@ -219,7 +219,7 @@ void main() {
       'rowIdx 가 주어진 rowIdx 보다 크고 '
       '주어진 rowIdx + dragRows.length 보다 작으면 true 를 리턴해야 한다.',
       () {
-        final rowIdx = givenDragTargetRowIdx + 1;
+        const rowIdx = givenDragTargetRowIdx + 1;
 
         expect(rowIdx, greaterThan(givenDragTargetRowIdx));
         expect(rowIdx, lessThan(rowIdx + givenDragRows!.length));
@@ -324,14 +324,14 @@ void main() {
     const int givenDragTargetRowIdx = 3;
     List<PlutoRow?> givenDragRows;
 
-    final setDrag = () {
+    setDrag() {
       givenDragRows = [
         rows![5],
         rows![6],
       ];
       stateManager.setDragTargetRowIdx(givenDragTargetRowIdx);
       stateManager.setDragRows(givenDragRows);
-    };
+    }
 
     setUp(setDrag);
 

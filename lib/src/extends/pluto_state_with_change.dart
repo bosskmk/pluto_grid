@@ -6,16 +6,14 @@ typedef _ResetStateCallback = void Function(_UpdateStateFunction update);
 typedef _UpdateStateFunction = T Function<T>(
   T oldValue,
   T newValue, {
-  _CompareFunction<T>? compare,
+  bool Function(T a, T b)? compare,
   bool? destructureList,
   bool? ignoreChange,
 });
 
-typedef _CompareFunction<T> = bool Function(T a, T b);
-
 abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier>
     extends StatefulWidget implements _HasPlutoStateManager {
-  PlutoStatefulWidget({Key? key}) : super(key: key);
+  const PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
 abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
@@ -57,10 +55,10 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     }
   }
 
-  T _update<T>(
-    T oldValue,
-    T newValue, {
-    _CompareFunction<T>? compare,
+  U _update<U>(
+    U oldValue,
+    U newValue, {
+    bool Function(U a, U b)? compare,
     bool? destructureList = false,
     bool? ignoreChange = false,
   }) {
@@ -72,7 +70,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
     if (destructureList!) {
       if (newValue is Iterable) {
-        return newValue.toList() as T;
+        return newValue.toList() as U;
       }
 
       PlutoLog(
@@ -102,6 +100,7 @@ abstract class PlutoStateWithChangeKeepAlive<T extends PlutoStatefulWidget>
     }
   }
 
+  @override
   @protected
   void updateKeepAlive() {
     if (wantKeepAlive) {

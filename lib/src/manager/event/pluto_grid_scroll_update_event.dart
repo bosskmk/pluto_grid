@@ -13,6 +13,7 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
           duration: const Duration(milliseconds: 800),
         );
 
+  @override
   void handler(PlutoGridStateManager? stateManager) {
     if (offset == null) {
       return;

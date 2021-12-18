@@ -402,7 +402,7 @@ void main() {
   });
 
   group('canChangeCellValue', () {
-    final createColumn = ({
+    createColumn({
       bool readonly = false,
       bool enableEditingMode = true,
     }) {
@@ -413,7 +413,7 @@ void main() {
         type: PlutoColumnType.text(),
         enableEditingMode: enableEditingMode,
       );
-    };
+    }
 
     test(
       'readonly column.'

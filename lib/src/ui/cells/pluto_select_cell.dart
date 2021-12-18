@@ -4,17 +4,25 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoSelectCell extends StatefulWidget implements AbstractMixinPopupCell {
+  @override
   final PlutoGridStateManager? stateManager;
+
+  @override
   final PlutoCell? cell;
+
+  @override
   final PlutoColumn? column;
+
+  @override
   final PlutoRow? row;
 
-  PlutoSelectCell({
+  const PlutoSelectCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoSelectCellState createState() => _PlutoSelectCellState();
@@ -22,10 +30,13 @@ class PlutoSelectCell extends StatefulWidget implements AbstractMixinPopupCell {
 
 class _PlutoSelectCellState extends State<PlutoSelectCell>
     with MixinPopupCell<PlutoSelectCell> {
+  @override
   List<PlutoColumn>? popupColumns;
 
+  @override
   List<PlutoRow>? popupRows;
 
+  @override
   Icon? icon = const Icon(
     Icons.arrow_drop_down,
   );

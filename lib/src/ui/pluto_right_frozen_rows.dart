@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRightFrozenRows extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
 
-  PlutoRightFrozenRows(this.stateManager);
+  const PlutoRightFrozenRows(
+    this.stateManager, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoRightFrozenRowsState createState() => _PlutoRightFrozenRowsState();

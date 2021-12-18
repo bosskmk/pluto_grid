@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final PlutoColumn column;
 
-  PlutoColumnFilter({
+  const PlutoColumnFilter({
     required this.stateManager,
     required this.column,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoColumnFilterState createState() => _PlutoColumnFilterState();

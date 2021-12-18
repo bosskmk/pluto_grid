@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseCell extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final PlutoCell cell;
+
   final PlutoColumn column;
+
   final int rowIdx;
+
   final PlutoRow row;
+
   final double width;
+
   final double height;
 
-  PlutoBaseCell({
-    Key? key,
+  const PlutoBaseCell({
     required this.stateManager,
     required this.cell,
     required this.column,
@@ -19,6 +25,7 @@ class PlutoBaseCell extends PlutoStatefulWidget {
     required this.row,
     this.width = PlutoGridSettings.columnWidth,
     this.height = PlutoGridSettings.rowHeight,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -199,7 +206,7 @@ class _CellContainer extends StatelessWidget {
   final PlutoGridConfiguration configuration;
   final double cellPadding;
 
-  _CellContainer({
+  const _CellContainer({
     required this.readOnly,
     required this.child,
     required this.width,

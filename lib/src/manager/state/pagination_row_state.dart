@@ -40,14 +40,19 @@ mixin PaginationRowState implements IPlutoGridState {
     return page;
   }
 
+  @override
   int get page => _page;
 
+  @override
   int get pageSize => _pageSize;
 
+  @override
   int get totalPage => (_length / _pageSize).ceil();
 
+  @override
   bool get isPaginated => refRows!.hasRange;
 
+  @override
   void setPageSize(int pageSize, {bool notify = true}) {
     _pageSize = pageSize;
 
@@ -56,6 +61,7 @@ mixin PaginationRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void setPage(int page, {bool notify = true}) {
     _page = page;
 
@@ -86,6 +92,7 @@ mixin PaginationRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void resetPage({bool notify = true}) {
     setPage(_adjustPage, notify: notify);
   }

@@ -185,7 +185,7 @@ class PlutoGridCellPosition {
   }
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => hashValues(columnIdx, rowIdx);
 }
 
 class PlutoGridSelectingCellPosition {
@@ -203,7 +203,7 @@ class PlutoGridSelectingCellPosition {
   }
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => hashValues(field, rowIdx);
 }
 
 class PlutoGridKeyPressed {
@@ -262,8 +262,10 @@ class _ApplyList implements _Apply {
     list.removeWhere((element) => !element.apply);
   }
 
+  @override
   bool get apply => list.isNotEmpty;
 
+  @override
   void execute(PlutoRow row) {
     var len = list.length;
 
@@ -278,16 +280,18 @@ class _ApplyCellForSetColumnRow implements _Apply {
 
   _ApplyCellForSetColumnRow(this.refColumns);
 
+  @override
   bool get apply => true;
 
+  @override
   void execute(PlutoRow row) {
-    refColumns.forEach((element) {
+    for (var element in refColumns) {
       final cell = row.cells[element.field]!;
 
       cell.setColumn(element);
 
       cell.setRow(row);
-    });
+    }
   }
 }
 
@@ -306,10 +310,12 @@ class _ApplyCellForFormat implements _Apply {
 
   late List<PlutoColumn> columnsToApply;
 
+  @override
   bool get apply => columnsToApply.isNotEmpty;
 
+  @override
   void execute(PlutoRow row) {
-    columnsToApply.forEach((column) {
+    for (var column in columnsToApply) {
       row.cells[column.field]!.value =
           column.type.applyFormat(row.cells[column.field]!.value);
 
@@ -319,7 +325,7 @@ class _ApplyCellForFormat implements _Apply {
             ) ??
             0;
       }
-    });
+    }
   }
 }
 
@@ -345,8 +351,10 @@ class _ApplyRowForSortIdx implements _Apply {
 
   late int _sortIdx;
 
+  @override
   bool get apply => forceApply == true || firstRow!.sortIdx == null;
 
+  @override
   void execute(PlutoRow? row) {
     row!.sortIdx = _sortIdx;
 

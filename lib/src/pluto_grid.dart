@@ -133,9 +133,9 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   @override
   void dispose() {
-    disposeList.forEach((dispose) {
+    for (var dispose in disposeList) {
       dispose();
-    });
+    }
 
     super.dispose();
   }

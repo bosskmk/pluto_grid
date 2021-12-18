@@ -502,8 +502,10 @@ abstract class PlutoFilterType {
 class PlutoFilterTypeContains implements PlutoFilterType {
   static String name = 'Contains';
 
+  @override
   String get title => PlutoFilterTypeContains.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareContains;
 
   const PlutoFilterTypeContains();
@@ -512,8 +514,10 @@ class PlutoFilterTypeContains implements PlutoFilterType {
 class PlutoFilterTypeEquals implements PlutoFilterType {
   static String name = 'Equals';
 
+  @override
   String get title => PlutoFilterTypeEquals.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareEquals;
 
   const PlutoFilterTypeEquals();
@@ -522,8 +526,10 @@ class PlutoFilterTypeEquals implements PlutoFilterType {
 class PlutoFilterTypeStartsWith implements PlutoFilterType {
   static String name = 'Starts with';
 
+  @override
   String get title => PlutoFilterTypeStartsWith.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareStartsWith;
 
   const PlutoFilterTypeStartsWith();
@@ -532,8 +538,10 @@ class PlutoFilterTypeStartsWith implements PlutoFilterType {
 class PlutoFilterTypeEndsWith implements PlutoFilterType {
   static String name = 'Ends with';
 
+  @override
   String get title => PlutoFilterTypeEndsWith.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareEndsWith;
 
   const PlutoFilterTypeEndsWith();
@@ -542,8 +550,10 @@ class PlutoFilterTypeEndsWith implements PlutoFilterType {
 class PlutoFilterTypeGreaterThan implements PlutoFilterType {
   static String name = 'Greater than';
 
+  @override
   String get title => PlutoFilterTypeGreaterThan.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareGreaterThan;
 
   const PlutoFilterTypeGreaterThan();
@@ -552,8 +562,10 @@ class PlutoFilterTypeGreaterThan implements PlutoFilterType {
 class PlutoFilterTypeGreaterThanOrEqualTo implements PlutoFilterType {
   static String name = 'Greater than or equal to';
 
+  @override
   String get title => PlutoFilterTypeGreaterThanOrEqualTo.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareGreaterThanOrEqualTo;
 
   const PlutoFilterTypeGreaterThanOrEqualTo();
@@ -562,8 +574,10 @@ class PlutoFilterTypeGreaterThanOrEqualTo implements PlutoFilterType {
 class PlutoFilterTypeLessThan implements PlutoFilterType {
   static String name = 'Less than';
 
+  @override
   String get title => PlutoFilterTypeLessThan.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareLessThan;
 
   const PlutoFilterTypeLessThan();
@@ -572,8 +586,10 @@ class PlutoFilterTypeLessThan implements PlutoFilterType {
 class PlutoFilterTypeLessThanOrEqualTo implements PlutoFilterType {
   static String name = 'Less than or equal to';
 
+  @override
   String get title => PlutoFilterTypeLessThanOrEqualTo.name;
 
+  @override
   PlutoCompareFunction get compare => FilterHelper.compareLessThanOrEqualTo;
 
   const PlutoFilterTypeLessThanOrEqualTo();

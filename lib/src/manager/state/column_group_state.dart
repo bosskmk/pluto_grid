@@ -20,10 +20,13 @@ abstract class IColumnGroupState {
 }
 
 mixin ColumnGroupState implements IPlutoGridState {
+  @override
   List<PlutoColumnGroup> get columnGroups => [...refColumnGroups!];
 
+  @override
   FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
 
+  @override
   set refColumnGroups(FilteredList<PlutoColumnGroup>? setColumnGroups) {
     if (setColumnGroups != null && setColumnGroups.isNotEmpty) {
       _showColumnGroups = true;
@@ -34,13 +37,16 @@ mixin ColumnGroupState implements IPlutoGridState {
 
   FilteredList<PlutoColumnGroup>? _refColumnGroups;
 
+  @override
   bool get hasColumnGroups =>
       refColumnGroups != null && refColumnGroups!.isNotEmpty;
 
+  @override
   bool get showColumnGroups => _showColumnGroups == true && hasColumnGroups;
 
   bool? _showColumnGroups;
 
+  @override
   void setShowColumnGroups(bool flag, {bool notify = true}) {
     if (_showColumnGroups == flag) {
       return;
@@ -53,6 +59,7 @@ mixin ColumnGroupState implements IPlutoGridState {
     }
   }
 
+  @override
   List<PlutoColumnGroupPair> separateLinkedGroup({
     required List<PlutoColumnGroup> columnGroupList,
     required List<PlutoColumn> columns,
@@ -63,6 +70,7 @@ mixin ColumnGroupState implements IPlutoGridState {
     );
   }
 
+  @override
   int columnGroupDepth(List<PlutoColumnGroup> columnGroupList) {
     return PlutoColumnGroupHelper.maxDepth(
       columnGroupList: columnGroupList,

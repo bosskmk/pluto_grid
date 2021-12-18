@@ -5,8 +5,8 @@ void main() {
   testWidgets(
     'dark 생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
-      final PlutoGridConfiguration configuration =
-          const PlutoGridConfiguration.dark(enableColumnBorder: true);
+      const PlutoGridConfiguration configuration =
+          PlutoGridConfiguration.dark(enableColumnBorder: true);
 
       expect(configuration.enableColumnBorder, true);
     },
