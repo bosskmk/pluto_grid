@@ -1,7 +1,7 @@
-import 'package:example/helper/launch_url.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../helper/launch_url.dart';
 import '../widget/pluto_expansion_tile.dart';
 
 class PlutoExampleScreen extends StatelessWidget {

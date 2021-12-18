@@ -1,7 +1,7 @@
-import 'package:example/dummy_data/development.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
 
