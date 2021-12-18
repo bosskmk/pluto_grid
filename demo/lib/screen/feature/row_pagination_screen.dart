@@ -44,7 +44,7 @@ class _RowPaginationScreenState extends State<RowPaginationScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/row_pagination_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/row_pagination_screen.dart',
         ),
       ],
       body: PlutoGrid(

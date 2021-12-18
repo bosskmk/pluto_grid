@@ -76,7 +76,7 @@ class _ColumnSortingScreenState extends State<ColumnSortingScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/column_sorting_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_sorting_screen.dart',
         ),
       ],
       body: PlutoGrid(

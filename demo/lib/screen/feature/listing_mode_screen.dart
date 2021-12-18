@@ -252,7 +252,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/listing_mode_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/listing_mode_screen.dart',
         ),
       ],
       body: PlutoGrid(

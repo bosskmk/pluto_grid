@@ -41,7 +41,7 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dark_mode_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/dark_mode_screen.dart',
         ),
       ],
       body: Theme(

@@ -86,7 +86,7 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/cell_selection_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/cell_selection_screen.dart',
         ),
       ],
       body: Column(
