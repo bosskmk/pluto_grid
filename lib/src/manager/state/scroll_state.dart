@@ -5,6 +5,8 @@ abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
   PlutoGridScrollController? get scroll;
 
+  bool get isInvalidHorizontalScroll;
+
   void setScroll(PlutoGridScrollController scroll);
 
   /// [direction] Scroll direction
@@ -24,6 +26,8 @@ abstract class IScrollState {
   void moveScrollByColumn(PlutoMoveDirection direction, int? columnIdx);
 
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
+
+  void updateInvalidScroll();
 }
 
 mixin ScrollState implements IPlutoGridState {
@@ -31,6 +35,10 @@ mixin ScrollState implements IPlutoGridState {
   PlutoGridScrollController? get scroll => _scroll;
 
   PlutoGridScrollController? _scroll;
+
+  @override
+  bool get isInvalidHorizontalScroll =>
+      scroll!.maxScrollHorizontal < scroll!.bodyRowsHorizontal!.offset;
 
   @override
   void setScroll(PlutoGridScrollController? scroll) {
@@ -164,5 +172,18 @@ mixin ScrollState implements IPlutoGridState {
       case PlutoMoveDirection.down:
         return offset!.dy > bodyDownScrollOffset;
     }
+  }
+
+  @override
+  void updateInvalidScroll() {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      if (isInvalidHorizontalScroll) {
+        scroll!.horizontal!.animateTo(
+          scroll!.maxScrollHorizontal,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    });
   }
 }

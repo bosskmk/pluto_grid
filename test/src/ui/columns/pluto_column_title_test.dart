@@ -557,7 +557,7 @@ void main() {
     ).test(
       'resizeColumn 이 54로 호출 되어야 한다.',
       (tester) async {
-        verify(stateManager.resizeColumn(column.key, 54.0));
+        verify(stateManager.resizeColumn(column, 54.0));
       },
     );
 
@@ -566,7 +566,7 @@ void main() {
     ).test(
       'resizeColumn 이 -46으로 호출 되어야 한다.',
       (tester) async {
-        verify(stateManager.resizeColumn(column.key, -46.0));
+        verify(stateManager.resizeColumn(column, -46.0));
       },
     );
   });

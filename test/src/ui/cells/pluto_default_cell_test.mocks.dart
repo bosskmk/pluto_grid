@@ -318,6 +318,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           .noSuchMethod(Invocation.getter(#hasUnCheckedRow), returnValue: false)
       as bool);
   @override
+  bool get isInvalidHorizontalScroll =>
+      (super.noSuchMethod(Invocation.getter(#isInvalidHorizontalScroll),
+          returnValue: false) as bool);
+  @override
   bool get isSelecting =>
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
           as bool);
@@ -483,8 +487,11 @@ class MockPlutoGridStateManager extends _i1.Mock
               #moveColumn, [], {#column: column, #targetColumn: targetColumn}),
           returnValueForMissingStub: null);
   @override
-  void resizeColumn(_i5.Key? columnKey, double? offset) =>
-      super.noSuchMethod(Invocation.method(#resizeColumn, [columnKey, offset]),
+  void resizeColumn(_i2.PlutoColumn? column, double? offset,
+          {bool? ignoreUpdateScroll = false}) =>
+      super.noSuchMethod(
+          Invocation.method(#resizeColumn, [column, offset],
+              {#ignoreUpdateScroll: ignoreUpdateScroll}),
           returnValueForMissingStub: null);
   @override
   void autoFitColumn(_i5.BuildContext? context, _i2.PlutoColumn? column) =>
@@ -895,6 +902,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   bool needMovingScroll(_i6.Offset? offset, _i2.PlutoMoveDirection? move) =>
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
+  @override
+  void updateInvalidScroll() =>
+      super.noSuchMethod(Invocation.method(#updateInvalidScroll, []),
+          returnValueForMissingStub: null);
   @override
   void setSelecting(bool? flag) =>
       super.noSuchMethod(Invocation.method(#setSelecting, [flag]),

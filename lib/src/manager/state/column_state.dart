@@ -88,7 +88,11 @@ abstract class IColumnState {
   });
 
   /// Change column size
-  void resizeColumn(Key columnKey, double offset);
+  void resizeColumn(
+    PlutoColumn column,
+    double offset, {
+    bool ignoreUpdateScroll = true,
+  });
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
 
@@ -364,21 +368,24 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   @override
-  void resizeColumn(Key columnKey, double offset) {
-    for (var i = 0; i < refColumns!.length; i += 1) {
-      final column = refColumns![i];
+  void resizeColumn(
+    PlutoColumn column,
+    double offset, {
+    bool ignoreUpdateScroll = false,
+  }) {
+    final setWidth = column.width + offset;
 
-      if (column.key == columnKey) {
-        final setWidth = column.width + offset;
-
-        column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
-        break;
-      }
-    }
+    column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
 
     resetShowFrozenColumn(notify: false);
 
     notifyListeners();
+
+    if (ignoreUpdateScroll) {
+      return;
+    }
+
+    updateInvalidScroll();
   }
 
   @override
@@ -418,7 +425,7 @@ mixin ColumnState implements IPlutoGridState {
         column.cellPadding ?? configuration!.defaultCellPadding;
 
     resizeColumn(
-      column.key,
+      column,
       textPainter.width - column.width + (cellPadding * 2) + 2,
     );
   }

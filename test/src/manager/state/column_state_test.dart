@@ -744,7 +744,7 @@ void main() {
       expect(stateManager.showFrozenColumn, true);
 
       // 최소 넓이에서 남는 50 이상 크기를 키움
-      stateManager.resizeColumn(columns.first.key, 60);
+      stateManager.resizeColumn(columns.first, 60);
 
       expect(stateManager.showFrozenColumn, false);
     },
@@ -786,7 +786,7 @@ void main() {
       expect(stateManager.showFrozenColumn, false);
 
       // 부족한 50 이상 컬럼 사이즈를 줄임
-      stateManager.resizeColumn(columns.first.key, -60);
+      stateManager.resizeColumn(columns.first, -60);
 
       expect(stateManager.showFrozenColumn, true);
     },
