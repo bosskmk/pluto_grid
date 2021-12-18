@@ -16,7 +16,7 @@ void main() {
 
     PlutoGridStateManager? stateManager;
 
-    final withEnterKeyAction = (PlutoGridEnterKeyAction enterKeyAction) {
+    withEnterKeyAction(PlutoGridEnterKeyAction enterKeyAction) {
       return PlutoWidgetTestHelper(
         '2, 2 셀이 선택 된 상태에서',
         (tester) async {
@@ -29,16 +29,14 @@ void main() {
           await tester.pumpWidget(
             MaterialApp(
               home: Material(
-                child: Container(
-                  child: PlutoGrid(
-                    columns: columns,
-                    rows: rows,
-                    onLoaded: (PlutoGridOnLoadedEvent event) {
-                      stateManager = event.stateManager;
-                    },
-                    configuration: PlutoGridConfiguration(
-                      enterKeyAction: enterKeyAction,
-                    ),
+                child: PlutoGrid(
+                  columns: columns,
+                  rows: rows,
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                  },
+                  configuration: PlutoGridConfiguration(
+                    enterKeyAction: enterKeyAction,
                   ),
                 ),
               ),
@@ -48,7 +46,7 @@ void main() {
           await tester.tap(find.text('header2 value 2'));
         },
       );
-    };
+    }
 
     withEnterKeyAction(PlutoGridEnterKeyAction.none).test(
       'PlutoEnterKeyAction.None 인 경우 기존 상태에서 아무 변화가 없어야 한다.',

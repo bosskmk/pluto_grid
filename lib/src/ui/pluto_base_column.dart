@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseColumn extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final PlutoColumn column;
+
   final double? columnTitleHeight;
 
   PlutoBaseColumn({

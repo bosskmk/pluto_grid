@@ -7,11 +7,11 @@ void main() {
     'child 가 렌더링 되어야 한다.',
     (WidgetTester tester) async {
       // given
-      final child = const Text('child widget');
+      const child = Text('child widget');
 
       // when
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Material(
             child: PlutoShadowContainer(width: 100, height: 50, child: child),
           ),

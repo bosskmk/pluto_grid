@@ -23,12 +23,15 @@ abstract class IFilteringRowState {
 }
 
 mixin FilteringRowState implements IPlutoGridState {
+  @override
   List<PlutoRow?> get filterRows => _filterRows;
 
   List<PlutoRow?> _filterRows = [];
 
+  @override
   bool get hasFilter => refRows!.hasFilter;
 
+  @override
   void setFilter(FilteredListFilter<PlutoRow?>? filter, {bool notify = true}) {
     for (var row in refRows!.originalList) {
       row!.setState(PlutoRowState.none);
@@ -53,6 +56,7 @@ mixin FilteringRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void setFilterWithFilterRows(List<PlutoRow?> rows, {bool notify = true}) {
     setFilterRows(rows);
 
@@ -69,6 +73,7 @@ mixin FilteringRowState implements IPlutoGridState {
     }
   }
 
+  @override
   void setFilterRows(List<PlutoRow?> rows) {
     _filterRows = rows
         .where(
@@ -79,6 +84,7 @@ mixin FilteringRowState implements IPlutoGridState {
         .toList();
   }
 
+  @override
   List<PlutoRow?> filterRowsByField(String columnField) {
     return _filterRows
         .where(
@@ -89,12 +95,14 @@ mixin FilteringRowState implements IPlutoGridState {
         .toList();
   }
 
+  @override
   bool isFilteredColumn(PlutoColumn? column) {
     return hasFilter &&
         _filterRows.isNotEmpty &&
         FilterHelper.isFilteredColumn(column!, _filterRows);
   }
 
+  @override
   void showFilterPopup(
     BuildContext context, {
     PlutoColumn? calledColumn,

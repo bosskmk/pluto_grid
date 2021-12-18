@@ -7,7 +7,7 @@ class PlutoBaseRow extends StatelessWidget {
   final PlutoRow row;
   final List<PlutoColumn> columns;
 
-  PlutoBaseRow({
+  const PlutoBaseRow({
     required this.stateManager,
     required this.rowIdx,
     required this.row,
@@ -73,19 +73,25 @@ class PlutoBaseRow extends StatelessWidget {
 }
 
 class _RowContainerWidget extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final int rowIdx;
+
   final PlutoRow row;
+
   final List<PlutoColumn> columns;
+
   final Widget child;
 
-  _RowContainerWidget({
+  const _RowContainerWidget({
     required this.stateManager,
     required this.rowIdx,
     required this.row,
     required this.columns,
     required this.child,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   __RowContainerWidgetState createState() => __RowContainerWidgetState();

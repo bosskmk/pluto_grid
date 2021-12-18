@@ -27,14 +27,17 @@ abstract class IScrollState {
 }
 
 mixin ScrollState implements IPlutoGridState {
+  @override
   PlutoGridScrollController? get scroll => _scroll;
 
   PlutoGridScrollController? _scroll;
 
+  @override
   void setScroll(PlutoGridScrollController? scroll) {
     _scroll = scroll;
   }
 
+  @override
   void scrollByDirection(PlutoMoveDirection direction, double offset) {
     if (direction.vertical) {
       _scroll!.vertical!.jumpTo(offset);
@@ -43,6 +46,7 @@ mixin ScrollState implements IPlutoGridState {
     }
   }
 
+  @override
   bool canHorizontalCellScrollByDirection(
     PlutoMoveDirection direction,
     PlutoColumn columnToMove,
@@ -51,6 +55,7 @@ mixin ScrollState implements IPlutoGridState {
     return !(showFrozenColumn == true && columnToMove.frozen.isFrozen);
   }
 
+  @override
   void moveScrollByRow(PlutoMoveDirection direction, int? rowIdx) {
     if (!direction.vertical) {
       return;
@@ -58,7 +63,7 @@ mixin ScrollState implements IPlutoGridState {
 
     final double rowSize = rowTotalHeight;
 
-    final double gridOffset =
+    const double gridOffset =
         PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
 
     final double screenOffset = _scroll!.verticalOffset +
@@ -85,6 +90,7 @@ mixin ScrollState implements IPlutoGridState {
     scrollByDirection(direction, offsetToMove);
   }
 
+  @override
   void moveScrollByColumn(PlutoMoveDirection direction, int? columnIdx) {
     if (!direction.horizontal) {
       return;
@@ -142,6 +148,7 @@ mixin ScrollState implements IPlutoGridState {
     scrollByDirection(direction, offsetToMove);
   }
 
+  @override
   bool needMovingScroll(Offset? offset, PlutoMoveDirection move) {
     if (selectingMode.isNone) {
       return false;

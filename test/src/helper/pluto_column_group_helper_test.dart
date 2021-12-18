@@ -6,9 +6,9 @@ import '../../helper/column_helper.dart';
 void main() {
   group('exists', () {
     test('field 가 columnGroup.fields 리스트에 존재하면 true 를 반환해야 한다.', () {
-      final title = 'title';
+      const title = 'title';
 
-      final field = 'DUMMY_FIELD';
+      const field = 'DUMMY_FIELD';
 
       final fields = ['DUMMY_FIELD'];
 
@@ -24,9 +24,9 @@ void main() {
     });
 
     test('field 가 columnGroup.fields 리스트에 존재하지 않으면 false 를 반환해야 한다.', () {
-      final title = 'title';
+      const title = 'title';
 
-      final field = 'NON_EXISTS_DUMMY_FIELD';
+      const field = 'NON_EXISTS_DUMMY_FIELD';
 
       final fields = ['DUMMY_FIELD'];
 
@@ -42,9 +42,9 @@ void main() {
     });
 
     test('field 가 columnGroup.children 리스트에 존재하면 true 를 반환해야 한다.', () {
-      final title = 'title';
+      const title = 'title';
 
-      final field = 'DUMMY_FIELD';
+      const field = 'DUMMY_FIELD';
 
       final children = [
         PlutoColumnGroup(title: 'title', fields: ['DUMMY_FIELD']),
@@ -62,9 +62,9 @@ void main() {
     });
 
     test('field 가 columnGroup.children 리스트에 존재하지 않으면 false 를 반환해야 한다.', () {
-      final title = 'title';
+      const title = 'title';
 
-      final field = 'NON_EXISTS_DUMMY_FIELD';
+      const field = 'NON_EXISTS_DUMMY_FIELD';
 
       final children = [
         PlutoColumnGroup(title: 'title', fields: ['DUMMY_FIELD']),
@@ -82,9 +82,9 @@ void main() {
     });
 
     test('field 가 columnGroup.children 의 2뎁스 하위에 존재하면 true 를 반환해야 한다.', () {
-      final title = 'title';
+      const title = 'title';
 
-      final field = 'DUMMY_FIELD';
+      const field = 'DUMMY_FIELD';
 
       final children = [
         PlutoColumnGroup(title: 'title', children: [
@@ -106,7 +106,7 @@ void main() {
 
   group('existsFromList', () {
     test('column1 필드가 리스트에 존재하면  true 를 리턴해야 한다.', () {
-      final field = 'column1';
+      const field = 'column1';
 
       final columnGroupList = [
         PlutoColumnGroup(title: 'title', fields: ['column1', 'column2']),
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('non_exists 필드가 리스트에 존재하지 않으면 false 를 리턴해야 한다.', () {
-      final field = 'non_exists';
+      const field = 'non_exists';
 
       final columnGroupList = [
         PlutoColumnGroup(title: 'title', fields: ['column1', 'column2']),
@@ -144,7 +144,7 @@ void main() {
 
   group('getGroupIfExistsFromList', () {
     test('column1 필드가 그룹에 존재하면 해당 그룹이 리턴 되어야 한다.', () {
-      final field = 'column1';
+      const field = 'column1';
 
       final columnGroup = PlutoColumnGroup(
         title: 'title',
@@ -167,7 +167,7 @@ void main() {
     });
 
     test('non_exists 필드가 그룹에 존재하지 않으면 null 이 리턴 되어야 한다.', () {
-      final field = 'non_exists';
+      const field = 'non_exists';
 
       final columnGroupList = [
         PlutoColumnGroup(title: 'title', fields: ['column1', 'column2']),
@@ -348,7 +348,7 @@ void main() {
 
   group('maxDepth', () {
     test('그룹의 깊이가 1인 경우 1을 리턴해야 한다.', () {
-      final expectedDepth = 1;
+      const expectedDepth = 1;
 
       final columnGroupList = [
         PlutoColumnGroup(title: 'title', fields: ['column1', 'column2']),
@@ -363,7 +363,7 @@ void main() {
     });
 
     test('그룹의 깊이가 2인 경우 2를 리턴해야 한다.', () {
-      final expectedDepth = 2;
+      const expectedDepth = 2;
 
       final columnGroupList = [
         PlutoColumnGroup(
@@ -384,7 +384,7 @@ void main() {
     });
 
     test('그룹의 깊이가 3인 경우 3를 리턴해야 한다.', () {
-      final expectedDepth = 3;
+      const expectedDepth = 3;
 
       final columnGroupList = [
         PlutoColumnGroup(
@@ -411,7 +411,7 @@ void main() {
     });
 
     test('그룹의 깊이가 3인 경우 3를 리턴해야 한다.', () {
-      final expectedDepth = 3;
+      const expectedDepth = 3;
 
       final columnGroupList = [
         PlutoColumnGroup(
@@ -438,7 +438,7 @@ void main() {
     });
 
     test('그룹의 깊이가 4인 경우 4를 리턴해야 한다.', () {
-      final expectedDepth = 4;
+      const expectedDepth = 4;
 
       final columnGroupList = [
         PlutoColumnGroup(
@@ -471,7 +471,7 @@ void main() {
     });
 
     test('그룹의 깊이가 5인 경우 5를 리턴해야 한다.', () {
-      final expectedDepth = 5;
+      const expectedDepth = 5;
 
       final columnGroupList = [
         PlutoColumnGroup(

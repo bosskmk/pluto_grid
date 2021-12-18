@@ -26,14 +26,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),
@@ -91,14 +89,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),

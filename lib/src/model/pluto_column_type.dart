@@ -156,20 +156,24 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
 }
 
 class PlutoColumnTypeText implements PlutoColumnType {
+  @override
   dynamic defaultValue;
 
   PlutoColumnTypeText({
     this.defaultValue,
   });
 
+  @override
   bool isValid(dynamic value) {
     return value is String || value is num;
   }
 
+  @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
+  @override
   dynamic makeCompareValue(dynamic v) {
     return v.toString();
   }
@@ -177,12 +181,15 @@ class PlutoColumnTypeText implements PlutoColumnType {
 
 class PlutoColumnTypeNumber
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+  @override
   dynamic defaultValue;
 
   bool? negative;
 
+  @override
   String? format;
 
+  @override
   bool? applyFormatOnInit;
 
   PlutoColumnTypeNumber({
@@ -192,6 +199,7 @@ class PlutoColumnTypeNumber
     this.applyFormatOnInit,
   });
 
+  @override
   bool isValid(dynamic value) {
     if (!_isNumeric(value)) {
       return false;
@@ -204,15 +212,18 @@ class PlutoColumnTypeNumber
     return true;
   }
 
+  @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b,
         () => double.parse(a.toString()).compareTo(double.parse(b.toString())));
   }
 
+  @override
   dynamic makeCompareValue(dynamic v) {
     return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
   }
 
+  @override
   String applyFormat(dynamic value) {
     final f = intl.NumberFormat(format);
 
@@ -242,6 +253,7 @@ class PlutoColumnTypeNumber
 }
 
 class PlutoColumnTypeSelect implements PlutoColumnType {
+  @override
   dynamic defaultValue;
 
   List<dynamic>? items;
@@ -254,8 +266,10 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
     this.enableColumnFilter,
   });
 
+  @override
   bool isValid(dynamic value) => items!.contains(value) == true;
 
+  @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () {
       final _a = items!.indexOf(a);
@@ -266,6 +280,7 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
     });
   }
 
+  @override
   dynamic makeCompareValue(dynamic v) {
     return v;
   }
@@ -273,14 +288,17 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
 
 class PlutoColumnTypeDate
     implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+  @override
   dynamic defaultValue;
 
   DateTime? startDate;
 
   DateTime? endDate;
 
+  @override
   String? format;
 
+  @override
   bool? applyFormatOnInit;
 
   PlutoColumnTypeDate({
@@ -291,6 +309,7 @@ class PlutoColumnTypeDate
     this.applyFormatOnInit,
   });
 
+  @override
   bool isValid(dynamic value) {
     final parsedDate = DateTime.tryParse(value.toString());
 
@@ -309,10 +328,12 @@ class PlutoColumnTypeDate
     return true;
   }
 
+  @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
+  @override
   dynamic makeCompareValue(dynamic v) {
     final dateFormat = intl.DateFormat(format);
 
@@ -327,6 +348,7 @@ class PlutoColumnTypeDate
     return dateFormatValue;
   }
 
+  @override
   String applyFormat(dynamic value) {
     final parseValue = DateTime.tryParse(value.toString());
 
@@ -339,21 +361,25 @@ class PlutoColumnTypeDate
 }
 
 class PlutoColumnTypeTime implements PlutoColumnType {
+  @override
   dynamic defaultValue;
 
   PlutoColumnTypeTime({
     this.defaultValue,
   });
 
+  @override
   bool isValid(dynamic value) {
     return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')
         .hasMatch(value.toString());
   }
 
+  @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
   }
 
+  @override
   dynamic makeCompareValue(dynamic v) {
     return v;
   }

@@ -7,9 +7,9 @@ void main() {
     'checkbox 가 렌더링 되어야 한다.',
     (WidgetTester tester) async {
       // given
-      final bool value = false;
+      const bool value = false;
 
-      final handleOnChanged = (bool? changed) {};
+      handleOnChanged(bool? changed) {}
 
       // when
       await tester.pumpWidget(
@@ -34,9 +34,9 @@ void main() {
       // given
       bool? value = false;
 
-      final handleOnChanged = (bool? changed) {
+      handleOnChanged(bool? changed) {
         value = changed;
-      };
+      }
 
       // when
       await tester.pumpWidget(

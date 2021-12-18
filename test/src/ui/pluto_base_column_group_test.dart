@@ -14,7 +14,7 @@ import 'pluto_base_column_group_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
-  final columnHeight = PlutoGridSettings.rowHeight;
+  const columnHeight = PlutoGridSettings.rowHeight;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
@@ -45,7 +45,7 @@ void main() {
     );
   });
 
-  final buildWidget = ({
+  buildWidget({
     required PlutoColumnGroupPair columnGroup,
     required int depth,
     bool showColumnFilter = false,
@@ -70,7 +70,7 @@ void main() {
         ),
       );
     });
-  };
+  }
 
   buildWidget(
     columnGroup: PlutoColumnGroupPair(

@@ -53,7 +53,7 @@ class PlutoGridEventManager {
   }
 
   StreamSubscription<PlutoGridEvent> listener(
-    void onData(PlutoGridEvent event),
+    void Function(PlutoGridEvent event) onData,
   ) {
     return _subject.stream.listen(onData);
   }

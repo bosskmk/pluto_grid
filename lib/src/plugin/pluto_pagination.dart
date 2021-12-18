@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoPagination extends PlutoStatefulWidget {
-  PlutoPagination(this.stateManager, {Key? key}) : super(key: key);
+  const PlutoPagination(this.stateManager, {Key? key}) : super(key: key);
 
+  @override
   final PlutoGridStateManager stateManager;
 
   @override

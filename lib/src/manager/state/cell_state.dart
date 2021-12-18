@@ -69,14 +69,17 @@ abstract class ICellState {
 }
 
 mixin CellState implements IPlutoGridState {
+  @override
   PlutoCell? get currentCell => _currentCell;
 
   PlutoCell? _currentCell;
 
+  @override
   PlutoGridCellPosition? get currentCellPosition => _currentCellPosition;
 
   PlutoGridCellPosition? _currentCellPosition;
 
+  @override
   PlutoCell? get firstCell {
     if (refRows == null || refRows!.isEmpty) {
       return null;
@@ -89,6 +92,7 @@ mixin CellState implements IPlutoGridState {
     return refRows!.first!.cells[columnField];
   }
 
+  @override
   void setCurrentCellPosition(
     PlutoGridCellPosition? cellPosition, {
     bool notify = true,
@@ -110,6 +114,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
+  @override
   void updateCurrentCellPosition({bool notify = true}) {
     if (_currentCell == null) {
       return;
@@ -127,6 +132,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
+  @override
   PlutoGridCellPosition? cellPositionByCellKey(Key? cellKey) {
     if (cellKey == null) {
       return null;
@@ -143,6 +149,7 @@ mixin CellState implements IPlutoGridState {
     return null;
   }
 
+  @override
   int? columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx) {
     if (rowIdx < 0 || refRows == null || rowIdx >= refRows!.length) {
       return null;
@@ -161,6 +168,7 @@ mixin CellState implements IPlutoGridState {
     return null;
   }
 
+  @override
   void clearCurrentCell({bool notify = true}) {
     if (_currentCell == null) {
       return;
@@ -175,6 +183,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
+  @override
   void setCurrentCell(
     PlutoCell? cell,
     int? rowIdx, {
@@ -211,6 +220,7 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
+  @override
   bool canMoveCell(
       PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
     switch (direction) {
@@ -225,11 +235,13 @@ mixin CellState implements IPlutoGridState {
     }
   }
 
+  @override
   bool canNotMoveCell(
       PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
     return !canMoveCell(cellPosition, direction);
   }
 
+  @override
   bool canChangeCellValue({
     PlutoColumn? column,
     PlutoRow? row,
@@ -252,6 +264,7 @@ mixin CellState implements IPlutoGridState {
     return true;
   }
 
+  @override
   bool canNotChangeCellValue({
     PlutoColumn? column,
     PlutoRow? row,
@@ -266,6 +279,7 @@ mixin CellState implements IPlutoGridState {
     );
   }
 
+  @override
   dynamic filteredCellValue({
     PlutoColumn? column,
     dynamic newValue,
@@ -295,10 +309,12 @@ mixin CellState implements IPlutoGridState {
     return newValue;
   }
 
+  @override
   bool isCurrentCell(PlutoCell? cell) {
     return _currentCell != null && _currentCell!.key == cell!.key;
   }
 
+  @override
   bool isInvalidCellPosition(PlutoGridCellPosition? cellPosition) {
     return cellPosition == null ||
         cellPosition.columnIdx == null ||

@@ -89,8 +89,9 @@ void main() {
   });
 
   group('renderer', () {
-    final buildCellWidgetWithRenderer =
-        (Widget Function(PlutoColumnRendererContext) renderer) {
+    buildCellWidgetWithRenderer(
+      Widget Function(PlutoColumnRendererContext) renderer,
+    ) {
       final PlutoColumn column = PlutoColumn(
         title: 'column title',
         field: 'column_field_name',
@@ -121,7 +122,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     final renderText = buildCellWidgetWithRenderer(
         (PlutoColumnRendererContext rendererContext) {
@@ -164,7 +165,7 @@ void main() {
       },
     );
 
-    final PlutoWidgetTestHelper Function({bool canRowDrag}) cellWidget = ({
+    cellWidget({
       bool? canRowDrag,
     }) {
       return PlutoWidgetTestHelper('cell widget', (tester) async {
@@ -184,7 +185,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     cellWidget(canRowDrag: true).test(
       'canRowDrag 가 true 인 경우 Draggable 위젯이 렌더링 되어야 한다.',
@@ -230,7 +231,7 @@ void main() {
     cellWidget(canRowDrag: true).test(
       'Draggable 아이콘을 드래그 하면 PlutoGridScrollUpdateEvent 가 호출 되어야 한다.',
       (tester) async {
-        final offset = const Offset(0.0, 100);
+        const offset = Offset(0.0, 100);
 
         when(stateManager.getRowByIdx(any)).thenReturn(row);
         when(stateManager.isSelectedRow(any)).thenReturn(false);
@@ -260,7 +261,7 @@ void main() {
   group('enableRowChecked', () {
     PlutoRow? row;
 
-    final buildCellWidget = (bool checked) {
+    buildCellWidget(bool checked) {
       return PlutoWidgetTestHelper('cell widget', (tester) async {
         final PlutoColumn column = PlutoColumn(
           title: 'column title',
@@ -292,7 +293,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     final checkedCellWidget = buildCellWidget(true);
 

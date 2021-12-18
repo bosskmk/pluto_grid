@@ -21,7 +21,7 @@ void main() {
   });
 
   group('렌더링', () {
-    final buildWidget = ({
+    buildWidget({
       int page = 1,
       int totalPage = 1,
     }) {
@@ -37,7 +37,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     buildWidget().test(
       '페이지 번호 1이 렌더링 되어야 한다.',

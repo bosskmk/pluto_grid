@@ -101,7 +101,7 @@ void main() {
 
           expect(list, [2, 6, 8, 40]);
 
-          final reverse = (int a, int b) => a < b ? 1 : (a > b ? -1 : 0);
+          reverse(int a, int b) => a < b ? 1 : (a > b ? -1 : 0);
 
           list.sort(reverse);
 

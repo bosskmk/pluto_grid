@@ -18,14 +18,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              createFooter: (stateManager) {
-                return const Text('Footer widget.');
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            createFooter: (stateManager) {
+              return const Text('Footer widget.');
+            },
           ),
         ),
       ),
@@ -47,14 +45,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              createHeader: (stateManager) {
-                return PlutoPagination(stateManager);
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            createHeader: (stateManager) {
+              return PlutoPagination(stateManager);
+            },
           ),
         ),
       ),
@@ -76,14 +72,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              createFooter: (stateManager) {
-                return PlutoPagination(stateManager);
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            createFooter: (stateManager) {
+              return PlutoPagination(stateManager);
+            },
           ),
         ),
       ),
@@ -104,14 +98,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (event) {
-                event.stateManager!.setShowLoading(true);
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (event) {
+              event.stateManager!.setShowLoading(true);
+            },
           ),
         ),
       ),
@@ -133,11 +125,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
           ),
         ),
       ),
@@ -163,11 +153,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
           ),
         ),
       ),
@@ -208,14 +196,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -290,14 +276,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -335,15 +319,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-              createHeader: (stateManager) => const Text('grid header'),
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
+            createHeader: (stateManager) => const Text('grid header'),
           ),
         ),
       ),
@@ -397,14 +379,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -448,14 +428,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -497,14 +475,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -546,14 +522,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -589,15 +563,13 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-                createHeader: (stateManager) => const Text('grid header'),
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+              createHeader: (stateManager) => const Text('grid header'),
             ),
           ),
         ),
@@ -632,15 +604,13 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-                createHeader: (stateManager) => const Text('grid header'),
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
+              createHeader: (stateManager) => const Text('grid header'),
             ),
           ),
         ),
@@ -672,14 +642,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -710,14 +678,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ),
@@ -757,7 +723,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
+            child: SizedBox(
               width: 50,
               child: PlutoGrid(
                 columns: columns,
@@ -823,14 +789,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),
@@ -904,14 +868,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),
@@ -990,14 +952,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),
@@ -1073,14 +1033,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
               ),
             ),
           ),
@@ -1158,14 +1116,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1216,14 +1172,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1274,14 +1228,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1332,14 +1284,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1390,14 +1340,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1443,14 +1391,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1496,14 +1442,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),
@@ -1549,14 +1493,12 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Material(
-          child: Container(
-            child: PlutoGrid(
-              columns: columns,
-              rows: rows,
-              onLoaded: (PlutoGridOnLoadedEvent event) {
-                stateManager = event.stateManager;
-              },
-            ),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
           ),
         ),
       ),

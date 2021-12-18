@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 
 void main() {
-  final buildWidget = ({
+  buildWidget({
     Color? backgroundColor,
     Color? indicatorColor,
     String? indicatorText,
@@ -27,7 +27,7 @@ void main() {
         ),
       );
     });
-  };
+  }
 
   buildWidget().test(
     'Parameter 를 전달 하지 않는 경우 기본 값으로 위젯이 생성 되어야 한다.',

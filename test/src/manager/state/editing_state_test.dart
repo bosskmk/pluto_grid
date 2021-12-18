@@ -54,23 +54,23 @@ void main() {
       ]);
 
       // then
-      [0, 1, 5, 6, 7, 8, 9].forEach((rowIdx) {
-        ['left', 'body', 'right'].forEach((column) {
-          [0, 1, 2].forEach((idx) {
+      for (var rowIdx in [0, 1, 5, 6, 7, 8, 9]) {
+        for (var column in ['left', 'body', 'right']) {
+          for (var idx in [0, 1, 2]) {
             expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
             expect(rows[rowIdx].cells['$column$idx']!.value, isNot('changed'));
-          });
-        });
-      });
+          }
+        }
+      }
 
-      [2, 3, 4].forEach((rowIdx) {
-        ['left', 'body', 'right'].forEach((column) {
-          [0, 1, 2].forEach((idx) {
+      for (var rowIdx in [2, 3, 4]) {
+        for (var column in ['left', 'body', 'right']) {
+          for (var idx in [0, 1, 2]) {
             expect(rows[rowIdx].cells['$column$idx']!.value, 'changed');
-          });
-        });
-      });
+          }
+        }
+      }
     });
 
     testWidgets(
@@ -116,14 +116,14 @@ void main() {
       ]);
 
       // then
-      [0, 1, 4, 5, 6, 7, 8, 9].forEach((rowIdx) {
-        ['left', 'body', 'right'].forEach((column) {
-          [0, 1, 2].forEach((idx) {
+      for (var rowIdx in [0, 1, 4, 5, 6, 7, 8, 9]) {
+        for (var column in ['left', 'body', 'right']) {
+          for (var idx in [0, 1, 2]) {
             expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
-          });
-        });
-      });
+          }
+        }
+      }
 
       expect(rows[2].cells['left0']!.value, 'left0 value 2');
       expect(rows[2].cells['left1']!.value, 'left1 value 2');
@@ -200,14 +200,14 @@ void main() {
       ]);
 
       // then
-      [0, 1, 5, 6, 7, 8, 9].forEach((rowIdx) {
-        ['left', 'body', 'right'].forEach((column) {
-          [0, 1, 2].forEach((idx) {
+      for (var rowIdx in [0, 1, 5, 6, 7, 8, 9]) {
+        for (var column in ['left', 'body', 'right']) {
+          for (var idx in [0, 1, 2]) {
             expect(rows[rowIdx].cells['$column$idx']!.value,
                 '$column$idx value $rowIdx');
-          });
-        });
-      });
+          }
+        }
+      }
 
       expect(rows[2].cells['left0']!.value, 'left0 value 2');
       expect(rows[2].cells['left1']!.value, 'left1 value 2');

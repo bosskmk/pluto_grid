@@ -20,21 +20,26 @@ abstract class IFocusState {
 }
 
 mixin FocusState implements IPlutoGridState {
+  @override
   FocusNode? get gridFocusNode => _gridFocusNode;
 
   FocusNode? _gridFocusNode;
 
+  @override
   bool get keepFocus => _keepFocus;
 
   bool _keepFocus = false;
 
+  @override
   bool get hasFocus =>
       _gridFocusNode != null && _keepFocus && _gridFocusNode!.hasFocus;
 
+  @override
   void setGridFocusNode(FocusNode? focusNode) {
     _gridFocusNode = focusNode;
   }
 
+  @override
   void setKeepFocus(bool flag, {bool notify = true}) {
     if (_keepFocus == flag) {
       return;
@@ -57,6 +62,7 @@ mixin FocusState implements IPlutoGridState {
     }
   }
 
+  @override
   void nextFocusOfColumnFilter(
     PlutoColumn column, {
     bool reversed = false,

@@ -9,16 +9,11 @@ import '../../helper/row_helper.dart';
 
 /// 행 높이 설정 후 동작 테스트
 void main() {
-  final PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
+  const PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.row;
 
   PlutoGridStateManager? stateManager;
 
-  final PlutoWidgetTestHelper Function(
-      {int columnIdx,
-      List<PlutoColumn> columns,
-      int numberOfRows,
-      double rowHeight,
-      int rowIdx}) buildRowsWithSettingRowHeight = ({
+  buildRowsWithSettingRowHeight({
     int numberOfRows = 10,
     List<PlutoColumn>? columns,
     int columnIdx = 0,
@@ -35,22 +30,20 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: _columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                    stateManager!.setSelectingMode(selectingMode);
+              child: PlutoGrid(
+                columns: _columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                  stateManager!.setSelectingMode(selectingMode);
 
-                    stateManager!.setCurrentCell(
-                      stateManager!.rows[rowIdx]!.cells['header$columnIdx'],
-                      rowIdx,
-                    );
-                  },
-                  configuration: PlutoGridConfiguration(
-                    rowHeight: rowHeight,
-                  ),
+                  stateManager!.setCurrentCell(
+                    stateManager!.rows[rowIdx]!.cells['header$columnIdx'],
+                    rowIdx,
+                  );
+                },
+                configuration: PlutoGridConfiguration(
+                  rowHeight: rowHeight,
                 ),
               ),
             ),
@@ -62,7 +55,7 @@ void main() {
         expect(stateManager!.currentCellPosition!.rowIdx, rowIdx);
       },
     );
-  };
+  }
 
   group('state', () {
     const rowHeight = 90.0;

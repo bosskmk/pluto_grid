@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnTitle extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
+
   final PlutoColumn column;
+
   late final double height;
 
   PlutoColumnTitle({
@@ -162,14 +165,17 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
 
 class PlutoGridColumnIcon extends StatelessWidget {
   final PlutoColumnSort? sort;
+
   final Color color;
+
   final IconData icon;
 
-  PlutoGridColumnIcon({
+  const PlutoGridColumnIcon({
     this.sort,
     this.color = Colors.black26,
     this.icon = Icons.dehaze,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -336,13 +342,16 @@ class _BuildColumnWidget extends StatelessWidget {
 }
 
 class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
-  final PlutoColumn? column;
+  @override
   final PlutoGridStateManager stateManager;
 
-  _CheckboxAllSelectionWidget({
-    this.column,
+  final PlutoColumn? column;
+
+  const _CheckboxAllSelectionWidget({
     required this.stateManager,
-  });
+    this.column,
+    Key? key,
+  }) : super(key: key);
 
   @override
   __CheckboxAllSelectionWidgetState createState() =>
@@ -409,15 +418,19 @@ class __CheckboxAllSelectionWidgetState
 }
 
 class _ColumnTextWidget extends PlutoStatefulWidget {
-  final PlutoColumn column;
+  @override
   final PlutoGridStateManager stateManager;
+
+  final PlutoColumn column;
+
   final double height;
 
-  _ColumnTextWidget({
-    required this.column,
+  const _ColumnTextWidget({
     required this.stateManager,
+    required this.column,
     required this.height,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   __ColumnTextWidgetState createState() => __ColumnTextWidgetState();

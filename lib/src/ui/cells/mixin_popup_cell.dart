@@ -7,12 +7,13 @@ abstract class AbstractMixinPopupCell extends StatefulWidget {
   final PlutoColumn? column;
   final PlutoRow? row;
 
-  AbstractMixinPopupCell({
+  const AbstractMixinPopupCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 }
 
 abstract class AbstractPopup {
@@ -189,25 +190,9 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
   void handleSelected(dynamic value) {
     widget.stateManager!.handleAfterSelectingRow(widget.cell!, value);
 
-    try {
-      _textController!.text = widget.column!.formattedValueForDisplayInEditing(
-        widget.stateManager!.currentCell!.value,
-      );
-    } catch (e) {
-      /**
-       * When the Popup is opened, the TextField is closed
-       * _textController is dispose
-       * When calling _handleSelected in Popup
-       * _textController error.
-       *
-       * TODO : Change widget structure...
-       */
-      PlutoLog(
-        'popup_base_mixin',
-        type: PlutoLogType.todo,
-        error: e,
-      );
-    }
+    _textController!.text = widget.column!.formattedValueForDisplayInEditing(
+      widget.cell!.value,
+    );
   }
 
   @override

@@ -368,7 +368,7 @@ void main() {
 
     const rowsLength = 10;
 
-    final buildRows = () {
+    buildRows() {
       return PlutoWidgetTestHelper('build rows', (tester) async {
         List<PlutoColumn> columns = [
           ...ColumnHelper.textColumn('text', count: 3, width: 150),
@@ -394,7 +394,7 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
       });
-    };
+    }
 
     buildRows().test(
       '0 번 row 보다 위인 offset 인 경우 null 을 리턴해야 한다.',
@@ -985,7 +985,7 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints());
 
-      final int rowIdxBeforePrependRows = 0;
+      const int rowIdxBeforePrependRows = 0;
 
       stateManager.setCurrentCell(
           rows.first.cells['text1'], rowIdxBeforePrependRows);
@@ -1026,7 +1026,7 @@ void main() {
         scroll: MockPlutoScrollController(),
       );
 
-      final int rowIdxBeforePrependRows = 3;
+      const int rowIdxBeforePrependRows = 3;
 
       stateManager.setCurrentSelectingPosition(
         cellPosition: PlutoGridCellPosition(
@@ -1604,7 +1604,7 @@ void main() {
         stateManager.addListener(listener.onChangeVoidNoParamListener);
 
         // when
-        final offset = -10.0;
+        const offset = -10.0;
 
         stateManager.moveRowsByOffset(
           [rows.first],

@@ -25,13 +25,14 @@ class PlutoDualGrid extends StatefulWidget {
   /// Fix the width of the right grid.
   final PlutoDualGridDisplay display;
 
-  PlutoDualGrid({
+  const PlutoDualGrid({
     this.gridPropsA,
     this.gridPropsB,
     this.mode,
     this.onSelected,
     this.display = const PlutoDualGridDisplayRatio(),
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoDualGridState createState() => _PlutoDualGridState();
@@ -155,8 +156,10 @@ class PlutoDualGridDisplayRatio implements PlutoDualGridDisplay {
     this.ratio = 0.5,
   }) : assert(0 < ratio && ratio < 1);
 
+  @override
   double gridAWidth(BoxConstraints size) => size.maxWidth * ratio;
 
+  @override
   double gridBWidth(BoxConstraints size) => size.maxWidth * (1 - ratio);
 }
 
@@ -167,8 +170,10 @@ class PlutoDualGridDisplayFixedAndExpanded implements PlutoDualGridDisplay {
     this.width = 206.0,
   });
 
+  @override
   double gridAWidth(BoxConstraints size) => width;
 
+  @override
   double gridBWidth(BoxConstraints size) => size.maxWidth - width;
 }
 
@@ -179,8 +184,10 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
     this.width = 206.0,
   });
 
+  @override
   double gridAWidth(BoxConstraints size) => size.maxWidth - width;
 
+  @override
   double gridBWidth(BoxConstraints size) => width;
 }
 

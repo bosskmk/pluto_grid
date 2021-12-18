@@ -96,7 +96,7 @@ void main() {
   });
 
   group('format MM/dd/yyyy', () {
-    final makeDateCell = (String date) {
+    makeDateCell(String date) {
       PlutoColumn column = PlutoColumn(
         title: 'column title',
         field: 'column_field_name',
@@ -125,7 +125,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     makeDateCell('01/30/2020').test(
       '01/30/2020 이 출력 되어야 한다.',
@@ -273,8 +273,7 @@ void main() {
   });
 
   group('format yyyy년 MM월 dd일', () {
-    final PlutoWidgetTestHelper Function(String, {DateTime startDate})
-        makeDateCell = (
+    makeDateCell(
       String date, {
       DateTime? startDate,
     }) {
@@ -309,7 +308,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     makeDateCell('2020년 12월 01일').test(
       '2020년 12월 01일 이 출력 되어야 한다.',

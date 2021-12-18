@@ -9,7 +9,7 @@ import '../../helper/pluto_widget_test_helper.dart';
 void main() {
   PlutoGridStateManager? stateManager;
 
-  final buildGrid = ({
+  buildGrid({
     int numberOfRows = 10,
     int numberOfColumns = 10,
     PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
@@ -40,22 +40,20 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                  },
-                  configuration: configuration,
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                },
+                configuration: configuration,
               ),
             ),
           ),
         );
       },
     );
-  };
+  }
 
   buildGrid(
     configuration: const PlutoGridConfiguration(

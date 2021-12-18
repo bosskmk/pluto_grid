@@ -248,7 +248,7 @@ void main() {
   });
 
   group('enableRowChecked', () {
-    final buildColumn = (bool enable) {
+    buildColumn(bool enable) {
       final column = PlutoColumn(
         title: 'column title',
         field: 'column_field_name',
@@ -268,7 +268,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     final columnHasNotCheckbox = buildColumn(false);
 
@@ -528,7 +528,7 @@ void main() {
       type: PlutoColumnType.text(),
     );
 
-    final dragAColumn = (Offset offset) {
+    dragAColumn(Offset offset) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
@@ -547,7 +547,7 @@ void main() {
 
         await tester.drag(columnIconGesture, offset);
       });
-    };
+    }
 
     /**
      * (기본 값이 4, Positioned 위젯 right -3)
@@ -579,7 +579,7 @@ void main() {
       frozen: PlutoColumnFrozen.right,
     );
 
-    final aColumnWithConfiguration = (PlutoGridConfiguration configuration) {
+    aColumnWithConfiguration(PlutoGridConfiguration configuration) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
 
@@ -594,7 +594,7 @@ void main() {
           ),
         );
       });
-    };
+    }
 
     aColumnWithConfiguration(const PlutoGridConfiguration(
       enableColumnBorder: true,

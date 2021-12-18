@@ -9,9 +9,9 @@ import '../../helper/row_helper.dart';
 void fillNumbers(List<PlutoRow> rows, String columnName) {
   int num = -1;
 
-  rows.forEach((element) {
+  for (var element in rows) {
     element.cells[columnName]?.value = ++num;
-  });
+  }
 }
 
 List<TextButton> buttonsToWidgets(Finder pageButtons) {
@@ -44,7 +44,7 @@ void main() {
 
     late Color activateButtonColor;
 
-    final headerName = 'header0';
+    const headerName = 'header0';
 
     final grid = PlutoWidgetTestHelper(
       '100개 행과 기본 페이지 크기 40',
@@ -60,16 +60,13 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: Container(
-                child: PlutoGrid(
-                  columns: columns,
-                  rows: rows,
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager!;
-                  },
-                  createFooter: (_stateManager) =>
-                      PlutoPagination(_stateManager),
-                ),
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager!;
+                },
+                createFooter: (_stateManager) => PlutoPagination(_stateManager),
               ),
             ),
           ),

@@ -4,17 +4,25 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'mixin_popup_cell.dart';
 
 class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
+  @override
   final PlutoGridStateManager? stateManager;
+
+  @override
   final PlutoCell? cell;
+
+  @override
   final PlutoColumn? column;
+
+  @override
   final PlutoRow? row;
 
-  PlutoTimeCell({
+  const PlutoTimeCell({
     this.stateManager,
     this.cell,
     this.column,
     this.row,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PlutoTimeCellState createState() => _PlutoTimeCellState();
@@ -24,10 +32,13 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
     with MixinPopupCell<PlutoTimeCell> {
   PlutoGridStateManager? popupStateManager;
 
+  @override
   List<PlutoColumn>? popupColumns = [];
 
+  @override
   List<PlutoRow>? popupRows = [];
 
+  @override
   Icon? icon = const Icon(
     Icons.access_time,
   );
@@ -36,6 +47,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
 
   String get cellMinute => widget.cell!.value.toString().substring(3, 5);
 
+  @override
   void openPopup() {
     if (widget.column!.readOnly) {
       return;

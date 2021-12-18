@@ -61,7 +61,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(false);
@@ -109,7 +109,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -156,7 +156,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -203,7 +203,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -250,7 +250,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -298,7 +298,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -346,7 +346,7 @@ void main() {
       },
     );
 
-    final rowIdx = 0;
+    const rowIdx = 0;
 
     // when
     when(stateManager.isCurrentCell(any)).thenReturn(true);
@@ -393,7 +393,7 @@ void main() {
         },
       );
 
-      final rowIdx = 0;
+      const rowIdx = 0;
 
       // when
       when(stateManager.isCurrentCell(any)).thenReturn(false);
@@ -447,7 +447,7 @@ void main() {
         },
       );
 
-      final rowIdx = 0;
+      const rowIdx = 0;
 
       // when
       when(stateManager.isCurrentCell(any)).thenReturn(false);
@@ -502,7 +502,7 @@ void main() {
         },
       );
 
-      final rowIdx = 0;
+      const rowIdx = 0;
 
       when(stateManager.isCurrentCell(any)).thenReturn(true);
       when(stateManager.isEditing).thenReturn(false);
@@ -558,7 +558,7 @@ void main() {
 
     int rowIdx;
 
-    final aCell = ({
+    aCell({
       bool isCurrentCell = true,
       bool isEditing = false,
       bool readOnly = false,
@@ -604,7 +604,7 @@ void main() {
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
       });
-    };
+    }
 
     aCell(isCurrentCell: false).test(
       'currentCell 이 아니면, DefaultCellWidget 이 렌더링 되어야 한다.',
@@ -643,7 +643,7 @@ void main() {
 
     int rowIdx;
 
-    final aCellWithConfiguration = (
+    aCellWithConfiguration(
       PlutoGridConfiguration configuration, {
       bool isCurrentCell = true,
       bool isSelectedCell = false,
@@ -691,7 +691,7 @@ void main() {
 
         await tester.pumpAndSettle(const Duration(seconds: 1));
       });
-    };
+    }
 
     aCellWithConfiguration(
       const PlutoGridConfiguration(

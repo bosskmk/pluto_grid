@@ -9,6 +9,7 @@ class PlutoChangeNotifier extends ChangeNotifier {
     super.dispose();
   }
 
+  @override
   notifyListeners() {
     if (!_disposed) {
       super.notifyListeners();

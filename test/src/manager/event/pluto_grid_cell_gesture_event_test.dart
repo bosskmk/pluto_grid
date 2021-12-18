@@ -14,7 +14,7 @@ void main() {
   MockPlutoGridStateManager? stateManager;
   MockPlutoGridEventManager? eventManager;
 
-  var eventBuilder = ({
+  eventBuilder({
     required PlutoGridGestureType gestureType,
     Offset? offset,
     PlutoCell? cell,
@@ -86,7 +86,7 @@ void main() {
         clearInteractions(stateManager);
 
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         // when
         var event = eventBuilder(
@@ -123,7 +123,7 @@ void main() {
         clearInteractions(stateManager);
 
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         // when
         var event = eventBuilder(
@@ -151,8 +151,8 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final columnIdx = 1;
-        final rowIdx = 1;
+        const columnIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.hasFocus).thenReturn(true);
         when(stateManager!.isSelectingInteraction()).thenReturn(true);
@@ -193,7 +193,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.hasFocus).thenReturn(true);
         when(stateManager!.isSelectingInteraction()).thenReturn(true);
@@ -232,7 +232,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.hasFocus).thenReturn(true);
         when(stateManager!.isSelectingInteraction()).thenReturn(false);
@@ -266,7 +266,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.hasFocus).thenReturn(true);
         when(stateManager!.isSelectingInteraction()).thenReturn(false);
@@ -299,7 +299,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(false);
         when(stateManager!.selectingMode).thenReturn(
@@ -330,7 +330,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(true);
         when(stateManager!.selectingMode).thenReturn(
@@ -360,7 +360,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(false);
         when(stateManager!.selectingMode)
@@ -386,9 +386,9 @@ void main() {
       'setCurrentSelectingPositionWithOffset, addEvent 가 호출 되어야 한다.',
       () {
         // given
-        final offset = const Offset(2.0, 3.0);
+        const offset = Offset(2.0, 3.0);
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         when(stateManager!.isCurrentCell(any)).thenReturn(false);
         when(stateManager!.selectingMode)
@@ -420,7 +420,7 @@ void main() {
       () {
         // given
         final cell = PlutoCell(value: 'value');
-        final rowIdx = 1;
+        const rowIdx = 1;
 
         // when
         when(stateManager!.isCurrentCell(any)).thenReturn(true);

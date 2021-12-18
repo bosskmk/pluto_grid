@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+Text _buildTextItem({
+  required String text,
+  required Color? textColor,
+  bool enabled = true,
+}) {
+  return Text(
+    text,
+    style: TextStyle(
+      color: enabled ? textColor : textColor!.withOpacity(0.5),
+      fontSize: 13,
+    ),
+  );
+}
+
+PopupMenuItem<PlutoGridColumnMenuItem> _buildMenuItem<PlutoGridColumnMenuItem>({
+  Widget? child,
+  bool enabled = true,
+  PlutoGridColumnMenuItem? value,
+}) {
+  return PopupMenuItem<PlutoGridColumnMenuItem>(
+    value: value,
+    child: child,
+    height: 36,
+    enabled: enabled,
+  );
+}
+
 /// Open the context menu on the right side of the column.
 Future<PlutoGridColumnMenuItem?>? showColumnMenu({
   BuildContext? context,
@@ -19,35 +46,6 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
 
   final Color backgroundColor = stateManager.configuration!.menuBackgroundColor;
 
-  final buildTextItem = (
-    String text, {
-    bool enabled = true,
-  }) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: enabled ? textColor : textColor!.withOpacity(0.5),
-        fontSize: 13,
-      ),
-    );
-  };
-
-  final PopupMenuItem<PlutoGridColumnMenuItem> Function<
-              PlutoGridColumnMenuItem>(
-          {Widget child, bool enabled, PlutoGridColumnMenuItem value})
-      buildMenuItem = <PlutoGridColumnMenuItem>({
-    PlutoGridColumnMenuItem? value,
-    Widget? child,
-    bool enabled = true,
-  }) {
-    return PopupMenuItem<PlutoGridColumnMenuItem>(
-      value: value,
-      child: child,
-      height: 36,
-      enabled: enabled,
-    );
-  };
-
   final localeText = stateManager.localeText;
 
   return showMenu<PlutoGridColumnMenuItem>(
@@ -57,50 +55,70 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
         position & const Size(40, 40), Offset.zero & overlay.size),
     items: [
       if (column!.frozen.isFrozen == true)
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.unfreeze,
-          child: buildTextItem(localeText.unfreezeColumn),
+          child: _buildTextItem(
+            text: localeText.unfreezeColumn,
+            textColor: textColor,
+          ),
         ),
       if (column.frozen.isFrozen != true) ...[
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToLeft,
-          child: buildTextItem(localeText.freezeColumnToLeft),
+          child: _buildTextItem(
+            text: localeText.freezeColumnToLeft,
+            textColor: textColor,
+          ),
         ),
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToRight,
-          child: buildTextItem(localeText.freezeColumnToRight),
+          child: _buildTextItem(
+            text: localeText.freezeColumnToRight,
+            textColor: textColor,
+          ),
         ),
       ],
       const PopupMenuDivider(),
-      buildMenuItem(
+      _buildMenuItem(
         value: PlutoGridColumnMenuItem.autoFit,
-        child: buildTextItem(localeText.autoFitColumn),
+        child: _buildTextItem(
+          text: localeText.autoFitColumn,
+          textColor: textColor,
+        ),
       ),
       if (column.enableHideColumnMenuItem == true)
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.hideColumn,
-          child: buildTextItem(
-            localeText.hideColumn,
+          child: _buildTextItem(
+            text: localeText.hideColumn,
             enabled: stateManager.refColumns!.length > 1,
+            textColor: textColor,
           ),
           enabled: stateManager.refColumns!.length > 1,
         ),
       if (column.enableSetColumnsMenuItem == true)
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.setColumns,
-          child: buildTextItem(localeText.setColumns),
+          child: _buildTextItem(
+            text: localeText.setColumns,
+            textColor: textColor,
+          ),
         ),
       if (column.enableFilterMenuItem == true) ...[
         const PopupMenuDivider(),
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.setFilter,
-          child: buildTextItem(localeText.setFilter),
+          child: _buildTextItem(
+            text: localeText.setFilter,
+            textColor: textColor,
+          ),
         ),
-        buildMenuItem(
+        _buildMenuItem(
           value: PlutoGridColumnMenuItem.resetFilter,
-          child: buildTextItem(
-            localeText.resetFilter,
+          child: _buildTextItem(
+            text: localeText.resetFilter,
             enabled: stateManager.hasFilter,
+            textColor: textColor,
           ),
           enabled: stateManager.hasFilter,
         ),

@@ -22,16 +22,14 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Container(
-              child: PlutoDualGrid(
-                gridPropsA: PlutoDualGridProps(
-                  columns: gridAColumns,
-                  rows: gridARows,
-                ),
-                gridPropsB: PlutoDualGridProps(
-                  columns: gridBColumns,
-                  rows: gridBRows,
-                ),
+            child: PlutoDualGrid(
+              gridPropsA: PlutoDualGridProps(
+                columns: gridAColumns,
+                rows: gridARows,
+              ),
+              gridPropsB: PlutoDualGridProps(
+                columns: gridBColumns,
+                rows: gridBRows,
               ),
             ),
           ),
@@ -79,20 +77,18 @@ void main() {
           await tester.pumpWidget(
             MaterialApp(
               home: Material(
-                child: Container(
-                  child: PlutoDualGrid(
-                    gridPropsA: PlutoDualGridProps(
-                      columns: gridAColumns,
-                      rows: gridARows,
-                      onLoaded: (PlutoGridOnLoadedEvent event) =>
-                          stateManagerA = event.stateManager,
-                    ),
-                    gridPropsB: PlutoDualGridProps(
-                      columns: gridBColumns,
-                      rows: gridBRows,
-                      onLoaded: (PlutoGridOnLoadedEvent event) =>
-                          stateManagerB = event.stateManager,
-                    ),
+                child: PlutoDualGrid(
+                  gridPropsA: PlutoDualGridProps(
+                    columns: gridAColumns,
+                    rows: gridARows,
+                    onLoaded: (PlutoGridOnLoadedEvent event) =>
+                        stateManagerA = event.stateManager,
+                  ),
+                  gridPropsB: PlutoDualGridProps(
+                    columns: gridBColumns,
+                    rows: gridBRows,
+                    onLoaded: (PlutoGridOnLoadedEvent event) =>
+                        stateManagerB = event.stateManager,
                   ),
                 ),
               ),
@@ -201,18 +197,18 @@ void main() {
     });
 
     test('ratio 가 0.5 인 경우 width 가 5:5', () {
-      final display = const PlutoDualGridDisplayRatio(ratio: 0.5);
+      const display = PlutoDualGridDisplayRatio(ratio: 0.5);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('ratio 가 0.1 인 경우 width 가 1:9', () {
-      final display = const PlutoDualGridDisplayRatio(ratio: 0.1);
+      const display = PlutoDualGridDisplayRatio(ratio: 0.1);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 20);
       expect(display.gridBWidth(size), 180);
@@ -221,18 +217,18 @@ void main() {
 
   group('PlutoDualGridDisplayFixedAndExpanded', () {
     test('width 가 100', () {
-      final display = const PlutoDualGridDisplayFixedAndExpanded(width: 100);
+      const display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('width 가 50', () {
-      final display = const PlutoDualGridDisplayFixedAndExpanded(width: 50);
+      const display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 50);
       expect(display.gridBWidth(size), 150);
@@ -241,18 +237,18 @@ void main() {
 
   group('PlutoDualGridDisplayExpandedAndFixed', () {
     test('width 가 100', () {
-      final display = const PlutoDualGridDisplayExpandedAndFixed(width: 100);
+      const display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 100);
       expect(display.gridBWidth(size), 100);
     });
 
     test('width 가 50', () {
-      final display = const PlutoDualGridDisplayExpandedAndFixed(width: 50);
+      const display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
 
-      final size = const BoxConstraints(maxWidth: 200);
+      const size = BoxConstraints(maxWidth: 200);
 
       expect(display.gridAWidth(size), 150);
       expect(display.gridBWidth(size), 50);

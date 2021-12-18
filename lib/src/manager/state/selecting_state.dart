@@ -79,19 +79,23 @@ abstract class ISelectingState {
 }
 
 mixin SelectingState implements IPlutoGridState {
+  @override
   bool get isSelecting => _isSelecting;
 
   bool _isSelecting = false;
 
+  @override
   PlutoGridSelectingMode get selectingMode => _selectingMode;
 
   PlutoGridSelectingMode _selectingMode = PlutoGridSelectingMode.cell;
 
+  @override
   PlutoGridCellPosition? get currentSelectingPosition =>
       _currentSelectingPosition;
 
   PlutoGridCellPosition? _currentSelectingPosition;
 
+  @override
   List<PlutoGridSelectingCellPosition> get currentSelectingPositionList {
     if (!_selectingMode.isCell ||
         currentCellPosition == null ||
@@ -129,12 +133,15 @@ mixin SelectingState implements IPlutoGridState {
     return positions;
   }
 
+  @override
   bool get hasCurrentSelectingPosition => _currentSelectingPosition != null;
 
+  @override
   List<PlutoRow?> get currentSelectingRows => _currentSelectingRows;
 
   List<PlutoRow?> _currentSelectingRows = [];
 
+  @override
   String get currentSelectingText {
     final bool fromSelectingRows =
         _selectingMode.isRow && _currentSelectingRows.isNotEmpty;
@@ -155,6 +162,7 @@ mixin SelectingState implements IPlutoGridState {
     return '';
   }
 
+  @override
   void setSelecting(bool flag) {
     if (_selectingMode.isNone) {
       return;
@@ -173,6 +181,7 @@ mixin SelectingState implements IPlutoGridState {
     notifyListeners();
   }
 
+  @override
   void setSelectingMode(PlutoGridSelectingMode mode) {
     if (_selectingMode == mode) {
       return;
@@ -187,6 +196,7 @@ mixin SelectingState implements IPlutoGridState {
     notifyListeners();
   }
 
+  @override
   void setAllCurrentSelecting() {
     if (refRows == null || refRows!.isEmpty) {
       return;
@@ -222,6 +232,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void setCurrentSelectingPosition({
     PlutoGridCellPosition? cellPosition,
     bool notify = true,
@@ -250,6 +261,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void setCurrentSelectingPositionByCellKey(
     Key? cellKey, {
     bool notify = true,
@@ -264,6 +276,7 @@ mixin SelectingState implements IPlutoGridState {
     );
   }
 
+  @override
   void setCurrentSelectingPositionWithOffset(Offset? offset) {
     if (currentCell == null) {
       return;
@@ -327,6 +340,7 @@ mixin SelectingState implements IPlutoGridState {
     );
   }
 
+  @override
   void setCurrentSelectingRowsByRange(int? from, int? to,
       {bool notify = true}) {
     if (!_selectingMode.isRow) {
@@ -348,6 +362,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void clearCurrentSelectingPosition({bool notify = true}) {
     if (_currentSelectingPosition == null) {
       return;
@@ -360,6 +375,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void clearCurrentSelectingRows({bool notify = true}) {
     if (_currentSelectingRows.isEmpty) {
       return;
@@ -372,6 +388,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void toggleSelectingRow(int? rowIdx, {notify = true}) {
     if (!_selectingMode.isRow) {
       return;
@@ -397,12 +414,14 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   bool isSelectingInteraction() {
     return !_selectingMode.isNone &&
         (keyPressed.shift || keyPressed.ctrl) &&
         currentCell != null;
   }
 
+  @override
   bool isSelectedRow(Key? rowKey) {
     if (rowKey == null ||
         !_selectingMode.isRow ||
@@ -418,6 +437,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   // todo : code cleanup
+  @override
   bool isSelectedCell(PlutoCell? cell, PlutoColumn? column, int? rowIdx) {
     if (_selectingMode.isNone) {
       return false;
@@ -510,6 +530,7 @@ mixin SelectingState implements IPlutoGridState {
     }
   }
 
+  @override
   void handleAfterSelectingRow(PlutoCell cell, dynamic value) {
     changeCellValue(cell, value, notify: false);
 
@@ -529,7 +550,7 @@ mixin SelectingState implements IPlutoGridState {
 
     List<String> rowText = [];
 
-    _currentSelectingRows.forEach((row) {
+    for (var row in _currentSelectingRows) {
       List<String> columnText = [];
 
       for (var i = 0; i < columnIndexes.length; i += 1) {
@@ -539,7 +560,7 @@ mixin SelectingState implements IPlutoGridState {
       }
 
       rowText.add(columnText.join('\t'));
-    });
+    }
 
     return rowText.join('\n');
   }
