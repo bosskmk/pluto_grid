@@ -142,7 +142,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/dual_mode_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/dual_mode_screen.dart',
         ),
       ],
       body: PlutoDualGrid(

@@ -122,7 +122,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/value_formatter_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/value_formatter_screen.dart',
         ),
       ],
       body: PlutoGrid(

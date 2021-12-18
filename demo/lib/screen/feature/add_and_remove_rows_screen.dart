@@ -191,7 +191,7 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/add_and_remove_rows_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/add_and_remove_rows_screen.dart',
         ),
       ],
       body: Column(

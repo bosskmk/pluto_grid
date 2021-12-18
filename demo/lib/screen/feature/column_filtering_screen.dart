@@ -81,7 +81,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/column_filtering_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_filtering_screen.dart',
         ),
       ],
       body: PlutoGrid(

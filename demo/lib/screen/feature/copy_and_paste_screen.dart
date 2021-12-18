@@ -66,7 +66,7 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
       topButtons: [
         PlutoExampleButton(
           url:
-              'https://github.com/bosskmk/pluto_grid/blob/master/example/lib/screen/feature/copy_and_paste_screen.dart',
+              'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/copy_and_paste_screen.dart',
         ),
       ],
       body: PlutoGrid(
