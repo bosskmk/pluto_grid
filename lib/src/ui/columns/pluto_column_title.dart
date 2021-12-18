@@ -87,8 +87,17 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   }
 
   void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager
-        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
+    var offset = _currentPosition.dx - 20;
+    widget.stateManager.resizeColumn(widget.column.key, offset);
+
+    if (widget.stateManager.scroll!.maxScrollHorizontal -
+            widget.stateManager.scroll!.bodyRowsHorizontal!.offset <
+        offset.abs()) {
+      widget.stateManager.scrollByDirection(
+          PlutoMoveDirection.right,
+          widget.stateManager.scroll!.bodyRowsHorizontal!.offset -
+              offset.abs());
+    }
   }
 
   @override
