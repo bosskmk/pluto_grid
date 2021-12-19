@@ -106,33 +106,58 @@ class _RowDragIconWidget extends StatefulWidget {
 }
 
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
+  List<PlutoRow?> get draggingRows {
+    if (widget.stateManager.currentSelectingRows.isEmpty) {
+      return [widget.row];
+    }
+
+    if (widget.stateManager.isSelectedRow(widget.row.key)) {
+      return widget.stateManager.currentSelectingRows;
+    }
+
+    // In case there are selected rows,
+    // if the dragging row is not included in it,
+    // the selection of rows is invalidated.
+    widget.stateManager.clearCurrentSelecting(notify: false);
+
+    return [widget.row];
+  }
+
+  void handleOnPointerDown(PointerDownEvent event) {
+    widget.stateManager.setIsDraggingRow(true, notify: false);
+
+    widget.stateManager.setDragRows(draggingRows);
+  }
+
+  void handleOnPointerMove(PointerMoveEvent event) {
+    // Do not drag while rows are selected.
+    if (widget.stateManager.isSelecting) {
+      widget.stateManager.setIsDraggingRow(false);
+
+      return;
+    }
+
+    widget.stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
+      offset: event.position,
+    ));
+
+    int? targetRowIdx = widget.stateManager.getRowIdxByOffset(
+      event.position.dy,
+    );
+
+    widget.stateManager.setDragTargetRowIdx(targetRowIdx);
+  }
+
+  void handleOnPointerUp(PointerUpEvent event) {
+    widget.stateManager.setIsDraggingRow(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (PointerDownEvent event) {
-        final List<PlutoRow?> draggingRows =
-            widget.stateManager.currentSelectingRows.isNotEmpty
-                ? widget.stateManager.currentSelectingRows
-                : [widget.row];
-
-        widget.stateManager.setIsDraggingRow(true, notify: false);
-
-        widget.stateManager.setDragRows(draggingRows);
-      },
-      onPointerMove: (PointerMoveEvent event) {
-        widget.stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
-          offset: event.position,
-        ));
-
-        int? targetRowIdx = widget.stateManager.getRowIdxByOffset(
-          event.position.dy,
-        );
-
-        widget.stateManager.setDragTargetRowIdx(targetRowIdx);
-      },
-      onPointerUp: (PointerUpEvent event) {
-        widget.stateManager.setIsDraggingRow(false);
-      },
+      onPointerDown: handleOnPointerDown,
+      onPointerMove: handleOnPointerMove,
+      onPointerUp: handleOnPointerUp,
       child: Draggable<List<PlutoRow?>>(
         data: [widget.row],
         feedback: Material(

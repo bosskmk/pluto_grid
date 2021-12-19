@@ -111,7 +111,9 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
     }
 
     _addGestureEvent(
-        PlutoGridGestureType.onLongPressStart, details.globalPosition);
+      PlutoGridGestureType.onLongPressStart,
+      details.globalPosition,
+    );
   }
 
   void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {

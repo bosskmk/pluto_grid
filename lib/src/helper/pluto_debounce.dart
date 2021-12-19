@@ -1,6 +1,36 @@
 import 'dart:async';
 
+class PlutoDebounce {
+  final Duration duration;
+
+  PlutoDebounce({
+    this.duration = const Duration(milliseconds: 1),
+  });
+
+  Timer? _debounce;
+
+  void dispose() {
+    _debounce?.cancel();
+  }
+
+  void debounce({
+    required void Function() callback,
+  }) {
+    if (_debounce?.isActive ?? false) {
+      _debounce?.cancel();
+    }
+
+    _debounce = Timer(duration, callback);
+  }
+}
+
 class PlutoDebounceByHashCode {
+  final Duration duration;
+
+  PlutoDebounceByHashCode({
+    this.duration = const Duration(milliseconds: 1),
+  });
+
   Timer? _debounce;
 
   int? _previousHashCode;
@@ -12,7 +42,6 @@ class PlutoDebounceByHashCode {
   bool isDebounced({
     required int hashCode,
     bool ignore = false,
-    Duration duration = const Duration(milliseconds: 1),
   }) {
     if (ignore) {
       return false;
@@ -22,7 +51,10 @@ class PlutoDebounceByHashCode {
       return true;
     }
 
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    if (_debounce?.isActive ?? false) {
+      _debounce?.cancel();
+    }
+
     _debounce = Timer(duration, () {
       _previousHashCode = null;
     });

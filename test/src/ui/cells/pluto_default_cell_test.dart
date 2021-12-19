@@ -235,6 +235,7 @@ void main() {
 
         when(stateManager.getRowByIdx(any)).thenReturn(row);
         when(stateManager.isSelectedRow(any)).thenReturn(false);
+        when(stateManager.isSelecting).thenReturn(false);
 
         await tester.drag(find.byType(Icon), offset);
 

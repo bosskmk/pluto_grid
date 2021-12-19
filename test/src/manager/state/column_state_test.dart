@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
+import 'column_state_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
+])
 void main() {
+  final MockPlutoGridScrollController scroll = MockPlutoGridScrollController();
+  final MockScrollController scrollController = MockScrollController();
+
+  when(scroll.maxScrollHorizontal).thenReturn(0);
+  when(scroll.bodyRowsHorizontal).thenReturn(scrollController);
+  when(scrollController.offset).thenReturn(0);
+
   testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',
       (WidgetTester tester) async {
     // given
@@ -19,7 +32,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -51,7 +64,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -88,7 +101,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -119,7 +132,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -152,7 +165,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -191,7 +204,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -222,7 +235,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -254,7 +267,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -301,7 +314,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -324,7 +337,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -350,7 +363,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -376,7 +389,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -399,7 +412,7 @@ void main() {
       ],
       rows: null,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -426,7 +439,7 @@ void main() {
       columns: columns,
       rows: rows,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     stateManager.setLayout(const BoxConstraints());
@@ -460,7 +473,7 @@ void main() {
       columns: columns,
       rows: rows,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     // when
@@ -488,7 +501,7 @@ void main() {
       columns: columns,
       rows: rows,
       gridFocusNode: null,
-      scroll: null,
+      scroll: scroll,
     );
 
     stateManager.setLayout(const BoxConstraints());
@@ -519,7 +532,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager.setLayout(const BoxConstraints());
@@ -545,7 +558,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -574,7 +587,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -614,7 +627,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager
@@ -653,7 +666,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
@@ -694,7 +707,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
@@ -734,7 +747,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // 150 + 200 + 150 = 최소 500 필요
@@ -744,7 +757,7 @@ void main() {
       expect(stateManager.showFrozenColumn, true);
 
       // 최소 넓이에서 남는 50 이상 크기를 키움
-      stateManager.resizeColumn(columns.first.key, 60);
+      stateManager.resizeColumn(columns.first, 60);
 
       expect(stateManager.showFrozenColumn, false);
     },
@@ -776,7 +789,7 @@ void main() {
         columns: columns,
         rows: rows,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // 150 + 200 + 150 = 최소 500 필요
@@ -786,7 +799,7 @@ void main() {
       expect(stateManager.showFrozenColumn, false);
 
       // 부족한 50 이상 컬럼 사이즈를 줄임
-      stateManager.resizeColumn(columns.first.key, -60);
+      stateManager.resizeColumn(columns.first, -60);
 
       expect(stateManager.showFrozenColumn, true);
     },
@@ -806,7 +819,7 @@ void main() {
         columns: columns,
         rows: null,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -837,7 +850,7 @@ void main() {
         columns: columns,
         rows: null,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       // when
@@ -862,7 +875,7 @@ void main() {
         columns: columns,
         rows: null,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       var listeners = MockOnChangeListener();
@@ -892,7 +905,7 @@ void main() {
         columns: columns,
         rows: null,
         gridFocusNode: null,
-        scroll: null,
+        scroll: scroll,
       );
 
       var listeners = MockOnChangeListener();

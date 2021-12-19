@@ -8,6 +8,7 @@ class RowHelper {
     int count,
     List<PlutoColumn>? columns, {
     bool checked = false,
+    int start = 0,
   }) {
     return Iterable<int>.generate(count)
         .map((rowIdx) => PlutoRow(
@@ -16,6 +17,8 @@ class RowHelper {
                 columns!,
                 key: (dynamic column) => column.field.toString(),
                 value: (dynamic column) {
+                  rowIdx += start;
+
                   if ((column as PlutoColumn).type.isText) {
                     return cellOfTextColumn(column, rowIdx);
                   } else if (column.type.isDate) {

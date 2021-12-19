@@ -35,7 +35,9 @@ abstract class _PlutoColumnTitleStateWithChange
 }
 
 class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
-  late Offset _currentPosition;
+  late double _columnLeftPosition;
+
+  late double _columnRightPosition;
 
   void _showContextMenu(BuildContext context, Offset position) async {
     final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
@@ -85,13 +87,37 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     _showContextMenu(context, details.globalPosition);
   }
 
+  void _handleOnHorizontalDragStartContextMenu(DragStartDetails details) {
+    _columnRightPosition = details.globalPosition.dx;
+    _columnLeftPosition = _columnRightPosition - widget.column.width;
+  }
+
   void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
-    _currentPosition = details.localPosition;
+    if (_columnLeftPosition + widget.column.minWidth >
+        details.globalPosition.dx) {
+      return;
+    }
+
+    final moveOffset = details.globalPosition.dx - _columnRightPosition;
+
+    widget.stateManager.resizeColumn(
+      widget.column,
+      moveOffset,
+      ignoreUpdateScroll: true,
+    );
+
+    if (widget.stateManager.isInvalidHorizontalScroll) {
+      widget.stateManager.scrollByDirection(
+        PlutoMoveDirection.right,
+        widget.stateManager.scroll!.maxScrollHorizontal + moveOffset,
+      );
+    }
+
+    _columnRightPosition = details.globalPosition.dx;
   }
 
   void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager
-        .resizeColumn(widget.column.key, _currentPosition.dx - 20);
+    widget.stateManager.updateInvalidScroll();
   }
 
   @override
@@ -151,6 +177,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                     onTapUp: widget.column.enableContextMenu
                         ? _handleOnTapUpContextMenu
                         : null,
+                    onHorizontalDragStart:
+                        _handleOnHorizontalDragStartContextMenu,
                     onHorizontalDragUpdate:
                         _handleOnHorizontalDragUpdateContextMenu,
                     onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
