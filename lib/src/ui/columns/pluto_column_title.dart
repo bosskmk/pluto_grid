@@ -103,7 +103,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     widget.stateManager.resizeColumn(
       widget.column,
       moveOffset,
-      ignoreUpdateScroll: true,
+      checkScroll: false,
     );
 
     if (widget.stateManager.isInvalidHorizontalScroll) {
@@ -117,7 +117,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   }
 
   void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager.updateInvalidScroll();
+    widget.stateManager.updateCorrectScroll();
   }
 
   @override

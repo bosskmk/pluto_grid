@@ -88,7 +88,8 @@ abstract class IColumnState {
   void resizeColumn(
     PlutoColumn column,
     double offset, {
-    bool ignoreUpdateScroll = true,
+    bool notify = true,
+    bool checkScroll = true,
   });
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
@@ -97,6 +98,7 @@ abstract class IColumnState {
     Key columnKey,
     bool flag, {
     bool notify = true,
+    bool checkScroll = true,
   });
 
   void sortAscending(PlutoColumn column, {bool notify = true});
@@ -355,7 +357,8 @@ mixin ColumnState implements IPlutoGridState {
   void resizeColumn(
     PlutoColumn column,
     double offset, {
-    bool ignoreUpdateScroll = false,
+    bool notify = true,
+    bool checkScroll = true,
   }) {
     final setWidth = column.width + offset;
 
@@ -363,13 +366,13 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn(notify: false);
 
-    notifyListeners();
-
-    if (ignoreUpdateScroll) {
-      return;
+    if (notify) {
+      notifyListeners();
     }
 
-    updateInvalidScroll();
+    if (checkScroll) {
+      updateCorrectScroll();
+    }
   }
 
   @override
@@ -419,6 +422,7 @@ mixin ColumnState implements IPlutoGridState {
     Key columnKey,
     bool flag, {
     bool notify = true,
+    bool checkScroll = true,
   }) {
     var found = refColumns!.originalList.firstWhereOrNull(
       (element) => element.key == columnKey,
@@ -436,6 +440,10 @@ mixin ColumnState implements IPlutoGridState {
 
     if (notify) {
       notifyListeners();
+    }
+
+    if (checkScroll) {
+      updateCorrectScroll();
     }
   }
 
