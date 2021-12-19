@@ -209,9 +209,7 @@ mixin CellState implements IPlutoGridState {
       columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
     );
 
-    clearCurrentSelectingPosition(notify: false);
-
-    clearCurrentSelectingRows(notify: false);
+    clearCurrentSelecting(notify: false);
 
     setEditing(autoEditing, notify: false);
 

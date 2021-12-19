@@ -77,9 +77,7 @@ mixin EditingState implements IPlutoGridState {
 
     _isEditing = flag;
 
-    clearCurrentSelectingPosition(notify: false);
-
-    clearCurrentSelectingRows(notify: false);
+    clearCurrentSelecting(notify: false);
 
     if (notify) {
       notifyListeners();

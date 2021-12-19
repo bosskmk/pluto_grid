@@ -904,9 +904,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#updateInvalidScroll, []),
           returnValueForMissingStub: null);
   @override
-  void setSelecting(bool? flag) =>
-      super.noSuchMethod(Invocation.method(#setSelecting, [flag]),
-          returnValueForMissingStub: null);
+  void setSelecting(bool? flag, {bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#setSelecting, [flag], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void setSelectingMode(_i2.PlutoGridSelectingMode? mode) =>
       super.noSuchMethod(Invocation.method(#setSelectingMode, [mode]),
@@ -942,14 +942,8 @@ class MockPlutoGridStateManager extends _i1.Mock
               #setCurrentSelectingRowsByRange, [from, to], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void clearCurrentSelectingPosition({bool? notify = true}) =>
-      super.noSuchMethod(
-          Invocation.method(
-              #clearCurrentSelectingPosition, [], {#notify: notify}),
-          returnValueForMissingStub: null);
-  @override
-  void clearCurrentSelectingRows({bool? notify = true}) => super.noSuchMethod(
-      Invocation.method(#clearCurrentSelectingRows, [], {#notify: notify}),
+  void clearCurrentSelecting({bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#clearCurrentSelecting, [], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
   void toggleSelectingRow(int? rowIdx, {bool? notify = true}) =>

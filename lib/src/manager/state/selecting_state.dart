@@ -35,7 +35,7 @@ abstract class ISelectingState {
   String get currentSelectingText;
 
   /// Change Multi-Select Status.
-  void setSelecting(bool flag);
+  void setSelecting(bool flag, {bool notify = true});
 
   void setSelectingMode(PlutoGridSelectingMode mode);
 
@@ -60,10 +60,10 @@ abstract class ISelectingState {
   /// [to] rowIdx of rows.
   void setCurrentSelectingRowsByRange(int from, int to, {bool notify = true});
 
-  void clearCurrentSelectingPosition({bool notify = true});
+  /// Resets currently selected rows and cells.
+  void clearCurrentSelecting({bool notify = true});
 
-  void clearCurrentSelectingRows({bool notify = true});
-
+  /// Select or unselect a row.
   void toggleSelectingRow(int rowIdx, {bool notify = true});
 
   bool isSelectingInteraction();
@@ -163,7 +163,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   @override
-  void setSelecting(bool flag) {
+  void setSelecting(bool flag, {bool notify = true}) {
     if (_selectingMode.isNone) {
       return;
     }
@@ -178,7 +178,14 @@ mixin SelectingState implements IPlutoGridState {
       setEditing(false, notify: false);
     }
 
-    notifyListeners();
+    // Invalidates the previously selected row.
+    if (_isSelecting) {
+      clearCurrentSelecting(notify: false);
+    }
+
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override
@@ -363,29 +370,10 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   @override
-  void clearCurrentSelectingPosition({bool notify = true}) {
-    if (_currentSelectingPosition == null) {
-      return;
-    }
+  void clearCurrentSelecting({bool notify = true}) {
+    _clearCurrentSelectingPosition(notify: notify);
 
-    _currentSelectingPosition = null;
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
-  @override
-  void clearCurrentSelectingRows({bool notify = true}) {
-    if (_currentSelectingRows.isEmpty) {
-      return;
-    }
-
-    _currentSelectingRows = [];
-
-    if (notify) {
-      notifyListeners();
-    }
+    _clearCurrentSelectingRows(notify: notify);
   }
 
   @override
@@ -606,6 +594,30 @@ mixin SelectingState implements IPlutoGridState {
 
     if (isEditing == true) {
       setEditing(false, notify: false);
+    }
+  }
+
+  void _clearCurrentSelectingPosition({bool notify = true}) {
+    if (_currentSelectingPosition == null) {
+      return;
+    }
+
+    _currentSelectingPosition = null;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  void _clearCurrentSelectingRows({bool notify = true}) {
+    if (_currentSelectingRows.isEmpty) {
+      return;
+    }
+
+    _currentSelectingRows = [];
+
+    if (notify) {
+      notifyListeners();
     }
   }
 }

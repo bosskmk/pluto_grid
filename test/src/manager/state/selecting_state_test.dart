@@ -649,7 +649,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNot(null));
 
-        stateManager.clearCurrentSelectingPosition();
+        stateManager.clearCurrentSelecting();
 
         // then
         expect(stateManager.currentSelectingPosition, null);
@@ -685,7 +685,7 @@ void main() {
 
         expect(stateManager.currentSelectingRows.length, 1);
 
-        stateManager.clearCurrentSelectingRows();
+        stateManager.clearCurrentSelecting();
 
         // then
         expect(stateManager.currentSelectingRows.length, 0);
