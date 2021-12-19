@@ -20,6 +20,7 @@ void main() {
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
+    when(stateManager!.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager!.columnHeight).thenReturn(
       stateManager!.configuration!.columnHeight,
     );

@@ -460,10 +460,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
           returnValue: 0) as int);
   @override
-  bool isShowFrozenColumn(double? maxWidth) =>
-      (super.noSuchMethod(Invocation.method(#isShowFrozenColumn, [maxWidth]),
-          returnValue: false) as bool);
-  @override
   void toggleFrozenColumn(_i5.Key? columnKey, _i2.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
@@ -695,14 +691,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void handleOnSelected() =>
       super.noSuchMethod(Invocation.method(#handleOnSelected, []),
-          returnValueForMissingStub: null);
-  @override
-  void setKeyPressed(_i2.PlutoGridKeyPressed? keyPressed) =>
-      super.noSuchMethod(Invocation.method(#setKeyPressed, [keyPressed]),
-          returnValueForMissingStub: null);
-  @override
-  void resetKeyPressed() =>
-      super.noSuchMethod(Invocation.method(#resetKeyPressed, []),
           returnValueForMissingStub: null);
   @override
   _i2.PlutoGridCellPosition cellPositionToMove(

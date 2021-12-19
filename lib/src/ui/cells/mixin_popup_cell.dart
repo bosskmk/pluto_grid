@@ -53,7 +53,7 @@ mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
 
   @override
   void dispose() {
-    widget.stateManager!.resetKeyPressed();
+    widget.stateManager!.keyPressed.reset();
 
     _textController!.dispose();
 

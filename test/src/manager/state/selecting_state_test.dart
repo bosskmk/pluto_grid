@@ -1023,9 +1023,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.setKeyPressed(PlutoGridKeyPressed(
-          shift: true,
-        ));
+        stateManager.keyPressed.shift = true;
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1056,9 +1054,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.setKeyPressed(PlutoGridKeyPressed(
-          ctrl: true,
-        ));
+        stateManager.keyPressed.ctrl = true;
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1089,9 +1085,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.setKeyPressed(PlutoGridKeyPressed(
-          shift: true,
-        ));
+        stateManager.keyPressed.shift = true;
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then
@@ -1123,9 +1117,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
-        stateManager.setKeyPressed(PlutoGridKeyPressed(
-          ctrl: true,
-        ));
+        stateManager.keyPressed.ctrl = true;
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then

@@ -22,6 +22,7 @@ void main() {
     eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowHeight).thenReturn(
       stateManager.configuration!.rowHeight,
     );
