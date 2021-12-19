@@ -17,15 +17,16 @@ class PlutoBaseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget(
-      onWillAccept: (List<PlutoRow?>? draggingRows) {
-        if (draggingRows == null || draggingRows.isEmpty) {
+    return DragTarget<PlutoRow>(
+      onWillAccept: (PlutoRow? draggingRow) {
+        if (draggingRow == null) {
           return false;
         }
 
-        final selectedRows = stateManager.currentSelectingRows.isNotEmpty
-            ? stateManager.currentSelectingRows
-            : draggingRows;
+        final List<PlutoRow?> selectedRows =
+            stateManager.currentSelectingRows.isNotEmpty
+                ? stateManager.currentSelectingRows
+                : [draggingRow];
 
         return selectedRows.firstWhere(
               (element) => element?.key == row.key,
@@ -33,10 +34,10 @@ class PlutoBaseRow extends StatelessWidget {
             ) ==
             null;
       },
-      onMove: (DragTargetDetails details) async {
+      onMove: (DragTargetDetails<PlutoRow> details) async {
         final draggingRows = stateManager.currentSelectingRows.isNotEmpty
             ? stateManager.currentSelectingRows
-            : details.data as List<PlutoRow?>;
+            : [details.data];
 
         stateManager.eventManager!.addEvent(
           PlutoGridDragRowsEvent(

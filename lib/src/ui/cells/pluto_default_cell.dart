@@ -158,8 +158,8 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
       onPointerDown: handleOnPointerDown,
       onPointerMove: handleOnPointerMove,
       onPointerUp: handleOnPointerUp,
-      child: Draggable<List<PlutoRow?>>(
-        data: [widget.row],
+      child: Draggable<PlutoRow>(
+        data: widget.row,
         feedback: Material(
           child: PlutoShadowContainer(
             width: widget.column.width,

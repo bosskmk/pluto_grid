@@ -334,8 +334,8 @@ class _BuildColumnWidget extends StatelessWidget {
         onWillAccept: (PlutoColumn? columnToDrag) {
           return columnToDrag != null && columnToDrag.key != column.key;
         },
-        onMove: (DragTargetDetails details) async {
-          final columnToMove = details.data as PlutoColumn;
+        onMove: (DragTargetDetails<PlutoColumn> details) async {
+          final columnToMove = details.data;
 
           if (columnToMove.key != column.key) {
             stateManager.eventManager!.addEvent(PlutoGridDragColumnEvent(
