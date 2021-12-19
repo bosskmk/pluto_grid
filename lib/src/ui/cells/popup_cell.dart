@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-abstract class AbstractMixinPopupCell extends StatefulWidget {
+abstract class PopupCell extends StatefulWidget {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
   final PlutoRow? row;
 
-  const AbstractMixinPopupCell({
+  const PopupCell({
     this.stateManager,
     this.cell,
     this.column,
@@ -16,7 +16,7 @@ abstract class AbstractMixinPopupCell extends StatefulWidget {
   }) : super(key: key);
 }
 
-abstract class AbstractPopup {
+abstract class GridPopupProps {
   List<PlutoColumn>? popupColumns;
 
   List<PlutoRow>? popupRows;
@@ -24,8 +24,8 @@ abstract class AbstractPopup {
   Icon? icon;
 }
 
-mixin MixinPopupCell<T extends AbstractMixinPopupCell> on State<T>
-    implements AbstractPopup {
+mixin PopupCellState<T extends PopupCell> on State<T>
+    implements GridPopupProps {
   TextEditingController? _textController;
 
   FocusNode? _textFocus;

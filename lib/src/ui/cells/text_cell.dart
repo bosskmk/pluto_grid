@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-abstract class AbstractMixinTextCell extends StatefulWidget {
+abstract class TextCell extends StatefulWidget {
   final PlutoGridStateManager? stateManager;
   final PlutoCell? cell;
   final PlutoColumn? column;
   final PlutoRow? row;
 
-  const AbstractMixinTextCell({
+  const TextCell({
     this.stateManager,
     this.cell,
     this.column,
@@ -18,7 +18,13 @@ abstract class AbstractMixinTextCell extends StatefulWidget {
   }) : super(key: key);
 }
 
-mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
+abstract class TextFieldProps {
+  TextInputType get keyboardType;
+
+  List<TextInputFormatter>? get inputFormatters;
+}
+
+mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   final _textController = TextEditingController();
 
   final PlutoDebounceByHashCode _debounce = PlutoDebounceByHashCode();
@@ -28,6 +34,12 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
   dynamic _initialCellValue;
 
   FocusNode? cellFocus;
+
+  @override
+  TextInputType get keyboardType => TextInputType.text;
+
+  @override
+  List<TextInputFormatter>? get inputFormatters => [];
 
   @override
   void dispose() {
@@ -217,17 +229,12 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
     widget.stateManager!.setKeepFocus(true);
   }
 
-  TextField buildTextField({
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? inputFormatters,
-    TextStyle? style,
-    InputDecoration decoration = const InputDecoration(
-      border: InputBorder.none,
-      contentPadding: EdgeInsets.all(0),
-      isDense: true,
-    ),
-    int maxLines = 1,
-  }) {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.stateManager!.keepFocus) {
+      cellFocus!.requestFocus();
+    }
+
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
@@ -235,21 +242,16 @@ mixin MixinTextCell<T extends AbstractMixinTextCell> on State<T> {
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
       onTap: _handleOnTap,
-      style: style ?? widget.stateManager!.configuration!.cellTextStyle,
-      decoration: decoration,
-      maxLines: maxLines,
-      keyboardType: keyboardType ?? TextInputType.text,
-      inputFormatters: inputFormatters ?? [],
+      style: widget.stateManager!.configuration!.cellTextStyle,
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.all(0),
+        isDense: true,
+      ),
+      maxLines: 1,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       textAlign: widget.column!.textAlign.value,
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.stateManager!.keepFocus) {
-      cellFocus!.requestFocus();
-    }
-
-    return buildTextField();
   }
 }

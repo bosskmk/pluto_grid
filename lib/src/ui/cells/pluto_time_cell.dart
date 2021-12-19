@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'mixin_popup_cell.dart';
+import 'popup_cell.dart';
 
-class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
+class PlutoTimeCell extends StatefulWidget implements PopupCell {
   @override
   final PlutoGridStateManager? stateManager;
 
@@ -29,7 +29,7 @@ class PlutoTimeCell extends StatefulWidget implements AbstractMixinPopupCell {
 }
 
 class _PlutoTimeCellState extends State<PlutoTimeCell>
-    with MixinPopupCell<PlutoTimeCell> {
+    with PopupCellState<PlutoTimeCell> {
   PlutoGridStateManager? popupStateManager;
 
   @override
