@@ -157,9 +157,10 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     setCurrentCell(
-        refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
-        toMove.rowIdx,
-        notify: notify);
+      refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
+      toMove.rowIdx,
+      notify: notify,
+    );
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition!.columnIdx);

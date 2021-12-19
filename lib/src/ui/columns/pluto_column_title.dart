@@ -165,7 +165,6 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                   stateManager: widget.stateManager,
                   column: widget.column,
                   child: _columnWidget,
-                  height: widget.height,
                 )
               : _columnWidget,
         ),
@@ -234,13 +233,11 @@ class _BuildDraggableWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
   final PlutoColumn column;
   final Widget child;
-  final double height;
 
   const _BuildDraggableWidget({
     required this.stateManager,
     required this.column,
     required this.child,
-    required this.height,
     Key? key,
   }) : super(key: key);
 
@@ -248,18 +245,24 @@ class _BuildDraggableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Draggable<PlutoColumn>(
       data: column,
-      feedback: PlutoShadowContainer(
-        alignment: column.titleTextAlign.alignmentValue,
-        width: column.width,
-        height: height,
-        backgroundColor: stateManager.configuration!.gridBackgroundColor,
-        borderColor: stateManager.configuration!.gridBorderColor,
-        child: Text(
-          column.title,
-          style: stateManager.configuration!.columnTextStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          softWrap: false,
+      dragAnchorStrategy: pointerDragAnchorStrategy,
+      feedback: FractionalTranslation(
+        translation: const Offset(-0.5, -0.5),
+        child: PlutoShadowContainer(
+          alignment: column.titleTextAlign.alignmentValue,
+          width: PlutoGridSettings.minColumnWidth,
+          height: stateManager.columnHeight,
+          backgroundColor: stateManager.configuration!.gridBackgroundColor,
+          borderColor: stateManager.configuration!.gridBorderColor,
+          child: Text(
+            column.title,
+            style: stateManager.configuration!.columnTextStyle.copyWith(
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            softWrap: false,
+          ),
         ),
       ),
       child: child,
