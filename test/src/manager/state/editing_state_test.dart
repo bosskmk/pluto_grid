@@ -453,6 +453,9 @@ void main() {
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
+        stateManager
+            .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+
         stateManager.resetShowFrozenColumn(notify: false);
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(

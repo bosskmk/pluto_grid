@@ -60,9 +60,6 @@ abstract class IColumnState {
   /// Column Index List by frozen Column
   List<int> get columnIndexesByShowFrozen;
 
-  /// Whether a frozen column is displayed in the screen width.
-  bool isShowFrozenColumn(double? maxWidth);
-
   /// Toggle whether the column is frozen or not.
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
 
@@ -243,19 +240,6 @@ mixin ColumnState implements IPlutoGridState {
   @override
   List<int> get columnIndexesByShowFrozen {
     return showFrozenColumn! ? columnIndexesForShowFrozen : columnIndexes;
-  }
-
-  @override
-  bool isShowFrozenColumn(double? maxWidth) {
-    final bool hasFrozenColumn =
-        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
-
-    return hasFrozenColumn &&
-        maxWidth! >
-            (leftFrozenColumnsWidth +
-                rightFrozenColumnsWidth +
-                PlutoGridSettings.bodyMinWidth +
-                PlutoGridSettings.totalShadowLineWidth);
   }
 
   @override
