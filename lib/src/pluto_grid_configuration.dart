@@ -603,10 +603,20 @@ class PlutoGridLocaleText {
   });
 }
 
+/// Behavior of the Enter key when a cell is selected.
 enum PlutoGridEnterKeyAction {
+  /// When the Enter key is pressed, the cell is changed to the edit state,
+  /// or if it is already in the edit state, it moves to the cell below.
   editingAndMoveDown,
+
+  /// When the Enter key is pressed, the cell is changed to the edit state,
+  /// or if it is already in the edit state, it moves to the right cell.
   editingAndMoveRight,
+
+  /// Pressing the Enter key toggles the editing status.
   toggleEditing,
+
+  /// Pressing the Enter key does nothing.
   none,
 }
 
