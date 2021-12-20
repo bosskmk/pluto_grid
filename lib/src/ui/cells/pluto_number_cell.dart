@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'mixin_text_cell.dart';
+import 'text_cell.dart';
 
-class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
+class PlutoNumberCell extends StatefulWidget implements TextCell {
   @override
   final PlutoGridStateManager? stateManager;
 
@@ -30,10 +30,21 @@ class PlutoNumberCell extends StatefulWidget implements AbstractMixinTextCell {
 }
 
 class _PlutoNumberCellState extends State<PlutoNumberCell>
-    with MixinTextCell<PlutoNumberCell> {
+    with TextCellState<PlutoNumberCell> {
   int? decimalRange;
 
   bool? activatedNegative;
+
+  @override
+  TextInputType get keyboardType => TextInputType.number;
+
+  @override
+  List<TextInputFormatter>? get inputFormatters => [
+        DecimalTextInputFormatter(
+          decimalRange: decimalRange,
+          activatedNegativeValues: activatedNegative!,
+        ),
+      ];
 
   @override
   void initState() {
@@ -42,23 +53,6 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
     decimalRange = widget.column!.type.number!.decimalRange();
 
     activatedNegative = widget.column!.type.number!.negative;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.stateManager!.keepFocus) {
-      cellFocus!.requestFocus();
-    }
-
-    return buildTextField(
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        DecimalTextInputFormatter(
-          decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative!,
-        ),
-      ],
-    );
   }
 }
 

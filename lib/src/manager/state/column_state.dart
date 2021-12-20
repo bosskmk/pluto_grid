@@ -60,9 +60,6 @@ abstract class IColumnState {
   /// Column Index List by frozen Column
   List<int> get columnIndexesByShowFrozen;
 
-  /// Whether a frozen column is displayed in the screen width.
-  bool isShowFrozenColumn(double? maxWidth);
-
   /// Toggle whether the column is frozen or not.
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
 
@@ -91,7 +88,8 @@ abstract class IColumnState {
   void resizeColumn(
     PlutoColumn column,
     double offset, {
-    bool ignoreUpdateScroll = true,
+    bool notify = true,
+    bool checkScroll = true,
   });
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
@@ -100,6 +98,7 @@ abstract class IColumnState {
     Key columnKey,
     bool flag, {
     bool notify = true,
+    bool checkScroll = true,
   });
 
   void sortAscending(PlutoColumn column, {bool notify = true});
@@ -246,19 +245,6 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   @override
-  bool isShowFrozenColumn(double? maxWidth) {
-    final bool hasFrozenColumn =
-        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
-
-    return hasFrozenColumn &&
-        maxWidth! >
-            (leftFrozenColumnsWidth +
-                rightFrozenColumnsWidth +
-                PlutoGridSettings.bodyMinWidth +
-                PlutoGridSettings.totalShadowLineWidth);
-  }
-
-  @override
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
     for (var i = 0; i < refColumns!.length; i += 1) {
       if (refColumns![i].key == columnKey) {
@@ -371,7 +357,8 @@ mixin ColumnState implements IPlutoGridState {
   void resizeColumn(
     PlutoColumn column,
     double offset, {
-    bool ignoreUpdateScroll = false,
+    bool notify = true,
+    bool checkScroll = true,
   }) {
     final setWidth = column.width + offset;
 
@@ -379,13 +366,13 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn(notify: false);
 
-    notifyListeners();
-
-    if (ignoreUpdateScroll) {
-      return;
+    if (notify) {
+      notifyListeners();
     }
 
-    updateInvalidScroll();
+    if (checkScroll) {
+      updateCorrectScroll();
+    }
   }
 
   @override
@@ -435,6 +422,7 @@ mixin ColumnState implements IPlutoGridState {
     Key columnKey,
     bool flag, {
     bool notify = true,
+    bool checkScroll = true,
   }) {
     var found = refColumns!.originalList.firstWhereOrNull(
       (element) => element.key == columnKey,
@@ -452,6 +440,10 @@ mixin ColumnState implements IPlutoGridState {
 
     if (notify) {
       notifyListeners();
+    }
+
+    if (checkScroll) {
+      updateCorrectScroll();
     }
   }
 

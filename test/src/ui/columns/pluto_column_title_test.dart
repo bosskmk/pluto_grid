@@ -561,7 +561,7 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(greaterThanOrEqualTo(30)),
-          ignoreUpdateScroll: true,
+          checkScroll: false,
         ));
       },
     );
@@ -574,7 +574,7 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(lessThanOrEqualTo(-30)),
-          ignoreUpdateScroll: true,
+          checkScroll: false,
         ));
       },
     );

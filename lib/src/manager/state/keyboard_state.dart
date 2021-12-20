@@ -4,11 +4,6 @@ abstract class IKeyboardState {
   /// Currently pressed key
   PlutoGridKeyPressed get keyPressed;
 
-  /// Set the current pressed key state.
-  void setKeyPressed(PlutoGridKeyPressed keyPressed);
-
-  void resetKeyPressed();
-
   /// The index position of the cell to move in that direction in the current cell.
   PlutoGridCellPosition cellPositionToMove(
     PlutoGridCellPosition cellPosition,
@@ -66,17 +61,7 @@ mixin KeyboardState implements IPlutoGridState {
   @override
   PlutoGridKeyPressed get keyPressed => _keyPressed;
 
-  PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
-
-  @override
-  void setKeyPressed(PlutoGridKeyPressed keyPressed) {
-    _keyPressed = keyPressed;
-  }
-
-  @override
-  void resetKeyPressed() {
-    _keyPressed = PlutoGridKeyPressed();
-  }
+  final PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
 
   @override
   PlutoGridCellPosition cellPositionToMove(
@@ -157,9 +142,10 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     setCurrentCell(
-        refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
-        toMove.rowIdx,
-        notify: notify);
+      refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
+      toMove.rowIdx,
+      notify: notify,
+    );
 
     if (direction.horizontal) {
       moveScrollByColumn(direction, cellPosition!.columnIdx);

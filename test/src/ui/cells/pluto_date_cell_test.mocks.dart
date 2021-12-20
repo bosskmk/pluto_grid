@@ -452,10 +452,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
           returnValue: 0) as int);
   @override
-  bool isShowFrozenColumn(double? maxWidth) =>
-      (super.noSuchMethod(Invocation.method(#isShowFrozenColumn, [maxWidth]),
-          returnValue: false) as bool);
-  @override
   void toggleFrozenColumn(_i3.Key? columnKey, _i2.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
@@ -480,19 +476,21 @@ class MockPlutoGridStateManager extends _i1.Mock
           returnValueForMissingStub: null);
   @override
   void resizeColumn(_i2.PlutoColumn? column, double? offset,
-          {bool? ignoreUpdateScroll = false}) =>
+          {bool? notify = true, bool? checkScroll = true}) =>
       super.noSuchMethod(
           Invocation.method(#resizeColumn, [column, offset],
-              {#ignoreUpdateScroll: ignoreUpdateScroll}),
+              {#notify: notify, #checkScroll: checkScroll}),
           returnValueForMissingStub: null);
   @override
   void autoFitColumn(_i3.BuildContext? context, _i2.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#autoFitColumn, [context, column]),
           returnValueForMissingStub: null);
   @override
-  void hideColumn(_i3.Key? columnKey, bool? flag, {bool? notify = true}) =>
+  void hideColumn(_i3.Key? columnKey, bool? flag,
+          {bool? notify = true, bool? checkScroll = true}) =>
       super.noSuchMethod(
-          Invocation.method(#hideColumn, [columnKey, flag], {#notify: notify}),
+          Invocation.method(#hideColumn, [columnKey, flag],
+              {#notify: notify, #checkScroll: checkScroll}),
           returnValueForMissingStub: null);
   @override
   void sortAscending(_i2.PlutoColumn? column, {bool? notify = true}) =>
@@ -687,14 +685,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void handleOnSelected() =>
       super.noSuchMethod(Invocation.method(#handleOnSelected, []),
-          returnValueForMissingStub: null);
-  @override
-  void setKeyPressed(_i2.PlutoGridKeyPressed? keyPressed) =>
-      super.noSuchMethod(Invocation.method(#setKeyPressed, [keyPressed]),
-          returnValueForMissingStub: null);
-  @override
-  void resetKeyPressed() =>
-      super.noSuchMethod(Invocation.method(#resetKeyPressed, []),
           returnValueForMissingStub: null);
   @override
   _i2.PlutoGridCellPosition cellPositionToMove(
@@ -895,16 +885,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
-  void updateInvalidScroll() =>
-      super.noSuchMethod(Invocation.method(#updateInvalidScroll, []),
+  void updateCorrectScroll() =>
+      super.noSuchMethod(Invocation.method(#updateCorrectScroll, []),
           returnValueForMissingStub: null);
   @override
   void setSelecting(bool? flag, {bool? notify = true}) => super.noSuchMethod(
       Invocation.method(#setSelecting, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setSelectingMode(_i2.PlutoGridSelectingMode? mode) =>
-      super.noSuchMethod(Invocation.method(#setSelectingMode, [mode]),
+  void setSelectingMode(_i2.PlutoGridSelectingMode? mode,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setSelectingMode, [mode], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void setAllCurrentSelecting() =>

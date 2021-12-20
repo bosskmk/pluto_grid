@@ -27,7 +27,7 @@ abstract class IScrollState {
 
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 
-  void updateInvalidScroll();
+  void updateCorrectScroll();
 }
 
 mixin ScrollState implements IPlutoGridState {
@@ -175,7 +175,7 @@ mixin ScrollState implements IPlutoGridState {
   }
 
   @override
-  void updateInvalidScroll() {
+  void updateCorrectScroll() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       if (isInvalidHorizontalScroll) {
         scroll!.horizontal!.animateTo(

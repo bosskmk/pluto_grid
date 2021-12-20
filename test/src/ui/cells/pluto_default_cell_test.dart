@@ -23,6 +23,7 @@ void main() {
     eventManager = MockPlutoGridEventManager();
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
@@ -191,7 +192,7 @@ void main() {
       'canRowDrag 가 true 인 경우 Draggable 위젯이 렌더링 되어야 한다.',
       (tester) async {
         expect(
-          find.byType(TestHelperUtil.typeOf<Draggable<List<PlutoRow?>>>()),
+          find.byType(TestHelperUtil.typeOf<Draggable<PlutoRow>>()),
           findsOneWidget,
         );
       },
@@ -201,7 +202,7 @@ void main() {
       'canRowDrag 가 false 인 경우 Draggable 위젯이 렌더링 되지 않아야 한다.',
       (tester) async {
         expect(
-          find.byType(TestHelperUtil.typeOf<Draggable<List<PlutoRow?>>>()),
+          find.byType(TestHelperUtil.typeOf<Draggable<PlutoRow>>()),
           findsNothing,
         );
       },

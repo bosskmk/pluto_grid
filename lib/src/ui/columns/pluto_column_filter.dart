@@ -96,15 +96,17 @@ abstract class _PlutoColumnFilterStateWithChange
     });
   }
 
-  void moveDown() {
+  void moveDown({required bool focusToPreviousCell}) {
     focusNode?.unfocus();
 
-    if (widget.stateManager.currentCell == null) {
+    if (!focusToPreviousCell || widget.stateManager.currentCell == null) {
       widget.stateManager.setCurrentCell(
         widget.stateManager.refRows!.first!.cells[widget.column.field],
         0,
         notify: false,
       );
+
+      widget.stateManager.scrollByDirection(PlutoMoveDirection.down, 0);
     }
 
     widget.stateManager.setKeepFocus(true, notify: false);
@@ -122,13 +124,14 @@ abstract class _PlutoColumnFilterStateWithChange
       return KeyEventResult.handled;
     }
 
-    final handleMoveDown = (keyManager.isDown || keyManager.isEnter) &&
-        widget.stateManager.refRows!.isNotEmpty;
+    final handleMoveDown =
+        (keyManager.isDown || keyManager.isEnter || keyManager.isEsc) &&
+            widget.stateManager.refRows!.isNotEmpty;
 
     final handleMoveHorizontal = keyManager.isTab ||
         (controller!.text.isEmpty && keyManager.isHorizontal);
 
-    final skip = !(handleMoveDown || handleMoveHorizontal);
+    final skip = !(handleMoveDown || handleMoveHorizontal || keyManager.isF3);
 
     if (skip) {
       /// 2021-11-19
@@ -150,11 +153,16 @@ abstract class _PlutoColumnFilterStateWithChange
     }
 
     if (handleMoveDown) {
-      moveDown();
+      moveDown(focusToPreviousCell: keyManager.isEsc);
     } else if (handleMoveHorizontal) {
       widget.stateManager.nextFocusOfColumnFilter(
         widget.column,
         reversed: keyManager.isLeft || keyManager.isShiftPressed,
+      );
+    } else if (keyManager.isF3) {
+      widget.stateManager.showFilterPopup(
+        focusNode!.context!,
+        calledColumn: widget.column,
       );
     }
 

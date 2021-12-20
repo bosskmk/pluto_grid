@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'mixin_popup_cell.dart';
+import 'popup_cell.dart';
 
-class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
+class PlutoDateCell extends StatefulWidget implements PopupCell {
   @override
   final PlutoGridStateManager? stateManager;
 
@@ -32,7 +32,7 @@ class PlutoDateCell extends StatefulWidget implements AbstractMixinPopupCell {
 }
 
 class _PlutoDateCellState extends State<PlutoDateCell>
-    with MixinPopupCell<PlutoDateCell> {
+    with PopupCellState<PlutoDateCell> {
   PlutoGridStateManager? popupStateManager;
 
   @override

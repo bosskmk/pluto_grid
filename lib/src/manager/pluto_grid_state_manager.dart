@@ -215,6 +215,11 @@ class PlutoGridKeyPressed {
     this.shift = false,
     this.ctrl = false,
   });
+
+  void reset() {
+    shift = false;
+    ctrl = false;
+  }
 }
 
 enum PlutoGridSelectingMode {

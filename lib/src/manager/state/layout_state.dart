@@ -266,7 +266,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final _isShowFrozenColumn = isShowFrozenColumn(size.maxWidth);
+    final _isShowFrozenColumn = _availableToShowFrozenColumns(size.maxWidth);
 
     final bool notify = _showFrozenColumn != _isShowFrozenColumn;
 
@@ -287,7 +287,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void resetShowFrozenColumn({bool notify = true}) {
-    _showFrozenColumn = isShowFrozenColumn(_maxWidth);
+    _showFrozenColumn = _availableToShowFrozenColumns(_maxWidth!);
 
     if (notify) {
       notifyListeners();
@@ -322,5 +322,17 @@ mixin LayoutState implements IPlutoGridState {
   @visibleForTesting
   void setGridGlobalOffset(Offset offset) {
     _gridGlobalOffset = offset;
+  }
+
+  bool _availableToShowFrozenColumns(double width) {
+    final bool hasFrozenColumn =
+        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
+
+    return hasFrozenColumn &&
+        width >
+            (leftFrozenColumnsWidth +
+                rightFrozenColumnsWidth +
+                PlutoGridSettings.bodyMinWidth +
+                PlutoGridSettings.totalShadowLineWidth);
   }
 }
