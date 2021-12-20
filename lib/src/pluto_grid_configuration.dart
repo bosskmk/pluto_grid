@@ -27,6 +27,9 @@ class PlutoGridConfiguration {
   /// Activated Border Color. (Current cell)
   final Color activatedBorderColor;
 
+  /// Inactivated Border Color. (Current cell)
+  final Color inactivatedBorderColor;
+
   /// Checked Color. (Checked rows)
   final Color checkedColor;
 
@@ -105,6 +108,7 @@ class PlutoGridConfiguration {
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
     this.activatedBorderColor = Colors.lightBlue,
+    this.inactivatedBorderColor = const Color(0xFFC4C7CC),
     this.checkedColor = const Color(0x11757575),
     this.borderColor = const Color(0xFFDDE2EB),
     this.cellColorInEditState = Colors.white,
@@ -145,6 +149,7 @@ class PlutoGridConfiguration {
     this.gridBorderColor = const Color(0xFF000000),
     this.activatedColor = const Color(0xFF313131),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
+    this.inactivatedBorderColor = const Color(0xFF666666),
     this.checkedColor = const Color(0x11202020),
     this.borderColor = const Color(0xFF000000),
     this.cellColorInEditState = const Color(0xFF666666),
@@ -215,6 +220,7 @@ class PlutoGridConfiguration {
     Color? gridBorderColor,
     Color? activatedColor,
     Color? activatedBorderColor,
+    Color? inactivatedBorderColor,
     Color? checkedColor,
     Color? borderColor,
     Color? cellColorInEditState,
@@ -248,6 +254,8 @@ class PlutoGridConfiguration {
       gridBorderColor: gridBorderColor ?? this.gridBorderColor,
       activatedColor: activatedColor ?? this.activatedColor,
       activatedBorderColor: activatedBorderColor ?? this.activatedBorderColor,
+      inactivatedBorderColor:
+          inactivatedBorderColor ?? this.inactivatedBorderColor,
       checkedColor: checkedColor ?? this.checkedColor,
       borderColor: borderColor ?? this.borderColor,
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,

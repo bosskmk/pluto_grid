@@ -128,7 +128,7 @@ abstract class _PlutoColumnFilterStateWithChange
     final handleMoveHorizontal = keyManager.isTab ||
         (controller!.text.isEmpty && keyManager.isHorizontal);
 
-    final skip = !(handleMoveDown || handleMoveHorizontal);
+    final skip = !(handleMoveDown || handleMoveHorizontal || keyManager.isF3);
 
     if (skip) {
       /// 2021-11-19
@@ -155,6 +155,11 @@ abstract class _PlutoColumnFilterStateWithChange
       widget.stateManager.nextFocusOfColumnFilter(
         widget.column,
         reversed: keyManager.isLeft || keyManager.isShiftPressed,
+      );
+    } else if (keyManager.isF3) {
+      widget.stateManager.showFilterPopup(
+        focusNode!.context!,
+        calledColumn: widget.column,
       );
     }
 

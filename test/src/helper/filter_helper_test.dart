@@ -515,25 +515,30 @@ void main() {
       test(
         'should be called setSelectingMode, addListener.',
         () {
+          final List<PlutoRow> filterRows = [];
+
           var filterPopupState = FilterPopupState(
             context: MockBuildContext(),
             configuration: const PlutoGridConfiguration(),
             handleAddNewFilter: (_) {},
             handleApplyFilter: (_) {},
             columns: ColumnHelper.textColumn('column'),
-            filterRows: [],
+            filterRows: filterRows,
             focusFirstFilterValue: false,
           );
 
           var stateManager = MockPlutoGridStateManager();
 
+          when(stateManager.rows).thenReturn(filterRows);
+
           filterPopupState.onLoaded(
             PlutoGridOnLoadedEvent(stateManager: stateManager),
           );
 
-          verify(
-            stateManager.setSelectingMode(PlutoGridSelectingMode.row),
-          ).called(1);
+          verify(stateManager.setSelectingMode(
+            PlutoGridSelectingMode.row,
+            notify: false,
+          )).called(1);
 
           verify(
             stateManager.addListener(filterPopupState.stateListener),
@@ -554,7 +559,14 @@ void main() {
             handleAddNewFilter: (_) {},
             handleApplyFilter: (_) {},
             columns: columns,
-            filterRows: [],
+            filterRows: [
+              FilterHelper.createFilterRow(
+                columnField: columns[0].enableFilterMenuItem
+                    ? columns[0].field
+                    : FilterHelper.filterFieldAllColumns,
+                filterType: columns[0].defaultFilter,
+              ),
+            ],
             focusFirstFilterValue: true,
           );
 
@@ -566,7 +578,7 @@ void main() {
             PlutoGridOnLoadedEvent(stateManager: stateManager),
           );
 
-          verify(stateManager.setKeepFocus(true)).called(1);
+          verify(stateManager.setKeepFocus(true, notify: false)).called(1);
 
           verify(stateManager.setCurrentCell(
             rows.first.cells[FilterHelper.filterFieldValue],
@@ -574,7 +586,9 @@ void main() {
             notify: false,
           )).called(1);
 
-          verify(stateManager.setEditing(true)).called(1);
+          verify(stateManager.setEditing(true, notify: false)).called(1);
+
+          verify(stateManager.notifyListeners()).called(1);
         },
       );
     });
@@ -598,17 +612,21 @@ void main() {
     });
 
     test('onSelected', () {
+      final List<PlutoRow> filterRows = [];
+
       var filterPopupState = FilterPopupState(
         context: MockBuildContext(),
         configuration: const PlutoGridConfiguration(),
         handleAddNewFilter: (_) {},
         handleApplyFilter: (_) {},
         columns: ColumnHelper.textColumn('column'),
-        filterRows: [],
+        filterRows: filterRows,
         focusFirstFilterValue: false,
       );
 
       var stateManager = MockPlutoGridStateManager();
+
+      when(stateManager.rows).thenReturn(filterRows);
 
       filterPopupState.onLoaded(
         PlutoGridOnLoadedEvent(stateManager: stateManager),
@@ -641,11 +659,11 @@ void main() {
 
         var stateManager = MockPlutoGridStateManager();
 
+        when(stateManager.rows).thenReturn([...filterRows]);
+
         filterPopupState.onLoaded(
           PlutoGridOnLoadedEvent(stateManager: stateManager),
         );
-
-        when(stateManager.rows).thenReturn([...filterRows]);
 
         filterPopupState.stateListener();
 
@@ -669,11 +687,11 @@ void main() {
 
         var stateManager = MockPlutoGridStateManager();
 
+        when(stateManager.rows).thenReturn(RowHelper.count(1, columns));
+
         filterPopupState.onLoaded(
           PlutoGridOnLoadedEvent(stateManager: stateManager),
         );
-
-        when(stateManager.rows).thenReturn(RowHelper.count(1, columns));
 
         filterPopupState.stateListener();
 

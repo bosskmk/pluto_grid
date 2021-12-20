@@ -319,10 +319,10 @@ class FilterPopupState {
   void onLoaded(PlutoGridOnLoadedEvent e) {
     _stateManager = e.stateManager;
 
-    _stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
+    _stateManager!.setSelectingMode(PlutoGridSelectingMode.row, notify: false);
 
-    if (focusFirstFilterValue && _stateManager!.rows.isNotEmpty) {
-      _stateManager!.setKeepFocus(true);
+    if (_stateManager!.rows.isNotEmpty) {
+      _stateManager!.setKeepFocus(true, notify: false);
 
       _stateManager!.setCurrentCell(
         _stateManager!.rows.first!.cells[FilterHelper.filterFieldValue],
@@ -330,8 +330,12 @@ class FilterPopupState {
         notify: false,
       );
 
-      _stateManager!.setEditing(true);
+      if (focusFirstFilterValue) {
+        _stateManager!.setEditing(true, notify: false);
+      }
     }
+
+    _stateManager!.notifyListeners();
 
     _stateManager!.addListener(stateListener);
   }

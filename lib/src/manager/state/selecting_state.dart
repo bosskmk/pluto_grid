@@ -37,7 +37,7 @@ abstract class ISelectingState {
   /// Change Multi-Select Status.
   void setSelecting(bool flag, {bool notify = true});
 
-  void setSelectingMode(PlutoGridSelectingMode mode);
+  void setSelectingMode(PlutoGridSelectingMode mode, {bool notify = true});
 
   void setAllCurrentSelecting();
 
@@ -189,7 +189,7 @@ mixin SelectingState implements IPlutoGridState {
   }
 
   @override
-  void setSelectingMode(PlutoGridSelectingMode mode) {
+  void setSelectingMode(PlutoGridSelectingMode mode, {bool notify = true}) {
     if (_selectingMode == mode) {
       return;
     }
@@ -200,7 +200,9 @@ mixin SelectingState implements IPlutoGridState {
 
     _selectingMode = mode;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override

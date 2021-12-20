@@ -241,7 +241,9 @@ class _CellContainer extends StatelessWidget {
       return BoxDecoration(
         color: _currentCellColor(),
         border: Border.all(
-          color: configuration.activatedBorderColor,
+          color: hasFocus
+              ? configuration.activatedBorderColor
+              : configuration.inactivatedBorderColor,
           width: 1,
         ),
       );
@@ -249,7 +251,9 @@ class _CellContainer extends StatelessWidget {
       return BoxDecoration(
         color: configuration.activatedColor,
         border: Border.all(
-          color: configuration.activatedBorderColor,
+          color: hasFocus
+              ? configuration.activatedBorderColor
+              : configuration.inactivatedBorderColor,
           width: 1,
         ),
       );

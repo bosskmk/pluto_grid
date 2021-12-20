@@ -898,8 +898,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setSelecting, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setSelectingMode(_i2.PlutoGridSelectingMode? mode) =>
-      super.noSuchMethod(Invocation.method(#setSelectingMode, [mode]),
+  void setSelectingMode(_i2.PlutoGridSelectingMode? mode,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setSelectingMode, [mode], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void setAllCurrentSelecting() =>

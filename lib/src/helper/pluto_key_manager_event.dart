@@ -57,6 +57,8 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
 
   bool get isF2 => event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
 
+  bool get isF3 => event.logicalKey.keyId == LogicalKeyboardKey.f3.keyId;
+
   bool get isBackspace =>
       event.logicalKey.keyId == LogicalKeyboardKey.backspace.keyId;
 

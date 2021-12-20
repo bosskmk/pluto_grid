@@ -100,6 +100,11 @@ class PlutoGridKeyManager {
       return;
     }
 
+    if (keyEvent.isF3) {
+      _handleF3(keyEvent);
+      return;
+    }
+
     if (keyEvent.isCharacter) {
       if (keyEvent.isCtrlC) {
         _handleCtrlC(keyEvent);
@@ -302,6 +307,30 @@ class PlutoGridKeyManager {
     if (!stateManager.isEditing) {
       stateManager.setEditing(true);
     }
+  }
+
+  void _handleF3(PlutoKeyManagerEvent keyEvent) {
+    final currentColumn = stateManager.currentColumn;
+
+    if (currentColumn == null) {
+      return;
+    }
+
+    if (!stateManager.showColumnFilter) {
+      return;
+    }
+
+    if (currentColumn.filterFocusNode?.canRequestFocus == true) {
+      currentColumn.filterFocusNode?.requestFocus();
+      stateManager.setKeepFocus(false);
+
+      return;
+    }
+
+    stateManager.showFilterPopup(
+      keyEvent.focusNode.context!,
+      calledColumn: stateManager.currentColumn,
+    );
   }
 
   void _handleCtrlC(PlutoKeyManagerEvent keyEvent) {

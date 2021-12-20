@@ -14,6 +14,7 @@ abstract class IFilteringRowState {
 
   List<PlutoRow?> filterRowsByField(String columnField);
 
+  /// Check if the column is in a state with filtering applied.
   bool isFilteredColumn(PlutoColumn column);
 
   void showFilterPopup(
@@ -97,9 +98,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   bool isFilteredColumn(PlutoColumn? column) {
-    return hasFilter &&
-        _filterRows.isNotEmpty &&
-        FilterHelper.isFilteredColumn(column!, _filterRows);
+    return hasFilter && FilterHelper.isFilteredColumn(column!, _filterRows);
   }
 
   @override
@@ -113,7 +112,9 @@ mixin FilteringRowState implements IPlutoGridState {
     var rows = shouldProvideDefaultFilterRow
         ? [
             FilterHelper.createFilterRow(
-              columnField: calledColumn!.field,
+              columnField: calledColumn!.enableFilterMenuItem
+                  ? calledColumn.field
+                  : FilterHelper.filterFieldAllColumns,
               filterType: calledColumn.defaultFilter,
             ),
           ]
