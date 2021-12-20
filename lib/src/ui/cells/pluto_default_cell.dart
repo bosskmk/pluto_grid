@@ -160,21 +160,25 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
       onPointerUp: handleOnPointerUp,
       child: Draggable<PlutoRow>(
         data: widget.row,
-        feedback: Material(
-          child: PlutoShadowContainer(
-            width: widget.column.width,
-            height: widget.stateManager.rowHeight,
-            backgroundColor:
-                widget.stateManager.configuration!.gridBackgroundColor,
-            borderColor:
-                widget.stateManager.configuration!.activatedBorderColor,
-            child: Row(
-              children: [
-                widget.dragIcon,
-                Expanded(
-                  child: widget.feedbackWidget,
-                ),
-              ],
+        dragAnchorStrategy: pointerDragAnchorStrategy,
+        feedback: FractionalTranslation(
+          translation: const Offset(-0.08, -0.5),
+          child: Material(
+            child: PlutoShadowContainer(
+              width: widget.column.width,
+              height: widget.stateManager.rowHeight,
+              backgroundColor:
+                  widget.stateManager.configuration!.gridBackgroundColor,
+              borderColor:
+                  widget.stateManager.configuration!.activatedBorderColor,
+              child: Row(
+                children: [
+                  widget.dragIcon,
+                  Expanded(
+                    child: widget.feedbackWidget,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
