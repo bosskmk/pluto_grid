@@ -48,8 +48,11 @@ class PlutoGridConfiguration {
   /// Cell - text style
   final TextStyle cellTextStyle;
 
-  /// Icon color. (column menu, cell of popup type)
+  /// Icon color. (column menu, cell of popup type, pagination plugin)
   final Color iconColor;
+
+  /// Disabled icon color. (pagination plugin)
+  final Color disabledIconColor;
 
   /// Icon size. (column menu, cell of popup type)
   final double iconSize;
@@ -124,6 +127,7 @@ class PlutoGridConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.black26,
+    this.disabledIconColor = Colors.black12,
     this.iconSize = 18,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
@@ -165,6 +169,7 @@ class PlutoGridConfiguration {
       fontSize: 14,
     ),
     this.iconColor = Colors.white38,
+    this.disabledIconColor = Colors.white12,
     this.iconSize = 18,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
@@ -228,6 +233,7 @@ class PlutoGridConfiguration {
     TextStyle? columnTextStyle,
     TextStyle? cellTextStyle,
     Color? iconColor,
+    Color? disabledIconColor,
     double? iconSize,
     Color? menuBackgroundColor,
     double? rowHeight,
@@ -264,6 +270,7 @@ class PlutoGridConfiguration {
       columnTextStyle: columnTextStyle ?? this.columnTextStyle,
       cellTextStyle: cellTextStyle ?? this.cellTextStyle,
       iconColor: iconColor ?? this.iconColor,
+      disabledIconColor: disabledIconColor ?? this.disabledIconColor,
       iconSize: iconSize ?? this.iconSize,
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       rowHeight: rowHeight ?? this.rowHeight,

@@ -49,7 +49,7 @@ void main() {
     buildWidget().test(
       'ElevatedButton 이 4개 렌더링 되어야 한다. (처음, 이전, 다음, 마지막 버튼)',
       (tester) async {
-        expect(find.byType(ElevatedButton), findsNWidgets(4));
+        expect(find.byType(IconButton), findsNWidgets(4));
       },
     );
 
