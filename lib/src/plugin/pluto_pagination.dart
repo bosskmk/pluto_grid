@@ -55,6 +55,10 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   bool get _isLastPage => page > totalPage - 1;
 
+  /// maxWidth < 450 : 1
+  /// maxWidth >= 450 : 3
+  /// maxWidth >= 550 : 5
+  /// maxWidth >= 650 : 7
   int get _itemSize {
     final countItemSize = ((_maxWidth - 350) / 100).floor();
 

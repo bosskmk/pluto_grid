@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
+import '../../helper/test_helper_util.dart';
 import '../plugin/pluto_pagination_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -47,7 +48,7 @@ void main() {
     );
 
     buildWidget().test(
-      'ElevatedButton 이 4개 렌더링 되어야 한다. (처음, 이전, 다음, 마지막 버튼)',
+      'IconButton 이 4개 렌더링 되어야 한다. (처음, 이전, 다음, 마지막 버튼)',
       (tester) async {
         expect(find.byType(IconButton), findsNWidgets(4));
       },
@@ -60,6 +61,142 @@ void main() {
         expect(find.text('2'), findsOneWidget);
         expect(find.text('3'), findsOneWidget);
         expect(find.byType(TextButton), findsNWidgets(3));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 449 이면 totalPage 가 10인 경우 TextButton 가 1개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 449,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(1));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 450 이면 totalPage 가 10인 경우 TextButton 가 3개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 450,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(3));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 549 이면 totalPage 가 10인 경우 TextButton 가 3개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 549,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(3));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 550 이면 totalPage 가 10인 경우 TextButton 가 5개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 550,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('5'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(5));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 649 이면 totalPage 가 10인 경우 TextButton 가 5개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 649,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('5'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(5));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 650 이면 totalPage 가 10인 경우 TextButton 가 7개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 650,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('5'), findsOneWidget);
+        expect(find.text('6'), findsOneWidget);
+        expect(find.text('7'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(7));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '넓이가 1280 이면 totalPage 가 10인 경우 TextButton 가 7개 렌더링 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 1280,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        expect(find.text('4'), findsOneWidget);
+        expect(find.text('5'), findsOneWidget);
+        expect(find.text('6'), findsOneWidget);
+        expect(find.text('7'), findsOneWidget);
+        expect(find.byType(TextButton), findsNWidgets(7));
       },
     );
   });
