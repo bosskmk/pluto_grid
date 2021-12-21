@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -45,21 +47,43 @@ abstract class _PlutoPaginationStateWithChange
 }
 
 class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
-  int get _startPage {
-    var start = page - 4;
+  late double _maxWidth;
 
-    if (page + 3 > totalPage) {
-      start -= 3 + page - totalPage;
+  final _iconSplashRadius = PlutoGridSettings.rowHeight / 2;
+
+  bool get _isFirstPage => page < 2;
+
+  bool get _isLastPage => page > totalPage - 1;
+
+  /// maxWidth < 450 : 1
+  /// maxWidth >= 450 : 3
+  /// maxWidth >= 550 : 5
+  /// maxWidth >= 650 : 7
+  int get _itemSize {
+    final countItemSize = ((_maxWidth - 350) / 100).floor();
+
+    return countItemSize < 0 ? 0 : min(countItemSize, 3);
+  }
+
+  int get _startPage {
+    final itemSizeGap = _itemSize + 1;
+
+    var start = page - itemSizeGap;
+
+    if (page + _itemSize > totalPage) {
+      start -= _itemSize + page - totalPage;
     }
 
     return start < 0 ? 0 : start;
   }
 
   int get _endPage {
-    var end = page + 3;
+    final itemSizeGap = _itemSize + 1;
 
-    if (page - 4 < 0) {
-      end += 4 - page;
+    var end = page + _itemSize;
+
+    if (page - itemSizeGap < 0) {
+      end += itemSizeGap - page;
     }
 
     return end > totalPage ? totalPage : end;
@@ -78,7 +102,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   void _beforePage() {
     setState(() {
-      page -= 1;
+      page -= 1 + (_itemSize * 2);
 
       if (page < 1) {
         page = 1;
@@ -90,7 +114,7 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   void _nextPage() {
     setState(() {
-      page += 1;
+      page += 1 + (_itemSize * 2);
 
       if (page > totalPage) {
         page = totalPage;
@@ -107,13 +131,6 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
   void _movePage(int page) {
     widget.stateManager.setPage(page);
   }
-
-  final _iconButtonStyle = ElevatedButton.styleFrom(
-    primary: Colors.transparent,
-    onPrimary: Colors.transparent,
-    onSurface: Colors.transparent,
-    shadowColor: Colors.transparent,
-  );
 
   ButtonStyle _getNumberButtonStyle(bool isCurrentIndex) {
     return TextButton.styleFrom(
@@ -154,58 +171,70 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   @override
   Widget build(BuildContext context) {
-    final Color _iconColor = widget.stateManager.configuration!.iconColor;
+    return LayoutBuilder(
+      builder: (layoutContext, size) {
+        _maxWidth = size.maxWidth;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 3),
-        child: Row(
-          children: [
-            ElevatedButton(
-              onPressed: _firstPage,
-              child: Icon(
-                Icons.first_page,
-                color: _iconColor,
-              ),
-              style: _iconButtonStyle,
-            ),
-            ElevatedButton(
-              onPressed: _beforePage,
-              child: Icon(
-                Icons.navigate_before,
-                color: _iconColor,
-              ),
-              style: _iconButtonStyle,
-            ),
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _pageNumbers.map(_makeNumberButton).toList(),
+        final Color _iconColor = widget.stateManager.configuration!.iconColor;
+
+        final Color _disabledIconColor =
+            widget.stateManager.configuration!.disabledIconColor;
+
+        return Center(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: _isFirstPage ? null : _firstPage,
+                    icon: const Icon(Icons.first_page),
+                    color: _iconColor,
+                    disabledColor: _disabledIconColor,
+                    splashRadius: _iconSplashRadius,
+                    mouseCursor: _isFirstPage
+                        ? SystemMouseCursors.basic
+                        : SystemMouseCursors.click,
                   ),
-                ),
+                  IconButton(
+                    onPressed: _isFirstPage ? null : _beforePage,
+                    icon: const Icon(Icons.navigate_before),
+                    color: _iconColor,
+                    disabledColor: _disabledIconColor,
+                    splashRadius: _iconSplashRadius,
+                    mouseCursor: _isFirstPage
+                        ? SystemMouseCursors.basic
+                        : SystemMouseCursors.click,
+                  ),
+                  ..._pageNumbers.map(_makeNumberButton).toList(),
+                  IconButton(
+                    onPressed: _isLastPage ? null : _nextPage,
+                    icon: const Icon(Icons.navigate_next),
+                    color: _iconColor,
+                    disabledColor: _disabledIconColor,
+                    splashRadius: _iconSplashRadius,
+                    mouseCursor: _isLastPage
+                        ? SystemMouseCursors.basic
+                        : SystemMouseCursors.click,
+                  ),
+                  IconButton(
+                    onPressed: _isLastPage ? null : _lastPage,
+                    icon: const Icon(Icons.last_page),
+                    color: _iconColor,
+                    disabledColor: _disabledIconColor,
+                    splashRadius: _iconSplashRadius,
+                    mouseCursor: _isLastPage
+                        ? SystemMouseCursors.basic
+                        : SystemMouseCursors.click,
+                  ),
+                ],
               ),
             ),
-            ElevatedButton(
-              onPressed: _nextPage,
-              child: Icon(
-                Icons.navigate_next,
-                color: _iconColor,
-              ),
-              style: _iconButtonStyle,
-            ),
-            ElevatedButton(
-              onPressed: _lastPage,
-              child: Icon(
-                Icons.last_page,
-                color: _iconColor,
-              ),
-              style: _iconButtonStyle,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

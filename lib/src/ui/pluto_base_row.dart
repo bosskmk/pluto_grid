@@ -15,60 +15,70 @@ class PlutoBaseRow extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  bool _handleOnWillAccept(PlutoRow? draggingRow) {
+    if (draggingRow == null) {
+      return false;
+    }
+
+    final List<PlutoRow?> selectedRows =
+        stateManager.currentSelectingRows.isNotEmpty
+            ? stateManager.currentSelectingRows
+            : [draggingRow];
+
+    return selectedRows.firstWhere(
+          (element) => element?.key == row.key,
+          orElse: () => null,
+        ) ==
+        null;
+  }
+
+  void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
+    final draggingRows = stateManager.currentSelectingRows.isNotEmpty
+        ? stateManager.currentSelectingRows
+        : [details.data];
+
+    stateManager.eventManager!.addEvent(
+      PlutoGridDragRowsEvent(
+        rows: draggingRows,
+        targetIdx: rowIdx,
+        offset: details.offset,
+      ),
+    );
+  }
+
+  PlutoBaseCell _buildCell(PlutoColumn column) {
+    return PlutoBaseCell(
+      stateManager: stateManager,
+      cell: row.cells[column.field]!,
+      width: column.width,
+      height: stateManager.rowHeight,
+      column: column,
+      rowIdx: rowIdx,
+      row: row,
+      key: row.cells[column.field]!.key,
+    );
+  }
+
+  Widget _dragTargetBuilder(dragContext, candidate, rejected) {
+    return _RowContainerWidget(
+      stateManager: stateManager,
+      rowIdx: rowIdx,
+      row: row,
+      columns: columns,
+      key: ValueKey('rowContainer_${row.key}'),
+      child: Row(
+        key: ValueKey('rowContainer_${row.key}_row'),
+        children: columns.map(_buildCell).toList(growable: false),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DragTarget<PlutoRow>(
-      onWillAccept: (PlutoRow? draggingRow) {
-        if (draggingRow == null) {
-          return false;
-        }
-
-        final List<PlutoRow?> selectedRows =
-            stateManager.currentSelectingRows.isNotEmpty
-                ? stateManager.currentSelectingRows
-                : [draggingRow];
-
-        return selectedRows.firstWhere(
-              (element) => element?.key == row.key,
-              orElse: () => null,
-            ) ==
-            null;
-      },
-      onMove: (DragTargetDetails<PlutoRow> details) async {
-        final draggingRows = stateManager.currentSelectingRows.isNotEmpty
-            ? stateManager.currentSelectingRows
-            : [details.data];
-
-        stateManager.eventManager!.addEvent(
-          PlutoGridDragRowsEvent(
-            rows: draggingRows,
-            targetIdx: rowIdx,
-            offset: details.offset,
-          ),
-        );
-      },
-      builder: (dragContext, candidate, rejected) {
-        return _RowContainerWidget(
-          stateManager: stateManager,
-          rowIdx: rowIdx,
-          row: row,
-          columns: columns,
-          child: Row(
-            children: columns.map((column) {
-              return PlutoBaseCell(
-                key: row.cells[column.field]!.key,
-                stateManager: stateManager,
-                cell: row.cells[column.field]!,
-                width: column.width,
-                height: stateManager.rowHeight,
-                column: column,
-                rowIdx: rowIdx,
-                row: row,
-              );
-            }).toList(growable: false),
-          ),
-        );
-      },
+      onWillAccept: _handleOnWillAccept,
+      onMove: _handleOnMove,
+      builder: _dragTargetBuilder,
     );
   }
 }
@@ -100,42 +110,43 @@ class _RowContainerWidget extends PlutoStatefulWidget {
 
 abstract class __RowContainerWidgetStateWithChangeKeepAlive
     extends PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
-  bool? isCurrentRow;
+  bool? _isCurrentRow;
 
-  bool? isSelectedRow;
+  bool? _isSelectedRow;
 
-  bool? isSelecting;
+  bool? _isSelecting;
 
-  bool? isCheckedRow;
+  bool? _isCheckedRow;
 
-  bool? isDragTarget;
+  bool? _isDragTarget;
 
-  bool? isTopDragTarget;
+  bool? _isTopDragTarget;
 
-  bool? isBottomDragTarget;
+  bool? _isBottomDragTarget;
 
-  bool? hasCurrentSelectingPosition;
+  bool? _hasCurrentSelectingPosition;
 
-  bool? isFocusedCurrentRow;
+  bool? _isFocusedCurrentRow;
 
-  Color? rowColor;
+  Color? _rowColor;
 
   @override
   void onChange() {
     resetState((update) {
-      isCurrentRow = update<bool?>(
-        isCurrentRow,
+      _isCurrentRow = update<bool?>(
+        _isCurrentRow,
         widget.stateManager.currentRowIdx == widget.rowIdx,
       );
 
-      isSelectedRow = update<bool?>(
-        isSelectedRow,
+      _isSelectedRow = update<bool?>(
+        _isSelectedRow,
         widget.stateManager.isSelectedRow(widget.row.key),
       );
 
-      isSelecting = update<bool?>(isSelecting, widget.stateManager.isSelecting);
+      _isSelecting =
+          update<bool?>(_isSelecting, widget.stateManager.isSelecting);
 
-      isCheckedRow = update<bool?>(isCheckedRow, widget.row.checked);
+      _isCheckedRow = update<bool?>(_isCheckedRow, widget.row.checked);
 
       final alreadyTarget = widget.stateManager.dragRows?.firstWhere(
               (element) => element?.key == widget.row.key,
@@ -144,35 +155,35 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
       final isDraggingRow = widget.stateManager.isDraggingRow;
 
-      isDragTarget = update<bool?>(
-        isDragTarget,
+      _isDragTarget = update<bool?>(
+        _isDragTarget,
         !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
         ignoreChange: !isDraggingRow,
       );
 
-      isTopDragTarget = update<bool?>(
-        isTopDragTarget,
+      _isTopDragTarget = update<bool?>(
+        _isTopDragTarget,
         isDraggingRow &&
             widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
       );
 
-      isBottomDragTarget = update<bool?>(
-        isBottomDragTarget,
+      _isBottomDragTarget = update<bool?>(
+        _isBottomDragTarget,
         isDraggingRow &&
             widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
       );
 
-      hasCurrentSelectingPosition = update<bool?>(
-        hasCurrentSelectingPosition,
+      _hasCurrentSelectingPosition = update<bool?>(
+        _hasCurrentSelectingPosition,
         widget.stateManager.hasCurrentSelectingPosition,
       );
 
-      isFocusedCurrentRow = update<bool?>(
-        isFocusedCurrentRow,
-        isCurrentRow! && widget.stateManager.hasFocus,
+      _isFocusedCurrentRow = update<bool?>(
+        _isFocusedCurrentRow,
+        _isCurrentRow! && widget.stateManager.hasFocus,
       );
 
-      rowColor = update<Color?>(rowColor, getRowColor());
+      _rowColor = update<Color?>(_rowColor, _getRowColor());
 
       if (widget.stateManager.mode.isNormal) {
         setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
@@ -180,7 +191,7 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
     });
   }
 
-  Color getDefaultRowColor() {
+  Color _getDefaultRowColor() {
     if (widget.stateManager.rowColorCallback == null) {
       return widget.stateManager.configuration!.gridBackgroundColor;
     }
@@ -194,15 +205,15 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
     );
   }
 
-  Color getRowColor() {
-    Color color = getDefaultRowColor();
+  Color _getRowColor() {
+    Color color = _getDefaultRowColor();
 
-    if (isDragTarget!) {
+    if (_isDragTarget!) {
       color = widget.stateManager.configuration!.cellColorInReadOnlyState;
     } else {
       final bool checkCurrentRow = !widget.stateManager.selectingMode.isRow &&
-          isFocusedCurrentRow! &&
-          (!isSelecting! && !hasCurrentSelectingPosition!);
+          _isFocusedCurrentRow! &&
+          (!_isSelecting! && !_hasCurrentSelectingPosition!);
 
       final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
           widget.stateManager.isSelectedRow(widget.row.key);
@@ -212,12 +223,32 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
       }
     }
 
-    return isCheckedRow!
+    return _isCheckedRow!
         ? Color.alphaBlend(
             widget.stateManager.configuration!.checkedColor,
             color,
           )
         : color;
+  }
+
+  BoxDecoration _getBoxDecoration() {
+    return BoxDecoration(
+      color: _rowColor,
+      border: Border(
+        top: _isTopDragTarget!
+            ? BorderSide(
+                width: PlutoGridSettings.rowBorderWidth,
+                color: widget.stateManager.configuration!.activatedBorderColor,
+              )
+            : BorderSide.none,
+        bottom: BorderSide(
+          width: PlutoGridSettings.rowBorderWidth,
+          color: _isBottomDragTarget!
+              ? widget.stateManager.configuration!.activatedBorderColor
+              : widget.stateManager.configuration!.borderColor,
+        ),
+      ),
+    );
   }
 }
 
@@ -227,28 +258,12 @@ class __RowContainerWidgetState
   Widget build(BuildContext context) {
     super.build(context);
 
-    final decoration = BoxDecoration(
-      color: rowColor,
-      border: Border(
-        top: isTopDragTarget!
-            ? BorderSide(
-                width: PlutoGridSettings.rowBorderWidth,
-                color: widget.stateManager.configuration!.activatedBorderColor,
-              )
-            : BorderSide.none,
-        bottom: BorderSide(
-          width: PlutoGridSettings.rowBorderWidth,
-          color: isBottomDragTarget!
-              ? widget.stateManager.configuration!.activatedBorderColor
-              : widget.stateManager.configuration!.borderColor,
-        ),
-      ),
-    );
+    final _decoration = _getBoxDecoration();
 
     return _AnimatedOrNormalContainer(
       enable: widget.stateManager.configuration!.enableRowColorAnimation,
       child: widget.child,
-      decoration: decoration,
+      decoration: _decoration,
     );
   }
 }
