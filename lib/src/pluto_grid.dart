@@ -375,7 +375,6 @@ class _PlutoGridState extends State<PlutoGrid> {
                       children: [
                         if (stateManager.showHeader) ...[
                           Positioned.fill(
-                            top: 0,
                             bottom: stateManager.headerBottomOffset,
                             child: _header!,
                           ),
@@ -395,12 +394,13 @@ class _PlutoGridState extends State<PlutoGrid> {
                         if (_showFrozenColumn! && _hasLeftFrozenColumns!) ...[
                           Positioned.fill(
                             top: stateManager.headerHeight,
-                            left: 0,
+                            right: stateManager.leftFrozenRightOffset,
+                            bottom: stateManager.rowsTopOffset,
                             child: PlutoLeftFrozenColumns(stateManager),
                           ),
                           Positioned.fill(
                             top: stateManager.rowsTopOffset,
-                            left: 0,
+                            right: stateManager.leftFrozenRightOffset,
                             bottom: stateManager.footerHeight,
                             child: PlutoLeftFrozenRows(stateManager),
                           ),
@@ -409,6 +409,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           top: stateManager.headerHeight,
                           left: _bodyLeftOffset,
                           right: _bodyRightOffset,
+                          bottom: stateManager.rowsTopOffset,
                           child: PlutoBodyColumns(stateManager),
                         ),
                         Positioned.fill(
@@ -422,6 +423,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                           Positioned.fill(
                             top: stateManager.headerHeight,
                             left: _rightFrozenLeftOffset,
+                            bottom: stateManager.rowsTopOffset,
                             child: PlutoRightFrozenColumns(stateManager),
                           ),
                           Positioned.fill(
@@ -485,7 +487,6 @@ class _PlutoGridState extends State<PlutoGrid> {
                           ),
                           Positioned.fill(
                             top: stateManager.footerTopOffset,
-                            bottom: 0,
                             child: _footer!,
                           ),
                         ],

@@ -66,6 +66,8 @@ abstract class ILayoutState {
 
   double get bodyDownScrollOffset;
 
+  double get leftFrozenRightOffset;
+
   double get rightFrozenLeftOffset;
 
   double get rightBlankOffset;
@@ -240,6 +242,9 @@ mixin LayoutState implements IPlutoGridState {
         footerHeight -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
+
+  @override
+  double get leftFrozenRightOffset => maxWidth! - bodyLeftOffset - 5;
 
   @override
   double get rightFrozenLeftOffset =>
