@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/helper/platform_helper.dart';
 
 abstract class TextCell extends StatefulWidget {
   final PlutoGridStateManager? stateManager;
@@ -167,6 +168,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     _changeValue();
 
     _handleOnChanged(old);
+
+    PlatformHelper.onMobile(() {
+      widget.stateManager?.setKeepFocus(false);
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
   }
 
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
@@ -242,6 +248,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       readOnly: widget.column!.checkReadOnly(widget.row!, widget.cell!),
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
+      onSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
       style: widget.stateManager!.configuration!.cellTextStyle,
       decoration: const InputDecoration(
