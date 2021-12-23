@@ -536,6 +536,8 @@ mixin ColumnState implements IPlutoGridState {
       context: context,
       configuration: configuration!.copyWith(
         enableRowColorAnimation: false,
+        gridBorderRadius:
+            configuration?.gridPopupBorderRadius ?? BorderRadius.zero,
       ),
       columns: columns,
       rows: rows,

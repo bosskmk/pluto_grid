@@ -66,6 +66,8 @@ abstract class ILayoutState {
 
   double get bodyDownScrollOffset;
 
+  double get leftFrozenRightOffset;
+
   double get rightFrozenLeftOffset;
 
   double get rightBlankOffset;
@@ -242,6 +244,9 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
+  double get leftFrozenRightOffset => maxWidth! - bodyLeftOffset - 5;
+
+  @override
   double get rightFrozenLeftOffset =>
       maxWidth! - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
 
@@ -277,6 +282,8 @@ mixin LayoutState implements IPlutoGridState {
     _gridGlobalOffset = null;
 
     updateCurrentCellPosition(notify: false);
+
+    resetScrollToZero();
 
     if (notify) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {

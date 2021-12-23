@@ -266,6 +266,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#bodyDownScrollOffset),
           returnValue: 0.0) as double);
   @override
+  double get leftFrozenRightOffset =>
+      (super.noSuchMethod(Invocation.getter(#leftFrozenRightOffset),
+          returnValue: 0.0) as double);
+  @override
   double get rightFrozenLeftOffset =>
       (super.noSuchMethod(Invocation.getter(#rightFrozenLeftOffset),
           returnValue: 0.0) as double);

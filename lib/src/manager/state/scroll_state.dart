@@ -28,6 +28,8 @@ abstract class IScrollState {
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 
   void updateCorrectScroll();
+
+  void resetScrollToZero();
 }
 
 mixin ScrollState implements IPlutoGridState {
@@ -185,5 +187,19 @@ mixin ScrollState implements IPlutoGridState {
         );
       }
     });
+  }
+
+  /// Called to fix an error
+  /// that the screen cannot be touched due to an incorrect scroll range
+  /// when resizing the screen.
+  @override
+  void resetScrollToZero() {
+    if ((scroll?.bodyRowsVertical?.offset ?? 0) <= 0) {
+      scroll?.bodyRowsVertical?.jumpTo(0);
+    }
+
+    if ((scroll?.bodyRowsHorizontal?.offset ?? 0) <= 0) {
+      scroll?.bodyRowsHorizontal?.jumpTo(0);
+    }
   }
 }

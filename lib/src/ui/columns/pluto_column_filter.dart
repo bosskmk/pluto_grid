@@ -236,20 +236,24 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
 
   @override
   Widget build(BuildContext context) {
+    final configuration = widget.stateManager.configuration!;
+
     return Container(
       width: widget.column.width,
       height: widget.stateManager.columnFilterHeight,
       padding: EdgeInsets.symmetric(horizontal: padding),
-      decoration: widget.stateManager.configuration!.enableColumnBorder
-          ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: widget.stateManager.configuration!.borderColor,
-                  width: 1.0,
-                ),
-              ),
-            )
-          : const BoxDecoration(),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: configuration.borderColor,
+          ),
+          right: configuration.enableColumnBorder
+              ? BorderSide(
+                  color: configuration.borderColor,
+                )
+              : BorderSide.none,
+        ),
+      ),
       child: Align(
         alignment: Alignment.center,
         child: Stack(
@@ -258,7 +262,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               focusNode: focusNode,
               controller: controller,
               enabled: enabled,
-              style: widget.stateManager.configuration!.cellTextStyle,
+              style: configuration.cellTextStyle,
               onTap: handleOnTap,
               onChanged: handleOnChanged,
               onEditingComplete: handleOnEditingComplete,
