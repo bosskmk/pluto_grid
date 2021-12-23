@@ -210,7 +210,6 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       hashCode: _textController.text.hashCode,
       ignore: !kIsWeb,
     )) {
-      PlutoLog('Event debounced from mixin_text_cell onKey.');
       return KeyEventResult.handled;
     }
 

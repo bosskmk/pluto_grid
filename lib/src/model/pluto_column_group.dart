@@ -57,7 +57,7 @@ class PlutoColumnGroup {
 
   Key get key => _key;
 
-  late final Key _key;
+  final Key _key;
 
   late final bool hasFields;
 
