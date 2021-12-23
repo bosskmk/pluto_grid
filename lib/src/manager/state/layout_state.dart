@@ -283,6 +283,8 @@ mixin LayoutState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
+    resetScrollToZero();
+
     if (notify) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         notifyListeners();
