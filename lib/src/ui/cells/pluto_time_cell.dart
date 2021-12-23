@@ -59,6 +59,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
 
     final configuration = widget.stateManager!.configuration!.copyWith(
       enableRowColorAnimation: false,
+      enableColumnBorder: false,
     );
 
     PlutoDualGridPopup(
