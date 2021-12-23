@@ -486,20 +486,6 @@ class _PlutoGridState extends State<PlutoGrid> {
                               child: _footer!,
                             ),
                           ],
-                          if (_showColumnFilter!)
-                            Positioned(
-                              top: stateManager.headerHeight +
-                                  stateManager.columnGroupHeight +
-                                  stateManager.columnHeight,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 1,
-                                decoration: BoxDecoration(
-                                  color: configuration.gridBorderColor,
-                                ),
-                              ),
-                            ),
                           if (stateManager.showLoading)
                             Positioned.fill(
                               child: PlutoLoading(
