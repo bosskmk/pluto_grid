@@ -10,11 +10,11 @@ class PlutoColumnFilter extends PlutoStatefulWidget {
 
   final PlutoColumn column;
 
-  const PlutoColumnFilter({
+  PlutoColumnFilter({
     required this.stateManager,
     required this.column,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: ValueKey('column_filter_${column.key}'));
 
   @override
   _PlutoColumnFilterState createState() => _PlutoColumnFilterState();

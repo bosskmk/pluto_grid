@@ -16,7 +16,7 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
     required this.column,
     double? height,
   })  : height = height ?? stateManager.columnHeight,
-        super(key: column.key);
+        super(key: ValueKey('column_title_${column.key}'));
 
   @override
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
