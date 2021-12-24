@@ -5,9 +5,9 @@ typedef PlutoDualOnSelectedEventCallback = void Function(
     PlutoDualOnSelectedEvent event);
 
 class PlutoDualGrid extends StatefulWidget {
-  final PlutoDualGridProps? gridPropsA;
+  final PlutoDualGridProps gridPropsA;
 
-  final PlutoDualGridProps? gridPropsB;
+  final PlutoDualGridProps gridPropsB;
 
   final PlutoGridMode? mode;
 
@@ -26,8 +26,8 @@ class PlutoDualGrid extends StatefulWidget {
   final PlutoDualGridDisplay display;
 
   const PlutoDualGrid({
-    this.gridPropsA,
-    this.gridPropsB,
+    required this.gridPropsA,
+    required this.gridPropsB,
     this.mode,
     this.onSelected,
     this.display = const PlutoDualGridDisplayRatio(),
@@ -116,13 +116,13 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
       return Row(
         children: [
           _buildGrid(
-            props: widget.gridPropsA!,
+            props: widget.gridPropsA,
             mode: widget.mode,
             width: widget.display.gridAWidth(size),
             isGridA: true,
           ),
           _buildGrid(
-            props: widget.gridPropsB!,
+            props: widget.gridPropsB,
             mode: widget.mode,
             width: widget.display.gridBWidth(size),
             isGridA: false,
