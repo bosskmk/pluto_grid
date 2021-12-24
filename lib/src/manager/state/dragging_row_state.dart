@@ -1,10 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IDraggingRowState {
   bool get isDraggingRow;
 
-  List<PlutoRow?>? get dragRows;
+  List<PlutoRow> get dragRows;
 
   int? get dragTargetRowIdx;
 
@@ -41,9 +42,9 @@ mixin DraggingRowState implements IPlutoGridState {
   bool _isDraggingRow = false;
 
   @override
-  List<PlutoRow?>? get dragRows => _dragRows;
+  List<PlutoRow> get dragRows => _dragRows;
 
-  List<PlutoRow?>? _dragRows;
+  List<PlutoRow> _dragRows = [];
 
   @override
   int? get dragTargetRowIdx => _dragTargetRowIdx;
@@ -73,7 +74,7 @@ mixin DraggingRowState implements IPlutoGridState {
 
   @override
   void setDragRows(
-    List<PlutoRow?>? rows, {
+    List<PlutoRow> rows, {
     bool notify = true,
   }) {
     _dragRows = rows;
@@ -104,7 +105,7 @@ mixin DraggingRowState implements IPlutoGridState {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
         _dragTargetRowIdx! <= rowIdx &&
-        rowIdx < _dragTargetRowIdx! + _dragRows!.length;
+        rowIdx < _dragTargetRowIdx! + _dragRows.length;
   }
 
   @override
@@ -112,28 +113,25 @@ mixin DraggingRowState implements IPlutoGridState {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
         _dragTargetRowIdx == rowIdx &&
-        rowIdx + _dragRows!.length <= refRows!.length;
+        rowIdx + _dragRows.length <= refRows.length;
   }
 
   @override
   bool isRowIdxBottomDragTarget(int? rowIdx) {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
-        rowIdx == _dragTargetRowIdx! + _dragRows!.length - 1;
+        rowIdx == _dragTargetRowIdx! + _dragRows.length - 1;
   }
 
   @override
   bool isRowBeingDragged(Key? rowKey) {
     return rowKey != null &&
         _isDraggingRow == true &&
-        dragRows != null &&
-        dragRows!.firstWhere((element) => element!.key == rowKey,
-                orElse: () => null) !=
-            null;
+        dragRows.firstWhereOrNull((element) => element.key == rowKey) != null;
   }
 
   void _clearDraggingState() {
-    _dragRows = null;
+    _dragRows = [];
 
     _dragTargetRowIdx = null;
   }

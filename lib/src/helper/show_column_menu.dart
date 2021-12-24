@@ -91,10 +91,10 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
           value: PlutoGridColumnMenuItem.hideColumn,
           child: _buildTextItem(
             text: localeText.hideColumn,
-            enabled: stateManager.refColumns!.length > 1,
+            enabled: stateManager.refColumns.length > 1,
             textColor: textColor,
           ),
-          enabled: stateManager.refColumns!.length > 1,
+          enabled: stateManager.refColumns.length > 1,
         ),
       if (column.enableSetColumnsMenuItem == true)
         _buildMenuItem(

@@ -68,17 +68,17 @@ void main() {
         );
 
         for (var i = 0; i < stateManager.rows.length; i += 1) {
-          stateManager.rows[i]!.setState(PlutoRowState.updated);
+          stateManager.rows[i].setState(PlutoRowState.updated);
         }
 
         for (var i = 0; i < stateManager.rows.length; i += 1) {
-          expect(stateManager.rows[i]!.state, PlutoRowState.updated);
+          expect(stateManager.rows[i].state, PlutoRowState.updated);
         }
 
         stateManager.setFilter(filter);
 
         for (var i = 0; i < stateManager.rows.length; i += 1) {
-          expect(stateManager.rows[i]!.state, PlutoRowState.none);
+          expect(stateManager.rows[i].state, PlutoRowState.none);
         }
       },
     );

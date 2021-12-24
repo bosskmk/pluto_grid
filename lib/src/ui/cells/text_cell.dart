@@ -5,16 +5,16 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/helper/platform_helper.dart';
 
 abstract class TextCell extends StatefulWidget {
-  final PlutoGridStateManager? stateManager;
-  final PlutoCell? cell;
-  final PlutoColumn? column;
-  final PlutoRow? row;
+  final PlutoGridStateManager stateManager;
+  final PlutoCell cell;
+  final PlutoColumn column;
+  final PlutoRow row;
 
   const TextCell({
-    this.stateManager,
-    this.cell,
-    this.column,
-    this.row,
+    required this.stateManager,
+    required this.cell,
+    required this.column,
+    required this.row,
     Key? key,
   }) : super(key: key);
 }
@@ -58,11 +58,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         _changeValue(notify: false);
 
-        widget.stateManager!.notifyListenersOnPostFrame();
+        widget.stateManager.notifyListenersOnPostFrame();
       });
     }
 
-    widget.stateManager!.textEditingController = null;
+    widget.stateManager.textEditingController = null;
 
     super.dispose();
   }
@@ -73,13 +73,13 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     cellFocus = FocusNode(onKey: _handleOnKey);
 
-    widget.stateManager!.textEditingController = _textController;
+    widget.stateManager.textEditingController = _textController;
 
-    _textController.text = widget.column!.formattedValueForDisplayInEditing(
-      widget.cell!.value,
+    _textController.text = widget.column.formattedValueForDisplayInEditing(
+      widget.cell.value,
     );
 
-    _initialCellValue = widget.cell!.value;
+    _initialCellValue = widget.cell.value;
 
     _cellEditingStatus = CellEditingStatus.init;
 
@@ -95,8 +95,8 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     _textController.text = _initialCellValue.toString();
 
-    widget.stateManager!.changeCellValue(
-      widget.stateManager!.currentCell!,
+    widget.stateManager.changeCellValue(
+      widget.stateManager.currentCell!,
       _initialCellValue,
       notify: false,
     );
@@ -107,7 +107,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       return false;
     }
 
-    if (widget.column!.readOnly == true) {
+    if (widget.column.readOnly == true) {
       return true;
     }
 
@@ -131,18 +131,18 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   }
 
   void _changeValue({bool notify = true}) {
-    if (widget.cell!.value.toString() == _textController.text) {
+    if (widget.cell.value.toString() == _textController.text) {
       return;
     }
 
-    widget.stateManager!.changeCellValue(
-      widget.cell!,
+    widget.stateManager.changeCellValue(
+      widget.cell,
       _textController.text,
       notify: notify,
     );
 
     if (notify) {
-      _initialCellValue = widget.cell!.value;
+      _initialCellValue = widget.cell.value;
 
       _textController.text = _initialCellValue.toString();
 
@@ -155,7 +155,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   }
 
   void _handleOnChanged(String value) {
-    _cellEditingStatus = widget.cell!.value.toString() != value.toString()
+    _cellEditingStatus = widget.cell.value.toString() != value.toString()
         ? CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
             ? CellEditingStatus.init
@@ -170,7 +170,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     _handleOnChanged(old);
 
     PlatformHelper.onMobile(() {
-      widget.stateManager?.setKeepFocus(false);
+      widget.stateManager.setKeepFocus(false);
       FocusScope.of(context).requestFocus(FocusNode());
     });
   }
@@ -191,7 +191,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         keyManager.isTab ||
         keyManager.isF3 ||
         (keyManager.isEnter &&
-            !widget.stateManager!.configuration!.enterKeyAction.isNone));
+            !widget.stateManager.configuration!.enterKeyAction.isNone));
 
     // 이동 및 엔터키, 수정불가 셀의 좌우 이동을 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
     if (skip) {
@@ -201,7 +201,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       /// ```dart
       /// return KeyEventResult.skipRemainingHandlers;
       /// ```
-      return widget.stateManager!.keyManager!.eventResult.skip(
+      return widget.stateManager.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );
     }
@@ -225,31 +225,31 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     }
 
     // KeyManager 로 이벤트 처리를 위임 한다.
-    widget.stateManager!.keyManager!.subject.add(keyManager);
+    widget.stateManager.keyManager!.subject.add(keyManager);
 
     // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
     return KeyEventResult.handled;
   }
 
   void _handleOnTap() {
-    widget.stateManager!.setKeepFocus(true);
+    widget.stateManager.setKeepFocus(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stateManager!.keepFocus) {
+    if (widget.stateManager.keepFocus) {
       cellFocus!.requestFocus();
     }
 
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
-      readOnly: widget.column!.checkReadOnly(widget.row!, widget.cell!),
+      readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
       onSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
-      style: widget.stateManager!.configuration!.cellTextStyle,
+      style: widget.stateManager.configuration!.cellTextStyle,
       decoration: const InputDecoration(
         border: InputBorder.none,
         contentPadding: EdgeInsets.all(0),
@@ -258,7 +258,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       maxLines: 1,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
-      textAlign: widget.column!.textAlign.value,
+      textAlign: widget.column.textAlign.value,
     );
   }
 }

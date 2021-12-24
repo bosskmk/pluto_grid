@@ -15,9 +15,9 @@ class DarkModeScreen extends StatefulWidget {
 }
 
 class _DarkModeScreenState extends State<DarkModeScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
@@ -25,9 +25,9 @@ class _DarkModeScreenState extends State<DarkModeScreen> {
 
     final dummyData = DummyData(10, 100);
 
-    columns = dummyData.columns;
+    columns.addAll(dummyData.columns);
 
-    rows = dummyData.rows;
+    rows.addAll(dummyData.rows);
   }
 
   @override

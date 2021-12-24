@@ -53,8 +53,8 @@ class PlutoGridState extends PlutoChangeNotifier
 
 class PlutoGridStateManager extends PlutoGridState {
   PlutoGridStateManager({
-    required List<PlutoColumn>? columns,
-    required List<PlutoRow?>? rows,
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController? scroll,
     List<PlutoColumnGroup>? columnGroups,

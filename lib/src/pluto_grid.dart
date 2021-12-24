@@ -24,9 +24,9 @@ class PlutoGrid extends StatefulWidget {
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
-  final List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns;
 
-  final List<PlutoRow?>? rows;
+  final List<PlutoRow> rows;
 
   final List<PlutoColumnGroup>? columnGroups;
 
@@ -372,9 +372,9 @@ class _PlutoGridState extends State<PlutoGrid> {
     }
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (_stateManager.currentCell == null && widget.rows!.isNotEmpty) {
+      if (_stateManager.currentCell == null && widget.rows.isNotEmpty) {
         _stateManager.setCurrentCell(
-            widget.rows!.first!.cells.entries.first.value, 0);
+            widget.rows.first.cells.entries.first.value, 0);
       }
 
       _stateManager.gridFocusNode!.requestFocus();
@@ -563,10 +563,10 @@ class _GridContainer extends StatelessWidget {
 }
 
 class PlutoGridOnLoadedEvent {
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
   PlutoGridOnLoadedEvent({
-    this.stateManager,
+    required this.stateManager,
   });
 }
 

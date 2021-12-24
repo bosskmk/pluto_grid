@@ -15,15 +15,15 @@ class CopyAndPasteScreen extends StatefulWidget {
 }
 
 class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'column 1',
         field: 'column_1',
@@ -49,9 +49,9 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
         field: 'column_5',
         type: PlutoColumnType.text(),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 30, columns: columns));
   }
 
   @override

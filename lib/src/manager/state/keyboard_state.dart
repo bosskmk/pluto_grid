@@ -125,7 +125,7 @@ mixin KeyboardState implements IPlutoGridState {
 
     final cellPosition = currentCellPosition;
 
-    if (canNotMoveCell(cellPosition, direction)) {
+    if (cellPosition != null && canNotMoveCell(cellPosition, direction)) {
       eventManager!.addEvent(
         PlutoGridCannotMoveCurrentCellEvent(
           cellPosition: cellPosition,
@@ -142,7 +142,7 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     setCurrentCell(
-      refRows![toMove.rowIdx!]!.cells[refColumns![toMove.columnIdx!].field],
+      refRows[toMove.rowIdx!].cells[refColumns[toMove.columnIdx!].field],
       toMove.rowIdx,
       notify: notify,
     );
@@ -178,7 +178,7 @@ mixin KeyboardState implements IPlutoGridState {
     final int columnIdx =
         direction.isLeft ? columnIndexes.first : columnIndexes.last;
 
-    final column = refColumns![columnIdx];
+    final column = refColumns[columnIdx];
 
     final cellToMove = currentRow!.cells[column.field];
 
@@ -207,9 +207,9 @@ mixin KeyboardState implements IPlutoGridState {
 
     final field = currentColumnField ?? columns.first.field;
 
-    final int rowIdx = direction.isUp ? 0 : refRows!.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
 
-    final cellToMove = refRows![rowIdx]!.cells[field];
+    final cellToMove = refRows[rowIdx].cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
@@ -232,13 +232,13 @@ mixin KeyboardState implements IPlutoGridState {
       rowIdx = 0;
     }
 
-    if (rowIdx > refRows!.length - 1) {
-      rowIdx = refRows!.length - 1;
+    if (rowIdx > refRows.length - 1) {
+      rowIdx = refRows.length - 1;
     }
 
-    final field = currentColumnField ?? refColumns!.first.field;
+    final field = currentColumnField ?? refColumns.first.field;
 
-    final cellToMove = refRows![rowIdx]!.cells[field];
+    final cellToMove = refRows[rowIdx].cells[field];
 
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
@@ -288,7 +288,7 @@ mixin KeyboardState implements IPlutoGridState {
       return;
     }
 
-    final int columnIdx = direction.isLeft ? 0 : refColumns!.length - 1;
+    final int columnIdx = direction.isLeft ? 0 : refColumns.length - 1;
 
     final int? rowIdx = hasCurrentSelectingPosition
         ? currentSelectingPosition!.rowIdx
@@ -329,7 +329,7 @@ mixin KeyboardState implements IPlutoGridState {
         ? currentSelectingPosition!.columnIdx
         : currentCellPosition!.columnIdx;
 
-    final int rowIdx = direction.isUp ? 0 : refRows!.length - 1;
+    final int rowIdx = direction.isUp ? 0 : refRows.length - 1;
 
     setCurrentSelectingPosition(
       cellPosition: PlutoGridCellPosition(
@@ -354,8 +354,8 @@ mixin KeyboardState implements IPlutoGridState {
       rowIdx = 0;
     }
 
-    if (rowIdx > refRows!.length - 1) {
-      rowIdx = refRows!.length - 1;
+    if (rowIdx > refRows.length - 1) {
+      rowIdx = refRows.length - 1;
     }
 
     if (currentCell == null) {

@@ -13,11 +13,11 @@ class EmptyScreen extends StatefulWidget {
 }
 
 class _EmptyScreenState extends State<EmptyScreen> {
-  List<PlutoColumn>? columns;
+  late List<PlutoColumn> columns;
 
-  List<PlutoRow>? rows;
+  late List<PlutoRow> rows;
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {

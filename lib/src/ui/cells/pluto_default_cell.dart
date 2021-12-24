@@ -106,7 +106,7 @@ class _RowDragIconWidget extends StatefulWidget {
 }
 
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
-  List<PlutoRow?> get draggingRows {
+  List<PlutoRow> get draggingRows {
     if (widget.stateManager.currentSelectingRows.isEmpty) {
       return [widget.row];
     }
@@ -189,16 +189,16 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
 }
 
 class _CheckboxSelectionWidget extends PlutoStatefulWidget {
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
-  final PlutoRow? row;
+  final PlutoRow row;
 
   @override
   final PlutoGridStateManager stateManager;
 
   const _CheckboxSelectionWidget({
-    this.column,
-    this.row,
+    required this.column,
+    required this.row,
     required this.stateManager,
   });
 
@@ -214,7 +214,7 @@ abstract class __CheckboxSelectionWidgetStateWithChange
   @override
   void onChange() {
     resetState((update) {
-      checked = update<bool?>(checked, widget.row!.checked);
+      checked = update<bool?>(checked, widget.row.checked);
     });
   }
 }
@@ -226,7 +226,7 @@ class __CheckboxSelectionWidgetState
       return;
     }
 
-    widget.stateManager.setRowChecked(widget.row, changed);
+    widget.stateManager.setRowChecked(widget.row, changed == true);
 
     if (widget.stateManager.onRowChecked != null) {
       widget.stateManager.onRowChecked!(

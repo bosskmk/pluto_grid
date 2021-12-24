@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -41,7 +42,6 @@ class PlutoBaseRow extends StatelessWidget {
       PlutoGridDragRowsEvent(
         rows: draggingRows,
         targetIdx: rowIdx,
-        offset: details.offset,
       ),
     );
   }
@@ -148,9 +148,8 @@ abstract class __RowContainerWidgetStateWithChangeKeepAlive
 
       _isCheckedRow = update<bool?>(_isCheckedRow, widget.row.checked);
 
-      final alreadyTarget = widget.stateManager.dragRows?.firstWhere(
-              (element) => element?.key == widget.row.key,
-              orElse: () => null) !=
+      final alreadyTarget = widget.stateManager.dragRows
+              .firstWhereOrNull((element) => element.key == widget.row.key) !=
           null;
 
       final isDraggingRow = widget.stateManager.isDraggingRow;

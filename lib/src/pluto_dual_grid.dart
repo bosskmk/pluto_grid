@@ -62,13 +62,13 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
             _stateManagerB = onLoadedEvent.stateManager;
           }
 
-          onLoadedEvent.stateManager!.eventManager!
+          onLoadedEvent.stateManager.eventManager!
               .listener((PlutoGridEvent plutoEvent) {
             if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
-              if (isGridA == true && plutoEvent.direction!.isRight) {
+              if (isGridA == true && plutoEvent.direction.isRight) {
                 _stateManagerA!.setKeepFocus(false);
                 _stateManagerB!.setKeepFocus(true);
-              } else if (isGridA != true && plutoEvent.direction!.isLeft) {
+              } else if (isGridA != true && plutoEvent.direction.isLeft) {
                 _stateManagerA!.setKeepFocus(true);
                 _stateManagerB!.setKeepFocus(false);
               }
@@ -192,8 +192,8 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 }
 
 class PlutoDualGridProps {
-  final List<PlutoColumn>? columns;
-  final List<PlutoRow>? rows;
+  final List<PlutoColumn> columns;
+  final List<PlutoRow> rows;
   final PlutoOnLoadedEventCallback? onLoaded;
   final PlutoOnChangedEventCallback? onChanged;
   final CreateHeaderCallBack? createHeader;
@@ -201,8 +201,8 @@ class PlutoDualGridProps {
   final PlutoGridConfiguration? configuration;
 
   PlutoDualGridProps({
-    this.columns,
-    this.rows,
+    required this.columns,
+    required this.rows,
     this.onLoaded,
     this.onChanged,
     this.createHeader,

@@ -2,8 +2,9 @@ import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DummyData {
-  List<PlutoColumn>? columns;
-  List<PlutoRow>? rows;
+  late List<PlutoColumn> columns;
+
+  late List<PlutoRow> rows;
 
   DummyData(int columnLength, int rowLength) {
     var faker = Faker();
