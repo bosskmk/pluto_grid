@@ -18,17 +18,17 @@ class DualModeScreen extends StatefulWidget {
 }
 
 class _DualModeScreenState extends State<DualModeScreen> {
-  List<PlutoColumn>? gridAColumns;
+  final List<PlutoColumn> gridAColumns = [];
 
-  List<PlutoRow>? gridARows;
+  final List<PlutoRow> gridARows = [];
 
-  List<PlutoColumn>? gridBColumns;
+  final List<PlutoColumn> gridBColumns = [];
 
-  List<PlutoRow>? gridBRows;
+  final List<PlutoRow> gridBRows = [];
 
-  PlutoGridStateManager? gridAStateManager;
+  late PlutoGridStateManager gridAStateManager;
 
-  PlutoGridStateManager? gridBStateManager;
+  late PlutoGridStateManager gridBStateManager;
 
   Key? currentRowKey;
 
@@ -45,7 +45,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
   void initState() {
     super.initState();
 
-    gridAColumns = [
+    gridAColumns.addAll([
       PlutoColumn(
         title: 'Username',
         field: 'username',
@@ -61,14 +61,14 @@ class _DualModeScreenState extends State<DualModeScreen> {
         field: 'grade',
         type: PlutoColumnType.select(<String>['A', 'B', 'C']),
       ),
-    ];
+    ]);
 
-    gridARows = DummyData.rowsByColumns(
+    gridARows.addAll(DummyData.rowsByColumns(
       length: 30,
       columns: gridAColumns,
-    );
+    ));
 
-    gridBColumns = [
+    gridBColumns.addAll([
       PlutoColumn(
         title: 'Activity',
         field: 'activity',
@@ -84,20 +84,18 @@ class _DualModeScreenState extends State<DualModeScreen> {
         field: 'time',
         type: PlutoColumnType.time(),
       ),
-    ];
-
-    gridBRows = [];
+    ]);
   }
 
   void gridAHandler() {
-    if (gridAStateManager!.currentRow == null) {
+    if (gridAStateManager.currentRow == null) {
       return;
     }
 
-    if (gridAStateManager!.currentRow!.key != currentRowKey) {
-      currentRowKey = gridAStateManager!.currentRow!.key;
+    if (gridAStateManager.currentRow!.key != currentRowKey) {
+      currentRowKey = gridAStateManager.currentRow!.key;
 
-      gridBStateManager!.setShowLoading(true);
+      gridBStateManager.setShowLoading(true);
 
       fetchUserActivity();
     }
@@ -117,12 +115,12 @@ class _DualModeScreenState extends State<DualModeScreen> {
             columns: gridBColumns,
           );
 
-          gridBStateManager!.removeRows(gridBStateManager!.rows);
-          gridBStateManager!.resetCurrentState();
-          gridBStateManager!.appendRows(rows);
+          gridBStateManager.removeRows(gridBStateManager.rows);
+          gridBStateManager.resetCurrentState();
+          gridBStateManager.appendRows(rows);
         });
 
-        gridBStateManager!.setShowLoading(false);
+        gridBStateManager.setShowLoading(false);
       });
     });
   }
@@ -154,7 +152,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             gridAStateManager = event.stateManager;
-            event.stateManager!.addListener(gridAHandler);
+            event.stateManager.addListener(gridAHandler);
           },
         ),
         gridPropsB: PlutoDualGridProps(

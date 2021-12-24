@@ -13,26 +13,26 @@ import 'pluto_date_cell_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
 ])
 void main() {
-  MockPlutoGridStateManager? stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(
+    when(stateManager.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
-    when(stateManager!.keyPressed).thenReturn(PlutoGridKeyPressed());
-    when(stateManager!.columnHeight).thenReturn(
-      stateManager!.configuration!.columnHeight,
+    when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
+    when(stateManager.columnHeight).thenReturn(
+      stateManager.configuration!.columnHeight,
     );
-    when(stateManager!.rowHeight).thenReturn(
-      stateManager!.configuration!.rowHeight,
+    when(stateManager.rowHeight).thenReturn(
+      stateManager.configuration!.rowHeight,
     );
-    when(stateManager!.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager!.configuration!.rowHeight),
+    when(stateManager.rowTotalHeight).thenReturn(
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
-    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager!.keepFocus).thenReturn(true);
-    when(stateManager!.hasFocus).thenReturn(true);
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager.keepFocus).thenReturn(true);
+    when(stateManager.hasFocus).thenReturn(true);
   });
 
   group('기본 date 컬럼', () {
@@ -199,7 +199,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '01/23/2020'))
+        verify(stateManager.handleAfterSelectingRow(any, '01/23/2020'))
             .called(1);
       },
     );
@@ -216,7 +216,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '02/06/2020'))
+        verify(stateManager.handleAfterSelectingRow(any, '02/06/2020'))
             .called(1);
       },
     );
@@ -233,7 +233,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '01/29/2020'))
+        verify(stateManager.handleAfterSelectingRow(any, '01/29/2020'))
             .called(1);
       },
     );
@@ -250,7 +250,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '01/31/2020'))
+        verify(stateManager.handleAfterSelectingRow(any, '01/31/2020'))
             .called(1);
       },
     );
@@ -267,7 +267,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '02/01/2020'))
+        verify(stateManager.handleAfterSelectingRow(any, '02/01/2020'))
             .called(1);
       },
     );
@@ -330,7 +330,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-        verify(stateManager!.handleAfterSelectingRow(any, '2020년 11월 30일'))
+        verify(stateManager.handleAfterSelectingRow(any, '2020년 11월 30일'))
             .called(1);
       },
     );
@@ -352,7 +352,7 @@ void main() {
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
-        verifyNever(stateManager!.handleAfterSelectingRow(
+        verifyNever(stateManager.handleAfterSelectingRow(
           any,
           '2020년 11월 30일',
         ));

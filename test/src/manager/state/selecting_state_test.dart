@@ -458,7 +458,7 @@ void main() {
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
         );
@@ -489,7 +489,7 @@ void main() {
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
         );
@@ -521,7 +521,7 @@ void main() {
 
         PlutoGridStateManager stateManager = PlutoGridStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
         );
@@ -706,7 +706,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: null,
       );
@@ -896,7 +896,7 @@ void main() {
         expect(stateManager.currentSelectingRows.length, 2);
 
         final List<Key> keys =
-            stateManager.currentSelectingRows.map((e) => e!.key).toList();
+            stateManager.currentSelectingRows.map((e) => e.key).toList();
 
         expect(keys.contains(rows[3].key), isTrue);
         expect(keys.contains(rows[4].key), isTrue);
@@ -1156,9 +1156,13 @@ void main() {
       for (var i = 0; i < rows.length; i += 1) {
         for (var column in columns) {
           expect(
-              stateManager.isSelectedCell(
-                  rows[i].cells[column.field], column, i),
-              false);
+            stateManager.isSelectedCell(
+              rows[i].cells[column.field]!,
+              column,
+              i,
+            ),
+            false,
+          );
         }
       }
     });
@@ -1203,14 +1207,22 @@ void main() {
         for (var column in columns) {
           if (i == 0 && (column.field == 'text0' || column.field == 'text1')) {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                true);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              true,
+            );
           } else {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                false);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              false,
+            );
           }
         }
       }
@@ -1257,14 +1269,22 @@ void main() {
           if ((i >= 1 && i <= 3) &&
               (column.field == 'text1' || column.field == 'text2')) {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                true);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              true,
+            );
           } else {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                false);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              false,
+            );
           }
         }
       }

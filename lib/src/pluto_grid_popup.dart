@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridPopup {
-  final BuildContext? context;
-  final List<PlutoColumn>? columns;
-  final List<PlutoRow?>? rows;
+  final BuildContext context;
+  final List<PlutoColumn> columns;
+  final List<PlutoRow> rows;
   final PlutoGridMode? mode;
   final PlutoOnLoadedEventCallback? onLoaded;
   final PlutoOnChangedEventCallback? onChanged;
@@ -16,9 +16,9 @@ class PlutoGridPopup {
   final PlutoGridConfiguration? configuration;
 
   PlutoGridPopup({
-    this.context,
-    this.columns,
-    this.rows,
+    required this.context,
+    required this.columns,
+    required this.rows,
     this.mode,
     this.onLoaded,
     this.onChanged,
@@ -35,7 +35,7 @@ class PlutoGridPopup {
   Future<void> open() async {
     PlutoGridOnSelectedEvent? selected =
         await showDialog<PlutoGridOnSelectedEvent>(
-            context: context!,
+            context: context,
             builder: (BuildContext ctx) {
               return Dialog(
                 shape: configuration?.gridBorderRadius != null

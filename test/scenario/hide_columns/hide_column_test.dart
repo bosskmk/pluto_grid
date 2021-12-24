@@ -8,9 +8,9 @@ import '../../helper/row_helper.dart';
 
 void main() {
   group('숨김 컬럼이 없는 상태에서', () {
-    List<PlutoColumn>? columns;
+    late List<PlutoColumn> columns;
 
-    List<PlutoRow> rows;
+    late List<PlutoRow> rows;
 
     PlutoGridStateManager? stateManager;
 
@@ -46,7 +46,7 @@ void main() {
 
         expect(column, findsOneWidget);
 
-        stateManager!.hideColumn(columns![1].key, true);
+        stateManager!.hideColumn(columns[1].key, true);
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
@@ -57,7 +57,8 @@ void main() {
     withTenColumns.test(
       'showSetColumnsPopup 을 호출 하면 컬럼 설정 팝업이 호출 되어야 한다.',
       (tester) async {
-        stateManager!.showSetColumnsPopup(stateManager!.gridFocusNode!.context);
+        stateManager!
+            .showSetColumnsPopup(stateManager!.gridFocusNode!.context!);
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
@@ -113,7 +114,7 @@ void main() {
         expect(column, findsNothing);
 
         stateManager!.hideColumn(
-          stateManager!.refColumns!.originalList[0].key,
+          stateManager!.refColumns.originalList[0].key,
           false,
         );
 

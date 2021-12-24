@@ -16,20 +16,20 @@ import 'pluto_time_cell_test.mocks.dart';
   ],
 )
 void main() {
-  MockPlutoGridStateManager? stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(
+    when(stateManager.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
-    when(stateManager!.keyPressed).thenReturn(PlutoGridKeyPressed());
-    when(stateManager!.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager!.configuration!.rowHeight),
+    when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
+    when(stateManager.rowTotalHeight).thenReturn(
+      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
-    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager!.keepFocus).thenReturn(true);
-    when(stateManager!.hasFocus).thenReturn(true);
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager.keepFocus).thenReturn(true);
+    when(stateManager.hasFocus).thenReturn(true);
   });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -75,6 +75,8 @@ void main() {
 
     final PlutoCell cell = PlutoCell(value: '12:30');
 
+    final PlutoRow row = PlutoRow(cells: {'column_field_name': cell});
+
     final tapCell = PlutoWidgetTestHelper('Tap cell', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -83,6 +85,7 @@ void main() {
               stateManager: stateManager,
               cell: cell,
               column: column,
+              row: row,
             ),
           ),
         ),
@@ -101,7 +104,7 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verify(stateManager!.handleAfterSelectingRow(cell, '12:28')).called(1);
+      verify(stateManager.handleAfterSelectingRow(cell, '12:28')).called(1);
     });
 
     tapCell.test('12:33 분 선택.', (tester) async {
@@ -110,14 +113,14 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verify(stateManager!.handleAfterSelectingRow(cell, '12:33')).called(1);
+      verify(stateManager.handleAfterSelectingRow(cell, '12:33')).called(1);
     });
 
     tapCell.test('12:29 분 선택.', (tester) async {
       await tester.tap(find.text('29'));
       await tester.tap(find.text('29'));
 
-      verify(stateManager!.handleAfterSelectingRow(cell, '12:29')).called(1);
+      verify(stateManager.handleAfterSelectingRow(cell, '12:29')).called(1);
     });
 
     tapCell.test('15:28 분 선택.', (tester) async {
@@ -129,7 +132,7 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verify(stateManager!.handleAfterSelectingRow(cell, '15:28')).called(1);
+      verify(stateManager.handleAfterSelectingRow(cell, '15:28')).called(1);
     });
   });
 }

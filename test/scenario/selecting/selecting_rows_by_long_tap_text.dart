@@ -30,10 +30,10 @@ void main() {
     selectRowsFrom3To5(
       '다른 행을 탭하면 이전 선택 된 행이 무효화 되어야 한다.',
       (tester) async {
-        final nonSelectedRow = grid.stateManager.refRows![0];
+        final nonSelectedRow = grid.stateManager.refRows[0];
 
         final nonSelectedRowWidget = find.text(
-          nonSelectedRow!.cells[columnTitle]!.value,
+          nonSelectedRow.cells[columnTitle]!.value,
         );
 
         expect(grid.stateManager.isSelectedRow(nonSelectedRow.key), false);
@@ -58,7 +58,7 @@ void main() {
 
         expect(
           grid.stateManager.currentSelectingRows[0],
-          grid.stateManager.refRows![0],
+          grid.stateManager.refRows[0],
         );
       },
     );
@@ -66,7 +66,7 @@ void main() {
     selectRowsFrom3To5(
       'setCurrentCell 로 현재 셀을 변경 하면 선택 된 행들이 무효화 되어야 한다.',
       (tester) async {
-        final cell = grid.stateManager.refRows![8]!.cells[columnTitle];
+        final cell = grid.stateManager.refRows[8].cells[columnTitle];
 
         expect(grid.stateManager.isCurrentCell(cell), false);
 
@@ -83,7 +83,7 @@ void main() {
     selectRowsFrom3To5(
       '탭하여 현재 셀을 변경 하면 선택 된 행들이 무효화 되어야 한다.',
       (tester) async {
-        final cell = grid.stateManager.refRows![7]!.cells[columnTitle];
+        final cell = grid.stateManager.refRows[7].cells[columnTitle];
 
         await tester.tap(find.text(cell!.value));
 

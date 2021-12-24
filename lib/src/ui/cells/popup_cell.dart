@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class PopupCell extends StatefulWidget {
-  final PlutoGridStateManager? stateManager;
-  final PlutoCell? cell;
-  final PlutoColumn? column;
-  final PlutoRow? row;
+  final PlutoGridStateManager stateManager;
+  final PlutoCell cell;
+  final PlutoColumn column;
+  final PlutoRow row;
 
   const PopupCell({
-    this.stateManager,
-    this.cell,
-    this.column,
-    this.row,
+    required this.stateManager,
+    required this.cell,
+    required this.column,
+    required this.row,
     Key? key,
   }) : super(key: key);
 }
 
 abstract class GridPopupProps {
-  List<PlutoColumn>? popupColumns;
+  List<PlutoColumn> popupColumns = [];
 
-  List<PlutoRow>? popupRows;
+  List<PlutoRow> popupRows = [];
 
   Icon? icon;
 }
@@ -53,7 +53,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
 
   @override
   void dispose() {
-    widget.stateManager!.keyPressed.reset();
+    widget.stateManager.keyPressed.reset();
 
     _textController!.dispose();
 
@@ -68,13 +68,13 @@ mixin PopupCellState<T extends PopupCell> on State<T>
 
     _textController = TextEditingController()
       ..text =
-          widget.column!.formattedValueForDisplayInEditing(widget.cell!.value);
+          widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
     _textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
   }
 
   void openPopup() {
-    if (widget.column!.checkReadOnly(widget.row!, widget.cell!)) {
+    if (widget.column.checkReadOnly(widget.row, widget.cell)) {
       return;
     }
 
@@ -87,20 +87,20 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       onSelected: onSelected,
       columns: popupColumns,
       rows: popupRows,
-      width: popupColumns!.fold<double>(0, (previous, column) {
+      width: popupColumns.fold<double>(0, (previous, column) {
             return previous + column.width;
           }) +
           1,
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,
-      configuration: widget.stateManager?.configuration?.copyWith(
+      configuration: widget.stateManager.configuration?.copyWith(
         gridBorderRadius:
-            widget.stateManager!.configuration?.gridPopupBorderRadius ??
+            widget.stateManager.configuration?.gridPopupBorderRadius ??
                 BorderRadius.zero,
         defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
         defaultCellPadding: PlutoGridSettings.cellPadding,
-        rowHeight: widget.stateManager!.configuration!.rowHeight,
+        rowHeight: widget.stateManager.configuration!.rowHeight,
         enableRowColorAnimation: false,
       ),
     );
@@ -129,42 +129,40 @@ mixin PopupCellState<T extends PopupCell> on State<T>
     }
 
     // KeyManager 로 이벤트 처리를 위임 한다.
-    widget.stateManager!.keyManager!.subject.add(keyManager);
+    widget.stateManager.keyManager!.subject.add(keyManager);
 
     // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
     return KeyEventResult.handled;
   }
 
   void onLoaded(PlutoGridOnLoadedEvent event) {
-    for (var i = 0; i < popupRows!.length; i += 1) {
+    for (var i = 0; i < popupRows.length; i += 1) {
       if (fieldOnSelected == null) {
-        for (var entry in popupRows![i].cells.entries) {
-          if (popupRows![i].cells[entry.key]!.value == widget.cell!.value) {
-            event.stateManager!.setCurrentCell(
-                event.stateManager!.refRows![i]!.cells[entry.key], i);
+        for (var entry in popupRows[i].cells.entries) {
+          if (popupRows[i].cells[entry.key]!.value == widget.cell.value) {
+            event.stateManager.setCurrentCell(
+                event.stateManager.refRows[i].cells[entry.key], i);
             break;
           }
         }
       } else {
-        if (popupRows![i].cells[fieldOnSelected!]!.value ==
-            widget.cell!.value) {
-          event.stateManager!.setCurrentCell(
-              event.stateManager!.refRows![i]!.cells[fieldOnSelected!], i);
+        if (popupRows[i].cells[fieldOnSelected!]!.value == widget.cell.value) {
+          event.stateManager.setCurrentCell(
+              event.stateManager.refRows[i].cells[fieldOnSelected!], i);
           break;
         }
       }
     }
 
-    if (event.stateManager!.currentRowIdx != null) {
+    if (event.stateManager.currentRowIdx != null) {
       final rowIdxToMove =
-          event.stateManager!.currentRowIdx! + 1 + offsetOfScrollRowIdx;
+          event.stateManager.currentRowIdx! + 1 + offsetOfScrollRowIdx;
 
-      if (rowIdxToMove < event.stateManager!.refRows!.length) {
-        event.stateManager!
-            .moveScrollByRow(PlutoMoveDirection.up, rowIdxToMove);
+      if (rowIdxToMove < event.stateManager.refRows.length) {
+        event.stateManager.moveScrollByRow(PlutoMoveDirection.up, rowIdxToMove);
       } else {
-        event.stateManager!.moveScrollByRow(
-            PlutoMoveDirection.up, event.stateManager!.refRows!.length);
+        event.stateManager.moveScrollByRow(
+            PlutoMoveDirection.up, event.stateManager.refRows.length);
       }
     }
   }
@@ -188,16 +186,16 @@ mixin PopupCellState<T extends PopupCell> on State<T>
   }
 
   void handleSelected(dynamic value) {
-    widget.stateManager!.handleAfterSelectingRow(widget.cell!, value);
+    widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
-    _textController!.text = widget.column!.formattedValueForDisplayInEditing(
-      widget.cell!.value,
+    _textController!.text = widget.column.formattedValueForDisplayInEditing(
+      widget.cell.value,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stateManager!.keepFocus) {
+    if (widget.stateManager.keepFocus) {
       _textFocus!.requestFocus();
     }
 
@@ -210,23 +208,23 @@ mixin PopupCellState<T extends PopupCell> on State<T>
           readOnly: true,
           textInputAction: TextInputAction.none,
           onTap: openPopup,
-          style: widget.stateManager!.configuration!.cellTextStyle,
+          style: widget.stateManager.configuration!.cellTextStyle,
           decoration: const InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.all(0),
             isDense: true,
           ),
           maxLines: 1,
-          textAlign: widget.column!.textAlign.value,
+          textAlign: widget.column.textAlign.value,
         ),
         Positioned(
           top: -14,
-          right: !widget.column!.textAlign.isRight ? -10 : null,
-          left: widget.column!.textAlign.isRight ? -10 : null,
+          right: !widget.column.textAlign.isRight ? -10 : null,
+          left: widget.column.textAlign.isRight ? -10 : null,
           child: IconButton(
             icon: icon!,
-            color: widget.stateManager!.configuration!.iconColor,
-            iconSize: widget.stateManager!.configuration!.iconSize,
+            color: widget.stateManager.configuration!.iconColor,
+            iconSize: widget.stateManager.configuration!.iconSize,
             onPressed: openPopup,
           ),
         ),

@@ -109,7 +109,7 @@ mixin ScrollState implements IPlutoGridState {
     final columnIndexes = columnIndexesByShowFrozen;
 
     final PlutoColumn columnToMove =
-        refColumns![columnIndexes[columnIdx! + direction.offset]];
+        refColumns[columnIndexes[columnIdx! + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,

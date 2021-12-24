@@ -102,7 +102,7 @@ void main() {
             columns: columns,
             rows: rows,
             onLoaded: (event) {
-              event.stateManager!.setShowLoading(true);
+              event.stateManager.setShowLoading(true);
             },
           ),
         ),
@@ -391,12 +391,12 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.cells['header']!.value, 0);
-      expect(stateManager!.rows[1]!.cells['header']!.value, 12);
-      expect(stateManager!.rows[2]!.cells['header']!.value, 12);
-      expect(stateManager!.rows[3]!.cells['header']!.value, -10);
-      expect(stateManager!.rows[4]!.cells['header']!.value, 1234567);
-      expect(stateManager!.rows[5]!.cells['header']!.value, 12);
+      expect(stateManager!.rows[0].cells['header']!.value, 0);
+      expect(stateManager!.rows[1].cells['header']!.value, 12);
+      expect(stateManager!.rows[2].cells['header']!.value, 12);
+      expect(stateManager!.rows[3].cells['header']!.value, -10);
+      expect(stateManager!.rows[4].cells['header']!.value, 1234567);
+      expect(stateManager!.rows[5].cells['header']!.value, 12);
     });
 
     testWidgets(
@@ -440,12 +440,12 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.cells['header']!.value, 'not a number');
-      expect(stateManager!.rows[1]!.cells['header']!.value, 12);
-      expect(stateManager!.rows[2]!.cells['header']!.value, '12');
-      expect(stateManager!.rows[3]!.cells['header']!.value, -10);
-      expect(stateManager!.rows[4]!.cells['header']!.value, 1234567);
-      expect(stateManager!.rows[5]!.cells['header']!.value, 12.12345);
+      expect(stateManager!.rows[0].cells['header']!.value, 'not a number');
+      expect(stateManager!.rows[1].cells['header']!.value, 12);
+      expect(stateManager!.rows[2].cells['header']!.value, '12');
+      expect(stateManager!.rows[3].cells['header']!.value, -10);
+      expect(stateManager!.rows[4].cells['header']!.value, 1234567);
+      expect(stateManager!.rows[5].cells['header']!.value, 12.12345);
     });
 
     testWidgets(
@@ -487,10 +487,10 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.cells['header']!.value, 1234567);
-      expect(stateManager!.rows[1]!.cells['header']!.value, 1234567.1234);
-      expect(stateManager!.rows[2]!.cells['header']!.value, 1234567.12345);
-      expect(stateManager!.rows[3]!.cells['header']!.value, 1234567.12346);
+      expect(stateManager!.rows[0].cells['header']!.value, 1234567);
+      expect(stateManager!.rows[1].cells['header']!.value, 1234567.1234);
+      expect(stateManager!.rows[2].cells['header']!.value, 1234567.12345);
+      expect(stateManager!.rows[3].cells['header']!.value, 1234567.12346);
     });
 
     testWidgets(
@@ -534,12 +534,12 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.cells['header']!.value, 12345);
-      expect(stateManager!.rows[1]!.cells['header']!.value, 0);
-      expect(stateManager!.rows[2]!.cells['header']!.value, 333);
-      expect(stateManager!.rows[3]!.cells['header']!.value, 0);
-      expect(stateManager!.rows[4]!.cells['header']!.value, 0);
-      expect(stateManager!.rows[5]!.cells['header']!.value, 0);
+      expect(stateManager!.rows[0].cells['header']!.value, 12345);
+      expect(stateManager!.rows[1].cells['header']!.value, 0);
+      expect(stateManager!.rows[2].cells['header']!.value, 333);
+      expect(stateManager!.rows[3].cells['header']!.value, 0);
+      expect(stateManager!.rows[4].cells['header']!.value, 0);
+      expect(stateManager!.rows[5].cells['header']!.value, 0);
     });
 
     testWidgets(
@@ -576,11 +576,11 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.sortIdx, 0);
-      expect(stateManager!.rows[1]!.sortIdx, 1);
-      expect(stateManager!.rows[2]!.sortIdx, 2);
-      expect(stateManager!.rows[3]!.sortIdx, 3);
-      expect(stateManager!.rows[4]!.sortIdx, 4);
+      expect(stateManager!.rows[0].sortIdx, 0);
+      expect(stateManager!.rows[1].sortIdx, 1);
+      expect(stateManager!.rows[2].sortIdx, 2);
+      expect(stateManager!.rows[3].sortIdx, 3);
+      expect(stateManager!.rows[4].sortIdx, 4);
     });
 
     testWidgets(
@@ -617,11 +617,11 @@ void main() {
       );
 
       // then
-      expect(stateManager!.rows[0]!.sortIdx, 5);
-      expect(stateManager!.rows[1]!.sortIdx, 6);
-      expect(stateManager!.rows[2]!.sortIdx, 7);
-      expect(stateManager!.rows[3]!.sortIdx, 8);
-      expect(stateManager!.rows[4]!.sortIdx, 9);
+      expect(stateManager!.rows[0].sortIdx, 5);
+      expect(stateManager!.rows[1].sortIdx, 6);
+      expect(stateManager!.rows[2].sortIdx, 7);
+      expect(stateManager!.rows[3].sortIdx, 8);
+      expect(stateManager!.rows[4].sortIdx, 9);
     });
   });
 

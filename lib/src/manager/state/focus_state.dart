@@ -80,7 +80,7 @@ mixin FocusState implements IPlutoGridState {
     bool found = false;
 
     for (var i = 0; i < length - 1; i += 1) {
-      var current = refColumns![columnIndexes[i]];
+      var current = refColumns[columnIndexes[i]];
 
       if (!found && current.key == column.key) {
         found = true;
@@ -92,7 +92,7 @@ mixin FocusState implements IPlutoGridState {
 
       var toMoveIndex = columnIndexes[i + 1];
 
-      var toMove = refColumns![toMoveIndex];
+      var toMove = refColumns[toMoveIndex];
 
       if (toMove.enableFilterMenuItem) {
         toMove.filterFocusNode?.requestFocus();

@@ -39,7 +39,7 @@ void main() {
     bool isDragTarget = false,
     bool isTopDragTarget = false,
     bool isBottomDragTarget = false,
-    List<PlutoRow>? dragRows,
+    List<PlutoRow> dragRows = const [],
     bool isSelectedRow = false,
     bool isCurrentCell = false,
     bool isSelectedCell = false,

@@ -139,7 +139,7 @@ void main() {
 
     final renderTextWithCellValue = buildCellWidgetWithRenderer(
         (PlutoColumnRendererContext rendererContext) {
-      return Text(rendererContext.cell!.value.toString());
+      return Text(rendererContext.cell.value.toString());
     });
 
     renderTextWithCellValue.test(
@@ -223,7 +223,7 @@ void main() {
         verifyNever(eventManager!.addEvent(
           argThat(
               PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
-            return object.offset is Offset;
+            return true;
           })),
         ));
       },
@@ -249,7 +249,7 @@ void main() {
         verify(eventManager!.addEvent(
           argThat(
               PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
-            return object.offset is Offset;
+            return true;
           })),
         )).called(greaterThan(1));
 

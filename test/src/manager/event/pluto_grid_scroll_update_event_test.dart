@@ -17,7 +17,7 @@ void main() {
   MockLinkedScrollControllerGroup? horizontal;
 
   eventBuilder({
-    Offset? offset,
+    required Offset offset,
   }) =>
       PlutoGridScrollUpdateEvent(
         offset: offset,
@@ -35,21 +35,6 @@ void main() {
   });
 
   group('인수 값 테스트', () {
-    test(
-      'offset 이 null 이면 return 되어야 한다.',
-      () {
-        var event = eventBuilder(offset: null);
-        event.handler(stateManager);
-
-        verifyNever(stateManager!.needMovingScroll(any, any));
-        verifyNever(horizontal!.animateTo(
-          any,
-          curve: anyNamed('curve'),
-          duration: anyNamed('duration'),
-        ));
-      },
-    );
-
     test(
       'offset 이 null 가 아니면 needMovingScroll 이 호출 되어야 한다.',
       () {
