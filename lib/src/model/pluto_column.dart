@@ -221,22 +221,22 @@ class PlutoColumn {
 }
 
 class PlutoColumnRendererContext {
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
-  final int? rowIdx;
+  final int rowIdx;
 
-  final PlutoRow? row;
+  final PlutoRow row;
 
-  final PlutoCell? cell;
+  final PlutoCell cell;
 
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
   PlutoColumnRendererContext({
-    this.column,
-    this.rowIdx,
-    this.row,
-    this.cell,
-    this.stateManager,
+    required this.column,
+    required this.rowIdx,
+    required this.row,
+    required this.cell,
+    required this.stateManager,
   });
 }
 

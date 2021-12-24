@@ -15,19 +15,19 @@ class ColumnGroupScreen extends StatefulWidget {
 }
 
 class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
-  PlutoGridStateManager? stateManager;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoColumn>? columns;
+  final List<PlutoRow> rows = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoColumnGroup> columnGroups = [];
 
-  List<PlutoColumnGroup>? columnGroups;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'ExpandedColumn1',
         field: 'column1',
@@ -76,11 +76,11 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         type: PlutoColumnType.text(),
         titleTextAlign: PlutoColumnTextAlign.center,
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 100, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 100, columns: columns));
 
-    columnGroups = [
+    columnGroups.addAll([
       PlutoColumnGroup(
         title: 'Expanded',
         fields: ['column1'],
@@ -136,7 +136,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
           ),
         ],
       ),
-    ];
+    ]);
   }
 
   @override
@@ -164,7 +164,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
           stateManager = event.stateManager;
-          stateManager!.setShowColumnFilter(true);
+          stateManager.setShowColumnFilter(true);
         },
         configuration: const PlutoGridConfiguration(
           enableColumnBorder: true,

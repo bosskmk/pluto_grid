@@ -21,7 +21,7 @@ void main() {
       .test('선택되지 않은 행의 드래그 아이콘을 드래그 하면 선택 된 행이 무효화 되어야 한다.',
           (WidgetTester tester) async {
     final selectedCell = find.text(
-      grid.stateManager.refRows![0]!.cells['column1']!.value,
+      grid.stateManager.refRows[0].cells['column1']!.value,
     );
 
     final dragIcon = find.descendant(
@@ -45,12 +45,12 @@ void main() {
   )
       .test('선택되지 않은 행의 드래그 아이콘을 드래그 하면 드래그 한 행이 이동 되어야 한다.',
           (WidgetTester tester) async {
-    final dragRow = grid.stateManager.refRows![0];
+    final dragRow = grid.stateManager.refRows[0];
 
-    final movedRow = grid.stateManager.refRows![1];
+    final movedRow = grid.stateManager.refRows[1];
 
     final selectedCell = find.text(
-      dragRow!.cells['column1']!.value,
+      dragRow.cells['column1']!.value,
     );
 
     final dragIcon = find.descendant(
@@ -62,9 +62,9 @@ void main() {
 
     await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
-    expect(grid.stateManager.refRows![0], movedRow);
+    expect(grid.stateManager.refRows[0], movedRow);
 
-    expect(grid.stateManager.refRows![1], dragRow);
+    expect(grid.stateManager.refRows[1], dragRow);
 
     expect(grid.stateManager.currentSelectingRows.length, 0);
   });
@@ -79,7 +79,7 @@ void main() {
       .test('선택된 행의 드래그 아이콘을 드래그 하면 선택 된 행이 유지 되어야 한다.',
           (WidgetTester tester) async {
     final selectedCell = find.text(
-      grid.stateManager.currentSelectingRows[0]!.cells['column1']!.value,
+      grid.stateManager.currentSelectingRows[0].cells['column1']!.value,
     );
 
     final dragIcon = find.descendant(
@@ -108,10 +108,10 @@ void main() {
     final existsSelectingRows = [...grid.stateManager.currentSelectingRows];
 
     final dragRowCellValue =
-        grid.stateManager.refRows![0]!.cells['column1']!.value;
+        grid.stateManager.refRows[0].cells['column1']!.value;
 
     final targetRowCellValue =
-        grid.stateManager.refRows![1]!.cells['column1']!.value;
+        grid.stateManager.refRows[1].cells['column1']!.value;
 
     expect(dragRowCellValue, 'column1 value 1');
 
@@ -147,12 +147,12 @@ void main() {
     );
 
     expect(
-      grid.stateManager.currentSelectingRows[0]!.cells['column1']!.value,
+      grid.stateManager.currentSelectingRows[0].cells['column1']!.value,
       dragRowCellValue,
     );
 
     expect(
-      grid.stateManager.currentSelectingRows[1]!.cells['column1']!.value,
+      grid.stateManager.currentSelectingRows[1].cells['column1']!.value,
       targetRowCellValue,
     );
   });

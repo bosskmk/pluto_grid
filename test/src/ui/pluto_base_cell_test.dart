@@ -422,8 +422,8 @@ void main() {
       verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnTapUp &&
-              object.cell!.key == cell.key &&
-              object.column!.key == column.key &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);
@@ -476,8 +476,8 @@ void main() {
       verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressStart &&
-              object.cell!.key == cell.key &&
-              object.column!.key == column.key &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);
@@ -544,8 +544,8 @@ void main() {
       verify(eventManager!.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressMoveUpdate &&
-              object.cell!.key == cell.key &&
-              object.column!.key == column.key &&
+              object.cell.key == cell.key &&
+              object.column.key == column.key &&
               object.rowIdx == rowIdx;
         })),
       )).called(1);

@@ -14,23 +14,23 @@ class TimeTypeColumnScreen extends StatefulWidget {
 }
 
 class _TimeTypeColumnScreenState extends State<TimeTypeColumnScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Time',
         field: 'time',
         type: PlutoColumnType.time(),
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(
         cells: {
           'time': PlutoCell(value: '00:00'),
@@ -46,7 +46,7 @@ class _TimeTypeColumnScreenState extends State<TimeTypeColumnScreen> {
           'time': PlutoCell(value: '12:30'),
         },
       ),
-    ];
+    ]);
   }
 
   @override

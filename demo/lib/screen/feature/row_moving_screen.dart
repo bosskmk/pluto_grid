@@ -15,17 +15,17 @@ class RowMovingScreen extends StatefulWidget {
 }
 
 class _RowMovingScreenState extends State<RowMovingScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'column1',
         field: 'column1',
@@ -52,9 +52,9 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
         field: 'column5',
         type: PlutoColumnType.text(),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 15, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 15, columns: columns));
   }
 
   @override
@@ -84,7 +84,7 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

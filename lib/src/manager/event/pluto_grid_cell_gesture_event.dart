@@ -2,30 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridCellGestureEvent extends PlutoGridEvent {
-  final PlutoGridGestureType? gestureType;
-  final Offset? offset;
-  final PlutoCell? cell;
-  final PlutoColumn? column;
-  final int? rowIdx;
+  final PlutoGridGestureType gestureType;
+  final Offset offset;
+  final PlutoCell cell;
+  final PlutoColumn column;
+  final int rowIdx;
 
   PlutoGridCellGestureEvent({
-    this.gestureType,
-    this.offset,
-    this.cell,
-    this.column,
-    this.rowIdx,
+    required this.gestureType,
+    required this.offset,
+    required this.cell,
+    required this.column,
+    required this.rowIdx,
   }) : super();
 
   @override
   void handler(PlutoGridStateManager? stateManager) {
-    if (gestureType == null ||
-        offset == null ||
-        cell == null ||
-        column == null ||
-        rowIdx == null) {
-      return;
-    }
-
     switch (gestureType) {
       case PlutoGridGestureType.onTapUp:
         _onTapUp(stateManager!);

@@ -15,19 +15,19 @@ class GridAsPopupScreen extends StatefulWidget {
 }
 
 class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
-  TextEditingController? _nameController;
+  final List<PlutoColumn> columns = [];
 
-  TextEditingController? _moneyController;
+  final List<PlutoRow> rows = [];
 
-  List<PlutoColumn>? columns;
+  late TextEditingController _nameController;
 
-  List<PlutoRow>? rows;
+  late TextEditingController _moneyController;
 
   @override
   void dispose() {
-    _nameController!.dispose();
+    _nameController.dispose();
 
-    _moneyController!.dispose();
+    _moneyController.dispose();
 
     super.dispose();
   }
@@ -40,7 +40,7 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
 
     _moneyController = TextEditingController();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'name',
         field: 'name',
@@ -56,9 +56,9 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
         field: 'registered_at',
         type: PlutoColumnType.date(),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 30, columns: columns));
   }
 
   void openGridPopup(BuildContext context, String selectFieldName) {
@@ -72,20 +72,20 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       rows: rows,
       mode: PlutoGridMode.select,
       onLoaded: (PlutoGridOnLoadedEvent event) {
-        rows!.asMap().entries.forEach((element) {
+        rows.asMap().entries.forEach((element) {
           final cell = element.value.cells[selectFieldName]!;
 
-          if (cell.value.toString() == controller!.text) {
-            event.stateManager!.setCurrentCell(cell, element.key);
-            event.stateManager!
+          if (cell.value.toString() == controller.text) {
+            event.stateManager.setCurrentCell(cell, element.key);
+            event.stateManager
                 .moveScrollByRow(PlutoMoveDirection.up, element.key + 1);
           }
         });
 
-        event.stateManager!.setShowColumnFilter(true);
+        event.stateManager.setShowColumnFilter(true);
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
-        controller!.text = event.row!.cells[selectFieldName]!.value.toString();
+        controller.text = event.row!.cells[selectFieldName]!.value.toString();
       },
     );
   }

@@ -6,22 +6,22 @@ import 'text_cell.dart';
 
 class PlutoNumberCell extends StatefulWidget implements TextCell {
   @override
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
   @override
-  final PlutoCell? cell;
+  final PlutoCell cell;
 
   @override
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
   @override
-  final PlutoRow? row;
+  final PlutoRow row;
 
   const PlutoNumberCell({
-    this.stateManager,
-    this.cell,
-    this.column,
-    this.row,
+    required this.stateManager,
+    required this.cell,
+    required this.column,
+    required this.row,
     Key? key,
   }) : super(key: key);
 
@@ -50,9 +50,9 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
   void initState() {
     super.initState();
 
-    decimalRange = widget.column!.type.number!.decimalRange();
+    decimalRange = widget.column.type.number!.decimalRange();
 
-    activatedNegative = widget.column!.type.number!.negative;
+    activatedNegative = widget.column.type.number!.negative;
   }
 }
 

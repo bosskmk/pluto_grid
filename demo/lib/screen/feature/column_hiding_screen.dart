@@ -14,17 +14,17 @@ class ColumnHidingScreen extends StatefulWidget {
 }
 
 class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Column A',
         field: 'column_a',
@@ -40,9 +40,9 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
         field: 'column_c',
         type: PlutoColumnType.text(),
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(
         cells: {
           'column_a': PlutoCell(value: 'a1'),
@@ -64,17 +64,17 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
           'column_c': PlutoCell(value: 'c3'),
         },
       ),
-    ];
+    ]);
   }
 
   void handleToggleColumnA() {
-    PlutoColumn firstColumn = stateManager!.refColumns!.originalList.first;
+    PlutoColumn firstColumn = stateManager.refColumns.originalList.first;
 
-    stateManager!.hideColumn(firstColumn.key, !firstColumn.hide);
+    stateManager.hideColumn(firstColumn.key, !firstColumn.hide);
   }
 
   void handleShowPopup(BuildContext context) {
-    stateManager!.showSetColumnsPopup(context);
+    stateManager.showSetColumnsPopup(context);
   }
 
   @override

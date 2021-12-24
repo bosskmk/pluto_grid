@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -28,7 +29,7 @@ abstract class ISelectingState {
 
   /// Rows of currently selected.
   /// Only valid in [PlutoGridSelectingMode.row].
-  List<PlutoRow?> get currentSelectingRows;
+  List<PlutoRow> get currentSelectingRows;
 
   /// String of multi-selected cells.
   /// Preserves the structure of the cells selected by the tabs and the enter key.
@@ -121,7 +122,7 @@ mixin SelectingState implements IPlutoGridState {
 
     for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = refColumns![columnIndexes[j]].field;
+        final String field = refColumns[columnIndexes[j]].field;
 
         positions.add(PlutoGridSelectingCellPosition(
           rowIdx: i,
@@ -137,9 +138,9 @@ mixin SelectingState implements IPlutoGridState {
   bool get hasCurrentSelectingPosition => _currentSelectingPosition != null;
 
   @override
-  List<PlutoRow?> get currentSelectingRows => _currentSelectingRows;
+  List<PlutoRow> get currentSelectingRows => _currentSelectingRows;
 
-  List<PlutoRow?> _currentSelectingRows = [];
+  List<PlutoRow> _currentSelectingRows = [];
 
   @override
   String get currentSelectingText {
@@ -207,7 +208,7 @@ mixin SelectingState implements IPlutoGridState {
 
   @override
   void setAllCurrentSelecting() {
-    if (refRows == null || refRows!.isEmpty) {
+    if (refRows.isEmpty) {
       return;
     }
 
@@ -218,8 +219,8 @@ mixin SelectingState implements IPlutoGridState {
 
         setCurrentSelectingPosition(
           cellPosition: PlutoGridCellPosition(
-            columnIdx: refColumns!.length - 1,
-            rowIdx: refRows!.length - 1,
+            columnIdx: refColumns.length - 1,
+            rowIdx: refRows.length - 1,
           ),
         );
         break;
@@ -229,11 +230,11 @@ mixin SelectingState implements IPlutoGridState {
         }
 
         _currentSelectingPosition = PlutoGridCellPosition(
-          columnIdx: refColumns!.length - 1,
-          rowIdx: refRows!.length - 1,
+          columnIdx: refColumns.length - 1,
+          rowIdx: refRows.length - 1,
         );
 
-        setCurrentSelectingRowsByRange(0, refRows!.length - 1);
+        setCurrentSelectingRowsByRange(0, refRows.length - 1);
         break;
       case PlutoGridSelectingMode.none:
       default:
@@ -323,7 +324,7 @@ mixin SelectingState implements IPlutoGridState {
     final _horizontalScrollOffset = scroll!.horizontal!.offset;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
-      final column = refColumns![columnIndexes[i]];
+      final column = refColumns[columnIndexes[i]];
 
       currentWidth += column.width;
 
@@ -360,11 +361,11 @@ mixin SelectingState implements IPlutoGridState {
 
     final _to = max(from, to) + 1;
 
-    if (_from < 0 || _to > refRows!.length) {
+    if (_from < 0 || _to > refRows.length) {
       return;
     }
 
-    _currentSelectingRows = refRows!.getRange(_from, _to).toList();
+    _currentSelectingRows = refRows.getRange(_from, _to).toList();
 
     if (notify) {
       notifyListeners();
@@ -384,17 +385,17 @@ mixin SelectingState implements IPlutoGridState {
       return;
     }
 
-    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows!.length - 1) {
+    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows.length - 1) {
       return;
     }
 
-    final PlutoRow row = refRows![rowIdx]!;
+    final PlutoRow row = refRows[rowIdx];
 
     final keys =
-        _currentSelectingRows.map((e) => e!.key).toList(growable: false);
+        _currentSelectingRows.map((e) => e.key).toList(growable: false);
 
     if (keys.contains(row.key)) {
-      _currentSelectingRows.removeWhere((element) => element!.key == row.key);
+      _currentSelectingRows.removeWhere((element) => element.key == row.key);
     } else {
       _currentSelectingRows.add(row);
     }
@@ -419,16 +420,15 @@ mixin SelectingState implements IPlutoGridState {
       return false;
     }
 
-    return _currentSelectingRows.firstWhere(
-          (element) => element!.key == rowKey,
-          orElse: () => null,
+    return _currentSelectingRows.firstWhereOrNull(
+          (element) => element.key == rowKey,
         ) !=
         null;
   }
 
   // todo : code cleanup
   @override
-  bool isSelectedCell(PlutoCell? cell, PlutoColumn? column, int? rowIdx) {
+  bool isSelectedCell(PlutoCell cell, PlutoColumn column, int rowIdx) {
     if (_selectingMode.isNone) {
       return false;
     }
@@ -444,7 +444,7 @@ mixin SelectingState implements IPlutoGridState {
     if (_selectingMode.isCell) {
       final bool inRangeOfRows = min(currentCellPosition!.rowIdx as num,
                   _currentSelectingPosition!.rowIdx as num) <=
-              rowIdx! &&
+              rowIdx &&
           rowIdx <=
               max(currentCellPosition!.rowIdx!,
                   _currentSelectingPosition!.rowIdx!);
@@ -508,7 +508,7 @@ mixin SelectingState implements IPlutoGridState {
         return true;
       } else if (rowIdx == endRowIdx && columnIdx <= endColumnIdx!) {
         return true;
-      } else if (rowIdx! > startRowIdx && rowIdx < endRowIdx) {
+      } else if (rowIdx > startRowIdx && rowIdx < endRowIdx) {
         return true;
       }
 
@@ -544,9 +544,9 @@ mixin SelectingState implements IPlutoGridState {
       List<String> columnText = [];
 
       for (var i = 0; i < columnIndexes.length; i += 1) {
-        final String field = refColumns![columnIndexes[i]].field;
+        final String field = refColumns[columnIndexes[i]].field;
 
-        columnText.add(row!.cells[field]!.value.toString());
+        columnText.add(row.cells[field]!.value.toString());
       }
 
       rowText.add(columnText.join('\t'));
@@ -576,9 +576,9 @@ mixin SelectingState implements IPlutoGridState {
       List<String> columnText = [];
 
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = refColumns![columnIndexes[j]].field;
+        final String field = refColumns[columnIndexes[j]].field;
 
-        columnText.add(refRows![i]!.cells[field]!.value.toString());
+        columnText.add(refRows[i].cells[field]!.value.toString());
       }
 
       rowText.add(columnText.join('\t'));

@@ -16,13 +16,13 @@ class AddAndRemoveRowsScreen extends StatefulWidget {
 }
 
 class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
-  PlutoGridSelectingMode? gridSelectingMode = PlutoGridSelectingMode.row;
+  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
   bool checkReadOnly(PlutoRow row, PlutoCell cell) {
     return row.cells['status']!.value != 'created';
@@ -32,7 +32,7 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Id',
         field: 'id',
@@ -73,16 +73,16 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
-          if (rendererContext.cell!.value == 'saved') {
+          if (rendererContext.cell.value == 'saved') {
             textColor = Colors.green;
-          } else if (rendererContext.cell!.value == 'edited') {
+          } else if (rendererContext.cell.value == 'edited') {
             textColor = Colors.red;
-          } else if (rendererContext.cell!.value == 'created') {
+          } else if (rendererContext.cell.value == 'created') {
             textColor = Colors.blue;
           }
 
           return Text(
-            rendererContext.cell!.value.toString(),
+            rendererContext.cell.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
@@ -90,9 +90,9 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
           );
         },
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(cells: {
         'id': PlutoCell(value: 'user1'),
         'name': PlutoCell(value: 'user name 1'),
@@ -108,35 +108,35 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
         'name': PlutoCell(value: 'user name 3'),
         'status': PlutoCell(value: 'saved'),
       }),
-    ];
+    ]);
   }
 
   void handleNewRows({int? count}) {
-    final newRows = stateManager!.getNewRow();
+    final newRows = stateManager.getNewRow();
     newRows.cells['status']!.value = 'created';
 
-    stateManager!.appendRows([newRows]);
+    stateManager.appendRows([newRows]);
 
-    stateManager!.setCurrentCell(
+    stateManager.setCurrentCell(
       newRows.cells['id'],
-      stateManager!.refRows!.length - 1,
+      stateManager.refRows.length - 1,
       notify: false,
     );
 
-    stateManager!.moveScrollByRow(
+    stateManager.moveScrollByRow(
       PlutoMoveDirection.down,
-      stateManager!.refRows!.length - 2,
+      stateManager.refRows.length - 2,
     );
 
-    stateManager!.setKeepFocus(true);
+    stateManager.setKeepFocus(true);
   }
 
   void handleSaveAll() {
-    stateManager!.setShowLoading(true);
+    stateManager.setShowLoading(true);
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      for (var row in stateManager!.refRows!) {
-        if (row!.cells['status']!.value != 'saved') {
+      for (var row in stateManager.refRows) {
+        if (row.cells['status']!.value != 'saved') {
           row.cells['status']!.value = 'saved';
         }
 
@@ -149,30 +149,30 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
         }
       }
 
-      stateManager!.setShowLoading(false);
+      stateManager.setShowLoading(false);
     });
   }
 
   void handleRemoveCurrentRowButton() {
-    stateManager!.removeCurrentRow();
+    stateManager.removeCurrentRow();
   }
 
   void handleRemoveSelectedRowsButton() {
-    stateManager!.removeRows(stateManager!.currentSelectingRows);
+    stateManager.removeRows(stateManager.currentSelectingRows);
   }
 
   void handleFiltering() {
-    stateManager!.setShowColumnFilter(!stateManager!.showColumnFilter);
+    stateManager.setShowColumnFilter(!stateManager.showColumnFilter);
   }
 
   void setGridSelectingMode(PlutoGridSelectingMode? mode) {
-    if (gridSelectingMode == mode) {
+    if (mode == null || gridSelectingMode == mode) {
       return;
     }
 
     setState(() {
       gridSelectingMode = mode;
-      stateManager!.setSelectingMode(mode!);
+      stateManager.setSelectingMode(mode);
     });
   }
 
@@ -257,11 +257,11 @@ class _AddAndRemoveRowsScreenState extends State<AddAndRemoveRowsScreen> {
                   event.row!.cells['status']!.value = 'edited';
                 }
 
-                stateManager!.notifyListeners();
+                stateManager.notifyListeners();
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
                 stateManager = event.stateManager;
-                stateManager!.setSelectingMode(gridSelectingMode!);
+                stateManager.setSelectingMode(gridSelectingMode);
               },
             ),
           ),

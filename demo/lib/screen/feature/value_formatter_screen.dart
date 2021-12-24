@@ -14,15 +14,15 @@ class ValueFormatterScreen extends StatefulWidget {
 }
 
 class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Permission',
         field: 'permission',
@@ -85,9 +85,9 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
           return '(N) None';
         },
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(
         cells: {
           'permission': PlutoCell(value: 0),
@@ -104,7 +104,7 @@ class _ValueFormatterScreenState extends State<ValueFormatterScreen> {
           'group_original_value': PlutoCell(value: 'B'),
         },
       ),
-    ];
+    ]);
   }
 
   @override

@@ -15,17 +15,17 @@ class RowWithCheckboxScreen extends StatefulWidget {
 }
 
 class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'column1',
         field: 'column1',
@@ -53,9 +53,9 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
         field: 'column5',
         type: PlutoColumnType.text(),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 15, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 15, columns: columns));
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -65,7 +65,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
       print(event.row?.cells['column1']?.value);
     } else {
       print('Toggled All Rows.');
-      print(stateManager?.checkedRows.length);
+      print(stateManager.checkedRows.length);
     }
   }
 
@@ -92,7 +92,7 @@ class _RowWithCheckboxScreenState extends State<RowWithCheckboxScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

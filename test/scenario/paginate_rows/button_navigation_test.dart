@@ -64,7 +64,7 @@ void main() {
                 columns: columns,
                 rows: rows,
                 onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager!;
+                  stateManager = event.stateManager;
                 },
                 createFooter: (_stateManager) => PlutoPagination(_stateManager),
               ),
@@ -118,21 +118,21 @@ void main() {
 
     grid.test('100 개의 행의 셀 값이 0~99 까지 설정 되어야 한다.', (tester) async {
       // 테스트를 위해 셀 값을 순서대로 0~99 까지 설정.
-      final _rows = stateManager!.refRows!.originalList;
+      final _rows = stateManager!.refRows.originalList;
 
-      expect(_rows[0]!.cells[headerName]!.value, 0);
+      expect(_rows[0].cells[headerName]!.value, 0);
 
-      expect(_rows[50]!.cells[headerName]!.value, 50);
+      expect(_rows[50].cells[headerName]!.value, 50);
 
-      expect(_rows[99]!.cells[headerName]!.value, 99);
+      expect(_rows[99].cells[headerName]!.value, 99);
     });
 
     grid.test('첫페이지의 행이 40개 렌더링 되어야 한다.', (tester) async {
       final _rows = stateManager!.rows;
 
-      expect(_rows.first!.cells[headerName]!.value, 0);
+      expect(_rows.first.cells[headerName]!.value, 0);
 
-      expect(_rows.last!.cells[headerName]!.value, 39);
+      expect(_rows.last.cells[headerName]!.value, 39);
 
       expect(_rows.length, 40);
     });
@@ -162,9 +162,9 @@ void main() {
 
       expect(_rows.length, 40);
 
-      expect(_rows.first!.cells[headerName]!.value, 40);
+      expect(_rows.first.cells[headerName]!.value, 40);
 
-      expect(_rows.last!.cells[headerName]!.value, 79);
+      expect(_rows.last.cells[headerName]!.value, 79);
     });
 
     grid.test('3 페이지로 이동 하면 3번 페이징 버튼이 활성화 되어야 한다.', (tester) async {
@@ -196,9 +196,9 @@ void main() {
 
       expect(_rows.length, 20);
 
-      expect(_rows.first!.cells[headerName]!.value, 80);
+      expect(_rows.first.cells[headerName]!.value, 80);
 
-      expect(_rows.last!.cells[headerName]!.value, 99);
+      expect(_rows.last.cells[headerName]!.value, 99);
     });
   });
 }

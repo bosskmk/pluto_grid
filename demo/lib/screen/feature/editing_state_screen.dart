@@ -15,11 +15,11 @@ class EditingStateScreen extends StatefulWidget {
 }
 
 class _EditingStateScreenState extends State<EditingStateScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   bool autoEditing = false;
 
@@ -29,15 +29,15 @@ class _EditingStateScreenState extends State<EditingStateScreen> {
 
     final dummyData = DummyData(10, 100);
 
-    columns = dummyData.columns;
+    columns.addAll(dummyData.columns);
 
-    rows = dummyData.rows;
+    rows.addAll(dummyData.rows);
   }
 
   void toggleAutoEditing(bool flag) {
     setState(() {
       autoEditing = flag;
-      stateManager!.setAutoEditing(flag);
+      stateManager.setAutoEditing(flag);
     });
   }
 
@@ -77,7 +77,7 @@ class _EditingStateScreenState extends State<EditingStateScreen> {
                 print(event);
               },
               onLoaded: (PlutoGridOnLoadedEvent event) {
-                event.stateManager!
+                event.stateManager
                     .setSelectingMode(PlutoGridSelectingMode.cell);
 
                 stateManager = event.stateManager;

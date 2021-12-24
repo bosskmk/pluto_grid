@@ -15,11 +15,11 @@ class RowColorScreen extends StatefulWidget {
 }
 
 class _RowColorScreenState extends State<RowColorScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -27,9 +27,9 @@ class _RowColorScreenState extends State<RowColorScreen> {
 
     final dummyData = DummyData(10, 100);
 
-    columns = dummyData.columns;
+    columns.addAll(dummyData.columns);
 
-    rows = dummyData.rows;
+    rows.addAll(dummyData.rows);
   }
 
   @override
@@ -56,7 +56,7 @@ class _RowColorScreenState extends State<RowColorScreen> {
           print(event);
         },
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager!.setSelectingMode(PlutoGridSelectingMode.row);
+          event.stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
           stateManager = event.stateManager;
         },

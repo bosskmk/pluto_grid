@@ -30,7 +30,7 @@ void main() {
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -62,7 +62,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -99,7 +99,7 @@ void main() {
           width: 250,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -130,7 +130,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -163,7 +163,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -202,7 +202,7 @@ void main() {
           width: 150,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -233,7 +233,7 @@ void main() {
           frozen: PlutoColumnFrozen.right,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -265,7 +265,7 @@ void main() {
           frozen: PlutoColumnFrozen.right,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -312,7 +312,7 @@ void main() {
           width: 120,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -335,7 +335,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -361,7 +361,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -387,7 +387,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -410,7 +410,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -817,7 +817,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
@@ -828,7 +828,7 @@ void main() {
       stateManager.hideColumn(columns.first.key, true);
 
       // then
-      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
     });
 
     testWidgets(
@@ -848,13 +848,13 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
 
       // when
-      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
 
       stateManager.hideColumn(columns.first.key, false);
 
@@ -873,7 +873,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
@@ -903,7 +903,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );

@@ -15,15 +15,15 @@ class SelectionTypeColumnScreen extends StatefulWidget {
 }
 
 class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Select A',
         field: 'select_a',
@@ -84,9 +84,9 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
           enableColumnFilter: true,
         ),
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(
         cells: {
           'select_a': PlutoCell(value: 'One'),
@@ -111,7 +111,7 @@ class _SelectionTypeColumnScreenState extends State<SelectionTypeColumnScreen> {
           'select_d': PlutoCell(value: '三'),
         },
       ),
-    ];
+    ]);
   }
 
   @override

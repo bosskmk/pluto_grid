@@ -80,7 +80,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
       // 기존 셀 값이 2020-01-08 로 변경 되어야 한다.
-      expect(stateManager!.rows[0]!.cells['date']!.value, '2020-01-08');
+      expect(stateManager!.rows[0].cells['date']!.value, '2020-01-08');
 
       // 현재 셀이 다음 행으로 변경 되어야 한다.
       expect(stateManager!.currentCellPosition!.rowIdx, 1);
@@ -97,7 +97,7 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       // 기존 셀 값이 2020-01-09 로 변경 되어야 한다.
-      expect(stateManager!.rows[1]!.cells['date']!.value, '2020-01-09');
+      expect(stateManager!.rows[1].cells['date']!.value, '2020-01-09');
 
       // 현재 셀이 다음 행으로 변경 되어야 한다.
       expect(stateManager!.currentCellPosition!.rowIdx, 2);

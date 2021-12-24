@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// Event called when a row is dragged.
 class PlutoGridDragRowsEvent extends PlutoGridEvent {
-  final List<PlutoRow?> rows;
-  final int? targetIdx;
-  final Offset? offset;
+  final List<PlutoRow> rows;
+  final int targetIdx;
 
   PlutoGridDragRowsEvent({
     required this.rows,
-    this.targetIdx,
-    this.offset,
+    required this.targetIdx,
   }) : super(
           type: PlutoGridEventType.debounce,
           duration: const Duration(milliseconds: debounceMilliseconds),

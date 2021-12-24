@@ -10,7 +10,7 @@ class PlutoBaseColumnGroup extends StatelessWidget {
     required this.stateManager,
     required this.columnGroup,
     required this.depth,
-  }) : super(key: columnGroup.group.key);
+  }) : super(key: columnGroup.key);
 
   int get childrenDepth => columnGroup.group.hasChildren
       ? stateManager.columnGroupDepth(columnGroup.group.children!)

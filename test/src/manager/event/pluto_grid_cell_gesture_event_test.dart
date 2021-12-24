@@ -3,6 +3,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../../helper/column_helper.dart';
 import '../../../matcher/pluto_object_matcher.dart';
 import 'pluto_grid_cell_gesture_event_test.mocks.dart';
 
@@ -150,6 +151,7 @@ void main() {
       'setCurrentSelectingPosition 가 호출 되어야 한다.',
       () {
         // given
+        final column = ColumnHelper.textColumn('column').first;
         final cell = PlutoCell(value: 'value');
         const columnIdx = 1;
         const rowIdx = 1;
@@ -158,7 +160,7 @@ void main() {
         when(stateManager!.isSelectingInteraction()).thenReturn(true);
         when(stateManager!.keyPressed)
             .thenReturn(PlutoGridKeyPressed(shift: true));
-        when(stateManager!.columnIndex(any)).thenReturn(columnIdx);
+        when(stateManager!.columnIndex(column)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
         // when
@@ -166,6 +168,7 @@ void main() {
           gestureType: PlutoGridGestureType.onTapUp,
           cell: cell,
           rowIdx: rowIdx,
+          column: column,
         );
         event.handler(stateManager);
 
