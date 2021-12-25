@@ -110,7 +110,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     if (widget.stateManager.isInvalidHorizontalScroll) {
       widget.stateManager.scrollByDirection(
         PlutoMoveDirection.right,
-        widget.stateManager.scroll!.maxScrollHorizontal + moveOffset,
+        widget.stateManager.scroll!.maxScrollHorizontal,
       );
     }
 
