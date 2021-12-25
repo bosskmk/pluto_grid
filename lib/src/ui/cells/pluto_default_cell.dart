@@ -28,13 +28,13 @@ class PlutoDefaultCell extends PlutoStatefulWidget {
 
 abstract class _PlutoDefaultCellStateWithChange
     extends PlutoStateWithChange<PlutoDefaultCell> {
-  bool? canRowDrag;
+  bool? _canRowDrag;
 
   @override
   void onChange() {
     resetState((update) {
-      canRowDrag = update<bool?>(
-        canRowDrag,
+      _canRowDrag = update<bool?>(
+        _canRowDrag,
         widget.stateManager.canRowDrag,
       );
     });
@@ -54,7 +54,7 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
 
     return Row(
       children: [
-        if (widget.column.enableRowDrag && canRowDrag!)
+        if (widget.column.enableRowDrag && _canRowDrag!)
           _RowDragIconWidget(
             column: widget.column,
             row: widget.row,
@@ -106,7 +106,7 @@ class _RowDragIconWidget extends StatefulWidget {
 }
 
 class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
-  List<PlutoRow> get draggingRows {
+  List<PlutoRow> get _draggingRows {
     if (widget.stateManager.currentSelectingRows.isEmpty) {
       return [widget.row];
     }
@@ -123,13 +123,13 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
     return [widget.row];
   }
 
-  void handleOnPointerDown(PointerDownEvent event) {
+  void _handleOnPointerDown(PointerDownEvent event) {
     widget.stateManager.setIsDraggingRow(true, notify: false);
 
-    widget.stateManager.setDragRows(draggingRows);
+    widget.stateManager.setDragRows(_draggingRows);
   }
 
-  void handleOnPointerMove(PointerMoveEvent event) {
+  void _handleOnPointerMove(PointerMoveEvent event) {
     // Do not drag while rows are selected.
     if (widget.stateManager.isSelecting) {
       widget.stateManager.setIsDraggingRow(false);
@@ -148,16 +148,16 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
     widget.stateManager.setDragTargetRowIdx(targetRowIdx);
   }
 
-  void handleOnPointerUp(PointerUpEvent event) {
+  void _handleOnPointerUp(PointerUpEvent event) {
     widget.stateManager.setIsDraggingRow(false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: handleOnPointerDown,
-      onPointerMove: handleOnPointerMove,
-      onPointerUp: handleOnPointerUp,
+      onPointerDown: _handleOnPointerDown,
+      onPointerMove: _handleOnPointerMove,
+      onPointerUp: _handleOnPointerUp,
       child: Draggable<PlutoRow>(
         data: widget.row,
         dragAnchorStrategy: pointerDragAnchorStrategy,
@@ -209,12 +209,12 @@ class _CheckboxSelectionWidget extends PlutoStatefulWidget {
 
 abstract class __CheckboxSelectionWidgetStateWithChange
     extends PlutoStateWithChange<_CheckboxSelectionWidget> {
-  bool? checked;
+  bool? _checked;
 
   @override
   void onChange() {
     resetState((update) {
-      checked = update<bool?>(checked, widget.row.checked);
+      _checked = update<bool?>(_checked, widget.row.checked);
     });
   }
 }
@@ -222,7 +222,7 @@ abstract class __CheckboxSelectionWidgetStateWithChange
 class __CheckboxSelectionWidgetState
     extends __CheckboxSelectionWidgetStateWithChange {
   void _handleOnChanged(bool? changed) {
-    if (changed == checked) {
+    if (changed == _checked) {
       return;
     }
 
@@ -235,14 +235,14 @@ class __CheckboxSelectionWidgetState
     }
 
     setState(() {
-      checked = changed;
+      _checked = changed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScaledCheckbox(
-      value: checked,
+      value: _checked,
       handleOnChanged: _handleOnChanged,
       scale: 0.86,
       unselectedColor: widget.stateManager.configuration!.iconColor,

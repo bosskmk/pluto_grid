@@ -321,10 +321,11 @@ void main() {
         ),
       );
 
-      final columnIconGesture = find.ancestor(
-          of: find.byType(IconButton), matching: find.byType(GestureDetector));
+      final columnIcon = find.byType(PlutoGridColumnIcon);
 
-      await tester.tap(columnIconGesture);
+      final gesture = await tester.startGesture(tester.getCenter(columnIcon));
+
+      await gesture.up();
     });
 
     tapColumn.test('기본 메뉴가 출력 되어야 한다.', (tester) async {
@@ -392,10 +393,11 @@ void main() {
         ),
       );
 
-      final columnIconGesture = find.ancestor(
-          of: find.byType(IconButton), matching: find.byType(GestureDetector));
+      final columnIcon = find.byType(PlutoGridColumnIcon);
 
-      await tester.tap(columnIconGesture);
+      final gesture = await tester.startGesture(tester.getCenter(columnIcon));
+
+      await gesture.up();
     });
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
@@ -450,10 +452,11 @@ void main() {
         ),
       );
 
-      final columnIconGesture = find.ancestor(
-          of: find.byType(IconButton), matching: find.byType(GestureDetector));
+      final columnIcon = find.byType(PlutoGridColumnIcon);
 
-      await tester.tap(columnIconGesture);
+      final gesture = await tester.startGesture(tester.getCenter(columnIcon));
+
+      await gesture.up();
     });
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
@@ -542,11 +545,9 @@ void main() {
           ),
         );
 
-        final columnIconGesture = find.ancestor(
-            of: find.byType(IconButton),
-            matching: find.byType(GestureDetector));
+        final columnIcon = find.byType(PlutoGridColumnIcon);
 
-        await tester.drag(columnIconGesture, offset);
+        await tester.drag(columnIcon, offset);
       });
     }
 
