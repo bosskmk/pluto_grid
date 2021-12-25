@@ -184,9 +184,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#footerHeight), returnValue: 0.0)
           as double);
   @override
-  double get offsetHeight =>
-      (super.noSuchMethod(Invocation.getter(#offsetHeight), returnValue: 0.0)
-          as double);
+  double get columnRowContainerHeight =>
+      (super.noSuchMethod(Invocation.getter(#columnRowContainerHeight),
+          returnValue: 0.0) as double);
+  @override
+  double get rowContainerHeight =>
+      (super.noSuchMethod(Invocation.getter(#rowContainerHeight),
+          returnValue: 0.0) as double);
+  @override
+  bool get showFrozenColumn =>
+      (super.noSuchMethod(Invocation.getter(#showFrozenColumn),
+          returnValue: false) as bool);
   @override
   bool get showColumnFilter =>
       (super.noSuchMethod(Invocation.getter(#showColumnFilter),
@@ -230,6 +238,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   double get columnFilterHeight =>
       (super.noSuchMethod(Invocation.getter(#columnFilterHeight),
+          returnValue: 0.0) as double);
+  @override
+  double get columnBottomOffset =>
+      (super.noSuchMethod(Invocation.getter(#columnBottomOffset),
           returnValue: 0.0) as double);
   @override
   double get rowsTopOffset =>

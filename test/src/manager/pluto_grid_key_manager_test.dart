@@ -436,7 +436,7 @@ void main() {
 
       keyManager.init();
 
-      when(stateManager.offsetHeight).thenReturn(230);
+      when(stateManager.rowContainerHeight).thenReturn(230);
       when(stateManager.currentRowIdx).thenReturn(0);
 
       await tester.pumpWidget(

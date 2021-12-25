@@ -187,7 +187,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
       PlutoColumnGroup(
         title: 'Group A',
-        fields: ['column2', 'column3'],
+        children: [
+          PlutoColumnGroup(title: 'SubA', fields: ['column2']),
+          PlutoColumnGroup(title: 'SubB', fields: ['column3']),
+        ],
       ),
       PlutoColumnGroup(
         title: 'Group B',

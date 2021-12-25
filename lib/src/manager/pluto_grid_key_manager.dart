@@ -196,7 +196,7 @@ class PlutoGridKeyManager {
 
   void _handlePageUpDown(PlutoKeyManagerEvent keyEvent) {
     final int moveCount =
-        (stateManager.offsetHeight / stateManager.rowTotalHeight).floor();
+        (stateManager.rowContainerHeight / stateManager.rowTotalHeight).floor();
 
     final direction =
         keyEvent.isPageUp ? PlutoMoveDirection.up : PlutoMoveDirection.down;

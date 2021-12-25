@@ -240,7 +240,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   List<int> get columnIndexesByShowFrozen {
-    return showFrozenColumn! ? columnIndexesForShowFrozen : columnIndexes;
+    return showFrozenColumn ? columnIndexesForShowFrozen : columnIndexes;
   }
 
   @override
