@@ -93,9 +93,10 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = true;
+    _isPointMoving = (_columnRightPosition - event.position.dx).abs() > 0;
 
-    if (_columnLeftPosition + widget.column.minWidth > event.position.dx) {
+    if (_isPointMoving &&
+        _columnLeftPosition + widget.column.minWidth > event.position.dx) {
       return;
     }
 
@@ -107,12 +108,12 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       checkScroll: false,
     );
 
-    if (widget.stateManager.isInvalidHorizontalScroll) {
-      widget.stateManager.scrollByDirection(
-        PlutoMoveDirection.right,
-        widget.stateManager.scroll!.maxScrollHorizontal,
-      );
-    }
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.right,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
 
     _columnRightPosition = event.position.dx;
   }
@@ -120,7 +121,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   void _handleOnPointUp(PointerUpEvent event) {
     if (_isPointMoving) {
       widget.stateManager.updateCorrectScroll();
-    } else if (widget.column.enableContextMenu) {
+    } else if (mounted && widget.column.enableContextMenu) {
       _showContextMenu(context, event.position);
     }
 

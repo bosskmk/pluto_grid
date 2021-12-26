@@ -2,9 +2,11 @@
 // in pluto_grid/test/src/ui/columns/pluto_column_title_test.dart.
 // Do not manually edit this file.
 
+import 'dart:async' as _i6;
 import 'dart:ui' as _i4;
 
 import 'package:flutter/material.dart' as _i3;
+import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_grid/pluto_grid.dart' as _i2;
 
@@ -29,6 +31,9 @@ class _FakePlutoGridCellPosition_3 extends _i1.Fake
     implements _i2.PlutoGridCellPosition {}
 
 class _FakePlutoRow_4 extends _i1.Fake implements _i2.PlutoRow {}
+
+class _FakeScrollController_5 extends _i1.Fake implements _i3.ScrollController {
+}
 
 /// A class which mocks [PlutoGridStateManager].
 ///
@@ -1002,4 +1007,86 @@ class MockPlutoGridStateManager extends _i1.Mock
   void handleAfterSelectingRow(_i2.PlutoCell? cell, dynamic value) => super
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
+}
+
+/// A class which mocks [PlutoGridScrollController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPlutoGridScrollController extends _i1.Mock
+    implements _i2.PlutoGridScrollController {
+  @override
+  set vertical(_i5.LinkedScrollControllerGroup? _vertical) =>
+      super.noSuchMethod(Invocation.setter(#vertical, _vertical),
+          returnValueForMissingStub: null);
+  @override
+  set horizontal(_i5.LinkedScrollControllerGroup? _horizontal) =>
+      super.noSuchMethod(Invocation.setter(#horizontal, _horizontal),
+          returnValueForMissingStub: null);
+  @override
+  double get maxScrollHorizontal =>
+      (super.noSuchMethod(Invocation.getter(#maxScrollHorizontal),
+          returnValue: 0.0) as double);
+  @override
+  double get maxScrollVertical => (super
+          .noSuchMethod(Invocation.getter(#maxScrollVertical), returnValue: 0.0)
+      as double);
+  @override
+  double get verticalOffset =>
+      (super.noSuchMethod(Invocation.getter(#verticalOffset), returnValue: 0.0)
+          as double);
+  @override
+  double get horizontalOffset => (super
+          .noSuchMethod(Invocation.getter(#horizontalOffset), returnValue: 0.0)
+      as double);
+  @override
+  void setBodyRowsHorizontal(_i3.ScrollController? scrollController) =>
+      super.noSuchMethod(
+          Invocation.method(#setBodyRowsHorizontal, [scrollController]),
+          returnValueForMissingStub: null);
+  @override
+  void setBodyRowsVertical(_i3.ScrollController? scrollController) => super
+      .noSuchMethod(Invocation.method(#setBodyRowsVertical, [scrollController]),
+          returnValueForMissingStub: null);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [LinkedScrollControllerGroup].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLinkedScrollControllerGroup extends _i1.Mock
+    implements _i5.LinkedScrollControllerGroup {
+  @override
+  double get offset =>
+      (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
+          as double);
+  @override
+  _i3.ScrollController addAndGet() =>
+      (super.noSuchMethod(Invocation.method(#addAndGet, []),
+          returnValue: _FakeScrollController_5()) as _i3.ScrollController);
+  @override
+  void addOffsetChangedListener(_i4.VoidCallback? onChanged) => super
+      .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
+          returnValueForMissingStub: null);
+  @override
+  void removeOffsetChangedListener(_i4.VoidCallback? listener) => super
+      .noSuchMethod(Invocation.method(#removeOffsetChangedListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  _i6.Future<void> animateTo(double? offset,
+          {_i3.Curve? curve, Duration? duration}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #animateTo, [offset], {#curve: curve, #duration: duration}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  void jumpTo(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpTo, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void resetScroll() => super.noSuchMethod(Invocation.method(#resetScroll, []),
+      returnValueForMissingStub: null);
+  @override
+  String toString() => super.toString();
 }
