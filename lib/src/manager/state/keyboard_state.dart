@@ -184,7 +184,7 @@ mixin KeyboardState implements IPlutoGridState {
 
     setCurrentCell(cellToMove, currentRowIdx, notify: notify);
 
-    if (!showFrozenColumn! || column.frozen.isFrozen != true) {
+    if (!showFrozenColumn || column.frozen.isFrozen != true) {
       direction.isLeft
           ? scroll!.horizontal!.jumpTo(0)
           : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);

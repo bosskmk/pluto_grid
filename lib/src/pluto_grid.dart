@@ -141,7 +141,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   get _leftFrozenColumnsStack => Positioned.fill(
         top: _stateManager.headerHeight,
         right: _stateManager.leftFrozenRightOffset,
-        bottom: _stateManager.rowsTopOffset,
+        bottom: _stateManager.columnBottomOffset,
         child: PlutoLeftFrozenColumns(_stateManager),
         key: _stackKeys[_StackName.leftFrozenColumns],
       );
@@ -158,7 +158,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         top: _stateManager.headerHeight,
         left: _bodyLeftOffset,
         right: _bodyRightOffset,
-        bottom: _stateManager.rowsTopOffset,
+        bottom: _stateManager.columnBottomOffset,
         child: PlutoBodyColumns(_stateManager),
         key: _stackKeys[_StackName.bodyColumns],
       );
@@ -175,7 +175,7 @@ class _PlutoGridState extends State<PlutoGrid> {
   get _rightFrozenColumnsStack => Positioned.fill(
         top: _stateManager.headerHeight,
         left: _rightFrozenLeftOffset,
-        bottom: _stateManager.rowsTopOffset,
+        bottom: _stateManager.columnBottomOffset,
         child: PlutoRightFrozenColumns(_stateManager),
         key: _stackKeys[_StackName.rightFrozenColumns],
       );
@@ -190,7 +190,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   get _leftFrozenDividerStack => Positioned(
         top: _stateManager.headerHeight,
-        left: _bodyLeftOffset! - 1,
+        left: _bodyLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
         child: PlutoShadowLine(
           axis: Axis.vertical,
@@ -202,7 +202,7 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   get _rightFrozenDividerStack => Positioned(
         top: _stateManager.headerHeight,
-        left: _rightFrozenLeftOffset! - 1,
+        left: _rightFrozenLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
         child: PlutoShadowLine(
           axis: Axis.vertical,
@@ -214,7 +214,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       );
 
   get _columnRowDividerStack => Positioned(
-        top: _stateManager.rowsTopOffset - 1,
+        top: _stateManager.rowsTopOffset - PlutoGridSettings.gridBorderWidth,
         left: 0,
         right: 0,
         child: PlutoShadowLine(

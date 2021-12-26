@@ -14,7 +14,9 @@ abstract class ILayoutState {
   /// grid footer height
   double get footerHeight;
 
-  double get offsetHeight;
+  double get columnRowContainerHeight;
+
+  double get rowContainerHeight;
 
   /// Global offset of Grid.
   Offset? get gridGlobalOffset;
@@ -22,7 +24,7 @@ abstract class ILayoutState {
   /// Whether to apply a frozen column according to the screen size.
   /// true : If there is a frozen column, the frozen column is exposed.
   /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
-  bool? get showFrozenColumn;
+  bool get showFrozenColumn;
 
   bool get showColumnFilter;
 
@@ -45,6 +47,8 @@ abstract class ILayoutState {
   double get columnGroupHeight;
 
   double get columnFilterHeight;
+
+  double get columnBottomOffset;
 
   double get rowsTopOffset;
 
@@ -107,7 +111,11 @@ mixin LayoutState implements IPlutoGridState {
       createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
 
   @override
-  double get offsetHeight => maxHeight! - headerHeight - footerHeight;
+  double get columnRowContainerHeight =>
+      maxHeight! - headerHeight - footerHeight;
+
+  @override
+  double get rowContainerHeight => maxHeight! - rowsTopOffset - footerHeight;
 
   @override
   Offset? get gridGlobalOffset {
@@ -130,7 +138,7 @@ mixin LayoutState implements IPlutoGridState {
   Offset? _gridGlobalOffset;
 
   @override
-  bool? get showFrozenColumn => _showFrozenColumn;
+  bool get showFrozenColumn => _showFrozenColumn == true;
 
   bool? _showFrozenColumn;
 
@@ -175,6 +183,10 @@ mixin LayoutState implements IPlutoGridState {
       showColumnFilter ? configuration!.columnFilterHeight : 0;
 
   @override
+  double get columnBottomOffset =>
+      maxHeight! - rowsTopOffset - PlutoGridSettings.totalShadowLineWidth;
+
+  @override
   double get rowsTopOffset =>
       headerHeight + columnGroupHeight + columnHeight + columnFilterHeight;
 
@@ -196,22 +208,22 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   double get bodyLeftOffset {
-    return (showFrozenColumn! && leftFrozenColumnsWidth > 0)
-        ? leftFrozenColumnsWidth + 1
+    return (showFrozenColumn && leftFrozenColumnsWidth > 0)
+        ? leftFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
         : 0;
   }
 
   @override
   double get bodyRightOffset {
-    return (showFrozenColumn! && rightFrozenColumnsWidth > 0)
-        ? rightFrozenColumnsWidth + 1
+    return (showFrozenColumn && rightFrozenColumnsWidth > 0)
+        ? rightFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
         : 0;
   }
 
   @override
   double get bodyLeftScrollOffset {
     final double leftFrozenColumnWidth =
-        showFrozenColumn! ? leftFrozenColumnsWidth : 0;
+        showFrozenColumn ? leftFrozenColumnsWidth : 0;
 
     return gridGlobalOffset!.dx +
         PlutoGridSettings.gridPadding +
@@ -223,7 +235,7 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get bodyRightScrollOffset {
     final double rightFrozenColumnWidth =
-        showFrozenColumn! ? rightFrozenColumnsWidth : 0;
+        showFrozenColumn ? rightFrozenColumnsWidth : 0;
 
     return (gridGlobalOffset!.dx + maxWidth!) -
         rightFrozenColumnWidth -
@@ -244,11 +256,16 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  double get leftFrozenRightOffset => maxWidth! - bodyLeftOffset - 5;
+  double get leftFrozenRightOffset =>
+      maxWidth! -
+      leftFrozenColumnsWidth -
+      PlutoGridSettings.totalShadowLineWidth;
 
   @override
   double get rightFrozenLeftOffset =>
-      maxWidth! - bodyRightOffset - PlutoGridSettings.totalShadowLineWidth + 1;
+      maxWidth! -
+      rightFrozenColumnsWidth -
+      PlutoGridSettings.totalShadowLineWidth;
 
   @override
   double get rightBlankOffset =>
@@ -262,8 +279,10 @@ mixin LayoutState implements IPlutoGridState {
     double offset = 0;
 
     if (_showFrozenColumn!) {
-      offset += leftFrozenColumnsWidth > 0 ? 1 : 0;
-      offset += rightFrozenColumnsWidth > 0 ? 1 : 0;
+      offset +=
+          leftFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
+      offset +=
+          rightFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
     }
 
     return offset;

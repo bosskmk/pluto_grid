@@ -17,8 +17,9 @@ import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
 
-abstract class IPlutoGridState extends PlutoChangeNotifier
+abstract class IPlutoGridState
     implements
+        PlutoChangeNotifier,
         ICellState,
         IColumnGroupState,
         IColumnState,

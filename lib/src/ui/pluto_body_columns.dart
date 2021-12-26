@@ -55,7 +55,7 @@ abstract class _PlutoBodyColumnsStateWithChange
   }
 
   List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn!
+    return widget.stateManager.showFrozenColumn
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
   }
@@ -65,7 +65,7 @@ abstract class _PlutoBodyColumnsStateWithChange
   }
 
   double _getWidth() {
-    return widget.stateManager.showFrozenColumn!
+    return widget.stateManager.showFrozenColumn
         ? widget.stateManager.bodyColumnsWidth
         : widget.stateManager.columnsWidth;
   }

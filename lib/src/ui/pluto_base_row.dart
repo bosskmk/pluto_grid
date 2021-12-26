@@ -21,14 +21,13 @@ class PlutoBaseRow extends StatelessWidget {
       return false;
     }
 
-    final List<PlutoRow?> selectedRows =
+    final List<PlutoRow> selectedRows =
         stateManager.currentSelectingRows.isNotEmpty
             ? stateManager.currentSelectingRows
             : [draggingRow];
 
-    return selectedRows.firstWhere(
-          (element) => element?.key == row.key,
-          orElse: () => null,
+    return selectedRows.firstWhereOrNull(
+          (element) => element.key == row.key,
         ) ==
         null;
   }

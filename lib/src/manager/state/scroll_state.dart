@@ -77,7 +77,7 @@ mixin ScrollState implements IPlutoGridState {
         PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
 
     final double screenOffset = _scroll!.verticalOffset +
-        offsetHeight -
+        columnRowContainerHeight -
         columnGroupHeight -
         columnHeight -
         columnFilterHeight -

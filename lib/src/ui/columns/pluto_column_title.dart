@@ -16,7 +16,7 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
     required this.column,
     double? height,
   })  : height = height ?? stateManager.columnHeight,
-        super(key: column.key);
+        super(key: ValueKey('column_title_${column.key}'));
 
   @override
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
@@ -38,6 +38,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   late double _columnLeftPosition;
 
   late double _columnRightPosition;
+
+  bool _isPointMoving = false;
 
   void _showContextMenu(BuildContext context, Offset position) async {
     final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
@@ -83,22 +85,22 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     }
   }
 
-  void _handleOnTapUpContextMenu(TapUpDetails details) {
-    _showContextMenu(context, details.globalPosition);
-  }
+  void _handleOnPointDown(PointerDownEvent event) {
+    _isPointMoving = false;
 
-  void _handleOnHorizontalDragStartContextMenu(DragStartDetails details) {
-    _columnRightPosition = details.globalPosition.dx;
+    _columnRightPosition = event.position.dx;
     _columnLeftPosition = _columnRightPosition - widget.column.width;
   }
 
-  void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
-    if (_columnLeftPosition + widget.column.minWidth >
-        details.globalPosition.dx) {
+  void _handleOnPointMove(PointerMoveEvent event) {
+    _isPointMoving = (_columnRightPosition - event.position.dx).abs() > 0;
+
+    if (_isPointMoving &&
+        _columnLeftPosition + widget.column.minWidth > event.position.dx) {
       return;
     }
 
-    final moveOffset = details.globalPosition.dx - _columnRightPosition;
+    final moveOffset = event.position.dx - _columnRightPosition;
 
     widget.stateManager.resizeColumn(
       widget.column,
@@ -106,18 +108,24 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       checkScroll: false,
     );
 
-    if (widget.stateManager.isInvalidHorizontalScroll) {
-      widget.stateManager.scrollByDirection(
-        PlutoMoveDirection.right,
-        widget.stateManager.scroll!.maxScrollHorizontal + moveOffset,
-      );
-    }
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.right,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
 
-    _columnRightPosition = details.globalPosition.dx;
+    _columnRightPosition = event.position.dx;
   }
 
-  void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager.updateCorrectScroll();
+  void _handleOnPointUp(PointerUpEvent event) {
+    if (_isPointMoving) {
+      widget.stateManager.updateCorrectScroll();
+    } else if (mounted && widget.column.enableContextMenu) {
+      _showContextMenu(context, event.position);
+    }
+
+    _isPointMoving = false;
   }
 
   @override
@@ -172,15 +180,10 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
           Positioned(
             right: -3,
             child: _enableGesture
-                ? GestureDetector(
-                    onTapUp: widget.column.enableContextMenu
-                        ? _handleOnTapUpContextMenu
-                        : null,
-                    onHorizontalDragStart:
-                        _handleOnHorizontalDragStartContextMenu,
-                    onHorizontalDragUpdate:
-                        _handleOnHorizontalDragUpdateContextMenu,
-                    onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
+                ? Listener(
+                    onPointerDown: _handleOnPointDown,
+                    onPointerMove: _handleOnPointMove,
+                    onPointerUp: _handleOnPointUp,
                     child: _contextMenuIcon,
                   )
                 : _contextMenuIcon,
