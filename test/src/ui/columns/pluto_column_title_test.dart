@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/test_helper_util.dart';
-import 'pluto_column_filter_test.mocks.dart';
+import 'pluto_column_title_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
+  late MockPlutoGridScrollController scroll;
+  late MockLinkedScrollControllerGroup horizontalScroll;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    scroll = MockPlutoGridScrollController();
+    horizontalScroll = MockLinkedScrollControllerGroup();
+
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
@@ -23,6 +31,10 @@ void main() {
     when(stateManager.hasFilter).thenReturn(false);
     when(stateManager.columnHeight).thenReturn(45);
     when(stateManager.isInvalidHorizontalScroll).thenReturn(false);
+    when(stateManager.scroll).thenReturn(scroll);
+    when(scroll.maxScrollHorizontal).thenReturn(0);
+    when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(horizontalScroll.offset).thenReturn(0);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
