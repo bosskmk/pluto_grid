@@ -107,12 +107,12 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       checkScroll: false,
     );
 
-    if (widget.stateManager.isInvalidHorizontalScroll) {
-      widget.stateManager.scrollByDirection(
-        PlutoMoveDirection.right,
-        widget.stateManager.scroll!.maxScrollHorizontal,
-      );
-    }
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.right,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
 
     _columnRightPosition = event.position.dx;
   }
