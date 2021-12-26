@@ -70,7 +70,7 @@ mixin FilteringRowState implements IPlutoGridState {
     );
 
     if (isPaginated) {
-      resetPage();
+      resetPage(notify: notify);
     }
   }
 

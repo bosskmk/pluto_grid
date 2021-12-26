@@ -78,6 +78,10 @@ abstract class IColumnState {
   /// must be referenced with the columnIndexesByShowFrozen function.
   int? columnIndex(PlutoColumn column);
 
+  void insertColumns(int columnIdx, List<PlutoColumn> columns);
+
+  void removeColumns(List<PlutoColumn> columns);
+
   /// Change column position.
   void moveColumn({
     required PlutoColumn column,
@@ -302,6 +306,52 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     return null;
+  }
+
+  @override
+  void insertColumns(int columnIdx, List<PlutoColumn> columns) {
+    if (columns.isEmpty) {
+      return;
+    }
+
+    if (columnIdx < 0 || refColumns.length < columnIdx) {
+      return;
+    }
+
+    if (columnIdx >= refColumns.originalLength) {
+      refColumns.addAll(columns.cast<PlutoColumn>());
+    } else {
+      refColumns.insertAll(columnIdx, columns);
+    }
+
+    _fillCellsToRows(columns);
+
+    resetCurrentState(notify: false);
+
+    notifyListeners();
+  }
+
+  @override
+  void removeColumns(List<PlutoColumn> columns) {
+    if (columns.isEmpty) {
+      return;
+    }
+
+    for (var removeColumn in columns) {
+      refColumns.removeFromOriginal(removeColumn);
+
+      filterRows.removeWhere(
+        (element) =>
+            element.cells[FilterHelper.filterFieldColumn]!.value ==
+            removeColumn.field,
+      );
+    }
+
+    setFilterWithFilterRows(filterRows, notify: false);
+
+    resetCurrentState(notify: false);
+
+    notifyListeners();
   }
 
   @override
@@ -605,5 +655,21 @@ mixin ColumnState implements IPlutoGridState {
 
       notifyListeners();
     };
+  }
+
+  void _fillCellsToRows(List<PlutoColumn> columns) {
+    for (var row in refRows.originalList) {
+      final List<MapEntry<String, PlutoCell>> cells = [];
+
+      for (var column in columns) {
+        final cell = PlutoCell(value: column.type.defaultValue)
+          ..setRow(row)
+          ..setColumn(column);
+
+        cells.add(MapEntry(column.field, cell));
+      }
+
+      row.cells.addEntries(cells);
+    }
   }
 }

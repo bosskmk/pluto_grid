@@ -509,6 +509,14 @@ class MockPlutoGridStateManager extends _i1.Mock
   int? columnIndex(_i2.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#columnIndex, [column])) as int?);
   @override
+  void insertColumns(int? columnIdx, List<_i2.PlutoColumn>? columns) => super
+      .noSuchMethod(Invocation.method(#insertColumns, [columnIdx, columns]),
+          returnValueForMissingStub: null);
+  @override
+  void removeColumns(List<_i2.PlutoColumn>? columns) =>
+      super.noSuchMethod(Invocation.method(#removeColumns, [columns]),
+          returnValueForMissingStub: null);
+  @override
   void moveColumn({_i2.PlutoColumn? column, _i2.PlutoColumn? targetColumn}) =>
       super.noSuchMethod(
           Invocation.method(
