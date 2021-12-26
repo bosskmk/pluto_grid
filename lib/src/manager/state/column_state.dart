@@ -337,14 +337,38 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
+    void removeColumnFromGroup(List<dynamic> parents,
+        PlutoColumnGroup columnGroup, PlutoColumn column) {
+      if (columnGroup.hasFields && columnGroup.fields!.contains(column.field)) {
+        columnGroup.fields!.remove(column.field);
+      } else if (columnGroup.hasChildren) {
+        for (var child in columnGroup.children!) {
+          removeColumnFromGroup(columnGroup.children!, child, column);
+        }
+      }
+
+      if ((columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
+          (columnGroup.hasChildren && columnGroup.children!.isEmpty)) {
+        parents.remove(columnGroup);
+      }
+    }
+
+    bool Function(PlutoRow) existsColumnInFilterRow(PlutoColumn column) {
+      return (PlutoRow filterRow) =>
+          filterRow.cells[FilterHelper.filterFieldColumn]!.value ==
+          column.field;
+    }
+
     for (var removeColumn in columns) {
       refColumns.removeFromOriginal(removeColumn);
 
-      filterRows.removeWhere(
-        (element) =>
-            element.cells[FilterHelper.filterFieldColumn]!.value ==
-            removeColumn.field,
-      );
+      filterRows.removeWhere(existsColumnInFilterRow(removeColumn));
+
+      if (refColumnGroups?.originalList.isNotEmpty == true) {
+        for (var group in refColumnGroups!.originalList) {
+          removeColumnFromGroup(refColumnGroups!, group, removeColumn);
+        }
+      }
     }
 
     setFilterWithFilterRows(filterRows, notify: false);

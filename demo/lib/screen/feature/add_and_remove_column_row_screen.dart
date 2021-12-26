@@ -21,6 +21,8 @@ class _AddAndRemoveColumnRowScreenState
     extends State<AddAndRemoveColumnRowScreen> {
   final List<PlutoColumn> columns = [];
 
+  final List<PlutoColumnGroup> columnGroups = [];
+
   final List<PlutoRow> rows = [];
 
   late PlutoGridStateManager stateManager;
@@ -94,6 +96,15 @@ class _AddAndRemoveColumnRowScreenState
       ),
     ]);
 
+    columnGroups.addAll([
+      PlutoColumnGroup(title: 'User', fields: ['id', 'name']),
+      PlutoColumnGroup(
+        title: 'Status',
+        fields: ['status'],
+        expandedColumn: true,
+      ),
+    ]);
+
     rows.addAll([
       PlutoRow(cells: {
         'id': PlutoCell(value: 'user1'),
@@ -134,6 +145,7 @@ class _AddAndRemoveColumnRowScreenState
       body: PlutoGrid(
         columns: columns,
         rows: rows,
+        columnGroups: columnGroups,
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
 
@@ -185,7 +197,7 @@ class _HeaderState extends State<_Header> {
       addedColumns.add(
         PlutoColumn(
           title: faker.food.cuisine(),
-          field: 'column${widget.stateManager.refColumns.length}',
+          field: 'column${widget.stateManager.refColumns.length + i}',
           type: PlutoColumnType.text(),
         ),
       );
