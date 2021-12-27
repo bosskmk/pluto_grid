@@ -9,7 +9,7 @@ import '../widget/pluto_grid_title.dart';
 import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
-import 'feature/add_and_remove_rows_screen.dart';
+import 'feature/add_and_remove_column_row_screen.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
@@ -372,10 +372,11 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
-            title: 'Add and Remove Rows',
-            description: 'You can add or delete rows.',
+            title: 'Add and Remove Columns, Rows',
+            description: 'You can add or delete columns, rows.',
             onTapLiveDemo: () {
-              Navigator.pushNamed(context, AddAndRemoveRowsScreen.routeName);
+              Navigator.pushNamed(
+                  context, AddAndRemoveColumnRowScreen.routeName);
             },
             trailing: updateIcon,
           ),

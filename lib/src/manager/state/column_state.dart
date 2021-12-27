@@ -78,6 +78,10 @@ abstract class IColumnState {
   /// must be referenced with the columnIndexesByShowFrozen function.
   int? columnIndex(PlutoColumn column);
 
+  void insertColumns(int columnIdx, List<PlutoColumn> columns);
+
+  void removeColumns(List<PlutoColumn> columns);
+
   /// Change column position.
   void moveColumn({
     required PlutoColumn column,
@@ -302,6 +306,48 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     return null;
+  }
+
+  @override
+  void insertColumns(int columnIdx, List<PlutoColumn> columns) {
+    if (columns.isEmpty) {
+      return;
+    }
+
+    if (columnIdx < 0 || refColumns.length < columnIdx) {
+      return;
+    }
+
+    if (columnIdx >= refColumns.originalLength) {
+      refColumns.addAll(columns.cast<PlutoColumn>());
+    } else {
+      refColumns.insertAll(columnIdx, columns);
+    }
+
+    _fillCellsInRows(columns);
+
+    resetCurrentState(notify: false);
+
+    notifyListeners();
+  }
+
+  @override
+  void removeColumns(List<PlutoColumn> columns) {
+    if (columns.isEmpty) {
+      return;
+    }
+
+    refColumns.removeWhereFromOriginal((column) => columns.contains(column));
+
+    _removeCellsInRows(columns);
+
+    removeColumnsInColumnGroup(columns, notify: false);
+
+    removeColumnsInFilterRows(columns, notify: false);
+
+    resetCurrentState(notify: false);
+
+    notifyListeners();
   }
 
   @override
@@ -546,7 +592,9 @@ mixin ColumnState implements IPlutoGridState {
       onLoaded: (e) {
         stateManager = e.stateManager;
         stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
-        stateManager!.addListener(_handleLister(stateManager!, columnField));
+        stateManager!.addListener(
+          _handleSetColumnsListener(stateManager!, columnField),
+        );
       },
     );
   }
@@ -590,7 +638,7 @@ mixin ColumnState implements IPlutoGridState {
     };
   }
 
-  void Function() _handleLister(
+  void Function() _handleSetColumnsListener(
       PlutoGridStateManager stateManager, String columnField) {
     return () {
       for (var row in stateManager.refRows) {
@@ -605,5 +653,29 @@ mixin ColumnState implements IPlutoGridState {
 
       notifyListeners();
     };
+  }
+
+  void _fillCellsInRows(List<PlutoColumn> columns) {
+    for (var row in refRows.originalList) {
+      final List<MapEntry<String, PlutoCell>> cells = [];
+
+      for (var column in columns) {
+        final cell = PlutoCell(value: column.type.defaultValue)
+          ..setRow(row)
+          ..setColumn(column);
+
+        cells.add(MapEntry(column.field, cell));
+      }
+
+      row.cells.addEntries(cells);
+    }
+  }
+
+  void _removeCellsInRows(List<PlutoColumn> columns) {
+    for (var row in refRows.originalList) {
+      for (var column in columns) {
+        row.cells.remove(column.field);
+      }
+    }
   }
 }

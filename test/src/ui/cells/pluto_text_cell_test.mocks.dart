@@ -484,6 +484,13 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
           returnValue: 0) as int);
   @override
+  void removeColumnsInColumnGroup(List<_i2.PlutoColumn>? columns,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #removeColumnsInColumnGroup, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
   void toggleFrozenColumn(_i3.Key? columnKey, _i2.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
@@ -503,6 +510,14 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   int? columnIndex(_i2.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#columnIndex, [column])) as int?);
+  @override
+  void insertColumns(int? columnIdx, List<_i2.PlutoColumn>? columns) => super
+      .noSuchMethod(Invocation.method(#insertColumns, [columnIdx, columns]),
+          returnValueForMissingStub: null);
+  @override
+  void removeColumns(List<_i2.PlutoColumn>? columns) =>
+      super.noSuchMethod(Invocation.method(#removeColumns, [columns]),
+          returnValueForMissingStub: null);
   @override
   void moveColumn({_i2.PlutoColumn? column, _i2.PlutoColumn? targetColumn}) =>
       super.noSuchMethod(
@@ -635,6 +650,13 @@ class MockPlutoGridStateManager extends _i1.Mock
   bool isFilteredColumn(_i2.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#isFilteredColumn, [column]),
           returnValue: false) as bool);
+  @override
+  void removeColumnsInFilterRows(List<_i2.PlutoColumn>? columns,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #removeColumnsInFilterRows, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
   @override
   void showFilterPopup(_i3.BuildContext? context,
           {_i2.PlutoColumn? calledColumn}) =>
