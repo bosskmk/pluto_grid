@@ -92,16 +92,13 @@ class PlutoGridStateManager extends PlutoGridState {
       PlutoGridSelectingMode.none.items;
 
   static void initializeRows(
-    List<PlutoColumn>? refColumns,
-    List<PlutoRow?>? refRows, {
+    List<PlutoColumn> refColumns,
+    List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
     int? start = 0,
   }) {
-    if (refColumns == null ||
-        refColumns.isEmpty ||
-        refRows == null ||
-        refRows.isEmpty) {
+    if (refColumns.isEmpty || refRows.isEmpty) {
       return;
     }
 
@@ -123,7 +120,7 @@ class PlutoGridStateManager extends PlutoGridState {
     var rowLength = refRows.length;
 
     for (var rowIdx = 0; rowIdx < rowLength; rowIdx += 1) {
-      applyList.execute(refRows[rowIdx]!);
+      applyList.execute(refRows[rowIdx]);
     }
   }
 }

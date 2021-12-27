@@ -181,6 +181,8 @@ class _HeaderState extends State<_Header> {
 
   int addCount = 1;
 
+  int addedCount = 0;
+
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
   @override
@@ -197,7 +199,7 @@ class _HeaderState extends State<_Header> {
       addedColumns.add(
         PlutoColumn(
           title: faker.food.cuisine(),
-          field: 'column${widget.stateManager.refColumns.length + i}',
+          field: 'column${++addedCount}',
           type: PlutoColumnType.text(),
         ),
       );
@@ -221,7 +223,6 @@ class _HeaderState extends State<_Header> {
     widget.stateManager.setCurrentCell(
       newRows.first.cells.entries.first.value,
       widget.stateManager.refRows.length - 1,
-      notify: false,
     );
 
     widget.stateManager.moveScrollByRow(
