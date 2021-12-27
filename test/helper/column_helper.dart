@@ -8,6 +8,7 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
+    dynamic defaultValue = '',
   }) {
     return Iterable<int>.generate(count).map((e) {
       e += start;
@@ -17,7 +18,7 @@ class ColumnHelper {
         width: width,
         frozen: frozen,
         readOnly: readOnly,
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.text(defaultValue: defaultValue),
       );
     }).toList();
   }
