@@ -17,6 +17,11 @@ abstract class IFilteringRowState {
   /// Check if the column is in a state with filtering applied.
   bool isFilteredColumn(PlutoColumn column);
 
+  void removeColumnsInFilterRows(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  });
+
   void showFilterPopup(
     BuildContext context, {
     PlutoColumn? calledColumn,
@@ -99,6 +104,28 @@ mixin FilteringRowState implements IPlutoGridState {
   @override
   bool isFilteredColumn(PlutoColumn column) {
     return hasFilter && FilterHelper.isFilteredColumn(column, _filterRows);
+  }
+
+  @override
+  void removeColumnsInFilterRows(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  }) {
+    if (filterRows.isEmpty) {
+      return;
+    }
+
+    final columnFields = columns.map((e) => e.field).toList(growable: false);
+
+    filterRows.removeWhere(
+      (filterRow) {
+        return columnFields.contains(
+          filterRow.cells[FilterHelper.filterFieldColumn]!.value,
+        );
+      },
+    );
+
+    setFilterWithFilterRows(filterRows, notify: notify);
   }
 
   @override

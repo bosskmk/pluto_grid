@@ -492,6 +492,13 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
           returnValue: 0) as int);
   @override
+  void removeColumnsInColumnGroup(List<_i2.PlutoColumn>? columns,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #removeColumnsInColumnGroup, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
   void toggleFrozenColumn(_i5.Key? columnKey, _i2.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
@@ -651,6 +658,13 @@ class MockPlutoGridStateManager extends _i1.Mock
   bool isFilteredColumn(_i2.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#isFilteredColumn, [column]),
           returnValue: false) as bool);
+  @override
+  void removeColumnsInFilterRows(List<_i2.PlutoColumn>? columns,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #removeColumnsInFilterRows, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
   @override
   void showFilterPopup(_i5.BuildContext? context,
           {_i2.PlutoColumn? calledColumn}) =>

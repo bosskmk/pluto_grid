@@ -324,7 +324,7 @@ mixin ColumnState implements IPlutoGridState {
       refColumns.insertAll(columnIdx, columns);
     }
 
-    _fillCellsToRows(columns);
+    _fillCellsInRows(columns);
 
     resetCurrentState(notify: false);
 
@@ -337,41 +337,13 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    void removeColumnFromGroup(List<dynamic> parents,
-        PlutoColumnGroup columnGroup, PlutoColumn column) {
-      if (columnGroup.hasFields && columnGroup.fields!.contains(column.field)) {
-        columnGroup.fields!.remove(column.field);
-      } else if (columnGroup.hasChildren) {
-        for (var child in columnGroup.children!) {
-          removeColumnFromGroup(columnGroup.children!, child, column);
-        }
-      }
+    refColumns.removeWhereFromOriginal((column) => columns.contains(column));
 
-      if ((columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
-          (columnGroup.hasChildren && columnGroup.children!.isEmpty)) {
-        parents.remove(columnGroup);
-      }
-    }
+    _removeCellsInRows(columns);
 
-    bool Function(PlutoRow) existsColumnInFilterRow(PlutoColumn column) {
-      return (PlutoRow filterRow) =>
-          filterRow.cells[FilterHelper.filterFieldColumn]!.value ==
-          column.field;
-    }
+    removeColumnsInColumnGroup(columns, notify: false);
 
-    for (var removeColumn in columns) {
-      refColumns.removeFromOriginal(removeColumn);
-
-      filterRows.removeWhere(existsColumnInFilterRow(removeColumn));
-
-      if (refColumnGroups?.originalList.isNotEmpty == true) {
-        for (var group in refColumnGroups!.originalList) {
-          removeColumnFromGroup(refColumnGroups!, group, removeColumn);
-        }
-      }
-    }
-
-    setFilterWithFilterRows(filterRows, notify: false);
+    removeColumnsInFilterRows(columns, notify: false);
 
     resetCurrentState(notify: false);
 
@@ -620,7 +592,9 @@ mixin ColumnState implements IPlutoGridState {
       onLoaded: (e) {
         stateManager = e.stateManager;
         stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
-        stateManager!.addListener(_handleLister(stateManager!, columnField));
+        stateManager!.addListener(
+          _handleSetColumnsListener(stateManager!, columnField),
+        );
       },
     );
   }
@@ -664,7 +638,7 @@ mixin ColumnState implements IPlutoGridState {
     };
   }
 
-  void Function() _handleLister(
+  void Function() _handleSetColumnsListener(
       PlutoGridStateManager stateManager, String columnField) {
     return () {
       for (var row in stateManager.refRows) {
@@ -681,7 +655,7 @@ mixin ColumnState implements IPlutoGridState {
     };
   }
 
-  void _fillCellsToRows(List<PlutoColumn> columns) {
+  void _fillCellsInRows(List<PlutoColumn> columns) {
     for (var row in refRows.originalList) {
       final List<MapEntry<String, PlutoCell>> cells = [];
 
@@ -694,6 +668,14 @@ mixin ColumnState implements IPlutoGridState {
       }
 
       row.cells.addEntries(cells);
+    }
+  }
+
+  void _removeCellsInRows(List<PlutoColumn> columns) {
+    for (var row in refRows.originalList) {
+      for (var column in columns) {
+        row.cells.remove(column.field);
+      }
     }
   }
 }
