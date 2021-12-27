@@ -17,21 +17,21 @@ class PlutoLeftFrozenRows extends PlutoStatefulWidget {
 
 abstract class _PlutoLeftFrozenRowsStateWithState
     extends PlutoStateWithChange<PlutoLeftFrozenRows> {
-  List<PlutoColumn>? columns;
+  List<PlutoColumn>? _columns;
 
-  List<PlutoRow?>? rows;
+  List<PlutoRow?>? _rows;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>?>(
-        columns,
+      _columns = update<List<PlutoColumn>?>(
+        _columns,
         widget.stateManager.leftFrozenColumns,
         compare: listEquals,
       );
 
-      rows = update<List<PlutoRow?>?>(
-        rows,
+      _rows = update<List<PlutoRow?>?>(
+        _rows,
         widget.stateManager.refRows,
         compare: listEquals,
         destructureList: true,
@@ -41,11 +41,11 @@ abstract class _PlutoLeftFrozenRowsStateWithState
 }
 
 class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
-  ScrollController? scroll;
+  ScrollController? _scroll;
 
   @override
   void dispose() {
-    scroll!.dispose();
+    _scroll!.dispose();
 
     super.dispose();
   }
@@ -54,24 +54,24 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
   void initState() {
     super.initState();
 
-    scroll = widget.stateManager.scroll!.vertical!.addAndGet();
+    _scroll = widget.stateManager.scroll!.vertical!.addAndGet();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      controller: scroll,
+      controller: _scroll,
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
-      itemCount: rows!.length,
+      itemCount: _rows!.length,
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('left_frozen_row_${rows![i]!.key}'),
+          key: ValueKey('left_frozen_row_${_rows![i]!.key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
-          row: rows![i]!,
-          columns: columns!,
+          row: _rows![i]!,
+          columns: _columns!,
         );
       },
     );

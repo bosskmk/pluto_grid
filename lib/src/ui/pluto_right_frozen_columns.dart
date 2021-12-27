@@ -18,48 +18,48 @@ class PlutoRightFrozenColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoRightFrozenColumnsStateWithChange
     extends PlutoStateWithChange<PlutoRightFrozenColumns> {
-  bool? showColumnGroups;
+  bool? _showColumnGroups;
 
-  List<PlutoColumn>? columns;
+  List<PlutoColumn>? _columns;
 
-  List<PlutoColumnGroupPair>? columnGroups;
+  List<PlutoColumnGroupPair>? _columnGroups;
 
-  int? itemCount;
+  int? _itemCount;
 
-  double? width;
+  double? _width;
 
   @override
   void onChange() {
     resetState((update) {
-      showColumnGroups = update<bool?>(
-        showColumnGroups,
+      _showColumnGroups = update<bool?>(
+        _showColumnGroups,
         widget.stateManager.showColumnGroups,
       );
 
-      columns = update<List<PlutoColumn>?>(
-        columns,
+      _columns = update<List<PlutoColumn>?>(
+        _columns,
         widget.stateManager.rightFrozenColumns,
         compare: listEquals,
       );
 
-      if (changed && showColumnGroups == true) {
-        columnGroups = widget.stateManager.separateLinkedGroup(
+      if (changed && _showColumnGroups == true) {
+        _columnGroups = widget.stateManager.separateLinkedGroup(
           columnGroupList: widget.stateManager.refColumnGroups!,
-          columns: columns!,
+          columns: _columns!,
         );
       }
 
-      itemCount = update<int?>(itemCount, _getItemCount());
+      _itemCount = update<int?>(_itemCount, _getItemCount());
 
-      width = update<double?>(
-        width,
+      _width = update<double?>(
+        _width,
         widget.stateManager.rightFrozenColumnsWidth,
       );
     });
   }
 
   int _getItemCount() {
-    return showColumnGroups == true ? columnGroups!.length : columns!.length;
+    return _showColumnGroups == true ? _columnGroups!.length : _columns!.length;
   }
 }
 
@@ -68,23 +68,23 @@ class _PlutoRightFrozenColumnsState
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
+      width: _width,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: itemCount,
+        itemCount: _itemCount,
         itemBuilder: (ctx, i) {
-          return showColumnGroups == true
+          return _showColumnGroups == true
               ? PlutoBaseColumnGroup(
                   stateManager: widget.stateManager,
-                  columnGroup: columnGroups![i],
+                  columnGroup: _columnGroups![i],
                   depth: widget.stateManager.columnGroupDepth(
                     widget.stateManager.refColumnGroups!,
                   ),
                 )
               : PlutoBaseColumn(
                   stateManager: widget.stateManager,
-                  column: columns![i],
+                  column: _columns![i],
                 );
         },
       ),

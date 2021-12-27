@@ -24,12 +24,12 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
 
 abstract class _PlutoColumnTitleStateWithChange
     extends PlutoStateWithChange<PlutoColumnTitle> {
-  PlutoColumnSort? sort;
+  PlutoColumnSort? _sort;
 
   @override
   void onChange() {
     resetState((update) {
-      sort = update<PlutoColumnSort?>(sort, widget.column.sort);
+      _sort = update<PlutoColumnSort?>(_sort, widget.column.sort);
     });
   }
 }
@@ -132,7 +132,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   Widget build(BuildContext context) {
     final _showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !sort!.isNone;
+        !_sort!.isNone;
 
     final _enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
@@ -152,7 +152,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       alignment: Alignment.center,
       child: IconButton(
         icon: PlutoGridColumnIcon(
-          sort: sort,
+          sort: _sort,
           color: widget.stateManager.configuration!.iconColor,
           icon:
               widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
@@ -394,18 +394,18 @@ class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
 
 abstract class __CheckboxAllSelectionWidgetStateWithChange
     extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
-  bool? checked;
+  bool? _checked;
 
-  bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
+  bool get _hasCheckedRow => widget.stateManager.hasCheckedRow;
 
-  bool get hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
+  bool get _hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
 
   @override
   void onChange() {
     resetState((update) {
-      checked = update<bool?>(
-        checked,
-        hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow,
+      _checked = update<bool?>(
+        _checked,
+        _hasCheckedRow && _hasUnCheckedRow ? null : _hasCheckedRow,
       );
     });
   }
@@ -414,13 +414,13 @@ abstract class __CheckboxAllSelectionWidgetStateWithChange
 class __CheckboxAllSelectionWidgetState
     extends __CheckboxAllSelectionWidgetStateWithChange {
   void _handleOnChanged(bool? changed) {
-    if (changed == checked) {
+    if (changed == _checked) {
       return;
     }
 
     changed ??= false;
 
-    if (checked == null) {
+    if (_checked == null) {
       changed = true;
     }
 
@@ -433,14 +433,14 @@ class __CheckboxAllSelectionWidgetState
     }
 
     setState(() {
-      checked = changed;
+      _checked = changed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScaledCheckbox(
-      value: checked,
+      value: _checked,
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,
@@ -472,19 +472,19 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
 
 abstract class __ColumnTextWidgetStateWithChange
     extends PlutoStateWithChange<_ColumnTextWidget> {
-  bool? isFilteredList;
+  bool? _isFilteredList;
 
   @override
   void onChange() {
     resetState((update) {
-      isFilteredList = update<bool?>(
-        isFilteredList,
+      _isFilteredList = update<bool?>(
+        _isFilteredList,
         widget.stateManager.isFilteredColumn(widget.column),
       );
     });
   }
 
-  void handleOnPressedFilter() {
+  void _handleOnPressedFilter() {
     widget.stateManager.showFilterPopup(
       context,
       calledColumn: widget.column,
@@ -498,7 +498,7 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
 
   List<InlineSpan>? get _children => [
         if (widget.column.titleSpan != null) widget.column.titleSpan!,
-        if (isFilteredList!)
+        if (_isFilteredList!)
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
@@ -507,7 +507,7 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
                 color: widget.stateManager.configuration!.iconColor,
                 size: widget.stateManager.configuration!.iconSize,
               ),
-              onPressed: handleOnPressedFilter,
+              onPressed: _handleOnPressedFilter,
               constraints: BoxConstraints(
                 maxHeight:
                     widget.height + (PlutoGridSettings.rowBorderWidth * 2),

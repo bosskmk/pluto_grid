@@ -17,29 +17,29 @@ class PlutoBodyRows extends PlutoStatefulWidget {
 
 abstract class _PlutoBodyRowsStateWithChange
     extends PlutoStateWithChange<PlutoBodyRows> {
-  List<PlutoColumn>? columns;
+  List<PlutoColumn>? _columns;
 
-  List<PlutoRow?>? rows;
+  List<PlutoRow?>? _rows;
 
-  double? width;
+  double? _width;
 
   @override
   void onChange() {
     resetState((update) {
-      columns = update<List<PlutoColumn>?>(
-        columns,
+      _columns = update<List<PlutoColumn>?>(
+        _columns,
         _getColumns(),
         compare: listEquals,
       );
 
-      rows = update<List<PlutoRow?>?>(
-        rows,
+      _rows = update<List<PlutoRow?>?>(
+        _rows,
         widget.stateManager.refRows,
         compare: listEquals,
         destructureList: true,
       );
 
-      width = update<double?>(width, _getWidth());
+      _width = update<double?>(_width, _getWidth());
     });
   }
 
@@ -57,15 +57,15 @@ abstract class _PlutoBodyRowsStateWithChange
 }
 
 class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
-  ScrollController? verticalScroll;
+  ScrollController? _verticalScroll;
 
-  ScrollController? horizontalScroll;
+  ScrollController? _horizontalScroll;
 
   @override
   void dispose() {
-    verticalScroll!.dispose();
+    _verticalScroll!.dispose();
 
-    horizontalScroll!.dispose();
+    _horizontalScroll!.dispose();
 
     super.dispose();
   }
@@ -74,13 +74,13 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
   void initState() {
     super.initState();
 
-    horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    _horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsHorizontal(horizontalScroll);
+    widget.stateManager.scroll!.setBodyRowsHorizontal(_horizontalScroll);
 
-    verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
+    _verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsVertical(verticalScroll);
+    widget.stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
   }
 
   @override
@@ -88,11 +88,11 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
     return PlutoScrollbar(
       verticalController:
           widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? verticalScroll
+              ? _verticalScroll
               : null,
       horizontalController:
           widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? horizontalScroll
+              ? _horizontalScroll
               : null,
       isAlwaysShown:
           widget.stateManager.configuration!.scrollbarConfig.isAlwaysShown,
@@ -105,24 +105,24 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
       radiusWhileDragging: widget.stateManager.configuration!.scrollbarConfig
           .scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(
-        controller: horizontalScroll,
+        controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         child: SizedBox(
-          width: width,
+          width: _width,
           child: ListView.builder(
-            controller: verticalScroll,
+            controller: _verticalScroll,
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
-            itemCount: rows!.length,
+            itemCount: _rows!.length,
             itemExtent: widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
-                key: ValueKey('body_row_${rows![i]!.key}'),
+                key: ValueKey('body_row_${_rows![i]!.key}'),
                 stateManager: widget.stateManager,
                 rowIdx: i,
-                row: rows![i]!,
-                columns: columns!,
+                row: _rows![i]!,
+                columns: _columns!,
               );
             },
           ),

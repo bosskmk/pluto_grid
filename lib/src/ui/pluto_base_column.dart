@@ -21,13 +21,13 @@ class PlutoBaseColumn extends PlutoStatefulWidget {
 
 abstract class _PlutoBaseColumnStateWithChange
     extends PlutoStateWithChange<PlutoBaseColumn> {
-  bool? showColumnFilter;
+  bool? _showColumnFilter;
 
   @override
   void onChange() {
     resetState((update) {
-      showColumnFilter = update<bool?>(
-        showColumnFilter,
+      _showColumnFilter = update<bool?>(
+        _showColumnFilter,
         widget.stateManager.showColumnFilter,
       );
     });
@@ -44,7 +44,7 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
           column: widget.column,
           height: widget.columnTitleHeight ?? widget.stateManager.columnHeight,
         ),
-        if (showColumnFilter!)
+        if (_showColumnFilter!)
           PlutoColumnFilter(
             stateManager: widget.stateManager,
             column: widget.column,

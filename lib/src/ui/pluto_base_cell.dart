@@ -34,41 +34,41 @@ class PlutoBaseCell extends PlutoStatefulWidget {
 
 abstract class _PlutoBaseCellStateWithChangeKeepAlive
     extends PlutoStateWithChangeKeepAlive<PlutoBaseCell> {
-  dynamic cellValue;
+  dynamic _cellValue;
 
-  bool? isCurrentCell;
+  bool? _isCurrentCell;
 
-  bool? isEditing;
+  bool? _isEditing;
 
-  PlutoGridSelectingMode? selectingMode;
+  PlutoGridSelectingMode? _selectingMode;
 
-  bool? isSelectedCell;
+  bool? _isSelectedCell;
 
-  bool? hasFocus;
+  bool? _hasFocus;
 
   @override
   void onChange() {
     resetState((update) {
-      cellValue = update<dynamic>(cellValue, widget.cell.value);
+      _cellValue = update<dynamic>(_cellValue, widget.cell.value);
 
-      isCurrentCell = update<bool?>(
-        isCurrentCell,
+      _isCurrentCell = update<bool?>(
+        _isCurrentCell,
         widget.stateManager.isCurrentCell(widget.cell),
       );
 
-      isEditing = update<bool?>(
-        isEditing,
+      _isEditing = update<bool?>(
+        _isEditing,
         widget.stateManager.isEditing,
-        ignoreChange: isCurrentCell != true,
+        ignoreChange: _isCurrentCell != true,
       );
 
-      selectingMode = update<PlutoGridSelectingMode?>(
-        selectingMode,
+      _selectingMode = update<PlutoGridSelectingMode?>(
+        _selectingMode,
         widget.stateManager.selectingMode,
       );
 
-      isSelectedCell = update<bool?>(
-        isSelectedCell,
+      _isSelectedCell = update<bool?>(
+        _isSelectedCell,
         widget.stateManager.isSelectedCell(
           widget.cell,
           widget.column,
@@ -76,13 +76,13 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
         ),
       );
 
-      hasFocus = update<bool?>(
-        hasFocus,
-        isCurrentCell! && widget.stateManager.hasFocus,
+      _hasFocus = update<bool?>(
+        _hasFocus,
+        _isCurrentCell! && widget.stateManager.hasFocus,
       );
 
       if (widget.stateManager.mode.isNormal) {
-        setKeepAlive(isCurrentCell!);
+        setKeepAlive(_isCurrentCell!);
       }
     });
   }
@@ -174,10 +174,10 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
         width: widget.width,
         height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
-        isCurrentCell: isCurrentCell!,
-        isEditing: isEditing!,
-        selectingMode: selectingMode!,
-        isSelectedCell: isSelectedCell!,
+        isCurrentCell: _isCurrentCell!,
+        isEditing: _isEditing!,
+        selectingMode: _selectingMode!,
+        isSelectedCell: _isSelectedCell!,
         configuration: widget.stateManager.configuration!,
         cellPadding: widget.column.cellPadding ??
             widget.stateManager.configuration!.defaultCellPadding,
@@ -187,8 +187,8 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
           column: widget.column,
           row: widget.row,
           cell: widget.cell,
-          isCurrentCell: isCurrentCell!,
-          isEditing: isEditing!,
+          isCurrentCell: _isCurrentCell!,
+          isEditing: _isEditing!,
         ),
       ),
     );
