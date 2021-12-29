@@ -27,6 +27,7 @@ export './src/model/pluto_column.dart';
 export './src/model/pluto_column_group.dart';
 export './src/model/pluto_column_type.dart';
 export './src/model/pluto_row.dart';
+export './src/model/pluto_row_group.dart';
 export './src/plugin/pluto_pagination.dart';
 export './src/pluto_dual_grid.dart';
 export './src/pluto_dual_grid_popup.dart';

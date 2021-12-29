@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/manager/state/column_group_state.dart';
 
 import 'state/cell_state.dart';
+import 'state/column_group_state.dart';
 import 'state/column_state.dart';
 import 'state/dragging_row_state.dart';
 import 'state/editing_state.dart';
@@ -13,6 +13,7 @@ import 'state/grid_state.dart';
 import 'state/keyboard_state.dart';
 import 'state/layout_state.dart';
 import 'state/pagination_row_state.dart';
+import 'state/row_group_state.dart';
 import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
@@ -31,6 +32,7 @@ abstract class IPlutoGridState
         IKeyboardState,
         ILayoutState,
         IPaginationRowState,
+        IRowGroupState,
         IRowState,
         IScrollState,
         ISelectingState {}
@@ -48,6 +50,7 @@ class PlutoGridState extends PlutoChangeNotifier
         KeyboardState,
         LayoutState,
         PaginationRowState,
+        RowGroupState,
         RowState,
         ScrollState,
         SelectingState {}

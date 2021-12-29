@@ -86,6 +86,8 @@ class PlutoColumn {
   /// A checkbox appears in the cell of the column.
   bool enableRowChecked;
 
+  bool enableRowGroup;
+
   /// Sort rows by tapping on the column heading.
   bool enableSorting;
 
@@ -137,6 +139,7 @@ class PlutoColumn {
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,
+    this.enableRowGroup = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
     this.enableDropToResize = false,

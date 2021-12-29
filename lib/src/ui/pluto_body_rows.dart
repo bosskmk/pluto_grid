@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/pluto_base_row_group.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
   @override
@@ -19,7 +20,11 @@ abstract class _PlutoBodyRowsStateWithChange
     extends PlutoStateWithChange<PlutoBodyRows> {
   List<PlutoColumn>? _columns;
 
-  List<PlutoRow?>? _rows;
+  bool? _hasRowGroups;
+
+  List<PlutoRow>? _rows;
+
+  List<PlutoRowGroup>? _rowGroups;
 
   double? _width;
 
@@ -32,11 +37,22 @@ abstract class _PlutoBodyRowsStateWithChange
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
+      _hasRowGroups = update<bool?>(
+        _hasRowGroups,
+        widget.stateManager.hasRowGroups,
+      );
+
+      _rows = update<List<PlutoRow>?>(
         _rows,
         widget.stateManager.refRows,
         compare: listEquals,
         destructureList: true,
+      );
+
+      _rowGroups = update<List<PlutoRowGroup>?>(
+        _rowGroups,
+        widget.stateManager.rowGroups,
+        compare: listEquals,
       );
 
       _width = update<double?>(_width, _getWidth());
@@ -114,16 +130,24 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
-            itemCount: _rows!.length,
-            itemExtent: widget.stateManager.rowTotalHeight,
+            itemCount: _hasRowGroups! ? _rowGroups!.length : _rows!.length,
+            itemExtent:
+                _hasRowGroups! ? null : widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {
-              return PlutoBaseRow(
-                key: ValueKey('body_row_${_rows![i]!.key}'),
-                stateManager: widget.stateManager,
-                rowIdx: i,
-                row: _rows![i]!,
-                columns: _columns!,
-              );
+              return _hasRowGroups!
+                  ? PlutoBaseRowGroup(
+                      key: ValueKey('body_rowGroup_${_rowGroups![i].key}'),
+                      stateManager: widget.stateManager,
+                      rowGroup: _rowGroups![i],
+                      columns: _columns!,
+                    )
+                  : PlutoBaseRow(
+                      key: ValueKey('body_row_${_rows![i].key}'),
+                      stateManager: widget.stateManager,
+                      rowIdx: i,
+                      row: _rows![i],
+                      columns: _columns!,
+                    );
             },
           ),
         ),

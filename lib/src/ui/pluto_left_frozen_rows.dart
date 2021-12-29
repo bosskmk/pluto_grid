@@ -19,7 +19,7 @@ abstract class _PlutoLeftFrozenRowsStateWithState
     extends PlutoStateWithChange<PlutoLeftFrozenRows> {
   List<PlutoColumn>? _columns;
 
-  List<PlutoRow?>? _rows;
+  List<PlutoRow>? _rows;
 
   @override
   void onChange() {
@@ -30,7 +30,7 @@ abstract class _PlutoLeftFrozenRowsStateWithState
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
+      _rows = update<List<PlutoRow>?>(
         _rows,
         widget.stateManager.refRows,
         compare: listEquals,
@@ -67,10 +67,10 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('left_frozen_row_${_rows![i]!.key}'),
+          key: ValueKey('left_frozen_row_${_rows![i].key}'),
           stateManager: widget.stateManager,
           rowIdx: i,
-          row: _rows![i]!,
+          row: _rows![i],
           columns: _columns!,
         );
       },
