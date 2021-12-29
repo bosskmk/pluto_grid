@@ -49,11 +49,7 @@ abstract class _PlutoBodyRowsStateWithChange
         destructureList: true,
       );
 
-      _rowGroups = update<List<PlutoRowGroup>?>(
-        _rowGroups,
-        widget.stateManager.rowGroups,
-        compare: listEquals,
-      );
+      _rowGroups = widget.stateManager.rowGroups;
 
       _width = update<double?>(_width, _getWidth());
     });
