@@ -21,17 +21,22 @@ abstract class PlutoColumnType {
   /// [negative] Allow negative numbers
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
+  ///
+  /// [allowFirstDot] When accepting negative numbers, a dot is allowed at the beginning.
+  /// This option is required on devices where the .- symbol works with one button.
   factory PlutoColumnType.number({
     dynamic defaultValue = 0,
     bool negative = true,
     String format = '#,###',
     bool applyFormatOnInit = true,
+    bool allowFirstDot = false,
   }) {
     return PlutoColumnTypeNumber(
       defaultValue: defaultValue,
       format: format,
       negative: negative,
       applyFormatOnInit: applyFormatOnInit,
+      allowFirstDot: allowFirstDot,
     );
   }
 
@@ -192,11 +197,14 @@ class PlutoColumnTypeNumber
   @override
   bool? applyFormatOnInit;
 
+  bool? allowFirstDot;
+
   PlutoColumnTypeNumber({
     this.defaultValue,
     this.negative,
     this.format,
     this.applyFormatOnInit,
+    this.allowFirstDot,
   });
 
   @override

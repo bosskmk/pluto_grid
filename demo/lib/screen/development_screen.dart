@@ -145,6 +145,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         titleTextAlign: PlutoColumnTextAlign.left,
         type: PlutoColumnType.number(
           negative: true,
+          format: '#,###.###',
+          allowFirstDot: true,
         ),
       ),
       PlutoColumn(

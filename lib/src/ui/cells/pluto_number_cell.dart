@@ -35,6 +35,8 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
 
   bool? activatedNegative;
 
+  bool? allowFirstDot;
+
   @override
   TextInputType get keyboardType => TextInputType.number;
 
@@ -43,6 +45,7 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
         DecimalTextInputFormatter(
           decimalRange: decimalRange,
           activatedNegativeValues: activatedNegative!,
+          allowFirstDot: allowFirstDot!,
         ),
       ];
 
@@ -53,6 +56,8 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
     decimalRange = widget.column.type.number!.decimalRange();
 
     activatedNegative = widget.column.type.number!.negative;
+
+    allowFirstDot = widget.column.type.number!.allowFirstDot;
   }
 }
 
@@ -61,6 +66,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({
     int? decimalRange,
     required bool activatedNegativeValues,
+    required bool allowFirstDot,
   }) : assert(decimalRange == null || decimalRange >= 0,
             'DecimalTextInputFormatter declaration error') {
     String dp = (decimalRange != null && decimalRange > 0)
@@ -69,7 +75,11 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     String num = '[0-9]*$dp';
 
     if (activatedNegativeValues) {
-      _exp = RegExp('^((((-){0,1})|((-){0,1}[0-9]$num))){0,1}\$');
+      final firstSymbols = allowFirstDot ? '[-.]' : '[-]';
+
+      _exp = RegExp(
+        '^(((($firstSymbols){0,1})|(($firstSymbols){0,1}[0-9]$num))){0,1}\$',
+      );
     } else {
       _exp = RegExp('^($num){0,1}\$');
     }
