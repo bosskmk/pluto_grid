@@ -201,7 +201,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       /// ```dart
       /// return KeyEventResult.skipRemainingHandlers;
       /// ```
-      return widget.stateManager.keyManager!.eventResult.skip(
+      return widget.stateManager.keyManager.eventResult.skip(
         KeyEventResult.ignored,
       );
     }
@@ -225,7 +225,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     }
 
     // KeyManager 로 이벤트 처리를 위임 한다.
-    widget.stateManager.keyManager!.subject.add(keyManager);
+    widget.stateManager.keyManager.subject.add(keyManager);
 
     // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
     return KeyEventResult.handled;

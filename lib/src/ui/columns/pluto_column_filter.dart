@@ -58,7 +58,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
     _controller = TextEditingController(text: _filterValue);
 
-    _event = widget.stateManager.eventManager!.listener(_handleFocusFromRows);
+    _event = widget.stateManager.eventManager.listener(_handleFocusFromRows);
   }
 
   @override
@@ -147,7 +147,7 @@ abstract class _PlutoColumnFilterStateWithChange
       /// ```dart
       /// return KeyEventResult.skipRemainingHandlers;
       /// ```
-      return widget.stateManager.keyManager!.eventResult.skip(
+      return widget.stateManager.keyManager.eventResult.skip(
         KeyEventResult.ignored,
       );
     }
@@ -219,7 +219,7 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   }
 
   void _handleOnChanged(String changed) {
-    widget.stateManager.eventManager!.addEvent(
+    widget.stateManager.eventManager.addEvent(
       PlutoGridChangeColumnFilterEvent(
         column: widget.column,
         filterType: widget.column.defaultFilter,

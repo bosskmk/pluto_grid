@@ -15,7 +15,7 @@ import 'pluto_base_cell_test.mocks.dart';
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
-  MockPlutoGridEventManager? eventManager;
+  late MockPlutoGridEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
@@ -419,7 +419,7 @@ void main() {
 
       await tester.tap(gesture);
 
-      verify(eventManager!.addEvent(
+      verify(eventManager.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnTapUp &&
               object.cell.key == cell.key &&
@@ -473,7 +473,7 @@ void main() {
 
       await tester.longPress(gesture);
 
-      verify(eventManager!.addEvent(
+      verify(eventManager.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressStart &&
               object.cell.key == cell.key &&
@@ -541,7 +541,7 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(milliseconds: 800));
 
-      verify(eventManager!.addEvent(
+      verify(eventManager.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridCellGestureEvent>(rule: (object) {
           return object.gestureType.isOnLongPressMoveUpdate &&
               object.cell.key == cell.key &&

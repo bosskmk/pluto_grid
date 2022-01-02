@@ -16,7 +16,7 @@ import 'pluto_default_cell_test.mocks.dart';
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
-  MockPlutoGridEventManager? eventManager;
+  late MockPlutoGridEventManager eventManager;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
@@ -220,7 +220,7 @@ void main() {
         // tester.tap triggers onDragStarted, onDragEnd.
         // It only needs to be called Update, so it is ignored.
 
-        verifyNever(eventManager!.addEvent(
+        verifyNever(eventManager.addEvent(
           argThat(
               PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
             return true;
@@ -246,7 +246,7 @@ void main() {
           [row],
         )).called(1);
 
-        verify(eventManager!.addEvent(
+        verify(eventManager.addEvent(
           argThat(
               PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (object) {
             return true;

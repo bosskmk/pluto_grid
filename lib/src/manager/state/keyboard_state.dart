@@ -126,7 +126,7 @@ mixin KeyboardState implements IPlutoGridState {
     final cellPosition = currentCellPosition;
 
     if (cellPosition != null && canNotMoveCell(cellPosition, direction)) {
-      eventManager!.addEvent(
+      eventManager.addEvent(
         PlutoGridCannotMoveCurrentCellEvent(
           cellPosition: cellPosition,
           direction: direction,

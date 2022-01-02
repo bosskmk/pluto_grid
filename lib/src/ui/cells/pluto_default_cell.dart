@@ -137,7 +137,7 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
       return;
     }
 
-    widget.stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
+    widget.stateManager.eventManager.addEvent(PlutoGridScrollUpdateEvent(
       offset: event.position,
     ));
 

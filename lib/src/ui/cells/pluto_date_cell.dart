@@ -113,7 +113,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
           .addOffsetChangedListener(_handleScroll);
     }
 
-    keyManagerStream = popupStateManager!.keyManager!.subject.stream
+    keyManagerStream = popupStateManager!.keyManager.subject.stream
         .listen(_handleGridFocusOnKey);
   }
 

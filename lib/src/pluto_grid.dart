@@ -77,10 +77,6 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   late PlutoGridStateManager _stateManager;
 
-  PlutoGridKeyManager? _keyManager;
-
-  PlutoGridEventManager? _eventManager;
-
   bool? _showFrozenColumn;
 
   bool? _hasLeftFrozenColumns;
@@ -275,6 +271,8 @@ class _PlutoGridState extends State<PlutoGrid> {
 
     _initEventManager();
 
+    _initNodeManager();
+
     _initOnLoadedEvent();
 
     _initSelectMode();
@@ -325,33 +323,41 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void _initKeyManager() {
-    _keyManager = PlutoGridKeyManager(
+    final _keyManager = PlutoGridKeyManager(
       stateManager: _stateManager,
     );
 
-    _keyManager!.init();
+    _keyManager.init();
 
     _stateManager.setKeyManager(_keyManager);
 
     // Dispose
     _disposeList.add(() {
-      _keyManager!.dispose();
+      _keyManager.dispose();
     });
   }
 
   void _initEventManager() {
-    _eventManager = PlutoGridEventManager(
+    final _eventManager = PlutoGridEventManager(
       stateManager: _stateManager,
     );
 
-    _eventManager!.init();
+    _eventManager.init();
 
     _stateManager.setEventManager(_eventManager);
 
     // Dispose
     _disposeList.add(() {
-      _eventManager!.dispose();
+      _eventManager.dispose();
     });
+  }
+
+  void _initNodeManager() {
+    final _nodeManager = PlutoGridNodeManager(stateManager: _stateManager);
+
+    _nodeManager.generateRowNodes();
+
+    _stateManager.setNodeManager(_nodeManager);
   }
 
   void _initOnLoadedEvent() {
@@ -419,8 +425,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     ///   event: event,
     /// ));
     /// ```
-    if (_keyManager!.eventResult.isSkip == false) {
-      _keyManager!.subject.add(PlutoKeyManagerEvent(
+    if (_stateManager.keyManager.eventResult.isSkip == false) {
+      _stateManager.keyManager.subject.add(PlutoKeyManagerEvent(
         focusNode: focusNode,
         event: event,
       ));
@@ -432,7 +438,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     /// ```dart
     /// return KeyEventResult.handled;
     /// ```
-    return _keyManager!.eventResult.consume(KeyEventResult.handled);
+    return _stateManager.keyManager.eventResult.consume(KeyEventResult.handled);
   }
 
   void _setLayout(BoxConstraints size) {

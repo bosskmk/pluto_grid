@@ -37,7 +37,7 @@ class PlutoBaseRow extends StatelessWidget {
         ? stateManager.currentSelectingRows
         : [details.data];
 
-    stateManager.eventManager!.addEvent(
+    stateManager.eventManager.addEvent(
       PlutoGridDragRowsEvent(
         rows: draggingRows,
         targetIdx: rowIdx,

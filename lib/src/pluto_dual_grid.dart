@@ -62,18 +62,19 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
             _stateManagerB = onLoadedEvent.stateManager;
           }
 
-          onLoadedEvent.stateManager.eventManager!
-              .listener((PlutoGridEvent plutoEvent) {
-            if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
-              if (isGridA == true && plutoEvent.direction.isRight) {
-                _stateManagerA!.setKeepFocus(false);
-                _stateManagerB!.setKeepFocus(true);
-              } else if (isGridA != true && plutoEvent.direction.isLeft) {
-                _stateManagerA!.setKeepFocus(true);
-                _stateManagerB!.setKeepFocus(false);
+          onLoadedEvent.stateManager.eventManager.listener(
+            (PlutoGridEvent plutoEvent) {
+              if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
+                if (isGridA == true && plutoEvent.direction.isRight) {
+                  _stateManagerA!.setKeepFocus(false);
+                  _stateManagerB!.setKeepFocus(true);
+                } else if (isGridA != true && plutoEvent.direction.isLeft) {
+                  _stateManagerA!.setKeepFocus(true);
+                  _stateManagerB!.setKeepFocus(false);
+                }
               }
-            }
-          });
+            },
+          );
 
           if (props.onLoaded != null) {
             props.onLoaded!(onLoadedEvent);

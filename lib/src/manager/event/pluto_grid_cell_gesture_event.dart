@@ -74,7 +74,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
     stateManager.setCurrentSelectingPositionWithOffset(offset);
 
-    stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
+    stateManager.eventManager.addEvent(PlutoGridScrollUpdateEvent(
       offset: offset,
     ));
   }

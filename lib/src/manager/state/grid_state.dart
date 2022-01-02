@@ -8,9 +8,11 @@ abstract class IGridState {
 
   PlutoGridConfiguration? get configuration;
 
-  PlutoGridKeyManager? get keyManager;
+  PlutoGridKeyManager get keyManager;
 
-  PlutoGridEventManager? get eventManager;
+  PlutoGridEventManager get eventManager;
+
+  PlutoGridNodeManager get nodeManager;
 
   /// Event callback fired when cell value changes.
   PlutoOnChangedEventCallback? get onChanged;
@@ -38,6 +40,8 @@ abstract class IGridState {
   void setKeyManager(PlutoGridKeyManager keyManager);
 
   void setEventManager(PlutoGridEventManager eventManager);
+
+  void setNodeManager(PlutoGridNodeManager nodeManager);
 
   void setGridMode(PlutoGridMode mode);
 
@@ -82,15 +86,20 @@ mixin GridState implements IPlutoGridState {
 
   PlutoGridConfiguration? _configuration;
 
-  PlutoGridKeyManager? _keyManager;
+  late PlutoGridKeyManager _keyManager;
 
   @override
-  PlutoGridKeyManager? get keyManager => _keyManager;
+  PlutoGridKeyManager get keyManager => _keyManager;
 
-  PlutoGridEventManager? _eventManager;
+  late PlutoGridEventManager _eventManager;
 
   @override
-  PlutoGridEventManager? get eventManager => _eventManager;
+  PlutoGridEventManager get eventManager => _eventManager;
+
+  late PlutoGridNodeManager _nodeManager;
+
+  @override
+  PlutoGridNodeManager get nodeManager => _nodeManager;
 
   @override
   PlutoOnChangedEventCallback? get onChanged => _onChanged;
@@ -137,13 +146,18 @@ mixin GridState implements IPlutoGridState {
   PlutoGridLocaleText get localeText => configuration!.localeText;
 
   @override
-  void setKeyManager(PlutoGridKeyManager? keyManager) {
+  void setKeyManager(PlutoGridKeyManager keyManager) {
     _keyManager = keyManager;
   }
 
   @override
-  void setEventManager(PlutoGridEventManager? eventManager) {
+  void setEventManager(PlutoGridEventManager eventManager) {
     _eventManager = eventManager;
+  }
+
+  @override
+  void setNodeManager(PlutoGridNodeManager nodeManager) {
+    _nodeManager = nodeManager;
   }
 
   @override

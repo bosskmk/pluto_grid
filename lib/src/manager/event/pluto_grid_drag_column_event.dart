@@ -18,17 +18,17 @@ class PlutoGridDragColumnEvent extends PlutoGridEvent {
 
   @override
   void handler(PlutoGridStateManager? stateManager) async {
-    if (stateManager!.eventManager!.subscription.isPaused) {
+    if (stateManager!.eventManager.subscription.isPaused) {
       return;
     }
 
     stateManager.moveColumn(column: column, targetColumn: targetColumn);
 
-    stateManager.eventManager!.subscription.pause();
+    stateManager.eventManager.subscription.pause();
 
     await Future.delayed(
       const Duration(milliseconds: resumeMilliseconds),
-      () => stateManager.eventManager!.subscription.resume(),
+      () => stateManager.eventManager.subscription.resume(),
     );
   }
 }

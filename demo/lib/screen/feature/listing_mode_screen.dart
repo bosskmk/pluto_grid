@@ -263,7 +263,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
           stateManager = event.stateManager;
 
           removeKeyboardListener =
-              stateManager.keyManager!.subject.stream.listen(handleKeyboard);
+              stateManager.keyManager.subject.stream.listen(handleKeyboard);
 
           stateManager.setSelectingMode(PlutoGridSelectingMode.none);
         },

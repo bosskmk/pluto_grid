@@ -16,7 +16,7 @@ import 'pluto_column_filter_test.mocks.dart';
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
-  MockPlutoGridEventManager? eventManager;
+  late MockPlutoGridEventManager eventManager;
   MockStreamSubscription<PlutoGridEvent> streamSubscription;
 
   setUp(() {
@@ -35,7 +35,7 @@ void main() {
       stateManager.configuration!.columnFilterHeight,
     );
 
-    when(eventManager!.listener(any)).thenReturn(streamSubscription);
+    when(eventManager.listener(any)).thenReturn(streamSubscription);
   });
 
   testWidgets(
@@ -92,7 +92,7 @@ void main() {
       // then
       await tester.enterText(find.byType(TextField), 'abc');
 
-      verify(eventManager!.addEvent(
+      verify(eventManager.addEvent(
         argThat(PlutoObjectMatcher<PlutoGridChangeColumnFilterEvent>(
             rule: (object) {
           return object.column.field == column.field &&

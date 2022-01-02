@@ -90,7 +90,7 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 
 class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
-    widget.stateManager.eventManager!.addEvent(
+    widget.stateManager.eventManager.addEvent(
       PlutoGridCellGestureEvent(
         gestureType: gestureType,
         offset: offset,
