@@ -54,6 +54,11 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
 
     return Row(
       children: [
+        if (widget.column.enableRowGroup && widget.cell.expandedIcon)
+          _RowExpandableIconWidget(
+            stateManager: widget.stateManager,
+            row: widget.row,
+          ),
         if (widget.column.enableRowDrag && _canRowDrag!)
           _RowDragIconWidget(
             column: widget.column,
@@ -81,7 +86,55 @@ class _PlutoDefaultCellState extends _PlutoDefaultCellStateWithChange {
   }
 }
 
-typedef DragUpdatedCallback = Function(Offset offset);
+class _RowExpandableIconWidget extends StatefulWidget {
+  final PlutoGridStateManager stateManager;
+  final PlutoRow row;
+
+  const _RowExpandableIconWidget({
+    required this.stateManager,
+    required this.row,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_RowExpandableIconWidget> createState() =>
+      _RowExpandableIconWidgetState();
+}
+
+class _RowExpandableIconWidgetState extends State<_RowExpandableIconWidget> {
+  void _handleOnTap() {
+    final expanded = !widget.row.expanded;
+    widget.row.setExpanded(expanded);
+    if (!expanded) {
+      updateChildren(List<PlutoRow> children) {
+        for (var element in children) {
+          element.setExpanded(expanded);
+
+          if (element.children.isNotEmpty) {
+            updateChildren(element.children);
+          }
+        }
+      }
+
+      updateChildren(widget.row.children);
+    }
+
+    widget.stateManager.rowsToDisplay.update();
+    widget.stateManager.notifyListeners();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _handleOnTap,
+      child: Icon(
+        widget.row.expanded
+            ? Icons.keyboard_arrow_down
+            : Icons.keyboard_arrow_right,
+      ),
+    );
+  }
+}
 
 class _RowDragIconWidget extends StatefulWidget {
   final PlutoColumn column;

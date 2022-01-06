@@ -61,4 +61,12 @@ class PlutoCell {
   void setRow(PlutoRow row) {
     _row = row;
   }
+
+  bool get expandedIcon => _expandedIcon;
+
+  bool _expandedIcon = false;
+
+  void setExpandedIcon(bool flag) {
+    _expandedIcon = flag;
+  }
 }

@@ -81,7 +81,7 @@ mixin CellState implements IPlutoGridState {
 
   @override
   PlutoCell? get firstCell {
-    if (refRows.isEmpty) {
+    if (rowsToDisplay.isEmpty) {
       return null;
     }
 
@@ -89,7 +89,7 @@ mixin CellState implements IPlutoGridState {
 
     final columnField = refColumns[columnIndexes.first].field;
 
-    return refRows.first.cells[columnField];
+    return rowsToDisplay.first.cells[columnField];
   }
 
   @override
@@ -138,7 +138,7 @@ mixin CellState implements IPlutoGridState {
       return null;
     }
 
-    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
+    for (var rowIdx = 0; rowIdx < rowsToDisplay.length; rowIdx += 1) {
       final columnIdx = columnIdxByCellKeyAndRowIdx(cellKey, rowIdx);
 
       if (columnIdx != null) {
@@ -151,7 +151,7 @@ mixin CellState implements IPlutoGridState {
 
   @override
   int? columnIdxByCellKeyAndRowIdx(Key cellKey, int rowIdx) {
-    if (rowIdx < 0 || rowIdx >= refRows.length) {
+    if (rowIdx < 0 || rowIdx >= rowsToDisplay.length) {
       return null;
     }
 
@@ -160,7 +160,7 @@ mixin CellState implements IPlutoGridState {
     for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
       final field = refColumns[columnIndexes[columnIdx]].field;
 
-      if (refRows[rowIdx].cells[field]!.key == cellKey) {
+      if (rowsToDisplay[rowIdx].cells[field]!.key == cellKey) {
         return columnIdx;
       }
     }
@@ -191,9 +191,9 @@ mixin CellState implements IPlutoGridState {
   }) {
     if (cell == null ||
         rowIdx == null ||
-        refRows.isEmpty ||
+        rowsToDisplay.isEmpty ||
         rowIdx < 0 ||
-        rowIdx > refRows.length - 1) {
+        rowIdx > rowsToDisplay.length - 1) {
       return;
     }
 
@@ -228,7 +228,7 @@ mixin CellState implements IPlutoGridState {
       case PlutoMoveDirection.up:
         return cellPosition!.rowIdx! > 0;
       case PlutoMoveDirection.down:
-        return cellPosition!.rowIdx! < refRows.length - 1;
+        return cellPosition!.rowIdx! < rowsToDisplay.length - 1;
     }
   }
 
@@ -319,6 +319,6 @@ mixin CellState implements IPlutoGridState {
         cellPosition.columnIdx! < 0 ||
         cellPosition.rowIdx! < 0 ||
         cellPosition.columnIdx! > refColumns.length - 1 ||
-        cellPosition.rowIdx! > refRows.length - 1;
+        cellPosition.rowIdx! > rowsToDisplay.length - 1;
   }
 }

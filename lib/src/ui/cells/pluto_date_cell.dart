@@ -126,7 +126,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
         }
       } else if (keyManagerEvent.isDown) {
         if (popupStateManager!.currentRowIdx ==
-            popupStateManager!.refRows.length - 1) {
+            popupStateManager!.rowsToDisplay.length - 1) {
           popupStateManager!.appendRows(_getMoreRows());
           return;
         }
@@ -224,7 +224,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = -1;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-        popupStateManager!.refRows.first.cells.entries.first.value.value
+        popupStateManager!.rowsToDisplay.first.cells.entries.first.value.value
             .toString(),
         widget.column.type.date!.format!,
       );
@@ -242,7 +242,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       lastDays = 30;
 
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-          popupStateManager!.refRows.last.cells.entries.last.value.value
+          popupStateManager!.rowsToDisplay.last.cells.entries.last.value.value
               .toString(),
           widget.column.type.date!.format!);
 

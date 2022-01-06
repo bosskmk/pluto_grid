@@ -206,7 +206,7 @@ mixin EditingState implements IPlutoGridState {
       onChanged!(PlutoGridOnChangedEvent(
         columnIdx: columnIndex(currentColumn),
         column: currentColumn,
-        rowIdx: refRows.indexOf(currentRow),
+        rowIdx: rowsToDisplay.indexOf(currentRow),
         row: currentRow,
         value: value,
         oldValue: oldValue,
@@ -228,8 +228,8 @@ mixin EditingState implements IPlutoGridState {
 
     List<int> rowIdxList = [];
 
-    for (var i = 0; i < refRows.length; i += 1) {
-      final currentRowKey = refRows[i].key;
+    for (var i = 0; i < rowsToDisplay.length; i += 1) {
+      final currentRowKey = rowsToDisplay[i].key;
 
       if (selectingRowKeys.contains(currentRowKey)) {
         selectingRowKeys.removeWhere((key) => key == currentRowKey);
@@ -264,7 +264,7 @@ mixin EditingState implements IPlutoGridState {
 
       int textColumnIdx = 0;
 
-      if (rowIdx > refRows.length - 1) {
+      if (rowIdx > rowsToDisplay.length - 1) {
         break;
       }
 
@@ -285,7 +285,7 @@ mixin EditingState implements IPlutoGridState {
 
         final currentColumn = refColumns[columnIndexes[columnIdx]];
 
-        final currentCell = refRows[rowIdx].cells[currentColumn.field]!;
+        final currentCell = rowsToDisplay[rowIdx].cells[currentColumn.field]!;
 
         dynamic newValue = textList[textRowIdx][textColumnIdx];
 
@@ -299,7 +299,7 @@ mixin EditingState implements IPlutoGridState {
 
         if (canNotChangeCellValue(
           column: currentColumn,
-          row: refRows[rowIdx],
+          row: rowsToDisplay[rowIdx],
           newValue: newValue,
           oldValue: oldValue,
         )) {
@@ -307,7 +307,7 @@ mixin EditingState implements IPlutoGridState {
           continue;
         }
 
-        refRows[rowIdx].setState(PlutoRowState.updated);
+        rowsToDisplay[rowIdx].setState(PlutoRowState.updated);
 
         currentCell.value =
             newValue = castValueByColumnType(newValue, currentColumn);
@@ -317,7 +317,7 @@ mixin EditingState implements IPlutoGridState {
             columnIdx: columnIndexes[columnIdx],
             column: currentColumn,
             rowIdx: rowIdx,
-            row: refRows[rowIdx],
+            row: rowsToDisplay[rowIdx],
             value: newValue,
             oldValue: oldValue,
           ));

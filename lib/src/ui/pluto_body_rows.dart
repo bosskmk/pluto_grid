@@ -34,7 +34,7 @@ abstract class _PlutoBodyRowsStateWithChange
 
       _rows = update<List<PlutoRow?>?>(
         _rows,
-        widget.stateManager.refRows,
+        widget.stateManager.rowsToDisplay,
         compare: listEquals,
         destructureList: true,
       );

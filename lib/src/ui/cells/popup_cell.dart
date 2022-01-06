@@ -141,14 +141,14 @@ mixin PopupCellState<T extends PopupCell> on State<T>
         for (var entry in popupRows[i].cells.entries) {
           if (popupRows[i].cells[entry.key]!.value == widget.cell.value) {
             event.stateManager.setCurrentCell(
-                event.stateManager.refRows[i].cells[entry.key], i);
+                event.stateManager.rowsToDisplay[i].cells[entry.key], i);
             break;
           }
         }
       } else {
         if (popupRows[i].cells[fieldOnSelected!]!.value == widget.cell.value) {
           event.stateManager.setCurrentCell(
-              event.stateManager.refRows[i].cells[fieldOnSelected!], i);
+              event.stateManager.rowsToDisplay[i].cells[fieldOnSelected!], i);
           break;
         }
       }
@@ -158,11 +158,11 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       final rowIdxToMove =
           event.stateManager.currentRowIdx! + 1 + offsetOfScrollRowIdx;
 
-      if (rowIdxToMove < event.stateManager.refRows.length) {
+      if (rowIdxToMove < event.stateManager.rowsToDisplay.length) {
         event.stateManager.moveScrollByRow(PlutoMoveDirection.up, rowIdxToMove);
       } else {
         event.stateManager.moveScrollByRow(
-            PlutoMoveDirection.up, event.stateManager.refRows.length);
+            PlutoMoveDirection.up, event.stateManager.rowsToDisplay.length);
       }
     }
   }

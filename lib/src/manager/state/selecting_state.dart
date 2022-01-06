@@ -208,7 +208,7 @@ mixin SelectingState implements IPlutoGridState {
 
   @override
   void setAllCurrentSelecting() {
-    if (refRows.isEmpty) {
+    if (rowsToDisplay.isEmpty) {
       return;
     }
 
@@ -220,7 +220,7 @@ mixin SelectingState implements IPlutoGridState {
         setCurrentSelectingPosition(
           cellPosition: PlutoGridCellPosition(
             columnIdx: refColumns.length - 1,
-            rowIdx: refRows.length - 1,
+            rowIdx: rowsToDisplay.length - 1,
           ),
         );
         break;
@@ -231,10 +231,10 @@ mixin SelectingState implements IPlutoGridState {
 
         _currentSelectingPosition = PlutoGridCellPosition(
           columnIdx: refColumns.length - 1,
-          rowIdx: refRows.length - 1,
+          rowIdx: rowsToDisplay.length - 1,
         );
 
-        setCurrentSelectingRowsByRange(0, refRows.length - 1);
+        setCurrentSelectingRowsByRange(0, rowsToDisplay.length - 1);
         break;
       case PlutoGridSelectingMode.none:
       default:
@@ -361,11 +361,11 @@ mixin SelectingState implements IPlutoGridState {
 
     final _to = max(from, to) + 1;
 
-    if (_from < 0 || _to > refRows.length) {
+    if (_from < 0 || _to > rowsToDisplay.length) {
       return;
     }
 
-    _currentSelectingRows = refRows.getRange(_from, _to).toList();
+    _currentSelectingRows = rowsToDisplay.getRange(_from, _to).toList();
 
     if (notify) {
       notifyListeners();
@@ -385,11 +385,11 @@ mixin SelectingState implements IPlutoGridState {
       return;
     }
 
-    if (rowIdx == null || rowIdx < 0 || rowIdx > refRows.length - 1) {
+    if (rowIdx == null || rowIdx < 0 || rowIdx > rowsToDisplay.length - 1) {
       return;
     }
 
-    final PlutoRow row = refRows[rowIdx];
+    final PlutoRow row = rowsToDisplay[rowIdx];
 
     final keys =
         _currentSelectingRows.map((e) => e.key).toList(growable: false);
@@ -578,7 +578,7 @@ mixin SelectingState implements IPlutoGridState {
       for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
         final String field = refColumns[columnIndexes[j]].field;
 
-        columnText.add(refRows[i].cells[field]!.value.toString());
+        columnText.add(rowsToDisplay[i].cells[field]!.value.toString());
       }
 
       rowText.add(columnText.join('\t'));

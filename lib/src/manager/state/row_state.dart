@@ -7,6 +7,8 @@ abstract class IRowState {
 
   FilteredList<PlutoRow> refRows = FilteredList();
 
+  FilteredList<PlutoRow> get rowsToDisplay;
+
   List<PlutoRow> get checkedRows;
 
   List<PlutoRow> get unCheckedRows;
@@ -22,6 +24,8 @@ abstract class IRowState {
   PlutoRow? get currentRow;
 
   PlutoRowColorCallback? get rowColorCallback;
+
+  void setGroupedRows();
 
   int? getRowIdxByOffset(double offset);
 
@@ -91,10 +95,113 @@ mixin RowState implements IPlutoGridState {
   @override
   FilteredList<PlutoRow> get refRows => _refRows;
 
+  FilteredList<PlutoRow> get refGroupedRows => _refGroupedRows;
+
+  @override
+  FilteredList<PlutoRow> get rowsToDisplay =>
+      hasRowGroups ? refGroupedRows : refRows;
+
+  FilteredList<PlutoRow> _refGroupedRows = FilteredList();
+
+  @override
+  void setGroupedRows() {
+    _refGroupedRows = groupedRows(_refRows);
+  }
+
+  bool get hasRowGroups =>
+      refColumns.where((element) => element.enableRowGroup).isNotEmpty;
+
+  FilteredList<PlutoRow> groupedRows(FilteredList<PlutoRow> rowsToGroup) {
+    final groupedColumns = refColumns.where(
+      (element) => element.enableRowGroup,
+    );
+
+    groupByColumn(PlutoColumn column, List<PlutoRow> rows) {
+      return groupBy(rows, (PlutoRow row) => row.cells[column.field]!.value);
+    }
+
+    makeRowGroup({
+      required List<PlutoColumn> columns,
+      required List<PlutoRow> rows,
+    }) {
+      final List<PlutoRow> rowGroups = [];
+
+      final columnsIterator = columns.iterator;
+
+      columnsIterator.moveNext();
+
+      final groupColumn = columnsIterator.current;
+
+      final groupRows = groupByColumn(groupColumn, rows);
+
+      final isLast = !columnsIterator.moveNext();
+
+      groupRows.forEach((key, value) {
+        final cells = <String, PlutoCell>{};
+
+        for (var column in refColumns) {
+          cells[column.field] = PlutoCell(
+            value: groupColumn.field == column.field
+                ? key
+                : column.type.defaultValue,
+          )..setExpandedIcon(groupColumn.field == column.field);
+        }
+
+        rowGroups.add(PlutoRow.stubGroup(
+          cells: cells,
+          children: isLast
+              ? value
+              : makeRowGroup(
+                  columns: columns.sublist(1),
+                  rows: value,
+                ),
+        ));
+      });
+
+      return rowGroups;
+    }
+
+    final FilteredList<PlutoRow> groupedRows = FilteredList(
+      initialList: makeRowGroup(
+        columns: groupedColumns.toList(),
+        rows: rowsToGroup,
+      ),
+    );
+
+    final List<PlutoRow> rows = [];
+
+    putChildren(List<PlutoRow> rowsToPut) {
+      for (var element in rowsToPut) {
+        rows.add(element);
+        // if (element.parent == null || element.parent!.expanded) {
+        // }
+
+        if (element.children.isNotEmpty) {
+          putChildren(element.children);
+        }
+      }
+    }
+
+    putChildren(groupedRows);
+
+    // PlutoGridStateManager.initializeRows(refColumns.originalList, rows);
+
+    final results = FilteredList(initialList: rows);
+
+    results.setFilter(
+      (element) => element.parent == null || element.parent!.expanded,
+    );
+
+    return results;
+  }
+
   @override
   set refRows(FilteredList<PlutoRow> setRows) {
     PlutoGridStateManager.initializeRows(refColumns.originalList, setRows);
     _refRows = setRows;
+    if (hasRowGroups) {
+      setGroupedRows();
+    }
   }
 
   FilteredList<PlutoRow> _refRows = FilteredList();
@@ -127,7 +234,7 @@ mixin RowState implements IPlutoGridState {
       return null;
     }
 
-    return refRows[currentRowIdx!];
+    return rowsToDisplay[currentRowIdx!];
   }
 
   PlutoRowColorCallback? _rowColorCallback;
@@ -145,7 +252,7 @@ mixin RowState implements IPlutoGridState {
 
     int? indexToMove;
 
-    final int rowsLength = refRows.length;
+    final int rowsLength = rowsToDisplay.length;
 
     for (var i = 0; i < rowsLength; i += 1) {
       if (currentOffset <= offset && offset < currentOffset + rowTotalHeight) {
@@ -161,11 +268,11 @@ mixin RowState implements IPlutoGridState {
 
   @override
   PlutoRow? getRowByIdx(int? rowIdx) {
-    if (rowIdx == null || rowIdx < 0 || refRows.length - 1 < rowIdx) {
+    if (rowIdx == null || rowIdx < 0 || rowsToDisplay.length - 1 < rowIdx) {
       return null;
     }
 
-    return refRows[rowIdx];
+    return rowsToDisplay[rowIdx];
   }
 
   @override

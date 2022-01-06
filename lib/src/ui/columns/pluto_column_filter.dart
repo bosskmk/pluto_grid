@@ -101,7 +101,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
     if (!focusToPreviousCell || widget.stateManager.currentCell == null) {
       widget.stateManager.setCurrentCell(
-        widget.stateManager.refRows.first.cells[widget.column.field],
+        widget.stateManager.rowsToDisplay.first.cells[widget.column.field],
         0,
         notify: false,
       );
@@ -126,7 +126,7 @@ abstract class _PlutoColumnFilterStateWithChange
 
     final handleMoveDown =
         (keyManager.isDown || keyManager.isEnter || keyManager.isEsc) &&
-            widget.stateManager.refRows.isNotEmpty;
+            widget.stateManager.rowsToDisplay.isNotEmpty;
 
     final handleMoveHorizontal = keyManager.isTab ||
         (_controller!.text.isEmpty && keyManager.isHorizontal);

@@ -113,7 +113,7 @@ mixin DraggingRowState implements IPlutoGridState {
     return rowIdx != null &&
         _dragTargetRowIdx != null &&
         _dragTargetRowIdx == rowIdx &&
-        rowIdx + _dragRows.length <= refRows.length;
+        rowIdx + _dragRows.length <= rowsToDisplay.length;
   }
 
   @override

@@ -18,6 +18,45 @@ class PlutoRow {
         _state = PlutoRowState.none,
         _key = key ?? UniqueKey();
 
+  factory PlutoRow.stubGroup({
+    required List<PlutoRow> children,
+    required Map<String, PlutoCell> cells,
+    bool expanded = false,
+  }) {
+    final row = PlutoRow(
+      cells: cells,
+    )
+      .._stub = true
+      .._expanded = expanded
+      .._children = children;
+
+    for (var e in row._children) {
+      e._parent = row;
+    }
+
+    return row;
+  }
+
+  bool get stub => _stub;
+
+  bool _stub = false;
+
+  bool get expanded => _expanded;
+
+  setExpanded(bool flag) {
+    _expanded = flag;
+  }
+
+  bool _expanded = false;
+
+  PlutoRow? get parent => _parent;
+
+  PlutoRow? _parent;
+
+  List<PlutoRow> get children => _children;
+
+  List<PlutoRow> _children = [];
+
   /// The state value that the checkbox is checked.
   /// If the enableRowChecked value of the [PlutoColumn] property is set to true,
   /// a check box appears in the cell of the corresponding column.

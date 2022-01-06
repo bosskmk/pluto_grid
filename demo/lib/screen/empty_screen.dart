@@ -27,12 +27,14 @@ class _EmptyScreenState extends State<EmptyScreen> {
       PlutoColumn(
         title: 'column1',
         field: 'column1',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(<String>['one', 'two', 'three']),
+        enableRowGroup: true,
       ),
       PlutoColumn(
         title: 'column2',
         field: 'column2',
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.select(<String>['a', 'b', 'c']),
+        enableRowGroup: true,
       ),
       PlutoColumn(
         title: 'column3',
@@ -57,6 +59,7 @@ class _EmptyScreenState extends State<EmptyScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
+            print(stateManager.refGroupedRows);
           },
           configuration: const PlutoGridConfiguration(),
         ),

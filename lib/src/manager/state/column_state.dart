@@ -422,7 +422,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void autoFitColumn(BuildContext context, PlutoColumn column) {
-    final String maxValue = refRows.fold('', (previousValue, element) {
+    final String maxValue = rowsToDisplay.fold('', (previousValue, element) {
       final value = column.formattedValueForDisplay(
         element.cells.entries
             .firstWhere((element) => element.key == column.field)
@@ -505,6 +505,8 @@ mixin ColumnState implements IPlutoGridState {
       ),
     );
 
+    setGroupedRows();
+
     if (notify) {
       notifyListeners();
     }
@@ -522,6 +524,8 @@ mixin ColumnState implements IPlutoGridState {
         b.cells[column.field]!.valueForSorting,
       ),
     );
+
+    setGroupedRows();
 
     if (notify) {
       notifyListeners();
@@ -543,6 +547,8 @@ mixin ColumnState implements IPlutoGridState {
 
       return a.sortIdx!.compareTo(b.sortIdx!);
     });
+
+    setGroupedRows();
 
     if (notify) {
       notifyListeners();
@@ -641,7 +647,7 @@ mixin ColumnState implements IPlutoGridState {
   void Function() _handleSetColumnsListener(
       PlutoGridStateManager stateManager, String columnField) {
     return () {
-      for (var row in stateManager.refRows) {
+      for (var row in stateManager.rowsToDisplay) {
         var found = refColumns.originalList.firstWhereOrNull(
           (column) => column.field == row.cells[columnField]!.value.toString(),
         );
@@ -656,7 +662,7 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void _fillCellsInRows(List<PlutoColumn> columns) {
-    for (var row in refRows.originalList) {
+    for (var row in rowsToDisplay.originalList) {
       final List<MapEntry<String, PlutoCell>> cells = [];
 
       for (var column in columns) {
@@ -672,7 +678,7 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void _removeCellsInRows(List<PlutoColumn> columns) {
-    for (var row in refRows.originalList) {
+    for (var row in rowsToDisplay.originalList) {
       for (var column in columns) {
         row.cells.remove(column.field);
       }
