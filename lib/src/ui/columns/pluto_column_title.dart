@@ -35,9 +35,9 @@ abstract class _PlutoColumnTitleStateWithChange
 }
 
 class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
-  late double _columnLeftPosition;
+  late Offset _columnLeftPosition;
 
-  late double _columnRightPosition;
+  late Offset _columnRightPosition;
 
   bool _isPointMoving = false;
 
@@ -88,19 +88,19 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
   void _handleOnPointDown(PointerDownEvent event) {
     _isPointMoving = false;
 
-    _columnRightPosition = event.position.dx;
-    _columnLeftPosition = _columnRightPosition - widget.column.width;
+    _columnRightPosition = event.position;
+    _columnLeftPosition = _columnRightPosition - Offset(widget.column.width, 0);
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = (_columnRightPosition - event.position.dx).abs() > 0;
+    _isPointMoving = _columnRightPosition - event.position != Offset.zero;
 
     if (_isPointMoving &&
-        _columnLeftPosition + widget.column.minWidth > event.position.dx) {
+        _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
       return;
     }
 
-    final moveOffset = event.position.dx - _columnRightPosition;
+    final moveOffset = event.position.dx - _columnRightPosition.dx;
 
     widget.stateManager.resizeColumn(
       widget.column,
@@ -115,7 +115,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
           : widget.stateManager.scroll!.horizontal!.offset,
     );
 
-    _columnRightPosition = event.position.dx;
+    _columnRightPosition = event.position;
   }
 
   void _handleOnPointUp(PointerUpEvent event) {

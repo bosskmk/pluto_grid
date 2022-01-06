@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v2.8.0
+## PlutoGrid for flutter - v2.9.0
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
