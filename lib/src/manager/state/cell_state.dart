@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ICellState {
@@ -283,15 +282,14 @@ mixin CellState implements IPlutoGridState {
     dynamic oldValue,
   }) {
     if (column!.type.isSelect &&
-        column.type.select!.items!.contains(newValue) != true) {
+        column.type.select!.items.contains(newValue) != true) {
       newValue = oldValue;
     } else if (column.type.isDate) {
       try {
-        final parseNewValue = intl.DateFormat(column.type.date!.format)
-            .parseStrict(newValue.toString());
+        final parseNewValue =
+            column.type.date!.dateFormat.parseStrict(newValue.toString());
 
-        newValue =
-            intl.DateFormat(column.type.date!.format).format(parseNewValue);
+        newValue = column.type.date!.dateFormat.format(parseNewValue);
       } catch (e) {
         newValue = oldValue;
       }

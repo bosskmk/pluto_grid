@@ -57,7 +57,7 @@ class RowHelper {
 
   static PlutoCell cellOfSelectColumn(PlutoColumn column, int rowIdx) {
     return PlutoCell(
-        value: (column.type.select!.items!.toList()..shuffle()).first);
+        value: (column.type.select!.items.toList()..shuffle()).first);
   }
 
   static double resolveRowTotalHeight(double rowHeight) {
