@@ -731,12 +731,12 @@ void main() {
         var columnType = filterColumn.type as PlutoColumnTypeSelect;
 
         // 전체 검색 필드가 추가 되어 +1 (FilterHelper.filterFieldAllColumns)
-        expect(columnType.items!.length, columns.length + 1);
+        expect(columnType.items.length, columns.length + 1);
 
-        expect(columnType.items![0], FilterHelper.filterFieldAllColumns);
-        expect(columnType.items![1], columns[0].field);
-        expect(columnType.items![2], columns[1].field);
-        expect(columnType.items![3], columns[2].field);
+        expect(columnType.items[0], FilterHelper.filterFieldAllColumns);
+        expect(columnType.items[1], columns[0].field);
+        expect(columnType.items[2], columns[1].field);
+        expect(columnType.items[3], columns[2].field);
 
         // formatter (column 의 field 가 값으로써 formatter 에서 title 로 반환한다.)
         expect(
@@ -760,18 +760,18 @@ void main() {
         var columnType = filterColumn.type as PlutoColumnTypeSelect;
 
         // configuration 의 필터 수 만큼 생성 되어야 한다. (기본 8개)
-        expect(configuration.columnFilterConfig.filters!.length, 8);
-        expect(columnType.items!.length,
-            configuration.columnFilterConfig.filters!.length);
+        expect(configuration.columnFilterConfig.filters.length, 8);
+        expect(columnType.items.length,
+            configuration.columnFilterConfig.filters.length);
 
         // formatter (filter 가 값으로 써 formatter 에서 title 을 반환한다.)
         for (var i = 0;
-            i < configuration.columnFilterConfig.filters!.length;
+            i < configuration.columnFilterConfig.filters.length;
             i += 1) {
           expect(
             filterColumn
-                .formatter!(configuration.columnFilterConfig.filters![i]),
-            configuration.columnFilterConfig.filters![i].title,
+                .formatter!(configuration.columnFilterConfig.filters[i]),
+            configuration.columnFilterConfig.filters[i].title,
           );
         }
       });

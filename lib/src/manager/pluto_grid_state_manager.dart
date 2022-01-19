@@ -319,15 +319,13 @@ class _ApplyCellForFormat implements _Apply {
   @override
   void execute(PlutoRow row) {
     for (var column in columnsToApply) {
-      row.cells[column.field]!.value =
-          column.type.applyFormat(row.cells[column.field]!.value);
+      var value = column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {
-        row.cells[column.field]!.value = num.tryParse(
-              row.cells[column.field]!.value.toString().replaceAll(',', ''),
-            ) ??
-            0;
+        value = column.type.number!.numberFormat.parse(value);
       }
+
+      row.cells[column.field]!.value = value;
     }
   }
 }

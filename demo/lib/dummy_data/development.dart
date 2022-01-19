@@ -62,7 +62,7 @@ class DummyData {
           if (element.type.isNumber) {
             return faker.randomGenerator.decimal(scale: 1000000000);
           } else if (element.type.isSelect) {
-            return (element.type.select!.items!.toList()..shuffle()).first;
+            return (element.type.select!.items.toList()..shuffle()).first;
           } else if (element.type.isDate) {
             return DateTime.now()
                 .add(Duration(

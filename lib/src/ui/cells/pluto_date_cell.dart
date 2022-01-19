@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
 import 'popup_cell.dart';
@@ -77,7 +76,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
     popupColumns = _buildColumns();
 
     final defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
-            widget.cell.value.toString(), widget.column.type.date!.format!) ??
+            widget.cell.value.toString(), widget.column.type.date!.format) ??
         DateTime.now();
 
     final startDate = widget.column.type.date!.startDate ??
@@ -174,8 +173,9 @@ class _PlutoDateCellState extends State<PlutoDateCell>
             return '';
           }
 
-          var dateTime = intl.DateFormat(widget.column.type.date!.format)
-              .parse(value.toString());
+          var dateTime = widget.column.type.date!.dateFormat.parse(
+            value.toString(),
+          );
 
           return dateTime.day.toString();
         },
@@ -202,7 +202,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
           final DateTime day = days.removeAt(0);
 
           return PlutoCell(
-            value: intl.DateFormat(widget.column.type.date!.format).format(day),
+            value: widget.column.type.date!.dateFormat.format(day),
           );
         },
       );
@@ -226,7 +226,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
         popupStateManager!.refRows.first.cells.entries.first.value.value
             .toString(),
-        widget.column.type.date!.format!,
+        widget.column.type.date!.format,
       );
 
       if (defaultDate == null) {
@@ -244,7 +244,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       defaultDate = PlutoDateTimeHelper.parseOrNullWithFormat(
           popupStateManager!.refRows.last.cells.entries.last.value.value
               .toString(),
-          widget.column.type.date!.format!);
+          widget.column.type.date!.format);
 
       if (defaultDate == null) {
         return [];
