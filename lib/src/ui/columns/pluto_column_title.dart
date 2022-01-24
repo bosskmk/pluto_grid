@@ -16,7 +16,7 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
     required this.column,
     double? height,
   })  : height = height ?? stateManager.columnHeight,
-        super(key: column.key);
+        super(key: ValueKey('column_title_${column.key}'));
 
   @override
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
@@ -24,20 +24,22 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
 
 abstract class _PlutoColumnTitleStateWithChange
     extends PlutoStateWithChange<PlutoColumnTitle> {
-  PlutoColumnSort? sort;
+  PlutoColumnSort? _sort;
 
   @override
   void onChange() {
     resetState((update) {
-      sort = update<PlutoColumnSort?>(sort, widget.column.sort);
+      _sort = update<PlutoColumnSort?>(_sort, widget.column.sort);
     });
   }
 }
 
 class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
-  late double _columnLeftPosition;
+  late Offset _columnLeftPosition;
 
-  late double _columnRightPosition;
+  late Offset _columnRightPosition;
+
+  bool _isPointMoving = false;
 
   void _showContextMenu(BuildContext context, Offset position) async {
     final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
@@ -83,22 +85,22 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     }
   }
 
-  void _handleOnTapUpContextMenu(TapUpDetails details) {
-    _showContextMenu(context, details.globalPosition);
+  void _handleOnPointDown(PointerDownEvent event) {
+    _isPointMoving = false;
+
+    _columnRightPosition = event.position;
+    _columnLeftPosition = _columnRightPosition - Offset(widget.column.width, 0);
   }
 
-  void _handleOnHorizontalDragStartContextMenu(DragStartDetails details) {
-    _columnRightPosition = details.globalPosition.dx;
-    _columnLeftPosition = _columnRightPosition - widget.column.width;
-  }
+  void _handleOnPointMove(PointerMoveEvent event) {
+    _isPointMoving = _columnRightPosition - event.position != Offset.zero;
 
-  void _handleOnHorizontalDragUpdateContextMenu(DragUpdateDetails details) {
-    if (_columnLeftPosition + widget.column.minWidth >
-        details.globalPosition.dx) {
+    if (_isPointMoving &&
+        _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
       return;
     }
 
-    final moveOffset = details.globalPosition.dx - _columnRightPosition;
+    final moveOffset = event.position.dx - _columnRightPosition.dx;
 
     widget.stateManager.resizeColumn(
       widget.column,
@@ -106,25 +108,31 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       checkScroll: false,
     );
 
-    if (widget.stateManager.isInvalidHorizontalScroll) {
-      widget.stateManager.scrollByDirection(
-        PlutoMoveDirection.right,
-        widget.stateManager.scroll!.maxScrollHorizontal + moveOffset,
-      );
-    }
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.right,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
 
-    _columnRightPosition = details.globalPosition.dx;
+    _columnRightPosition = event.position;
   }
 
-  void _handleOnHorizontalDragEndContextMenu(DragEndDetails details) {
-    widget.stateManager.updateCorrectScroll();
+  void _handleOnPointUp(PointerUpEvent event) {
+    if (_isPointMoving) {
+      widget.stateManager.updateCorrectScroll();
+    } else if (mounted && widget.column.enableContextMenu) {
+      _showContextMenu(context, event.position);
+    }
+
+    _isPointMoving = false;
   }
 
   @override
   Widget build(BuildContext context) {
     final _showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !sort!.isNone;
+        !_sort!.isNone;
 
     final _enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
@@ -144,10 +152,11 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       alignment: Alignment.center,
       child: IconButton(
         icon: PlutoGridColumnIcon(
-          sort: sort,
+          sort: _sort,
           color: widget.stateManager.configuration!.iconColor,
           icon:
               widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
+          descendingIcon: widget.stateManager.configuration!.descendingIcon,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
         mouseCursor: _enableGesture
@@ -172,15 +181,10 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
           Positioned(
             right: -3,
             child: _enableGesture
-                ? GestureDetector(
-                    onTapUp: widget.column.enableContextMenu
-                        ? _handleOnTapUpContextMenu
-                        : null,
-                    onHorizontalDragStart:
-                        _handleOnHorizontalDragStartContextMenu,
-                    onHorizontalDragUpdate:
-                        _handleOnHorizontalDragUpdateContextMenu,
-                    onHorizontalDragEnd: _handleOnHorizontalDragEndContextMenu,
+                ? Listener(
+                    onPointerDown: _handleOnPointDown,
+                    onPointerMove: _handleOnPointMove,
+                    onPointerUp: _handleOnPointUp,
                     child: _contextMenuIcon,
                   )
                 : _contextMenuIcon,
@@ -197,11 +201,14 @@ class PlutoGridColumnIcon extends StatelessWidget {
 
   final IconData icon;
 
+  final Icon descendingIcon;
+
   const PlutoGridColumnIcon({
     this.sort,
     this.color = Colors.black26,
     this.icon = Icons.dehaze,
     Key? key,
+    this.descendingIcon = const Icon(Icons.sort),
   }) : super(key: key);
 
   @override
@@ -210,16 +217,10 @@ class PlutoGridColumnIcon extends StatelessWidget {
       case PlutoColumnSort.ascending:
         return Transform.rotate(
           angle: 90 * pi / 90,
-          child: const Icon(
-            Icons.sort,
-            color: Colors.green,
-          ),
+          child: descendingIcon,
         );
       case PlutoColumnSort.descending:
-        return const Icon(
-          Icons.sort,
-          color: Colors.red,
-        );
+        return descendingIcon;
       default:
         return Icon(
           icon,
@@ -391,18 +392,18 @@ class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
 
 abstract class __CheckboxAllSelectionWidgetStateWithChange
     extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
-  bool? checked;
+  bool? _checked;
 
-  bool get hasCheckedRow => widget.stateManager.hasCheckedRow;
+  bool get _hasCheckedRow => widget.stateManager.hasCheckedRow;
 
-  bool get hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
+  bool get _hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
 
   @override
   void onChange() {
     resetState((update) {
-      checked = update<bool?>(
-        checked,
-        hasCheckedRow && hasUnCheckedRow ? null : hasCheckedRow,
+      _checked = update<bool?>(
+        _checked,
+        _hasCheckedRow && _hasUnCheckedRow ? null : _hasCheckedRow,
       );
     });
   }
@@ -411,13 +412,13 @@ abstract class __CheckboxAllSelectionWidgetStateWithChange
 class __CheckboxAllSelectionWidgetState
     extends __CheckboxAllSelectionWidgetStateWithChange {
   void _handleOnChanged(bool? changed) {
-    if (changed == checked) {
+    if (changed == _checked) {
       return;
     }
 
     changed ??= false;
 
-    if (checked == null) {
+    if (_checked == null) {
       changed = true;
     }
 
@@ -430,14 +431,14 @@ class __CheckboxAllSelectionWidgetState
     }
 
     setState(() {
-      checked = changed;
+      _checked = changed;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PlutoScaledCheckbox(
-      value: checked,
+      value: _checked,
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,
@@ -469,19 +470,19 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
 
 abstract class __ColumnTextWidgetStateWithChange
     extends PlutoStateWithChange<_ColumnTextWidget> {
-  bool? isFilteredList;
+  bool? _isFilteredList;
 
   @override
   void onChange() {
     resetState((update) {
-      isFilteredList = update<bool?>(
-        isFilteredList,
+      _isFilteredList = update<bool?>(
+        _isFilteredList,
         widget.stateManager.isFilteredColumn(widget.column),
       );
     });
   }
 
-  void handleOnPressedFilter() {
+  void _handleOnPressedFilter() {
     widget.stateManager.showFilterPopup(
       context,
       calledColumn: widget.column,
@@ -495,7 +496,7 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
 
   List<InlineSpan>? get _children => [
         if (widget.column.titleSpan != null) widget.column.titleSpan!,
-        if (isFilteredList!)
+        if (_isFilteredList!)
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
@@ -504,7 +505,7 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
                 color: widget.stateManager.configuration!.iconColor,
                 size: widget.stateManager.configuration!.iconSize,
               ),
-              onPressed: handleOnPressedFilter,
+              onPressed: _handleOnPressedFilter,
               constraints: BoxConstraints(
                 maxHeight:
                     widget.height + (PlutoGridSettings.rowBorderWidth * 2),

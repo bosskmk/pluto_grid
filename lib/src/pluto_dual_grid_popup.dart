@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoDualGridPopup {
-  final BuildContext? context;
-  final PlutoDualGridProps? gridPropsA;
-  final PlutoDualGridProps? gridPropsB;
+  final BuildContext context;
+  final PlutoDualGridProps gridPropsA;
+  final PlutoDualGridProps gridPropsB;
   final PlutoGridMode? mode;
   final PlutoDualOnSelectedEventCallback? onSelected;
   final PlutoDualGridDisplay display;
@@ -12,9 +12,9 @@ class PlutoDualGridPopup {
   final double? height;
 
   PlutoDualGridPopup({
-    this.context,
-    this.gridPropsA,
-    this.gridPropsB,
+    required this.context,
+    required this.gridPropsA,
+    required this.gridPropsB,
     this.mode,
     this.onSelected,
     this.display = const PlutoDualGridDisplayRatio(),
@@ -41,7 +41,7 @@ class PlutoDualGridPopup {
 
     PlutoDualOnSelectedEvent? selected =
         await showDialog<PlutoDualOnSelectedEvent>(
-            context: context!,
+            context: context,
             builder: (BuildContext ctx) {
               return Dialog(
                 shape: shape,
@@ -71,9 +71,9 @@ class PlutoDualGridPopup {
   }
 
   List<BorderRadius>? _splitBorderRadius() {
-    final left = gridPropsA?.configuration?.gridBorderRadius;
+    final left = gridPropsA.configuration?.gridBorderRadius;
 
-    final right = gridPropsB?.configuration?.gridBorderRadius;
+    final right = gridPropsB.configuration?.gridBorderRadius;
 
     if (left == null && right == null) {
       return null;
@@ -106,11 +106,11 @@ class PlutoDualGridPopup {
     );
   }
 
-  PlutoDualGridProps? _applyBorderRadiusToGridProps(
+  PlutoDualGridProps _applyBorderRadiusToGridProps(
     BorderRadius? borderRadius,
-    PlutoDualGridProps? gridProps,
+    PlutoDualGridProps gridProps,
   ) {
-    if (borderRadius == null || gridProps == null) {
+    if (borderRadius == null) {
       return gridProps;
     }
 

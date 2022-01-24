@@ -14,15 +14,15 @@ class DateTypeColumnScreen extends StatefulWidget {
 }
 
 class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'yyyy-MM-dd',
         field: 'yyyy_mm_dd',
@@ -62,9 +62,9 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
         field: 'custom',
         type: PlutoColumnType.date(format: 'yyyy年 MM月 dd日'),
       ),
-    ];
+    ]);
 
-    rows = [
+    rows.addAll([
       PlutoRow(
         cells: {
           'yyyy_mm_dd': PlutoCell(value: '2020-06-30'),
@@ -95,7 +95,7 @@ class _DateTypeColumnScreenState extends State<DateTypeColumnScreen> {
           'custom': PlutoCell(value: '2020-01-01'),
         },
       ),
-    ];
+    ]);
   }
 
   @override

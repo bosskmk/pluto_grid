@@ -71,5 +71,9 @@ class PlutoColumnGroupPair {
   PlutoColumnGroupPair({
     required this.group,
     required this.columns,
-  });
+  }) : _key = ObjectKey({group.key: columns});
+
+  Key get key => _key;
+
+  final Key _key;
 }

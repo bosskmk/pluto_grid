@@ -125,7 +125,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           rows: rows,
           columnGroups: columnGroups,
           onLoaded: (PlutoGridOnLoadedEvent event) {
-            stateManager = event.stateManager!;
+            stateManager = event.stateManager;
           },
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);

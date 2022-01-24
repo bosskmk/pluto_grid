@@ -147,8 +147,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
       fontSize:
           isCurrentIndex ? widget.stateManager.configuration!.iconSize : null,
       color: isCurrentIndex
-          ? widget.stateManager.configuration!.activatedBorderColor
-          : widget.stateManager.configuration!.iconColor,
+          ? widget.stateManager.configuration!.paginationActiveColor
+          : widget.stateManager.configuration!.paginationInactiveColor,
     );
   }
 

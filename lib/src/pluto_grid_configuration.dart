@@ -102,6 +102,13 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  /// Customise sort icon
+  final Icon descendingIcon;
+
+  /// Customise pagination page numbers
+  final Color paginationActiveColor;
+  final Color paginationInactiveColor;
+
   const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
@@ -142,6 +149,9 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.descendingIcon = const Icon(Icons.sort),
+    this.paginationActiveColor = Colors.black,
+    this.paginationInactiveColor = Colors.grey,
   });
 
   const PlutoGridConfiguration.dark({
@@ -184,6 +194,9 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.descendingIcon = const Icon(Icons.sort),
+    this.paginationActiveColor = Colors.black,
+    this.paginationInactiveColor = Colors.grey,
   });
 
   void updateLocale() {
@@ -248,6 +261,9 @@ class PlutoGridConfiguration {
     PlutoGridLocaleText? localeText,
     PlutoGridScrollbarConfig? scrollbarConfig,
     PlutoGridColumnFilterConfig? columnFilterConfig,
+    Icon? descendingIcon,
+    Color? paginationActiveColor,
+    Color? paginationInactiveColor,
   }) {
     return PlutoGridConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -289,6 +305,11 @@ class PlutoGridConfiguration {
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
       columnFilterConfig: columnFilterConfig ?? this.columnFilterConfig,
+      descendingIcon: descendingIcon ?? this.descendingIcon,
+      paginationActiveColor:
+          paginationActiveColor ?? this.paginationActiveColor,
+      paginationInactiveColor:
+          paginationInactiveColor ?? this.paginationInactiveColor,
     );
   }
 }
@@ -747,26 +768,26 @@ class PlutoGridColumnFilterConfig {
 
   bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
 
-  List<PlutoFilterType>? get filters =>
-      hasUserFilter ? _userFilters : FilterHelper.defaultFilters;
+  List<PlutoFilterType> get filters =>
+      hasUserFilter ? _userFilters! : FilterHelper.defaultFilters;
 
   int get debounceMilliseconds => _debounceMilliseconds;
 
   PlutoFilterType resolver<T>() {
-    return filters!.firstWhereOrNull(
+    return filters.firstWhereOrNull(
           (element) => element.runtimeType == T,
         ) ??
-        filters!.first;
+        filters.first;
   }
 
   PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
     if (_userResolveDefaultColumnFilter == null) {
-      return filters!.first;
+      return filters.first;
     }
 
     var resolvedFilter = _userResolveDefaultColumnFilter!(column, resolver);
 
-    assert(filters!.contains(resolvedFilter));
+    assert(filters.contains(resolvedFilter));
 
     return resolvedFilter;
   }

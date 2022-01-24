@@ -17,6 +17,11 @@ abstract class IColumnGroupState {
   });
 
   int columnGroupDepth(List<PlutoColumnGroup> groups);
+
+  void removeColumnsInColumnGroup(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  });
 }
 
 mixin ColumnGroupState implements IPlutoGridState {
@@ -75,5 +80,47 @@ mixin ColumnGroupState implements IPlutoGridState {
     return PlutoColumnGroupHelper.maxDepth(
       columnGroupList: columnGroupList,
     );
+  }
+
+  @override
+  void removeColumnsInColumnGroup(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  }) {
+    if (refColumnGroups?.originalList.isEmpty == true) {
+      return;
+    }
+
+    final columnFields = columns.map((e) => e.field).toList(growable: false);
+
+    refColumnGroups!.removeWhereFromOriginal((group) {
+      return _emptyGroupAfterRemoveColumns(
+        columnGroup: group,
+        columnFields: columnFields,
+      );
+    });
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  bool _emptyGroupAfterRemoveColumns({
+    required PlutoColumnGroup columnGroup,
+    required List<String> columnFields,
+  }) {
+    if (columnGroup.hasFields) {
+      columnGroup.fields!.removeWhere((field) => columnFields.contains(field));
+    } else if (columnGroup.hasChildren) {
+      columnGroup.children!.removeWhere((child) {
+        return _emptyGroupAfterRemoveColumns(
+          columnGroup: child,
+          columnFields: columnFields,
+        );
+      });
+    }
+
+    return (columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
+        (columnGroup.hasChildren && columnGroup.children!.isEmpty);
   }
 }

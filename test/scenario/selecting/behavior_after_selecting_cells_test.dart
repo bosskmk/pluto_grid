@@ -35,11 +35,11 @@ void main() {
                   columns: columns,
                   rows: rows,
                   onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager!;
+                    stateManager = event.stateManager;
                     stateManager.setSelectingMode(selectingMode);
 
                     stateManager.setCurrentCell(
-                      stateManager.rows[rowIdx]!.cells['header$columnIdx'],
+                      stateManager.rows[rowIdx].cells['header$columnIdx'],
                       rowIdx,
                     );
 

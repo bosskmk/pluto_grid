@@ -65,7 +65,7 @@ void main() {
 
         // when
         final keys =
-            stateManager.checkedRows.toList().map((e) => e!.key).toList();
+            stateManager.checkedRows.toList().map((e) => e.key).toList();
 
         // then
         expect(keys.length, 3);
@@ -119,7 +119,7 @@ void main() {
 
         // when
         final keys =
-            stateManager.unCheckedRows.toList().map((e) => e!.key).toList();
+            stateManager.unCheckedRows.toList().map((e) => e.key).toList();
 
         // then
         expect(keys.length, 10);
@@ -680,7 +680,7 @@ void main() {
         // then
         expect(
           stateManager.rows
-              .firstWhere((element) => element!.key == row.key)!
+              .firstWhere((element) => element.key == row.key)
               .checked,
           isTrue,
         );
@@ -791,7 +791,7 @@ void main() {
         expect(stateManager.rows.length, 8);
 
         for (var i = 0; i < stateManager.rows.length; i += 1) {
-          expect(stateManager.rows[i]!.sortIdx, i);
+          expect(stateManager.rows[i].sortIdx, i);
         }
       },
     );
@@ -827,9 +827,9 @@ void main() {
 
         stateManager.toggleSortColumn(columns.first);
         expect(stateManager.hasSortedColumn, isTrue);
-        expect(stateManager.rows[0]!.sortIdx, 1);
-        expect(stateManager.rows[1]!.sortIdx, 2);
-        expect(stateManager.rows[2]!.sortIdx, 0);
+        expect(stateManager.rows[0].sortIdx, 1);
+        expect(stateManager.rows[1].sortIdx, 2);
+        expect(stateManager.rows[2].sortIdx, 0);
 
         // when
         final rowsToAdd = [
@@ -847,23 +847,23 @@ void main() {
         stateManager.insertRows(1, rowsToAdd);
 
         expect(stateManager.rows.length, 6);
-        expect(stateManager.rows[0]!.sortIdx, 1);
-        expect(stateManager.rows[0]!.cells['text0']!.value, '1');
+        expect(stateManager.rows[0].sortIdx, 1);
+        expect(stateManager.rows[0].cells['text0']!.value, '1');
 
-        expect(stateManager.rows[1]!.sortIdx, 2);
-        expect(stateManager.rows[1]!.cells['text0']!.value, 'a');
+        expect(stateManager.rows[1].sortIdx, 2);
+        expect(stateManager.rows[1].cells['text0']!.value, 'a');
 
-        expect(stateManager.rows[2]!.sortIdx, 3);
-        expect(stateManager.rows[2]!.cells['text0']!.value, 'b');
+        expect(stateManager.rows[2].sortIdx, 3);
+        expect(stateManager.rows[2].cells['text0']!.value, 'b');
 
-        expect(stateManager.rows[3]!.sortIdx, 4);
-        expect(stateManager.rows[3]!.cells['text0']!.value, 'c');
+        expect(stateManager.rows[3].sortIdx, 4);
+        expect(stateManager.rows[3].cells['text0']!.value, 'c');
 
-        expect(stateManager.rows[4]!.sortIdx, 5);
-        expect(stateManager.rows[4]!.cells['text0']!.value, '2');
+        expect(stateManager.rows[4].sortIdx, 5);
+        expect(stateManager.rows[4].cells['text0']!.value, '2');
 
-        expect(stateManager.rows[5]!.sortIdx, 0);
-        expect(stateManager.rows[5]!.cells['text0']!.value, '3');
+        expect(stateManager.rows[5].sortIdx, 0);
+        expect(stateManager.rows[5].cells['text0']!.value, '3');
       },
     );
   });
@@ -892,7 +892,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 6);
         // 원래 있던 첫번 째 Row 의 셀이 두번 째로 이동
-        expect(stateManager.rows[1]!.cells['text0']!.value, 'text0 value 0');
+        expect(stateManager.rows[1].cells['text0']!.value, 'text0 value 0');
       },
     );
 
@@ -919,7 +919,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 10);
         // 원래 있던 첫번 째 Row 의 셀이 6번 째로 이동
-        expect(stateManager.rows[5]!.cells['text0']!.value, 'text0 value 0');
+        expect(stateManager.rows[5].cells['text0']!.value, 'text0 value 0');
       },
     );
   });
@@ -947,7 +947,7 @@ void main() {
       stateManager.prependRows([newRow]);
 
       // then
-      expect(stateManager.rows[0]!.key, newRow.key);
+      expect(stateManager.rows[0].key, newRow.key);
       expect(stateManager.rows.length, 6);
     });
 
@@ -1090,7 +1090,7 @@ void main() {
         expect(stateManager.rows.length, 6);
         // 마지막 Row 에 추가 됨
         expect(
-          stateManager.rows[5]!.cells['text0']!.value,
+          stateManager.rows[5].cells['text0']!.value,
           columns[0].type.defaultValue,
         );
       },
@@ -1120,11 +1120,11 @@ void main() {
         expect(stateManager.rows.length, 10);
         // 추가 된 5~9 번 셀의 기본 값
         expect(
-          stateManager.rows[5]!.cells['text0']!.value,
+          stateManager.rows[5].cells['text0']!.value,
           columns[0].type.defaultValue,
         );
         expect(
-          stateManager.rows[9]!.cells['text0']!.value,
+          stateManager.rows[9].cells['text0']!.value,
           columns[0].type.defaultValue,
         );
       },
@@ -1154,8 +1154,8 @@ void main() {
       stateManager.appendRows(newRows);
 
       // then
-      expect(stateManager.rows[5]!.key, newRows[0].key);
-      expect(stateManager.rows[6]!.key, newRows[1].key);
+      expect(stateManager.rows[5].key, newRows[0].key);
+      expect(stateManager.rows[6].key, newRows[1].key);
       expect(stateManager.rows.length, 7);
     });
 
@@ -1343,10 +1343,10 @@ void main() {
 
       // then
       expect(stateManager.rows.length, 4);
-      expect(stateManager.rows[0]!.key, isNot(currentRowKey));
-      expect(stateManager.rows[1]!.key, isNot(currentRowKey));
-      expect(stateManager.rows[2]!.key, isNot(currentRowKey));
-      expect(stateManager.rows[3]!.key, isNot(currentRowKey));
+      expect(stateManager.rows[0].key, isNot(currentRowKey));
+      expect(stateManager.rows[1].key, isNot(currentRowKey));
+      expect(stateManager.rows[2].key, isNot(currentRowKey));
+      expect(stateManager.rows[3].key, isNot(currentRowKey));
     });
   });
 
@@ -1368,7 +1368,7 @@ void main() {
       );
 
       // when
-      stateManager.removeRows(null);
+      stateManager.removeRows([]);
 
       // then
       expect(stateManager.rows.length, 5);
@@ -1400,9 +1400,9 @@ void main() {
           deleteRows.map((e) => e.key).toList(growable: false);
 
       expect(stateManager.rows.length, 3);
-      expect(deleteRowKeys.contains(stateManager.rows[0]!.key), false);
-      expect(deleteRowKeys.contains(stateManager.rows[1]!.key), false);
-      expect(deleteRowKeys.contains(stateManager.rows[2]!.key), false);
+      expect(deleteRowKeys.contains(stateManager.rows[0].key), false);
+      expect(deleteRowKeys.contains(stateManager.rows[1].key), false);
+      expect(deleteRowKeys.contains(stateManager.rows[2].key), false);
     });
 
     testWidgets('Should be removed all rows', (WidgetTester tester) async {
@@ -1474,7 +1474,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[1]!.key, rowKey);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1522,7 +1522,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[1]!.key, rowKey);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1570,7 +1570,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[4]!.key, rowKey);
+        expect(stateManager.rows[4].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1709,7 +1709,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[0]!.key, rowKey);
+        expect(stateManager.rows[0].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1747,7 +1747,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[1]!.key, rowKey);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1783,7 +1783,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        expect(stateManager.rows[1]!.key, rowKey);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1819,7 +1819,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 2);
-        expect(stateManager.rows[1]!.key, rowKey);
+        expect(stateManager.rows[1].key, rowKey);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1851,7 +1851,7 @@ void main() {
 
         // then
         expect(
-            stateManager.rows.where((element) => element!.checked!).length, 10);
+            stateManager.rows.where((element) => element.checked!).length, 10);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1880,8 +1880,8 @@ void main() {
         stateManager.toggleAllRowChecked(false);
 
         // then
-        expect(stateManager.rows.where((element) => !element!.checked!).length,
-            10);
+        expect(
+            stateManager.rows.where((element) => !element.checked!).length, 10);
         verify(listener.onChangeVoidNoParamListener()).called(1);
       },
     );
@@ -1911,7 +1911,7 @@ void main() {
 
         // then
         expect(
-            stateManager.rows.where((element) => element!.checked!).length, 10);
+            stateManager.rows.where((element) => element.checked!).length, 10);
         verifyNever(listener.onChangeVoidNoParamListener());
       },
     );

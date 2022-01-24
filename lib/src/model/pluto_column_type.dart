@@ -21,23 +21,28 @@ abstract class PlutoColumnType {
   /// [negative] Allow negative numbers
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
+  ///
+  /// [allowFirstDot] When accepting negative numbers, a dot is allowed at the beginning.
+  /// This option is required on devices where the .- symbol works with one button.
   factory PlutoColumnType.number({
     dynamic defaultValue = 0,
     bool negative = true,
     String format = '#,###',
     bool applyFormatOnInit = true,
+    bool allowFirstDot = false,
   }) {
     return PlutoColumnTypeNumber(
       defaultValue: defaultValue,
       format: format,
       negative: negative,
       applyFormatOnInit: applyFormatOnInit,
+      allowFirstDot: allowFirstDot,
     );
   }
 
   /// Provides a selection list and sets it as a selection column.
   factory PlutoColumnType.select(
-    List<dynamic>? items, {
+    List<dynamic> items, {
     dynamic defaultValue = '',
     bool enableColumnFilter = false,
   }) {
@@ -180,24 +185,33 @@ class PlutoColumnTypeText implements PlutoColumnType {
 }
 
 class PlutoColumnTypeNumber
-    implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+    implements
+        PlutoColumnType,
+        _PlutoColumnTypeHasFormat,
+        _PlutoColumnTypeHasNumberFormat {
   @override
   dynamic defaultValue;
 
-  bool? negative;
+  bool negative;
 
   @override
-  String? format;
+  String format;
 
   @override
-  bool? applyFormatOnInit;
+  bool applyFormatOnInit;
+
+  bool allowFirstDot;
 
   PlutoColumnTypeNumber({
     this.defaultValue,
-    this.negative,
-    this.format,
-    this.applyFormatOnInit,
-  });
+    required this.negative,
+    required this.format,
+    required this.applyFormatOnInit,
+    required this.allowFirstDot,
+  }) : numberFormat = intl.NumberFormat(format);
+
+  @override
+  intl.NumberFormat numberFormat;
 
   @override
   bool isValid(dynamic value) {
@@ -205,7 +219,7 @@ class PlutoColumnTypeNumber
       return false;
     }
 
-    if (negative == false && int.parse(value.toString()) < 0) {
+    if (negative == false && num.parse(value.toString()) < 0) {
       return false;
     }
 
@@ -214,8 +228,8 @@ class PlutoColumnTypeNumber
 
   @override
   int compare(dynamic a, dynamic b) {
-    return compareWithNull(a, b,
-        () => double.parse(a.toString()).compareTo(double.parse(b.toString())));
+    return compareWithNull(
+        a, b, () => num.parse(a.toString()).compareTo(num.parse(b.toString())));
   }
 
   @override
@@ -225,30 +239,26 @@ class PlutoColumnTypeNumber
 
   @override
   String applyFormat(dynamic value) {
-    final f = intl.NumberFormat(format);
+    num number = num.tryParse(value.toString()) ?? 0;
 
-    double num =
-        double.tryParse(value.toString().replaceAll(f.symbols.GROUP_SEP, '')) ??
-            0;
-
-    if (negative == false && num < 0) {
-      num = 0;
+    if (negative == false && number < 0) {
+      number = 0;
     }
 
-    return f.format(num);
+    return numberFormat.format(number);
   }
 
   int decimalRange() {
-    final int dotIndex = format!.indexOf('.');
+    final int dotIndex = format.indexOf('.');
 
-    return dotIndex < 0 ? 0 : format!.substring(dotIndex).length - 1;
+    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
   }
 
   bool _isNumeric(dynamic s) {
     if (s == null) {
       return false;
     }
-    return double.tryParse(s.toString()) != null;
+    return num.tryParse(s.toString()) != null;
   }
 }
 
@@ -256,25 +266,25 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
   @override
   dynamic defaultValue;
 
-  List<dynamic>? items;
+  List<dynamic> items;
 
-  bool? enableColumnFilter;
+  bool enableColumnFilter;
 
   PlutoColumnTypeSelect({
     this.defaultValue,
-    this.items,
-    this.enableColumnFilter,
+    required this.items,
+    required this.enableColumnFilter,
   });
 
   @override
-  bool isValid(dynamic value) => items!.contains(value) == true;
+  bool isValid(dynamic value) => items.contains(value) == true;
 
   @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () {
-      final _a = items!.indexOf(a);
+      final _a = items.indexOf(a);
 
-      final _b = items!.indexOf(b);
+      final _b = items.indexOf(b);
 
       return _a.compareTo(_b);
     });
@@ -287,7 +297,10 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
 }
 
 class PlutoColumnTypeDate
-    implements PlutoColumnType, _PlutoColumnTypeHasFormat {
+    implements
+        PlutoColumnType,
+        _PlutoColumnTypeHasFormat,
+        _PlutoColumnTypeHasDateFormat {
   @override
   dynamic defaultValue;
 
@@ -296,18 +309,21 @@ class PlutoColumnTypeDate
   DateTime? endDate;
 
   @override
-  String? format;
+  String format;
 
   @override
-  bool? applyFormatOnInit;
+  bool applyFormatOnInit;
 
   PlutoColumnTypeDate({
     this.defaultValue,
     this.startDate,
     this.endDate,
-    this.format,
-    this.applyFormatOnInit,
-  });
+    required this.format,
+    required this.applyFormatOnInit,
+  }) : dateFormat = intl.DateFormat(format);
+
+  @override
+  intl.DateFormat dateFormat;
 
   @override
   bool isValid(dynamic value) {
@@ -335,8 +351,6 @@ class PlutoColumnTypeDate
 
   @override
   dynamic makeCompareValue(dynamic v) {
-    final dateFormat = intl.DateFormat(format);
-
     DateTime? dateFormatValue;
 
     try {
@@ -356,7 +370,7 @@ class PlutoColumnTypeDate
       return '';
     }
 
-    return intl.DateFormat(format).format(DateTime.parse(value.toString()));
+    return dateFormat.format(DateTime.parse(value.toString()));
   }
 }
 
@@ -386,9 +400,17 @@ class PlutoColumnTypeTime implements PlutoColumnType {
 }
 
 abstract class _PlutoColumnTypeHasFormat {
-  String? format;
+  late String format;
 
-  bool? applyFormatOnInit;
+  late bool applyFormatOnInit;
 
   dynamic applyFormat(dynamic value);
+}
+
+abstract class _PlutoColumnTypeHasNumberFormat {
+  late intl.NumberFormat numberFormat;
+}
+
+abstract class _PlutoColumnTypeHasDateFormat {
+  late intl.DateFormat dateFormat;
 }

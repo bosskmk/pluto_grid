@@ -38,7 +38,7 @@ void main() {
                   stateManager!.setSelectingMode(selectingMode);
 
                   stateManager!.setCurrentCell(
-                    stateManager!.rows[rowIdx]!.cells['header$columnIdx'],
+                    stateManager!.rows[rowIdx].cells['header$columnIdx'],
                     rowIdx,
                   );
                 },

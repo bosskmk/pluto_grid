@@ -74,7 +74,7 @@ class BuildGridHelper {
                 columns: _columns,
                 rows: _rows,
                 onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager!;
+                  stateManager = event.stateManager;
                   stateManager.setSelectingMode(PlutoGridSelectingMode.row);
                 },
               ),

@@ -2,8 +2,9 @@ import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DummyData {
-  List<PlutoColumn>? columns;
-  List<PlutoRow>? rows;
+  late List<PlutoColumn> columns;
+
+  late List<PlutoRow> rows;
 
   DummyData(int columnLength, int rowLength) {
     var faker = Faker();
@@ -61,7 +62,7 @@ class DummyData {
           if (element.type.isNumber) {
             return faker.randomGenerator.decimal(scale: 1000000000);
           } else if (element.type.isSelect) {
-            return (element.type.select!.items!.toList()..shuffle()).first;
+            return (element.type.select!.items.toList()..shuffle()).first;
           } else if (element.type.isDate) {
             return DateTime.now()
                 .add(Duration(

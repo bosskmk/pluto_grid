@@ -10,9 +10,9 @@ class PlutoBaseColumnGroup extends StatelessWidget {
     required this.stateManager,
     required this.columnGroup,
     required this.depth,
-  }) : super(key: columnGroup.group.key);
+  }) : super(key: columnGroup.key);
 
-  int get childrenDepth => columnGroup.group.hasChildren
+  int get _childrenDepth => columnGroup.group.hasChildren
       ? stateManager.columnGroupDepth(columnGroup.group.children!)
       : 0;
 
@@ -30,12 +30,12 @@ class PlutoBaseColumnGroup extends StatelessWidget {
                 stateManager: stateManager,
                 columnGroup: columnGroup,
                 depth: depth,
-                childrenDepth: childrenDepth,
+                childrenDepth: _childrenDepth,
               ),
               _ColumnGroup(
                 stateManager: stateManager,
                 columnGroup: columnGroup,
-                depth: childrenDepth,
+                depth: _childrenDepth,
               ),
             ],
           );
@@ -155,20 +155,20 @@ class _ColumnGroup extends StatelessWidget {
     required this.depth,
   });
 
-  List<PlutoColumnGroupPair> get separateLinkedGroup =>
+  List<PlutoColumnGroupPair> get _separateLinkedGroup =>
       stateManager.separateLinkedGroup(
         columnGroupList: columnGroup.group.children!,
         columns: columnGroup.columns,
       );
 
-  Widget makeFieldWidget(PlutoColumn column) {
+  Widget _makeFieldWidget(PlutoColumn column) {
     return PlutoBaseColumn(
       stateManager: stateManager,
       column: column,
     );
   }
 
-  Widget makeChildWidget(PlutoColumnGroupPair columnGroupPair) {
+  Widget _makeChildWidget(PlutoColumnGroupPair columnGroupPair) {
     return PlutoBaseColumnGroup(
       stateManager: stateManager,
       columnGroup: columnGroupPair,
@@ -180,8 +180,8 @@ class _ColumnGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: columnGroup.group.hasFields
-          ? columnGroup.columns.map(makeFieldWidget).toList()
-          : separateLinkedGroup.map(makeChildWidget).toList(),
+          ? columnGroup.columns.map(_makeFieldWidget).toList()
+          : _separateLinkedGroup.map(_makeChildWidget).toList(),
     );
   }
 }

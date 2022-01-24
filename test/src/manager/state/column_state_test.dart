@@ -30,7 +30,7 @@ void main() {
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -62,7 +62,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -99,7 +99,7 @@ void main() {
           width: 250,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -130,7 +130,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -163,7 +163,7 @@ void main() {
           frozen: PlutoColumnFrozen.left,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -202,7 +202,7 @@ void main() {
           width: 150,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -233,7 +233,7 @@ void main() {
           frozen: PlutoColumnFrozen.right,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -265,7 +265,7 @@ void main() {
           frozen: PlutoColumnFrozen.right,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -312,7 +312,7 @@ void main() {
           width: 120,
         ),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -335,7 +335,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -361,7 +361,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -387,7 +387,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -410,7 +410,7 @@ void main() {
         ...ColumnHelper.textColumn('right',
             count: 3, frozen: PlutoColumnFrozen.right),
       ],
-      rows: null,
+      rows: [],
       gridFocusNode: null,
       scroll: scroll,
     );
@@ -805,6 +805,349 @@ void main() {
     },
   );
 
+  group('insertColumns', () {
+    testWidgets(
+      '기존 컬럼이 없는 상태에서 0번 인덱스에 컬럼 1개가 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        const columnIdxToInsert = 0;
+
+        final List<PlutoColumn> columnsToInsert = ColumnHelper.textColumn(
+          'column',
+          count: 1,
+        );
+
+        final List<PlutoColumn> columns = [];
+
+        final List<PlutoRow> rows = [];
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
+
+        expect(stateManager.refColumns.length, 1);
+      },
+    );
+
+    testWidgets(
+      '기존 컬럼 1개 있는 상태에서 0번 인덱스에 컬럼 1개가 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        const columnIdxToInsert = 0;
+
+        final List<PlutoColumn> columnsToInsert = ColumnHelper.textColumn(
+          'column',
+          count: 1,
+          start: 1,
+        );
+
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 1,
+          start: 0,
+        );
+
+        final List<PlutoRow> rows = [];
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
+
+        expect(stateManager.refColumns.length, 2);
+
+        expect(stateManager.refColumns[0].key, columnsToInsert[0].key);
+      },
+    );
+
+    testWidgets(
+      '기존 컬럼 1개 있는 상태에서 추가된 컬럼의 셀이 행에 추가 되어야 한다.',
+      (WidgetTester tester) async {
+        const columnIdxToInsert = 0;
+
+        const defaultValue = 'inserted column';
+
+        final List<PlutoColumn> columnsToInsert = ColumnHelper.textColumn(
+          'column',
+          count: 1,
+          start: 1,
+          defaultValue: defaultValue,
+        );
+
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 1,
+          start: 0,
+        );
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
+
+        expect(
+          stateManager.refRows[0].cells['column1']!.value,
+          defaultValue,
+        );
+
+        expect(
+          stateManager.refRows[1].cells['column1']!.value,
+          defaultValue,
+        );
+      },
+    );
+  });
+
+  group('removeColumns', () {
+    testWidgets(
+      '0번 컬럼을 삭제하면 컬럼이 삭제되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.removeColumns([columns[0]]);
+
+        expect(stateManager.refColumns.length, 9);
+      },
+    );
+
+    testWidgets(
+      '0번 컬럼을 삭제하면 해당 컬럼의 셀이 삭제 되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        expect(stateManager.refRows[0].cells.entries.length, 10);
+
+        stateManager.removeColumns([columns[0]]);
+
+        expect(stateManager.refRows[0].cells.entries.length, 9);
+      },
+    );
+
+    testWidgets(
+      '8, 8번 컬럼을 삭제하면 해당 컬럼의 셀이 삭제 되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        expect(stateManager.refRows[0].cells.entries.length, 10);
+
+        stateManager.removeColumns([columns[8], columns[9]]);
+
+        expect(stateManager.refRows[0].cells.entries.length, 8);
+      },
+    );
+
+    testWidgets(
+      '컬럼 그룹이 있는 상태에서 컬럼을 삭제하면 빈 그룹이 삭제 되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoColumnGroup> columnGroups = [
+          PlutoColumnGroup(title: 'a', fields: ['column0']),
+          PlutoColumnGroup(
+              title: 'b',
+              fields: columns
+                  .where((element) => element.field != 'column0')
+                  .map((e) => e.field)
+                  .toList()),
+        ];
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          columnGroups: columnGroups,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.removeColumns([columns[0]]);
+
+        expect(stateManager.columnGroups.length, 1);
+
+        expect(stateManager.columnGroups[0].title, 'b');
+      },
+    );
+
+    testWidgets(
+      '컬럼 그룹이 있는 상태에서 컬럼을 삭제하면 해당 그룹에서 컬럼이 삭제되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoColumnGroup> columnGroups = [
+          PlutoColumnGroup(title: 'a', fields: ['column0']),
+          PlutoColumnGroup(
+              title: 'b',
+              fields: columns
+                  .where((element) => element.field != 'column0')
+                  .map((e) => e.field)
+                  .toList()),
+        ];
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          columnGroups: columnGroups,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.removeColumns([columns[1]]);
+
+        expect(stateManager.columnGroups.length, 2);
+
+        expect(
+          stateManager.columnGroups[1].fields!.contains('column1'),
+          false,
+        );
+
+        expect(stateManager.columnGroups[1].fields!.length, 8);
+      },
+    );
+
+    testWidgets(
+      '하위 컬럼 그룹이 있는 상태에서 컬럼을 삭제하면 빈 해당 하위 그룹이 삭제 되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoColumnGroup> columnGroups = [
+          PlutoColumnGroup(title: 'a', fields: ['column0']),
+          PlutoColumnGroup(
+            title: 'b',
+            children: [
+              PlutoColumnGroup(title: 'c', fields: ['column1']),
+              PlutoColumnGroup(
+                  title: 'd',
+                  fields: columns
+                      .where((element) =>
+                          !['column0', 'column1'].contains(element.field))
+                      .map((e) => e.field)
+                      .toList()),
+            ],
+          ),
+        ];
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          columnGroups: columnGroups,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        expect(stateManager.columnGroups[1].children!.length, 2);
+
+        stateManager.removeColumns([columns[1]]);
+
+        expect(stateManager.columnGroups[1].children!.length, 1);
+
+        expect(stateManager.columnGroups[1].children![0].title, 'd');
+      },
+    );
+
+    testWidgets(
+      '필터가 있는 컬럼을 삭제 한 경우 해당 컬럼의 필터가 삭제 되어야 한다.',
+      (WidgetTester tester) async {
+        final List<PlutoColumn> columns = ColumnHelper.textColumn(
+          'column',
+          count: 10,
+        );
+
+        final List<PlutoRow> rows = RowHelper.count(2, columns);
+
+        final List<PlutoRow> filterRows = [
+          FilterHelper.createFilterRow(
+            columnField: columns[0].field,
+            filterType: const PlutoFilterTypeContains(),
+            filterValue: 'filter',
+          ),
+          FilterHelper.createFilterRow(
+            columnField: columns[0].field,
+            filterType: const PlutoFilterTypeContains(),
+            filterValue: 'filter',
+          ),
+        ];
+
+        PlutoGridStateManager stateManager = PlutoGridStateManager(
+          columns: columns,
+          rows: rows,
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setFilterWithFilterRows(filterRows);
+
+        expect(stateManager.filterRows.length, 2);
+
+        stateManager.removeColumns([columns[0]]);
+
+        expect(stateManager.filterRows.length, 0);
+      },
+    );
+  });
+
   group('hideColumn', () {
     testWidgets('flag 를 true 로 호출 한 경우 컬럼의 hide 가 true 로 변경 되어야 한다.',
         (WidgetTester tester) async {
@@ -817,7 +1160,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
@@ -828,7 +1171,7 @@ void main() {
       stateManager.hideColumn(columns.first.key, true);
 
       // then
-      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
     });
 
     testWidgets(
@@ -848,13 +1191,13 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
 
       // when
-      expect(stateManager.refColumns!.originalList.first.hide, isTrue);
+      expect(stateManager.refColumns.originalList.first.hide, isTrue);
 
       stateManager.hideColumn(columns.first.key, false);
 
@@ -873,7 +1216,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );
@@ -903,7 +1246,7 @@ void main() {
 
       PlutoGridStateManager stateManager = PlutoGridStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: scroll,
       );

@@ -15,13 +15,13 @@ class DevelopmentScreen extends StatefulWidget {
 }
 
 class _DevelopmentScreenState extends State<DevelopmentScreen> {
-  List<PlutoColumn>? columns;
+  late List<PlutoColumn> columns;
 
-  List<PlutoRow>? rows;
+  late List<PlutoRow> rows;
 
-  List<PlutoColumnGroup>? columnGroups;
+  late List<PlutoColumnGroup> columnGroups;
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
@@ -60,9 +60,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.add_circle,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager!.insertRows(
-                    rendererContext.rowIdx!,
-                    rendererContext.stateManager!.getNewRows(count: 1),
+                  rendererContext.stateManager.insertRows(
+                    rendererContext.rowIdx,
+                    rendererContext.stateManager.getNewRows(count: 1),
                   );
                 },
                 iconSize: 18,
@@ -74,7 +74,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                   Icons.remove_circle_outlined,
                 ),
                 onPressed: () {
-                  rendererContext.stateManager!
+                  rendererContext.stateManager
                       .removeRows([rendererContext.row]);
                 },
                 iconSize: 18,
@@ -83,7 +83,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               ),
               Expanded(
                 child: Text(
-                  '${rendererContext.row!.sortIdx.toString()}(${rendererContext.row!.cells[rendererContext.column!.field]!.value.toString()})',
+                  '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field]!.value.toString()})',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -105,21 +105,21 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 
-          if (rendererContext.cell!.value == 'red') {
+          if (rendererContext.cell.value == 'red') {
             textColor = Colors.red;
-          } else if (rendererContext.cell!.value == 'blue') {
+          } else if (rendererContext.cell.value == 'blue') {
             textColor = Colors.blue;
-          } else if (rendererContext.cell!.value == 'green') {
+          } else if (rendererContext.cell.value == 'green') {
             textColor = Colors.green;
           }
 
           return Text(
-            rendererContext.cell!.value.toString(),
+            rendererContext.cell.value.toString(),
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
             ),
-            textAlign: rendererContext.column!.textAlign.value,
+            textAlign: rendererContext.column.textAlign.value,
           );
         },
       ),
@@ -145,6 +145,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         titleTextAlign: PlutoColumnTextAlign.left,
         type: PlutoColumnType.number(
           negative: true,
+          format: '#,###.###',
+          allowFirstDot: true,
         ),
       ),
       PlutoColumn(
@@ -171,7 +173,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         width: 80,
         renderer: (rendererContext) {
           return Container(
-            color: rendererContext.cell!.value % 2 == 0
+            color: rendererContext.cell.value % 2 == 0
                 ? Colors.yellow
                 : Colors.teal,
           );
@@ -187,7 +189,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
       PlutoColumnGroup(
         title: 'Group A',
-        fields: ['column2', 'column3'],
+        children: [
+          PlutoColumnGroup(title: 'SubA', fields: ['column2']),
+          PlutoColumnGroup(title: 'SubB', fields: ['column3']),
+        ],
       ),
       PlutoColumnGroup(
         title: 'Group B',
@@ -208,7 +213,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       print(event.row?.cells['column1']?.value);
     } else {
       print('Toggled All Rows.');
-      print(stateManager?.checkedRows.length);
+      print(stateManager.checkedRows.length);
     }
   }
 
@@ -228,7 +233,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
 
-            stateManager!.setShowColumnFilter(true, notify: false);
+            stateManager.setShowColumnFilter(true, notify: false);
 
             // stateManager!.setAutoEditing(true, notify: false);
           },
@@ -251,7 +256,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           createHeader: (PlutoGridStateManager stateManager) {
             return _Header(
               stateManager: stateManager,
-              columns: columns!,
+              columns: columns,
             );
           },
           createFooter: (stateManager) {

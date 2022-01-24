@@ -1,3 +1,24 @@
+## [2.9.1] - 2022. 1. 11
+
+* Fixed a bug where `listener` of `keyManager` was not called when `enterKeyAction` was `none`.
+
+## [2.9.0] - 2022. 1. 6
+
+* Added expandedColumn of columnGroup.
+* Added row color animation when dragging rows.
+* Changed the default value of enableMoveDownAfterSelecting to false.
+* Changed a minimum flutter version to 2.5.0.
+* Changed to be changed in real time when changing the column width.
+* Removed isShowFrozenColumn method of PlutoGridStateManager.
+* Removed resetKeyPressed, setKeyPressed methods of PlutoGridStateManager.
+* Added F3 key action.
+* Added ESC key action to moving previous cell in column filter widget.
+* Changed pagination logic.
+* Added done button action for mobile.
+* Fixed screen not being able to touch due to scroll range error when resizing the screen.
+* Added insert, remove columns.
+* Added allowFirstDot to PlutoColumnTypeNumber.
+
 ## [2.8.0] - 2021. 12. 10
 
 * Added column group.

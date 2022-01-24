@@ -6,22 +6,22 @@ import 'text_cell.dart';
 
 class PlutoNumberCell extends StatefulWidget implements TextCell {
   @override
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
   @override
-  final PlutoCell? cell;
+  final PlutoCell cell;
 
   @override
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
   @override
-  final PlutoRow? row;
+  final PlutoRow row;
 
   const PlutoNumberCell({
-    this.stateManager,
-    this.cell,
-    this.column,
-    this.row,
+    required this.stateManager,
+    required this.cell,
+    required this.column,
+    required this.row,
     Key? key,
   }) : super(key: key);
 
@@ -35,6 +35,8 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
 
   bool? activatedNegative;
 
+  bool? allowFirstDot;
+
   @override
   TextInputType get keyboardType => TextInputType.number;
 
@@ -43,6 +45,7 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
         DecimalTextInputFormatter(
           decimalRange: decimalRange,
           activatedNegativeValues: activatedNegative!,
+          allowFirstDot: allowFirstDot!,
         ),
       ];
 
@@ -50,9 +53,11 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
   void initState() {
     super.initState();
 
-    decimalRange = widget.column!.type.number!.decimalRange();
+    decimalRange = widget.column.type.number!.decimalRange();
 
-    activatedNegative = widget.column!.type.number!.negative;
+    activatedNegative = widget.column.type.number!.negative;
+
+    allowFirstDot = widget.column.type.number!.allowFirstDot;
   }
 }
 
@@ -61,6 +66,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({
     int? decimalRange,
     required bool activatedNegativeValues,
+    required bool allowFirstDot,
   }) : assert(decimalRange == null || decimalRange >= 0,
             'DecimalTextInputFormatter declaration error') {
     String dp = (decimalRange != null && decimalRange > 0)
@@ -69,7 +75,11 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     String num = '[0-9]*$dp';
 
     if (activatedNegativeValues) {
-      _exp = RegExp('^((((-){0,1})|((-){0,1}[0-9]$num))){0,1}\$');
+      final firstSymbols = allowFirstDot ? '[-.]' : '[-]';
+
+      _exp = RegExp(
+        '^(((($firstSymbols){0,1})|(($firstSymbols){0,1}[0-9]$num))){0,1}\$',
+      );
     } else {
       _exp = RegExp('^($num){0,1}\$');
     }

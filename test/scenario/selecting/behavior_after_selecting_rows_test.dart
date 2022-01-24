@@ -74,12 +74,12 @@ void main() {
           stateManager!.removeRows([rowToRemove]);
 
           final selectedRows = stateManager!.currentSelectingRows;
-          final selectedRowKeys = selectedRows.map((e) => e!.key);
+          final selectedRowKeys = selectedRows.map((e) => e.key);
 
           expect(selectedRows.length, countSelectedRows);
-          expect(selectedRowKeys.contains(stateManager!.rows[0]!.key), isTrue);
-          expect(selectedRowKeys.contains(stateManager!.rows[1]!.key), isTrue);
-          expect(selectedRowKeys.contains(stateManager!.rows[2]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[0].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[1].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[2].key), isTrue);
         },
       );
 
@@ -89,17 +89,17 @@ void main() {
         (tester) async {
           final rowToRemove = stateManager!.rows.first;
 
-          stateManager!.insertRows(1, [rowToRemove!]);
+          stateManager!.insertRows(1, [rowToRemove]);
 
           expect(stateManager!.rows.length, countTotalRows + 1);
 
           final selectedRows = stateManager!.currentSelectingRows;
-          final selectedRowKeys = selectedRows.map((e) => e!.key);
+          final selectedRowKeys = selectedRows.map((e) => e.key);
 
           expect(selectedRows.length, countSelectedRows);
-          expect(selectedRowKeys.contains(stateManager!.rows[2]!.key), isTrue);
-          expect(selectedRowKeys.contains(stateManager!.rows[3]!.key), isTrue);
-          expect(selectedRowKeys.contains(stateManager!.rows[4]!.key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[2].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[3].key), isTrue);
+          expect(selectedRowKeys.contains(stateManager!.rows[4].key), isTrue);
         },
       );
     },

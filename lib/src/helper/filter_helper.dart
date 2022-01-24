@@ -286,10 +286,10 @@ class FilterPopupState {
   final SetFilterPopupHandler handleApplyFilter;
 
   /// List of columns to be filtered.
-  final List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns;
 
   /// List with filtering condition information
-  final List<PlutoRow?> filterRows;
+  final List<PlutoRow> filterRows;
 
   /// The filter popup opens and focuses on the filter value in the first row.
   final bool focusFirstFilterValue;
@@ -310,7 +310,7 @@ class FilterPopupState {
     required this.focusFirstFilterValue,
     this.width = 600,
     this.height = 450,
-  })  : assert(columns != null && columns.isNotEmpty),
+  })  : assert(columns.isNotEmpty),
         _previousFilterRows = [...filterRows];
 
   PlutoGridStateManager? _stateManager;
@@ -325,7 +325,7 @@ class FilterPopupState {
       _stateManager!.setKeepFocus(true, notify: false);
 
       _stateManager!.setCurrentCell(
-        _stateManager!.rows.first!.cells[FilterHelper.filterFieldValue],
+        _stateManager!.rows.first.cells[FilterHelper.filterFieldValue],
         0,
         notify: false,
       );
@@ -368,7 +368,7 @@ class FilterPopupState {
   }
 
   List<PlutoColumn> makeColumns() {
-    return _makeFilterColumns(configuration: configuration, columns: columns!);
+    return _makeFilterColumns(configuration: configuration, columns: columns);
   }
 
   Map<String, String> _makeFilterColumnMap({

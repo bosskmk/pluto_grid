@@ -15,15 +15,15 @@ class ColumnFilteringScreen extends StatefulWidget {
 }
 
 class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'Text',
         field: 'text',
@@ -50,9 +50,9 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         field: 'select',
         type: PlutoColumnType.select(<String>['A', 'B', 'C', 'D', 'E', 'F']),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 30, columns: columns));
   }
 
   @override
@@ -88,7 +88,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
         columns: columns,
         rows: rows,
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager!.setShowColumnFilter(true);
+          event.stateManager.setShowColumnFilter(true);
         },
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);

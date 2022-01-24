@@ -17,11 +17,11 @@ class ListingModeScreen extends StatefulWidget {
 }
 
 class _ListingModeScreenState extends State<ListingModeScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
-  PlutoGridStateManager? stateManager;
+  late PlutoGridStateManager stateManager;
 
   late StreamSubscription removeKeyboardListener;
 
@@ -36,7 +36,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
   void initState() {
     super.initState();
 
-    columns = [
+    columns.addAll([
       PlutoColumn(
         title: 'column 1',
         field: 'column_1',
@@ -62,9 +62,9 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
         field: 'column_5',
         type: PlutoColumnType.text(),
       ),
-    ];
+    ]);
 
-    rows = DummyData.rowsByColumns(length: 30, columns: columns);
+    rows.addAll(DummyData.rowsByColumns(length: 30, columns: columns));
   }
 
   void handleKeyboard(PlutoKeyManagerEvent event) {
@@ -152,9 +152,9 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       },
     );
 
-    stateManager!.prependRows([newRow]);
-    stateManager!.moveScrollByRow(PlutoMoveDirection.up, 1);
-    stateManager!.setCurrentCell(newRow.cells.entries.first.value, 0);
+    stateManager.prependRows([newRow]);
+    stateManager.moveScrollByRow(PlutoMoveDirection.up, 1);
+    stateManager.setCurrentCell(newRow.cells.entries.first.value, 0);
   }
 
   void openDetail(PlutoRow? row) async {
@@ -231,8 +231,8 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
       return;
     }
 
-    stateManager!.changeCellValue(
-      stateManager!.currentRow!.cells['column_1']!,
+    stateManager.changeCellValue(
+      stateManager.currentRow!.cells['column_1']!,
       value,
       force: true,
     );
@@ -263,9 +263,9 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
           stateManager = event.stateManager;
 
           removeKeyboardListener =
-              stateManager!.keyManager!.subject.stream.listen(handleKeyboard);
+              stateManager.keyManager!.subject.stream.listen(handleKeyboard);
 
-          stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
+          stateManager.setSelectingMode(PlutoGridSelectingMode.none);
         },
         onSelected: (PlutoGridOnSelectedEvent event) {
           if (event.row != null) {

@@ -5,22 +5,22 @@ import 'popup_cell.dart';
 
 class PlutoSelectCell extends StatefulWidget implements PopupCell {
   @override
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
   @override
-  final PlutoCell? cell;
+  final PlutoCell cell;
 
   @override
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
   @override
-  final PlutoRow? row;
+  final PlutoRow row;
 
   const PlutoSelectCell({
-    this.stateManager,
-    this.cell,
-    this.column,
-    this.row,
+    required this.stateManager,
+    required this.cell,
+    required this.column,
+    required this.row,
     Key? key,
   }) : super(key: key);
 
@@ -31,10 +31,10 @@ class PlutoSelectCell extends StatefulWidget implements PopupCell {
 class _PlutoSelectCellState extends State<PlutoSelectCell>
     with PopupCellState<PlutoSelectCell> {
   @override
-  List<PlutoColumn>? popupColumns;
+  List<PlutoColumn> popupColumns = [];
 
   @override
-  List<PlutoRow>? popupRows;
+  List<PlutoRow> popupRows = [];
 
   @override
   Icon? icon = const Icon(
@@ -47,40 +47,39 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
   void initState() {
     super.initState();
 
-    enableColumnFilter =
-        widget.column!.type.select!.enableColumnFilter ?? false;
+    enableColumnFilter = widget.column.type.select!.enableColumnFilter;
 
     final columnFilterHeight = enableColumnFilter
-        ? widget.stateManager!.configuration!.columnFilterHeight
+        ? widget.stateManager.configuration!.columnFilterHeight
         : 0;
 
-    final rowsHeight = widget.column!.type.select!.items!.length *
-        widget.stateManager!.rowTotalHeight;
+    final rowsHeight = widget.column.type.select!.items.length *
+        widget.stateManager.rowTotalHeight;
 
-    popupHeight = widget.stateManager!.columnHeight +
+    popupHeight = widget.stateManager.columnHeight +
         columnFilterHeight +
         rowsHeight +
         PlutoGridSettings.gridInnerSpacing;
 
-    fieldOnSelected = widget.column!.title;
+    fieldOnSelected = widget.column.title;
 
     popupColumns = [
       PlutoColumn(
-        title: widget.column!.title,
-        field: widget.column!.title,
+        title: widget.column.title,
+        field: widget.column.title,
         readOnly: true,
         type: PlutoColumnType.text(),
-        formatter: widget.column!.formatter,
+        formatter: widget.column.formatter,
         enableFilterMenuItem: enableColumnFilter,
         enableHideColumnMenuItem: false,
         enableSetColumnsMenuItem: false,
       )
     ];
 
-    popupRows = widget.column!.type.select!.items!.map((dynamic item) {
+    popupRows = widget.column.type.select!.items.map((dynamic item) {
       return PlutoRow(
         cells: {
-          widget.column!.title: PlutoCell(value: item),
+          widget.column.title: PlutoCell(value: item),
         },
       );
     }).toList();
@@ -91,9 +90,9 @@ class _PlutoSelectCellState extends State<PlutoSelectCell>
     super.onLoaded(event);
 
     if (enableColumnFilter) {
-      event.stateManager!.setShowColumnFilter(true, notify: false);
+      event.stateManager.setShowColumnFilter(true, notify: false);
     }
 
-    event.stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
+    event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
   }
 }

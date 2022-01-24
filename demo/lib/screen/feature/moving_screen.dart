@@ -15,9 +15,9 @@ class MovingScreen extends StatefulWidget {
 }
 
 class _MovingScreenState extends State<MovingScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
@@ -25,9 +25,9 @@ class _MovingScreenState extends State<MovingScreen> {
 
     final dummyData = DummyData(10, 100);
 
-    columns = dummyData.columns;
+    columns.addAll(dummyData.columns);
 
-    rows = dummyData.rows;
+    rows.addAll(dummyData.rows);
   }
 
   @override

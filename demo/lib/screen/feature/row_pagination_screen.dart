@@ -15,9 +15,9 @@ class RowPaginationScreen extends StatefulWidget {
 }
 
 class _RowPaginationScreenState extends State<RowPaginationScreen> {
-  List<PlutoColumn>? columns;
+  final List<PlutoColumn> columns = [];
 
-  List<PlutoRow>? rows;
+  final List<PlutoRow> rows = [];
 
   @override
   void initState() {
@@ -25,9 +25,9 @@ class _RowPaginationScreenState extends State<RowPaginationScreen> {
 
     final dummyData = DummyData(10, 5000);
 
-    columns = dummyData.columns;
+    columns.addAll(dummyData.columns);
 
-    rows = dummyData.rows;
+    rows.addAll(dummyData.rows);
   }
 
   @override
@@ -51,7 +51,7 @@ class _RowPaginationScreenState extends State<RowPaginationScreen> {
         columns: columns,
         rows: rows,
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager!.setShowColumnFilter(true);
+          event.stateManager.setShowColumnFilter(true);
         },
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);

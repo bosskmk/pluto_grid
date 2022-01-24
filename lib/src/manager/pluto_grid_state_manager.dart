@@ -17,8 +17,9 @@ import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
 
-abstract class IPlutoGridState extends PlutoChangeNotifier
+abstract class IPlutoGridState
     implements
+        PlutoChangeNotifier,
         ICellState,
         IColumnGroupState,
         IColumnState,
@@ -53,8 +54,8 @@ class PlutoGridState extends PlutoChangeNotifier
 
 class PlutoGridStateManager extends PlutoGridState {
   PlutoGridStateManager({
-    required List<PlutoColumn>? columns,
-    required List<PlutoRow?>? rows,
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController? scroll,
     List<PlutoColumnGroup>? columnGroups,
@@ -91,16 +92,13 @@ class PlutoGridStateManager extends PlutoGridState {
       PlutoGridSelectingMode.none.items;
 
   static void initializeRows(
-    List<PlutoColumn>? refColumns,
-    List<PlutoRow?>? refRows, {
+    List<PlutoColumn> refColumns,
+    List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
     int? start = 0,
   }) {
-    if (refColumns == null ||
-        refColumns.isEmpty ||
-        refRows == null ||
-        refRows.isEmpty) {
+    if (refColumns.isEmpty || refRows.isEmpty) {
       return;
     }
 
@@ -122,7 +120,7 @@ class PlutoGridStateManager extends PlutoGridState {
     var rowLength = refRows.length;
 
     for (var rowIdx = 0; rowIdx < rowLength; rowIdx += 1) {
-      applyList.execute(refRows[rowIdx]!);
+      applyList.execute(refRows[rowIdx]);
     }
   }
 }
@@ -321,15 +319,13 @@ class _ApplyCellForFormat implements _Apply {
   @override
   void execute(PlutoRow row) {
     for (var column in columnsToApply) {
-      row.cells[column.field]!.value =
-          column.type.applyFormat(row.cells[column.field]!.value);
+      var value = column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {
-        row.cells[column.field]!.value = num.tryParse(
-              row.cells[column.field]!.value.toString().replaceAll(',', ''),
-            ) ??
-            0;
+        value = column.type.number!.numberFormat.parse(value);
       }
+
+      row.cells[column.field]!.value = value;
     }
   }
 }

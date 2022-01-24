@@ -77,7 +77,7 @@ mixin ScrollState implements IPlutoGridState {
         PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
 
     final double screenOffset = _scroll!.verticalOffset +
-        offsetHeight -
+        columnRowContainerHeight -
         columnGroupHeight -
         columnHeight -
         columnFilterHeight -
@@ -109,7 +109,7 @@ mixin ScrollState implements IPlutoGridState {
     final columnIndexes = columnIndexesByShowFrozen;
 
     final PlutoColumn columnToMove =
-        refColumns![columnIndexes[columnIdx! + direction.offset]];
+        refColumns[columnIndexes[columnIdx! + direction.offset]];
 
     if (!canHorizontalCellScrollByDirection(
       direction,

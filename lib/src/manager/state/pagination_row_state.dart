@@ -26,7 +26,7 @@ mixin PaginationRowState implements IPlutoGridState {
   final FilteredListRange _range = FilteredListRange(0, defaultPageSize);
 
   int get _length =>
-      hasFilter ? refRows!.filteredList.length : refRows!.originalList.length;
+      hasFilter ? refRows.filteredList.length : refRows.originalList.length;
 
   int get _adjustPage {
     if (page > totalPage) {
@@ -50,7 +50,7 @@ mixin PaginationRowState implements IPlutoGridState {
   int get totalPage => (_length / _pageSize).ceil();
 
   @override
-  bool get isPaginated => refRows!.hasRange;
+  bool get isPaginated => refRows.hasRange;
 
   @override
   void setPageSize(int pageSize, {bool notify = true}) {
@@ -79,7 +79,7 @@ mixin PaginationRowState implements IPlutoGridState {
 
     _range.setRange(from, to);
 
-    refRows!.setFilterRange(_range);
+    refRows.setFilterRange(_range);
 
     clearCurrentCell(notify: false);
 
