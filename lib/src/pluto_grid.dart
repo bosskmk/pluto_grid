@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' show Intl;
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -59,6 +61,14 @@ class PlutoGrid extends StatefulWidget {
   /// Editing is not possible, and if you press enter or tap on the list,
   /// you can receive the selected row and cell from the onSelected callback.
   final PlutoGridMode? mode;
+
+  static setDefaultLocale(String locale) {
+    Intl.defaultLocale = locale;
+  }
+
+  static initializeDateFormat() {
+    initializeDateFormatting();
+  }
 
   @override
   _PlutoGridState createState() => _PlutoGridState();
