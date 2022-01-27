@@ -322,7 +322,7 @@ class _ApplyCellForFormat implements _Apply {
       var value = column.type.applyFormat(row.cells[column.field]!.value);
 
       if (column.type.isNumber) {
-        value = column.type.number!.numberFormat.parse(value);
+        value = column.type.number!.toNumber(value);
       }
 
       row.cells[column.field]!.value = value;

@@ -53,7 +53,7 @@ class _PlutoNumberCellState extends State<PlutoNumberCell>
   void initState() {
     super.initState();
 
-    decimalRange = widget.column.type.number!.decimalRange();
+    decimalRange = widget.column.type.number!.decimalPoint;
 
     activatedNegative = widget.column.type.number!.negative;
 

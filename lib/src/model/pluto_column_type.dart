@@ -208,10 +208,19 @@ class PlutoColumnTypeNumber
     required this.format,
     required this.applyFormatOnInit,
     required this.allowFirstDot,
-  }) : numberFormat = intl.NumberFormat(format);
+  })  : numberFormat = intl.NumberFormat(format),
+        decimalPoint = getDecimalPoint(format);
 
   @override
-  intl.NumberFormat numberFormat;
+  late final intl.NumberFormat numberFormat;
+
+  final int decimalPoint;
+
+  static int getDecimalPoint(String format) {
+    final int dotIndex = format.indexOf('.');
+
+    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  }
 
   @override
   bool isValid(dynamic value) {
@@ -248,10 +257,13 @@ class PlutoColumnTypeNumber
     return numberFormat.format(number);
   }
 
-  int decimalRange() {
-    final int dotIndex = format.indexOf('.');
-
-    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  /// Convert [String] converted to [applyFormat] to [number].
+  dynamic toNumber(String formatted) {
+    return num.tryParse(formatted
+            .toString()
+            .replaceAll(numberFormat.symbols.GROUP_SEP, '')
+            .replaceAll(numberFormat.symbols.DECIMAL_SEP, '.')) ??
+        0;
   }
 
   bool _isNumeric(dynamic s) {
@@ -323,7 +335,7 @@ class PlutoColumnTypeDate
   }) : dateFormat = intl.DateFormat(format);
 
   @override
-  intl.DateFormat dateFormat;
+  late final intl.DateFormat dateFormat;
 
   @override
   bool isValid(dynamic value) {
@@ -408,9 +420,9 @@ abstract class _PlutoColumnTypeHasFormat {
 }
 
 abstract class _PlutoColumnTypeHasNumberFormat {
-  late intl.NumberFormat numberFormat;
+  late final intl.NumberFormat numberFormat;
 }
 
 abstract class _PlutoColumnTypeHasDateFormat {
-  late intl.DateFormat dateFormat;
+  late final intl.DateFormat dateFormat;
 }
