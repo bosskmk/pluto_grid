@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v2.9.1
+## PlutoGrid for flutter - v2.9.2
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -42,7 +42,7 @@ If you comment on an issue, mobile improvements can be made quickly.
 ### Screenshots
 
 #### Change the color of the rows or make the cells look the way you want them.
-![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_01.png)
+![PlutoGrid Normal](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_01.png)
 
 <br>
 

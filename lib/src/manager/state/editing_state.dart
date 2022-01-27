@@ -161,8 +161,8 @@ mixin EditingState implements IPlutoGridState {
 
   @override
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
-    if (column.type.isNumber && value.runtimeType != num) {
-      return num.tryParse(value.toString()) ?? 0;
+    if (column.type.isNumber) {
+      return column.type.number!.toNumber(column.type.applyFormat(value));
     }
 
     return value;
@@ -188,6 +188,8 @@ mixin EditingState implements IPlutoGridState {
       oldValue: oldValue,
     );
 
+    value = castValueByColumnType(value, currentColumn);
+
     if (force == false &&
         canNotChangeCellValue(
           column: currentColumn,
@@ -200,7 +202,7 @@ mixin EditingState implements IPlutoGridState {
 
     currentRow.setState(PlutoRowState.updated);
 
-    cell.value = value = castValueByColumnType(value, currentColumn);
+    cell.value = value;
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(PlutoGridOnChangedEvent(
@@ -297,6 +299,8 @@ mixin EditingState implements IPlutoGridState {
           oldValue: oldValue,
         );
 
+        newValue = castValueByColumnType(newValue, currentColumn);
+
         if (canNotChangeCellValue(
           column: currentColumn,
           row: refRows[rowIdx],
@@ -309,8 +313,7 @@ mixin EditingState implements IPlutoGridState {
 
         refRows[rowIdx].setState(PlutoRowState.updated);
 
-        currentCell.value =
-            newValue = castValueByColumnType(newValue, currentColumn);
+        currentCell.value = newValue;
 
         if (onChanged != null) {
           onChanged!(PlutoGridOnChangedEvent(
