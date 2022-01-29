@@ -154,8 +154,9 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
         icon: PlutoGridColumnIcon(
           sort: _sort,
           color: widget.stateManager.configuration!.iconColor,
-          icon:
-              widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
+          icon: widget.column.enableContextMenu
+              ? widget.stateManager.configuration!.columnContextIcon
+              : widget.stateManager.configuration!.columnResizeIcon,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
         mouseCursor: _enableGesture
