@@ -29,6 +29,10 @@ abstract class IEditingState {
   /// Paste based on current cell
   void pasteCellValue(List<List<String>> textList);
 
+  /// When pasting cells,
+  /// if the number of rows in textList is greater than the current rows, new rows are added.
+  void pasteCellValueWithAppendingRows(List<List<String>> textList);
+
   /// Cast the value according to the column type.
   dynamic castValueByColumnType(dynamic value, PlutoColumn column);
 
@@ -157,6 +161,27 @@ mixin EditingState implements IPlutoGridState {
     }
 
     notifyListeners();
+  }
+
+  @override
+  void pasteCellValueWithAppendingRows(List<List<String>> textList) {
+    int countExistingRows = refRows.length;
+
+    if (currentCellPosition != null) {
+      countExistingRows -= currentCellPosition!.rowIdx!;
+    }
+
+    int countAddingRows = textList.length - countExistingRows;
+
+    if (countAddingRows > 0) {
+      appendNewRows(count: countAddingRows, notify: false);
+    }
+
+    if (currentCellPosition == null) {
+      setCurrentCell(firstCell, 0, notify: false);
+    }
+
+    pasteCellValue(textList);
   }
 
   @override

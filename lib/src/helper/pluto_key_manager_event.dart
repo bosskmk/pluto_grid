@@ -75,18 +75,19 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
   bool get isCharacter => characters.contains(event.logicalKey.keyId);
 
   bool get isCtrlC {
-    return isCtrlPressed &&
-        event.logicalKey.keyId == LogicalKeyboardKey.keyC.keyId;
+    return isCtrlPressed && event.logicalKey.keyLabel == 'C';
   }
 
   bool get isCtrlV {
-    return isCtrlPressed &&
-        event.logicalKey.keyId == LogicalKeyboardKey.keyV.keyId;
+    return isCtrlPressed && !isShiftPressed && event.logicalKey.keyLabel == 'V';
+  }
+
+  bool get isCtrlShiftV {
+    return isCtrlPressed && isShiftPressed && event.logicalKey.keyLabel == 'V';
   }
 
   bool get isCtrlA {
-    return isCtrlPressed &&
-        event.logicalKey.keyId == LogicalKeyboardKey.keyA.keyId;
+    return isCtrlPressed && event.logicalKey.keyLabel == 'A';
   }
 
   bool get isShiftPressed {

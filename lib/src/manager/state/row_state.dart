@@ -45,23 +45,40 @@ abstract class IRowState {
     bool notify = true,
   });
 
-  void insertRows(int rowIdx, List<PlutoRow> rows);
+  void insertRows(
+    int rowIdx,
+    List<PlutoRow> rows, {
+    bool notify = true,
+  });
 
   void prependNewRows({
     int count = 1,
+    bool notify = true,
   });
 
-  void prependRows(List<PlutoRow> rows);
+  void prependRows(
+    List<PlutoRow> rows, {
+    bool notify = true,
+  });
 
   void appendNewRows({
     int count = 1,
+    bool notify = true,
   });
 
-  void appendRows(List<PlutoRow> rows);
+  void appendRows(
+    List<PlutoRow> rows, {
+    bool notify = true,
+  });
 
-  void removeCurrentRow();
+  void removeCurrentRow({
+    bool notify = true,
+  });
 
-  void removeRows(List<PlutoRow> rows);
+  void removeRows(
+    List<PlutoRow> rows, {
+    bool notify = true,
+  });
 
   void moveRowsByOffset(
     List<PlutoRow> rows,
@@ -237,7 +254,11 @@ mixin RowState implements IPlutoGridState {
   }
 
   @override
-  void insertRows(int rowIdx, List<PlutoRow> rows) {
+  void insertRows(
+    int rowIdx,
+    List<PlutoRow> rows, {
+    bool notify = true,
+  }) {
     if (rows.isEmpty) {
       return;
     }
@@ -294,18 +315,24 @@ mixin RowState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override
   void prependNewRows({
     int count = 1,
+    bool notify = true,
   }) {
-    prependRows(getNewRows(count: count));
+    prependRows(getNewRows(count: count), notify: notify);
   }
 
   @override
-  void prependRows(List<PlutoRow> rows) {
+  void prependRows(
+    List<PlutoRow> rows, {
+    bool notify = true,
+  }) {
     if (rows.isEmpty) {
       return;
     }
@@ -358,18 +385,24 @@ mixin RowState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override
   void appendNewRows({
     int count = 1,
+    bool notify = true,
   }) {
-    appendRows(getNewRows(count: count));
+    appendRows(getNewRows(count: count), notify: notify);
   }
 
   @override
-  void appendRows(List<PlutoRow> rows) {
+  void appendRows(
+    List<PlutoRow> rows, {
+    bool notify = true,
+  }) {
     if (rows.isEmpty) {
       return;
     }
@@ -394,11 +427,15 @@ mixin RowState implements IPlutoGridState {
 
     _insertRows(refRows.length, rows, state: PlutoRowState.added);
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override
-  void removeCurrentRow() {
+  void removeCurrentRow({
+    bool notify = true,
+  }) {
     if (currentRowIdx == null) {
       return;
     }
@@ -407,7 +444,9 @@ mixin RowState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override

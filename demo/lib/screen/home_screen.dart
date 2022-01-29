@@ -355,6 +355,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, CopyAndPasteScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Moving',

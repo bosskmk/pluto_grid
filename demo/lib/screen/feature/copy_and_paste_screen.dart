@@ -51,7 +51,7 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
       ),
     ]);
 
-    rows.addAll(DummyData.rowsByColumns(length: 30, columns: columns));
+    rows.addAll(DummyData.rowsByColumns(length: 5, columns: columns));
   }
 
   @override
@@ -62,6 +62,13 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
       topContents: const [
         Text(
             'Copy and paste are operated depending on the cell and row selection status.'),
+        Text('Tap and hold a cell and move it to select a row or cell.'),
+        Text('Ctrl + a : Select an entire row or cell.'),
+        Text(
+            'Ctrl + c : Copies the currently selected row or cell to the clipboard.'),
+        Text('Ctrl + v : Paste the copied text array into the cell.'),
+        Text(
+            'Ctrl + Shift + v : If the copied text array is larger than the line at the currently selected position, a new line is added.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -75,6 +82,98 @@ class _CopyAndPasteScreenState extends State<CopyAndPasteScreen> {
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
         },
+        createHeader: (stateManager) {
+          return _Header(stateManager: stateManager);
+        },
+      ),
+    );
+  }
+}
+
+class _Header extends StatefulWidget {
+  final PlutoGridStateManager stateManager;
+
+  const _Header({
+    required this.stateManager,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _HeaderState createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.stateManager.setSelectingMode(gridSelectingMode);
+  }
+
+  void setGridSelectingMode(PlutoGridSelectingMode? mode) {
+    if (gridSelectingMode == mode || mode == null) {
+      return;
+    }
+
+    setState(() {
+      gridSelectingMode = mode;
+      widget.stateManager.setSelectingMode(mode);
+    });
+  }
+
+  void handleAddDummyRow() {
+    widget.stateManager.appendRows(
+      [DummyData.rowByColumns(widget.stateManager.refColumns)],
+    );
+  }
+
+  void handleRemoveSelectedRowsButton() {
+    widget.stateManager.removeRows(widget.stateManager.currentSelectingRows);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Wrap(
+          spacing: 10,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: gridSelectingMode,
+                items: PlutoGridStateManager.selectingModes
+                    .map<DropdownMenuItem<PlutoGridSelectingMode>>(
+                        (PlutoGridSelectingMode item) {
+                  final color = gridSelectingMode == item ? Colors.blue : null;
+
+                  return DropdownMenuItem<PlutoGridSelectingMode>(
+                    value: item,
+                    child: Text(
+                      item.toShortString(),
+                      style: TextStyle(color: color),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (PlutoGridSelectingMode? mode) {
+                  setGridSelectingMode(mode);
+                },
+              ),
+            ),
+            ElevatedButton(
+              child: const Text('Add dummy row'),
+              onPressed: handleAddDummyRow,
+            ),
+            ElevatedButton(
+              child: const Text('Remove Selected Rows'),
+              onPressed: handleRemoveSelectedRowsButton,
+            ),
+          ],
+        ),
       ),
     );
   }
