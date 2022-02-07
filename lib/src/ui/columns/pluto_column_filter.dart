@@ -258,25 +258,28 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
         alignment: Alignment.center,
         child: Stack(
           children: [
-            if (_enabled == true) TextField(
-              focusNode: _focusNode,
-              controller: _controller,
-              enabled: _enabled,
-              style: configuration.cellTextStyle,
-              onTap: _handleOnTap,
-              onChanged: _handleOnChanged,
-              onEditingComplete: _handleOnEditingComplete,
-              decoration: InputDecoration(
-                hintText: _enabled! ? widget.column.defaultFilter.title : '',
-                isDense: true,
-                filled: true,
-                fillColor: _textFieldColor,
-                border: _border,
-                enabledBorder: _border,
-                focusedBorder: _enabledBorder,
-                contentPadding: const EdgeInsets.symmetric(vertical: 5),
+            if (_enabled == true)
+              TextField(
+                focusNode: _focusNode,
+                controller: _controller,
+                enabled: _enabled,
+                style: configuration.cellTextStyle,
+                onTap: _handleOnTap,
+                onChanged: _handleOnChanged,
+                onEditingComplete: _handleOnEditingComplete,
+                decoration: InputDecoration(
+                  hintText: _enabled! ? widget.column.defaultFilter.title : '',
+                  isDense: true,
+                  filled: true,
+                  fillColor: _textFieldColor,
+                  border: _border,
+                  enabledBorder: _border,
+                  focusedBorder: _enabledBorder,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                  suffixIcon: IconButton(
+                      onPressed: _controller.clear, icon: Icon(Icons.clear)),
+                ),
               ),
-            ),
           ],
         ),
       ),
