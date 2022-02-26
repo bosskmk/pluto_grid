@@ -85,22 +85,38 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     }
   }
 
-  void _handleOnPointDown(PointerDownEvent event) {
+  void _handleOnPointDownLTR(PointerDownEvent event) {
     _isPointMoving = false;
 
     _columnRightPosition = event.position;
     _columnLeftPosition = _columnRightPosition - Offset(widget.column.width, 0);
   }
 
-  void _handleOnPointMove(PointerMoveEvent event) {
+  void _handleOnPointDownRTL(PointerDownEvent event) {
+    _isPointMoving = false;
+
+    _columnLeftPosition = event.position;
+    _columnRightPosition = _columnLeftPosition - Offset(widget.column.width, 0);
+  }
+
+  void _handleOnPointMoveLTR(PointerMoveEvent event) {
     _isPointMoving = _columnRightPosition - event.position != Offset.zero;
 
     if (_isPointMoving &&
         _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
       return;
     }
+  }
 
-    final moveOffset = event.position.dx - _columnRightPosition.dx;
+  void _handleOnPointMoveRTL(PointerMoveEvent event) {
+    _isPointMoving = _columnLeftPosition - event.position != Offset.zero;
+
+    if (_isPointMoving &&
+        _columnLeftPosition.dx - widget.column.minWidth > event.position.dx) {
+      return;
+    }
+
+    final moveOffset = _columnLeftPosition.dx - event.position.dx;
 
     widget.stateManager.resizeColumn(
       widget.column,
@@ -109,13 +125,13 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     );
 
     widget.stateManager.scrollByDirection(
-      PlutoMoveDirection.right,
+      PlutoMoveDirection.left,
       widget.stateManager.isInvalidHorizontalScroll
           ? widget.stateManager.scroll!.maxScrollHorizontal
           : widget.stateManager.scroll!.horizontal!.offset,
     );
 
-    _columnRightPosition = event.position;
+    _columnLeftPosition = event.position;
   }
 
   void _handleOnPointUp(PointerUpEvent event) {
@@ -165,6 +181,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       ),
     );
 
+    final isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return Stack(
       children: [
         Positioned(
@@ -177,12 +195,15 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
               : _columnWidget,
         ),
         if (_showContextIcon)
-          Positioned(
-            right: -3,
+          Positioned.directional(
+            textDirection: Directionality.of(context),
+            end: -3,
             child: _enableGesture
                 ? Listener(
-                    onPointerDown: _handleOnPointDown,
-                    onPointerMove: _handleOnPointMove,
+                    onPointerDown:
+                        isRTL ? _handleOnPointDownRTL : _handleOnPointDownLTR,
+                    onPointerMove:
+                        isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
                     onPointerUp: _handleOnPointUp,
                     child: _contextMenuIcon,
                   )
