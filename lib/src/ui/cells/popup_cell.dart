@@ -199,34 +199,32 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       _textFocus!.requestFocus();
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
+    return Row(
+
+
       children: [
-        TextField(
-          controller: _textController,
-          focusNode: _textFocus,
-          readOnly: true,
-          textInputAction: TextInputAction.none,
-          onTap: openPopup,
-          style: widget.stateManager.configuration!.cellTextStyle,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.all(0),
-            isDense: true,
+        Expanded(
+          child: TextField(
+            controller: _textController,
+            focusNode: _textFocus,
+            readOnly: true,
+            textInputAction: TextInputAction.none,
+            onTap: openPopup,
+            style: widget.stateManager.configuration!.cellTextStyle,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.all(0),
+              isDense: true,
+            ),
+            maxLines: 1,
+            textAlign: widget.column.textAlign.value,
           ),
-          maxLines: 1,
-          textAlign: widget.column.textAlign.value,
         ),
-        Positioned(
-          top: -14,
-          right: !widget.column.textAlign.isRight ? -10 : null,
-          left: widget.column.textAlign.isRight ? -10 : null,
-          child: IconButton(
-            icon: icon!,
-            color: widget.stateManager.configuration!.iconColor,
-            iconSize: widget.stateManager.configuration!.iconSize,
-            onPressed: openPopup,
-          ),
+        IconButton(
+          icon: icon!,
+          color: widget.stateManager.configuration!.iconColor,
+          iconSize: widget.stateManager.configuration!.iconSize,
+          onPressed: openPopup,
         ),
       ],
     );

@@ -37,7 +37,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableContextMenu: false,
         enableDropToResize: true,
         enableAutoEditing: true,
-        titleTextAlign: PlutoColumnTextAlign.right,
+        titleTextAlign: PlutoColumnTextAlign.start,
         titleSpan: const TextSpan(
           children: [
             WidgetSpan(
@@ -222,87 +222,90 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(15),
-        child: PlutoGrid(
-          columns: columns,
-          rows: rows,
-          columnGroups: columnGroups,
-          // mode: PlutoGridMode.selectWithOneTap,
-          onChanged: (PlutoGridOnChangedEvent event) {
-            print(event);
-          },
-          onLoaded: (PlutoGridOnLoadedEvent event) {
-            stateManager = event.stateManager;
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            columnGroups: columnGroups,
+            // mode: PlutoGridMode.selectWithOneTap,
+            onChanged: (PlutoGridOnChangedEvent event) {
+              print(event);
+            },
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
 
-            stateManager.setShowColumnFilter(true, notify: false);
+              stateManager.setShowColumnFilter(true, notify: false);
 
-            // stateManager!.setAutoEditing(true, notify: false);
-          },
-          // onSelected: (event) {
-          //   print(event.cell!.value);
-          // },
-          // onRowChecked: handleOnRowChecked,
-          // onRowsMoved: (event) {
-          //   print(event.idx);
-          //   print(event.rows);
-          // },
-          // onRowDoubleTap: (e) {
-          //   print('Double click A Row.');
-          //   print(e.row?.cells['column1']?.value);
-          // },
-          // onRowSecondaryTap: (e) {
-          //   print('Secondary click A Row.(${e.offset})');
-          //   print(e.row?.cells['column1']?.value);
-          // },
-          createHeader: (PlutoGridStateManager stateManager) {
-            return _Header(
-              stateManager: stateManager,
-              columns: columns,
-            );
-          },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(100, notify: false);
-            return PlutoPagination(stateManager);
-          },
-          rowColorCallback: (rowColorContext) {
-            return rowColorContext.row.cells['column2']!.value == 'green'
-                ? const Color(0xFFE2F6DF)
-                : Colors.white;
-          },
-          configuration: PlutoGridConfiguration(
-            // columnHeight: 30.0,
-            // columnFilterHeight: 30.0,
-            // rowHeight: 30.0,
-            // defaultCellPadding: 15,
-            // defaultColumnTitlePadding: 15,
-            // iconSize: 15,
-            enableColumnBorder: true,
-            // enableGridBorderShadow: true,
-            enableMoveHorizontalInEditing: true,
-            // enableRowColorAnimation: false,
-            // checkedColor: const Color(0x876FB0FF),
-            enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
-            enableMoveDownAfterSelecting: true,
-            gridBorderRadius: BorderRadius.circular(10),
-            gridPopupBorderRadius: BorderRadius.circular(7),
-            scrollbarConfig: const PlutoGridScrollbarConfig(
-              isAlwaysShown: false,
-              scrollbarThickness: 8,
-              scrollbarThicknessWhileDragging: 10,
-            ),
-            // localeText: const PlutoGridLocaleText.korean(),
-            columnFilterConfig: PlutoGridColumnFilterConfig(
-              filters: const [
-                ...FilterHelper.defaultFilters,
-                ClassYouImplemented(),
-              ],
-              resolveDefaultColumnFilter: (column, resolver) {
-                if (column.field == 'column3') {
-                  return resolver<PlutoFilterTypeGreaterThan>()
-                      as PlutoFilterType;
-                }
+              // stateManager!.setAutoEditing(true, notify: false);
+            },
+            // onSelected: (event) {
+            //   print(event.cell!.value);
+            // },
+            // onRowChecked: handleOnRowChecked,
+            // onRowsMoved: (event) {
+            //   print(event.idx);
+            //   print(event.rows);
+            // },
+            // onRowDoubleTap: (e) {
+            //   print('Double click A Row.');
+            //   print(e.row?.cells['column1']?.value);
+            // },
+            // onRowSecondaryTap: (e) {
+            //   print('Secondary click A Row.(${e.offset})');
+            //   print(e.row?.cells['column1']?.value);
+            // },
+            createHeader: (PlutoGridStateManager stateManager) {
+              return _Header(
+                stateManager: stateManager,
+                columns: columns,
+              );
+            },
+            createFooter: (stateManager) {
+              stateManager.setPageSize(100, notify: false);
+              return PlutoPagination(stateManager);
+            },
+            rowColorCallback: (rowColorContext) {
+              return rowColorContext.row.cells['column2']!.value == 'green'
+                  ? const Color(0xFFE2F6DF)
+                  : Colors.white;
+            },
+            configuration: PlutoGridConfiguration(
+              // columnHeight: 30.0,
+              // columnFilterHeight: 30.0,
+              // rowHeight: 30.0,
+              // defaultCellPadding: 15,
+              // defaultColumnTitlePadding: 15,
+              // iconSize: 15,
+              enableColumnBorder: true,
+              // enableGridBorderShadow: true,
+              enableMoveHorizontalInEditing: true,
+              // enableRowColorAnimation: false,
+              // checkedColor: const Color(0x876FB0FF),
+              enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
+              enableMoveDownAfterSelecting: true,
+              gridBorderRadius: BorderRadius.circular(10),
+              gridPopupBorderRadius: BorderRadius.circular(7),
+              scrollbarConfig: const PlutoGridScrollbarConfig(
+                isAlwaysShown: false,
+                scrollbarThickness: 8,
+                scrollbarThicknessWhileDragging: 10,
+              ),
+              // localeText: const PlutoGridLocaleText.korean(),
+              columnFilterConfig: PlutoGridColumnFilterConfig(
+                filters: const [
+                  ...FilterHelper.defaultFilters,
+                  ClassYouImplemented(),
+                ],
+                resolveDefaultColumnFilter: (column, resolver) {
+                  if (column.field == 'column3') {
+                    return resolver<PlutoFilterTypeGreaterThan>()
+                        as PlutoFilterType;
+                  }
 
-                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-              },
+                  return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+                },
+              ),
             ),
           ),
         ),

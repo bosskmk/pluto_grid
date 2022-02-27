@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 void main() {
@@ -11,6 +12,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      supportedLocales: [
+        Locale('ar'),
+      ],
+      locale: Locale('ar'),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        return supportedLocales.first;
+      },
       title: 'PlutoGrid Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -45,6 +57,8 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Age',
       field: 'age',
+      textAlign: PlutoColumnTextAlign.end,
+      titleTextAlign: PlutoColumnTextAlign.start,
       type: PlutoColumnType.number(),
     ),
     PlutoColumn(

@@ -116,6 +116,23 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     );
 
     _columnRightPosition = event.position;
+
+    final moveOffset = event.position.dx - _columnRightPosition.dx;
+
+    widget.stateManager.resizeColumn(
+      widget.column,
+      moveOffset,
+      checkScroll: false,
+    );
+
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.right,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
+
+    _columnRightPosition = event.position;
   }
 
   void _handleOnPointUp(PointerUpEvent event) {
@@ -165,6 +182,16 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       ),
     );
 
+    var sortGesture = _enableGesture
+        ? Listener(
+            onPointerDown:
+                isRTL ? _handleOnPointDownRTL : _handleOnPointDownLTR,
+            onPointerMove:
+                isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
+            onPointerUp: _handleOnPointUp,
+            child: _contextMenuIcon,
+          )
+        : _contextMenuIcon;
     return Stack(
       children: [
         Positioned(
@@ -176,18 +203,31 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
                 )
               : _columnWidget,
         ),
-        if (_showContextIcon)
-          Positioned(
-            right: -3,
-            child: _enableGesture
-                ? Listener(
-                    onPointerDown: _handleOnPointDown,
-                    onPointerMove: _handleOnPointMove,
-                    onPointerUp: _handleOnPointUp,
-                    child: _contextMenuIcon,
-                  )
-                : _contextMenuIcon,
-          ),
+        if (_showContextIcon) ...[
+          if (widget.column.titleTextAlign.value == TextAlign.start ||
+              widget.column.titleTextAlign.value == TextAlign.center)
+            Positioned.directional(
+              textDirection: Directionality.of(context),
+              end: -3,
+              child: sortGesture,
+            ),
+          if (widget.column.titleTextAlign.value == TextAlign.end)
+            Positioned.directional(
+              textDirection: Directionality.of(context),
+              start: -3,
+              child: sortGesture,
+            ),
+          if (widget.column.titleTextAlign.value == TextAlign.left)
+            Positioned(
+              right: -3,
+              child: sortGesture,
+            ),
+          if (widget.column.titleTextAlign.value == TextAlign.right)
+            Positioned(
+              left: -3,
+              child: sortGesture,
+            ),
+        ]
       ],
     );
   }
