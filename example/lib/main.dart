@@ -13,9 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       supportedLocales: [
-        Locale('ar'),
+        Locale('ar'),  // rtl
+        Locale('en'),  //ltr
       ],
-      locale: Locale('ar'),
+      locale: Locale('ar')  ,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate

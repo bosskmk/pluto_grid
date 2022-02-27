@@ -43,61 +43,59 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(textDirection: TextDirection.rtl,
-      child: MaterialApp(
-        initialRoute:
-            kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
-        routes: {
-          HomeScreen.routeName: (context) => const HomeScreen(),
-          AddAndRemoveColumnRowScreen.routeName: (context) =>
-              const AddAndRemoveColumnRowScreen(),
-          CellRendererScreen.routeName: (context) => const CellRendererScreen(),
-          CellSelectionScreen.routeName: (context) => const CellSelectionScreen(),
-          ColumnFilteringScreen.routeName: (context) =>
-              const ColumnFilteringScreen(),
-          ColumnFreezingScreen.routeName: (context) =>
-              const ColumnFreezingScreen(),
-          ColumnGroupScreen.routeName: (context) => const ColumnGroupScreen(),
-          ColumnHidingScreen.routeName: (context) => const ColumnHidingScreen(),
-          ColumnMovingScreen.routeName: (context) => const ColumnMovingScreen(),
-          ColumnResizingScreen.routeName: (context) =>
-              const ColumnResizingScreen(),
-          ColumnSortingScreen.routeName: (context) => const ColumnSortingScreen(),
-          CopyAndPasteScreen.routeName: (context) => const CopyAndPasteScreen(),
-          DarkModeScreen.routeName: (context) => const DarkModeScreen(),
-          DateTypeColumnScreen.routeName: (context) =>
-              const DateTypeColumnScreen(),
-          DualModeScreen.routeName: (context) => const DualModeScreen(),
-          EditingStateScreen.routeName: (context) => const EditingStateScreen(),
-          GridAsPopupScreen.routeName: (context) => const GridAsPopupScreen(),
-          ListingModeScreen.routeName: (context) => const ListingModeScreen(),
-          MovingScreen.routeName: (context) => const MovingScreen(),
-          NumberTypeColumnScreen.routeName: (context) =>
-              const NumberTypeColumnScreen(),
-          RowColorScreen.routeName: (context) => const RowColorScreen(),
-          RowMovingScreen.routeName: (context) => const RowMovingScreen(),
-          RowPaginationScreen.routeName: (context) => const RowPaginationScreen(),
-          RowSelectionScreen.routeName: (context) => const RowSelectionScreen(),
-          RowWithCheckboxScreen.routeName: (context) =>
-              const RowWithCheckboxScreen(),
-          SelectionTypeColumnScreen.routeName: (context) =>
-              const SelectionTypeColumnScreen(),
-          TextTypeColumnScreen.routeName: (context) =>
-              const TextTypeColumnScreen(),
-          TimeTypeColumnScreen.routeName: (context) =>
-              const TimeTypeColumnScreen(),
-          ValueFormatterScreen.routeName: (context) =>
-              const ValueFormatterScreen(),
-          // only development
-          EmptyScreen.routeName: (context) => const EmptyScreen(),
-          DevelopmentScreen.routeName: (context) => const DevelopmentScreen(),
-        },
-        theme: ThemeData(
-          primaryColor: PlutoGridExampleColors.primaryColor,
-          fontFamily: 'OpenSans',
-          backgroundColor: PlutoGridExampleColors.backgroundColor,
-          scaffoldBackgroundColor: PlutoGridExampleColors.backgroundColor,
-        ),
+    return MaterialApp(
+      initialRoute:
+          kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
+      routes: {
+        HomeScreen.routeName: (context) => const HomeScreen(),
+        AddAndRemoveColumnRowScreen.routeName: (context) =>
+            const AddAndRemoveColumnRowScreen(),
+        CellRendererScreen.routeName: (context) => const CellRendererScreen(),
+        CellSelectionScreen.routeName: (context) => const CellSelectionScreen(),
+        ColumnFilteringScreen.routeName: (context) =>
+            const ColumnFilteringScreen(),
+        ColumnFreezingScreen.routeName: (context) =>
+            const ColumnFreezingScreen(),
+        ColumnGroupScreen.routeName: (context) => const ColumnGroupScreen(),
+        ColumnHidingScreen.routeName: (context) => const ColumnHidingScreen(),
+        ColumnMovingScreen.routeName: (context) => const ColumnMovingScreen(),
+        ColumnResizingScreen.routeName: (context) =>
+            const ColumnResizingScreen(),
+        ColumnSortingScreen.routeName: (context) => const ColumnSortingScreen(),
+        CopyAndPasteScreen.routeName: (context) => const CopyAndPasteScreen(),
+        DarkModeScreen.routeName: (context) => const DarkModeScreen(),
+        DateTypeColumnScreen.routeName: (context) =>
+            const DateTypeColumnScreen(),
+        DualModeScreen.routeName: (context) => const DualModeScreen(),
+        EditingStateScreen.routeName: (context) => const EditingStateScreen(),
+        GridAsPopupScreen.routeName: (context) => const GridAsPopupScreen(),
+        ListingModeScreen.routeName: (context) => const ListingModeScreen(),
+        MovingScreen.routeName: (context) => const MovingScreen(),
+        NumberTypeColumnScreen.routeName: (context) =>
+            const NumberTypeColumnScreen(),
+        RowColorScreen.routeName: (context) => const RowColorScreen(),
+        RowMovingScreen.routeName: (context) => const RowMovingScreen(),
+        RowPaginationScreen.routeName: (context) => const RowPaginationScreen(),
+        RowSelectionScreen.routeName: (context) => const RowSelectionScreen(),
+        RowWithCheckboxScreen.routeName: (context) =>
+            const RowWithCheckboxScreen(),
+        SelectionTypeColumnScreen.routeName: (context) =>
+            const SelectionTypeColumnScreen(),
+        TextTypeColumnScreen.routeName: (context) =>
+            const TextTypeColumnScreen(),
+        TimeTypeColumnScreen.routeName: (context) =>
+            const TimeTypeColumnScreen(),
+        ValueFormatterScreen.routeName: (context) =>
+            const ValueFormatterScreen(),
+        // only development
+        EmptyScreen.routeName: (context) => const EmptyScreen(),
+        DevelopmentScreen.routeName: (context) => const DevelopmentScreen(),
+      },
+      theme: ThemeData(
+        primaryColor: PlutoGridExampleColors.primaryColor,
+        fontFamily: 'OpenSans',
+        backgroundColor: PlutoGridExampleColors.backgroundColor,
+        scaffoldBackgroundColor: PlutoGridExampleColors.backgroundColor,
       ),
     );
   }

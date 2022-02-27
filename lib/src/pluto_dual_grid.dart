@@ -49,67 +49,63 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
     double? width,
     bool? isGridA,
   }) {
-    var of = Directionality.of(context);
     return SizedBox(
       width: width,
-      child: Directionality(
-        textDirection: of,
-        child:PlutoGrid(
-          columns: props.columns,
-          rows: props.rows,
-          mode: mode,
-          onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
-            if (isGridA!) {
-              _stateManagerA = onLoadedEvent.stateManager;
-            } else {
-              _stateManagerB = onLoadedEvent.stateManager;
-            }
+      child: PlutoGrid(
+        columns: props.columns,
+        rows: props.rows,
+        mode: mode,
+        onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
+          if (isGridA!) {
+            _stateManagerA = onLoadedEvent.stateManager;
+          } else {
+            _stateManagerB = onLoadedEvent.stateManager;
+          }
 
-            onLoadedEvent.stateManager.eventManager!
-                .listener((PlutoGridEvent plutoEvent) {
-              if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
-                if (isGridA == true && plutoEvent.direction.isRight) {
-                  _stateManagerA!.setKeepFocus(false);
-                  _stateManagerB!.setKeepFocus(true);
-                } else if (isGridA != true && plutoEvent.direction.isLeft) {
-                  _stateManagerA!.setKeepFocus(true);
-                  _stateManagerB!.setKeepFocus(false);
-                }
+          onLoadedEvent.stateManager.eventManager!
+              .listener((PlutoGridEvent plutoEvent) {
+            if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
+              if (isGridA == true && plutoEvent.direction.isRight) {
+                _stateManagerA!.setKeepFocus(false);
+                _stateManagerB!.setKeepFocus(true);
+              } else if (isGridA != true && plutoEvent.direction.isLeft) {
+                _stateManagerA!.setKeepFocus(true);
+                _stateManagerB!.setKeepFocus(false);
               }
-            });
+            }
+          });
 
-            if (props.onLoaded != null) {
-              props.onLoaded!(onLoadedEvent);
-            }
-          },
-          onChanged: props.onChanged,
-          onSelected: (PlutoGridOnSelectedEvent onSelectedEvent) {
-            if (onSelectedEvent.row == null || onSelectedEvent.cell == null) {
-              widget.onSelected!(
-                PlutoDualOnSelectedEvent(
-                  gridA: null,
-                  gridB: null,
+          if (props.onLoaded != null) {
+            props.onLoaded!(onLoadedEvent);
+          }
+        },
+        onChanged: props.onChanged,
+        onSelected: (PlutoGridOnSelectedEvent onSelectedEvent) {
+          if (onSelectedEvent.row == null || onSelectedEvent.cell == null) {
+            widget.onSelected!(
+              PlutoDualOnSelectedEvent(
+                gridA: null,
+                gridB: null,
+              ),
+            );
+          } else {
+            widget.onSelected!(
+              PlutoDualOnSelectedEvent(
+                gridA: PlutoGridOnSelectedEvent(
+                  row: _stateManagerA!.currentRow,
+                  cell: _stateManagerA!.currentCell,
                 ),
-              );
-            } else {
-              widget.onSelected!(
-                PlutoDualOnSelectedEvent(
-                  gridA: PlutoGridOnSelectedEvent(
-                    row: _stateManagerA!.currentRow,
-                    cell: _stateManagerA!.currentCell,
-                  ),
-                  gridB: PlutoGridOnSelectedEvent(
-                    row: _stateManagerB!.currentRow,
-                    cell: _stateManagerB!.currentCell,
-                  ),
+                gridB: PlutoGridOnSelectedEvent(
+                  row: _stateManagerB!.currentRow,
+                  cell: _stateManagerB!.currentCell,
                 ),
-              );
-            }
-          },
-          createHeader: props.createHeader,
-          createFooter: props.createFooter,
-          configuration: props.configuration,
-        ),
+              ),
+            );
+          }
+        },
+        createHeader: props.createHeader,
+        createFooter: props.createFooter,
+        configuration: props.configuration,
       ),
     );
   }

@@ -103,21 +103,18 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
             ),
           ),
           Expanded(
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onChanged: (PlutoGridOnChangedEvent event) {
-                  print(event);
-                },
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  event.stateManager
-                      .setSelectingMode(PlutoGridSelectingMode.cell);
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onChanged: (PlutoGridOnChangedEvent event) {
+                print(event);
+              },
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                event.stateManager
+                    .setSelectingMode(PlutoGridSelectingMode.cell);
 
-                  stateManager = event.stateManager;
-                },
-              ),
+                stateManager = event.stateManager;
+              },
             ),
           ),
         ],
