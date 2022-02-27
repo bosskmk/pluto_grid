@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PlutoGridExamplePage(),
+      home: const Directionality(child: PlutoGridExamplePage() , textDirection: TextDirection.rtl,),
     );
   }
 }
@@ -45,38 +45,38 @@ class PlutoGridExamplePage extends StatefulWidget {
 class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
   final List<PlutoColumn> columns = <PlutoColumn>[
     PlutoColumn(
-      title: 'Id',
+      title: 'المعرف',
       field: 'id',
       type: PlutoColumnType.text(),
     ),
     PlutoColumn(
-      title: 'Name',
+      title: 'الاسم',
       field: 'name',
       type: PlutoColumnType.text(),
     ),
     PlutoColumn(
-      title: 'Age',
+      title: 'العمر',
       field: 'age',
       textAlign: PlutoColumnTextAlign.end,
       titleTextAlign: PlutoColumnTextAlign.start,
       type: PlutoColumnType.number(),
     ),
     PlutoColumn(
-      title: 'Role',
+      title: 'الاختصاص',
       field: 'role',
       type: PlutoColumnType.select(<String>[
-        'Programmer',
-        'Designer',
-        'Owner',
+        'مبرمج',
+        'مصمم',
+        'مالك',
       ]),
     ),
     PlutoColumn(
-      title: 'Joined',
+      title: 'الانضمام',
       field: 'joined',
       type: PlutoColumnType.date(),
     ),
     PlutoColumn(
-      title: 'Working time',
+      title: 'ساعات العمل',
       field: 'working_time',
       type: PlutoColumnType.time(),
     ),
@@ -85,18 +85,18 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
   final List<PlutoRow> rows = [
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user1'),
-        'name': PlutoCell(value: 'Mike'),
+        'id': PlutoCell(value: 'مستخدم1'),
+        'name': PlutoCell(value: 'فلان'),
         'age': PlutoCell(value: 20),
-        'role': PlutoCell(value: 'Programmer'),
+        'role': PlutoCell(value: 'مبرمج'),
         'joined': PlutoCell(value: '2021-01-01'),
         'working_time': PlutoCell(value: '09:00'),
       },
     ),
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user2'),
-        'name': PlutoCell(value: 'Jack'),
+        'id': PlutoCell(value: 'مستخدم 2'),
+        'name': PlutoCell(value: 'فلان'),
         'age': PlutoCell(value: 25),
         'role': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
@@ -105,10 +105,10 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     ),
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user3'),
-        'name': PlutoCell(value: 'Suzi'),
+        'id': PlutoCell(value: 'مستخدم 2'),
+        'name': PlutoCell(value: 'فلان'),
         'age': PlutoCell(value: 40),
-        'role': PlutoCell(value: 'Owner'),
+        'role': PlutoCell(value: 'فلان'),
         'joined': PlutoCell(value: '2021-03-01'),
         'working_time': PlutoCell(value: '11:00'),
       },
@@ -117,7 +117,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
 
   /// columnGroups that can group columns can be omitted.
   final List<PlutoColumnGroup> columnGroups = [
-    PlutoColumnGroup(title: 'Id', fields: ['id'], expandedColumn: true),
+    PlutoColumnGroup(title: 'Id', fields: ['id']  ),
     PlutoColumnGroup(title: 'User information', fields: ['name', 'age']),
     PlutoColumnGroup(title: 'Status', children: [
       PlutoColumnGroup(title: 'A', fields: ['role'], expandedColumn: true),
