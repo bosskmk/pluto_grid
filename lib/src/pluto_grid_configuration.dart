@@ -616,6 +616,46 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Cargando...',
   });
+
+  const PlutoGridLocaleText.arabic({
+    // Column menu
+    this.unfreezeColumn = 'إلغاء التجميد',
+    this.freezeColumnToLeft = 'تجميد إلى اليسار',
+    this.freezeColumnToRight = 'تجميد إلى اليمين',
+    this.autoFitColumn = 'تعبئة تلقائية',
+    this.hideColumn = 'إخفاء العمود',
+    this.setColumns = 'إدراج أعمدة',
+    this.setFilter = 'فلترة',
+    this.resetFilter = 'تهيئة الفلترة',
+    // SetColumns popup
+    this.setColumnsTitle = 'اسم العمود',
+    // Filter popup
+    this.filterColumn = 'العمود',
+    this.filterType = 'النوع',
+    this.filterValue = 'القيمة',
+    this.filterAllColumns = 'كل الأعمدة',
+    this.filterContains = 'يحتوي',
+    this.filterEquals = 'يساوي',
+    this.filterStartsWith = 'يبدأ بـ',
+    this.filterEndsWith = 'ينتهي بـ',
+    this.filterGreaterThan = 'أكبر من',
+    this.filterGreaterThanOrEqualTo = 'أكبر من أو يساوي',
+    this.filterLessThan = 'اصغر من',
+    this.filterLessThanOrEqualTo = 'أصغر من أو يساوي',
+    // Date popup
+    this.sunday = 'أح',
+    this.monday = 'إث',
+    this.tuesday = 'ثل',
+    this.wednesday = 'أر',
+    this.thursday = 'خم',
+    this.friday = 'جم',
+    this.saturday = 'سب',
+    // Time column popup
+    this.hour = 'ساعة',
+    this.minute = 'دقيقي',
+    // Common
+    this.loadingText = 'جاري التحميل...',
+  });
 }
 
 /// Behavior of the Enter key when a cell is selected.
