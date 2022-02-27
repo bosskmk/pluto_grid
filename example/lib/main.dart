@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       supportedLocales: [
-        Locale('ar'),  // rtl
-        Locale('en'),  //ltr
+        Locale('ar'), // rtl
+        Locale('en'), //ltr
       ],
-      locale: Locale('ar')  ,
+      locale: Locale('ar'),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
@@ -28,7 +28,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Directionality(child: PlutoGridExamplePage() , textDirection: TextDirection.rtl,),
+      home: const Directionality(
+        child: PlutoGridExamplePage(),
+        textDirection: TextDirection.rtl,
+      ),
     );
   }
 }
@@ -118,7 +121,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
 
   /// columnGroups that can group columns can be omitted.
   final List<PlutoColumnGroup> columnGroups = [
-    PlutoColumnGroup(title: 'Id', fields: ['id']  ),
+    PlutoColumnGroup(title: 'Id', fields: ['id']),
     PlutoColumnGroup(title: 'User information', fields: ['name', 'age']),
     PlutoColumnGroup(title: 'Status', children: [
       PlutoColumnGroup(title: 'A', fields: ['role'], expandedColumn: true),

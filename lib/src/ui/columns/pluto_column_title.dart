@@ -132,23 +132,6 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     );
 
     _columnLeftPosition = event.position;
-
-    final moveOffset = event.position.dx - _columnRightPosition.dx;
-
-    widget.stateManager.resizeColumn(
-      widget.column,
-      moveOffset,
-      checkScroll: false,
-    );
-
-    widget.stateManager.scrollByDirection(
-      PlutoMoveDirection.right,
-      widget.stateManager.isInvalidHorizontalScroll
-          ? widget.stateManager.scroll!.maxScrollHorizontal
-          : widget.stateManager.scroll!.horizontal!.offset,
-    );
-
-    _columnRightPosition = event.position;
   }
 
   void _handleOnPointUp(PointerUpEvent event) {
@@ -188,7 +171,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
           sort: _sort,
           color: widget.stateManager.configuration!.iconColor,
           icon:
-              widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
+          widget.column.enableContextMenu ? Icons.dehaze : Icons.code_sharp,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
         mouseCursor: _enableGesture
@@ -198,54 +181,34 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       ),
     );
 
-    var sortGesture = _enableGesture
-        ? Listener(
-            onPointerDown:
-                isRTL ? _handleOnPointDownRTL : _handleOnPointDownLTR,
-            onPointerMove:
-                isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
-            onPointerUp: _handleOnPointUp,
-            child: _contextMenuIcon,
-          )
-        : _contextMenuIcon;
+    final isRTL = Directionality.of(context) == TextDirection.rtl;
+
     return Stack(
       children: [
         Positioned(
           child: widget.column.enableColumnDrag
               ? _BuildDraggableWidget(
-                  stateManager: widget.stateManager,
-                  column: widget.column,
-                  child: _columnWidget,
-                )
+            stateManager: widget.stateManager,
+            column: widget.column,
+            child: _columnWidget,
+          )
               : _columnWidget,
         ),
-        if (_showContextIcon) ...[
-          if (widget.column.titleTextAlign.value == TextAlign.start ||
-              widget.column.titleTextAlign.value == TextAlign.center)
-            Positioned.directional(
-              textDirection: Directionality.of(context),
-              end: -3,
-              child: sortGesture,
-            ),
-          if (widget.column.titleTextAlign.value == TextAlign.end)
-            Positioned.directional(
-              textDirection: Directionality.of(context),
-              start: -3,
-              child: sortGesture,
-            ),
-          if (widget.column.titleTextAlign.value == TextAlign.left)
-            Positioned(
-              right: -3,
-              child: sortGesture,
-                    onPointerMove:
-                        isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
-            ),
-          if (widget.column.titleTextAlign.value == TextAlign.right)
-            Positioned(
-              left: -3,
-              child: sortGesture,
-            ),
-        ]
+        if (_showContextIcon)
+          Positioned.directional(
+            textDirection: Directionality.of(context),
+            end: -3,
+            child: _enableGesture
+                ? Listener(
+              onPointerDown:
+              isRTL ? _handleOnPointDownRTL : _handleOnPointDownLTR,
+              onPointerMove:
+              isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
+              onPointerUp: _handleOnPointUp,
+              child: _contextMenuIcon,
+            )
+                : _contextMenuIcon,
+          ),
       ],
     );
   }
@@ -347,11 +310,11 @@ class _BuildSortableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return column!.enableSorting
         ? InkWell(
-            onTap: () {
-              stateManager!.toggleSortColumn(column!);
-            },
-            child: child,
-          )
+      onTap: () {
+        stateManager!.toggleSortColumn(column!);
+      },
+      child: child,
+    )
         : child!;
   }
 }
@@ -370,7 +333,7 @@ class _BuildColumnWidget extends StatelessWidget {
 
   double get padding =>
       column.titlePadding ??
-      stateManager.configuration!.defaultColumnTitlePadding;
+          stateManager.configuration!.defaultColumnTitlePadding;
 
   bool get showSizedBoxForIcon =>
       column.isShowRightIcon && column.titleTextAlign.isRight;
@@ -383,13 +346,13 @@ class _BuildColumnWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: padding),
       decoration: stateManager.configuration!.enableColumnBorder
           ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: stateManager.configuration!.borderColor,
-                  width: 1.0,
-                ),
-              ),
-            )
+        border: Border(
+          right: BorderSide(
+            color: stateManager.configuration!.borderColor,
+            width: 1.0,
+          ),
+        ),
+      )
           : const BoxDecoration(),
       child: DragTarget<PlutoColumn>(
         onWillAccept: (PlutoColumn? columnToDrag) {
@@ -555,24 +518,24 @@ class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
       widget.column.titleSpan == null ? widget.column.title : null;
 
   List<InlineSpan>? get _children => [
-        if (widget.column.titleSpan != null) widget.column.titleSpan!,
-        if (_isFilteredList!)
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: IconButton(
-              icon: Icon(
-                Icons.filter_alt_outlined,
-                color: widget.stateManager.configuration!.iconColor,
-                size: widget.stateManager.configuration!.iconSize,
-              ),
-              onPressed: _handleOnPressedFilter,
-              constraints: BoxConstraints(
-                maxHeight:
-                    widget.height + (PlutoGridSettings.rowBorderWidth * 2),
-              ),
-            ),
+    if (widget.column.titleSpan != null) widget.column.titleSpan!,
+    if (_isFilteredList!)
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: IconButton(
+          icon: Icon(
+            Icons.filter_alt_outlined,
+            color: widget.stateManager.configuration!.iconColor,
+            size: widget.stateManager.configuration!.iconSize,
           ),
-      ];
+          onPressed: _handleOnPressedFilter,
+          constraints: BoxConstraints(
+            maxHeight:
+            widget.height + (PlutoGridSettings.rowBorderWidth * 2),
+          ),
+        ),
+      ),
+  ];
 
   @override
   Widget build(BuildContext context) {
