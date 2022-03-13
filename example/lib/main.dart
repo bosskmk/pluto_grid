@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'PlutoStateManger/PlutoStateManagerMixin.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,7 +51,10 @@ class PlutoGridExamplePage extends StatefulWidget {
   State<PlutoGridExamplePage> createState() => _PlutoGridExamplePageState();
 }
 
-class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
+class _PlutoGridExamplePageState extends State<PlutoGridExamplePage>
+    with PlutoStateManagerMixin {
+
+
   final List<PlutoColumn> columns = <PlutoColumn>[
     PlutoColumn(
       title: 'المعرف',
@@ -131,7 +139,6 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
 
   /// [PlutoGridStateManager] has many methods and properties to dynamically manipulate the grid.
   /// You can manipulate the grid dynamically at runtime by passing this through the [onLoaded] callback.
-  late final PlutoGridStateManager stateManager;
 
   @override
   Widget build(BuildContext context) {
@@ -142,9 +149,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           columns: columns,
           rows: rows,
           columnGroups: columnGroups,
-          onLoaded: (PlutoGridOnLoadedEvent event) {
-            stateManager = event.stateManager;
-          },
+          onLoaded: onLoaded,
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
@@ -154,5 +159,9 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         ),
       ),
     );
+  }
+
+  void onLoaded(PlutoGridOnLoadedEvent event) {
+    initStateManger(event, 'main_grid' + 'user_1');
   }
 }
