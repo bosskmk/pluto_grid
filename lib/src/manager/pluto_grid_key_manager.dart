@@ -116,11 +116,6 @@ class PlutoGridKeyManager {
         return;
       }
 
-      if (keyEvent.isCtrlShiftV) {
-        _handleCtrlShiftV(keyEvent);
-        return;
-      }
-
       if (keyEvent.isCtrlA) {
         _handleCtrlA(keyEvent);
         return;
@@ -360,19 +355,6 @@ class PlutoGridKeyManager {
           PlutoClipboardTransformation.stringToList(value!.text!);
 
       stateManager.pasteCellValue(textList);
-    });
-  }
-
-  void _handleCtrlShiftV(PlutoKeyManagerEvent keyEvent) {
-    if (stateManager.isEditing == true) {
-      return;
-    }
-
-    Clipboard.getData('text/plain').then((value) {
-      List<List<String>> textList =
-          PlutoClipboardTransformation.stringToList(value!.text!);
-
-      stateManager.pasteCellValueWithAppendingRows(textList);
     });
   }
 

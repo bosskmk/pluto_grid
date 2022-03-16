@@ -606,11 +606,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#pasteCellValue, [textList]),
           returnValueForMissingStub: null);
   @override
-  void pasteCellValueWithAppendingRows(List<List<String>>? textList) =>
-      super.noSuchMethod(
-          Invocation.method(#pasteCellValueWithAppendingRows, [textList]),
-          returnValueForMissingStub: null);
-  @override
   dynamic castValueByColumnType(dynamic value, _i2.PlutoColumn? column) => super
       .noSuchMethod(Invocation.method(#castValueByColumnType, [value, column]));
   @override
@@ -865,35 +860,29 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setRowChecked, [row, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void insertRows(int? rowIdx, List<_i2.PlutoRow>? rows,
-          {bool? notify = true}) =>
-      super.noSuchMethod(
-          Invocation.method(#insertRows, [rowIdx, rows], {#notify: notify}),
+  void insertRows(int? rowIdx, List<_i2.PlutoRow>? rows) =>
+      super.noSuchMethod(Invocation.method(#insertRows, [rowIdx, rows]),
           returnValueForMissingStub: null);
   @override
-  void prependNewRows({int? count = 1, bool? notify = true}) => super
-      .noSuchMethod(
-          Invocation.method(
-              #prependNewRows, [], {#count: count, #notify: notify}),
-          returnValueForMissingStub: null);
-  @override
-  void prependRows(List<_i2.PlutoRow>? rows, {bool? notify = true}) => super
-      .noSuchMethod(Invocation.method(#prependRows, [rows], {#notify: notify}),
-          returnValueForMissingStub: null);
-  @override
-  void appendNewRows({int? count = 1, bool? notify = true}) => super
-      .noSuchMethod(
-          Invocation.method(
-              #appendNewRows, [], {#count: count, #notify: notify}),
-          returnValueForMissingStub: null);
-  @override
-  void appendRows(List<_i2.PlutoRow>? rows, {bool? notify = true}) => super
-      .noSuchMethod(Invocation.method(#appendRows, [rows], {#notify: notify}),
-          returnValueForMissingStub: null);
-  @override
-  void removeCurrentRow({bool? notify = true}) => super.noSuchMethod(
-      Invocation.method(#removeCurrentRow, [], {#notify: notify}),
+  void prependNewRows({int? count = 1}) => super.noSuchMethod(
+      Invocation.method(#prependNewRows, [], {#count: count}),
       returnValueForMissingStub: null);
+  @override
+  void prependRows(List<_i2.PlutoRow>? rows) =>
+      super.noSuchMethod(Invocation.method(#prependRows, [rows]),
+          returnValueForMissingStub: null);
+  @override
+  void appendNewRows({int? count = 1}) =>
+      super.noSuchMethod(Invocation.method(#appendNewRows, [], {#count: count}),
+          returnValueForMissingStub: null);
+  @override
+  void appendRows(List<_i2.PlutoRow>? rows) =>
+      super.noSuchMethod(Invocation.method(#appendRows, [rows]),
+          returnValueForMissingStub: null);
+  @override
+  void removeCurrentRow() =>
+      super.noSuchMethod(Invocation.method(#removeCurrentRow, []),
+          returnValueForMissingStub: null);
   @override
   void removeRows(List<_i2.PlutoRow>? rows, {bool? notify = true}) => super
       .noSuchMethod(Invocation.method(#removeRows, [rows], {#notify: notify}),
