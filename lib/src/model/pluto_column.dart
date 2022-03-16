@@ -74,6 +74,8 @@ class PlutoColumn {
   /// or the text cannot be directly modified, such as in the form of select popup.
   bool applyFormatterInEditing;
 
+  Color? backgroundColor;
+
   /// Rendering for cell widget.
   PlutoColumnRenderer? renderer;
 
@@ -133,6 +135,7 @@ class PlutoColumn {
     this.sort = PlutoColumnSort.none,
     this.formatter,
     this.applyFormatterInEditing = false,
+    this.backgroundColor,
     this.renderer,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,

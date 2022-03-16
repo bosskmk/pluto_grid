@@ -33,6 +33,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         field: 'column1',
         type: PlutoColumnType.text(),
         titleTextAlign: PlutoColumnTextAlign.center,
+        backgroundColor: Colors.red,
       ),
       PlutoColumn(
         title: 'Column2',
@@ -88,13 +89,16 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
       ),
       PlutoColumnGroup(
         title: 'Group A',
+        backgroundColor: Colors.teal,
         children: [
           PlutoColumnGroup(
             title: 'A - 1',
             fields: ['column2', 'column3'],
+            backgroundColor: Colors.amber,
           ),
           PlutoColumnGroup(
             title: 'A - 2',
+            backgroundColor: Colors.greenAccent,
             children: [
               PlutoColumnGroup(
                 title: 'A - 2 - 1',

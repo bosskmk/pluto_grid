@@ -57,6 +57,14 @@ class PlutoGridConfiguration {
   /// Icon size. (column menu, cell of popup type)
   final double iconSize;
 
+  /// Icon that can open a pop-up menu next to the column title
+  /// when [enableContextMenu] of [PlutoColumn] is true.
+  final IconData columnContextIcon;
+
+  /// If enableContextMenu of PlutoColumn is false and enableDropToResize is true,
+  /// only the width of the column can be adjusted.
+  final IconData columnResizeIcon;
+
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
 
@@ -129,6 +137,8 @@ class PlutoGridConfiguration {
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
     this.iconSize = 18,
+    this.columnContextIcon = Icons.dehaze,
+    this.columnResizeIcon = Icons.code_sharp,
     this.menuBackgroundColor = Colors.white,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
@@ -171,6 +181,8 @@ class PlutoGridConfiguration {
     this.iconColor = Colors.white38,
     this.disabledIconColor = Colors.white12,
     this.iconSize = 18,
+    this.columnContextIcon = Icons.dehaze,
+    this.columnResizeIcon = Icons.code_sharp,
     this.menuBackgroundColor = const Color(0xFF414141),
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
@@ -235,6 +247,8 @@ class PlutoGridConfiguration {
     Color? iconColor,
     Color? disabledIconColor,
     double? iconSize,
+    IconData? columnContextIcon,
+    IconData? columnResizeIcon,
     Color? menuBackgroundColor,
     double? rowHeight,
     double? columnHeight,
@@ -272,6 +286,8 @@ class PlutoGridConfiguration {
       iconColor: iconColor ?? this.iconColor,
       disabledIconColor: disabledIconColor ?? this.disabledIconColor,
       iconSize: iconSize ?? this.iconSize,
+      columnContextIcon: columnContextIcon ?? this.columnContextIcon,
+      columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       rowHeight: rowHeight ?? this.rowHeight,
       columnHeight: columnHeight ?? this.columnHeight,

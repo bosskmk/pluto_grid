@@ -1,3 +1,8 @@
+## [2.9.3] - 2022. 3. 16
+
+* Added columnContextIcon, columnResizeIcon.
+* Added backgroundColor to PlutoColumn, PlutoColumnGroup.
+
 ## [2.9.2] - 2022. 1. 27
 
 * Fixed locale number format.  
