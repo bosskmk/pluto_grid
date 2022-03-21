@@ -335,17 +335,22 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void _initKeyManager() {
-    _keyManager = PlutoGridKeyManager(
-      stateManager: _stateManager,
-    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final _isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    _keyManager!.init();
+      _keyManager = PlutoGridKeyManager(
+        stateManager: _stateManager,
+        isRTL: _isRTL,
+      );
 
-    _stateManager.setKeyManager(_keyManager);
+      _keyManager!.init();
 
-    // Dispose
-    _disposeList.add(() {
-      _keyManager!.dispose();
+      _stateManager.setKeyManager(_keyManager);
+
+      // Dispose
+      _disposeList.add(() {
+        _keyManager!.dispose();
+      });
     });
   }
 
@@ -622,6 +627,7 @@ class PlutoGridOnSelectedEvent {
 
 abstract class PlutoGridOnRowCheckedEvent {
   bool get isAll => runtimeType == PlutoGridOnRowCheckedAllEvent;
+
   bool get isRow => runtimeType == PlutoGridOnRowCheckedOneEvent;
 
   final PlutoRow? row;

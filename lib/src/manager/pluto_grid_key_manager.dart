@@ -36,6 +36,7 @@ class PlutoGridKeyEventResult {
 
 class PlutoGridKeyManager {
   PlutoGridStateManager stateManager;
+  bool isRTL;
 
   /// 2021-11-19
   /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
@@ -44,6 +45,7 @@ class PlutoGridKeyManager {
 
   PlutoGridKeyManager({
     required this.stateManager,
+    required this.isRTL,
   });
 
   PublishSubject<PlutoKeyManagerEvent> subject =
@@ -132,9 +134,17 @@ class PlutoGridKeyManager {
         stateManager.configuration?.enableMoveHorizontalInEditing == true;
 
     if (keyEvent.isLeft) {
-      moveDirection = PlutoMoveDirection.left;
+      if (isRTL) {
+        moveDirection = PlutoMoveDirection.right;
+      } else {
+        moveDirection = PlutoMoveDirection.left;
+      }
     } else if (keyEvent.isRight) {
-      moveDirection = PlutoMoveDirection.right;
+      if (isRTL) {
+        moveDirection = PlutoMoveDirection.left;
+      } else {
+        moveDirection = PlutoMoveDirection.right;
+      }
     } else if (keyEvent.isUp) {
       moveDirection = PlutoMoveDirection.up;
     } else if (keyEvent.isDown) {
