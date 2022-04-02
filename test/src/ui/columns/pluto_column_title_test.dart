@@ -659,9 +659,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border? border = decoration.border as Border?;
+        final Border border = decoration.border as Border;
 
-        expect(border, null);
+        expect(border.right, BorderSide.none);
       },
     );
   });

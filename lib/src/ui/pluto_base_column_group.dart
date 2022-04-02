@@ -105,6 +105,7 @@ class _ColumnGroupTitle extends StatelessWidget {
       height: groupTitleHeight,
       padding: EdgeInsets.symmetric(horizontal: _padding),
       decoration: BoxDecoration(
+        color: columnGroup.group.backgroundColor,
         border: Border(
           right: stateManager.configuration!.enableColumnBorder
               ? BorderSide(

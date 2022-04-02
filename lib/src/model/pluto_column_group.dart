@@ -38,6 +38,8 @@ class PlutoColumnGroup {
   /// a unique name to represent the group
   String groupId;
 
+  final Color? backgroundColor;
+
   PlutoColumnGroup({
     required this.title,
     required this.groupId,
@@ -47,6 +49,7 @@ class PlutoColumnGroup {
     this.titleSpan,
     this.titleTextAlign = PlutoColumnTextAlign.center,
     this.expandedColumn = false,
+    this.backgroundColor,
   })  : assert(fields == null
             ? (children != null && children.isNotEmpty)
             : fields.isNotEmpty && children == null),
