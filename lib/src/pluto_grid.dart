@@ -315,12 +315,6 @@ class _PlutoGridState extends State<PlutoGrid> {
     return _keyManager!.eventResult.consume(KeyEventResult.handled);
   }
 
-  void _setLayout(BoxConstraints size) {
-    _stateManager.setLayout(size);
-
-    _resetState();
-  }
-
   void _resetState() {
     _showFrozenColumn = _stateManager.showFrozenColumn;
 
@@ -438,15 +432,18 @@ class _PlutoGridState extends State<PlutoGrid> {
                   child: _footer!,
                 ),
               if (_stateManager.showLoading)
-                PlutoLoading(
-                  backgroundColor:
-                      _stateManager.configuration!.gridBackgroundColor,
-                  indicatorColor:
-                      _stateManager.configuration!.cellTextStyle.color,
-                  indicatorText:
-                      _stateManager.configuration!.localeText.loadingText,
-                  indicatorSize:
-                      _stateManager.configuration!.cellTextStyle.fontSize,
+                LayoutId(
+                  id: _StackName.loading,
+                  child: PlutoLoading(
+                    backgroundColor:
+                        _stateManager.configuration!.gridBackgroundColor,
+                    indicatorColor:
+                        _stateManager.configuration!.cellTextStyle.color,
+                    indicatorText:
+                        _stateManager.configuration!.localeText.loadingText,
+                    indicatorSize:
+                        _stateManager.configuration!.cellTextStyle.fontSize,
+                  ),
                 ),
             ],
           ),
@@ -588,6 +585,9 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
           _StackName.bodyRows, BoxConstraints.tight(Size(width, height)));
       positionChild(
           _StackName.bodyRows, Offset(bodyLeftOffset, bodyRowsTopOffset));
+    }
+    if (hasChild(_StackName.loading)) {
+      layoutChild(_StackName.loading, BoxConstraints.tight(totalSize));
     }
   }
 
