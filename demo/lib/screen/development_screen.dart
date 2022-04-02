@@ -184,22 +184,26 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     columnGroups = [
       PlutoColumnGroup(
         title: 'Expanded Column Group',
+        groupId: 'Expanded Column Group',
         fields: ['column1'],
         expandedColumn: true,
       ),
       PlutoColumnGroup(
         title: 'Group A',
+        groupId: 'Group A',
         children: [
-          PlutoColumnGroup(title: 'SubA', fields: ['column2']),
-          PlutoColumnGroup(title: 'SubB', fields: ['column3']),
+          PlutoColumnGroup(title: 'SubA', groupId: 'SubA', fields: ['column2']),
+          PlutoColumnGroup(title: 'SubB', groupId: 'SubB', fields: ['column3']),
         ],
       ),
       PlutoColumnGroup(
         title: 'Group B',
+        groupId: 'Group B',
         fields: ['column4', 'column5', 'column6'],
       ),
       PlutoColumnGroup(
         title: 'Group C',
+        groupId: 'Group C',
         fields: ['column7'],
       ),
     ];
@@ -233,7 +237,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
 
-            stateManager.setShowColumnFilter(true, notify: false);
+            stateManager.setShowColumnFilter(true);
 
             // stateManager!.setAutoEditing(true, notify: false);
           },
@@ -388,84 +392,78 @@ class _HeaderState extends State<_Header> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: widget.stateManager.headerHeight,
-        child: Wrap(
-          spacing: 10,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            ElevatedButton(
-              child: const Text('Go Home'),
-              onPressed: () {
-                Navigator.pushNamed(context, HomeScreen.routeName);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Go Empty'),
-              onPressed: () {
-                Navigator.pushNamed(context, EmptyScreen.routeName);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add 10'),
-              onPressed: () {
-                handleAddRowButton(count: 10);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add 100 Rows'),
-              onPressed: () => handleAddRowButton(count: 100),
-            ),
-            ElevatedButton(
-              child: const Text('Add 100,000 Rows'),
-              onPressed: () => handleAddRowButton(count: 100000),
-            ),
-            ElevatedButton(
-              child: const Text('Remove Current Row'),
-              onPressed: handleRemoveCurrentRowButton,
-            ),
-            ElevatedButton(
-              child: const Text('Remove Selected Rows'),
-              onPressed: handleRemoveSelectedRowsButton,
-            ),
-            DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: gridSelectingMode,
-                items: PlutoGridStateManager.selectingModes
-                    .map<DropdownMenuItem<PlutoGridSelectingMode>>(
-                        (PlutoGridSelectingMode item) {
-                  final color = gridSelectingMode == item ? Colors.blue : null;
-
-                  return DropdownMenuItem<PlutoGridSelectingMode>(
-                    value: item,
-                    child: Text(
-                      item.toShortString(),
-                      style: TextStyle(color: color),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (PlutoGridSelectingMode? mode) {
-                  setGridSelectingMode(mode);
-                },
-              ),
-            ),
-            ElevatedButton(
-              child: const Text('Toggle filter'),
-              onPressed: handleToggleColumnFilter,
-            ),
-            ElevatedButton(
-              child: const Text('Toggle group'),
-              onPressed: () {
-                widget.stateManager.setShowColumnGroups(
-                  !widget.stateManager.showColumnGroups,
-                );
-              },
-            ),
-          ],
+    return Wrap(
+      spacing: 10,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        ElevatedButton(
+          child: const Text('Go Home'),
+          onPressed: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
         ),
-      ),
+        ElevatedButton(
+          child: const Text('Go Empty'),
+          onPressed: () {
+            Navigator.pushNamed(context, EmptyScreen.routeName);
+          },
+        ),
+        ElevatedButton(
+          child: const Text('Add 10'),
+          onPressed: () {
+            handleAddRowButton(count: 10);
+          },
+        ),
+        ElevatedButton(
+          child: const Text('Add 100 Rows'),
+          onPressed: () => handleAddRowButton(count: 100),
+        ),
+        ElevatedButton(
+          child: const Text('Add 100,000 Rows'),
+          onPressed: () => handleAddRowButton(count: 100000),
+        ),
+        ElevatedButton(
+          child: const Text('Remove Current Row'),
+          onPressed: handleRemoveCurrentRowButton,
+        ),
+        ElevatedButton(
+          child: const Text('Remove Selected Rows'),
+          onPressed: handleRemoveSelectedRowsButton,
+        ),
+        DropdownButtonHideUnderline(
+          child: DropdownButton(
+            value: gridSelectingMode,
+            items: PlutoGridStateManager.selectingModes
+                .map<DropdownMenuItem<PlutoGridSelectingMode>>(
+                    (PlutoGridSelectingMode item) {
+              final color = gridSelectingMode == item ? Colors.blue : null;
+
+              return DropdownMenuItem<PlutoGridSelectingMode>(
+                value: item,
+                child: Text(
+                  item.toShortString(),
+                  style: TextStyle(color: color),
+                ),
+              );
+            }).toList(),
+            onChanged: (PlutoGridSelectingMode? mode) {
+              setGridSelectingMode(mode);
+            },
+          ),
+        ),
+        ElevatedButton(
+          child: const Text('Toggle filter'),
+          onPressed: handleToggleColumnFilter,
+        ),
+        ElevatedButton(
+          child: const Text('Toggle group'),
+          onPressed: () {
+            widget.stateManager.setShowColumnGroups(
+              !widget.stateManager.showColumnGroups,
+            );
+          },
+        ),
+      ],
     );
   }
 }

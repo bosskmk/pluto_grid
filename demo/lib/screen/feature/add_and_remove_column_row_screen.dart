@@ -97,8 +97,9 @@ class _AddAndRemoveColumnRowScreenState
     ]);
 
     columnGroups.addAll([
-      PlutoColumnGroup(title: 'User', fields: ['id', 'name']),
+      PlutoColumnGroup(groupId: 'User', title: 'User', fields: ['id', 'name']),
       PlutoColumnGroup(
+        groupId: 'Status',
         title: 'Status',
         fields: ['status'],
         expandedColumn: true,

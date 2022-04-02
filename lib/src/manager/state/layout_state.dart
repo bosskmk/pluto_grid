@@ -92,6 +92,8 @@ abstract class ILayoutState {
 }
 
 mixin LayoutState implements IPlutoGridState {
+  ChangeNotifier resizingChangeNotifier = ChangeNotifier();
+
   @override
   double? get maxWidth => _maxWidth;
 
@@ -102,13 +104,43 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _maxHeight;
 
-  @override
-  double get headerHeight =>
-      createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double? _headerHeight;
+
+  double? _footerHeight;
+
+  set headerHeight(double value) {
+    _headerHeight = value;
+  }
+
+  set footerHeight(double value) {
+    _footerHeight = value;
+  }
 
   @override
-  double get footerHeight =>
-      createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get headerHeight {
+    if (createHeader == null) {
+      return PlutoGridSettings.rowTotalHeight;
+    } else {
+      if (_headerHeight == null) {
+        return PlutoGridSettings.rowTotalHeight;
+      } else {
+        return _headerHeight!;
+      }
+    }
+  }
+
+  @override
+  double get footerHeight {
+    if (createFooter == null) {
+      return PlutoGridSettings.rowTotalHeight;
+    } else {
+      if (_footerHeight == null) {
+        return PlutoGridSettings.rowTotalHeight;
+      } else {
+        return _footerHeight!;
+      }
+    }
+  }
 
   @override
   double get columnRowContainerHeight =>
@@ -148,10 +180,10 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showColumnFilter;
 
   @override
-  bool get showHeader => headerHeight > 0;
+  bool get showHeader => createHeader != null;
 
   @override
-  bool get showFooter => footerHeight > 0;
+  bool get showFooter => createFooter != null;
 
   @override
   bool get showLoading => _showLoading == true;
@@ -290,30 +322,16 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final _isShowFrozenColumn = _availableToShowFrozenColumns(size.maxWidth);
-
-    final bool notify = _showFrozenColumn != _isShowFrozenColumn;
-
+    final _isShowFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
     _showFrozenColumn = _isShowFrozenColumn;
-
     _gridGlobalOffset = null;
-
-    updateCurrentCellPosition(notify: false);
-
-    resetScrollToZero();
-
-    if (notify) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        notifyListeners();
-      });
-    }
   }
 
   @override
   void resetShowFrozenColumn({bool notify = true}) {
-    _showFrozenColumn = _availableToShowFrozenColumns(_maxWidth!);
+    _showFrozenColumn = shouldShowFrozenColumns(_maxWidth!);
 
     if (notify) {
       notifyListeners();
@@ -350,7 +368,7 @@ mixin LayoutState implements IPlutoGridState {
     _gridGlobalOffset = offset;
   }
 
-  bool _availableToShowFrozenColumns(double width) {
+  bool shouldShowFrozenColumns(double width) {
     final bool hasFrozenColumn =
         leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 

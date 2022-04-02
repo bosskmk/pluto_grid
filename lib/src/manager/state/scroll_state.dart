@@ -194,11 +194,11 @@ mixin ScrollState implements IPlutoGridState {
   /// when resizing the screen.
   @override
   void resetScrollToZero() {
-    if ((scroll?.bodyRowsVertical?.offset ?? 0) <= 0) {
+    if ((scroll?.bodyRowsVertical?.offset ?? 0) < 0) {
       scroll?.bodyRowsVertical?.jumpTo(0);
     }
 
-    if ((scroll?.bodyRowsHorizontal?.offset ?? 0) <= 0) {
+    if ((scroll?.bodyRowsHorizontal?.offset ?? 0)  <  0) {
       scroll?.bodyRowsHorizontal?.jumpTo(0);
     }
   }

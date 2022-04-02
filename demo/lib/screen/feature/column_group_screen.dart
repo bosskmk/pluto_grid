@@ -82,25 +82,31 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
 
     columnGroups.addAll([
       PlutoColumnGroup(
+        groupId: 'Expanded',
         title: 'Expanded',
         fields: ['column1'],
         expandedColumn: true,
       ),
       PlutoColumnGroup(
+        groupId: 'Group A',
         title: 'Group A',
         children: [
           PlutoColumnGroup(
+            groupId: 'A - 1',
             title: 'A - 1',
             fields: ['column2', 'column3'],
           ),
           PlutoColumnGroup(
+            groupId: 'A - 2',
             title: 'A - 2',
             children: [
               PlutoColumnGroup(
+                groupId: 'A - 2 - 1',
                 title: 'A - 2 - 1',
                 fields: ['column4'],
               ),
               PlutoColumnGroup(
+                groupId: 'A - 2 - 2',
                 title: 'A - 2 - 2',
                 fields: ['column5'],
               ),
@@ -109,25 +115,31 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
         ],
       ),
       PlutoColumnGroup(
+        groupId: 'Group B',
         title: 'Group B',
         children: [
           PlutoColumnGroup(
+            groupId: 'B - 1',
             title: 'B - 1',
             children: [
               PlutoColumnGroup(
+                groupId: 'B - 1 - 1',
                 title: 'B - 1 - 1',
                 children: [
                   PlutoColumnGroup(
+                    groupId: 'B - 1 - 1 - 1',
                     title: 'B - 1 - 1 - 1',
                     fields: ['column6'],
                   ),
                   PlutoColumnGroup(
+                    groupId: 'B - 1 - 1 - 2',
                     title: 'B - 1 - 1 - 2',
                     fields: ['column7'],
                   ),
                 ],
               ),
               PlutoColumnGroup(
+                groupId: 'Expanded',
                 title: 'Expanded',
                 fields: ['column8'],
                 expandedColumn: true,

@@ -35,8 +35,12 @@ class PlutoColumnGroup {
   /// The group title is not shown.
   final bool? expandedColumn;
 
+  /// a unique name to represent the group
+  String groupId;
+
   PlutoColumnGroup({
     required this.title,
+    required this.groupId,
     this.fields,
     this.children,
     this.titlePadding,
@@ -49,15 +53,15 @@ class PlutoColumnGroup {
         assert(expandedColumn == true
             ? fields?.length == 1 && children == null
             : true),
-        _key = UniqueKey() {
+        _key = ValueKey(groupId) {
     hasFields = fields != null;
 
     hasChildren = !hasFields;
   }
 
-  Key get key => _key;
+  ValueKey get key => _key;
 
-  final Key _key;
+  final ValueKey _key;
 
   late final bool hasFields;
 
@@ -71,7 +75,13 @@ class PlutoColumnGroupPair {
   PlutoColumnGroupPair({
     required this.group,
     required this.columns,
-  }) : _key = ObjectKey({group.key: columns});
+  }) :
+        // a unique reproducable key
+        _key = ValueKey(group.key.value.toString() +
+            columns.fold(
+                "",
+                (previousValue, element) =>
+                    previousValue + "-" + element.field));
 
   Key get key => _key;
 
