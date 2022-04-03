@@ -51,7 +51,9 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
 
   bool get isEsc => event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
 
-  bool get isEnter => event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
+  bool get isEnter =>
+      event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpadEnter.keyId;
 
   bool get isTab => event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
 
@@ -72,7 +74,19 @@ extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
       event.logicalKey.keyId == LogicalKeyboardKey.controlLeft.keyId ||
       event.logicalKey.keyId == LogicalKeyboardKey.controlRight.keyId;
 
-  bool get isCharacter => characters.contains(event.logicalKey.keyId);
+  bool get isCharacter =>
+      characters.contains(event.logicalKey.keyId) ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad0.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad1.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad2.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad3.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad4.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad5.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad6.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad7.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad8.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpad9.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpadDecimal.keyId;
 
   bool get isCtrlC {
     return isCtrlPressed &&
