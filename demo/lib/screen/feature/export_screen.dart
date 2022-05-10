@@ -133,18 +133,6 @@ class _ExportScreenState extends State<ExportScreen> {
         Text('You can export grid contents as CSV or TSV'),
       ],
       topButtons: [
-        ElevatedButton(
-            onPressed: _defaultExportGridAsCSV,
-            child: const Text("Export to CSV")),
-        ElevatedButton(
-            onPressed: _defaultExportGridAsCSVWithSemicolon,
-            child: const Text("Export to CSV with Semicolon ';'")),
-        ElevatedButton(
-            onPressed: _exportGridAsTSV,
-            child: const Text("Export to TSV (tab separated)")),
-        ElevatedButton(
-            onPressed: _defaultExportGridAsCSVFakeExcel,
-            child: const Text("Export to fake-Excel")),
         PlutoExampleButton(
           url:
               'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/export_screen.dart',
@@ -161,32 +149,83 @@ class _ExportScreenState extends State<ExportScreen> {
 
           stateManager = event.stateManager;
         },
+        createHeader: (stateManager) => _Header(stateManager: stateManager),
         // configuration: PlutoConfiguration.dark(),
       ),
     );
   }
+}
 
+class _Header extends StatefulWidget {
+  const _Header({
+    required this.stateManager,
+    Key? key,
+  }) : super(key: key);
+
+  final PlutoGridStateManager stateManager;
+
+  @override
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
   void _defaultExportGridAsCSV() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(stateManager);
+    var exported = PlutoExport.exportCSV(widget.stateManager);
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVFakeExcel() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(stateManager);
+    var exported = PlutoExport.exportCSV(widget.stateManager);
     await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
   }
 
   void _exportGridAsTSV() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(stateManager, fieldDelimiter: "\t");
+    var exported = PlutoExport.exportCSV(
+      widget.stateManager,
+      fieldDelimiter: "\t",
+    );
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVWithSemicolon() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(stateManager, fieldDelimiter: ";");
+    var exported = PlutoExport.exportCSV(
+      widget.stateManager,
+      fieldDelimiter: ";",
+    );
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Wrap(
+            spacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: _defaultExportGridAsCSV,
+                  child: const Text("Export to CSV")),
+              ElevatedButton(
+                  onPressed: _defaultExportGridAsCSVWithSemicolon,
+                  child: const Text("Export to CSV with Semicolon ';'")),
+              ElevatedButton(
+                  onPressed: _exportGridAsTSV,
+                  child: const Text("Export to TSV (tab separated)")),
+              ElevatedButton(
+                  onPressed: _defaultExportGridAsCSVFakeExcel,
+                  child: const Text("Export to fake-Excel")),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

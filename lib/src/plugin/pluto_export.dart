@@ -4,7 +4,6 @@ import 'package:csv/csv.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoExport {
-
   static Uint8List exportCSV(
     PlutoGridStateManager state, {
     String? fieldDelimiter,
@@ -27,7 +26,7 @@ class PlutoExport {
   static List<List<String?>> _mapStateToRows(PlutoGridStateManager state) {
     List<List<String?>> outputRows = [];
     outputRows.add(state.columns
-        // Apend all VISIBLE columns
+        // Append all VISIBLE columns
         .where((element) => !element.hide)
         .map((e) => e.title)
         .toList());
@@ -36,7 +35,7 @@ class PlutoExport {
 
     // Use filteredList if available
     // https://github.com/bosskmk/pluto_grid/issues/318#issuecomment-987424407
-    if(state.refRows.filteredList.isNotEmpty) {
+    if (state.refRows.filteredList.isNotEmpty) {
       rowsToExport = state.refRows.filteredList;
     } else {
       rowsToExport = state.refRows.originalList;
@@ -50,13 +49,15 @@ class PlutoExport {
   }
 
   static List<String?> _mapRow(
-      List<PlutoColumn> plutoColumns, PlutoRow plutoRow) {
+    List<PlutoColumn> plutoColumns,
+    PlutoRow plutoRow,
+  ) {
     List<String?> serializedRow = [];
 
     // Order is important, so we iterate over columns
     for (PlutoColumn column in plutoColumns) {
       // Only VISIBLE columns
-      if(!column.hide) {
+      if (!column.hide) {
         dynamic value = plutoRow.cells[column.field]?.value;
         serializedRow
             .add(value != null ? column.formattedValueForDisplay(value) : null);
