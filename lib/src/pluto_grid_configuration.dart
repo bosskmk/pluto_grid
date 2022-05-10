@@ -632,6 +632,46 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Cargando...',
   });
+
+  const PlutoGridLocaleText.persian({
+    // Column menu
+    this.unfreezeColumn = 'جدا کردن',
+    this.freezeColumnToLeft = 'چسباندن به چپ',
+    this.freezeColumnToRight = 'چسباندن به راست',
+    this.autoFitColumn = 'عرض خودکار',
+    this.hideColumn = 'مخفی کردن ستون',
+    this.setColumns = 'تنظیم ستون ها',
+    this.setFilter = 'اعمال فیلتر',
+    this.resetFilter = 'ریست فیلتر',
+    // SetColumns popup
+    this.setColumnsTitle = 'عنوان ستون',
+    // Filter popup
+    this.filterColumn = 'ستون',
+    this.filterType = 'نوع',
+    this.filterValue = 'مقدار',
+    this.filterAllColumns = 'تمام ستون ها',
+    this.filterContains = 'شامل',
+    this.filterEquals = 'برابر',
+    this.filterStartsWith = 'شروع با',
+    this.filterEndsWith = 'خاتمه با',
+    this.filterGreaterThan = 'بزرگتر از',
+    this.filterGreaterThanOrEqualTo = 'بزرگتر مساوی از',
+    this.filterLessThan = 'کمتر از',
+    this.filterLessThanOrEqualTo = 'کمتر مساوی از',
+    // Date popup
+    this.sunday = 'ی',
+    this.monday = 'د',
+    this.tuesday = 'س',
+    this.wednesday = 'چ',
+    this.thursday = 'پ',
+    this.friday = 'ج',
+    this.saturday = 'ش',
+    // Time column popup
+    this.hour = 'ساعت',
+    this.minute = 'دقیقه',
+    // Common
+    this.loadingText = 'در حال بارگیری...',
+  });
 }
 
 /// Behavior of the Enter key when a cell is selected.
