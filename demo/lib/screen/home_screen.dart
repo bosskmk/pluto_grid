@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:demo/screen/feature/export_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -401,6 +402,14 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Listing mode to open or navigate to the Detail page.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ListingModeScreen.routeName);
+            },
+          ),
+          PlutoListTile(
+            title: 'Export',
+            description: 'Exporting grid data as CSV.',
+            trailing: newIcon,
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ExportScreen.routeName);
             },
           ),
           PlutoListTile.dark(

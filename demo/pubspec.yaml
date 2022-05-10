@@ -29,6 +29,7 @@ dependencies:
   url_launcher: ^6.0.3
   font_awesome_flutter: ^9.0.0
   rainbow_color: ^2.0.1
+  file_saver: ^0.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
