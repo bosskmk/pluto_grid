@@ -1,3 +1,8 @@
+## [2.10.0] - 2022. 5. 11
+
+* Added export as csv.
+* Added persian locale.
+
 ## [2.9.3] - 2022. 3. 16
 
 * Added columnContextIcon, columnResizeIcon.

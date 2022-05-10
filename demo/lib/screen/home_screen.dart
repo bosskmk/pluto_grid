@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:demo/screen/feature/export_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -403,6 +404,14 @@ class PlutoFeatures extends StatelessWidget {
               Navigator.pushNamed(context, ListingModeScreen.routeName);
             },
           ),
+          PlutoListTile(
+            title: 'Export',
+            description: 'Exporting grid data as CSV.',
+            trailing: newIcon,
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ExportScreen.routeName);
+            },
+          ),
           PlutoListTile.dark(
             title: 'Dark mode',
             description: 'Change the entire theme of the grid to Dark.',
@@ -473,6 +482,20 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/henry2man');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'hos3ein',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/hos3ein');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Hu-Wentao',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/Hu-Wentao');
             },
           ),
           PlutoContributorTile.invisible(

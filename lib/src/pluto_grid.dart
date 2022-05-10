@@ -7,60 +7,57 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGrid extends StatefulWidget {
-  const PlutoGrid({
+  PlutoGrid({
     Key? key,
-    required this.columns,
-    required this.rows,
-    this.columnGroups,
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    List<PlutoColumnGroup>? columnGroups,
+    PlutoGridMode? mode,
+    PlutoOnChangedEventCallback? onChanged,
+    PlutoOnSelectedEventCallback? onSelected,
+    PlutoOnRowCheckedEventCallback? onRowChecked,
+    PlutoOnRowDoubleTapEventCallback? onRowDoubleTap,
+    PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap,
+    PlutoOnRowsMovedEventCallback? onRowsMoved,
+    CreateHeaderCallBack? createHeader,
+    CreateFooterCallBack? createFooter,
+    PlutoGridConfiguration? configuration,
+    PlutoRowColorCallback? rowColorCallback,
+    PlutoOnLoadedEventCallback? onLoaded,
+  }) : this.of(
+          key: key,
+          stateManager: PlutoGridStateManager(
+            columns: columns,
+            rows: rows,
+            gridFocusNode: FocusNode(),
+            scroll: PlutoGridScrollController(
+              vertical: LinkedScrollControllerGroup(),
+              horizontal: LinkedScrollControllerGroup(),
+            ),
+            columnGroups: columnGroups,
+            mode: mode,
+            onChangedEventCallback: onChanged,
+            onSelectedEventCallback: onSelected,
+            onRowCheckedEventCallback: onRowChecked,
+            onRowDoubleTapEventCallback: onRowDoubleTap,
+            onRowSecondaryTapEventCallback: onRowSecondaryTap,
+            onRowsMovedEventCallback: onRowsMoved,
+            createHeader: createHeader,
+            createFooter: createFooter,
+            configuration: configuration,
+            rowColorCallback: rowColorCallback,
+          ),
+          onLoaded: onLoaded,
+        );
+
+  const PlutoGrid.of({
+    Key? key,
+    required this.stateManager,
     this.onLoaded,
-    this.onChanged,
-    this.onSelected,
-    this.onRowChecked,
-    this.onRowDoubleTap,
-    this.onRowSecondaryTap,
-    this.onRowsMoved,
-    this.createHeader,
-    this.createFooter,
-    this.rowColorCallback,
-    this.configuration,
-    this.mode = PlutoGridMode.normal,
   }) : super(key: key);
-
-  final List<PlutoColumn> columns;
-
-  final List<PlutoRow> rows;
-
-  final List<PlutoColumnGroup>? columnGroups;
+  final PlutoGridStateManager stateManager;
 
   final PlutoOnLoadedEventCallback? onLoaded;
-
-  final PlutoOnChangedEventCallback? onChanged;
-
-  final PlutoOnSelectedEventCallback? onSelected;
-
-  final PlutoOnRowCheckedEventCallback? onRowChecked;
-
-  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
-
-  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
-
-  final PlutoOnRowsMovedEventCallback? onRowsMoved;
-
-  final CreateHeaderCallBack? createHeader;
-
-  final CreateFooterCallBack? createFooter;
-
-  final PlutoRowColorCallback? rowColorCallback;
-
-  final PlutoGridConfiguration? configuration;
-
-  /// [PlutoGridMode.normal]
-  /// Normal grid with cell editing.
-  ///
-  /// [PlutoGridMode.select]
-  /// Editing is not possible, and if you press enter or tap on the list,
-  /// you can receive the selected row and cell from the onSelected callback.
-  final PlutoGridMode? mode;
 
   static setDefaultLocale(String locale) {
     Intl.defaultLocale = locale;
@@ -75,14 +72,6 @@ class PlutoGrid extends StatefulWidget {
 }
 
 class _PlutoGridState extends State<PlutoGrid> {
-  FocusNode? _gridFocusNode;
-
-  final LinkedScrollControllerGroup _verticalScroll =
-      LinkedScrollControllerGroup();
-
-  final LinkedScrollControllerGroup _horizontalScroll =
-      LinkedScrollControllerGroup();
-
   final List<Function()> _disposeList = [];
 
   late PlutoGridStateManager _stateManager;
@@ -293,39 +282,16 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void _initProperties() {
-    _gridFocusNode = FocusNode();
-
     // Dispose
     _disposeList.add(() {
-      _gridFocusNode!.dispose();
+      widget.stateManager.gridFocusNode!.dispose();
     });
   }
 
   void _initStateManager() {
-    _stateManager = PlutoGridStateManager(
-      columns: widget.columns,
-      rows: widget.rows,
-      gridFocusNode: _gridFocusNode,
-      scroll: PlutoGridScrollController(
-        vertical: _verticalScroll,
-        horizontal: _horizontalScroll,
-      ),
-      columnGroups: widget.columnGroups,
-      mode: widget.mode,
-      onChangedEventCallback: widget.onChanged,
-      onSelectedEventCallback: widget.onSelected,
-      onRowCheckedEventCallback: widget.onRowChecked,
-      onRowDoubleTapEventCallback: widget.onRowDoubleTap,
-      onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
-      onRowsMovedEventCallback: widget.onRowsMoved,
-      createHeader: widget.createHeader,
-      createFooter: widget.createFooter,
-      configuration: widget.configuration,
-    );
+    _stateManager = widget.stateManager;
 
     _stateManager.addListener(_changeStateListener);
-
-    _stateManager.setRowColorCallback(widget.rowColorCallback);
 
     // Dispose
     _disposeList.add(() {
@@ -377,14 +343,16 @@ class _PlutoGridState extends State<PlutoGrid> {
   }
 
   void _initSelectMode() {
-    if (widget.mode.isSelect != true) {
+    if (_stateManager.mode.isSelect != true) {
       return;
     }
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (_stateManager.currentCell == null && widget.rows.isNotEmpty) {
+      if (_stateManager.currentCell == null && _stateManager.rows.isNotEmpty) {
         _stateManager.setCurrentCell(
-            widget.rows.first.cells.entries.first.value, 0);
+          _stateManager.rows.first.cells.entries.first.value,
+          0,
+        );
       }
 
       _stateManager.gridFocusNode!.requestFocus();
@@ -475,7 +443,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     _setLayout(size);
 
     if (_stateManager.keepFocus) {
-      _gridFocusNode?.requestFocus();
+      _stateManager.gridFocusNode?.requestFocus();
     }
 
     final List<Widget> stack = [];
@@ -575,7 +543,7 @@ class _GridContainer extends StatelessWidget {
 class PlutoGridOnLoadedEvent {
   final PlutoGridStateManager stateManager;
 
-  PlutoGridOnLoadedEvent({
+  const PlutoGridOnLoadedEvent({
     required this.stateManager,
   });
 }
@@ -622,6 +590,7 @@ class PlutoGridOnSelectedEvent {
 
 abstract class PlutoGridOnRowCheckedEvent {
   bool get isAll => runtimeType == PlutoGridOnRowCheckedAllEvent;
+
   bool get isRow => runtimeType == PlutoGridOnRowCheckedOneEvent;
 
   final PlutoRow? row;

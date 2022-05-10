@@ -1,3 +1,4 @@
+import 'package:demo/screen/feature/export_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
             const DateTypeColumnScreen(),
         DualModeScreen.routeName: (context) => const DualModeScreen(),
         EditingStateScreen.routeName: (context) => const EditingStateScreen(),
+        ExportScreen.routeName: (context) => const ExportScreen(),
         GridAsPopupScreen.routeName: (context) => const GridAsPopupScreen(),
         ListingModeScreen.routeName: (context) => const ListingModeScreen(),
         MovingScreen.routeName: (context) => const MovingScreen(),
