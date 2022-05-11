@@ -216,8 +216,7 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     return refColumns
-        .where((element) => element.field == currentColumnField)
-        .first;
+        .firstWhereOrNull((element) => element.field == currentColumnField);
   }
 
   @override

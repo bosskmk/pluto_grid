@@ -1,3 +1,7 @@
+## [2.10.1] - 2022. 5. 11
+
+* Fixed currentColumn null error.
+
 ## [2.10.0] - 2022. 5. 11
 
 * Added export as csv.

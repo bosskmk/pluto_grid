@@ -253,7 +253,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.10.0"
+    version: "2.10.1"
   process:
     dependency: transitive
     description:
