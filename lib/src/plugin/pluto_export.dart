@@ -1,10 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:csv/csv.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoExport {
-  static Uint8List exportCSV(
+  static String exportCSV(
     PlutoGridStateManager state, {
     String? fieldDelimiter,
     String? textDelimiter,
@@ -20,7 +18,7 @@ class PlutoExport {
       eol: eol,
     );
 
-    return Uint8List.fromList(toCsv.codeUnits);
+    return toCsv;
   }
 
   static List<List<String?>> _mapStateToRows(PlutoGridStateManager state) {
