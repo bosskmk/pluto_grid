@@ -33,6 +33,30 @@ class PlutoColumnGroupHelper {
     return false;
   }
 
+  static PlutoColumnGroup? getParentGroupIfExistsFromList({
+    required String field,
+    required List<PlutoColumnGroup> columnGroupList,
+  }) {
+    for (final columnGroup in columnGroupList) {
+      if (columnGroup.hasFields && columnGroup.fields!.contains(field)) {
+        return columnGroup;
+      } else if (columnGroup.hasChildren) {
+        for (int i = 0; i < columnGroup.children!.length; i += 1) {
+          final found = getParentGroupIfExistsFromList(
+            field: field,
+            columnGroupList: columnGroup.children!,
+          );
+
+          if (found != null) {
+            return found;
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
   static PlutoColumnGroup? getGroupIfExistsFromList({
     required String field,
     required List<PlutoColumnGroup> columnGroupList,
