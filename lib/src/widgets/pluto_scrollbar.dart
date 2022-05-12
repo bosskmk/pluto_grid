@@ -184,7 +184,7 @@ class _CupertinoScrollbarState extends State<PlutoScrollbar>
   // show immediately when isAlwaysShown is true.  A scroll event is required in
   // order to paint the thumb.
   void _triggerScrollbar() {
-    WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
       if (widget.isAlwaysShown) {
         _fadeoutTimer?.cancel();
         if (widget.verticalController!.hasClients) {

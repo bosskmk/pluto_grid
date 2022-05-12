@@ -335,7 +335,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onLoaded!(PlutoGridOnLoadedEvent(
         stateManager: _stateManager,
       ));
@@ -347,7 +347,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null && _stateManager.rows.isNotEmpty) {
         _stateManager.setCurrentCell(
           _stateManager.rows.first.cells.entries.first.value,

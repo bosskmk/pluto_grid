@@ -34,7 +34,7 @@ void main() {
     (tester) async {
       final text = find.byType(Text).evaluate().first.widget as Text;
       final coloredBox =
-          find.byType(ColoredBox).evaluate().first.widget as ColoredBox;
+          find.byType(ColoredBox).evaluate().last.widget as ColoredBox;
       final container =
           find.byType(Container).evaluate().first.widget as Container;
       final decoration = container.decoration as BoxDecoration;
@@ -51,7 +51,7 @@ void main() {
     'backgroundColor 를 전달 하면 배경 색이 변경 되어야 한다.',
     (tester) async {
       final coloredBox =
-          find.byType(ColoredBox).evaluate().first.widget as ColoredBox;
+          find.byType(ColoredBox).evaluate().last.widget as ColoredBox;
       final container =
           find.byType(Container).evaluate().first.widget as Container;
       final decoration = container.decoration as BoxDecoration;
