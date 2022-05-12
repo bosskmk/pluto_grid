@@ -1,3 +1,7 @@
+## [2.10.2] - 2022. 5. 12
+
+* Fixed bad export CSV encoding when non-Latin1 / US-ASCII characters were present.
+
 ## [2.10.1] - 2022. 5. 11
 
 * Fixed currentColumn null error.

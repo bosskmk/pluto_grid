@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -171,31 +173,33 @@ class _Header extends StatefulWidget {
 class _HeaderState extends State<_Header> {
   void _defaultExportGridAsCSV() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(widget.stateManager);
+    var exported =
+        const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVFakeExcel() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(widget.stateManager);
+    var exported =
+        const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
   }
 
   void _exportGridAsTSV() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(
+    var exported = const Utf8Encoder().convert(PlutoExport.exportCSV(
       widget.stateManager,
       fieldDelimiter: "\t",
-    );
+    ));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVWithSemicolon() async {
     String title = "pluto_grid_export";
-    var exported = PlutoExport.exportCSV(
+    var exported = const Utf8Encoder().convert(PlutoExport.exportCSV(
       widget.stateManager,
       fieldDelimiter: ";",
-    );
+    ));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 

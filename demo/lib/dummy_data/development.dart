@@ -1,3 +1,4 @@
+import 'package:demo/dummy_data/words_multilingual.dart';
 import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -71,7 +72,7 @@ class DummyData {
           } else if (element.type.isTime) {
             return '00:00';
           } else {
-            return faker.food.restaurant();
+            return ([...multilingualWords]..shuffle()).getRange(0, 3).join(" ");
           }
         }(column),
       );
