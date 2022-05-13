@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   pluto_grid:
     path: ../
+  pluto_grid_export:
+    path: ../packages/pluto_grid_export
   faker: ^2.0.0-rc.2
   url_launcher: ^6.0.3
   font_awesome_flutter: ^9.0.0

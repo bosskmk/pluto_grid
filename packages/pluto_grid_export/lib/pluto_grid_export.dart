@@ -1,7 +1,7 @@
 import 'package:csv/csv.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoExport {
+class PlutoGridExport {
   static String exportCSV(
     PlutoGridStateManager state, {
     String? fieldDelimiter,
