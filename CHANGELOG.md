@@ -1,3 +1,7 @@
+## [3.0.1] - 2022. 5. 13
+
+* Updated pubspec.yaml for Flutter 3.0.0.
+
 ## [3.0.0] - 2022. 5. 13
 
 * Updated for flutter 3.0 version. 
