@@ -22,9 +22,9 @@ PopupMenuItem<PlutoGridColumnMenuItem> _buildMenuItem<PlutoGridColumnMenuItem>({
 }) {
   return PopupMenuItem<PlutoGridColumnMenuItem>(
     value: value,
-    child: child,
     height: 36,
     enabled: enabled,
+    child: child,
   );
 }
 

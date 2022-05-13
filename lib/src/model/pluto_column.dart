@@ -177,6 +177,28 @@ class PlutoColumn {
   bool get isShowRightIcon =>
       enableContextMenu || !sort.isNone || enableRowDrag;
 
+  PlutoColumnGroup? group;
+
+  String get titleWithGroup {
+    if (group == null) {
+      return title;
+    }
+
+    List<String> titleList = [
+      title,
+    ];
+
+    if (group!.expandedColumn != true) {
+      titleList.add(group!.title);
+    }
+
+    for (final g in group!.parents.toList()) {
+      titleList.add(g.title);
+    }
+
+    return titleList.reversed.join(' ');
+  }
+
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
     if (!hasCheckReadOnly || row == null || cell == null) {
       return readOnly;

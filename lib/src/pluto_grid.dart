@@ -121,36 +121,36 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   get _headerStack => Positioned.fill(
         bottom: _stateManager.headerBottomOffset,
-        child: _header!,
         key: _stackKeys[_StackName.header],
+        child: _header!,
       );
 
   get _headerDividerStack => Positioned(
         top: _stateManager.headerHeight,
         left: 0,
         right: 0,
+        key: _stackKeys[_StackName.headerDivider],
         child: PlutoShadowLine(
           axis: Axis.horizontal,
           color: _stateManager.configuration!.gridBorderColor,
           shadow: _stateManager.configuration!.enableGridBorderShadow,
         ),
-        key: _stackKeys[_StackName.headerDivider],
       );
 
   get _leftFrozenColumnsStack => Positioned.fill(
         top: _stateManager.headerHeight,
         right: _stateManager.leftFrozenRightOffset,
         bottom: _stateManager.columnBottomOffset,
-        child: PlutoLeftFrozenColumns(_stateManager),
         key: _stackKeys[_StackName.leftFrozenColumns],
+        child: PlutoLeftFrozenColumns(_stateManager),
       );
 
   get _leftFrozenRowsStack => Positioned.fill(
         top: _stateManager.rowsTopOffset,
         right: _stateManager.leftFrozenRightOffset,
         bottom: _stateManager.footerHeight,
-        child: PlutoLeftFrozenRows(_stateManager),
         key: _stackKeys[_StackName.leftFrozenRows],
+        child: PlutoLeftFrozenRows(_stateManager),
       );
 
   get _bodyColumnsStack => Positioned.fill(
@@ -158,8 +158,8 @@ class _PlutoGridState extends State<PlutoGrid> {
         left: _bodyLeftOffset,
         right: _bodyRightOffset,
         bottom: _stateManager.columnBottomOffset,
-        child: PlutoBodyColumns(_stateManager),
         key: _stackKeys[_StackName.bodyColumns],
+        child: PlutoBodyColumns(_stateManager),
       );
 
   get _bodyRowsStack => Positioned.fill(
@@ -167,90 +167,90 @@ class _PlutoGridState extends State<PlutoGrid> {
         left: _bodyLeftOffset,
         right: _bodyRightOffset,
         bottom: _stateManager.footerHeight,
-        child: PlutoBodyRows(_stateManager),
         key: _stackKeys[_StackName.bodyRows],
+        child: PlutoBodyRows(_stateManager),
       );
 
   get _rightFrozenColumnsStack => Positioned.fill(
         top: _stateManager.headerHeight,
         left: _rightFrozenLeftOffset,
         bottom: _stateManager.columnBottomOffset,
-        child: PlutoRightFrozenColumns(_stateManager),
         key: _stackKeys[_StackName.rightFrozenColumns],
+        child: PlutoRightFrozenColumns(_stateManager),
       );
 
   get _rightFrozenRowsStack => Positioned.fill(
         top: _stateManager.rowsTopOffset,
         left: _rightFrozenLeftOffset,
         bottom: _stateManager.footerHeight,
-        child: PlutoRightFrozenRows(_stateManager),
         key: _stackKeys[_StackName.rightFrozenRows],
+        child: PlutoRightFrozenRows(_stateManager),
       );
 
   get _leftFrozenDividerStack => Positioned(
         top: _stateManager.headerHeight,
         left: _bodyLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
+        key: _stackKeys[_StackName.leftFrozenDivider],
         child: PlutoShadowLine(
           axis: Axis.vertical,
           color: _stateManager.configuration!.gridBorderColor,
           shadow: _stateManager.configuration!.enableGridBorderShadow,
         ),
-        key: _stackKeys[_StackName.leftFrozenDivider],
       );
 
   get _rightFrozenDividerStack => Positioned(
         top: _stateManager.headerHeight,
         left: _rightFrozenLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
+        key: _stackKeys[_StackName.rightFrozenDivider],
         child: PlutoShadowLine(
           axis: Axis.vertical,
           reverse: true,
           color: _stateManager.configuration!.gridBorderColor,
           shadow: _stateManager.configuration!.enableGridBorderShadow,
         ),
-        key: _stackKeys[_StackName.rightFrozenDivider],
       );
 
   get _columnRowDividerStack => Positioned(
         top: _stateManager.rowsTopOffset - PlutoGridSettings.gridBorderWidth,
         left: 0,
         right: 0,
+        key: _stackKeys[_StackName.columnRowDivider],
         child: PlutoShadowLine(
           axis: Axis.horizontal,
           color: _stateManager.configuration!.gridBorderColor,
           shadow: _stateManager.configuration!.enableGridBorderShadow,
         ),
-        key: _stackKeys[_StackName.columnRowDivider],
       );
 
   get _footerDividerStack => Positioned(
         top: _stateManager.footerTopOffset,
         left: 0,
         right: 0,
+        key: _stackKeys[_StackName.footerDivider],
         child: PlutoShadowLine(
           axis: Axis.horizontal,
           reverse: true,
           color: _stateManager.configuration!.gridBorderColor,
           shadow: _stateManager.configuration!.enableGridBorderShadow,
         ),
-        key: _stackKeys[_StackName.footerDivider],
       );
 
   get _footerStack => Positioned.fill(
         top: _stateManager.footerTopOffset,
-        child: _footer!,
         key: _stackKeys[_StackName.footer],
+        child: _footer!,
       );
 
   get _loadingStack => Positioned.fill(
+        key: _stackKeys[_StackName.loading],
         child: PlutoLoading(
           backgroundColor: _stateManager.configuration!.gridBackgroundColor,
           indicatorColor: _stateManager.configuration!.cellTextStyle.color,
           indicatorText: _stateManager.configuration!.localeText.loadingText,
           indicatorSize: _stateManager.configuration!.cellTextStyle.fontSize,
         ),
-        key: _stackKeys[_StackName.loading],
       );
 
   @override
@@ -335,7 +335,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onLoaded!(PlutoGridOnLoadedEvent(
         stateManager: _stateManager,
       ));
@@ -347,7 +347,7 @@ class _PlutoGridState extends State<PlutoGrid> {
       return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null && _stateManager.rows.isNotEmpty) {
         _stateManager.setCurrentCell(
           _stateManager.rows.first.cells.entries.first.value,

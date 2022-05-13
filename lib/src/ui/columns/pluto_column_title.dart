@@ -63,15 +63,18 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
             .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.right);
         break;
       case PlutoGridColumnMenuItem.autoFit:
+        if (!mounted) return;
         widget.stateManager.autoFitColumn(context, widget.column);
         break;
       case PlutoGridColumnMenuItem.hideColumn:
         widget.stateManager.hideColumn(widget.column.key, true);
         break;
       case PlutoGridColumnMenuItem.setColumns:
+        if (!mounted) return;
         widget.stateManager.showSetColumnsPopup(context);
         break;
       case PlutoGridColumnMenuItem.setFilter:
+        if (!mounted) return;
         widget.stateManager.showFilterPopup(
           context,
           calledColumn: widget.column,

@@ -559,6 +559,7 @@ mixin ColumnState implements IPlutoGridState {
         type: PlutoColumnType.text(),
         enableRowChecked: true,
         enableEditingMode: false,
+        enableDropToResize: true,
         enableContextMenu: false,
         enableColumnDrag: false,
       ),
@@ -629,7 +630,7 @@ mixin ColumnState implements IPlutoGridState {
     return (PlutoColumn column) {
       return PlutoRow(
         cells: {
-          'title': PlutoCell(value: column.title),
+          'title': PlutoCell(value: column.titleWithGroup),
           columnField: PlutoCell(value: column.field),
         },
         checked: !column.hide,

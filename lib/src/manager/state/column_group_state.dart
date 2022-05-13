@@ -38,6 +38,8 @@ mixin ColumnGroupState implements IPlutoGridState {
     }
 
     _refColumnGroups = setColumnGroups;
+
+    _setGroupToColumn();
   }
 
   FilteredList<PlutoColumnGroup>? _refColumnGroups;
@@ -122,5 +124,18 @@ mixin ColumnGroupState implements IPlutoGridState {
 
     return (columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
         (columnGroup.hasChildren && columnGroup.children!.isEmpty);
+  }
+
+  void _setGroupToColumn() {
+    if (hasColumnGroups == false) {
+      return;
+    }
+
+    for (final column in refColumns) {
+      column.group = PlutoColumnGroupHelper.getParentGroupIfExistsFromList(
+        field: column.field,
+        columnGroupList: refColumnGroups!,
+      );
+    }
   }
 }

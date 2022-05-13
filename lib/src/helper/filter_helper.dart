@@ -381,7 +381,7 @@ class FilterPopupState {
     };
 
     columns.where((element) => element.enableFilterMenuItem).forEach((element) {
-      columnMap[element.field] = element.title;
+      columnMap[element.field] = element.titleWithGroup;
     });
 
     return columnMap;

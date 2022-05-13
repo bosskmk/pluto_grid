@@ -56,6 +56,12 @@ class PlutoColumnGroup {
     hasFields = fields != null;
 
     hasChildren = !hasFields;
+
+    if (hasChildren) {
+      for (final child in children!) {
+        child.parent = this;
+      }
+    }
   }
 
   Key get key => _key;
@@ -65,6 +71,18 @@ class PlutoColumnGroup {
   late final bool hasFields;
 
   late final bool hasChildren;
+
+  PlutoColumnGroup? parent;
+
+  Iterable<PlutoColumnGroup> get parents sync* {
+    var cursor = parent;
+
+    while (cursor != null) {
+      yield cursor;
+
+      cursor = cursor.parent;
+    }
+  }
 }
 
 class PlutoColumnGroupPair {
