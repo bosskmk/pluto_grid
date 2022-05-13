@@ -139,7 +139,7 @@ mixin FilteringRowState implements IPlutoGridState {
     var rows = shouldProvideDefaultFilterRow
         ? [
             FilterHelper.createFilterRow(
-              columnField: calledColumn!.enableFilterMenuItem
+              columnField: calledColumn.enableFilterMenuItem
                   ? calledColumn.field
                   : FilterHelper.filterFieldAllColumns,
               filterType: calledColumn.defaultFilter,
