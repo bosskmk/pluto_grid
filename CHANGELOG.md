@@ -1,3 +1,8 @@
+## [3.0.0] - 2022. 5. 13
+
+* Updated for flutter 3.0 version. 
+* Updated group name display in column filter popup.
+
 ## [2.10.2] - 2022. 5. 12
 
 * Fixed bad export CSV encoding when non-Latin1 / US-ASCII characters were present.

@@ -260,8 +260,8 @@ class __RowContainerWidgetState
 
     return _AnimatedOrNormalContainer(
       enable: widget.stateManager.configuration!.enableRowColorAnimation,
-      child: widget.child,
       decoration: _decoration,
+      child: widget.child,
     );
   }
 }
