@@ -1,3 +1,7 @@
+## [2.10.3] - 2022. 5. 14
+
+* Fixed by bug due to commit 1d5554d3.
+
 ## [2.10.2] - 2022. 5. 12
 
 * Fixed bad export CSV encoding when non-Latin1 / US-ASCII characters were present.
