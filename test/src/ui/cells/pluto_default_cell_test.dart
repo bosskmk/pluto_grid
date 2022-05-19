@@ -33,6 +33,7 @@ void main() {
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.rowHeight).thenReturn(0);
     when(stateManager.currentSelectingRows).thenReturn([]);
+    when(stateManager.isRTL).thenReturn(false);
   });
 
   group('기본 셀 테스트', () {

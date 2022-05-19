@@ -154,6 +154,8 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final translationX = widget.stateManager.isRTL ? -0.92 : -0.08;
+
     return Listener(
       onPointerDown: _handleOnPointerDown,
       onPointerMove: _handleOnPointerMove,
@@ -162,22 +164,25 @@ class __RowDragIconWidgetState extends State<_RowDragIconWidget> {
         data: widget.row,
         dragAnchorStrategy: pointerDragAnchorStrategy,
         feedback: FractionalTranslation(
-          translation: const Offset(-0.08, -0.5),
+          translation: Offset(translationX, -0.5),
           child: Material(
-            child: PlutoShadowContainer(
-              width: widget.column.width,
-              height: widget.stateManager.rowHeight,
-              backgroundColor:
-                  widget.stateManager.configuration!.gridBackgroundColor,
-              borderColor:
-                  widget.stateManager.configuration!.activatedBorderColor,
-              child: Row(
-                children: [
-                  widget.dragIcon,
-                  Expanded(
-                    child: widget.feedbackWidget,
-                  ),
-                ],
+            child: Directionality(
+              textDirection: widget.stateManager.configuration!.textDirection,
+              child: PlutoShadowContainer(
+                width: widget.column.width,
+                height: widget.stateManager.rowHeight,
+                backgroundColor:
+                    widget.stateManager.configuration!.gridBackgroundColor,
+                borderColor:
+                    widget.stateManager.configuration!.activatedBorderColor,
+                child: Row(
+                  children: [
+                    widget.dragIcon,
+                    Expanded(
+                      child: widget.feedbackWidget,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

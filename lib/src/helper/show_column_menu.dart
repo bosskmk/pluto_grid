@@ -66,14 +66,18 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
         _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToLeft,
           child: _buildTextItem(
-            text: localeText.freezeColumnToLeft,
+            text: stateManager.isRTL
+                ? localeText.freezeColumnToRight
+                : localeText.freezeColumnToLeft,
             textColor: textColor,
           ),
         ),
         _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToRight,
           child: _buildTextItem(
-            text: localeText.freezeColumnToRight,
+            text: stateManager.isRTL
+                ? localeText.freezeColumnToLeft
+                : localeText.freezeColumnToRight,
             textColor: textColor,
           ),
         ),

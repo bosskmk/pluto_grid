@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:demo/screen/feature/export_screen.dart';
+import 'package:demo/screen/feature/rtl_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -412,6 +413,14 @@ class PlutoFeatures extends StatelessWidget {
               Navigator.pushNamed(context, ExportScreen.routeName);
             },
           ),
+          PlutoListTile(
+            title: 'Right-To-Left',
+            description: 'Right-To-Left support.',
+            trailing: newIcon,
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RTLScreen.routeName);
+            },
+          ),
           PlutoListTile.dark(
             title: 'Dark mode',
             description: 'Change the entire theme of the grid to Dark.',
@@ -496,6 +505,13 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/Hu-Wentao');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'MajedDH',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/MajedDH');
             },
           ),
           PlutoContributorTile.invisible(

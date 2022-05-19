@@ -42,6 +42,7 @@ void main() {
     when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
+    when(stateManager.isRTL).thenReturn(false);
   });
 
   testWidgets(
@@ -741,9 +742,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right.color, stateManager.configuration!.borderColor);
+        expect(border.end.color, stateManager.configuration!.borderColor);
       },
     );
 
@@ -768,7 +769,8 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border? border = decoration.border as Border?;
+        final BorderDirectional? border =
+            decoration.border as BorderDirectional?;
 
         expect(border, isNull);
       },

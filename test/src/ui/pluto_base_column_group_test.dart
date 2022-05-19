@@ -43,6 +43,7 @@ void main() {
         );
       },
     );
+    when(stateManager!.isRTL).thenReturn(false);
   });
 
   buildWidget({

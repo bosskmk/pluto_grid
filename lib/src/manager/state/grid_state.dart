@@ -33,6 +33,8 @@ abstract class IGridState {
 
   PlutoGridLocaleText get localeText;
 
+  bool get isRTL;
+
   void setGridKey(GlobalKey key);
 
   void setKeyManager(PlutoGridKeyManager keyManager);
@@ -135,6 +137,9 @@ mixin GridState implements IPlutoGridState {
 
   @override
   PlutoGridLocaleText get localeText => configuration!.localeText;
+
+  @override
+  bool get isRTL => configuration!.textDirection == TextDirection.rtl;
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {

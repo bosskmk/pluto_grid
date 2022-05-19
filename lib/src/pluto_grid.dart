@@ -148,59 +148,70 @@ class _PlutoGridState extends State<PlutoGrid> {
         ),
       );
 
-  get _leftFrozenColumnsStack => Positioned.fill(
+  get _leftFrozenColumnsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.headerHeight,
-        right: _stateManager.leftFrozenRightOffset,
+        start: 0,
+        end: _stateManager.leftFrozenRightOffset,
         bottom: _stateManager.columnBottomOffset,
         key: _stackKeys[_StackName.leftFrozenColumns],
         child: PlutoLeftFrozenColumns(_stateManager),
       );
 
-  get _leftFrozenRowsStack => Positioned.fill(
+  get _leftFrozenRowsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.rowsTopOffset,
-        right: _stateManager.leftFrozenRightOffset,
+        start: 0,
+        end: _stateManager.leftFrozenRightOffset,
         bottom: _stateManager.footerHeight,
         key: _stackKeys[_StackName.leftFrozenRows],
         child: PlutoLeftFrozenRows(_stateManager),
       );
 
-  get _bodyColumnsStack => Positioned.fill(
+  get _bodyColumnsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.headerHeight,
-        left: _bodyLeftOffset,
-        right: _bodyRightOffset,
+        start: _bodyLeftOffset,
+        end: _bodyRightOffset,
         bottom: _stateManager.columnBottomOffset,
         key: _stackKeys[_StackName.bodyColumns],
         child: PlutoBodyColumns(_stateManager),
       );
 
-  get _bodyRowsStack => Positioned.fill(
+  get _bodyRowsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.rowsTopOffset,
-        left: _bodyLeftOffset,
-        right: _bodyRightOffset,
+        start: _bodyLeftOffset,
+        end: _bodyRightOffset,
         bottom: _stateManager.footerHeight,
         key: _stackKeys[_StackName.bodyRows],
         child: PlutoBodyRows(_stateManager),
       );
 
-  get _rightFrozenColumnsStack => Positioned.fill(
+  get _rightFrozenColumnsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.headerHeight,
-        left: _rightFrozenLeftOffset,
+        start: _rightFrozenLeftOffset,
+        end: 0,
         bottom: _stateManager.columnBottomOffset,
         key: _stackKeys[_StackName.rightFrozenColumns],
         child: PlutoRightFrozenColumns(_stateManager),
       );
 
-  get _rightFrozenRowsStack => Positioned.fill(
+  get _rightFrozenRowsStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.rowsTopOffset,
-        left: _rightFrozenLeftOffset,
+        start: _rightFrozenLeftOffset,
+        end: 0,
         bottom: _stateManager.footerHeight,
         key: _stackKeys[_StackName.rightFrozenRows],
         child: PlutoRightFrozenRows(_stateManager),
       );
 
-  get _leftFrozenDividerStack => Positioned(
+  get _leftFrozenDividerStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.headerHeight,
-        left: _bodyLeftOffset! - PlutoGridSettings.gridBorderWidth,
+        start: _bodyLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
         key: _stackKeys[_StackName.leftFrozenDivider],
         child: PlutoShadowLine(
@@ -210,9 +221,10 @@ class _PlutoGridState extends State<PlutoGrid> {
         ),
       );
 
-  get _rightFrozenDividerStack => Positioned(
+  get _rightFrozenDividerStack => Positioned.directional(
+        textDirection: _stateManager.configuration!.textDirection,
         top: _stateManager.headerHeight,
-        left: _rightFrozenLeftOffset! - PlutoGridSettings.gridBorderWidth,
+        start: _rightFrozenLeftOffset! - PlutoGridSettings.gridBorderWidth,
         bottom: _stateManager.footerHeight,
         key: _stackKeys[_StackName.rightFrozenDivider],
         child: PlutoShadowLine(
@@ -545,26 +557,29 @@ class _GridContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final configuration = stateManager.configuration!;
 
-    return Focus(
-      focusNode: stateManager.gridFocusNode,
-      child: ScrollConfiguration(
-        behavior: const PlutoScrollBehavior().copyWith(
-          scrollbars: false,
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
-          decoration: BoxDecoration(
-            color: configuration.gridBackgroundColor,
-            borderRadius: configuration.gridBorderRadius,
-            border: Border.all(
-              color: configuration.gridBorderColor,
-              width: PlutoGridSettings.gridBorderWidth,
-            ),
+    return Directionality(
+      textDirection: configuration.textDirection,
+      child: Focus(
+        focusNode: stateManager.gridFocusNode,
+        child: ScrollConfiguration(
+          behavior: const PlutoScrollBehavior().copyWith(
+            scrollbars: false,
           ),
-          child: ClipRRect(
-            borderRadius:
-                configuration.gridBorderRadius.resolve(TextDirection.ltr),
-            child: child,
+          child: Container(
+            padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
+            decoration: BoxDecoration(
+              color: configuration.gridBackgroundColor,
+              borderRadius: configuration.gridBorderRadius,
+              border: Border.all(
+                color: configuration.gridBorderColor,
+                width: PlutoGridSettings.gridBorderWidth,
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius:
+                  configuration.gridBorderRadius.resolve(TextDirection.ltr),
+              child: child,
+            ),
           ),
         ),
       ),

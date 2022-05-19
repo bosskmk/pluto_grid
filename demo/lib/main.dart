@@ -1,4 +1,5 @@
 import 'package:demo/screen/feature/export_screen.dart';
+import 'package:demo/screen/feature/rtl_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -89,6 +90,7 @@ class MyApp extends StatelessWidget {
             const TimeTypeColumnScreen(),
         ValueFormatterScreen.routeName: (context) =>
             const ValueFormatterScreen(),
+        RTLScreen.routeName: (context) => const RTLScreen(),
         // only development
         EmptyScreen.routeName: (context) => const EmptyScreen(),
         DevelopmentScreen.routeName: (context) => const DevelopmentScreen(),

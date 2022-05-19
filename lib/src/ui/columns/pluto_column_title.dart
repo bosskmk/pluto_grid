@@ -35,9 +35,9 @@ abstract class _PlutoColumnTitleStateWithChange
 }
 
 class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
-  late Offset _columnLeftPosition;
+  late Offset _columnStartPosition;
 
-  late Offset _columnRightPosition;
+  late Offset _columnEndPosition;
 
   bool _isPointMoving = false;
 
@@ -88,22 +88,30 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     }
   }
 
-  void _handleOnPointDown(PointerDownEvent event) {
+  void _handleOnPointDownLTR(PointerDownEvent event) {
     _isPointMoving = false;
 
-    _columnRightPosition = event.position;
-    _columnLeftPosition = _columnRightPosition - Offset(widget.column.width, 0);
+    _columnEndPosition = event.position;
+
+    _columnStartPosition = _columnEndPosition - Offset(widget.column.width, 0);
   }
 
-  void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = _columnRightPosition - event.position != Offset.zero;
+  void _handleOnPointDownRTL(PointerDownEvent event) {
+    _isPointMoving = false;
+
+    _columnStartPosition = event.position;
+    _columnEndPosition = _columnStartPosition - Offset(widget.column.width, 0);
+  }
+
+  void _handleOnPointMoveLTR(PointerMoveEvent event) {
+    _isPointMoving = _columnEndPosition - event.position != Offset.zero;
 
     if (_isPointMoving &&
-        _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
+        _columnStartPosition.dx + widget.column.minWidth > event.position.dx) {
       return;
     }
 
-    final moveOffset = event.position.dx - _columnRightPosition.dx;
+    final moveOffset = event.position.dx - _columnEndPosition.dx;
 
     widget.stateManager.resizeColumn(
       widget.column,
@@ -118,7 +126,33 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
           : widget.stateManager.scroll!.horizontal!.offset,
     );
 
-    _columnRightPosition = event.position;
+    _columnEndPosition = event.position;
+  }
+
+  void _handleOnPointMoveRTL(PointerMoveEvent event) {
+    _isPointMoving = _columnStartPosition - event.position != Offset.zero;
+
+    if (_isPointMoving &&
+        _columnStartPosition.dx - widget.column.minWidth > event.position.dx) {
+      return;
+    }
+
+    final moveOffset = _columnStartPosition.dx - event.position.dx;
+
+    widget.stateManager.resizeColumn(
+      widget.column,
+      moveOffset,
+      checkScroll: false,
+    );
+
+    widget.stateManager.scrollByDirection(
+      PlutoMoveDirection.left,
+      widget.stateManager.isInvalidHorizontalScroll
+          ? widget.stateManager.scroll!.maxScrollHorizontal
+          : widget.stateManager.scroll!.horizontal!.offset,
+    );
+
+    _columnStartPosition = event.position;
   }
 
   void _handleOnPointUp(PointerUpEvent event) {
@@ -169,6 +203,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       ),
     );
 
+    final isRTL = widget.stateManager.isRTL;
+
     return Stack(
       children: [
         Positioned(
@@ -181,12 +217,15 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
               : _columnWidget,
         ),
         if (_showContextIcon)
-          Positioned(
-            right: -3,
+          Positioned.directional(
+            textDirection: widget.stateManager.configuration!.textDirection,
+            end: -3,
             child: _enableGesture
                 ? Listener(
-                    onPointerDown: _handleOnPointDown,
-                    onPointerMove: _handleOnPointMove,
+                    onPointerDown:
+                        isRTL ? _handleOnPointDownRTL : _handleOnPointDownLTR,
+                    onPointerMove:
+                        isRTL ? _handleOnPointMoveRTL : _handleOnPointMoveLTR,
                     onPointerUp: _handleOnPointUp,
                     child: _contextMenuIcon,
                   )
@@ -319,7 +358,9 @@ class _BuildColumnWidget extends StatelessWidget {
       stateManager.configuration!.defaultColumnTitlePadding;
 
   bool get showSizedBoxForIcon =>
-      column.isShowRightIcon && column.titleTextAlign.isRight;
+      column.isShowRightIcon &&
+      (column.titleTextAlign.isRight ||
+          stateManager.configuration!.textDirection == TextDirection.rtl);
 
   @override
   Widget build(BuildContext context) {
@@ -329,8 +370,8 @@ class _BuildColumnWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: padding),
       decoration: BoxDecoration(
         color: column.backgroundColor,
-        border: Border(
-          right: stateManager.configuration!.enableColumnBorder
+        border: BorderDirectional(
+          end: stateManager.configuration!.enableColumnBorder
               ? BorderSide(
                   color: stateManager.configuration!.borderColor,
                   width: 1.0,

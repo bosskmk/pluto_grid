@@ -148,7 +148,7 @@ class _PlutoDateCellState extends State<PlutoDateCell>
   List<PlutoColumn> _buildColumns() {
     final localeText = widget.stateManager.localeText;
 
-    return [
+    List<List> columns = [
       [localeText.sunday, '7'],
       [localeText.monday, '1'],
       [localeText.tuesday, '2'],
@@ -156,7 +156,13 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       [localeText.thursday, '4'],
       [localeText.friday, '5'],
       [localeText.saturday, '6'],
-    ].map((e) {
+    ];
+
+    if (widget.stateManager.isRTL) {
+      columns = columns.reversed.toList(growable: false);
+    }
+
+    return columns.map((e) {
       return PlutoColumn(
         title: e[0],
         field: e[1],

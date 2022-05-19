@@ -110,6 +110,8 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  final TextDirection textDirection;
+
   const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
@@ -152,6 +154,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.textDirection = TextDirection.ltr,
   });
 
   const PlutoGridConfiguration.dark({
@@ -196,6 +199,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.textDirection = TextDirection.ltr,
   });
 
   void updateLocale() {
@@ -262,6 +266,7 @@ class PlutoGridConfiguration {
     PlutoGridLocaleText? localeText,
     PlutoGridScrollbarConfig? scrollbarConfig,
     PlutoGridColumnFilterConfig? columnFilterConfig,
+    TextDirection? textDirection,
   }) {
     return PlutoGridConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -305,6 +310,7 @@ class PlutoGridConfiguration {
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
       columnFilterConfig: columnFilterConfig ?? this.columnFilterConfig,
+      textDirection: textDirection ?? this.textDirection,
     );
   }
 }
@@ -671,6 +677,46 @@ class PlutoGridLocaleText {
     this.minute = 'دقیقه',
     // Common
     this.loadingText = 'در حال بارگیری...',
+  });
+
+  const PlutoGridLocaleText.arabic({
+    // Column menu
+    this.unfreezeColumn = 'إلغاء التجميد',
+    this.freezeColumnToLeft = 'تجميد إلى اليسار',
+    this.freezeColumnToRight = 'تجميد إلى اليمين',
+    this.autoFitColumn = 'تعبئة تلقائية',
+    this.hideColumn = 'إخفاء العمود',
+    this.setColumns = 'إدراج أعمدة',
+    this.setFilter = 'فلترة',
+    this.resetFilter = 'تهيئة الفلترة',
+    // SetColumns popup
+    this.setColumnsTitle = 'اسم العمود',
+    // Filter popup
+    this.filterColumn = 'العمود',
+    this.filterType = 'النوع',
+    this.filterValue = 'القيمة',
+    this.filterAllColumns = 'كل الأعمدة',
+    this.filterContains = 'يحتوي',
+    this.filterEquals = 'يساوي',
+    this.filterStartsWith = 'يبدأ بـ',
+    this.filterEndsWith = 'ينتهي بـ',
+    this.filterGreaterThan = 'أكبر من',
+    this.filterGreaterThanOrEqualTo = 'أكبر من أو يساوي',
+    this.filterLessThan = 'اصغر من',
+    this.filterLessThanOrEqualTo = 'أصغر من أو يساوي',
+    // Date popup
+    this.sunday = 'أح',
+    this.monday = 'إث',
+    this.tuesday = 'ثل',
+    this.wednesday = 'أر',
+    this.thursday = 'خم',
+    this.friday = 'جم',
+    this.saturday = 'سب',
+    // Time column popup
+    this.hour = 'ساعة',
+    this.minute = 'دقيقي',
+    // Common
+    this.loadingText = 'جاري التحميل...',
   });
 }
 

@@ -89,6 +89,10 @@ abstract class _PlutoBaseCellStateWithChangeKeepAlive
 }
 
 class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
+  /// todo : Support for selecting by long tapping in RTL
+  bool get disallowSelectingMode =>
+      widget.stateManager.selectingMode.isNone || widget.stateManager.isRTL;
+
   void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
     widget.stateManager.eventManager!.addEvent(
       PlutoGridCellGestureEvent(
@@ -106,7 +110,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnLongPressStart(LongPressStartDetails details) {
-    if (widget.stateManager.selectingMode.isNone) {
+    if (disallowSelectingMode) {
       return;
     }
 
@@ -117,7 +121,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
-    if (widget.stateManager.selectingMode.isNone) {
+    if (disallowSelectingMode) {
       return;
     }
 
@@ -126,7 +130,7 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
   }
 
   void _handleOnLongPressEnd(LongPressEndDetails details) {
-    if (widget.stateManager.selectingMode.isNone) {
+    if (disallowSelectingMode) {
       return;
     }
 
@@ -260,8 +264,8 @@ class _CellContainer extends StatelessWidget {
     } else {
       return configuration.enableColumnBorder
           ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
+              border: BorderDirectional(
+                end: BorderSide(
                   color: configuration.borderColor,
                   width: 1.0,
                 ),

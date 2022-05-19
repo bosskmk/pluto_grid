@@ -243,11 +243,11 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
       height: widget.stateManager.columnFilterHeight,
       padding: EdgeInsets.symmetric(horizontal: _padding),
       decoration: BoxDecoration(
-        border: Border(
+        border: BorderDirectional(
           top: BorderSide(
             color: configuration.borderColor,
           ),
-          right: configuration.enableColumnBorder
+          end: configuration.enableColumnBorder
               ? BorderSide(
                   color: configuration.borderColor,
                 )

@@ -61,6 +61,9 @@ class PlutoColumn {
   PlutoColumnTextAlign titleTextAlign;
 
   /// Freeze the column to the left and right.
+  ///
+  /// In case of RTL, it works in reverse.
+  /// (left > right, right > left)
   PlutoColumnFrozen frozen;
 
   /// Set column sorting.
@@ -129,8 +132,8 @@ class PlutoColumn {
     this.titlePadding,
     this.titleSpan,
     this.cellPadding,
-    this.textAlign = PlutoColumnTextAlign.left,
-    this.titleTextAlign = PlutoColumnTextAlign.left,
+    this.textAlign = PlutoColumnTextAlign.start,
+    this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
@@ -269,6 +272,8 @@ enum PlutoColumnTextAlign {
   left,
   center,
   right,
+  start,
+  end,
 }
 
 extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
@@ -277,7 +282,11 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
         ? TextAlign.left
         : this == PlutoColumnTextAlign.right
             ? TextAlign.right
-            : TextAlign.center;
+            : this == PlutoColumnTextAlign.start
+                ? TextAlign.start
+                : this == PlutoColumnTextAlign.end
+                    ? TextAlign.end
+                    : TextAlign.center;
   }
 
   AlignmentGeometry get alignmentValue {
@@ -285,7 +294,11 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
         ? Alignment.centerLeft
         : this == PlutoColumnTextAlign.right
             ? Alignment.centerRight
-            : Alignment.center;
+            : this == PlutoColumnTextAlign.start
+                ? AlignmentDirectional.centerStart
+                : this == PlutoColumnTextAlign.end
+                    ? AlignmentDirectional.centerEnd
+                    : Alignment.center;
   }
 
   bool get isLeft => this == PlutoColumnTextAlign.left;

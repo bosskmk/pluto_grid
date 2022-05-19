@@ -109,8 +109,8 @@ class _ColumnGroupTitle extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: _padding),
       decoration: BoxDecoration(
         color: columnGroup.group.backgroundColor,
-        border: Border(
-          right: stateManager.configuration!.enableColumnBorder
+        border: BorderDirectional(
+          end: stateManager.configuration!.enableColumnBorder
               ? BorderSide(
                   color: stateManager.configuration!.borderColor,
                   width: 1.0,

@@ -36,6 +36,7 @@ void main() {
     when(scroll.horizontal).thenReturn(horizontalScroll);
     when(horizontalScroll.offset).thenReturn(0);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
+    when(stateManager.isRTL).thenReturn(false);
   });
 
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -635,10 +636,10 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right.width, 1.0);
-        expect(border.right.color, Colors.deepOrange);
+        expect(border.end.width, 1.0);
+        expect(border.end.color, Colors.deepOrange);
       },
     );
 
@@ -659,9 +660,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right, BorderSide.none);
+        expect(border.end, BorderSide.none);
       },
     );
   });

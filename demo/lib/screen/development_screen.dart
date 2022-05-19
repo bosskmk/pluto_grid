@@ -276,6 +276,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 : Colors.white;
           },
           configuration: PlutoGridConfiguration(
+            // textDirection: TextDirection.rtl,
             // columnHeight: 30.0,
             // columnFilterHeight: 30.0,
             // rowHeight: 30.0,
@@ -384,7 +385,8 @@ class _HeaderState extends State<_Header> {
 
   void handleExport() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
+    var exported =
+        const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 

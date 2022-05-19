@@ -33,6 +33,7 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.isRTL).thenReturn(false);
   });
 
   group('기본 date 컬럼', () {

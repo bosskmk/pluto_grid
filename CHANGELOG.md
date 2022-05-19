@@ -1,3 +1,7 @@
+## [3.0.0-2.pre] - 2022. 5. 19
+
+* Support RTL.
+
 ## [3.0.0-1.pre] - 2022. 5. 14
 
 * Updated for flutter 3.0 version.
