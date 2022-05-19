@@ -56,11 +56,14 @@ void main() {
       when(stateManager!.columnHeight).thenReturn(columnHeight);
       when(stateManager!.showColumnFilter).thenReturn(showColumnFilter);
       when(stateManager!.isFilteredColumn(any)).thenReturn(isFilteredColumn);
+      when(stateManager!.columnFilterHeight).thenReturn(columnHeight);
 
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: FittedBox(
+            child: SizedBox(
+              width: 1920,
+              height: 1080,
               child: PlutoBaseColumnGroup(
                 stateManager: stateManager!,
                 columnGroup: columnGroup,

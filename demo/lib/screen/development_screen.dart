@@ -39,7 +39,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
-        enableAutoEditing: true,
+        // enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
         titleSpan: const TextSpan(
           children: [
@@ -101,6 +101,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableContextMenu: false,
         textAlign: PlutoColumnTextAlign.right,
         titleTextAlign: PlutoColumnTextAlign.right,
+        frozen: PlutoColumnFrozen.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -133,13 +134,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         titleTextAlign: PlutoColumnTextAlign.center,
         enableAutoEditing: true,
         type: PlutoColumnType.date(),
-      ),
-      PlutoColumn(
-        title: 'column4',
-        field: 'column4',
-        textAlign: PlutoColumnTextAlign.center,
-        titleTextAlign: PlutoColumnTextAlign.right,
-        type: PlutoColumnType.time(),
       ),
       PlutoColumn(
         title: 'column5',
@@ -182,6 +176,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
       ),
+      PlutoColumn(
+        title: 'column4',
+        field: 'column4',
+        textAlign: PlutoColumnTextAlign.center,
+        titleTextAlign: PlutoColumnTextAlign.right,
+        type: PlutoColumnType.time(),
+      ),
     ];
 
     columnGroups = [
@@ -194,24 +195,20 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'Group A',
         children: [
           PlutoColumnGroup(title: 'SubA', fields: ['column2']),
-          PlutoColumnGroup(
-            title: 'SubB',
-            fields: ['column3'],
-            expandedColumn: true,
-          ),
+          PlutoColumnGroup(title: 'SubB', fields: ['column3']),
         ],
       ),
       PlutoColumnGroup(
         title: 'Group B',
-        fields: ['column4', 'column5', 'column6'],
+        fields: ['column5', 'column6', 'column7'],
       ),
       PlutoColumnGroup(
         title: 'Group C',
-        fields: ['column7'],
+        fields: ['column4'],
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 10000, columns: columns);
+    rows = DummyData.rowsByColumns(length: 30, columns: columns);
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -240,7 +237,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
 
-            stateManager.setShowColumnFilter(true, notify: false);
+            stateManager.setShowColumnFilter(true);
 
             // stateManager!.setAutoEditing(true, notify: false);
           },
@@ -261,6 +258,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(e.row?.cells['column1']?.value);
           // },
           createHeader: (PlutoGridStateManager stateManager) {
+            // stateManager.headerHeight = 200;
             return _Header(
               stateManager: stateManager,
               columns: columns,

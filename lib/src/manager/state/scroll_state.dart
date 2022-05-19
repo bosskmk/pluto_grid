@@ -73,15 +73,11 @@ mixin ScrollState implements IPlutoGridState {
 
     final double rowSize = rowTotalHeight;
 
-    const double gridOffset =
-        PlutoGridSettings.gridPadding + PlutoGridSettings.shadowLineSize;
-
     final double screenOffset = _scroll!.verticalOffset +
         columnRowContainerHeight -
         columnGroupHeight -
         columnHeight -
-        columnFilterHeight -
-        gridOffset;
+        columnFilterHeight;
 
     double offsetToMove =
         direction.isUp ? (rowIdx! - 1) * rowSize : (rowIdx! + 1) * rowSize;
@@ -131,7 +127,6 @@ mixin ScrollState implements IPlutoGridState {
     if (direction.isRight) {
       if (offsetToMove > _scroll!.horizontal!.offset) {
         offsetToMove -= screenOffset!;
-        offsetToMove += PlutoGridSettings.totalShadowLineWidth;
         offsetToMove += columnToMove.width;
         offsetToMove += scrollOffsetByFrozenColumn;
 
@@ -140,9 +135,7 @@ mixin ScrollState implements IPlutoGridState {
         }
       }
     } else {
-      final offsetToNeed = offsetToMove +
-          columnToMove.width +
-          PlutoGridSettings.totalShadowLineWidth;
+      final offsetToNeed = offsetToMove + columnToMove.width;
 
       final currentOffset = screenOffset! + _scroll!.horizontal!.offset;
 

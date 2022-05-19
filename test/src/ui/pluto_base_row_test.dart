@@ -63,6 +63,8 @@ void main() {
         columns = ColumnHelper.textColumn('header', count: 3);
         rows = RowHelper.count(10, columns);
 
+        when(stateManager!.columns).thenReturn(columns);
+
         final row = rows[rowIdx];
 
         if (checked) {
