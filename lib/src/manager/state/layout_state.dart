@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ILayoutState {
+  ChangeNotifier get resizingChangeNotifier;
+
   /// Screen width
   double? get maxWidth;
 
@@ -89,10 +91,15 @@ abstract class ILayoutState {
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
+
+  void notifyResizingListeners();
 }
 
 mixin LayoutState implements IPlutoGridState {
-  ChangeNotifier resizingChangeNotifier = ChangeNotifier();
+  @override
+  ChangeNotifier get resizingChangeNotifier => _resizingChangeNotifier;
+
+  final ChangeNotifier _resizingChangeNotifier = ChangeNotifier();
 
   @override
   double? get maxWidth => _maxWidth;
@@ -378,5 +385,10 @@ mixin LayoutState implements IPlutoGridState {
                 rightFrozenColumnsWidth +
                 PlutoGridSettings.bodyMinWidth +
                 PlutoGridSettings.totalShadowLineWidth);
+  }
+
+  @override
+  void notifyResizingListeners() {
+    _resizingChangeNotifier.notifyListeners();
   }
 }
