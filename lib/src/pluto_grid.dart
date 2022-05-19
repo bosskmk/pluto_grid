@@ -380,6 +380,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                   child: PlutoShadowLine(
                     axis: Axis.horizontal,
                     color: _stateManager.configuration!.gridBorderColor,
+                    reverse: true,
                     shadow: _stateManager.configuration!.enableGridBorderShadow,
                   ),
                 ),
@@ -400,6 +401,7 @@ class _PlutoGridState extends State<PlutoGrid> {
                     child: PlutoShadowLine(
                       axis: Axis.vertical,
                       color: _stateManager.configuration!.gridBorderColor,
+                      reverse: true,
                       shadow:
                           _stateManager.configuration!.enableGridBorderShadow,
                     )),
@@ -447,126 +449,240 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         _stateManager.shouldShowFrozenColumns(size.width)) {
       _stateManager.notifyListenersOnPostFrame();
     }
+
     _stateManager.setLayout(BoxConstraints.tight(size));
+
     double bodyRowsTopOffset = 0;
     double bodyRowsBottomOffset = 0;
     double columnsTopOffset = 0;
     double bodyLeftOffset = 0;
     double bodyRightOffset = 0;
+
     // first layout header and footer and see what remains for the scrolling part
     if (hasChild(_StackName.header)) {
       // maximum 40% of the height
       var s = layoutChild(_StackName.header,
           BoxConstraints.loose(Size(size.width, size.height / 100 * 40)));
+
       _stateManager.headerHeight = s.height;
+
       bodyRowsTopOffset += s.height;
+
       columnsTopOffset += s.height;
     }
+
     if (hasChild(_StackName.headerDivider)) {
-      var s = layoutChild(
-          _StackName.headerDivider,
-          BoxConstraints.tight(
-              Size(size.width, PlutoGridSettings.gridBorderWidth)));
-      positionChild(_StackName.headerDivider, Offset(0, columnsTopOffset));
-      bodyRowsTopOffset += s.height;
-      columnsTopOffset += s.height;
+      layoutChild(
+        _StackName.headerDivider,
+        BoxConstraints.tight(
+          Size(size.width, PlutoGridSettings.gridBorderWidth),
+        ),
+      );
+
+      positionChild(
+        _StackName.headerDivider,
+        Offset(0, columnsTopOffset),
+      );
     }
+
     if (hasChild(_StackName.footer)) {
       // maximum 40% of the height
       var s = layoutChild(_StackName.footer, BoxConstraints.loose(size));
+
       _stateManager.footerHeight = s.height;
+
       bodyRowsBottomOffset += s.height;
+
       positionChild(
-          _StackName.footer, Offset(0, size.height - bodyRowsBottomOffset));
-      // columnsTopOffset += s.height;
+        _StackName.footer,
+        Offset(0, size.height - bodyRowsBottomOffset),
+      );
     }
+
     if (hasChild(_StackName.footerDivider)) {
-      var s = layoutChild(
-          _StackName.footerDivider,
-          BoxConstraints.tight(
-              Size(size.width, PlutoGridSettings.gridBorderWidth)));
-      positionChild(_StackName.footerDivider,
-          Offset(0, size.height - bodyRowsBottomOffset));
-      // bodyRowsBottomOffset += s.height;
-      // columnsTopOffset += s.height;
+      layoutChild(
+        _StackName.footerDivider,
+        BoxConstraints.tight(
+          Size(size.width, PlutoGridSettings.gridBorderWidth),
+        ),
+      );
+
+      positionChild(
+        _StackName.footerDivider,
+        Offset(0, size.height - bodyRowsBottomOffset),
+      );
     }
 
     // now layout columns of frozen sides and see what remains for the body width
     if (hasChild(_StackName.leftFrozenColumns)) {
-      var s =
-          layoutChild(_StackName.leftFrozenColumns, BoxConstraints.loose(size));
-      positionChild(_StackName.leftFrozenColumns, Offset(0, columnsTopOffset));
+      var s = layoutChild(
+        _StackName.leftFrozenColumns,
+        BoxConstraints.loose(size),
+      );
+
+      positionChild(
+        _StackName.leftFrozenColumns,
+        Offset(0, columnsTopOffset),
+      );
+
       bodyLeftOffset = s.width;
     }
+
     if (hasChild(_StackName.leftFrozenDivider)) {
       var s = layoutChild(
-          _StackName.leftFrozenDivider,
-          BoxConstraints.tight(Size(PlutoGridSettings.gridBorderWidth,
-              size.height - columnsTopOffset - bodyRowsBottomOffset)));
-      positionChild(_StackName.leftFrozenDivider,
-          Offset(bodyLeftOffset, columnsTopOffset));
+        _StackName.leftFrozenDivider,
+        BoxConstraints.tight(
+          Size(
+            PlutoGridSettings.gridBorderWidth,
+            size.height - columnsTopOffset - bodyRowsBottomOffset,
+          ),
+        ),
+      );
+
+      positionChild(
+        _StackName.leftFrozenDivider,
+        Offset(bodyLeftOffset, columnsTopOffset),
+      );
+
       bodyLeftOffset += s.width;
     }
+
     if (hasChild(_StackName.rightFrozenColumns)) {
       var s = layoutChild(
-          _StackName.rightFrozenColumns, BoxConstraints.loose(size));
-      positionChild(_StackName.rightFrozenColumns,
-          Offset(size.width - s.width, columnsTopOffset));
+        _StackName.rightFrozenColumns,
+        BoxConstraints.loose(size),
+      );
+
+      positionChild(
+        _StackName.rightFrozenColumns,
+        Offset(
+          size.width - s.width + PlutoGridSettings.gridBorderWidth,
+          columnsTopOffset,
+        ),
+      );
+
       bodyRightOffset = s.width;
     }
+
     if (hasChild(_StackName.rightFrozenDivider)) {
       var s = layoutChild(
-          _StackName.rightFrozenDivider,
-          BoxConstraints.tight(Size(PlutoGridSettings.gridBorderWidth,
-              size.height - columnsTopOffset - bodyRowsBottomOffset)));
-      positionChild(_StackName.rightFrozenDivider,
-          Offset(size.width - bodyRightOffset, columnsTopOffset));
+        _StackName.rightFrozenDivider,
+        BoxConstraints.tight(
+          Size(
+            PlutoGridSettings.gridBorderWidth,
+            size.height - columnsTopOffset - bodyRowsBottomOffset,
+          ),
+        ),
+      );
+
+      positionChild(
+        _StackName.rightFrozenDivider,
+        Offset(
+          size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth,
+          columnsTopOffset,
+        ),
+      );
+
       bodyRightOffset += s.width;
     }
+
     if (hasChild(_StackName.bodyColumns)) {
       var s = layoutChild(
-          _StackName.bodyColumns,
-          BoxConstraints.loose(Size(
-              size.width - bodyLeftOffset - bodyRightOffset, size.height)));
+        _StackName.bodyColumns,
+        BoxConstraints.loose(
+          Size(
+            size.width - bodyLeftOffset - bodyRightOffset,
+            size.height,
+          ),
+        ),
+      );
+
       positionChild(
-          _StackName.bodyColumns, Offset(bodyLeftOffset, columnsTopOffset));
+        _StackName.bodyColumns,
+        Offset(bodyLeftOffset, columnsTopOffset),
+      );
+
       bodyRowsTopOffset += s.height;
     }
 
     // layout rows
     if (hasChild(_StackName.columnRowDivider)) {
       var s = layoutChild(
-          _StackName.columnRowDivider,
-          BoxConstraints.tight(
-              Size(size.width, PlutoGridSettings.gridBorderWidth)));
-      positionChild(_StackName.columnRowDivider, Offset(0, bodyRowsTopOffset));
+        _StackName.columnRowDivider,
+        BoxConstraints.tight(
+          Size(
+            size.width,
+            PlutoGridSettings.gridBorderWidth,
+          ),
+        ),
+      );
+
+      positionChild(
+        _StackName.columnRowDivider,
+        Offset(0, bodyRowsTopOffset),
+      );
+
       bodyRowsTopOffset += s.height;
     }
+
     if (hasChild(_StackName.leftFrozenRows)) {
       layoutChild(
-          _StackName.leftFrozenRows,
-          BoxConstraints.loose(Size(bodyLeftOffset,
-              size.height - bodyRowsTopOffset - bodyRowsBottomOffset)));
-      positionChild(_StackName.leftFrozenRows, Offset(0, bodyRowsTopOffset));
+        _StackName.leftFrozenRows,
+        BoxConstraints.loose(
+          Size(
+            bodyLeftOffset,
+            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
+          ),
+        ),
+      );
+
+      positionChild(
+        _StackName.leftFrozenRows,
+        Offset(0, bodyRowsTopOffset),
+      );
     }
+
     if (hasChild(_StackName.rightFrozenRows)) {
       layoutChild(
-          _StackName.rightFrozenRows,
-          BoxConstraints.loose(Size(bodyRightOffset,
-              size.height - bodyRowsTopOffset - bodyRowsBottomOffset)));
-      positionChild(_StackName.rightFrozenRows,
-          Offset(size.width - bodyRightOffset, bodyRowsTopOffset));
+        _StackName.rightFrozenRows,
+        BoxConstraints.loose(
+          Size(
+            bodyRightOffset,
+            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
+          ),
+        ),
+      );
+
+      positionChild(
+        _StackName.rightFrozenRows,
+        Offset(
+          size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth,
+          bodyRowsTopOffset,
+        ),
+      );
     }
+
     if (hasChild(_StackName.bodyRows)) {
       var height = size.height - bodyRowsTopOffset - bodyRowsBottomOffset;
+
       var width = size.width - bodyLeftOffset - bodyRightOffset;
+
       layoutChild(
-          _StackName.bodyRows, BoxConstraints.tight(Size(width, height)));
+        _StackName.bodyRows,
+        BoxConstraints.tight(Size(width, height)),
+      );
+
       positionChild(
-          _StackName.bodyRows, Offset(bodyLeftOffset, bodyRowsTopOffset));
+        _StackName.bodyRows,
+        Offset(bodyLeftOffset, bodyRowsTopOffset),
+      );
     }
+
     if (hasChild(_StackName.loading)) {
-      layoutChild(_StackName.loading, BoxConstraints.tight(size));
+      layoutChild(
+        _StackName.loading,
+        BoxConstraints.tight(size),
+      );
     }
   }
 

@@ -119,7 +119,7 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get headerHeight {
     if (createHeader == null) {
-      return PlutoGridSettings.rowTotalHeight;
+      return 0;
     } else {
       if (_headerHeight == null) {
         return PlutoGridSettings.rowTotalHeight;
@@ -132,7 +132,7 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get footerHeight {
     if (createFooter == null) {
-      return PlutoGridSettings.rowTotalHeight;
+      return 0;
     } else {
       if (_footerHeight == null) {
         return PlutoGridSettings.rowTotalHeight;
