@@ -39,7 +39,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableRowChecked: true,
         enableContextMenu: false,
         enableDropToResize: true,
-        enableAutoEditing: true,
+        // enableAutoEditing: true,
         titleTextAlign: PlutoColumnTextAlign.right,
         titleSpan: const TextSpan(
           children: [
@@ -187,26 +187,26 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     columnGroups = [
       PlutoColumnGroup(
         title: 'Expanded Column Group',
+        groupId: 'Expanded Column Group',
         fields: ['column1'],
         expandedColumn: true,
       ),
       PlutoColumnGroup(
         title: 'Group A',
+        groupId: 'Group A',
         children: [
-          PlutoColumnGroup(title: 'SubA', fields: ['column2']),
-          PlutoColumnGroup(
-            title: 'SubB',
-            fields: ['column3'],
-            expandedColumn: true,
-          ),
+          PlutoColumnGroup(title: 'SubA', groupId: 'SubA', fields: ['column2']),
+          PlutoColumnGroup(title: 'SubB', groupId: 'SubB', fields: ['column3']),
         ],
       ),
       PlutoColumnGroup(
         title: 'Group B',
+        groupId: 'Group B',
         fields: ['column4', 'column5', 'column6'],
       ),
       PlutoColumnGroup(
         title: 'Group C',
+        groupId: 'Group C',
         fields: ['column7'],
       ),
     ];
@@ -240,7 +240,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
 
-            stateManager.setShowColumnFilter(true, notify: false);
+            stateManager.setShowColumnFilter(true);
 
             // stateManager!.setAutoEditing(true, notify: false);
           },
@@ -384,7 +384,8 @@ class _HeaderState extends State<_Header> {
 
   void handleExport() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
+    var exported =
+        const Utf8Encoder().convert(PlutoExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 

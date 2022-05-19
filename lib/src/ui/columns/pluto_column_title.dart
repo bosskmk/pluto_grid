@@ -65,6 +65,7 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
       case PlutoGridColumnMenuItem.autoFit:
         if (!mounted) return;
         widget.stateManager.autoFitColumn(context, widget.column);
+        widget.stateManager.resizingChangeNotifier.notifyListeners();
         break;
       case PlutoGridColumnMenuItem.hideColumn:
         widget.stateManager.hideColumn(widget.column.key, true);
@@ -108,9 +109,10 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     widget.stateManager.resizeColumn(
       widget.column,
       moveOffset,
+      notify: false,
       checkScroll: false,
     );
-
+    widget.stateManager.resizingChangeNotifier.notifyListeners();
     widget.stateManager.scrollByDirection(
       PlutoMoveDirection.right,
       widget.stateManager.isInvalidHorizontalScroll
@@ -172,6 +174,8 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
     return Stack(
       children: [
         Positioned(
+          left: 0,
+          right: 0,
           child: widget.column.enableColumnDrag
               ? _BuildDraggableWidget(
                   stateManager: widget.stateManager,

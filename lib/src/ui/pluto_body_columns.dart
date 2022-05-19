@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -90,28 +91,95 @@ class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _width,
-      child: ListView.builder(
-        controller: _scroll,
-        scrollDirection: Axis.horizontal,
-        physics: const ClampingScrollPhysics(),
-        itemCount: _itemCount,
-        itemBuilder: (ctx, i) {
-          return _showColumnGroups == true
-              ? PlutoBaseColumnGroup(
-                  stateManager: widget.stateManager,
-                  columnGroup: _columnGroups![i],
-                  depth: widget.stateManager.columnGroupDepth(
-                    widget.stateManager.refColumnGroups!,
-                  ),
-                )
-              : PlutoBaseColumn(
-                  stateManager: widget.stateManager,
-                  column: _columns![i],
-                );
-        },
-      ),
+    return SingleChildScrollView(
+      controller: _scroll,
+      scrollDirection: Axis.horizontal,
+      physics: const ClampingScrollPhysics(),
+      child: CustomMultiChildLayout(
+          delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+          children: _showColumnGroups == true
+              ? _columnGroups!
+                  .map((PlutoColumnGroupPair e) => LayoutId(
+                        id: e.key,
+                        child: PlutoBaseColumnGroup(
+                          stateManager: widget.stateManager,
+                          columnGroup: e,
+                          depth: widget.stateManager.columnGroupDepth(
+                            widget.stateManager.refColumnGroups!,
+                          ),
+                        ),
+                      ))
+                  .toList()
+              : _columns!
+                  .map((e) => LayoutId(
+                        id: e.field,
+                        child: PlutoBaseColumn(
+                          stateManager: widget.stateManager,
+                          column: e,
+                        ),
+                      ))
+                  .toList()),
     );
+  }
+}
+
+class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
+  PlutoGridStateManager stateManager;
+
+  List<PlutoColumn> columns;
+
+  MainColumnLayoutDelegate(this.stateManager, this.columns)
+      : super(relayout: stateManager.resizingChangeNotifier);
+
+  double totalColumnsHeight = 0;
+
+  @override
+  Size getSize(BoxConstraints constraints) {
+    totalColumnsHeight = 0;
+    if (stateManager.showColumnGroups) {
+      totalColumnsHeight =
+          stateManager.columnGroupHeight + stateManager.columnHeight;
+    } else {
+      totalColumnsHeight = stateManager.columnHeight;
+    }
+    totalColumnsHeight += stateManager.columnFilterHeight;
+    return Size(
+        columns.fold(
+            0, (previousValue, element) => previousValue += element.width),
+        totalColumnsHeight);
+  }
+
+  @override
+  void performLayout(Size size) {
+    if (stateManager.showColumnGroups) {
+      var separateLinkedGroup = stateManager.separateLinkedGroup(
+          columnGroupList: stateManager.columnGroups, columns: columns);
+      double dx = 0;
+      for (PlutoColumnGroupPair pair in separateLinkedGroup) {
+        if (!hasChild(pair.key)) continue;
+        final double width = pair.columns.fold<double>(
+            0, (previousValue, element) => previousValue + element.width);
+        var boxConstraints =
+            BoxConstraints.tight(Size(width, totalColumnsHeight));
+        layoutChild(pair.key, boxConstraints);
+        positionChild(pair.key, Offset(dx, 0));
+        dx += width;
+      }
+    } else {
+      double dx = 0;
+      for (PlutoColumn col in columns) {
+        var width = col.width;
+        var boxConstraints =
+            BoxConstraints.tight(Size(width, totalColumnsHeight));
+        layoutChild(col.field, boxConstraints);
+        positionChild(col.field, Offset(dx, 0));
+        dx += width;
+      }
+    }
+  }
+
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
+    return true;
   }
 }

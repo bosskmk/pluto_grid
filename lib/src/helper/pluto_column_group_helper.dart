@@ -93,6 +93,7 @@ class PlutoColumnGroupHelper {
             columnGroupList: columnGroupList,
           ) ??
           PlutoColumnGroup(
+            groupId: field,
             title: field,
             fields: [field],
             expandedColumn: true,
