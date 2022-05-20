@@ -11,12 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pluto_grid: ^3.0.0-0.pre
+  pluto_grid:
+    path: ../..
   csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.1.0
-  build_runner: ^2.1.10
+  mockito: ^5.2.0
+  build_runner: ^2.1.11
   flutter_lints: ^2.0.1

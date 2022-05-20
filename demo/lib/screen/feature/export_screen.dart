@@ -179,10 +179,25 @@ class _HeaderState extends State<_Header> {
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
+  void _defaultExportGridAsCSVCompatibleWithExcel() async {
+    String title = "pluto_grid_export";
+    var exportCSV = PlutoGridExport.exportCSV(widget.stateManager);
+    var exported = const Utf8Encoder().convert(
+        // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
+        // This allows open the file in Excel with proper character interpretation
+        // See https://stackoverflow.com/a/155176
+        '\u{FEFF}$exportCSV');
+    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+  }
+
   void _defaultExportGridAsCSVFakeExcel() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder()
-        .convert(PlutoGridExport.exportCSV(widget.stateManager));
+    var exportCSV = PlutoGridExport.exportCSV(widget.stateManager);
+    var exported = const Utf8Encoder().convert(
+        // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
+        // This allows open the file in Excel with proper character interpretation
+        // See https://stackoverflow.com/a/155176
+        '\u{FEFF}$exportCSV');
     await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
   }
 
@@ -225,8 +240,11 @@ class _HeaderState extends State<_Header> {
                   onPressed: _exportGridAsTSV,
                   child: const Text("Export to TSV (tab separated)")),
               ElevatedButton(
+                  onPressed: _defaultExportGridAsCSVCompatibleWithExcel,
+                  child: const Text("UTF-8 CSV compatible with MS Excel")),
+              ElevatedButton(
                   onPressed: _defaultExportGridAsCSVFakeExcel,
-                  child: const Text("Export to fake-Excel")),
+                  child: const Text("Fake MS Excel .xls export")),
             ],
           ),
         ),
