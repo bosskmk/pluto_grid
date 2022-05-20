@@ -14,6 +14,8 @@ dependencies:
   pluto_grid:
     path: ../..
   csv: ^5.0.1
+  pdf: ^3.8.0
+  printing: ^5.9.0
 
 dev_dependencies:
   flutter_test:
