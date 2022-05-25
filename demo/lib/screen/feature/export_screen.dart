@@ -176,10 +176,10 @@ class _HeaderState extends State<_Header> {
   void _printToPdfAndShareOrSave() async {
     final themeData = pluto_grid_export.ThemeData.withFont(
       base: pluto_grid_export.Font.ttf(
-        await rootBundle.load('fonts/open_sans/OpenSans-Regular.ttf'),
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
       ),
       bold: pluto_grid_export.Font.ttf(
-        await rootBundle.load('fonts/open_sans/OpenSans-Bold.ttf'),
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
       ),
     );
 
