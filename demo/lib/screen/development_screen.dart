@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid_export/pluto_grid_export.dart';
+import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 import '../dummy_data/development.dart';
 import 'empty_screen.dart';
@@ -385,8 +385,8 @@ class _HeaderState extends State<_Header> {
 
   void handleExport() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder()
-        .convert(PlutoGridExport.exportCSV(widget.stateManager));
+    var exported = const Utf8Encoder().convert(
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
@@ -438,12 +438,12 @@ class _HeaderState extends State<_Header> {
               onPressed: () => handleAddRowButton(count: 100000),
             ),
             ElevatedButton(
-              child: const Text('Remove Current Row'),
               onPressed: handleRemoveCurrentRowButton,
+              child: const Text('Remove Current Row'),
             ),
             ElevatedButton(
-              child: const Text('Remove Selected Rows'),
               onPressed: handleRemoveSelectedRowsButton,
+              child: const Text('Remove Selected Rows'),
             ),
             ElevatedButton(
                 onPressed: handleExport, child: const Text("Export to CSV")),
@@ -469,8 +469,8 @@ class _HeaderState extends State<_Header> {
               ),
             ),
             ElevatedButton(
-              child: const Text('Toggle filter'),
               onPressed: handleToggleColumnFilter,
+              child: const Text('Toggle filter'),
             ),
             ElevatedButton(
               child: const Text('Toggle group'),

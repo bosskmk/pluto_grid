@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
+import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid_export/pdf/pluto_grid_pdf_export.dart';
-import 'package:pluto_grid_export/pluto_grid_export.dart';
-import 'package:printing/printing.dart';
+import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -176,13 +174,23 @@ class _Header extends StatefulWidget {
 
 class _HeaderState extends State<_Header> {
   void _printToPdfAndShareOrSave() async {
-    var plutoGridPdfExport = PlutoGridDefaultPdfExport(
-      title: "Pluto Grid Sample pdf print",
-      creator: "Pluto Grid Rocks!",
-      format: PdfPageFormat.a4.landscape,
+    final themeData = pluto_grid_export.ThemeData.withFont(
+      base: pluto_grid_export.Font.ttf(
+        await rootBundle.load('fonts/open_sans/OpenSans-Regular.ttf'),
+      ),
+      bold: pluto_grid_export.Font.ttf(
+        await rootBundle.load('fonts/open_sans/OpenSans-Bold.ttf'),
+      ),
     );
 
-    await Printing.sharePdf(
+    var plutoGridPdfExport = pluto_grid_export.PlutoGridDefaultPdfExport(
+      title: "Pluto Grid Sample pdf print",
+      creator: "Pluto Grid Rocks!",
+      format: pluto_grid_export.PdfPageFormat.a4.landscape,
+      themeData: themeData,
+    );
+
+    await pluto_grid_export.Printing.sharePdf(
         bytes: await plutoGridPdfExport.export(widget.stateManager),
         filename: plutoGridPdfExport.getFilename());
   }
@@ -209,14 +217,15 @@ class _HeaderState extends State<_Header> {
 
   void _defaultExportGridAsCSV() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder()
-        .convert(PlutoGridExport.exportCSV(widget.stateManager));
+    var exported = const Utf8Encoder().convert(
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
     await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVCompatibleWithExcel() async {
     String title = "pluto_grid_export";
-    var exportCSV = PlutoGridExport.exportCSV(widget.stateManager);
+    var exportCSV =
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
     var exported = const Utf8Encoder().convert(
         // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
         // This allows open the file in Excel with proper character interpretation
@@ -227,7 +236,8 @@ class _HeaderState extends State<_Header> {
 
   void _defaultExportGridAsCSVFakeExcel() async {
     String title = "pluto_grid_export";
-    var exportCSV = PlutoGridExport.exportCSV(widget.stateManager);
+    var exportCSV =
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
     var exported = const Utf8Encoder().convert(
         // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
         // This allows open the file in Excel with proper character interpretation
@@ -247,7 +257,8 @@ class _HeaderState extends State<_Header> {
 
   void _defaultExportGridAsCSVWithSemicolon() async {
     String title = "pluto_grid_export";
-    var exported = const Utf8Encoder().convert(PlutoGridExport.exportCSV(
+    var exported =
+        const Utf8Encoder().convert(pluto_grid_export.PlutoGridExport.exportCSV(
       widget.stateManager,
       fieldDelimiter: ";",
     ));

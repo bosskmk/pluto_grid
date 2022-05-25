@@ -322,32 +322,32 @@ class _HeaderState extends State<_Header> {
               ),
             ),
             ElevatedButton(
-              child: const Text('Add columns'),
               onPressed: handleAddColumns,
+              child: const Text('Add columns'),
             ),
             ElevatedButton(
-              child: const Text('Add rows'),
               onPressed: handleAddRows,
+              child: const Text('Add rows'),
             ),
             ElevatedButton(
-              child: const Text('Save all'),
               onPressed: handleSaveAll,
+              child: const Text('Save all'),
             ),
             ElevatedButton(
-              child: const Text('Remove Current Column'),
               onPressed: handleRemoveCurrentColumnButton,
+              child: const Text('Remove Current Column'),
             ),
             ElevatedButton(
-              child: const Text('Remove Current Row'),
               onPressed: handleRemoveCurrentRowButton,
+              child: const Text('Remove Current Row'),
             ),
             ElevatedButton(
-              child: const Text('Remove Selected Rows'),
               onPressed: handleRemoveSelectedRowsButton,
+              child: const Text('Remove Selected Rows'),
             ),
             ElevatedButton(
-              child: const Text('Toggle filtering'),
               onPressed: handleFiltering,
+              child: const Text('Toggle filtering'),
             ),
             DropdownButtonHideUnderline(
               child: DropdownButton(

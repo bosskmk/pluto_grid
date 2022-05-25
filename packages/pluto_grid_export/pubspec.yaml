@@ -5,8 +5,8 @@ homepage: https://bosskmk.github.io
 repository: https://github.com/bosskmk/pluto_grid/packages/pluto_grid_export
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
-  flutter: ">=3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:
@@ -14,8 +14,8 @@ dependencies:
   pluto_grid:
     path: ../..
   csv: ^5.0.1
-  pdf: ^3.8.0
-  printing: ^5.9.0
+  pdf: ^3.8.1
+  printing: ^5.9.1
 
 dev_dependencies:
   flutter_test:
