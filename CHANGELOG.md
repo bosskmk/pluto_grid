@@ -1,7 +1,17 @@
-## [3.0.0-0.pre] - 2022. 5. 13
+## [3.0.2] - 2022. 5. 25
+
+* CSV export has been separated into external packages.   
+  Install the pluto_grid_export package.
+
+## [3.0.0-1.pre] - 2022. 5. 14
 
 * Updated for flutter 3.0 version.
 * Updated group name display in column filter popup.
+* Fixed by bug due to commit 1d5554d3.
+
+## [2.10.3] - 2022. 5. 14
+
+* Fixed by bug due to commit 1d5554d3.
 
 ## [2.10.2] - 2022. 5. 12
 

@@ -103,8 +103,8 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
               spacing: 10,
               children: [
                 ElevatedButton(
-                  child: const Text('Toggle hide Column A'),
                   onPressed: handleToggleColumnA,
+                  child: const Text('Toggle hide Column A'),
                 ),
                 ElevatedButton(
                   child: const Text('Show Popup'),

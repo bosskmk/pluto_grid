@@ -70,13 +70,13 @@ class PlutoListTile extends StatelessWidget {
                     children: [
                       if (onTapPreview != null)
                         TextButton(
-                          child: const Text('Preview'),
                           onPressed: onTapPreview,
+                          child: const Text('Preview'),
                         ),
                       if (onTapLiveDemo != null)
                         TextButton(
-                          child: const Text('LiveDemo'),
                           onPressed: onTapLiveDemo,
+                          child: const Text('LiveDemo'),
                         ),
                     ],
                   ),

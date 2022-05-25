@@ -113,16 +113,16 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                   print(textController.text);
                                   Navigator.pop(ctx, textController.text);
                                 },
-                                child: const Text(
-                                  'Create.',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                     Colors.blue,
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Create.',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -202,16 +202,16 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 onPressed: () {
                                   Navigator.pop(ctx, textController.text);
                                 },
-                                child: const Text(
-                                  'Update.',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                     Colors.blue,
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Update.',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),

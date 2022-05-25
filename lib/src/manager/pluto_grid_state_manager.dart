@@ -69,7 +69,6 @@ class PlutoGridStateManager extends PlutoGridState {
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
-    PlutoRowColorCallback? rowColorCallback,
   }) {
     refColumns = FilteredList(initialList: columns);
     refRows = FilteredList(initialList: rows);
@@ -87,7 +86,6 @@ class PlutoGridStateManager extends PlutoGridState {
     setCreateFooter(createFooter);
     setConfiguration(configuration);
     setGridKey(GlobalKey());
-    setRowColorCallback(rowColorCallback);
   }
 
   static List<PlutoGridSelectingMode> get selectingModes =>

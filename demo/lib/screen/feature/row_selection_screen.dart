@@ -93,8 +93,8 @@ class _RowSelectionScreenState extends State<RowSelectionScreen> {
             child: Row(
               children: [
                 TextButton(
-                  child: const Text('Show selected rows.'),
                   onPressed: handleSelected,
+                  child: const Text('Show selected rows.'),
                 ),
               ],
             ),

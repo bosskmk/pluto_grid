@@ -96,8 +96,8 @@ class _CellSelectionScreenState extends State<CellSelectionScreen> {
             child: Row(
               children: [
                 ElevatedButton(
-                  child: const Text('Show selected cells.'),
                   onPressed: handleSelected,
+                  child: const Text('Show selected cells.'),
                 ),
               ],
             ),
