@@ -14,8 +14,7 @@ dependencies:
   intl: ^0.17.0
   rxdart: ^0.27.3
   linked_scroll_controller: ^0.2.0
-  collection: ^1.15.0
-  csv: ^5.0.1
+  collection: ^1.16.0
 
 dev_dependencies:
   flutter_test:

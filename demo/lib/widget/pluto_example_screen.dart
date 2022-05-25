@@ -71,8 +71,8 @@ class PlutoExampleScreen extends StatelessWidget {
                 children: [
                   PlutoExpansionTile(
                     title: topTitle!,
-                    children: topContents,
                     buttons: topButtons,
+                    children: topContents,
                   ),
                   const SizedBox(
                     height: 10,
@@ -93,11 +93,11 @@ class PlutoExampleScreen extends StatelessWidget {
             builder: reportingDialog,
           );
         },
+        backgroundColor: const Color(0xFF33BDE5),
         child: const FaIcon(
           FontAwesomeIcons.exclamation,
           color: Colors.white,
         ),
-        backgroundColor: const Color(0xFF33BDE5),
       ),
     );
   }

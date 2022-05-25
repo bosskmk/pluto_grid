@@ -25,21 +25,23 @@ dependencies:
     sdk: flutter
   pluto_grid:
     path: ../
-  faker: ^2.0.0-rc.2
-  url_launcher: ^6.0.3
-  font_awesome_flutter: ^9.0.0
+  pluto_grid_export:
+    path: ../packages/pluto_grid_export
+  faker: ^2.0.0
+  url_launcher: ^6.1.2
+  font_awesome_flutter: ^10.1.0
   rainbow_color: ^2.0.1
   file_saver: ^0.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
