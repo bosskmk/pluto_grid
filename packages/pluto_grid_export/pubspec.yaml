@@ -11,8 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pluto_grid:
-    path: ../..
+  pluto_grid: ^3.0.2
   csv: ^5.0.1
   pdf: ^3.8.1
   printing: ^5.9.1
