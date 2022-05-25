@@ -3,6 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../abstract_text_export.dart';
 
+/// Csv exporter for PlutoGrid
 class PlutoGridDefaultCsvExport extends AbstractTextExport<String> {
   const PlutoGridDefaultCsvExport({
     this.fieldDelimiter,

@@ -1,6 +1,6 @@
 name: pluto_grid_export
 description: CSV export for PlutoGrid.
-version: 0.0.1-pre
+version: 1.0.0
 homepage: https://bosskmk.github.io
 repository: https://github.com/bosskmk/pluto_grid/packages/pluto_grid_export
 

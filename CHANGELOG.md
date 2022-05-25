@@ -1,3 +1,8 @@
+## [3.0.2] - 2022. 5. 25
+
+* CSV export has been separated into external packages.   
+  Install the pluto_grid_export package.
+
 ## [3.0.0-1.pre] - 2022. 5. 14
 
 * Updated for flutter 3.0 version.

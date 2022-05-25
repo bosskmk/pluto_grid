@@ -7,6 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../abstract_text_export.dart';
 import 'generic_pdf_controller.dart';
 
+/// PDF exporter for PlutoGrid
 class PlutoGridDefaultPdfExport extends AbstractTextExport {
   PlutoGridDefaultPdfExport({
     required this.title,
