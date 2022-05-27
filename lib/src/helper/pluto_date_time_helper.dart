@@ -45,4 +45,20 @@ class PlutoDateTimeHelper {
       return null;
     }
   }
+
+  static bool isValidRange({
+    required DateTime date,
+    required DateTime? start,
+    required DateTime? end,
+  }) {
+    if (start != null && date.isBefore(start)) {
+      return false;
+    }
+
+    if (end != null && date.isAfter(end)) {
+      return false;
+    }
+
+    return true;
+  }
 }
