@@ -31,6 +31,8 @@ class PlutoGridDatePicker {
 
   late final intl.DateFormat dateFormat;
 
+  late int currentMonth;
+
   Future<void> open() async {
     const rowsHeight = 6 * PlutoGridSettings.rowTotalHeight;
 
@@ -42,6 +44,8 @@ class PlutoGridDatePicker {
     final popupColumns = _buildColumns();
 
     final defaultDate = _getDefaultDate();
+
+    currentMonth = defaultDate.month;
 
     final List<DateTime> days = PlutoDateTimeHelper.getDaysInBetween(
       DateTime(defaultDate.year, defaultDate.month, 1),
@@ -104,7 +108,9 @@ class PlutoGridDatePicker {
   }
 
   DateTime _getDefaultDate() {
-    if (initDate != null) {
+    DateTime defaultDate = DateTime.now();
+
+    if (initDate != null && _isValidRange(initDate!)) {
       return initDate!;
     }
 
@@ -116,7 +122,7 @@ class PlutoGridDatePicker {
       return endDate!;
     }
 
-    return DateTime.now();
+    return defaultDate;
   }
 
   Widget _createHeader(PlutoGridStateManager? stateManager) {
@@ -135,18 +141,33 @@ class PlutoGridDatePicker {
     return dateTime.day.toString();
   }
 
+  bool _isValidRange(DateTime date) {
+    return PlutoDateTimeHelper.isValidRange(
+      date: date,
+      start: startDate,
+      end: endDate,
+    );
+  }
+
   Widget _cellRenderer(PlutoColumnRendererContext renderContext) {
     final cell = renderContext.cell;
 
     final isCurrentCell = renderContext.stateManager.isCurrentCell(cell);
 
+    final isValidDate = cell.value.toString().isNotEmpty &&
+        _isValidRange(dateFormat.parse(cell.value));
+
     final cellColor = isCurrentCell
-        ? stateManager.configuration!.activatedBorderColor
+        ? isValidDate
+            ? stateManager.configuration!.activatedBorderColor
+            : stateManager.configuration!.cellColorInReadOnlyState
         : stateManager.configuration!.gridBackgroundColor;
 
     final textColor = isCurrentCell
         ? stateManager.configuration!.gridBackgroundColor
-        : stateManager.configuration!.cellTextStyle.color;
+        : isValidDate
+            ? stateManager.configuration!.cellTextStyle.color
+            : stateManager.configuration!.cellColorInReadOnlyState;
 
     return Container(
       padding: const EdgeInsets.all(5),
