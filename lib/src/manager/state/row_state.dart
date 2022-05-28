@@ -419,7 +419,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    final List<Key> removeKeys = rows.map((e) => e.key).toList(growable: false);
+    final Set<Key> removeKeys = Set.from(rows.map((e) => e.key));
 
     if (currentRowIdx != null &&
         refRows.length > currentRowIdx! &&

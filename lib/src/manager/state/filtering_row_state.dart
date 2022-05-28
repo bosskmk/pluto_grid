@@ -115,7 +115,7 @@ mixin FilteringRowState implements IPlutoGridState {
       return;
     }
 
-    final columnFields = columns.map((e) => e.field).toList(growable: false);
+    final Set<String> columnFields = Set.from(columns.map((e) => e.field));
 
     filterRows.removeWhere(
       (filterRow) {
