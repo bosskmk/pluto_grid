@@ -17,6 +17,7 @@ class PlutoGridDefaultCsvExport extends AbstractTextExport<String> {
   final String? textEndDelimiter;
   final String? eol;
 
+  /// [state] PlutoGrid's PlutoGridStateManager.
   @override
   String export(PlutoGridStateManager state) {
     String toCsv = const ListToCsvConverter().convert(

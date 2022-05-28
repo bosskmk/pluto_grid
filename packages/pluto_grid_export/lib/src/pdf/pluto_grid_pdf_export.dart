@@ -8,6 +8,19 @@ import '../abstract_text_export.dart';
 import 'generic_pdf_controller.dart';
 
 /// PDF exporter for PlutoGrid
+///
+/// [themeData] Attributes for custom fonts.
+///
+/// import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
+///
+/// final themeData = pluto_grid_export.ThemeData.withFont(
+///   base: pluto_grid_export.Font.ttf(
+///     await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
+///   ),
+///   bold: pluto_grid_export.Font.ttf(
+///     await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
+///   ),
+/// );
 class PlutoGridDefaultPdfExport extends AbstractTextExport {
   PlutoGridDefaultPdfExport({
     required this.title,
