@@ -1,3 +1,7 @@
+## [3.1.1] - 2022. 5. 29
+
+* Improved row deletion speed improvement.
+
 ## [3.1.0] - 2022. 5. 29
 
 * Improved column width adjustment performance.
