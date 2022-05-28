@@ -58,6 +58,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       initDate: widget.column.type.date!.dateFormat.parse(widget.cell.value),
       startDate: widget.column.type.date!.startDate,
       endDate: widget.column.type.date!.endDate,
+      dateFormat: widget.column.type.date!.dateFormat,
+      headerDateFormat: widget.column.type.date!.headerDateFormat,
       onSelected: onSelected,
     );
   }

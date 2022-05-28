@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:pluto_grid/pluto_grid.dart';
@@ -5,10 +8,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoGridDatePicker {
   final BuildContext context;
   final PlutoGridStateManager stateManager;
+  final intl.DateFormat dateFormat;
+  final intl.DateFormat headerDateFormat;
   final DateTime? initDate;
   final DateTime? startDate;
   final DateTime? endDate;
-  final String? format;
   final PlutoOnLoadedEventCallback? onLoaded;
   final PlutoOnSelectedEventCallback? onSelected;
   final double? cellWidth;
@@ -17,33 +21,41 @@ class PlutoGridDatePicker {
   PlutoGridDatePicker({
     required this.context,
     required this.stateManager,
+    required this.dateFormat,
+    required this.headerDateFormat,
     this.initDate,
     this.startDate,
     this.endDate,
-    this.format = 'yyyy-MM-dd',
     this.onLoaded,
     this.onSelected,
     this.cellWidth,
     this.cellHeight,
-  }) : dateFormat = intl.DateFormat(format) {
+  }) {
     open();
   }
 
-  late final intl.DateFormat dateFormat;
+  late final PlutoGridStateManager datePickerStateManager;
+
+  late final StreamSubscription keyboardStream;
+
+  late int currentYear;
 
   late int currentMonth;
 
   Future<void> open() async {
-    const rowsHeight = 6 * PlutoGridSettings.rowTotalHeight;
+    double rowsHeight = 6 * stateManager.rowTotalHeight;
 
-    const popupHeight = PlutoGridSettings.rowTotalHeight +
-        PlutoGridSettings.rowHeight +
+    double popupHeight = stateManager.rowTotalHeight +
+        stateManager.columnHeight +
         rowsHeight +
+        PlutoGridSettings.totalShadowLineWidth +
         PlutoGridSettings.gridInnerSpacing;
 
     final popupColumns = _buildColumns();
 
     final defaultDate = _getDefaultDate();
+
+    currentYear = defaultDate.year;
 
     currentMonth = defaultDate.month;
 
@@ -58,7 +70,7 @@ class PlutoGridDatePicker {
       context: context,
       mode: PlutoGridMode.select,
       onLoaded: _onLoaded,
-      onSelected: onSelected,
+      onSelected: _onSelected,
       columns: popupColumns,
       rows: popupRows,
       width: popupColumns.fold<double>(0, (previous, column) {
@@ -79,23 +91,51 @@ class PlutoGridDatePicker {
         activatedBorderColor: stateManager.configuration!.gridBackgroundColor,
         activatedColor: stateManager.configuration!.gridBackgroundColor,
         gridBorderColor: stateManager.configuration!.gridBackgroundColor,
+        inactivatedBorderColor: stateManager.configuration!.gridBackgroundColor,
       ),
     );
   }
 
+  void keyboardListener(PlutoGridEvent event) {
+    if (event is! PlutoGridCannotMoveCurrentCellEvent) {
+      return;
+    }
+
+    switch (event.direction) {
+      case PlutoMoveDirection.left:
+        _updateRows(-12);
+        break;
+      case PlutoMoveDirection.right:
+        _updateRows(12);
+        break;
+      case PlutoMoveDirection.up:
+        _updateRows(-1);
+        break;
+      case PlutoMoveDirection.down:
+        _updateRows(1);
+        break;
+    }
+  }
+
   void _onLoaded(PlutoGridOnLoadedEvent event) {
-    event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+    datePickerStateManager = event.stateManager;
+
+    datePickerStateManager.setSelectingMode(PlutoGridSelectingMode.none);
+
+    keyboardStream = datePickerStateManager.eventManager!.listener(
+      keyboardListener,
+    );
 
     if (initDate != null) {
-      final rows = event.stateManager.rows;
+      final rows = datePickerStateManager.rows;
 
       final initDateString = dateFormat.format(initDate!);
 
       for (var i = 0; i < rows.length; i += 1) {
         for (var entry in rows[i].cells.entries) {
           if (rows[i].cells[entry.key]!.value == initDateString) {
-            event.stateManager.setCurrentCell(
-                event.stateManager.refRows[i].cells[entry.key], i);
+            datePickerStateManager.setCurrentCell(
+                datePickerStateManager.refRows[i].cells[entry.key], i);
             break;
           }
         }
@@ -104,6 +144,14 @@ class PlutoGridDatePicker {
 
     if (onLoaded != null) {
       onLoaded!(event);
+    }
+  }
+
+  void _onSelected(PlutoGridOnSelectedEvent event) {
+    keyboardStream.cancel();
+
+    if (onSelected != null) {
+      onSelected!(event);
     }
   }
 
@@ -125,8 +173,87 @@ class PlutoGridDatePicker {
     return defaultDate;
   }
 
+  void _updateRows(int offset) {
+    final offsetDate = DateTime(currentYear, currentMonth + offset);
+
+    if (false ==
+        PlutoDateTimeHelper.isValidRangeInMonth(
+          date: offsetDate,
+          start: startDate,
+          end: endDate,
+        )) {
+      return;
+    }
+
+    currentYear = offsetDate.year;
+
+    currentMonth = offsetDate.month;
+
+    final List<DateTime> days = PlutoDateTimeHelper.getDaysInBetween(
+      DateTime(offsetDate.year, offsetDate.month, 1),
+      DateTime(offsetDate.year, offsetDate.month + 1, 0),
+    );
+
+    final popupRows = _buildRows(days);
+
+    datePickerStateManager.refRows.clear();
+
+    datePickerStateManager.refRows.addAll(popupRows);
+
+    PlutoGridCellPosition? cellPosition;
+
+    switch (offset) {
+      case -12:
+        cellPosition = PlutoGridCellPosition(
+          columnIdx: datePickerStateManager.refColumns.length - 1,
+          rowIdx: min(datePickerStateManager.currentCellPosition?.rowIdx ?? 0,
+              datePickerStateManager.refRows.length - 1),
+        );
+        break;
+      case 12:
+        cellPosition = PlutoGridCellPosition(
+          columnIdx: 0,
+          rowIdx: min(datePickerStateManager.currentCellPosition?.rowIdx ?? 0,
+              datePickerStateManager.refRows.length - 1),
+        );
+        break;
+      case -1:
+        cellPosition = PlutoGridCellPosition(
+          columnIdx: datePickerStateManager.currentCellPosition?.columnIdx ?? 0,
+          rowIdx: datePickerStateManager.refRows.length - 1,
+        );
+        break;
+      case 1:
+        cellPosition = PlutoGridCellPosition(
+          columnIdx: datePickerStateManager.currentCellPosition?.columnIdx ?? 0,
+          rowIdx: 0,
+        );
+        break;
+    }
+
+    if (cellPosition != null) {
+      final PlutoCell cell = datePickerStateManager
+          .refRows[cellPosition.rowIdx!].cells.entries
+          .elementAt(cellPosition.columnIdx!)
+          .value;
+
+      datePickerStateManager.setCurrentCell(
+        cell,
+        cellPosition.rowIdx,
+        notify: false,
+      );
+    }
+
+    datePickerStateManager.notifyListeners();
+  }
+
   Widget _createHeader(PlutoGridStateManager? stateManager) {
-    return _DateCellHeader(stateManager: stateManager!);
+    return _DateCellHeader(
+      stateManager: stateManager!,
+      dateFormat: dateFormat,
+      headerDateFormat: headerDateFormat,
+      changeMonth: (offset) => _updateRows(offset),
+    );
   }
 
   String _dateFormatter(dynamic value) {
@@ -247,7 +374,18 @@ class _DateCellHeader extends PlutoStatefulWidget {
   @override
   final PlutoGridStateManager stateManager;
 
-  const _DateCellHeader({required this.stateManager});
+  final intl.DateFormat dateFormat;
+
+  final intl.DateFormat headerDateFormat;
+
+  final Function(int offset) changeMonth;
+
+  const _DateCellHeader({
+    required this.stateManager,
+    required this.dateFormat,
+    required this.headerDateFormat,
+    required this.changeMonth,
+  });
 
   @override
   _DateCellHeaderState createState() => _DateCellHeaderState();
@@ -257,6 +395,10 @@ abstract class _DateCellHeaderStateWithChange
     extends PlutoStateWithChange<_DateCellHeader> {
   PlutoCell? currentCell;
 
+  int? currentYear;
+
+  int? currentMonth;
+
   @override
   void onChange() {
     resetState((update) {
@@ -265,19 +407,25 @@ abstract class _DateCellHeaderStateWithChange
         widget.stateManager.currentCell,
         compare: identical,
       );
+
+      final date = widget.dateFormat.parse(
+        widget.stateManager.rows[1].cells.entries.first.value.value,
+      );
+
+      currentYear = update<int?>(
+        currentYear,
+        date.year,
+      );
+
+      currentMonth = update<int?>(
+        currentMonth,
+        date.month,
+      );
     });
   }
 }
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
-  String get currentDate {
-    if (currentCell == null || currentCell!.value.toString().isEmpty) {
-      return '';
-    }
-
-    return currentCell!.value.toString();
-  }
-
   Color? get textColor =>
       widget.stateManager.configuration!.columnTextStyle.color;
 
@@ -289,17 +437,66 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
         horizontal: PlutoGridSettings.cellPadding,
       ),
       alignment: Alignment.center,
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          currentDate,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+      child: Row(
+        children: [
+          IconButton(
+            padding: const EdgeInsets.all(0),
+            iconSize: widget.stateManager.configuration!.iconSize,
+            onPressed: () => widget.changeMonth(-12),
+            icon: Icon(
+              Icons.navigate_before,
+              color: widget.stateManager.configuration!.iconColor,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
+          IconButton(
+            padding: const EdgeInsets.all(0),
+            iconSize: widget.stateManager.configuration!.iconSize,
+            onPressed: () => widget.changeMonth(12),
+            icon: Icon(
+              Icons.navigate_next,
+              color: widget.stateManager.configuration!.iconColor,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              widget.headerDateFormat.format(
+                DateTime(currentYear!, currentMonth!),
+              ),
+              style: TextStyle(
+                color: textColor,
+                fontSize:
+                    widget.stateManager.configuration!.columnTextStyle.fontSize,
+                fontWeight: widget
+                    .stateManager.configuration!.columnTextStyle.fontWeight,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          RotatedBox(
+            quarterTurns: 3,
+            child: IconButton(
+              padding: const EdgeInsets.all(0),
+              iconSize: widget.stateManager.configuration!.iconSize,
+              onPressed: () => widget.changeMonth(-1),
+              icon: Icon(
+                Icons.navigate_next,
+                color: widget.stateManager.configuration!.iconColor,
+              ),
+            ),
+          ),
+          RotatedBox(
+            quarterTurns: 3,
+            child: IconButton(
+              padding: const EdgeInsets.all(0),
+              iconSize: widget.stateManager.configuration!.iconSize,
+              onPressed: () => widget.changeMonth(1),
+              icon: Icon(
+                Icons.navigate_before,
+                color: widget.stateManager.configuration!.iconColor,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

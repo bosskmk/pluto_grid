@@ -135,9 +135,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         titleTextAlign: PlutoColumnTextAlign.center,
         enableAutoEditing: true,
         type: PlutoColumnType.date(
-          startDate: DateTime(2022, 01, 09),
-          endDate: DateTime(2022, 08, 10),
-        ),
+            // headerFormat: 'yyyy 년 MM 월',
+            // startDate: DateTime(2022, 01, 09),
+            // endDate: DateTime(2022, 08, 10),
+            ),
       ),
       PlutoColumn(
         title: 'column4',

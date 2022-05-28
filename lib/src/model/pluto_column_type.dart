@@ -61,12 +61,16 @@ abstract class PlutoColumnType {
   ///
   /// [format] 'yyyy-MM-dd' (2020-01-01)
   ///
+  /// [headerFormat] 'yyyy-MM' (2020-01)
+  /// Display year and month in header in date picker popup.
+  ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
   factory PlutoColumnType.date({
     dynamic defaultValue = '',
     DateTime? startDate,
     DateTime? endDate,
     String format = 'yyyy-MM-dd',
+    String headerFormat = 'yyyy-MM',
     bool applyFormatOnInit = true,
   }) {
     return PlutoColumnTypeDate(
@@ -74,6 +78,7 @@ abstract class PlutoColumnType {
       startDate: startDate,
       endDate: endDate,
       format: format,
+      headerFormat: headerFormat,
       applyFormatOnInit: applyFormatOnInit,
     );
   }
@@ -324,6 +329,9 @@ class PlutoColumnTypeDate
   String format;
 
   @override
+  String headerFormat;
+
+  @override
   bool applyFormatOnInit;
 
   PlutoColumnTypeDate({
@@ -331,11 +339,16 @@ class PlutoColumnTypeDate
     this.startDate,
     this.endDate,
     required this.format,
+    required this.headerFormat,
     required this.applyFormatOnInit,
-  }) : dateFormat = intl.DateFormat(format);
+  })  : dateFormat = intl.DateFormat(format),
+        headerDateFormat = intl.DateFormat(headerFormat);
 
   @override
   late final intl.DateFormat dateFormat;
+
+  @override
+  late final intl.DateFormat headerDateFormat;
 
   @override
   bool isValid(dynamic value) {
@@ -396,8 +409,7 @@ class PlutoColumnTypeTime implements PlutoColumnType {
 
   @override
   bool isValid(dynamic value) {
-    return RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$')
-        .hasMatch(value.toString());
+    return RegExp(r'^([0-1]?\d|2[0-3]):[0-5]\d$').hasMatch(value.toString());
   }
 
   @override
@@ -425,4 +437,8 @@ abstract class _PlutoColumnTypeHasNumberFormat {
 
 abstract class _PlutoColumnTypeHasDateFormat {
   late final intl.DateFormat dateFormat;
+
+  late String headerFormat;
+
+  late final intl.DateFormat headerDateFormat;
 }

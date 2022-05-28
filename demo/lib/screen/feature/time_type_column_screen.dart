@@ -56,6 +56,7 @@ class _TimeTypeColumnScreenState extends State<TimeTypeColumnScreen> {
       topTitle: 'Time type column',
       topContents: const [
         Text('A column to enter a time value.'),
+        Text('Move the hour and minute with the left and right arrow keys.'),
       ],
       topButtons: [
         PlutoExampleButton(
