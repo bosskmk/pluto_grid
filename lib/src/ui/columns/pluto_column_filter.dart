@@ -239,7 +239,6 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     final configuration = widget.stateManager.configuration!;
 
     return Container(
-      width: widget.column.width,
       height: widget.stateManager.columnFilterHeight,
       padding: EdgeInsets.symmetric(horizontal: _padding),
       decoration: BoxDecoration(
@@ -254,30 +253,25 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               : BorderSide.none,
         ),
       ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Stack(
-          children: [
-            TextField(
-              focusNode: _focusNode,
-              controller: _controller,
-              enabled: _enabled,
-              style: configuration.cellTextStyle,
-              onTap: _handleOnTap,
-              onChanged: _handleOnChanged,
-              onEditingComplete: _handleOnEditingComplete,
-              decoration: InputDecoration(
-                hintText: _enabled! ? widget.column.defaultFilter.title : '',
-                isDense: true,
-                filled: true,
-                fillColor: _textFieldColor,
-                border: _border,
-                enabledBorder: _border,
-                focusedBorder: _enabledBorder,
-                contentPadding: const EdgeInsets.symmetric(vertical: 5),
-              ),
-            ),
-          ],
+      child: Center(
+        child: TextField(
+          focusNode: _focusNode,
+          controller: _controller,
+          enabled: _enabled,
+          style: configuration.cellTextStyle,
+          onTap: _handleOnTap,
+          onChanged: _handleOnChanged,
+          onEditingComplete: _handleOnEditingComplete,
+          decoration: InputDecoration(
+            hintText: _enabled! ? widget.column.defaultFilter.title : '',
+            isDense: true,
+            filled: true,
+            fillColor: _textFieldColor,
+            border: _border,
+            enabledBorder: _border,
+            focusedBorder: _enabledBorder,
+            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          ),
         ),
       ),
     );

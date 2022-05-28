@@ -273,6 +273,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DateTypeColumnScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Time type column',
@@ -280,6 +281,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, TimeTypeColumnScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Selection type column',

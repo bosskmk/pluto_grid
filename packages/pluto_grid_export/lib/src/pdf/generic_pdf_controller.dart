@@ -3,6 +3,7 @@ import 'package:pdf/widgets.dart';
 
 import 'pdf_controller.dart';
 
+/// GenericPdfController
 class GenericPdfController extends PdfController {
   static const PdfColor borderColor = PdfColors.black;
   static const PdfColor headerBackground = PdfColors.teal100;

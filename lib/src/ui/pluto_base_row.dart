@@ -45,16 +45,17 @@ class PlutoBaseRow extends StatelessWidget {
     );
   }
 
-  PlutoBaseCell _buildCell(PlutoColumn column) {
-    return PlutoBaseCell(
-      stateManager: stateManager,
-      cell: row.cells[column.field]!,
-      width: column.width,
-      height: stateManager.rowHeight,
-      column: column,
-      rowIdx: rowIdx,
-      row: row,
-      key: row.cells[column.field]!.key,
+  Widget _buildCell(PlutoColumn column) {
+    return LayoutId(
+      id: column.field,
+      child: PlutoBaseCell(
+        stateManager: stateManager,
+        cell: row.cells[column.field]!,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
+        key: row.cells[column.field]!.key,
+      ),
     );
   }
 
@@ -65,8 +66,9 @@ class PlutoBaseRow extends StatelessWidget {
       row: row,
       columns: columns,
       key: ValueKey('rowContainer_${row.key}'),
-      child: Row(
+      child: CustomMultiChildLayout(
         key: ValueKey('rowContainer_${row.key}_row'),
+        delegate: RowCellsLayoutDelegate(stateManager, columns),
         children: columns.map(_buildCell).toList(growable: false),
       ),
     );
@@ -79,6 +81,43 @@ class PlutoBaseRow extends StatelessWidget {
       onMove: _handleOnMove,
       builder: _dragTargetBuilder,
     );
+  }
+}
+
+class RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
+  PlutoGridStateManager stateManager;
+  List<PlutoColumn> columns;
+
+  RowCellsLayoutDelegate(this.stateManager, this.columns);
+
+  double _getWidth() {
+    return columns.fold(
+        0, (previousValue, element) => previousValue + element.width);
+  }
+
+  @override
+  Size getSize(BoxConstraints constraints) {
+    return Size(_getWidth(), stateManager.rowHeight);
+  }
+
+  @override
+  void performLayout(Size size) {
+    double dx = 0;
+    for (var element in stateManager.columns) {
+      if (!hasChild(element.field)) continue;
+      var width = element.width;
+      layoutChild(
+          element.field,
+          BoxConstraints.tightFor(
+              width: width, height: stateManager.rowHeight));
+      positionChild(element.field, Offset(dx, 0));
+      dx += width;
+    }
+  }
+
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
+    return true;
   }
 }
 

@@ -1,3 +1,8 @@
+## [3.1.0] - 2022. 5. 29
+
+* Improved column width adjustment performance.
+* Updated date, time picker popups.
+
 ## [3.0.2] - 2022. 5. 25
 
 * CSV export has been separated into external packages.   

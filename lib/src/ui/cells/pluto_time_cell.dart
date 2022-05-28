@@ -58,11 +58,21 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
     final localeText = widget.stateManager.localeText;
 
     final configuration = widget.stateManager.configuration!.copyWith(
-      enableRowColorAnimation: false,
-      enableColumnBorder: false,
       gridBorderRadius:
           widget.stateManager.configuration?.gridPopupBorderRadius ??
               BorderRadius.zero,
+      defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+      defaultCellPadding: 3,
+      rowHeight: widget.stateManager.configuration!.rowHeight,
+      enableRowColorAnimation: false,
+      enableColumnBorder: false,
+      borderColor: widget.stateManager.configuration!.gridBackgroundColor,
+      activatedBorderColor:
+          widget.stateManager.configuration!.gridBackgroundColor,
+      activatedColor: widget.stateManager.configuration!.gridBackgroundColor,
+      gridBorderColor: widget.stateManager.configuration!.gridBackgroundColor,
+      inactivatedBorderColor:
+          widget.stateManager.configuration!.gridBackgroundColor,
     );
 
     PlutoDualGridPopup(
@@ -92,6 +102,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
             textAlign: PlutoColumnTextAlign.center,
             titleTextAlign: PlutoColumnTextAlign.center,
             width: 134,
+            renderer: _cellRenderer,
           ),
         ],
         rows: Iterable<int>.generate(24)
@@ -131,6 +142,7 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
             textAlign: PlutoColumnTextAlign.center,
             titleTextAlign: PlutoColumnTextAlign.center,
             width: 134,
+            renderer: _cellRenderer,
           ),
         ],
         rows: Iterable<int>.generate(60)
@@ -160,6 +172,43 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
       mode: PlutoGridMode.select,
       width: 276,
       height: 300,
+    );
+  }
+
+  Widget _cellRenderer(PlutoColumnRendererContext renderContext) {
+    final cell = renderContext.cell;
+
+    final isCurrentCell = renderContext.stateManager.isCurrentCell(cell);
+
+    final cellColor = isCurrentCell && renderContext.stateManager.hasFocus
+        ? widget.stateManager.configuration!.activatedBorderColor
+        : widget.stateManager.configuration!.gridBackgroundColor;
+
+    final textColor = isCurrentCell && renderContext.stateManager.hasFocus
+        ? widget.stateManager.configuration!.gridBackgroundColor
+        : widget.stateManager.configuration!.cellTextStyle.color;
+
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: cellColor,
+        shape: BoxShape.circle,
+        border: !isCurrentCell
+            ? null
+            : !renderContext.stateManager.hasFocus
+                ? Border.all(
+                    color:
+                        widget.stateManager.configuration!.activatedBorderColor,
+                    width: 1,
+                  )
+                : null,
+      ),
+      child: Center(
+        child: Text(
+          cell.value,
+          style: TextStyle(color: textColor),
+        ),
+      ),
     );
   }
 }

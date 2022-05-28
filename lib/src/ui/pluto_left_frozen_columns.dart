@@ -25,8 +25,6 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
 
   int? _itemCount;
 
-  double? _width;
-
   @override
   void onChange() {
     resetState((update) {
@@ -49,11 +47,6 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
       }
 
       _itemCount = update<int?>(_itemCount, _getItemCount());
-
-      _width = update<double?>(
-        _width,
-        widget.stateManager.leftFrozenColumnsWidth,
-      );
     });
   }
 
@@ -66,27 +59,29 @@ class _PlutoLeftFrozenColumnsState
     extends _PlutoLeftFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _width,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: _itemCount,
-        itemBuilder: (ctx, i) {
-          return _showColumnGroups == true
-              ? PlutoBaseColumnGroup(
-                  stateManager: widget.stateManager,
-                  columnGroup: _columnGroups![i],
-                  depth: widget.stateManager.columnGroupDepth(
-                    widget.stateManager.refColumnGroups!,
-                  ),
-                )
-              : PlutoBaseColumn(
-                  stateManager: widget.stateManager,
-                  column: _columns![i],
-                );
-        },
-      ),
-    );
+    return CustomMultiChildLayout(
+        delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+        children: _showColumnGroups == true
+            ? _columnGroups!
+                .map((PlutoColumnGroupPair e) => LayoutId(
+                      id: e.key,
+                      child: PlutoBaseColumnGroup(
+                        stateManager: widget.stateManager,
+                        columnGroup: e,
+                        depth: widget.stateManager.columnGroupDepth(
+                          widget.stateManager.refColumnGroups!,
+                        ),
+                      ),
+                    ))
+                .toList()
+            : _columns!
+                .map((e) => LayoutId(
+                      id: e.field,
+                      child: PlutoBaseColumn(
+                        stateManager: widget.stateManager,
+                        column: e,
+                      ),
+                    ))
+                .toList());
   }
 }

@@ -27,6 +27,9 @@ void main() {
     when(stateManager.rowHeight).thenReturn(
       stateManager.configuration!.rowHeight,
     );
+    when(stateManager.headerHeight).thenReturn(
+      stateManager.configuration!.columnHeight,
+    );
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
     );
@@ -76,7 +79,9 @@ void main() {
 
       expect(find.byType(Dialog), findsOneWidget);
 
-      expect(find.text('2020-01-01'), findsNWidgets(2));
+      expect(find.text('2020-01-01'), findsOneWidget);
+
+      expect(find.text('2020-01'), findsOneWidget);
     });
 
     tapCell.test('탭하면 팝업이 호출 되어 요일이 출력 되어야 한다.', (tester) async {
@@ -151,7 +156,9 @@ void main() {
 
         expect(find.byType(Dialog), findsOneWidget);
 
-        expect(find.text('01/30/2020'), findsNWidgets(2));
+        expect(find.text('2020-01'), findsOneWidget);
+
+        expect(find.text('01/30/2020'), findsOneWidget);
       },
     );
 
@@ -164,7 +171,9 @@ void main() {
 
         expect(find.byType(Dialog), findsOneWidget);
 
-        expect(find.text('09/12/2020'), findsNWidgets(2));
+        expect(find.text('2020-09'), findsOneWidget);
+
+        expect(find.text('09/12/2020'), findsOneWidget);
       },
     );
 
@@ -205,23 +214,6 @@ void main() {
     );
 
     makeDateCell('01/30/2020').test(
-      '아래쪽 방향키를 입력하고 엔터를 입력하면 2월 06이 선택 되어야 한다.',
-      (tester) async {
-        await tester.tap(find.byType(TextField));
-
-        await tester.pumpAndSettle();
-
-        expect(find.byType(Dialog), findsOneWidget);
-
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        verify(stateManager.handleAfterSelectingRow(any, '02/06/2020'))
-            .called(1);
-      },
-    );
-
-    makeDateCell('01/30/2020').test(
       '왼쪽 방향키를 입력하고 엔터를 입력하면 1월 29이 선택 되어야 한다.',
       (tester) async {
         await tester.tap(find.byType(TextField));
@@ -251,23 +243,6 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
         verify(stateManager.handleAfterSelectingRow(any, '01/31/2020'))
-            .called(1);
-      },
-    );
-
-    makeDateCell('01/31/2020').test(
-      '오른쪽 방향키를 입력하고 엔터를 입력하면 2월 01이 선택 되어야 한다.',
-      (tester) async {
-        await tester.tap(find.byType(TextField));
-
-        await tester.pumpAndSettle();
-
-        expect(find.byType(Dialog), findsOneWidget);
-
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        verify(stateManager.handleAfterSelectingRow(any, '02/01/2020'))
             .called(1);
       },
     );
@@ -315,23 +290,6 @@ void main() {
       '2020년 12월 01일 이 출력 되어야 한다.',
       (tester) async {
         expect(find.text('2020년 12월 01일'), findsOneWidget);
-      },
-    );
-
-    makeDateCell('2020년 12월 01일').test(
-      '왼쪽 방향키를 입력하고 엔터를 입력하면 11월 30이 선택 되어야 한다.',
-      (tester) async {
-        await tester.tap(find.byType(TextField));
-
-        await tester.pumpAndSettle();
-
-        expect(find.byType(Dialog), findsOneWidget);
-
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        verify(stateManager.handleAfterSelectingRow(any, '2020년 11월 30일'))
-            .called(1);
       },
     );
 
