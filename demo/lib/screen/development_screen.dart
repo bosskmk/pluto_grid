@@ -376,6 +376,12 @@ class _HeaderState extends State<_Header> {
     widget.stateManager.prependRows(rows);
   }
 
+  void handleRemoveCurrentColumnButton() {
+    if (widget.stateManager.currentColumn != null) {
+      widget.stateManager.removeColumns([widget.stateManager.currentColumn!]);
+    }
+  }
+
   void handleRemoveCurrentRowButton() {
     widget.stateManager.removeCurrentRow();
   }
@@ -442,6 +448,10 @@ class _HeaderState extends State<_Header> {
             ElevatedButton(
               child: const Text('Add 100,000 Rows'),
               onPressed: () => handleAddRowButton(count: 100000),
+            ),
+            ElevatedButton(
+              onPressed: handleRemoveCurrentColumnButton,
+              child: const Text('Remove Current Column'),
             ),
             ElevatedButton(
               onPressed: handleRemoveCurrentRowButton,

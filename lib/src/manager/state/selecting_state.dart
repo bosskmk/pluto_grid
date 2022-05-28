@@ -391,8 +391,7 @@ mixin SelectingState implements IPlutoGridState {
 
     final PlutoRow row = refRows[rowIdx];
 
-    final keys =
-        _currentSelectingRows.map((e) => e.key).toList(growable: false);
+    final keys = Set.from(_currentSelectingRows.map((e) => e.key));
 
     if (keys.contains(row.key)) {
       _currentSelectingRows.removeWhere((element) => element.key == row.key);
