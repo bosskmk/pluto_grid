@@ -26,8 +26,6 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
 
   int? _itemCount;
 
-  double? _width;
-
   @override
   void onChange() {
     resetState((update) {
@@ -50,11 +48,6 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
       }
 
       _itemCount = update<int?>(_itemCount, _getItemCount());
-
-      _width = update<double?>(
-        _width,
-        widget.stateManager.rightFrozenColumnsWidth,
-      );
     });
   }
 

@@ -21,8 +21,6 @@ abstract class _PlutoBodyRowsStateWithChange
 
   List<PlutoRow?>? _rows;
 
-  double? _width;
-
   @override
   void onChange() {
     resetState((update) {
@@ -38,8 +36,6 @@ abstract class _PlutoBodyRowsStateWithChange
         compare: listEquals,
         destructureList: true,
       );
-
-      _width = update<double?>(_width, _getWidth());
     });
   }
 
@@ -47,12 +43,6 @@ abstract class _PlutoBodyRowsStateWithChange
     return widget.stateManager.showFrozenColumn == true
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
-  }
-
-  double _getWidth() {
-    return widget.stateManager.showFrozenColumn == true
-        ? widget.stateManager.bodyColumnsWidth
-        : widget.stateManager.columnsWidth;
   }
 }
 

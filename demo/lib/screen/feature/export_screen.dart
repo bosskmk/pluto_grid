@@ -269,12 +269,12 @@ class _HeaderState extends State<_Header> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Center(
+      child: SizedBox(
+        height: widget.stateManager.headerHeight,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Wrap(
             spacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ElevatedButton(
                   onPressed: _printToPdfAndShareOrSave,

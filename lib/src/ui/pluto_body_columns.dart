@@ -26,8 +26,6 @@ abstract class _PlutoBodyColumnsStateWithChange
 
   int? _itemCount;
 
-  double? _width;
-
   @override
   void onChange() {
     resetState((update) {
@@ -50,8 +48,6 @@ abstract class _PlutoBodyColumnsStateWithChange
       }
 
       _itemCount = update<int?>(_itemCount, _getItemCount());
-
-      _width = update<double?>(_width, _getWidth());
     });
   }
 
@@ -63,12 +59,6 @@ abstract class _PlutoBodyColumnsStateWithChange
 
   int _getItemCount() {
     return _showColumnGroups == true ? _columnGroups!.length : _columns!.length;
-  }
-
-  double _getWidth() {
-    return widget.stateManager.showFrozenColumn
-        ? widget.stateManager.bodyColumnsWidth
-        : widget.stateManager.columnsWidth;
   }
 }
 

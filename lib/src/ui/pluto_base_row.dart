@@ -51,8 +51,6 @@ class PlutoBaseRow extends StatelessWidget {
       child: PlutoBaseCell(
         stateManager: stateManager,
         cell: row.cells[column.field]!,
-        width: column.width,
-        height: stateManager.rowHeight,
         column: column,
         rowIdx: rowIdx,
         row: row,
@@ -70,7 +68,7 @@ class PlutoBaseRow extends StatelessWidget {
       key: ValueKey('rowContainer_${row.key}'),
       child: CustomMultiChildLayout(
         key: ValueKey('rowContainer_${row.key}_row'),
-        delegate: RowCellsLayouter(stateManager, columns),
+        delegate: RowCellsLayoutDelegate(stateManager, columns),
         children: columns.map(_buildCell).toList(growable: false),
       ),
     );
@@ -86,11 +84,11 @@ class PlutoBaseRow extends StatelessWidget {
   }
 }
 
-class RowCellsLayouter extends MultiChildLayoutDelegate {
+class RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   PlutoGridStateManager stateManager;
   List<PlutoColumn> columns;
 
-  RowCellsLayouter(this.stateManager, this.columns);
+  RowCellsLayoutDelegate(this.stateManager, this.columns);
 
   double _getWidth() {
     return columns.fold(
