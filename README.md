@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v3.0.2
+## PlutoGrid for flutter - v3.1.0
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -39,6 +39,14 @@ If you comment on an issue, mobile improvements can be made quickly.
 
 <br>
 
+### Packages
+
+> [PlutoGridExport](https://github.com/bosskmk/pluto_grid/tree/master/packages/pluto_grid_export)  
+> This package can export the metadata of PlutoGrid as CSV or PDF.
+
+
+<br>
+
 ### Screenshots
 
 #### Change the color of the rows or make the cells look the way you want them.
@@ -47,7 +55,7 @@ If you comment on an issue, mobile improvements can be made quickly.
 <br>
 
 #### Date type input can be easily selected by pop-up and keyboard.
-![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_02.png)
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/3.1.0/pluto_grid_3.1.0_01.png)
 
 <br>
 

@@ -13,18 +13,12 @@ class PlutoBaseCell extends PlutoStatefulWidget {
 
   final PlutoRow row;
 
-  final double width;
-
-  final double height;
-
   const PlutoBaseCell({
     required this.stateManager,
     required this.cell,
     required this.column,
     required this.rowIdx,
     required this.row,
-    this.width = PlutoGridSettings.columnWidth,
-    this.height = PlutoGridSettings.rowHeight,
     Key? key,
   }) : super(key: key);
 
@@ -171,8 +165,6 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
       onSecondaryTapDown: _onSecondaryTapOrNull(),
       child: _CellContainer(
         readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
-        width: widget.width,
-        height: widget.height,
         hasFocus: widget.stateManager.hasFocus,
         isCurrentCell: _isCurrentCell!,
         isEditing: _isEditing!,
@@ -198,8 +190,6 @@ class _PlutoBaseCellState extends _PlutoBaseCellStateWithChangeKeepAlive {
 class _CellContainer extends StatelessWidget {
   final bool readOnly;
   final Widget child;
-  final double width;
-  final double height;
   final bool hasFocus;
   final bool isCurrentCell;
   final bool isEditing;
@@ -211,8 +201,6 @@ class _CellContainer extends StatelessWidget {
   const _CellContainer({
     required this.readOnly,
     required this.child,
-    required this.width,
-    required this.height,
     required this.hasFocus,
     required this.isCurrentCell,
     required this.isEditing,
@@ -274,22 +262,13 @@ class _CellContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
       decoration: _boxDecoration(),
-      child: Padding(
-        // New - Customisable cellPadding
-        padding: EdgeInsets.symmetric(
-          horizontal: cellPadding,
-        ),
-        child: Container(
-          clipBehavior: Clip.hardEdge,
-          height: height,
-          alignment: Alignment.centerLeft,
-          decoration: const BoxDecoration(),
-          child: child,
-        ),
+      padding: EdgeInsets.symmetric(
+        horizontal: cellPadding,
       ),
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.centerLeft,
+      child: child,
     );
   }
 }

@@ -21,8 +21,6 @@ abstract class _PlutoBodyRowsStateWithChange
 
   List<PlutoRow?>? _rows;
 
-  double? _width;
-
   @override
   void onChange() {
     resetState((update) {
@@ -38,8 +36,6 @@ abstract class _PlutoBodyRowsStateWithChange
         compare: listEquals,
         destructureList: true,
       );
-
-      _width = update<double?>(_width, _getWidth());
     });
   }
 
@@ -47,12 +43,6 @@ abstract class _PlutoBodyRowsStateWithChange
     return widget.stateManager.showFrozenColumn == true
         ? widget.stateManager.bodyColumns
         : widget.stateManager.columns;
-  }
-
-  double _getWidth() {
-    return widget.stateManager.showFrozenColumn == true
-        ? widget.stateManager.bodyColumnsWidth
-        : widget.stateManager.columnsWidth;
   }
 }
 
@@ -108,8 +98,8 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        child: SizedBox(
-          width: _width,
+        child: CustomSingleChildLayout(
+          delegate: ListResizeDelegate(widget.stateManager, _getColumns()),
           child: ListView.builder(
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,
@@ -129,5 +119,39 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
         ),
       ),
     );
+  }
+}
+
+class ListResizeDelegate extends SingleChildLayoutDelegate {
+  PlutoGridStateManager stateManager;
+
+  List<PlutoColumn> columns;
+
+  ListResizeDelegate(this.stateManager, this.columns)
+      : super(relayout: stateManager.resizingChangeNotifier);
+
+  @override
+  bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) {
+    return true;
+  }
+
+  double _getWidth() {
+    return columns.fold(
+        0, (previousValue, element) => previousValue + element.width);
+  }
+
+  @override
+  Size getSize(BoxConstraints constraints) {
+    return constraints.tighten(width: _getWidth()).biggest;
+  }
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    return const Offset(0, 0);
+  }
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    return constraints.tighten(width: _getWidth());
   }
 }

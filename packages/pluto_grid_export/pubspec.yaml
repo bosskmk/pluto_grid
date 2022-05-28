@@ -1,8 +1,8 @@
 name: pluto_grid_export
-description: CSV export for PlutoGrid.
-version: 1.0.0
+description: PlutoGridExport converts PlutoGrid's metadata to CSV or PDF. Used with PlutoGrid.
+version: 1.0.1
 homepage: https://bosskmk.github.io
-repository: https://github.com/bosskmk/pluto_grid/packages/pluto_grid_export
+repository: https://github.com/bosskmk/pluto_grid/tree/master/packages/pluto_grid_export
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

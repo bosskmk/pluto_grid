@@ -102,6 +102,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableContextMenu: false,
         textAlign: PlutoColumnTextAlign.right,
         titleTextAlign: PlutoColumnTextAlign.right,
+        frozen: PlutoColumnFrozen.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -133,7 +134,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         textAlign: PlutoColumnTextAlign.left,
         titleTextAlign: PlutoColumnTextAlign.center,
         enableAutoEditing: true,
-        type: PlutoColumnType.date(),
+        type: PlutoColumnType.date(
+            // headerFormat: 'yyyy 년 MM 월',
+            // startDate: DateTime(2022, 01, 09),
+            // endDate: DateTime(2022, 08, 10),
+            ),
       ),
       PlutoColumn(
         title: 'column4',
@@ -262,6 +267,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(e.row?.cells['column1']?.value);
           // },
           createHeader: (PlutoGridStateManager stateManager) {
+            // stateManager.headerHeight = 200;
             return _Header(
               stateManager: stateManager,
               columns: columns,

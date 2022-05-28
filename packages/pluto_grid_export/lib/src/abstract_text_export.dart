@@ -1,14 +1,18 @@
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Abstract class for converting PlutoGrid's metadata.
 abstract class AbstractTextExport<T> {
-
   const AbstractTextExport();
 
   T export(PlutoGridStateManager state);
 
+  /// Returns the titles of the active column of PlutoGrid.
   List<String> getColumnTitles(PlutoGridStateManager state) =>
       visibleColumns(state).map((e) => e.title).toList();
 
+  /// Converts a list of PlutoRows to a string to be printed.
+  ///
+  /// [state] PlutoGrid's PlutoGridStateManager.
   List<List<String?>> mapStateToListOfRows(PlutoGridStateManager state) {
     List<List<String?>> outputRows = [];
 
@@ -27,6 +31,7 @@ abstract class AbstractTextExport<T> {
     return outputRows;
   }
 
+  /// [state] PlutoGrid's PlutoGridStateManager.
   List<String?> mapPlutoRowToList(
     PlutoGridStateManager state,
     PlutoRow plutoRow,

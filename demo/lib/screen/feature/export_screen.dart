@@ -176,10 +176,10 @@ class _HeaderState extends State<_Header> {
   void _printToPdfAndShareOrSave() async {
     final themeData = pluto_grid_export.ThemeData.withFont(
       base: pluto_grid_export.Font.ttf(
-        await rootBundle.load('fonts/open_sans/OpenSans-Regular.ttf'),
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
       ),
       bold: pluto_grid_export.Font.ttf(
-        await rootBundle.load('fonts/open_sans/OpenSans-Bold.ttf'),
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
       ),
     );
 
@@ -269,12 +269,12 @@ class _HeaderState extends State<_Header> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Center(
+      child: SizedBox(
+        height: widget.stateManager.headerHeight,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Wrap(
             spacing: 10,
-            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               ElevatedButton(
                   onPressed: _printToPdfAndShareOrSave,
