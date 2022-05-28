@@ -1,7 +1,6 @@
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class AbstractTextExport<T> {
-
   const AbstractTextExport();
 
   T export(PlutoGridStateManager state);

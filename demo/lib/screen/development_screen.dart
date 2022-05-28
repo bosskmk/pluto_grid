@@ -102,6 +102,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableContextMenu: false,
         textAlign: PlutoColumnTextAlign.right,
         titleTextAlign: PlutoColumnTextAlign.right,
+        frozen: PlutoColumnFrozen.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -265,6 +266,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(e.row?.cells['column1']?.value);
           // },
           createHeader: (PlutoGridStateManager stateManager) {
+            // stateManager.headerHeight = 200;
             return _Header(
               stateManager: stateManager,
               columns: columns,

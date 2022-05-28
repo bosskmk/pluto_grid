@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ILayoutState {
+  ChangeNotifier get resizingChangeNotifier;
+
   /// Screen width
   double? get maxWidth;
 
@@ -89,9 +91,16 @@ abstract class ILayoutState {
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
+
+  void notifyResizingListeners();
 }
 
 mixin LayoutState implements IPlutoGridState {
+  @override
+  ChangeNotifier get resizingChangeNotifier => _resizingChangeNotifier;
+
+  final ChangeNotifier _resizingChangeNotifier = ChangeNotifier();
+
   @override
   double? get maxWidth => _maxWidth;
 
@@ -102,13 +111,39 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _maxHeight;
 
-  @override
-  double get headerHeight =>
-      createHeader == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double? _headerHeight;
+
+  double? _footerHeight;
+
+  set headerHeight(double value) {
+    _headerHeight = value;
+  }
+
+  set footerHeight(double value) {
+    _footerHeight = value;
+  }
 
   @override
-  double get footerHeight =>
-      createFooter == null ? 0 : PlutoGridSettings.rowTotalHeight;
+  double get headerHeight {
+    if (createHeader == null) {
+      return 0;
+    }
+
+    return _headerHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _headerHeight!;
+  }
+
+  @override
+  double get footerHeight {
+    if (createFooter == null) {
+      return 0;
+    }
+
+    return _footerHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _footerHeight!;
+  }
 
   @override
   double get columnRowContainerHeight =>
@@ -148,10 +183,10 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showColumnFilter;
 
   @override
-  bool get showHeader => headerHeight > 0;
+  bool get showHeader => createHeader != null;
 
   @override
-  bool get showFooter => footerHeight > 0;
+  bool get showFooter => createFooter != null;
 
   @override
   bool get showLoading => _showLoading == true;
@@ -290,30 +325,16 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final _isShowFrozenColumn = _availableToShowFrozenColumns(size.maxWidth);
-
-    final bool notify = _showFrozenColumn != _isShowFrozenColumn;
-
+    final _isShowFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
     _showFrozenColumn = _isShowFrozenColumn;
-
     _gridGlobalOffset = null;
-
-    updateCurrentCellPosition(notify: false);
-
-    resetScrollToZero();
-
-    if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
-    }
   }
 
   @override
   void resetShowFrozenColumn({bool notify = true}) {
-    _showFrozenColumn = _availableToShowFrozenColumns(_maxWidth!);
+    _showFrozenColumn = shouldShowFrozenColumns(_maxWidth!);
 
     if (notify) {
       notifyListeners();
@@ -350,7 +371,7 @@ mixin LayoutState implements IPlutoGridState {
     _gridGlobalOffset = offset;
   }
 
-  bool _availableToShowFrozenColumns(double width) {
+  bool shouldShowFrozenColumns(double width) {
     final bool hasFrozenColumn =
         leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 
@@ -360,5 +381,10 @@ mixin LayoutState implements IPlutoGridState {
                 rightFrozenColumnsWidth +
                 PlutoGridSettings.bodyMinWidth +
                 PlutoGridSettings.totalShadowLineWidth);
+  }
+
+  @override
+  void notifyResizingListeners() {
+    _resizingChangeNotifier.notifyListeners();
   }
 }

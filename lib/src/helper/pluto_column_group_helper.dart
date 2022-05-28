@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnGroupHelper {
@@ -93,6 +94,7 @@ class PlutoColumnGroupHelper {
             columnGroupList: columnGroupList,
           ) ??
           PlutoColumnGroup(
+            key: ValueKey(field),
             title: field,
             fields: [field],
             expandedColumn: true,
