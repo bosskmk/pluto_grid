@@ -49,7 +49,11 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
   void resetState(_ResetStateCallback callback) {
     callback(_update);
-    if (mounted && _initialized && _changed) {
+    // it may have not been layouted yet.
+    if (mounted &&
+        _initialized &&
+        _changed &&
+        widget.stateManager.maxWidth != null) {
       _changed = false;
       _statefulElement?.markNeedsBuild();
     }

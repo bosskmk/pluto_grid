@@ -36,18 +36,38 @@ abstract class _PlutoBaseColumnStateWithChange
 
 class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
   @override
+  void initState() {
+    super.initState();
+    _showColumnFilter = widget.stateManager.showColumnFilter;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      fit: StackFit.expand,
       children: [
-        PlutoColumnTitle(
-          stateManager: widget.stateManager,
-          column: widget.column,
-          height: widget.columnTitleHeight ?? widget.stateManager.columnHeight,
-        ),
-        if (_showColumnFilter!)
-          PlutoColumnFilter(
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom:
+              _showColumnFilter! ? widget.stateManager.columnFilterHeight : 0,
+          child: PlutoColumnTitle(
             stateManager: widget.stateManager,
             column: widget.column,
+            height:
+                widget.columnTitleHeight ?? widget.stateManager.columnHeight,
+          ),
+        ),
+        if (_showColumnFilter!)
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: PlutoColumnFilter(
+              stateManager: widget.stateManager,
+              column: widget.column,
+            ),
           ),
       ],
     );
