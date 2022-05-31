@@ -1,47 +1,77 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 class PlutoBaseRow extends StatelessWidget {
-  final PlutoGridStateManager stateManager;
   final int rowIdx;
+
   final PlutoRow row;
+
   final List<PlutoColumn> columns;
 
   const PlutoBaseRow({
-    required this.stateManager,
     required this.rowIdx,
     required this.row,
     required this.columns,
     Key? key,
   }) : super(key: key);
 
-  bool _handleOnWillAccept(PlutoRow? draggingRow) {
-    if (draggingRow == null) {
-      return false;
+  @override
+  Widget build(BuildContext context) {
+    final stateManager = context.read<PlutoGridStateManager>();
+
+    bool _handleOnWillAccept(PlutoRow? draggingRow) {
+      if (draggingRow == null) {
+        return false;
+      }
+
+      final List<PlutoRow> selectedRows =
+          stateManager.currentSelectingRows.isNotEmpty
+              ? stateManager.currentSelectingRows
+              : [draggingRow];
+
+      return selectedRows.firstWhereOrNull(
+            (element) => element.key == row.key,
+          ) ==
+          null;
     }
 
-    final List<PlutoRow> selectedRows =
-        stateManager.currentSelectingRows.isNotEmpty
-            ? stateManager.currentSelectingRows
-            : [draggingRow];
+    void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
+      final draggingRows = stateManager.currentSelectingRows.isNotEmpty
+          ? stateManager.currentSelectingRows
+          : [details.data];
 
-    return selectedRows.firstWhereOrNull(
-          (element) => element.key == row.key,
-        ) ==
-        null;
-  }
+      stateManager.eventManager!.addEvent(
+        PlutoGridDragRowsEvent(
+          rows: draggingRows,
+          targetIdx: rowIdx,
+        ),
+      );
+    }
 
-  void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
-    final draggingRows = stateManager.currentSelectingRows.isNotEmpty
-        ? stateManager.currentSelectingRows
-        : [details.data];
+    Widget _dragTargetBuilder(dragContext, candidate, rejected) {
+      return _RowContainerWidget(
+        rowIdx: rowIdx,
+        row: row,
+        enableRowColorAnimation:
+            stateManager.configuration!.enableRowColorAnimation,
+        key: ValueKey('rowContainer_${row.key}'),
+        child: CustomMultiChildLayout(
+          key: ValueKey('rowContainer_${row.key}_row'),
+          delegate: _RowCellsLayoutDelegate(
+            stateManager: stateManager,
+            columns: columns,
+          ),
+          children: columns.map(_buildCell).toList(growable: false),
+        ),
+      );
+    }
 
-    stateManager.eventManager!.addEvent(
-      PlutoGridDragRowsEvent(
-        rows: draggingRows,
-        targetIdx: rowIdx,
-      ),
+    return DragTarget<PlutoRow>(
+      onWillAccept: _handleOnWillAccept,
+      onMove: _handleOnMove,
+      builder: _dragTargetBuilder,
     );
   }
 
@@ -49,7 +79,6 @@ class PlutoBaseRow extends StatelessWidget {
     return LayoutId(
       id: column.field,
       child: PlutoBaseCell(
-        stateManager: stateManager,
         cell: row.cells[column.field]!,
         column: column,
         rowIdx: rowIdx,
@@ -58,249 +87,191 @@ class PlutoBaseRow extends StatelessWidget {
       ),
     );
   }
-
-  Widget _dragTargetBuilder(dragContext, candidate, rejected) {
-    return _RowContainerWidget(
-      stateManager: stateManager,
-      rowIdx: rowIdx,
-      row: row,
-      columns: columns,
-      key: ValueKey('rowContainer_${row.key}'),
-      child: CustomMultiChildLayout(
-        key: ValueKey('rowContainer_${row.key}_row'),
-        delegate: RowCellsLayoutDelegate(stateManager, columns),
-        children: columns.map(_buildCell).toList(growable: false),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DragTarget<PlutoRow>(
-      onWillAccept: _handleOnWillAccept,
-      onMove: _handleOnMove,
-      builder: _dragTargetBuilder,
-    );
-  }
 }
 
-class RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
-  List<PlutoColumn> columns;
+class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
+  final PlutoGridStateManager stateManager;
 
-  RowCellsLayoutDelegate(this.stateManager, this.columns);
+  final List<PlutoColumn> columns;
 
-  double _getWidth() {
-    return columns.fold(
-        0, (previousValue, element) => previousValue + element.width);
-  }
+  _RowCellsLayoutDelegate({
+    required this.stateManager,
+    required this.columns,
+  });
 
   @override
   Size getSize(BoxConstraints constraints) {
-    return Size(_getWidth(), stateManager.rowHeight);
-  }
+    final double width = columns.fold(
+      0,
+      (previousValue, element) => previousValue + element.width,
+    );
 
-  @override
-  void performLayout(Size size) {
-    double dx = 0;
-    for (var element in stateManager.columns) {
-      if (!hasChild(element.field)) continue;
-      var width = element.width;
-      layoutChild(
-          element.field,
-          BoxConstraints.tightFor(
-              width: width, height: stateManager.rowHeight));
-      positionChild(element.field, Offset(dx, 0));
-      dx += width;
-    }
+    return Size(width, stateManager.rowHeight);
   }
 
   @override
   bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
     return true;
   }
+
+  @override
+  void performLayout(Size size) {
+    double dx = 0;
+
+    for (var element in columns) {
+      if (!hasChild(element.field)) continue;
+
+      var width = element.width;
+
+      layoutChild(
+        element.field,
+        BoxConstraints.tightFor(
+          width: width,
+          height: stateManager.rowHeight,
+        ),
+      );
+
+      positionChild(
+        element.field,
+        Offset(dx, 0),
+      );
+
+      dx += width;
+    }
+  }
 }
 
-class _RowContainerWidget extends PlutoStatefulWidget {
-  @override
-  final PlutoGridStateManager stateManager;
-
+class _RowContainerWidget extends StatelessWidget {
   final int rowIdx;
 
   final PlutoRow row;
 
-  final List<PlutoColumn> columns;
+  final bool enableRowColorAnimation;
 
   final Widget child;
 
   const _RowContainerWidget({
-    required this.stateManager,
     required this.rowIdx,
     required this.row,
-    required this.columns,
+    required this.enableRowColorAnimation,
     required this.child,
     Key? key,
   }) : super(key: key);
 
-  @override
-  __RowContainerWidgetState createState() => __RowContainerWidgetState();
-}
-
-abstract class __RowContainerWidgetStateWithChangeKeepAlive
-    extends PlutoStateWithChangeKeepAlive<_RowContainerWidget> {
-  bool? _isCurrentRow;
-
-  bool? _isSelectedRow;
-
-  bool? _isSelecting;
-
-  bool? _isCheckedRow;
-
-  bool? _isDragTarget;
-
-  bool? _isTopDragTarget;
-
-  bool? _isBottomDragTarget;
-
-  bool? _hasCurrentSelectingPosition;
-
-  bool? _isFocusedCurrentRow;
-
-  Color? _rowColor;
-
-  @override
-  void onChange() {
-    resetState((update) {
-      _isCurrentRow = update<bool?>(
-        _isCurrentRow,
-        widget.stateManager.currentRowIdx == widget.rowIdx,
-      );
-
-      _isSelectedRow = update<bool?>(
-        _isSelectedRow,
-        widget.stateManager.isSelectedRow(widget.row.key),
-      );
-
-      _isSelecting =
-          update<bool?>(_isSelecting, widget.stateManager.isSelecting);
-
-      _isCheckedRow = update<bool?>(_isCheckedRow, widget.row.checked);
-
-      final alreadyTarget = widget.stateManager.dragRows
-              .firstWhereOrNull((element) => element.key == widget.row.key) !=
-          null;
-
-      final isDraggingRow = widget.stateManager.isDraggingRow;
-
-      _isDragTarget = update<bool?>(
-        _isDragTarget,
-        !alreadyTarget && widget.stateManager.isRowIdxDragTarget(widget.rowIdx),
-        ignoreChange: !isDraggingRow,
-      );
-
-      _isTopDragTarget = update<bool?>(
-        _isTopDragTarget,
-        isDraggingRow &&
-            widget.stateManager.isRowIdxTopDragTarget(widget.rowIdx),
-      );
-
-      _isBottomDragTarget = update<bool?>(
-        _isBottomDragTarget,
-        isDraggingRow &&
-            widget.stateManager.isRowIdxBottomDragTarget(widget.rowIdx),
-      );
-
-      _hasCurrentSelectingPosition = update<bool?>(
-        _hasCurrentSelectingPosition,
-        widget.stateManager.hasCurrentSelectingPosition,
-      );
-
-      _isFocusedCurrentRow = update<bool?>(
-        _isFocusedCurrentRow,
-        _isCurrentRow! && widget.stateManager.hasFocus,
-      );
-
-      _rowColor = update<Color?>(_rowColor, _getRowColor());
-
-      if (widget.stateManager.mode.isNormal) {
-        setKeepAlive(widget.stateManager.isRowBeingDragged(widget.row.key));
-      }
-    });
-  }
-
-  Color _getDefaultRowColor() {
-    if (widget.stateManager.rowColorCallback == null) {
-      return widget.stateManager.configuration!.gridBackgroundColor;
+  Color _getDefaultRowColor(PlutoGridStateManager stateManager) {
+    if (stateManager.rowColorCallback == null) {
+      return stateManager.configuration!.gridBackgroundColor;
     }
 
-    return widget.stateManager.rowColorCallback!(
+    return stateManager.rowColorCallback!(
       PlutoRowColorContext(
-        rowIdx: widget.rowIdx,
-        row: widget.row,
-        stateManager: widget.stateManager,
+        rowIdx: rowIdx,
+        row: row,
+        stateManager: stateManager,
       ),
     );
   }
 
-  Color _getRowColor() {
-    Color color = _getDefaultRowColor();
+  Color _getRowColor({
+    required PlutoGridStateManager stateManager,
+    required bool isDragTarget,
+    required bool isFocusedCurrentRow,
+    required bool isSelecting,
+    required bool hasCurrentSelectingPosition,
+    required bool isCheckedRow,
+  }) {
+    Color color = _getDefaultRowColor(stateManager);
 
-    if (_isDragTarget!) {
-      color = widget.stateManager.configuration!.cellColorInReadOnlyState;
+    if (isDragTarget) {
+      color = stateManager.configuration!.cellColorInReadOnlyState;
     } else {
-      final bool checkCurrentRow = !widget.stateManager.selectingMode.isRow &&
-          _isFocusedCurrentRow! &&
-          (!_isSelecting! && !_hasCurrentSelectingPosition!);
+      final bool checkCurrentRow = !stateManager.selectingMode.isRow &&
+          isFocusedCurrentRow &&
+          (!isSelecting && !hasCurrentSelectingPosition);
 
-      final bool checkSelectedRow = widget.stateManager.selectingMode.isRow &&
-          widget.stateManager.isSelectedRow(widget.row.key);
+      final bool checkSelectedRow = stateManager.selectingMode.isRow &&
+          stateManager.isSelectedRow(row.key);
 
       if (checkCurrentRow || checkSelectedRow) {
-        color = widget.stateManager.configuration!.activatedColor;
+        color = stateManager.configuration!.activatedColor;
       }
     }
 
-    return _isCheckedRow!
-        ? Color.alphaBlend(
-            widget.stateManager.configuration!.checkedColor,
-            color,
-          )
+    return isCheckedRow
+        ? Color.alphaBlend(stateManager.configuration!.checkedColor, color)
         : color;
   }
 
-  BoxDecoration _getBoxDecoration() {
+  BoxDecoration _getBoxDecoration(PlutoGridStateManager stateManager) {
+    final bool isCurrentRow = stateManager.currentRowIdx == rowIdx;
+
+    final bool isSelecting = stateManager.isSelecting;
+
+    final bool isCheckedRow = row.checked == true;
+
+    final alreadyTarget = stateManager.dragRows
+            .firstWhereOrNull((element) => element.key == row.key) !=
+        null;
+
+    final isDraggingRow = stateManager.isDraggingRow;
+
+    final bool isDragTarget = isDraggingRow &&
+        !alreadyTarget &&
+        stateManager.isRowIdxDragTarget(rowIdx);
+
+    final bool isTopDragTarget =
+        isDraggingRow && stateManager.isRowIdxTopDragTarget(rowIdx);
+
+    final bool isBottomDragTarget =
+        isDraggingRow && stateManager.isRowIdxBottomDragTarget(rowIdx);
+
+    final bool hasCurrentSelectingPosition =
+        stateManager.hasCurrentSelectingPosition;
+
+    final bool isFocusedCurrentRow = isCurrentRow && stateManager.hasFocus;
+
+    final Color rowColor = _getRowColor(
+      stateManager: stateManager,
+      isDragTarget: isDragTarget,
+      isFocusedCurrentRow: isFocusedCurrentRow,
+      isSelecting: isSelecting,
+      hasCurrentSelectingPosition: hasCurrentSelectingPosition,
+      isCheckedRow: isCheckedRow,
+    );
+
     return BoxDecoration(
-      color: _rowColor,
+      color: rowColor,
       border: Border(
-        top: _isTopDragTarget!
+        top: isTopDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: widget.stateManager.configuration!.activatedBorderColor,
+                color: stateManager.configuration!.activatedBorderColor,
               )
             : BorderSide.none,
         bottom: BorderSide(
           width: PlutoGridSettings.rowBorderWidth,
-          color: _isBottomDragTarget!
-              ? widget.stateManager.configuration!.activatedBorderColor
-              : widget.stateManager.configuration!.borderColor,
+          color: isBottomDragTarget
+              ? stateManager.configuration!.activatedBorderColor
+              : stateManager.configuration!.borderColor,
         ),
       ),
     );
   }
-}
 
-class __RowContainerWidgetState
-    extends __RowContainerWidgetStateWithChangeKeepAlive {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    final _decoration = _getBoxDecoration();
-
-    return _AnimatedOrNormalContainer(
-      enable: widget.stateManager.configuration!.enableRowColorAnimation,
-      decoration: _decoration,
-      child: widget.child,
+    return ProxyProvider<PlutoGridStateManager, BoxDecoration>(
+      update: (_, stateManager, __) => _getBoxDecoration(stateManager),
+      child: Consumer<BoxDecoration>(
+        builder: (_, decoration, child) {
+          return _AnimatedOrNormalContainer(
+            enable: enableRowColorAnimation,
+            decoration: decoration,
+            child: child!,
+          );
+        },
+        child: child,
+      ),
     );
   }
 }

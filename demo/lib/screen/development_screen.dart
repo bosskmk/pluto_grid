@@ -217,7 +217,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 10000, columns: columns);
+    rows = DummyData.rowsByColumns(length: 1000, columns: columns);
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -273,10 +273,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               columns: columns,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(100, notify: false);
-            return PlutoPagination(stateManager);
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(100, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
           rowColorCallback: (rowColorContext) {
             return rowColorContext.row.cells['column2']!.value == 'green'
                 ? const Color(0xFFE2F6DF)

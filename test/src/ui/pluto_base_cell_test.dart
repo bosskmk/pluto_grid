@@ -73,7 +73,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -120,7 +119,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -167,7 +165,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -214,7 +211,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -261,7 +257,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -309,7 +304,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -357,7 +351,6 @@ void main() {
       MaterialApp(
         home: Material(
           child: PlutoBaseCell(
-            stateManager: stateManager,
             cell: cell,
             column: column,
             rowIdx: rowIdx,
@@ -405,7 +398,6 @@ void main() {
         MaterialApp(
           home: Material(
             child: PlutoBaseCell(
-              stateManager: stateManager,
               cell: cell,
               column: column,
               rowIdx: rowIdx,
@@ -459,7 +451,6 @@ void main() {
         MaterialApp(
           home: Material(
             child: PlutoBaseCell(
-              stateManager: stateManager,
               cell: cell,
               column: column,
               rowIdx: rowIdx,
@@ -517,7 +508,6 @@ void main() {
         MaterialApp(
           home: Material(
             child: PlutoBaseCell(
-              stateManager: stateManager,
               cell: cell,
               column: column,
               rowIdx: rowIdx,
@@ -593,7 +583,6 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoBaseCell(
-                stateManager: stateManager,
                 cell: cell,
                 column: column,
                 rowIdx: rowIdx,
@@ -680,7 +669,6 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoBaseCell(
-                stateManager: stateManager,
                 cell: cell,
                 column: column!,
                 rowIdx: rowIdx,

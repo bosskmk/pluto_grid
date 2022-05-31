@@ -55,7 +55,6 @@ void main() {
         MaterialApp(
           home: Material(
             child: PlutoDefaultCell(
-              stateManager: stateManager,
               cell: cell,
               column: column,
               row: row,
@@ -113,7 +112,6 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoDefaultCell(
-                stateManager: stateManager,
                 cell: cell,
                 column: column,
                 row: row,
@@ -176,7 +174,6 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoDefaultCell(
-                stateManager: stateManager,
                 cell: cell,
                 column: column,
                 row: row,
@@ -285,7 +282,6 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoDefaultCell(
-                stateManager: stateManager,
                 cell: cell,
                 column: column,
                 row: row!,
