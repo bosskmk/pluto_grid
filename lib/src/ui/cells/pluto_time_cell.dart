@@ -43,9 +43,12 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
     Icons.access_time,
   );
 
-  String get cellHour => widget.cell.value.toString().substring(0, 2);
+  String get cellValue =>
+      widget.cell.value ?? widget.column.type.time!.defaultValue;
 
-  String get cellMinute => widget.cell.value.toString().substring(3, 5);
+  String get cellHour => cellValue.toString().substring(0, 2);
+
+  String get cellMinute => cellValue.toString().substring(3, 5);
 
   @override
   void openPopup() {
