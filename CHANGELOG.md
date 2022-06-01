@@ -1,3 +1,7 @@
+## [3.1.2] - 2022. 6. 2
+
+* Fixed the date popup not opening when the value is wrong.
+
 ## [3.1.1] - 2022. 5. 29
 
 * Improved row deletion speed improvement.
