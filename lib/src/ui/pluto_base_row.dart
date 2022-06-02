@@ -78,12 +78,20 @@ class PlutoBaseRow extends StatelessWidget {
   Widget _buildCell(PlutoColumn column) {
     return LayoutId(
       id: column.field,
-      child: PlutoBaseCell(
-        cell: row.cells[column.field]!,
-        column: column,
-        rowIdx: rowIdx,
-        row: row,
-        key: row.cells[column.field]!.key,
+      child: Selector<PlutoGridStateManager, bool>(
+        selector: (_, __) => column.visible,
+        builder: (_, visible, __) {
+          return Visibility(
+            visible: column.visible,
+            child: PlutoBaseCell(
+              cell: row.cells[column.field]!,
+              column: column,
+              rowIdx: rowIdx,
+              row: row,
+              key: row.cells[column.field]!.key,
+            ),
+          );
+        },
       ),
     );
   }

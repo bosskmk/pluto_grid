@@ -188,6 +188,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
       ),
+      ...DummyData(100, 0).columns,
     ];
 
     columnGroups = [
@@ -217,7 +218,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ),
     ];
 
-    rows = DummyData.rowsByColumns(length: 1000, columns: columns);
+    rows = DummyData.rowsByColumns(length: 10000, columns: columns);
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -363,7 +364,7 @@ class _HeaderState extends State<_Header> {
   void initState() {
     super.initState();
 
-    widget.stateManager.setSelectingMode(gridSelectingMode);
+    widget.stateManager.setSelectingMode(gridSelectingMode, notify: false);
   }
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
