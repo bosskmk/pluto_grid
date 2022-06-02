@@ -28,6 +28,26 @@ class PlutoDefaultCell extends StatelessWidget {
           (value) => value.canRowDrag,
         );
 
+    context.select<PlutoGridStateManager, String>((value) {
+      return column.formattedValueForDisplay(cell.value);
+    });
+
+    context.select<PlutoGridStateManager, bool>((value) {
+      return value.isCurrentCell(cell);
+    });
+
+    context.select<PlutoGridStateManager, bool>((value) {
+      return value.hasFocus;
+    });
+
+    final cellWidget = _BuildDefaultCellWidget(
+      stateManager: stateManager,
+      rowIdx: rowIdx,
+      row: row,
+      column: column,
+      cell: cell,
+    );
+
     return Row(
       children: [
         if (canRowDrag)
@@ -36,13 +56,7 @@ class PlutoDefaultCell extends StatelessWidget {
             row: row,
             rowIdx: rowIdx,
             stateManager: stateManager,
-            feedbackWidget: _BuildDefaultCellWidget(
-              stateManager: stateManager,
-              rowIdx: rowIdx,
-              row: row,
-              column: column,
-              cell: cell,
-            ),
+            feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
               size: stateManager.configuration!.iconSize,
@@ -56,13 +70,7 @@ class PlutoDefaultCell extends StatelessWidget {
             stateManager: stateManager,
           ),
         Expanded(
-          child: _BuildDefaultCellWidget(
-            stateManager: stateManager,
-            rowIdx: rowIdx,
-            row: row,
-            column: column,
-            cell: cell,
-          ),
+          child: cellWidget,
         ),
       ],
     );
@@ -258,18 +266,6 @@ class _BuildDefaultCellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = context.select<PlutoGridStateManager, String>((value) {
-      return column.formattedValueForDisplay(cell.value);
-    });
-
-    context.select<PlutoGridStateManager, bool>((value) {
-      return value.isCurrentCell(cell);
-    });
-
-    context.select<PlutoGridStateManager, bool>((value) {
-      return value.hasFocus;
-    });
-
     return column.hasRenderer
         ? column.renderer!(PlutoColumnRendererContext(
             column: column,
@@ -279,7 +275,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
             stateManager: stateManager,
           ))
         : Text(
-            text,
+            column.formattedValueForDisplay(cell.value),
             style: stateManager.configuration!.cellTextStyle.copyWith(
               decoration: TextDecoration.none,
               fontWeight: FontWeight.normal,
