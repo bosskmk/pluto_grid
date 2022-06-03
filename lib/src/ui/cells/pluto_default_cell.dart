@@ -63,6 +63,7 @@ class PlutoDefaultCell extends StatelessWidget {
           _CheckboxSelectionWidget(
             column: column,
             row: row,
+            rowIdx: rowIdx,
             stateManager: stateManager,
           ),
         Expanded(
@@ -185,10 +186,13 @@ class _CheckboxSelectionWidget extends StatefulWidget {
 
   final PlutoRow row;
 
+  final int rowIdx;
+
   const _CheckboxSelectionWidget({
     required this.stateManager,
     required this.column,
     required this.row,
+    required this.rowIdx,
   });
 
   @override
@@ -215,7 +219,11 @@ class __CheckboxSelectionWidgetState extends State<_CheckboxSelectionWidget> {
 
     if (widget.stateManager.onRowChecked != null) {
       widget.stateManager.onRowChecked!(
-        PlutoGridOnRowCheckedOneEvent(row: widget.row, isChecked: changed),
+        PlutoGridOnRowCheckedOneEvent(
+          row: widget.row,
+          rowIdx: widget.rowIdx,
+          isChecked: changed,
+        ),
       );
     }
 

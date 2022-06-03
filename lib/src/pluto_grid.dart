@@ -773,10 +773,12 @@ class PlutoGridOnChangedEvent {
 
 class PlutoGridOnSelectedEvent {
   final PlutoRow? row;
+  final int? rowIdx;
   final PlutoCell? cell;
 
   PlutoGridOnSelectedEvent({
     this.row,
+    this.rowIdx,
     this.cell,
   });
 }
@@ -787,31 +789,37 @@ abstract class PlutoGridOnRowCheckedEvent {
   bool get isRow => runtimeType == PlutoGridOnRowCheckedOneEvent;
 
   final PlutoRow? row;
+  final int? rowIdx;
   final bool? isChecked;
 
   PlutoGridOnRowCheckedEvent({
     this.row,
+    this.rowIdx,
     this.isChecked,
   });
 }
 
 class PlutoGridOnRowDoubleTapEvent {
   final PlutoRow? row;
+  final int? rowIdx;
   final PlutoCell? cell;
 
   PlutoGridOnRowDoubleTapEvent({
     this.row,
+    this.rowIdx,
     this.cell,
   });
 }
 
 class PlutoGridOnRowSecondaryTapEvent {
   final PlutoRow? row;
+  final int? rowIdx;
   final PlutoCell? cell;
   final Offset? offset;
 
   PlutoGridOnRowSecondaryTapEvent({
     this.row,
+    this.rowIdx,
     this.cell,
     this.offset,
   });
@@ -830,14 +838,15 @@ class PlutoGridOnRowsMovedEvent {
 class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
   PlutoGridOnRowCheckedOneEvent({
     PlutoRow? row,
+    int? rowIdx,
     bool? isChecked,
-  }) : super(row: row, isChecked: isChecked);
+  }) : super(row: row, rowIdx: rowIdx, isChecked: isChecked);
 }
 
 class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
   PlutoGridOnRowCheckedAllEvent({
     bool? isChecked,
-  }) : super(row: null, isChecked: isChecked);
+  }) : super(row: null, rowIdx: null, isChecked: isChecked);
 }
 
 class PlutoScrollBehavior extends MaterialScrollBehavior {
