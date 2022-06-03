@@ -76,7 +76,7 @@ class PlutoGrid extends StatefulWidget {
 }
 
 class _PlutoGridState extends State<PlutoGrid> {
-  FocusNode? _gridFocusNode;
+  final FocusNode _gridFocusNode = FocusNode();
 
   final LinkedScrollControllerGroup _verticalScroll =
       LinkedScrollControllerGroup();
@@ -86,11 +86,11 @@ class _PlutoGridState extends State<PlutoGrid> {
 
   final List<Function()> _disposeList = [];
 
-  late PlutoGridStateManager _stateManager;
+  late final PlutoGridStateManager _stateManager;
 
-  PlutoGridKeyManager? _keyManager;
+  late final PlutoGridKeyManager _keyManager;
 
-  PlutoGridEventManager? _eventManager;
+  late final PlutoGridEventManager _eventManager;
 
   bool? _showFrozenColumn;
 
@@ -127,7 +127,9 @@ class _PlutoGridState extends State<PlutoGrid> {
   void initState() {
     super.initState();
 
-    _initProperties();
+    _disposeList.add(() {
+      _gridFocusNode.dispose();
+    });
 
     _initStateManager();
 
@@ -140,15 +142,6 @@ class _PlutoGridState extends State<PlutoGrid> {
     _initSelectMode();
 
     _initHeaderFooter();
-  }
-
-  void _initProperties() {
-    _gridFocusNode = FocusNode();
-
-    // Dispose
-    _disposeList.add(() {
-      _gridFocusNode!.dispose();
-    });
   }
 
   void _initStateManager() {
@@ -168,14 +161,13 @@ class _PlutoGridState extends State<PlutoGrid> {
       onRowDoubleTapEventCallback: widget.onRowDoubleTap,
       onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
       onRowsMovedEventCallback: widget.onRowsMoved,
+      onRowColorCallback: widget.rowColorCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
     );
 
     _stateManager.addListener(_changeStateListener);
-
-    _stateManager.setRowColorCallback(widget.rowColorCallback);
 
     // Dispose
     _disposeList.add(() {
@@ -189,13 +181,13 @@ class _PlutoGridState extends State<PlutoGrid> {
       stateManager: _stateManager,
     );
 
-    _keyManager!.init();
+    _keyManager.init();
 
     _stateManager.setKeyManager(_keyManager);
 
     // Dispose
     _disposeList.add(() {
-      _keyManager!.dispose();
+      _keyManager.dispose();
     });
   }
 
@@ -204,13 +196,13 @@ class _PlutoGridState extends State<PlutoGrid> {
       stateManager: _stateManager,
     );
 
-    _eventManager!.init();
+    _eventManager.init();
 
     _stateManager.setEventManager(_eventManager);
 
     // Dispose
     _disposeList.add(() {
-      _eventManager!.dispose();
+      _eventManager.dispose();
     });
   }
 
@@ -265,7 +257,7 @@ class _PlutoGridState extends State<PlutoGrid> {
         _showColumnGroups != _stateManager.showColumnGroups ||
         _showColumnFilter != _stateManager.showColumnFilter ||
         _showLoading != _stateManager.showLoading) {
-      // it has been layouted
+      // it has been layout
       if (_stateManager.maxWidth != null) {
         setState(_resetState);
       }
@@ -282,8 +274,8 @@ class _PlutoGridState extends State<PlutoGrid> {
     ///   event: event,
     /// ));
     /// ```
-    if (_keyManager!.eventResult.isSkip == false) {
-      _keyManager!.subject.add(PlutoKeyManagerEvent(
+    if (_keyManager.eventResult.isSkip == false) {
+      _keyManager.subject.add(PlutoKeyManagerEvent(
         focusNode: focusNode,
         event: event,
       ));
@@ -295,7 +287,7 @@ class _PlutoGridState extends State<PlutoGrid> {
     /// ```dart
     /// return KeyEventResult.handled;
     /// ```
-    return _keyManager!.eventResult.consume(KeyEventResult.handled);
+    return _keyManager.eventResult.consume(KeyEventResult.handled);
   }
 
   void _resetState() {
