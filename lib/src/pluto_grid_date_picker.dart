@@ -7,7 +7,6 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridDatePicker {
   final BuildContext context;
-  final PlutoGridStateManager stateManager;
   final intl.DateFormat dateFormat;
   final intl.DateFormat headerDateFormat;
   final DateTime? initDate;
@@ -15,12 +14,11 @@ class PlutoGridDatePicker {
   final DateTime? endDate;
   final PlutoOnLoadedEventCallback? onLoaded;
   final PlutoOnSelectedEventCallback? onSelected;
-  final double? cellWidth;
-  final double? cellHeight;
+  final double itemHeight;
+  final PlutoGridConfiguration configuration;
 
   PlutoGridDatePicker({
     required this.context,
-    required this.stateManager,
     required this.dateFormat,
     required this.headerDateFormat,
     this.initDate,
@@ -28,8 +26,8 @@ class PlutoGridDatePicker {
     this.endDate,
     this.onLoaded,
     this.onSelected,
-    this.cellWidth,
-    this.cellHeight,
+    this.itemHeight = PlutoGridSettings.rowTotalHeight,
+    this.configuration = const PlutoGridConfiguration(),
   }) {
     open();
   }
@@ -43,10 +41,10 @@ class PlutoGridDatePicker {
   late int currentMonth;
 
   Future<void> open() async {
-    double rowsHeight = 6 * stateManager.rowTotalHeight;
+    double rowsHeight = 6 * itemHeight;
 
-    double popupHeight = stateManager.rowTotalHeight +
-        stateManager.columnHeight +
+    // itemHeight * 2 = Header Height + Column Height
+    double popupHeight = (itemHeight * 2) +
         rowsHeight +
         PlutoGridSettings.totalShadowLineWidth +
         PlutoGridSettings.gridInnerSpacing;
@@ -79,19 +77,18 @@ class PlutoGridDatePicker {
           1,
       height: popupHeight,
       createHeader: _createHeader,
-      configuration: stateManager.configuration?.copyWith(
-        gridBorderRadius: stateManager.configuration?.gridPopupBorderRadius ??
-            BorderRadius.zero,
+      configuration: configuration.copyWith(
+        gridBorderRadius: configuration.gridPopupBorderRadius,
         defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
         defaultCellPadding: 3,
-        rowHeight: stateManager.configuration!.rowHeight,
+        rowHeight: configuration.rowHeight,
         enableRowColorAnimation: false,
         enableColumnBorder: false,
-        borderColor: stateManager.configuration!.gridBackgroundColor,
-        activatedBorderColor: stateManager.configuration!.gridBackgroundColor,
-        activatedColor: stateManager.configuration!.gridBackgroundColor,
-        gridBorderColor: stateManager.configuration!.gridBackgroundColor,
-        inactivatedBorderColor: stateManager.configuration!.gridBackgroundColor,
+        borderColor: configuration.gridBackgroundColor,
+        activatedBorderColor: configuration.gridBackgroundColor,
+        activatedColor: configuration.gridBackgroundColor,
+        gridBorderColor: configuration.gridBackgroundColor,
+        inactivatedBorderColor: configuration.gridBackgroundColor,
       ),
     );
   }
@@ -286,15 +283,15 @@ class PlutoGridDatePicker {
 
     final cellColor = isCurrentCell
         ? isValidDate
-            ? stateManager.configuration!.activatedBorderColor
-            : stateManager.configuration!.cellColorInReadOnlyState
-        : stateManager.configuration!.gridBackgroundColor;
+            ? configuration.activatedBorderColor
+            : configuration.cellColorInReadOnlyState
+        : configuration.gridBackgroundColor;
 
     final textColor = isCurrentCell
-        ? stateManager.configuration!.gridBackgroundColor
+        ? configuration.gridBackgroundColor
         : isValidDate
-            ? stateManager.configuration!.cellTextStyle.color
-            : stateManager.configuration!.cellColorInReadOnlyState;
+            ? configuration.cellTextStyle.color
+            : configuration.cellColorInReadOnlyState;
 
     return Container(
       padding: const EdgeInsets.all(5),
@@ -312,7 +309,7 @@ class PlutoGridDatePicker {
   }
 
   List<PlutoColumn> _buildColumns() {
-    final localeText = stateManager.localeText;
+    final localeText = configuration.localeText;
 
     return [
       [localeText.sunday, '7'],
