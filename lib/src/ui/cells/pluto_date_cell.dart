@@ -54,7 +54,6 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     PlutoGridDatePicker(
       context: context,
-      stateManager: widget.stateManager,
       initDate: PlutoDateTimeHelper.parseOrNullWithFormat(
         widget.cell.value,
         widget.column.type.date!.format,
@@ -64,6 +63,8 @@ class _PlutoDateCellState extends State<PlutoDateCell>
       dateFormat: widget.column.type.date!.dateFormat,
       headerDateFormat: widget.column.type.date!.headerDateFormat,
       onSelected: onSelected,
+      itemHeight: widget.stateManager.rowTotalHeight,
+      configuration: widget.stateManager.configuration!,
     );
   }
 }
