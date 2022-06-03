@@ -35,6 +35,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 세번 째 컬럼 왼쪽 고정
     stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
 
@@ -106,6 +108,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // when
     // first cell of first column

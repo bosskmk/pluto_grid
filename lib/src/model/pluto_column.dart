@@ -199,6 +199,8 @@ class PlutoColumn {
     return titleList.reversed.join(' ');
   }
 
+  bool visible = false;
+
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
     if (!hasCheckReadOnly || row == null || cell == null) {
       return readOnly;

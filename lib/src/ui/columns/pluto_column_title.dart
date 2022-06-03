@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
-class PlutoColumnTitle extends PlutoStatefulWidget {
-  @override
+class PlutoColumnTitle extends StatefulWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -22,19 +22,7 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
   _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
 }
 
-abstract class _PlutoColumnTitleStateWithChange
-    extends PlutoStateWithChange<PlutoColumnTitle> {
-  PlutoColumnSort? _sort;
-
-  @override
-  void onChange() {
-    resetState((update) {
-      _sort = update<PlutoColumnSort?>(_sort, widget.column.sort);
-    });
-  }
-}
-
-class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
+class _PlutoColumnTitleState extends State<PlutoColumnTitle> {
   late Offset _columnLeftPosition;
 
   late Offset _columnRightPosition;
@@ -137,9 +125,13 @@ class _PlutoColumnTitleState extends _PlutoColumnTitleStateWithChange {
 
   @override
   Widget build(BuildContext context) {
+    final _sort = context.select<PlutoGridStateManager, PlutoColumnSort>((_) {
+      return widget.column.sort;
+    });
+
     final _showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !_sort!.isNone;
+        !_sort.isNone;
 
     final _enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
