@@ -399,16 +399,12 @@ abstract class __CheckboxAllSelectionWidgetStateWithChange
     extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
   bool? _checked;
 
-  bool get _hasCheckedRow => widget.stateManager.hasCheckedRow;
-
-  bool get _hasUnCheckedRow => widget.stateManager.hasUnCheckedRow;
-
   @override
   void onChange() {
     resetState((update) {
       _checked = update<bool?>(
         _checked,
-        _hasCheckedRow && _hasUnCheckedRow ? null : _hasCheckedRow,
+        widget.stateManager.tristateCheckedRow,
       );
     });
   }

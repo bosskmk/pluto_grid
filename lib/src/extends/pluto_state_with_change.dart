@@ -7,7 +7,6 @@ typedef _UpdateStateFunction = T Function<T>(
   T oldValue,
   T newValue, {
   bool Function(T a, T b)? compare,
-  bool? destructureList,
   bool? ignoreChange,
 });
 
@@ -63,24 +62,14 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     U oldValue,
     U newValue, {
     bool Function(U a, U b)? compare,
-    bool? destructureList = false,
     bool? ignoreChange = false,
   }) {
-    if (ignoreChange == false && _changed == false) {
+    if (oldValue == null) {
+      _changed = true;
+    } else if (ignoreChange == false && _changed == false) {
       _changed = compare == null
           ? oldValue != newValue
           : compare(oldValue, newValue) == false;
-    }
-
-    if (destructureList!) {
-      if (newValue is Iterable) {
-        return newValue.toList() as U;
-      }
-
-      PlutoLog(
-        'Cannot destructure newValue.',
-        type: PlutoLogType.warning,
-      );
     }
 
     return newValue;

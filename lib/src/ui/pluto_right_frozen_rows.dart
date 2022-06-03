@@ -30,12 +30,13 @@ abstract class _PlutoRightFrozenRowsStateWithState
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
-        _rows,
-        widget.stateManager.refRows,
-        compare: listEquals,
-        destructureList: true,
-      );
+      _rows = [
+        ...update<List<PlutoRow?>?>(
+          _rows,
+          widget.stateManager.refRows,
+          compare: listEquals,
+        )!
+      ];
     });
   }
 }
