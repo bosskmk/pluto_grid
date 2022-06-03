@@ -82,6 +82,8 @@ class BuildGridHelper {
           ),
         );
 
+        await tester.pump();
+
         await selectRows(
           startRowIdx: startRowIdx,
           endRowIdx: endRowIdx,

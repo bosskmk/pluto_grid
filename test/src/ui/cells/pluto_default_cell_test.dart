@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
@@ -33,6 +34,7 @@ void main() {
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.rowHeight).thenReturn(0);
     when(stateManager.currentSelectingRows).thenReturn([]);
+    when(stateManager.isCurrentCell(any)).thenReturn(false);
   });
 
   group('기본 셀 테스트', () {
@@ -54,11 +56,14 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: PlutoDefaultCell(
-              cell: cell,
-              column: column,
-              row: row,
-              rowIdx: 0,
+            child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+              value: stateManager,
+              child: PlutoDefaultCell(
+                cell: cell,
+                column: column,
+                row: row,
+                rowIdx: 0,
+              ),
             ),
           ),
         ),
@@ -111,11 +116,14 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoDefaultCell(
-                cell: cell,
-                column: column,
-                row: row,
-                rowIdx: 0,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager,
+                child: PlutoDefaultCell(
+                  cell: cell,
+                  column: column,
+                  row: row,
+                  rowIdx: 0,
+                ),
               ),
             ),
           ),
@@ -173,11 +181,14 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoDefaultCell(
-                cell: cell,
-                column: column,
-                row: row,
-                rowIdx: 0,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager,
+                child: PlutoDefaultCell(
+                  cell: cell,
+                  column: column,
+                  row: row,
+                  rowIdx: 0,
+                ),
               ),
             ),
           ),
@@ -281,11 +292,14 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoDefaultCell(
-                cell: cell,
-                column: column,
-                row: row!,
-                rowIdx: 0,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager,
+                child: PlutoDefaultCell(
+                  cell: cell,
+                  column: column,
+                  row: row!,
+                  rowIdx: 0,
+                ),
               ),
             ),
           ),

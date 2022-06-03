@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
@@ -44,6 +45,27 @@ void main() {
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
   });
 
+  Widget buildApp({
+    required PlutoCell cell,
+    required PlutoColumn column,
+    required PlutoRow row,
+    required int rowIdx,
+  }) {
+    return MaterialApp(
+      home: Material(
+        child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+          value: stateManager,
+          child: PlutoBaseCell(
+            cell: cell,
+            column: column,
+            rowIdx: rowIdx,
+            row: row,
+          ),
+        ),
+      ),
+    );
+  }
+
   testWidgets(
       'WHEN If it is not CurrentCell or not in Editing state'
       'THEN Text widget should be rendered', (WidgetTester tester) async {
@@ -70,15 +92,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(false);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -116,15 +134,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(false);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -162,15 +176,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(true);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -208,15 +218,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(true);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -254,15 +260,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(true);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -301,15 +303,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(true);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -348,15 +346,11 @@ void main() {
     when(stateManager.isEditing).thenReturn(true);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-          ),
-        ),
+      buildApp(
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
       ),
     );
 
@@ -395,15 +389,11 @@ void main() {
       when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoBaseCell(
-              cell: cell,
-              column: column,
-              rowIdx: rowIdx,
-              row: row,
-            ),
-          ),
+        buildApp(
+          cell: cell,
+          column: column,
+          rowIdx: rowIdx,
+          row: row,
         ),
       );
 
@@ -448,15 +438,11 @@ void main() {
       when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoBaseCell(
-              cell: cell,
-              column: column,
-              rowIdx: rowIdx,
-              row: row,
-            ),
-          ),
+        buildApp(
+          cell: cell,
+          column: column,
+          rowIdx: rowIdx,
+          row: row,
         ),
       );
 
@@ -505,15 +491,11 @@ void main() {
 
       // when
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoBaseCell(
-              cell: cell,
-              column: column,
-              rowIdx: rowIdx,
-              row: row,
-            ),
-          ),
+        buildApp(
+          cell: cell,
+          column: column,
+          rowIdx: rowIdx,
+          row: row,
         ),
       );
 
@@ -580,15 +562,11 @@ void main() {
         rowIdx = 0;
 
         await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoBaseCell(
-                cell: cell,
-                column: column,
-                rowIdx: rowIdx,
-                row: row,
-              ),
-            ),
+          buildApp(
+            cell: cell,
+            column: column,
+            rowIdx: rowIdx,
+            row: row,
           ),
         );
 
@@ -666,15 +644,11 @@ void main() {
         when(stateManager.configuration).thenReturn(configuration);
 
         await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoBaseCell(
-                cell: cell,
-                column: column!,
-                rowIdx: rowIdx,
-                row: row,
-              ),
-            ),
+          buildApp(
+            cell: cell,
+            column: column!,
+            rowIdx: rowIdx,
+            row: row,
           ),
         );
 
