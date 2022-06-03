@@ -188,6 +188,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           );
         },
       ),
+      ...DummyData(100, 0).columns,
     ];
 
     columnGroups = [
@@ -273,10 +274,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               columns: columns,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(100, notify: false);
-            return PlutoPagination(stateManager);
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(100, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
           rowColorCallback: (rowColorContext) {
             return rowColorContext.row.cells['column2']!.value == 'green'
                 ? const Color(0xFFE2F6DF)
@@ -363,7 +364,7 @@ class _HeaderState extends State<_Header> {
   void initState() {
     super.initState();
 
-    widget.stateManager.setSelectingMode(gridSelectingMode);
+    widget.stateManager.setSelectingMode(gridSelectingMode, notify: false);
   }
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;

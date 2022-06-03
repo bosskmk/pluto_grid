@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -63,10 +64,13 @@ void main() {
             child: SizedBox(
               width: 1920,
               height: 1080,
-              child: PlutoBaseColumnGroup(
-                stateManager: stateManager!,
-                columnGroup: columnGroup,
-                depth: depth,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager!,
+                child: PlutoBaseColumnGroup(
+                  stateManager: stateManager!,
+                  columnGroup: columnGroup,
+                  depth: depth,
+                ),
               ),
             ),
           ),

@@ -93,10 +93,12 @@ class _PlutoDualGridState extends State<PlutoDualGrid> {
               PlutoDualOnSelectedEvent(
                 gridA: PlutoGridOnSelectedEvent(
                   row: _stateManagerA!.currentRow,
+                  rowIdx: _stateManagerA!.currentRowIdx,
                   cell: _stateManagerA!.currentCell,
                 ),
                 gridB: PlutoGridOnSelectedEvent(
                   row: _stateManagerB!.currentRow,
+                  rowIdx: _stateManagerB!.currentRowIdx,
                   cell: _stateManagerB!.currentCell,
                 ),
               ),

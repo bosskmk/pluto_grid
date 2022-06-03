@@ -109,7 +109,6 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
                 key: ValueKey('body_row_${_rows![i]!.key}'),
-                stateManager: widget.stateManager,
                 rowIdx: i,
                 row: _rows![i]!,
                 columns: _columns!,

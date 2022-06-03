@@ -38,6 +38,8 @@ void main() {
           ),
         );
 
+        await tester.pump();
+
         await tester.tap(find.text('header3 value 3'));
       },
     );

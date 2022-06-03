@@ -68,7 +68,6 @@ class _PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
           key: ValueKey('left_frozen_row_${_rows![i]!.key}'),
-          stateManager: widget.stateManager,
           rowIdx: i,
           row: _rows![i]!,
           columns: _columns!,

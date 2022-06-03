@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class PlutoBaseColumn extends PlutoStatefulWidget {
   @override
@@ -38,38 +39,53 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
   @override
   void initState() {
     super.initState();
+
+    VisibilityDetectorController.instance.updateInterval = Duration.zero;
+
     _showColumnFilter = widget.stateManager.showColumnFilter;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom:
-              _showColumnFilter! ? widget.stateManager.columnFilterHeight : 0,
-          child: PlutoColumnTitle(
-            stateManager: widget.stateManager,
-            column: widget.column,
-            height:
-                widget.columnTitleHeight ?? widget.stateManager.columnHeight,
-          ),
-        ),
-        if (_showColumnFilter!)
+    return VisibilityDetector(
+      key: widget.column.key,
+      onVisibilityChanged: (info) {
+        final bool visible = info.visibleFraction * 100 > 0;
+
+        if (visible != widget.column.visible) {
+          widget.column.visible = visible;
+
+          widget.stateManager.notifyListeners();
+        }
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
           Positioned(
-            bottom: 0,
-            right: 0,
+            top: 0,
             left: 0,
-            child: PlutoColumnFilter(
+            right: 0,
+            bottom:
+                _showColumnFilter! ? widget.stateManager.columnFilterHeight : 0,
+            child: PlutoColumnTitle(
               stateManager: widget.stateManager,
               column: widget.column,
+              height:
+                  widget.columnTitleHeight ?? widget.stateManager.columnHeight,
             ),
           ),
-      ],
+          if (_showColumnFilter!)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: PlutoColumnFilter(
+                stateManager: widget.stateManager,
+                column: widget.column,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

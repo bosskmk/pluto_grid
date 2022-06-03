@@ -43,6 +43,8 @@ void main() {
             ),
           );
 
+          await tester.pump();
+
           await tester.tap(find.text('header2 value 2'));
         },
       );
