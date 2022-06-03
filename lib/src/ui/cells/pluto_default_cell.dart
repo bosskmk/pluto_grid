@@ -36,10 +36,6 @@ class PlutoDefaultCell extends StatelessWidget {
       return value.isCurrentCell(cell);
     });
 
-    context.select<PlutoGridStateManager, bool>((value) {
-      return value.hasFocus;
-    });
-
     final cellWidget = _BuildDefaultCellWidget(
       stateManager: stateManager,
       rowIdx: rowIdx,
