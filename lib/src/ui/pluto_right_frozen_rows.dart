@@ -22,7 +22,13 @@ abstract class _PlutoRightFrozenRowsStateWithState
   List<PlutoRow?>? _rows;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _columns = update<List<PlutoColumn>?>(
         _columns,

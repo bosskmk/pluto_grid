@@ -400,7 +400,7 @@ abstract class __CheckboxAllSelectionWidgetStateWithChange
   bool? _checked;
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _checked = update<bool?>(
         _checked,
@@ -474,7 +474,7 @@ abstract class __ColumnTextWidgetStateWithChange
   bool? _isFilteredList;
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _isFilteredList = update<bool?>(
         _isFilteredList,

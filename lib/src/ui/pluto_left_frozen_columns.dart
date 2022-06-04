@@ -26,7 +26,13 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
   int? _itemCount;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _showColumnGroups = update<bool?>(
         _showColumnGroups,

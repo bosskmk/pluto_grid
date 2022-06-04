@@ -31,7 +31,7 @@ abstract class _PlutoPaginationStateWithChange
   }
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       page = update<int>(
         page,

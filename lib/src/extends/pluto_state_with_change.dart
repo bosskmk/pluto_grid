@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -17,6 +19,8 @@ abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier>
 
 abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     extends State<T> {
+  late final StreamSubscription _subscription;
+
   bool _initialized = false;
 
   bool _changed = false;
@@ -26,11 +30,15 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   StatefulElement? get _statefulElement =>
       mounted ? context as StatefulElement? : null;
 
-  void onChange();
+  void onChange(PlutoStreamNotifierEvent event);
+
+  bool allowStream(PlutoStreamNotifierEvent event) {
+    return true;
+  }
 
   @override
   void dispose() {
-    widget.stateManager.removeListener(onChange);
+    _subscription.cancel();
 
     super.dispose();
   }
@@ -39,16 +47,18 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   void initState() {
     super.initState();
 
-    onChange();
+    onChange(PlutoInitStateStreamNotifierEvent());
 
-    widget.stateManager.addListener(onChange);
+    _subscription = widget.stateManager.streamNotifier.stream
+        .where(allowStream)
+        .listen(onChange);
 
     _initialized = true;
   }
 
   void resetState(_ResetStateCallback callback) {
     callback(_update);
-    // it may have not been layouted yet.
+    // it may have not been layout yet.
     if (mounted &&
         _initialized &&
         _changed &&
