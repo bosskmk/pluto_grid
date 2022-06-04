@@ -291,11 +291,9 @@ class _ApplyCellForSetColumnRow implements _Apply {
   @override
   void execute(PlutoRow row) {
     for (var element in refColumns) {
-      final cell = row.cells[element.field]!;
-
-      cell.setColumn(element);
-
-      cell.setRow(row);
+      row.cells[element.field]!
+        ..setColumn(element)
+        ..setRow(row);
     }
   }
 }
@@ -308,12 +306,11 @@ class _ApplyCellForFormat implements _Apply {
   ) {
     assert(refColumns.isNotEmpty);
 
-    columnsToApply = refColumns
-        .where((element) => element.type.applyFormatOnInit!)
-        .toList(growable: false);
+    columnsToApply =
+        refColumns.where((element) => element.type.applyFormatOnInit!);
   }
 
-  late List<PlutoColumn> columnsToApply;
+  late Iterable<PlutoColumn> columnsToApply;
 
   @override
   bool get apply => columnsToApply.isNotEmpty;
