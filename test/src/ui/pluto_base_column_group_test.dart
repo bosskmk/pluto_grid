@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -15,19 +16,28 @@ import 'pluto_base_column_group_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
+  late PublishSubject<PlutoStreamNotifierEvent> subject;
+
   const columnHeight = PlutoGridSettings.rowHeight;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+
+    subject = PublishSubject<PlutoStreamNotifierEvent>();
+
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
+
+    when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+
     when(stateManager!.columnGroupDepth(any)).thenAnswer((realInvocation) {
       return PlutoColumnGroupHelper.maxDepth(
         columnGroupList:
             realInvocation.positionalArguments[0] as List<PlutoColumnGroup>,
       );
     });
+
     when(
       stateManager!.separateLinkedGroup(
         columnGroupList: anyNamed('columnGroupList'),
@@ -44,6 +54,10 @@ void main() {
         );
       },
     );
+  });
+
+  tearDown(() {
+    subject.close();
   });
 
   buildWidget({

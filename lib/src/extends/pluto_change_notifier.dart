@@ -23,9 +23,9 @@ class PlutoChangeNotifier extends ChangeNotifier {
   notifyListeners() {
     if (!_disposed) {
       super.notifyListeners();
-    }
 
-    _streamNotifier.add(PlutoEmptyStreamNotifierEvent());
+      _streamNotifier.add(PlutoEmptyStreamNotifierEvent());
+    }
   }
 
   void notifyListenersOnPostFrame() {
@@ -37,9 +37,9 @@ class PlutoChangeNotifier extends ChangeNotifier {
   notifyStreamListeners(PlutoStreamNotifierEvent event) {
     if (!_disposed) {
       super.notifyListeners();
-    }
 
-    _streamNotifier.add(event);
+      _streamNotifier.add(event);
+    }
   }
 }
 
