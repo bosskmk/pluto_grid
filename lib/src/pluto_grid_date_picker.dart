@@ -397,7 +397,7 @@ abstract class _DateCellHeaderStateWithChange
   int? currentMonth;
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       currentCell = update<PlutoCell?>(
         currentCell,

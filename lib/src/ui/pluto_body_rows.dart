@@ -22,7 +22,13 @@ abstract class _PlutoBodyRowsStateWithChange
   List<PlutoRow?>? _rows;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _columns = update<List<PlutoColumn>?>(
         _columns,
@@ -30,12 +36,13 @@ abstract class _PlutoBodyRowsStateWithChange
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
-        _rows,
-        widget.stateManager.refRows,
-        compare: listEquals,
-        destructureList: true,
-      );
+      _rows = [
+        ...update<List<PlutoRow?>?>(
+          _rows,
+          widget.stateManager.refRows,
+          compare: listEquals,
+        )!
+      ];
     });
   }
 

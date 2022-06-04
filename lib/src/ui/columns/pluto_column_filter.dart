@@ -73,7 +73,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _filterRows = update<List<PlutoRow?>?>(
         _filterRows,

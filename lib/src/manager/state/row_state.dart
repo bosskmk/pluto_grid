@@ -15,6 +15,9 @@ abstract class IRowState {
 
   bool get hasUnCheckedRow;
 
+  /// Property for [tristate] value in [Checkbox] widget.
+  bool? get tristateCheckedRow;
+
   /// Row index of currently selected cell.
   int? get currentRowIdx;
 
@@ -117,6 +120,23 @@ mixin RowState implements IPlutoGridState {
   @override
   bool get hasUnCheckedRow =>
       refRows.firstWhereOrNull((element) => !element.checked!) != null;
+
+  @override
+  bool? get tristateCheckedRow {
+    final length = refRows.length;
+
+    if (length == 0) {
+      return false;
+    }
+
+    final Set<bool> checkSet = {};
+
+    for (var i = 0; i < length; i += 1) {
+      checkSet.add(refRows[i].checked == true);
+    }
+
+    return checkSet.length == 2 ? null : checkSet.first;
+  }
 
   @override
   int? get currentRowIdx => currentCellPosition?.rowIdx;

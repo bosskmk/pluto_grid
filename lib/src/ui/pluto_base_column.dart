@@ -25,7 +25,7 @@ abstract class _PlutoBaseColumnStateWithChange
   bool? _showColumnFilter;
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _showColumnFilter = update<bool?>(
         _showColumnFilter,
@@ -55,7 +55,9 @@ class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
         if (visible != widget.column.visible) {
           widget.column.visible = visible;
 
-          widget.stateManager.notifyListeners();
+          widget.stateManager.notifyStreamListeners(
+            PlutoVisibilityColumnStreamNotifierEvent(),
+          );
         }
       },
       child: Stack(

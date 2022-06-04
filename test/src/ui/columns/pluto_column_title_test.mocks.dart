@@ -2,13 +2,14 @@
 // in pluto_grid/test/src/ui/columns/pluto_column_title_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
-import 'dart:ui' as _i4;
+import 'dart:async' as _i7;
+import 'dart:ui' as _i5;
 
-import 'package:flutter/material.dart' as _i3;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i5;
+import 'package:flutter/material.dart' as _i4;
+import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:pluto_grid/pluto_grid.dart' as _i2;
+import 'package:pluto_grid/pluto_grid.dart' as _i3;
+import 'package:rxdart/rxdart.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -20,42 +21,51 @@ import 'package:pluto_grid/pluto_grid.dart' as _i2;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeFilteredList_0<E> extends _i1.Fake implements _i2.FilteredList<E> {}
+class _FakePublishSubject_0<T> extends _i1.Fake
+    implements _i2.PublishSubject<T> {}
 
-class _FakePlutoGridLocaleText_1 extends _i1.Fake
-    implements _i2.PlutoGridLocaleText {}
+class _FakeFilteredList_1<E> extends _i1.Fake implements _i3.FilteredList<E> {}
 
-class _FakePlutoGridKeyPressed_2 extends _i1.Fake
-    implements _i2.PlutoGridKeyPressed {}
+class _FakePlutoGridLocaleText_2 extends _i1.Fake
+    implements _i3.PlutoGridLocaleText {}
 
-class _FakeChangeNotifier_3 extends _i1.Fake implements _i3.ChangeNotifier {}
+class _FakePlutoGridKeyPressed_3 extends _i1.Fake
+    implements _i3.PlutoGridKeyPressed {}
 
-class _FakePlutoGridCellPosition_4 extends _i1.Fake
-    implements _i2.PlutoGridCellPosition {}
+class _FakeChangeNotifier_4 extends _i1.Fake implements _i4.ChangeNotifier {}
 
-class _FakePlutoRow_5 extends _i1.Fake implements _i2.PlutoRow {}
+class _FakePlutoGridCellPosition_5 extends _i1.Fake
+    implements _i3.PlutoGridCellPosition {}
 
-class _FakeScrollController_6 extends _i1.Fake implements _i3.ScrollController {
+class _FakePlutoRow_6 extends _i1.Fake implements _i3.PlutoRow {}
+
+class _FakeScrollController_7 extends _i1.Fake implements _i4.ScrollController {
 }
 
 /// A class which mocks [PlutoGridStateManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPlutoGridStateManager extends _i1.Mock
-    implements _i2.PlutoGridStateManager {
+    implements _i3.PlutoGridStateManager {
+  @override
+  _i2.PublishSubject<_i3.PlutoStreamNotifierEvent> get streamNotifier =>
+      (super.noSuchMethod(Invocation.getter(#streamNotifier),
+              returnValue:
+                  _FakePublishSubject_0<_i3.PlutoStreamNotifierEvent>())
+          as _i2.PublishSubject<_i3.PlutoStreamNotifierEvent>);
   @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
   @override
   set refColumnGroups(
-          _i2.FilteredList<_i2.PlutoColumnGroup>? setColumnGroups) =>
+          _i3.FilteredList<_i3.PlutoColumnGroup>? setColumnGroups) =>
       super.noSuchMethod(Invocation.setter(#refColumnGroups, setColumnGroups),
           returnValueForMissingStub: null);
   @override
-  List<_i2.PlutoColumnGroup> get columnGroups =>
+  List<_i3.PlutoColumnGroup> get columnGroups =>
       (super.noSuchMethod(Invocation.getter(#columnGroups),
-          returnValue: <_i2.PlutoColumnGroup>[]) as List<_i2.PlutoColumnGroup>);
+          returnValue: <_i3.PlutoColumnGroup>[]) as List<_i3.PlutoColumnGroup>);
   @override
   bool get hasColumnGroups => (super
           .noSuchMethod(Invocation.getter(#hasColumnGroups), returnValue: false)
@@ -65,18 +75,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#showColumnGroups),
           returnValue: false) as bool);
   @override
-  _i2.FilteredList<_i2.PlutoColumn> get refColumns =>
+  _i3.FilteredList<_i3.PlutoColumn> get refColumns =>
       (super.noSuchMethod(Invocation.getter(#refColumns),
-              returnValue: _FakeFilteredList_0<_i2.PlutoColumn>())
-          as _i2.FilteredList<_i2.PlutoColumn>);
+              returnValue: _FakeFilteredList_1<_i3.PlutoColumn>())
+          as _i3.FilteredList<_i3.PlutoColumn>);
   @override
-  set refColumns(_i2.FilteredList<_i2.PlutoColumn>? setColumns) =>
+  set refColumns(_i3.FilteredList<_i3.PlutoColumn>? setColumns) =>
       super.noSuchMethod(Invocation.setter(#refColumns, setColumns),
           returnValueForMissingStub: null);
   @override
-  List<_i2.PlutoColumn> get columns =>
+  List<_i3.PlutoColumn> get columns =>
       (super.noSuchMethod(Invocation.getter(#columns),
-          returnValue: <_i2.PlutoColumn>[]) as List<_i2.PlutoColumn>);
+          returnValue: <_i3.PlutoColumn>[]) as List<_i3.PlutoColumn>);
   @override
   List<int> get columnIndexes => (super
           .noSuchMethod(Invocation.getter(#columnIndexes), returnValue: <int>[])
@@ -90,9 +100,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#columnsWidth), returnValue: 0.0)
           as double);
   @override
-  List<_i2.PlutoColumn> get leftFrozenColumns =>
+  List<_i3.PlutoColumn> get leftFrozenColumns =>
       (super.noSuchMethod(Invocation.getter(#leftFrozenColumns),
-          returnValue: <_i2.PlutoColumn>[]) as List<_i2.PlutoColumn>);
+          returnValue: <_i3.PlutoColumn>[]) as List<_i3.PlutoColumn>);
   @override
   List<int> get leftFrozenColumnIndexes =>
       (super.noSuchMethod(Invocation.getter(#leftFrozenColumnIndexes),
@@ -102,9 +112,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#leftFrozenColumnsWidth),
           returnValue: 0.0) as double);
   @override
-  List<_i2.PlutoColumn> get rightFrozenColumns =>
+  List<_i3.PlutoColumn> get rightFrozenColumns =>
       (super.noSuchMethod(Invocation.getter(#rightFrozenColumns),
-          returnValue: <_i2.PlutoColumn>[]) as List<_i2.PlutoColumn>);
+          returnValue: <_i3.PlutoColumn>[]) as List<_i3.PlutoColumn>);
   @override
   List<int> get rightFrozenColumnIndexes =>
       (super.noSuchMethod(Invocation.getter(#rightFrozenColumnIndexes),
@@ -114,9 +124,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#rightFrozenColumnsWidth),
           returnValue: 0.0) as double);
   @override
-  List<_i2.PlutoColumn> get bodyColumns =>
+  List<_i3.PlutoColumn> get bodyColumns =>
       (super.noSuchMethod(Invocation.getter(#bodyColumns),
-          returnValue: <_i2.PlutoColumn>[]) as List<_i2.PlutoColumn>);
+          returnValue: <_i3.PlutoColumn>[]) as List<_i3.PlutoColumn>);
   @override
   List<int> get bodyColumnIndexes =>
       (super.noSuchMethod(Invocation.getter(#bodyColumnIndexes),
@@ -138,16 +148,16 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isDraggingRow), returnValue: false)
           as bool);
   @override
-  List<_i2.PlutoRow> get dragRows =>
+  List<_i3.PlutoRow> get dragRows =>
       (super.noSuchMethod(Invocation.getter(#dragRows),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
   bool get canRowDrag =>
       (super.noSuchMethod(Invocation.getter(#canRowDrag), returnValue: false)
           as bool);
   @override
   set textEditingController(
-          _i3.TextEditingController? _textEditingController) =>
+          _i4.TextEditingController? _textEditingController) =>
       super.noSuchMethod(
           Invocation.setter(#textEditingController, _textEditingController),
           returnValueForMissingStub: null);
@@ -160,9 +170,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#autoEditing), returnValue: false)
           as bool);
   @override
-  List<_i2.PlutoRow> get filterRows =>
+  List<_i3.PlutoRow> get filterRows =>
       (super.noSuchMethod(Invocation.getter(#filterRows),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
   bool get hasFilter =>
       (super.noSuchMethod(Invocation.getter(#hasFilter), returnValue: false)
@@ -176,17 +186,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#hasFocus), returnValue: false)
           as bool);
   @override
-  _i2.PlutoGridLocaleText get localeText => (super.noSuchMethod(
+  _i3.PlutoGridLocaleText get localeText => (super.noSuchMethod(
       Invocation.getter(#localeText),
-      returnValue: _FakePlutoGridLocaleText_1()) as _i2.PlutoGridLocaleText);
+      returnValue: _FakePlutoGridLocaleText_2()) as _i3.PlutoGridLocaleText);
   @override
-  _i2.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
+  _i3.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
       Invocation.getter(#keyPressed),
-      returnValue: _FakePlutoGridKeyPressed_2()) as _i2.PlutoGridKeyPressed);
+      returnValue: _FakePlutoGridKeyPressed_3()) as _i3.PlutoGridKeyPressed);
   @override
-  _i3.ChangeNotifier get resizingChangeNotifier =>
+  _i4.ChangeNotifier get resizingChangeNotifier =>
       (super.noSuchMethod(Invocation.getter(#resizingChangeNotifier),
-          returnValue: _FakeChangeNotifier_3()) as _i3.ChangeNotifier);
+          returnValue: _FakeChangeNotifier_4()) as _i4.ChangeNotifier);
   @override
   double get headerHeight =>
       (super.noSuchMethod(Invocation.getter(#headerHeight), returnValue: 0.0)
@@ -326,25 +336,25 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isPaginated), returnValue: false)
           as bool);
   @override
-  _i2.FilteredList<_i2.PlutoRow> get refRows =>
+  _i3.FilteredList<_i3.PlutoRow> get refRows =>
       (super.noSuchMethod(Invocation.getter(#refRows),
-              returnValue: _FakeFilteredList_0<_i2.PlutoRow>())
-          as _i2.FilteredList<_i2.PlutoRow>);
+              returnValue: _FakeFilteredList_1<_i3.PlutoRow>())
+          as _i3.FilteredList<_i3.PlutoRow>);
   @override
-  set refRows(_i2.FilteredList<_i2.PlutoRow>? setRows) =>
+  set refRows(_i3.FilteredList<_i3.PlutoRow>? setRows) =>
       super.noSuchMethod(Invocation.setter(#refRows, setRows),
           returnValueForMissingStub: null);
   @override
-  List<_i2.PlutoRow> get rows => (super.noSuchMethod(Invocation.getter(#rows),
-      returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+  List<_i3.PlutoRow> get rows => (super.noSuchMethod(Invocation.getter(#rows),
+      returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
-  List<_i2.PlutoRow> get checkedRows =>
+  List<_i3.PlutoRow> get checkedRows =>
       (super.noSuchMethod(Invocation.getter(#checkedRows),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
-  List<_i2.PlutoRow> get unCheckedRows =>
+  List<_i3.PlutoRow> get unCheckedRows =>
       (super.noSuchMethod(Invocation.getter(#unCheckedRows),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
   bool get hasCheckedRow =>
       (super.noSuchMethod(Invocation.getter(#hasCheckedRow), returnValue: false)
@@ -362,23 +372,23 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
           as bool);
   @override
-  _i2.PlutoGridSelectingMode get selectingMode =>
+  _i3.PlutoGridSelectingMode get selectingMode =>
       (super.noSuchMethod(Invocation.getter(#selectingMode),
-              returnValue: _i2.PlutoGridSelectingMode.cell)
-          as _i2.PlutoGridSelectingMode);
+              returnValue: _i3.PlutoGridSelectingMode.cell)
+          as _i3.PlutoGridSelectingMode);
   @override
-  List<_i2.PlutoGridSelectingCellPosition> get currentSelectingPositionList =>
+  List<_i3.PlutoGridSelectingCellPosition> get currentSelectingPositionList =>
       (super.noSuchMethod(Invocation.getter(#currentSelectingPositionList),
-              returnValue: <_i2.PlutoGridSelectingCellPosition>[])
-          as List<_i2.PlutoGridSelectingCellPosition>);
+              returnValue: <_i3.PlutoGridSelectingCellPosition>[])
+          as List<_i3.PlutoGridSelectingCellPosition>);
   @override
   bool get hasCurrentSelectingPosition =>
       (super.noSuchMethod(Invocation.getter(#hasCurrentSelectingPosition),
           returnValue: false) as bool);
   @override
-  List<_i2.PlutoRow> get currentSelectingRows =>
+  List<_i3.PlutoRow> get currentSelectingRows =>
       (super.noSuchMethod(Invocation.getter(#currentSelectingRows),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
   String get currentSelectingText =>
       (super.noSuchMethod(Invocation.getter(#currentSelectingText),
@@ -403,15 +413,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
           returnValueForMissingStub: null);
   @override
-  void addListener(_i4.VoidCallback? listener) =>
+  dynamic notifyStreamListeners(_i3.PlutoStreamNotifierEvent? event) =>
+      super.noSuchMethod(Invocation.method(#notifyStreamListeners, [event]));
+  @override
+  void addListener(_i5.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i4.VoidCallback? listener) =>
+  void removeListener(_i5.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void setCurrentCellPosition(_i2.PlutoGridCellPosition? cellPosition,
+  void setCurrentCellPosition(_i3.PlutoGridCellPosition? cellPosition,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
@@ -422,7 +435,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#updateCurrentCellPosition, [], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  int? columnIdxByCellKeyAndRowIdx(_i3.Key? cellKey, int? rowIdx) =>
+  int? columnIdxByCellKeyAndRowIdx(_i4.Key? cellKey, int? rowIdx) =>
       (super.noSuchMethod(Invocation.method(
           #columnIdxByCellKeyAndRowIdx, [cellKey, rowIdx])) as int?);
   @override
@@ -430,27 +443,27 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#clearCurrentCell, [], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setCurrentCell(_i2.PlutoCell? cell, int? rowIdx,
+  void setCurrentCell(_i3.PlutoCell? cell, int? rowIdx,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentCell, [cell, rowIdx], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  bool canMoveCell(_i2.PlutoGridCellPosition? cellPosition,
-          _i2.PlutoMoveDirection? direction) =>
+  bool canMoveCell(_i3.PlutoGridCellPosition? cellPosition,
+          _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
           Invocation.method(#canMoveCell, [cellPosition, direction]),
           returnValue: false) as bool);
   @override
-  bool canNotMoveCell(_i2.PlutoGridCellPosition? cellPosition,
-          _i2.PlutoMoveDirection? direction) =>
+  bool canNotMoveCell(_i3.PlutoGridCellPosition? cellPosition,
+          _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
           Invocation.method(#canNotMoveCell, [cellPosition, direction]),
           returnValue: false) as bool);
   @override
   bool canChangeCellValue(
-          {_i2.PlutoColumn? column,
-          _i2.PlutoRow? row,
+          {_i3.PlutoColumn? column,
+          _i3.PlutoRow? row,
           dynamic newValue,
           dynamic oldValue}) =>
       (super.noSuchMethod(
@@ -463,8 +476,8 @@ class MockPlutoGridStateManager extends _i1.Mock
           returnValue: false) as bool);
   @override
   bool canNotChangeCellValue(
-          {_i2.PlutoColumn? column,
-          _i2.PlutoRow? row,
+          {_i3.PlutoColumn? column,
+          _i3.PlutoRow? row,
           dynamic newValue,
           dynamic oldValue}) =>
       (super.noSuchMethod(
@@ -476,11 +489,11 @@ class MockPlutoGridStateManager extends _i1.Mock
           }),
           returnValue: false) as bool);
   @override
-  bool isCurrentCell(_i2.PlutoCell? cell) =>
+  bool isCurrentCell(_i3.PlutoCell? cell) =>
       (super.noSuchMethod(Invocation.method(#isCurrentCell, [cell]),
           returnValue: false) as bool);
   @override
-  bool isInvalidCellPosition(_i2.PlutoGridCellPosition? cellPosition) => (super
+  bool isInvalidCellPosition(_i3.PlutoGridCellPosition? cellPosition) => (super
       .noSuchMethod(Invocation.method(#isInvalidCellPosition, [cellPosition]),
           returnValue: false) as bool);
   @override
@@ -489,32 +502,32 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setShowColumnGroups, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  List<_i2.PlutoColumnGroupPair> separateLinkedGroup(
-          {List<_i2.PlutoColumnGroup>? columnGroupList,
-          List<_i2.PlutoColumn>? columns}) =>
+  List<_i3.PlutoColumnGroupPair> separateLinkedGroup(
+          {List<_i3.PlutoColumnGroup>? columnGroupList,
+          List<_i3.PlutoColumn>? columns}) =>
       (super.noSuchMethod(
               Invocation.method(#separateLinkedGroup, [],
                   {#columnGroupList: columnGroupList, #columns: columns}),
-              returnValue: <_i2.PlutoColumnGroupPair>[])
-          as List<_i2.PlutoColumnGroupPair>);
+              returnValue: <_i3.PlutoColumnGroupPair>[])
+          as List<_i3.PlutoColumnGroupPair>);
   @override
-  int columnGroupDepth(List<_i2.PlutoColumnGroup>? columnGroupList) => (super
+  int columnGroupDepth(List<_i3.PlutoColumnGroup>? columnGroupList) => (super
       .noSuchMethod(Invocation.method(#columnGroupDepth, [columnGroupList]),
           returnValue: 0) as int);
   @override
-  void removeColumnsInColumnGroup(List<_i2.PlutoColumn>? columns,
+  void removeColumnsInColumnGroup(List<_i3.PlutoColumn>? columns,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #removeColumnsInColumnGroup, [columns], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void toggleFrozenColumn(_i3.Key? columnKey, _i2.PlutoColumnFrozen? frozen) =>
+  void toggleFrozenColumn(_i4.Key? columnKey, _i3.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
           Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
           returnValueForMissingStub: null);
   @override
-  void toggleSortColumn(_i2.PlutoColumn? column) =>
+  void toggleSortColumn(_i3.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#toggleSortColumn, [column]),
           returnValueForMissingStub: null);
   @override
@@ -526,57 +539,57 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#bodyColumnsWidthAtColumnIdx, [columnIdx]),
       returnValue: 0.0) as double);
   @override
-  int? columnIndex(_i2.PlutoColumn? column) =>
+  int? columnIndex(_i3.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#columnIndex, [column])) as int?);
   @override
-  void insertColumns(int? columnIdx, List<_i2.PlutoColumn>? columns) => super
+  void insertColumns(int? columnIdx, List<_i3.PlutoColumn>? columns) => super
       .noSuchMethod(Invocation.method(#insertColumns, [columnIdx, columns]),
           returnValueForMissingStub: null);
   @override
-  void removeColumns(List<_i2.PlutoColumn>? columns) =>
+  void removeColumns(List<_i3.PlutoColumn>? columns) =>
       super.noSuchMethod(Invocation.method(#removeColumns, [columns]),
           returnValueForMissingStub: null);
   @override
-  void moveColumn({_i2.PlutoColumn? column, _i2.PlutoColumn? targetColumn}) =>
+  void moveColumn({_i3.PlutoColumn? column, _i3.PlutoColumn? targetColumn}) =>
       super.noSuchMethod(
           Invocation.method(
               #moveColumn, [], {#column: column, #targetColumn: targetColumn}),
           returnValueForMissingStub: null);
   @override
-  void resizeColumn(_i2.PlutoColumn? column, double? offset,
+  void resizeColumn(_i3.PlutoColumn? column, double? offset,
           {bool? notify = true, bool? checkScroll = true}) =>
       super.noSuchMethod(
           Invocation.method(#resizeColumn, [column, offset],
               {#notify: notify, #checkScroll: checkScroll}),
           returnValueForMissingStub: null);
   @override
-  void autoFitColumn(_i3.BuildContext? context, _i2.PlutoColumn? column) =>
+  void autoFitColumn(_i4.BuildContext? context, _i3.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#autoFitColumn, [context, column]),
           returnValueForMissingStub: null);
   @override
-  void hideColumn(_i3.Key? columnKey, bool? flag,
+  void hideColumn(_i4.Key? columnKey, bool? flag,
           {bool? notify = true, bool? checkScroll = true}) =>
       super.noSuchMethod(
           Invocation.method(#hideColumn, [columnKey, flag],
               {#notify: notify, #checkScroll: checkScroll}),
           returnValueForMissingStub: null);
   @override
-  void sortAscending(_i2.PlutoColumn? column, {bool? notify = true}) =>
+  void sortAscending(_i3.PlutoColumn? column, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#sortAscending, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void sortDescending(_i2.PlutoColumn? column, {bool? notify = true}) =>
+  void sortDescending(_i3.PlutoColumn? column, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#sortDescending, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void sortBySortIdx(_i2.PlutoColumn? column, {bool? notify = true}) =>
+  void sortBySortIdx(_i3.PlutoColumn? column, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#sortBySortIdx, [column], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void showSetColumnsPopup(_i3.BuildContext? context) =>
+  void showSetColumnsPopup(_i4.BuildContext? context) =>
       super.noSuchMethod(Invocation.method(#showSetColumnsPopup, [context]),
           returnValueForMissingStub: null);
   @override
@@ -585,7 +598,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setIsDraggingRow, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setDragRows(List<_i2.PlutoRow>? rows, {bool? notify = true}) => super
+  void setDragRows(List<_i3.PlutoRow>? rows, {bool? notify = true}) => super
       .noSuchMethod(Invocation.method(#setDragRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
@@ -606,7 +619,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#isRowIdxBottomDragTarget, [rowIdx]),
       returnValue: false) as bool);
   @override
-  bool isRowBeingDragged(_i3.Key? rowKey) =>
+  bool isRowBeingDragged(_i4.Key? rowKey) =>
       (super.noSuchMethod(Invocation.method(#isRowBeingDragged, [rowKey]),
           returnValue: false) as bool);
   @override
@@ -626,10 +639,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#pasteCellValue, [textList]),
           returnValueForMissingStub: null);
   @override
-  dynamic castValueByColumnType(dynamic value, _i2.PlutoColumn? column) => super
+  dynamic castValueByColumnType(dynamic value, _i3.PlutoColumn? column) => super
       .noSuchMethod(Invocation.method(#castValueByColumnType, [value, column]));
   @override
-  void changeCellValue(_i2.PlutoCell? cell, dynamic value,
+  void changeCellValue(_i3.PlutoCell? cell, dynamic value,
           {bool? callOnChangedEvent = true,
           bool? force = false,
           bool? notify = true}) =>
@@ -644,46 +657,46 @@ class MockPlutoGridStateManager extends _i1.Mock
           }),
           returnValueForMissingStub: null);
   @override
-  void setFilter(_i2.FilteredListFilter<_i2.PlutoRow>? filter,
+  void setFilter(_i3.FilteredListFilter<_i3.PlutoRow>? filter,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setFilter, [filter], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setFilterWithFilterRows(List<_i2.PlutoRow>? rows,
+  void setFilterWithFilterRows(List<_i3.PlutoRow>? rows,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #setFilterWithFilterRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setFilterRows(List<_i2.PlutoRow>? rows) =>
+  void setFilterRows(List<_i3.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#setFilterRows, [rows]),
           returnValueForMissingStub: null);
   @override
-  List<_i2.PlutoRow> filterRowsByField(String? columnField) =>
+  List<_i3.PlutoRow> filterRowsByField(String? columnField) =>
       (super.noSuchMethod(Invocation.method(#filterRowsByField, [columnField]),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
-  bool isFilteredColumn(_i2.PlutoColumn? column) =>
+  bool isFilteredColumn(_i3.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#isFilteredColumn, [column]),
           returnValue: false) as bool);
   @override
-  void removeColumnsInFilterRows(List<_i2.PlutoColumn>? columns,
+  void removeColumnsInFilterRows(List<_i3.PlutoColumn>? columns,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #removeColumnsInFilterRows, [columns], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void showFilterPopup(_i3.BuildContext? context,
-          {_i2.PlutoColumn? calledColumn}) =>
+  void showFilterPopup(_i4.BuildContext? context,
+          {_i3.PlutoColumn? calledColumn}) =>
       super.noSuchMethod(
           Invocation.method(
               #showFilterPopup, [context], {#calledColumn: calledColumn}),
           returnValueForMissingStub: null);
   @override
-  void setGridFocusNode(_i3.FocusNode? focusNode) =>
+  void setGridFocusNode(_i4.FocusNode? focusNode) =>
       super.noSuchMethod(Invocation.method(#setGridFocusNode, [focusNode]),
           returnValueForMissingStub: null);
   @override
@@ -691,66 +704,66 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setKeepFocus, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void nextFocusOfColumnFilter(_i2.PlutoColumn? column,
+  void nextFocusOfColumnFilter(_i3.PlutoColumn? column,
           {bool? reversed = false}) =>
       super.noSuchMethod(
           Invocation.method(
               #nextFocusOfColumnFilter, [column], {#reversed: reversed}),
           returnValueForMissingStub: null);
   @override
-  void setGridKey(_i3.GlobalKey<_i3.State<_i3.StatefulWidget>>? key) =>
+  void setGridKey(_i4.GlobalKey<_i4.State<_i4.StatefulWidget>>? key) =>
       super.noSuchMethod(Invocation.method(#setGridKey, [key]),
           returnValueForMissingStub: null);
   @override
-  void setKeyManager(_i2.PlutoGridKeyManager? keyManager) =>
+  void setKeyManager(_i3.PlutoGridKeyManager? keyManager) =>
       super.noSuchMethod(Invocation.method(#setKeyManager, [keyManager]),
           returnValueForMissingStub: null);
   @override
-  void setEventManager(_i2.PlutoGridEventManager? eventManager) =>
+  void setEventManager(_i3.PlutoGridEventManager? eventManager) =>
       super.noSuchMethod(Invocation.method(#setEventManager, [eventManager]),
           returnValueForMissingStub: null);
   @override
-  void setGridMode(_i2.PlutoGridMode? mode) =>
+  void setGridMode(_i3.PlutoGridMode? mode) =>
       super.noSuchMethod(Invocation.method(#setGridMode, [mode]),
           returnValueForMissingStub: null);
   @override
-  void setOnChanged(_i2.PlutoOnChangedEventCallback? onChanged) =>
+  void setOnChanged(_i3.PlutoOnChangedEventCallback? onChanged) =>
       super.noSuchMethod(Invocation.method(#setOnChanged, [onChanged]),
           returnValueForMissingStub: null);
   @override
-  void setCreateHeader(_i2.CreateHeaderCallBack? createHeader) =>
+  void setCreateHeader(_i3.CreateHeaderCallBack? createHeader) =>
       super.noSuchMethod(Invocation.method(#setCreateHeader, [createHeader]),
           returnValueForMissingStub: null);
   @override
-  void setCreateFooter(_i2.CreateFooterCallBack? createFooter) =>
+  void setCreateFooter(_i3.CreateFooterCallBack? createFooter) =>
       super.noSuchMethod(Invocation.method(#setCreateFooter, [createFooter]),
           returnValueForMissingStub: null);
   @override
-  void setOnSelected(_i2.PlutoOnSelectedEventCallback? onSelected) =>
+  void setOnSelected(_i3.PlutoOnSelectedEventCallback? onSelected) =>
       super.noSuchMethod(Invocation.method(#setOnSelected, [onSelected]),
           returnValueForMissingStub: null);
   @override
-  void setOnRowChecked(_i2.PlutoOnRowCheckedEventCallback? onRowChecked) =>
+  void setOnRowChecked(_i3.PlutoOnRowCheckedEventCallback? onRowChecked) =>
       super.noSuchMethod(Invocation.method(#setOnRowChecked, [onRowChecked]),
           returnValueForMissingStub: null);
   @override
   void setOnRowDoubleTap(
-          _i2.PlutoOnRowDoubleTapEventCallback? onRowDoubleTap) =>
+          _i3.PlutoOnRowDoubleTapEventCallback? onRowDoubleTap) =>
       super.noSuchMethod(
           Invocation.method(#setOnRowDoubleTap, [onRowDoubleTap]),
           returnValueForMissingStub: null);
   @override
   void setOnRowSecondaryTap(
-          _i2.PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) =>
+          _i3.PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) =>
       super.noSuchMethod(
           Invocation.method(#setOnRowSecondaryTap, [onRowSecondaryTap]),
           returnValueForMissingStub: null);
   @override
-  void setOnRowsMoved(_i2.PlutoOnRowsMovedEventCallback? onRowsMoved) =>
+  void setOnRowsMoved(_i3.PlutoOnRowsMovedEventCallback? onRowsMoved) =>
       super.noSuchMethod(Invocation.method(#setOnRowsMoved, [onRowsMoved]),
           returnValueForMissingStub: null);
   @override
-  void setConfiguration(_i2.PlutoGridConfiguration? configuration) =>
+  void setConfiguration(_i3.PlutoGridConfiguration? configuration) =>
       super.noSuchMethod(Invocation.method(#setConfiguration, [configuration]),
           returnValueForMissingStub: null);
   @override
@@ -762,68 +775,68 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#handleOnSelected, []),
           returnValueForMissingStub: null);
   @override
-  _i2.PlutoGridCellPosition cellPositionToMove(
-          _i2.PlutoGridCellPosition? cellPosition,
-          _i2.PlutoMoveDirection? direction) =>
+  _i3.PlutoGridCellPosition cellPositionToMove(
+          _i3.PlutoGridCellPosition? cellPosition,
+          _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
               Invocation.method(#cellPositionToMove, [cellPosition, direction]),
-              returnValue: _FakePlutoGridCellPosition_4())
-          as _i2.PlutoGridCellPosition);
+              returnValue: _FakePlutoGridCellPosition_5())
+          as _i3.PlutoGridCellPosition);
   @override
-  void moveCurrentCell(_i2.PlutoMoveDirection? direction,
+  void moveCurrentCell(_i3.PlutoMoveDirection? direction,
           {bool? force = false, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #moveCurrentCell, [direction], {#force: force, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveCurrentCellToEdgeOfColumns(_i2.PlutoMoveDirection? direction,
+  void moveCurrentCellToEdgeOfColumns(_i3.PlutoMoveDirection? direction,
           {bool? force = false, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#moveCurrentCellToEdgeOfColumns, [direction],
               {#force: force, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveCurrentCellToEdgeOfRows(_i2.PlutoMoveDirection? direction,
+  void moveCurrentCellToEdgeOfRows(_i3.PlutoMoveDirection? direction,
           {bool? force = false, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#moveCurrentCellToEdgeOfRows, [direction],
               {#force: force, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveCurrentCellByRowIdx(int? rowIdx, _i2.PlutoMoveDirection? direction,
+  void moveCurrentCellByRowIdx(int? rowIdx, _i3.PlutoMoveDirection? direction,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #moveCurrentCellByRowIdx, [rowIdx, direction], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveSelectingCell(_i2.PlutoMoveDirection? direction) =>
+  void moveSelectingCell(_i3.PlutoMoveDirection? direction) =>
       super.noSuchMethod(Invocation.method(#moveSelectingCell, [direction]),
           returnValueForMissingStub: null);
   @override
-  void moveSelectingCellToEdgeOfColumns(_i2.PlutoMoveDirection? direction,
+  void moveSelectingCellToEdgeOfColumns(_i3.PlutoMoveDirection? direction,
           {bool? force = false, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#moveSelectingCellToEdgeOfColumns, [direction],
               {#force: force, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveSelectingCellToEdgeOfRows(_i2.PlutoMoveDirection? direction,
+  void moveSelectingCellToEdgeOfRows(_i3.PlutoMoveDirection? direction,
           {bool? force = false, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#moveSelectingCellToEdgeOfRows, [direction],
               {#force: force, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveSelectingCellByRowIdx(int? rowIdx, _i2.PlutoMoveDirection? direction,
+  void moveSelectingCellByRowIdx(int? rowIdx, _i3.PlutoMoveDirection? direction,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#moveSelectingCellByRowIdx, [rowIdx, direction],
               {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setLayout(_i3.BoxConstraints? size) =>
+  void setLayout(_i4.BoxConstraints? size) =>
       super.noSuchMethod(Invocation.method(#setLayout, [size]),
           returnValueForMissingStub: null);
   @override
@@ -840,7 +853,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setShowLoading, [flag]),
           returnValueForMissingStub: null);
   @override
-  void setGridGlobalOffset(_i4.Offset? offset) =>
+  void setGridGlobalOffset(_i5.Offset? offset) =>
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
@@ -864,27 +877,27 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#getRowIdxByOffset, [offset]))
           as int?);
   @override
-  _i2.PlutoRow getNewRow() =>
+  _i3.PlutoRow getNewRow() =>
       (super.noSuchMethod(Invocation.method(#getNewRow, []),
-          returnValue: _FakePlutoRow_5()) as _i2.PlutoRow);
+          returnValue: _FakePlutoRow_6()) as _i3.PlutoRow);
   @override
-  List<_i2.PlutoRow> getNewRows({int? count = 1}) =>
+  List<_i3.PlutoRow> getNewRows({int? count = 1}) =>
       (super.noSuchMethod(Invocation.method(#getNewRows, [], {#count: count}),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
-  List<_i2.PlutoRow> setSortIdxOfRows(List<_i2.PlutoRow>? rows,
+  List<_i3.PlutoRow> setSortIdxOfRows(List<_i3.PlutoRow>? rows,
           {bool? increase = true, int? start = 0}) =>
       (super.noSuchMethod(
           Invocation.method(
               #setSortIdxOfRows, [rows], {#increase: increase, #start: start}),
-          returnValue: <_i2.PlutoRow>[]) as List<_i2.PlutoRow>);
+          returnValue: <_i3.PlutoRow>[]) as List<_i3.PlutoRow>);
   @override
-  void setRowChecked(_i2.PlutoRow? row, bool? flag, {bool? notify = true}) =>
+  void setRowChecked(_i3.PlutoRow? row, bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setRowChecked, [row, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void insertRows(int? rowIdx, List<_i2.PlutoRow>? rows) =>
+  void insertRows(int? rowIdx, List<_i3.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#insertRows, [rowIdx, rows]),
           returnValueForMissingStub: null);
   @override
@@ -892,7 +905,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#prependNewRows, [], {#count: count}),
       returnValueForMissingStub: null);
   @override
-  void prependRows(List<_i2.PlutoRow>? rows) =>
+  void prependRows(List<_i3.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#prependRows, [rows]),
           returnValueForMissingStub: null);
   @override
@@ -900,7 +913,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#appendNewRows, [], {#count: count}),
           returnValueForMissingStub: null);
   @override
-  void appendRows(List<_i2.PlutoRow>? rows) =>
+  void appendRows(List<_i3.PlutoRow>? rows) =>
       super.noSuchMethod(Invocation.method(#appendRows, [rows]),
           returnValueForMissingStub: null);
   @override
@@ -908,18 +921,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#removeCurrentRow, []),
           returnValueForMissingStub: null);
   @override
-  void removeRows(List<_i2.PlutoRow>? rows, {bool? notify = true}) => super
+  void removeRows(List<_i3.PlutoRow>? rows, {bool? notify = true}) => super
       .noSuchMethod(Invocation.method(#removeRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveRowsByOffset(List<_i2.PlutoRow>? rows, double? offset,
+  void moveRowsByOffset(List<_i3.PlutoRow>? rows, double? offset,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
               #moveRowsByOffset, [rows, offset], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void moveRowsByIndex(List<_i2.PlutoRow>? rows, int? indexToMove,
+  void moveRowsByIndex(List<_i3.PlutoRow>? rows, int? indexToMove,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
@@ -931,36 +944,36 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#toggleAllRowChecked, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setRowColorCallback(_i2.PlutoRowColorCallback? rowColorCallback) => super
+  void setRowColorCallback(_i3.PlutoRowColorCallback? rowColorCallback) => super
       .noSuchMethod(Invocation.method(#setRowColorCallback, [rowColorCallback]),
           returnValueForMissingStub: null);
   @override
-  void setScroll(_i2.PlutoGridScrollController? scroll) =>
+  void setScroll(_i3.PlutoGridScrollController? scroll) =>
       super.noSuchMethod(Invocation.method(#setScroll, [scroll]),
           returnValueForMissingStub: null);
   @override
-  void scrollByDirection(_i2.PlutoMoveDirection? direction, double? offset) =>
+  void scrollByDirection(_i3.PlutoMoveDirection? direction, double? offset) =>
       super.noSuchMethod(
           Invocation.method(#scrollByDirection, [direction, offset]),
           returnValueForMissingStub: null);
   @override
   bool canHorizontalCellScrollByDirection(
-          _i2.PlutoMoveDirection? direction, _i2.PlutoColumn? columnToMove) =>
+          _i3.PlutoMoveDirection? direction, _i3.PlutoColumn? columnToMove) =>
       (super.noSuchMethod(
           Invocation.method(
               #canHorizontalCellScrollByDirection, [direction, columnToMove]),
           returnValue: false) as bool);
   @override
-  void moveScrollByRow(_i2.PlutoMoveDirection? direction, int? rowIdx) => super
+  void moveScrollByRow(_i3.PlutoMoveDirection? direction, int? rowIdx) => super
       .noSuchMethod(Invocation.method(#moveScrollByRow, [direction, rowIdx]),
           returnValueForMissingStub: null);
   @override
-  void moveScrollByColumn(_i2.PlutoMoveDirection? direction, int? columnIdx) =>
+  void moveScrollByColumn(_i3.PlutoMoveDirection? direction, int? columnIdx) =>
       super.noSuchMethod(
           Invocation.method(#moveScrollByColumn, [direction, columnIdx]),
           returnValueForMissingStub: null);
   @override
-  bool needMovingScroll(_i4.Offset? offset, _i2.PlutoMoveDirection? move) =>
+  bool needMovingScroll(_i5.Offset? offset, _i3.PlutoMoveDirection? move) =>
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
@@ -976,7 +989,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setSelecting, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setSelectingMode(_i2.PlutoGridSelectingMode? mode,
+  void setSelectingMode(_i3.PlutoGridSelectingMode? mode,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setSelectingMode, [mode], {#notify: notify}),
@@ -987,20 +1000,20 @@ class MockPlutoGridStateManager extends _i1.Mock
           returnValueForMissingStub: null);
   @override
   void setCurrentSelectingPosition(
-          {_i2.PlutoGridCellPosition? cellPosition, bool? notify = true}) =>
+          {_i3.PlutoGridCellPosition? cellPosition, bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentSelectingPosition, [],
               {#cellPosition: cellPosition, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setCurrentSelectingPositionByCellKey(_i3.Key? cellKey,
+  void setCurrentSelectingPositionByCellKey(_i4.Key? cellKey,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentSelectingPositionByCellKey, [cellKey],
               {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setCurrentSelectingPositionWithOffset(_i4.Offset? offset) =>
+  void setCurrentSelectingPositionWithOffset(_i5.Offset? offset) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentSelectingPositionWithOffset, [offset]),
           returnValueForMissingStub: null);
@@ -1025,17 +1038,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#isSelectingInteraction, []),
           returnValue: false) as bool);
   @override
-  bool isSelectedRow(_i3.Key? rowKey) =>
+  bool isSelectedRow(_i4.Key? rowKey) =>
       (super.noSuchMethod(Invocation.method(#isSelectedRow, [rowKey]),
           returnValue: false) as bool);
   @override
   bool isSelectedCell(
-          _i2.PlutoCell? cell, _i2.PlutoColumn? column, int? rowIdx) =>
+          _i3.PlutoCell? cell, _i3.PlutoColumn? column, int? rowIdx) =>
       (super.noSuchMethod(
           Invocation.method(#isSelectedCell, [cell, column, rowIdx]),
           returnValue: false) as bool);
   @override
-  void handleAfterSelectingRow(_i2.PlutoCell? cell, dynamic value) => super
+  void handleAfterSelectingRow(_i3.PlutoCell? cell, dynamic value) => super
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
   @override
@@ -1048,13 +1061,13 @@ class MockPlutoGridStateManager extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPlutoGridScrollController extends _i1.Mock
-    implements _i2.PlutoGridScrollController {
+    implements _i3.PlutoGridScrollController {
   @override
-  set vertical(_i5.LinkedScrollControllerGroup? _vertical) =>
+  set vertical(_i6.LinkedScrollControllerGroup? _vertical) =>
       super.noSuchMethod(Invocation.setter(#vertical, _vertical),
           returnValueForMissingStub: null);
   @override
-  set horizontal(_i5.LinkedScrollControllerGroup? _horizontal) =>
+  set horizontal(_i6.LinkedScrollControllerGroup? _horizontal) =>
       super.noSuchMethod(Invocation.setter(#horizontal, _horizontal),
           returnValueForMissingStub: null);
   @override
@@ -1074,12 +1087,12 @@ class MockPlutoGridScrollController extends _i1.Mock
           .noSuchMethod(Invocation.getter(#horizontalOffset), returnValue: 0.0)
       as double);
   @override
-  void setBodyRowsHorizontal(_i3.ScrollController? scrollController) =>
+  void setBodyRowsHorizontal(_i4.ScrollController? scrollController) =>
       super.noSuchMethod(
           Invocation.method(#setBodyRowsHorizontal, [scrollController]),
           returnValueForMissingStub: null);
   @override
-  void setBodyRowsVertical(_i3.ScrollController? scrollController) => super
+  void setBodyRowsVertical(_i4.ScrollController? scrollController) => super
       .noSuchMethod(Invocation.method(#setBodyRowsVertical, [scrollController]),
           returnValueForMissingStub: null);
 }
@@ -1088,31 +1101,31 @@ class MockPlutoGridScrollController extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinkedScrollControllerGroup extends _i1.Mock
-    implements _i5.LinkedScrollControllerGroup {
+    implements _i6.LinkedScrollControllerGroup {
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
           as double);
   @override
-  _i3.ScrollController addAndGet() =>
+  _i4.ScrollController addAndGet() =>
       (super.noSuchMethod(Invocation.method(#addAndGet, []),
-          returnValue: _FakeScrollController_6()) as _i3.ScrollController);
+          returnValue: _FakeScrollController_7()) as _i4.ScrollController);
   @override
-  void addOffsetChangedListener(_i4.VoidCallback? onChanged) => super
+  void addOffsetChangedListener(_i5.VoidCallback? onChanged) => super
       .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
           returnValueForMissingStub: null);
   @override
-  void removeOffsetChangedListener(_i4.VoidCallback? listener) => super
+  void removeOffsetChangedListener(_i5.VoidCallback? listener) => super
       .noSuchMethod(Invocation.method(#removeOffsetChangedListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  _i6.Future<void> animateTo(double? offset,
-          {_i3.Curve? curve, Duration? duration}) =>
+  _i7.Future<void> animateTo(double? offset,
+          {_i4.Curve? curve, Duration? duration}) =>
       (super.noSuchMethod(
           Invocation.method(
               #animateTo, [offset], {#curve: curve, #duration: duration}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
   @override
   void jumpTo(double? value) =>
       super.noSuchMethod(Invocation.method(#jumpTo, [value]),

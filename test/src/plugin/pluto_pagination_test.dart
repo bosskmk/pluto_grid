@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/test_helper_util.dart';
@@ -14,11 +15,21 @@ import '../plugin/pluto_pagination_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
+  late PublishSubject<PlutoStreamNotifierEvent> subject;
+
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    subject = PublishSubject<PlutoStreamNotifierEvent>();
+
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
+
+    when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+  });
+
+  tearDown(() {
+    subject.close();
   });
 
   group('렌더링', () {
