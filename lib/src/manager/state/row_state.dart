@@ -125,6 +125,10 @@ mixin RowState implements IPlutoGridState {
   bool? get tristateCheckedRow {
     final length = refRows.length;
 
+    if (length == 0) {
+      return false;
+    }
+
     final Set<bool> checkSet = {};
 
     for (var i = 0; i < length; i += 1) {
