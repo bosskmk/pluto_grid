@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:collection';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -72,8 +76,8 @@ class PlutoGridStateManager extends PlutoGridState {
     PlutoGridConfiguration? configuration,
   }) {
     refColumns = FilteredList(initialList: columns);
-    refRows = FilteredList(initialList: rows);
     refColumnGroups = FilteredList(initialList: columnGroups);
+    refRows = FilteredList(initialList: rows);
     setGridFocusNode(gridFocusNode);
     setScroll(scroll);
     setGridMode(mode);
@@ -93,7 +97,7 @@ class PlutoGridStateManager extends PlutoGridState {
   static List<PlutoGridSelectingMode> get selectingModes =>
       PlutoGridSelectingMode.none.items;
 
-  static void initializeRows(
+  static List<PlutoRow> initializeRows(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
@@ -101,7 +105,7 @@ class PlutoGridStateManager extends PlutoGridState {
     int? start = 0,
   }) {
     if (refColumns.isEmpty || refRows.isEmpty) {
-      return;
+      return refRows;
     }
 
     _ApplyList applyList = _ApplyList([
@@ -116,7 +120,7 @@ class PlutoGridStateManager extends PlutoGridState {
     ]);
 
     if (!applyList.apply) {
-      return;
+      return refRows;
     }
 
     var rowLength = refRows.length;
@@ -124,6 +128,62 @@ class PlutoGridStateManager extends PlutoGridState {
     for (var rowIdx = 0; rowIdx < rowLength; rowIdx += 1) {
       applyList.execute(refRows[rowIdx]);
     }
+
+    return refRows;
+  }
+
+  static Future<List<PlutoRow>> initializeRowsAsync(
+    List<PlutoColumn> refColumns,
+    List<PlutoRow> refRows, {
+    bool forceApplySortIdx = false,
+    bool increase = true,
+    int? start = 0,
+  }) {
+    if (refColumns.isEmpty || refRows.isEmpty) {
+      return Future.value(refRows);
+    }
+
+    final Completer<List<PlutoRow>> completer = Completer();
+
+    SplayTreeMap<int, List<PlutoRow>> _rows = SplayTreeMap();
+
+    final Iterable<List<PlutoRow>> chunks = refRows.slices(100);
+
+    final chunksLength = chunks.length;
+
+    final List<int> chunksIndexes = List.generate(
+      chunksLength,
+      (index) => index,
+    );
+
+    Timer.periodic(const Duration(milliseconds: 1), (timer) {
+      if (chunksIndexes.isEmpty) {
+        return;
+      }
+
+      final chunkIndex = chunksIndexes.removeLast();
+
+      final chunk = chunks.elementAt(chunkIndex);
+
+      Future(() {
+        return PlutoGridStateManager.initializeRows(
+          refColumns,
+          chunk,
+        );
+      }).then((value) {
+        _rows[chunkIndex] = value;
+
+        if (_rows.length == chunksLength) {
+          completer.complete(
+            _rows.values.expand((element) => element).toList(),
+          );
+
+          timer.cancel();
+        }
+      });
+    });
+
+    return completer.future;
   }
 }
 
