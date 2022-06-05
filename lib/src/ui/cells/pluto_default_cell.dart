@@ -2,6 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
+class _PlutoDefaultCellState {
+  _PlutoDefaultCellState({
+    required this.hasFocus,
+    required this.canRowDrag,
+    required this.isCurrentCell,
+    required this.text,
+  });
+
+  bool hasFocus;
+
+  bool canRowDrag;
+
+  bool isCurrentCell;
+
+  String text;
+
+  @override
+  bool operator ==(Object other) =>
+      other is _PlutoDefaultCellState &&
+      other.runtimeType == runtimeType &&
+      other.hasFocus == hasFocus &&
+      other.canRowDrag == canRowDrag &&
+      other.isCurrentCell == isCurrentCell &&
+      other.text == text;
+
+  @override
+  int get hashCode => hashValues(
+        hasFocus,
+        canRowDrag,
+        isCurrentCell,
+        text,
+      );
+}
+
 class PlutoDefaultCell extends StatelessWidget {
   final PlutoCell cell;
 
@@ -23,18 +57,14 @@ class PlutoDefaultCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateManager = context.read<PlutoGridStateManager>();
 
-    final canRowDrag = column.enableRowDrag &&
-        context.select<PlutoGridStateManager, bool>(
-          (value) => value.canRowDrag,
-        );
-
-    context.select<PlutoGridStateManager, String>((value) {
-      return column.formattedValueForDisplay(cell.value);
-    });
-
-    context.select<PlutoGridStateManager, bool>((value) {
-      return value.isCurrentCell(cell);
-    });
+    final state = context.select<PlutoGridStateManager, _PlutoDefaultCellState>(
+      (value) => _PlutoDefaultCellState(
+        canRowDrag: column.enableRowDrag && value.canRowDrag,
+        isCurrentCell: value.isCurrentCell(cell),
+        hasFocus: value.hasFocus,
+        text: column.formattedValueForDisplay(cell.value),
+      ),
+    );
 
     final cellWidget = _BuildDefaultCellWidget(
       stateManager: stateManager,
@@ -46,7 +76,7 @@ class PlutoDefaultCell extends StatelessWidget {
 
     return Row(
       children: [
-        if (canRowDrag)
+        if (state.canRowDrag)
           _RowDragIconWidget(
             column: column,
             row: row,
