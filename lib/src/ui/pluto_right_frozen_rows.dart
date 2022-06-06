@@ -12,7 +12,7 @@ class PlutoRightFrozenRows extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoRightFrozenRowsState createState() => _PlutoRightFrozenRowsState();
+  PlutoRightFrozenRowsState createState() => PlutoRightFrozenRowsState();
 }
 
 abstract class _PlutoRightFrozenRowsStateWithState
@@ -47,7 +47,7 @@ abstract class _PlutoRightFrozenRowsStateWithState
   }
 }
 
-class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
+class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
   ScrollController? _scroll;
 
   @override

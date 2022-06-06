@@ -25,9 +25,9 @@ void main() {
     double? itemHeight,
     PlutoGridConfiguration? configuration,
   }) {
-    final _dateFormat = intl.DateFormat(format);
+    final dateFormat = intl.DateFormat(format);
 
-    final _headerFormat = intl.DateFormat(headerFormat);
+    final headerDateFormat = intl.DateFormat(headerFormat);
 
     return PlutoWidgetTestHelper('Build date picker.', (tester) async {
       await tester.pumpWidget(
@@ -39,8 +39,8 @@ void main() {
                   onPressed: () {
                     PlutoGridDatePicker(
                       context: context,
-                      dateFormat: _dateFormat,
-                      headerDateFormat: _headerFormat,
+                      dateFormat: dateFormat,
+                      headerDateFormat: headerDateFormat,
                       initDate: initDate,
                       startDate: startDate,
                       endDate: endDate,

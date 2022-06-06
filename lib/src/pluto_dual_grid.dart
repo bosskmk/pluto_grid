@@ -4,6 +4,8 @@ import 'package:pluto_grid/pluto_grid.dart';
 typedef PlutoDualOnSelectedEventCallback = void Function(
     PlutoDualOnSelectedEvent event);
 
+/// [PlutoDualGrid] can connect the keyboard movement between the two grids
+/// by arranging two [PlutoGrid] left and right.
 class PlutoDualGrid extends StatefulWidget {
   final PlutoDualGridProps gridPropsA;
 
@@ -35,10 +37,10 @@ class PlutoDualGrid extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoDualGridState createState() => _PlutoDualGridState();
+  PlutoDualGridState createState() => PlutoDualGridState();
 }
 
-class _PlutoDualGridState extends State<PlutoDualGrid> {
+class PlutoDualGridState extends State<PlutoDualGrid> {
   PlutoGridStateManager? _stateManagerA;
 
   PlutoGridStateManager? _stateManagerB;

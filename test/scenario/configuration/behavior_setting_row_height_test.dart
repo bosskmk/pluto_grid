@@ -21,8 +21,9 @@ void main() {
     double rowHeight = 45.0,
   }) {
     // given
-    final _columns = columns ?? ColumnHelper.textColumn('header', count: 10);
-    final rows = RowHelper.count(numberOfRows, _columns);
+    final safetyColumns =
+        columns ?? ColumnHelper.textColumn('header', count: 10);
+    final rows = RowHelper.count(numberOfRows, safetyColumns);
 
     return PlutoWidgetTestHelper(
       'build with setting row height.',
@@ -31,7 +32,7 @@ void main() {
           MaterialApp(
             home: Material(
               child: PlutoGrid(
-                columns: _columns,
+                columns: safetyColumns,
                 rows: rows,
                 onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;

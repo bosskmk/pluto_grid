@@ -25,8 +25,8 @@ class PlutoTextCell extends StatefulWidget implements TextCell {
   }) : super(key: key);
 
   @override
-  _PlutoTextCellState createState() => _PlutoTextCellState();
+  PlutoTextCellState createState() => PlutoTextCellState();
 }
 
-class _PlutoTextCellState extends State<PlutoTextCell>
+class PlutoTextCellState extends State<PlutoTextCell>
     with TextCellState<PlutoTextCell> {}

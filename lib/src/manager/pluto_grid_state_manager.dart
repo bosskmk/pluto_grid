@@ -39,7 +39,7 @@ abstract class IPlutoGridState
         IScrollState,
         ISelectingState {}
 
-class PlutoGridState extends PlutoChangeNotifier
+class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     with
         CellState,
         ColumnGroupState,
@@ -56,7 +56,39 @@ class PlutoGridState extends PlutoChangeNotifier
         ScrollState,
         SelectingState {}
 
-class PlutoGridStateManager extends PlutoGridState {
+/// It manages the state of the [PlutoGrid] and contains methods used by the grid.
+///
+/// An instance of [PlutoGridStateManager] can be returned
+/// through the [onLoaded] callback of the [PlutoGrid] constructor.
+/// ```dart
+/// PlutoGridStateManager stateManager;
+///
+/// PlutoGrid(
+///   onLoaded: (PlutoGridOnLoadedEvent event) => stateManager = event.stateManager,
+/// )
+/// ```
+/// {@template initialize_rows_sync_or_async}
+/// It is created when [PlutoGrid] is first created,
+/// and the state required for the grid is set for `List<PlutoRow> rows`.
+/// [PlutoGridStateManager.initializeRows], which operates at this time, works synchronously,
+/// and if there are many rows, the UI may freeze when starting the grid.
+///
+/// To prevent UI from freezing when passing many rows to [PlutoGrid],
+/// you can set rows asynchronously as follows.
+/// After passing an empty list when creating [PlutoGrid],
+/// add rows initialized with [initializeRowsAsync] as shown below.
+///
+/// ```dart
+/// PlutoGridStateManager.initializeRowsAsync(
+///   columns,
+///   fetchedRows,
+/// ).then((value) {
+///   stateManager.refRows.addAll(FilteredList(initialList: value));
+///   stateManager.notifyListeners();
+/// });
+/// {@endtemplate}
+/// ```
+class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   PlutoGridStateManager({
     required List<PlutoColumn> columns,
     required List<PlutoRow> rows,
@@ -97,12 +129,29 @@ class PlutoGridStateManager extends PlutoGridState {
   static List<PlutoGridSelectingMode> get selectingModes =>
       PlutoGridSelectingMode.none.items;
 
+  /// It handles the necessary settings when [rows] are first set or added to the [PlutoGrid].
+  ///
+  /// {@template initialize_rows_params}
+  /// [forceApplySortIdx] determines whether to force PlutoRow.sortIdx to be set.
+  /// [PlutoRow.sortIdx] does not reset if the value is already set.
+  /// Set [forceApplySortIdx] to true to reset this value.
+  ///
+  /// [increase] determines whether to increment or decrement when initializing [sortIdx].
+  /// For example, if a row is added before an existing row,
+  /// the [sortIdx] value should be set to a negative number than the row being added.
+  ///
+  /// [start] sets the starting value when initializing [sortIdx].
+  /// For example, if sortIdx is set from 0 to 9 in the previous 10 rows,
+  /// [start] is set to 10, which sets the sortIdx of the row added at the end.
+  /// {@endtemplate}
+  ///
+  /// {@macro initialize_rows_sync_or_async}
   static List<PlutoRow> initializeRows(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
-    int? start = 0,
+    int start = 0,
   }) {
     if (refColumns.isEmpty || refRows.isEmpty) {
       return refRows;
@@ -114,7 +163,7 @@ class PlutoGridStateManager extends PlutoGridState {
       _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
         increase: increase,
-        start: start ?? 0,
+        start: start,
         firstRow: refRows.first,
       ),
     ]);
@@ -132,22 +181,41 @@ class PlutoGridStateManager extends PlutoGridState {
     return refRows;
   }
 
+  /// An asynchronous version of [PlutoGridStateManager.initializeRows].
+  ///
+  /// [PlutoGridStateManager.initializeRowsAsync] repeats [Timer] every [duration],
+  /// Process the setting of [refRows] by the size of [chunkSize].
+  /// [Isolate] is a good way to handle CPU heavy work, but
+  /// The condition that List<PlutoRow> cannot be passed to Isolate
+  /// solves the problem of UI freezing by dividing the work with Timer.
+  ///
+  /// {@macro initialize_rows_params}
+  ///
+  /// [chunkSize] determines the number of lists processed at one time when setting rows.
+  ///
+  /// [duration] determines the processing interval when setting rows.
+  ///
+  /// {@macro initialize_rows_sync_or_async}
   static Future<List<PlutoRow>> initializeRowsAsync(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
-    int? start = 0,
+    int start = 0,
+    int chunkSize = 100,
+    Duration duration = const Duration(milliseconds: 1),
   }) {
     if (refColumns.isEmpty || refRows.isEmpty) {
       return Future.value(refRows);
     }
 
+    assert(chunkSize > 0);
+
     final Completer<List<PlutoRow>> completer = Completer();
 
-    SplayTreeMap<int, List<PlutoRow>> _rows = SplayTreeMap();
+    SplayTreeMap<int, List<PlutoRow>> splayMapRows = SplayTreeMap();
 
-    final Iterable<List<PlutoRow>> chunks = refRows.slices(100);
+    final Iterable<List<PlutoRow>> chunks = refRows.slices(chunkSize);
 
     final chunksLength = chunks.length;
 
@@ -156,7 +224,7 @@ class PlutoGridStateManager extends PlutoGridState {
       (index) => index,
     );
 
-    Timer.periodic(const Duration(milliseconds: 1), (timer) {
+    Timer.periodic(duration, (timer) {
       if (chunksIndexes.isEmpty) {
         return;
       }
@@ -169,13 +237,16 @@ class PlutoGridStateManager extends PlutoGridState {
         return PlutoGridStateManager.initializeRows(
           refColumns,
           chunk,
+          forceApplySortIdx: forceApplySortIdx,
+          increase: increase,
+          start: start + (chunkIndex * chunkSize),
         );
       }).then((value) {
-        _rows[chunkIndex] = value;
+        splayMapRows[chunkIndex] = value;
 
-        if (_rows.length == chunksLength) {
+        if (splayMapRows.length == chunksLength) {
           completer.complete(
-            _rows.values.expand((element) => element).toList(),
+            splayMapRows.values.expand((element) => element).toList(),
           );
 
           timer.cancel();
@@ -187,6 +258,7 @@ class PlutoGridStateManager extends PlutoGridState {
   }
 }
 
+/// This is a class for handling horizontal and vertical scrolling of columns and rows of [PlutoGrid].
 class PlutoGridScrollController {
   LinkedScrollControllerGroup? vertical;
 
@@ -282,6 +354,15 @@ class PlutoGridKeyPressed {
   }
 }
 
+/// A type of selection mode when you select a row or cell in a grid
+/// by tapping and holding, then moving the pointer
+/// or selecting a row or cell in the grid with controls or shift and tap.
+///
+/// [PlutoGridSelectingMode.cell] selects each cell.
+///
+/// [PlutoGridSelectingMode.row] selects row by row.
+///
+/// [PlutoGridSelectingMode.none] does nothing.
 enum PlutoGridSelectingMode {
   cell,
   row,

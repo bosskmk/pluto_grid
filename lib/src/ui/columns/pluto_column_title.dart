@@ -19,10 +19,10 @@ class PlutoColumnTitle extends StatefulWidget {
         super(key: ValueKey('column_title_${column.key}'));
 
   @override
-  _PlutoColumnTitleState createState() => _PlutoColumnTitleState();
+  PlutoColumnTitleState createState() => PlutoColumnTitleState();
 }
 
-class _PlutoColumnTitleState extends State<PlutoColumnTitle> {
+class PlutoColumnTitleState extends State<PlutoColumnTitle> {
   late Offset _columnLeftPosition;
 
   late Offset _columnRightPosition;
@@ -125,18 +125,18 @@ class _PlutoColumnTitleState extends State<PlutoColumnTitle> {
 
   @override
   Widget build(BuildContext context) {
-    final _sort = context.select<PlutoGridStateManager, PlutoColumnSort>((_) {
+    final sort = context.select<PlutoGridStateManager, PlutoColumnSort>((_) {
       return widget.column.sort;
     });
 
-    final _showContextIcon = widget.column.enableContextMenu ||
+    final showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !_sort.isNone;
+        !sort.isNone;
 
-    final _enableGesture =
+    final enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
 
-    final _columnWidget = _BuildSortableWidget(
+    final columnWidget = _BuildSortableWidget(
       stateManager: widget.stateManager,
       column: widget.column,
       child: _BuildColumnWidget(
@@ -146,19 +146,19 @@ class _PlutoColumnTitleState extends State<PlutoColumnTitle> {
       ),
     );
 
-    final _contextMenuIcon = Container(
+    final contextMenuIcon = Container(
       height: widget.height,
       alignment: Alignment.center,
       child: IconButton(
         icon: PlutoGridColumnIcon(
-          sort: _sort,
+          sort: sort,
           color: widget.stateManager.configuration!.iconColor,
           icon: widget.column.enableContextMenu
               ? widget.stateManager.configuration!.columnContextIcon
               : widget.stateManager.configuration!.columnResizeIcon,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
-        mouseCursor: _enableGesture
+        mouseCursor: enableGesture
             ? SystemMouseCursors.resizeLeftRight
             : SystemMouseCursors.basic,
         onPressed: null,
@@ -174,21 +174,21 @@ class _PlutoColumnTitleState extends State<PlutoColumnTitle> {
               ? _BuildDraggableWidget(
                   stateManager: widget.stateManager,
                   column: widget.column,
-                  child: _columnWidget,
+                  child: columnWidget,
                 )
-              : _columnWidget,
+              : columnWidget,
         ),
-        if (_showContextIcon)
+        if (showContextIcon)
           Positioned(
             right: -3,
-            child: _enableGesture
+            child: enableGesture
                 ? Listener(
                     onPointerDown: _handleOnPointDown,
                     onPointerMove: _handleOnPointMove,
                     onPointerUp: _handleOnPointUp,
-                    child: _contextMenuIcon,
+                    child: contextMenuIcon,
                   )
-                : _contextMenuIcon,
+                : contextMenuIcon,
           ),
       ],
     );

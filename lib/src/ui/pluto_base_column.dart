@@ -17,7 +17,7 @@ class PlutoBaseColumn extends PlutoStatefulWidget {
   }) : super(key: column.key);
 
   @override
-  _PlutoBaseColumnState createState() => _PlutoBaseColumnState();
+  PlutoBaseColumnState createState() => PlutoBaseColumnState();
 }
 
 abstract class _PlutoBaseColumnStateWithChange
@@ -35,7 +35,7 @@ abstract class _PlutoBaseColumnStateWithChange
   }
 }
 
-class _PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
+class PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
   @override
   void initState() {
     super.initState();

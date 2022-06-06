@@ -13,7 +13,7 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoBodyColumnsState createState() => _PlutoBodyColumnsState();
+  PlutoBodyColumnsState createState() => PlutoBodyColumnsState();
 }
 
 abstract class _PlutoBodyColumnsStateWithChange
@@ -68,7 +68,7 @@ abstract class _PlutoBodyColumnsStateWithChange
   }
 }
 
-class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
+class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
   ScrollController? _scroll;
 
   @override

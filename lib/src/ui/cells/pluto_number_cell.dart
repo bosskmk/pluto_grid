@@ -26,10 +26,10 @@ class PlutoNumberCell extends StatefulWidget implements TextCell {
   }) : super(key: key);
 
   @override
-  _PlutoNumberCellState createState() => _PlutoNumberCellState();
+  PlutoNumberCellState createState() => PlutoNumberCellState();
 }
 
-class _PlutoNumberCellState extends State<PlutoNumberCell>
+class PlutoNumberCellState extends State<PlutoNumberCell>
     with TextCellState<PlutoNumberCell> {
   int? decimalRange;
 

@@ -25,10 +25,10 @@ class PlutoDateCell extends StatefulWidget implements PopupCell {
   }) : super(key: key);
 
   @override
-  _PlutoDateCellState createState() => _PlutoDateCellState();
+  PlutoDateCellState createState() => PlutoDateCellState();
 }
 
-class _PlutoDateCellState extends State<PlutoDateCell>
+class PlutoDateCellState extends State<PlutoDateCell>
     with PopupCellState<PlutoDateCell> {
   PlutoGridStateManager? popupStateManager;
 

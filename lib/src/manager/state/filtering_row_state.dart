@@ -43,17 +43,17 @@ mixin FilteringRowState implements IPlutoGridState {
       row.setState(PlutoRowState.none);
     }
 
-    var _filter = filter;
+    var savedFilter = filter;
 
     if (filter == null) {
       setFilterRows([]);
     } else {
-      _filter = (PlutoRow row) {
+      savedFilter = (PlutoRow row) {
         return !row.state.isNone || filter(row);
       };
     }
 
-    refRows.setFilter(_filter);
+    refRows.setFilter(savedFilter);
 
     resetCurrentState(notify: false);
 
