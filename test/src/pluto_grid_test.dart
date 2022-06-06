@@ -87,34 +87,6 @@ void main() {
     expect(found, findsOneWidget);
   });
 
-  testWidgets('showLoading 을 설정 한 경우 PlutoLoadingWidget 이 출력 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final columns = ColumnHelper.textColumn('header');
-    final rows = RowHelper.count(3, columns);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoGrid(
-            columns: columns,
-            rows: rows,
-            onLoaded: (event) {
-              event.stateManager.setShowLoading(true);
-            },
-          ),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    // then
-    final loading = find.byType(PlutoLoading);
-    expect(loading, findsOneWidget);
-  });
-
   testWidgets('cell 값이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = ColumnHelper.textColumn('header');
