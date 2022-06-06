@@ -844,9 +844,9 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setShowColumnFilter, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setShowLoading(bool? flag) =>
-      super.noSuchMethod(Invocation.method(#setShowLoading, [flag]),
-          returnValueForMissingStub: null);
+  void setShowLoading(bool? flag, {bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#setShowLoading, [flag], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void setGridGlobalOffset(_i5.Offset? offset) =>
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),

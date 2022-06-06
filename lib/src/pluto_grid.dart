@@ -420,11 +420,9 @@ class _PlutoGridState extends State<PlutoGrid> {
                       backgroundColor:
                           _stateManager.configuration!.gridBackgroundColor,
                       indicatorColor:
-                          _stateManager.configuration!.cellTextStyle.color,
-                      indicatorText:
-                          _stateManager.configuration!.localeText.loadingText,
-                      indicatorSize:
-                          _stateManager.configuration!.cellTextStyle.fontSize,
+                          _stateManager.configuration!.activatedBorderColor,
+                      text: _stateManager.configuration!.localeText.loadingText,
+                      textStyle: _stateManager.configuration!.cellTextStyle,
                     ),
                   ),
               ],
