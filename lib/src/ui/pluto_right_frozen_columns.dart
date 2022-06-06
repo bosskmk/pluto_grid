@@ -12,8 +12,7 @@ class PlutoRightFrozenColumns extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoRightFrozenColumnsState createState() =>
-      _PlutoRightFrozenColumnsState();
+  PlutoRightFrozenColumnsState createState() => PlutoRightFrozenColumnsState();
 }
 
 abstract class _PlutoRightFrozenColumnsStateWithChange
@@ -62,7 +61,7 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
   }
 }
 
-class _PlutoRightFrozenColumnsState
+class PlutoRightFrozenColumnsState
     extends _PlutoRightFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {

@@ -39,7 +39,7 @@ abstract class IPlutoGridState
         IScrollState,
         ISelectingState {}
 
-class PlutoGridState extends PlutoChangeNotifier
+class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     with
         CellState,
         ColumnGroupState,
@@ -56,7 +56,7 @@ class PlutoGridState extends PlutoChangeNotifier
         ScrollState,
         SelectingState {}
 
-class PlutoGridStateManager extends PlutoGridState {
+class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   PlutoGridStateManager({
     required List<PlutoColumn> columns,
     required List<PlutoRow> rows,
@@ -149,7 +149,7 @@ class PlutoGridStateManager extends PlutoGridState {
 
     final Completer<List<PlutoRow>> completer = Completer();
 
-    SplayTreeMap<int, List<PlutoRow>> _rows = SplayTreeMap();
+    SplayTreeMap<int, List<PlutoRow>> splayMapRows = SplayTreeMap();
 
     final Iterable<List<PlutoRow>> chunks = refRows.slices(chunkSize);
 
@@ -178,11 +178,11 @@ class PlutoGridStateManager extends PlutoGridState {
           start: start + (chunkIndex * chunkSize),
         );
       }).then((value) {
-        _rows[chunkIndex] = value;
+        splayMapRows[chunkIndex] = value;
 
-        if (_rows.length == chunksLength) {
+        if (splayMapRows.length == chunksLength) {
           completer.complete(
-            _rows.values.expand((element) => element).toList(),
+            splayMapRows.values.expand((element) => element).toList(),
           );
 
           timer.cancel();

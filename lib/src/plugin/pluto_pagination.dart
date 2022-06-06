@@ -10,7 +10,7 @@ class PlutoPagination extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
   @override
-  _PlutoPaginationState createState() => _PlutoPaginationState();
+  PlutoPaginationState createState() => PlutoPaginationState();
 }
 
 abstract class _PlutoPaginationStateWithChange
@@ -46,7 +46,7 @@ abstract class _PlutoPaginationStateWithChange
   }
 }
 
-class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
+class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   late double _maxWidth;
 
   final _iconSplashRadius = PlutoGridSettings.rowHeight / 2;
@@ -174,8 +174,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
     return LayoutBuilder(
       builder: (layoutContext, size) {
         _maxWidth = size.maxWidth;
-        final Color _iconColor = widget.stateManager.configuration!.iconColor;
-        final Color _disabledIconColor =
+        final Color iconColor = widget.stateManager.configuration!.iconColor;
+        final Color disabledIconColor =
             widget.stateManager.configuration!.disabledIconColor;
         // can't center using center, it'll take all max width and max height
         return Row(
@@ -192,8 +192,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
                     IconButton(
                       onPressed: _isFirstPage ? null : _firstPage,
                       icon: const Icon(Icons.first_page),
-                      color: _iconColor,
-                      disabledColor: _disabledIconColor,
+                      color: iconColor,
+                      disabledColor: disabledIconColor,
                       splashRadius: _iconSplashRadius,
                       mouseCursor: _isFirstPage
                           ? SystemMouseCursors.basic
@@ -202,8 +202,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
                     IconButton(
                       onPressed: _isFirstPage ? null : _beforePage,
                       icon: const Icon(Icons.navigate_before),
-                      color: _iconColor,
-                      disabledColor: _disabledIconColor,
+                      color: iconColor,
+                      disabledColor: disabledIconColor,
                       splashRadius: _iconSplashRadius,
                       mouseCursor: _isFirstPage
                           ? SystemMouseCursors.basic
@@ -213,8 +213,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
                     IconButton(
                       onPressed: _isLastPage ? null : _nextPage,
                       icon: const Icon(Icons.navigate_next),
-                      color: _iconColor,
-                      disabledColor: _disabledIconColor,
+                      color: iconColor,
+                      disabledColor: disabledIconColor,
                       splashRadius: _iconSplashRadius,
                       mouseCursor: _isLastPage
                           ? SystemMouseCursors.basic
@@ -223,8 +223,8 @@ class _PlutoPaginationState extends _PlutoPaginationStateWithChange {
                     IconButton(
                       onPressed: _isLastPage ? null : _lastPage,
                       icon: const Icon(Icons.last_page),
-                      color: _iconColor,
-                      disabledColor: _disabledIconColor,
+                      color: iconColor,
+                      disabledColor: disabledIconColor,
                       splashRadius: _iconSplashRadius,
                       mouseCursor: _isLastPage
                           ? SystemMouseCursors.basic

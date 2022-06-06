@@ -50,17 +50,17 @@ class BuildGridHelper {
     String columnName = 'column',
   }) {
     // given
-    final _columns = columns ??
+    final safetyColumns = columns ??
         ColumnHelper.textColumn(
           columnName,
           count: numberOfColumns,
           start: startColumnIndex,
         );
 
-    final _rows = rows ??
+    final safetyRows = rows ??
         RowHelper.count(
           numberOfRows,
-          _columns,
+          safetyColumns,
           start: startColumnIndex,
         );
 
@@ -71,8 +71,8 @@ class BuildGridHelper {
           MaterialApp(
             home: Material(
               child: PlutoGrid(
-                columns: _columns,
-                rows: _rows,
+                columns: safetyColumns,
+                rows: safetyRows,
                 onLoaded: (PlutoGridOnLoadedEvent event) {
                   stateManager = event.stateManager;
                   stateManager.setSelectingMode(PlutoGridSelectingMode.row);

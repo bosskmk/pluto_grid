@@ -72,10 +72,10 @@ class PlutoGrid extends StatefulWidget {
   }
 
   @override
-  _PlutoGridState createState() => _PlutoGridState();
+  PlutoGridState createState() => PlutoGridState();
 }
 
-class _PlutoGridState extends State<PlutoGrid> {
+class PlutoGridState extends State<PlutoGrid> {
   final FocusNode _gridFocusNode = FocusNode();
 
   final LinkedScrollControllerGroup _verticalScroll =

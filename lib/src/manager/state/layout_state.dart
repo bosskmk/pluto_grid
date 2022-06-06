@@ -325,10 +325,10 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final _isShowFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
-    _showFrozenColumn = _isShowFrozenColumn;
+    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
   }
 

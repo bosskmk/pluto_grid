@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef _ResetStateCallback = void Function(_UpdateStateFunction update);
+typedef PlutoStateResetStateCallback = void Function(
+    PlutoStateUpdateStateFunction update);
 
-typedef _UpdateStateFunction = T Function<T>(
+typedef PlutoStateUpdateStateFunction = T Function<T>(
   T oldValue,
   T newValue, {
   bool Function(T a, T b)? compare,
@@ -56,7 +57,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     _initialized = true;
   }
 
-  void resetState(_ResetStateCallback callback) {
+  void resetState(PlutoStateResetStateCallback callback) {
     callback(_update);
     // it may have not been layout yet.
     if (mounted &&

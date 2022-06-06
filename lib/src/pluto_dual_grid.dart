@@ -35,10 +35,10 @@ class PlutoDualGrid extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoDualGridState createState() => _PlutoDualGridState();
+  PlutoDualGridState createState() => PlutoDualGridState();
 }
 
-class _PlutoDualGridState extends State<PlutoDualGrid> {
+class PlutoDualGridState extends State<PlutoDualGrid> {
   PlutoGridStateManager? _stateManagerA;
 
   PlutoGridStateManager? _stateManagerB;
