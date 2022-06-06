@@ -102,7 +102,7 @@ class PlutoGridStateManager extends PlutoGridState {
     List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
-    int? start = 0,
+    int start = 0,
   }) {
     if (refColumns.isEmpty || refRows.isEmpty) {
       return refRows;
@@ -114,7 +114,7 @@ class PlutoGridStateManager extends PlutoGridState {
       _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
         increase: increase,
-        start: start ?? 0,
+        start: start,
         firstRow: refRows.first,
       ),
     ]);
@@ -137,17 +137,21 @@ class PlutoGridStateManager extends PlutoGridState {
     List<PlutoRow> refRows, {
     bool forceApplySortIdx = false,
     bool increase = true,
-    int? start = 0,
+    int start = 0,
+    int chunkSize = 100,
+    Duration duration = const Duration(milliseconds: 1),
   }) {
     if (refColumns.isEmpty || refRows.isEmpty) {
       return Future.value(refRows);
     }
 
+    assert(chunkSize > 0);
+
     final Completer<List<PlutoRow>> completer = Completer();
 
     SplayTreeMap<int, List<PlutoRow>> _rows = SplayTreeMap();
 
-    final Iterable<List<PlutoRow>> chunks = refRows.slices(100);
+    final Iterable<List<PlutoRow>> chunks = refRows.slices(chunkSize);
 
     final chunksLength = chunks.length;
 
@@ -156,7 +160,7 @@ class PlutoGridStateManager extends PlutoGridState {
       (index) => index,
     );
 
-    Timer.periodic(const Duration(milliseconds: 1), (timer) {
+    Timer.periodic(duration, (timer) {
       if (chunksIndexes.isEmpty) {
         return;
       }
@@ -169,6 +173,9 @@ class PlutoGridStateManager extends PlutoGridState {
         return PlutoGridStateManager.initializeRows(
           refColumns,
           chunk,
+          forceApplySortIdx: forceApplySortIdx,
+          increase: increase,
+          start: start + (chunkIndex * chunkSize),
         );
       }).then((value) {
         _rows[chunkIndex] = value;

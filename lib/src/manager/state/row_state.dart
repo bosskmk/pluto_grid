@@ -274,7 +274,7 @@ mixin RowState implements IPlutoGridState {
       PlutoGridStateManager.initializeRows(
         refColumns,
         rows,
-        start: sortIdx,
+        start: sortIdx ?? 0,
       );
 
       for (var i = 0; i < refRows.originalLength; i += 1) {

@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/column_helper.dart';
+import '../../helper/row_helper.dart';
 
 class _MockScrollController extends Mock implements ScrollController {}
 
@@ -385,6 +386,175 @@ void main() {
 
       expect(rows[2].cells['field']!.row, rows[2]);
       expect(rows[2].cells['field']!.column, columns.first);
+    });
+  });
+
+  group('initializeRowsAsync', () {
+    test('chunkSize 가 0 이면 assert 가 발생 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(1, columns);
+
+      expect(
+        () async {
+          await PlutoGridStateManager.initializeRowsAsync(
+            columns,
+            rows,
+            chunkSize: 0,
+          );
+        },
+        throwsAssertionError,
+      );
+    });
+
+    test('chunkSize 가 -1 이면 assert 가 발생 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(1, columns);
+
+      expect(
+        () async {
+          await PlutoGridStateManager.initializeRowsAsync(
+            columns,
+            rows,
+            chunkSize: -1,
+          );
+        },
+        throwsAssertionError,
+      );
+    });
+
+    test(
+        'sortIdx 가 null 로 설정 된 rows 를 sortIdx 시작 값을 변경하여 실행하면, '
+        'sortIdx 값을 0 으로 변경 하면 rows 의 sortIdx 가 변경 되고, '
+        '원래 순서대로 리턴 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(100, columns);
+
+      for (var value in rows) {
+        value.sortIdx = null;
+      }
+
+      final Iterable<Key> rowKeys = rows.map((e) => e.key);
+
+      expect(rows.first.sortIdx, null);
+      expect(rows.last.sortIdx, null);
+
+      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+        start: 0,
+        chunkSize: 10,
+        duration: const Duration(milliseconds: 1),
+      );
+
+      for (int i = 0; i < initializedRows.length; i += 1) {
+        expect(initializedRows[i].sortIdx, i);
+        expect(initializedRows[i].key, rowKeys.elementAt(i));
+      }
+    });
+
+    test(
+        'sortIdx 가 0부터 설정 된 rows 를 sortIdx 시작 값을 변경하여 실행하면, '
+        'sortIdx 값을 10 으로 변경 하면 rows 의 sortIdx 가 변경 되고, '
+        '원래 순서대로 리턴 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(100, columns);
+
+      final Iterable<Key> rowKeys = rows.map((e) => e.key);
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, 99);
+
+      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+        start: 10,
+        chunkSize: 10,
+        duration: const Duration(milliseconds: 1),
+      );
+
+      for (int i = 0; i < initializedRows.length; i += 1) {
+        expect(initializedRows[i].sortIdx, 10 + i);
+        expect(initializedRows[i].key, rowKeys.elementAt(i));
+      }
+    });
+
+    test(
+        'sortIdx 가 0부터 설정 된 rows 를 sortIdx 시작 값을 변경하여 실행하면, '
+        'sortIdx 값을 -10 으로 변경 하면 rows 의 sortIdx 가 변경 되고, '
+        '원래 순서대로 리턴 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(100, columns);
+
+      final Iterable<Key> rowKeys = rows.map((e) => e.key);
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, 99);
+
+      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+        start: -10,
+        chunkSize: 10,
+        duration: const Duration(milliseconds: 1),
+      );
+
+      for (int i = 0; i < initializedRows.length; i += 1) {
+        expect(initializedRows[i].sortIdx, -10 + i);
+        expect(initializedRows[i].key, rowKeys.elementAt(i));
+      }
+    });
+
+    test(
+        'sortIdx 가 0부터 설정 된 rows 를 sortIdx 시작 값을 변경하여 실행하면, '
+        'sortIdx 값을 -10 으로 변경 하면 rows 의 sortIdx 가 변경 되고, '
+        '원래 순서대로 리턴 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(100, columns);
+
+      final Iterable<Key> rowKeys = rows.map((e) => e.key);
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, 99);
+
+      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+        start: -10,
+        chunkSize: 10,
+        duration: const Duration(milliseconds: 1),
+      );
+
+      for (int i = 0; i < initializedRows.length; i += 1) {
+        expect(initializedRows[i].sortIdx, -10 + i);
+        expect(initializedRows[i].key, rowKeys.elementAt(i));
+      }
+    });
+
+    test('한개의 행을 전달하고 chunkSize 가 10 인경우 정상적으로 리턴 되어야 한다.', () async {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = RowHelper.count(1, columns);
+
+      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+        start: 99,
+        chunkSize: 10,
+        duration: const Duration(milliseconds: 1),
+      );
+
+      expect(initializedRows.first.sortIdx, 99);
     });
   });
 }
