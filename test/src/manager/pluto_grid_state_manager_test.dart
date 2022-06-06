@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../helper/column_helper.dart';
+
 class _MockScrollController extends Mock implements ScrollController {}
 
 void main() {
@@ -95,6 +97,294 @@ void main() {
       expect(PlutoGridSelectingMode.row.toShortString(), 'row');
 
       expect(PlutoGridSelectingMode.none.toShortString(), 'none');
+    });
+  });
+
+  group('initializeRows', () {
+    test('전달 한 행의 sortIdx 가 설정 되어야 한다.', () {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+      ];
+
+      expect(rows.first.sortIdx, null);
+      expect(rows.last.sortIdx, null);
+
+      PlutoGridStateManager.initializeRows(columns, rows);
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, 4);
+    });
+
+    test('이미 sortIdx 가 설정 된 경우 sortIdx 값이 유지 되어야 한다.', () {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = [
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 3,
+        ),
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 4,
+        ),
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 5,
+        ),
+      ];
+
+      expect(rows.first.sortIdx, 3);
+      expect(rows.last.sortIdx, 5);
+
+      PlutoGridStateManager.initializeRows(columns, rows);
+
+      expect(rows.first.sortIdx, 3);
+      expect(rows.last.sortIdx, 5);
+    });
+
+    test(
+        'forceApplySortIdx 가 true 인 경우, '
+        '이미 sortIdx 가 설정 되어도 0부터 다시 설정 되어야 한다.', () {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = [
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 3,
+        ),
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 4,
+        ),
+        PlutoRow(
+          cells: {'title0': PlutoCell(value: 'test')},
+          sortIdx: 5,
+        ),
+      ];
+
+      expect(rows.first.sortIdx, 3);
+      expect(rows.last.sortIdx, 5);
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+      );
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, 2);
+    });
+
+    test('increase 가 false 인 경우 값이 0부터 음수로 설정 되어야 한다.', () {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+      ];
+
+      expect(rows.first.sortIdx, null);
+      expect(rows.last.sortIdx, null);
+
+      PlutoGridStateManager.initializeRows(columns, rows, increase: false);
+
+      expect(rows.first.sortIdx, 0);
+      expect(rows.last.sortIdx, -4);
+    });
+
+    test('increase 가 false, start 가 -10 인 경우 값이 -10 부터 음수로 설정 되어야 한다.', () {
+      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+        PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
+      ];
+
+      expect(rows.first.sortIdx, null);
+      expect(rows.last.sortIdx, null);
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        increase: false,
+        start: -10,
+      );
+
+      expect(rows.first.sortIdx, -10);
+      expect(rows.last.sortIdx, -14);
+    });
+
+    test('컬럼 타입이 숫자인 경우 셀 값이 숫자로 cast 되어야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.number(),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '10')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '300')}),
+        PlutoRow(cells: {'field': PlutoCell(value: 1000)}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.value, 10);
+      expect(rows[1].cells['field']!.value, 300);
+      expect(rows[2].cells['field']!.value, 1000);
+    });
+
+    test(
+        'applyFormatOnInit 이 false 인 경우, '
+        '값이 cast 되지 않아야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.number(
+            applyFormatOnInit: false,
+          ),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '10')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '300')}),
+        PlutoRow(cells: {'field': PlutoCell(value: 1000)}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.value, '10');
+      expect(rows[1].cells['field']!.value, '300');
+      expect(rows[2].cells['field']!.value, 1000);
+    });
+
+    test('컬럼 타입이 Date 인 경우 셀 값이 날짜 포멧에 맞게 변경 되어야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.date(),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-01 12:30:51')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-03 12:40:52')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-04 12:50:53')}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.value, '2021-01-01');
+      expect(rows[1].cells['field']!.value, '2021-01-03');
+      expect(rows[2].cells['field']!.value, '2021-01-04');
+    });
+
+    test('applyFormatOnInit 이 false 인 경우 컬럼 타입이 Date 인 셀 값이 변경 되지 않아야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.date(
+            applyFormatOnInit: false,
+          ),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-01 12:30:51')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-03 12:40:52')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-04 12:50:53')}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.value, '2021-01-01 12:30:51');
+      expect(rows[1].cells['field']!.value, '2021-01-03 12:40:52');
+      expect(rows[2].cells['field']!.value, '2021-01-04 12:50:53');
+    });
+
+    test('format 값을 설정한 경우 컬럼 타입이 Date 인 셀 값이 포멧에 맞게 변경 되어야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.date(format: 'yyyy년 MM월 dd일'),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-01 12:30:51')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-03 12:40:52')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-04 12:50:53')}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.value, '2021년 01월 01일');
+      expect(rows[1].cells['field']!.value, '2021년 01월 03일');
+      expect(rows[2].cells['field']!.value, '2021년 01월 04일');
+    });
+
+    test('각 셀에 row 와 column 이 설정 되어야 한다.', () {
+      final List<PlutoColumn> columns = [
+        PlutoColumn(
+          title: 'title',
+          field: 'field',
+          type: PlutoColumnType.date(format: 'yyyy년 MM월 dd일'),
+        )
+      ];
+
+      final List<PlutoRow> rows = [
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-01 12:30:51')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-03 12:40:52')}),
+        PlutoRow(cells: {'field': PlutoCell(value: '2021-01-04 12:50:53')}),
+      ];
+
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+      );
+
+      expect(rows[0].cells['field']!.row, rows[0]);
+      expect(rows[0].cells['field']!.column, columns.first);
+
+      expect(rows[1].cells['field']!.row, rows[1]);
+      expect(rows[1].cells['field']!.column, columns.first);
+
+      expect(rows[2].cells['field']!.row, rows[2]);
+      expect(rows[2].cells['field']!.column, columns.first);
     });
   });
 }
