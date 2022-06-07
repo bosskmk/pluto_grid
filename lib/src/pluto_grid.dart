@@ -241,6 +241,8 @@ class PlutoGridState extends State<PlutoGrid> {
 
   bool? _showColumnGroups;
 
+  bool? _showColumnTitle;
+
   bool? _showColumnFilter;
 
   bool? _showLoading;
@@ -390,6 +392,7 @@ class PlutoGridState extends State<PlutoGrid> {
         _hasRightFrozenColumns != _stateManager.hasRightFrozenColumns ||
         _rightFrozenLeftOffset != _stateManager.rightFrozenLeftOffset ||
         _showColumnGroups != _stateManager.showColumnGroups ||
+        _showColumnTitle != _stateManager.showColumnTitle ||
         _showColumnFilter != _stateManager.showColumnFilter ||
         _showLoading != _stateManager.showLoading) {
       // it has been layout
@@ -433,6 +436,8 @@ class PlutoGridState extends State<PlutoGrid> {
     _hasRightFrozenColumns = _stateManager.hasRightFrozenColumns;
 
     _showColumnGroups = _stateManager.showColumnGroups;
+
+    _showColumnTitle = _stateManager.showColumnTitle;
 
     _showColumnFilter = _stateManager.showColumnFilter;
 
@@ -488,14 +493,17 @@ class PlutoGridState extends State<PlutoGrid> {
                   LayoutId(
                       id: _StackName.rightFrozenRows,
                       child: PlutoRightFrozenRows(_stateManager)),
-                LayoutId(
-                  id: _StackName.columnRowDivider,
-                  child: PlutoShadowLine(
-                    axis: Axis.horizontal,
-                    color: _stateManager.configuration!.gridBorderColor,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
+                if (_stateManager.showColumnTitle ||
+                    _stateManager.showColumnFilter)
+                  LayoutId(
+                    id: _StackName.columnRowDivider,
+                    child: PlutoShadowLine(
+                      axis: Axis.horizontal,
+                      color: _stateManager.configuration!.gridBorderColor,
+                      shadow:
+                          _stateManager.configuration!.enableGridBorderShadow,
+                    ),
                   ),
-                ),
                 if (_stateManager.showHeader)
                   LayoutId(
                     id: _StackName.headerDivider,
@@ -755,6 +763,8 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       bodyRowsTopOffset += s.height;
+    } else {
+      bodyRowsTopOffset += PlutoGridSettings.gridBorderWidth;
     }
 
     if (hasChild(_StackName.leftFrozenRows)) {

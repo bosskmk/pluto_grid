@@ -390,6 +390,11 @@ class _HeaderState extends State<_Header> {
     widget.stateManager.removeRows(widget.stateManager.currentSelectingRows);
   }
 
+  void handleToggleColumnTitle() {
+    widget.stateManager
+        .setShowColumnTitle(!widget.stateManager.showColumnTitle);
+  }
+
   void handleToggleColumnFilter() {
     widget.stateManager
         .setShowColumnFilter(!widget.stateManager.showColumnFilter);
@@ -483,6 +488,10 @@ class _HeaderState extends State<_Header> {
                   setGridSelectingMode(mode);
                 },
               ),
+            ),
+            ElevatedButton(
+              onPressed: handleToggleColumnTitle,
+              child: const Text('Toggle title'),
             ),
             ElevatedButton(
               onPressed: handleToggleColumnFilter,

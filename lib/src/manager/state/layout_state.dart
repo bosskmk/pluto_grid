@@ -28,6 +28,8 @@ abstract class ILayoutState {
   /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
   bool get showFrozenColumn;
 
+  bool get showColumnTitle;
+
   bool get showColumnFilter;
 
   bool get showHeader;
@@ -84,6 +86,8 @@ abstract class ILayoutState {
   void setLayout(BoxConstraints size);
 
   void resetShowFrozenColumn({bool notify = true});
+
+  void setShowColumnTitle(bool flag, {bool notify = true});
 
   void setShowColumnFilter(bool flag, {bool notify = true});
 
@@ -178,6 +182,11 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showFrozenColumn;
 
   @override
+  bool get showColumnTitle => _showColumnTitle == true;
+
+  bool? _showColumnTitle = true;
+
+  @override
   bool get showColumnFilter => _showColumnFilter == true;
 
   bool? _showColumnFilter;
@@ -206,8 +215,16 @@ mixin LayoutState implements IPlutoGridState {
   double get footerTopOffset =>
       maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
+  /// Each column is checked whether it is currently visible on the screen
+  /// with the VisibilityDetector widget.
+  /// Decide whether to render each Row.cells
+  /// according to whether the column is displayed on the screen or not.
+  /// Because of this, the column must always exist.
+  /// For this reason,
+  /// hide the column area at a height of 0.1 and operate as if it were not shown.
   @override
-  double get columnHeight => configuration!.columnHeight;
+  double get columnHeight =>
+      showColumnTitle ? configuration!.columnHeight : 0.1;
 
   @override
   double get columnGroupHeight =>
@@ -335,6 +352,19 @@ mixin LayoutState implements IPlutoGridState {
   @override
   void resetShowFrozenColumn({bool notify = true}) {
     _showFrozenColumn = shouldShowFrozenColumns(_maxWidth!);
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void setShowColumnTitle(bool flag, {bool notify = true}) {
+    if (_showColumnTitle == flag) {
+      return;
+    }
+
+    _showColumnTitle = flag;
 
     if (notify) {
       notifyListeners();

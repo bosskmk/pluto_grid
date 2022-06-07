@@ -19,6 +19,8 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
     extends PlutoStateWithChange<PlutoRightFrozenColumns> {
   bool? _showColumnGroups;
 
+  bool? _showColumnTitle;
+
   List<PlutoColumn>? _columns;
 
   List<PlutoColumnGroupPair>? _columnGroups;
@@ -37,6 +39,11 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
         widget.stateManager.showColumnGroups,
+      );
+
+      _showColumnTitle = update<bool?>(
+        _showColumnTitle,
+        widget.stateManager.showColumnTitle,
       );
 
       _columns = update<List<PlutoColumn>?>(

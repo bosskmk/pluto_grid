@@ -20,6 +20,8 @@ abstract class _PlutoBodyColumnsStateWithChange
     extends PlutoStateWithChange<PlutoBodyColumns> {
   bool? _showColumnGroups;
 
+  bool? _showColumnTitle;
+
   List<PlutoColumn>? _columns;
 
   List<PlutoColumnGroupPair>? _columnGroups;
@@ -38,6 +40,11 @@ abstract class _PlutoBodyColumnsStateWithChange
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
         widget.stateManager.showColumnGroups,
+      );
+
+      _showColumnTitle = update<bool?>(
+        _showColumnTitle,
+        widget.stateManager.showColumnTitle,
       );
 
       _columns = update<List<PlutoColumn>?>(
