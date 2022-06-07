@@ -155,6 +155,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
           createHeader: props.createHeader,
           createFooter: props.createFooter,
           configuration: props.configuration,
+          key: props.key,
         ),
       ),
     );
@@ -463,25 +464,32 @@ class PlutoDualGridProps {
     this.createHeader,
     this.createFooter,
     this.configuration = const PlutoGridConfiguration(),
+    this.key,
   });
+
+  final Key? key;
 
   PlutoDualGridProps copyWith({
     List<PlutoColumn>? columns,
     List<PlutoRow>? rows,
+    List<PlutoColumnGroup>? columnGroups,
     PlutoOnLoadedEventCallback? onLoaded,
     PlutoOnChangedEventCallback? onChanged,
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
+    Key? key,
   }) {
     return PlutoDualGridProps(
       columns: columns ?? this.columns,
       rows: rows ?? this.rows,
+      columnGroups: columnGroups ?? this.columnGroups,
       onLoaded: onLoaded ?? this.onLoaded,
       onChanged: onChanged ?? this.onChanged,
       createHeader: createHeader ?? this.createHeader,
       createFooter: createFooter ?? this.createFooter,
       configuration: configuration ?? this.configuration,
+      key: key ?? this.key,
     );
   }
 }
