@@ -177,6 +177,9 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
       mode: PlutoGridMode.select,
       width: 276,
       height: 300,
+      divider: const PlutoDualGridDivider(
+        show: false,
+      ),
     );
   }
 
