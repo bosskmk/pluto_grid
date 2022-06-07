@@ -199,7 +199,7 @@ void main() {
     });
 
     test('ratio 가 0.5 인 경우 width 가 5:5', () {
-      const display = PlutoDualGridDisplayRatio(ratio: 0.5);
+      var display = PlutoDualGridDisplayRatio(ratio: 0.5);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -208,7 +208,7 @@ void main() {
     });
 
     test('ratio 가 0.1 인 경우 width 가 1:9', () {
-      const display = PlutoDualGridDisplayRatio(ratio: 0.1);
+      var display = PlutoDualGridDisplayRatio(ratio: 0.1);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -219,7 +219,7 @@ void main() {
 
   group('PlutoDualGridDisplayFixedAndExpanded', () {
     test('width 가 100', () {
-      const display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
+      var display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -228,7 +228,7 @@ void main() {
     });
 
     test('width 가 50', () {
-      const display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
+      var display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -239,7 +239,7 @@ void main() {
 
   group('PlutoDualGridDisplayExpandedAndFixed', () {
     test('width 가 100', () {
-      const display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
+      var display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -248,7 +248,7 @@ void main() {
     });
 
     test('width 가 50', () {
-      const display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
+      var display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
 
       const size = BoxConstraints(maxWidth: 200);
 
