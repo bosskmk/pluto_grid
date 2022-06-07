@@ -84,6 +84,8 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
         isOpenedPopup = false;
 
         if (event.gridA == null || event.gridB == null) {
+          widget.stateManager.setKeepFocus(true);
+          textFocus.requestFocus();
           return;
         }
 

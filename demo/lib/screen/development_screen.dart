@@ -294,8 +294,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableMoveHorizontalInEditing: true,
             // enableRowColorAnimation: false,
             // checkedColor: const Color(0x876FB0FF),
-            enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
-            enableMoveDownAfterSelecting: true,
+            enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
+            enableMoveDownAfterSelecting: false,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
