@@ -100,6 +100,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         child: PlutoGrid(
           columns: props.columns,
           rows: props.rows,
+          columnGroups: props.columnGroups,
           mode: mode,
           onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
             if (isGridA!) {
@@ -321,8 +322,6 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       } else if (gridAWidth > size.width - dividerOffset) {
         gridAWidth = size.width - dividerOffset;
       }
-
-      display.offset = null;
     }
 
     final gridBWidth = size.width - gridAWidth - dividerOffset;
@@ -448,6 +447,7 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 class PlutoDualGridProps {
   final List<PlutoColumn> columns;
   final List<PlutoRow> rows;
+  final List<PlutoColumnGroup>? columnGroups;
   final PlutoOnLoadedEventCallback? onLoaded;
   final PlutoOnChangedEventCallback? onChanged;
   final CreateHeaderCallBack? createHeader;
@@ -457,6 +457,7 @@ class PlutoDualGridProps {
   const PlutoDualGridProps({
     required this.columns,
     required this.rows,
+    this.columnGroups,
     this.onLoaded,
     this.onChanged,
     this.createHeader,

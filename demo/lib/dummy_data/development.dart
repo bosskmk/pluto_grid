@@ -7,7 +7,12 @@ class DummyData {
 
   late List<PlutoRow> rows;
 
-  DummyData(int columnLength, int rowLength) {
+  DummyData(
+    int columnLength,
+    int rowLength, {
+    List<int> leftFrozenColumnIndexes = const [],
+    List<int> rightFrozenColumnIndexes = const [],
+  }) {
     var faker = Faker();
 
     columns = List<int>.generate(columnLength, (index) => index).map((i) {
@@ -37,8 +42,12 @@ class DummyData {
           }
         }(i),
         frozen: (int i) {
-          if (i < 1) return PlutoColumnFrozen.left;
-          if (i > columnLength - 2) return PlutoColumnFrozen.right;
+          if (leftFrozenColumnIndexes.contains(i)) {
+            return PlutoColumnFrozen.left;
+          }
+          if (rightFrozenColumnIndexes.contains(i)) {
+            return PlutoColumnFrozen.right;
+          }
           return PlutoColumnFrozen.none;
         }(i),
       );

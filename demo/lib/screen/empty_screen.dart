@@ -19,28 +19,29 @@ class _EmptyScreenState extends State<EmptyScreen> {
 
   late PlutoGridStateManager stateManager;
 
-  final gridAProps = PlutoDualGridProps(
-    columns: [],
-    rows: [],
-  );
-
-  final gridBProps = PlutoDualGridProps(
-    columns: [],
-    rows: [],
-  );
-
   @override
   void initState() {
     super.initState();
 
-    final gridAData = DummyData(10, 100);
-    final gridBData = DummyData(10, 100);
+    columns = [
+      PlutoColumn(
+        title: 'column1',
+        field: 'column1',
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'column2',
+        field: 'column2',
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'column3',
+        field: 'column3',
+        type: PlutoColumnType.text(),
+      ),
+    ];
 
-    gridAProps.columns.addAll(gridAData.columns);
-    gridAProps.rows.addAll(gridAData.rows);
-
-    gridBProps.columns.addAll(gridBData.columns);
-    gridBProps.rows.addAll(gridBData.rows);
+    rows = DummyData.rowsByColumns(length: 10, columns: columns);
   }
 
   @override
@@ -48,16 +49,18 @@ class _EmptyScreenState extends State<EmptyScreen> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(15),
-        child: PlutoDualGrid(
-          gridPropsA: gridAProps,
-          gridPropsB: gridBProps,
+        child: PlutoGrid(
+          columns: columns,
+          rows: rows,
+          onChanged: (PlutoGridOnChangedEvent event) {
+            print(event);
+          },
+          onLoaded: (PlutoGridOnLoadedEvent event) {
+            stateManager = event.stateManager;
+          },
+          configuration: const PlutoGridConfiguration(),
         ),
       ),
     );
   }
 }
-// borderColor: widget.gridPropsA.configuration.gridBorderColor,
-// backgroundColor:
-// widget.gridPropsA.configuration.gridBackgroundColor,
-// indicatorColor: widget.gridPropsA.configuration.gridBorderColor,
-// draggingColor: widget.gridPropsA.configuration.activatedColor,

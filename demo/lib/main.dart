@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: kReleaseMode ? HomeScreen.routeName : EmptyScreen.routeName,
+      initialRoute:
+          kReleaseMode ? HomeScreen.routeName : DevelopmentScreen.routeName,
       routes: {
         HomeScreen.routeName: (context) => const HomeScreen(),
         AddAndRemoveColumnRowScreen.routeName: (context) =>
