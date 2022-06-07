@@ -87,7 +87,7 @@ abstract class ILayoutState {
 
   void setShowColumnFilter(bool flag, {bool notify = true});
 
-  void setShowLoading(bool flag);
+  void setShowLoading(bool flag, {bool notify = true});
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -325,10 +325,10 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final _isShowFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
-    _showFrozenColumn = _isShowFrozenColumn;
+    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
   }
 
@@ -355,14 +355,16 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  void setShowLoading(bool flag) {
+  void setShowLoading(bool flag, {bool notify = true}) {
     if (_showLoading == flag) {
       return;
     }
 
     _showLoading = flag;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override

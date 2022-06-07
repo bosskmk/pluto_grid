@@ -294,8 +294,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             enableMoveHorizontalInEditing: true,
             // enableRowColorAnimation: false,
             // checkedColor: const Color(0x876FB0FF),
-            enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveDown,
-            enableMoveDownAfterSelecting: true,
+            enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
+            enableMoveDownAfterSelecting: false,
             gridBorderRadius: BorderRadius.circular(10),
             gridPopupBorderRadius: BorderRadius.circular(7),
             scrollbarConfig: const PlutoGridScrollbarConfig(
@@ -363,7 +363,7 @@ class _HeaderState extends State<_Header> {
   void initState() {
     super.initState();
 
-    widget.stateManager.setSelectingMode(gridSelectingMode);
+    widget.stateManager.setSelectingMode(gridSelectingMode, notify: false);
   }
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
@@ -374,6 +374,12 @@ class _HeaderState extends State<_Header> {
         : DummyData.rowsByColumns(length: count, columns: widget.columns);
 
     widget.stateManager.prependRows(rows);
+  }
+
+  void handleRemoveCurrentColumnButton() {
+    if (widget.stateManager.currentColumn != null) {
+      widget.stateManager.removeColumns([widget.stateManager.currentColumn!]);
+    }
   }
 
   void handleRemoveCurrentRowButton() {
@@ -442,6 +448,10 @@ class _HeaderState extends State<_Header> {
             ElevatedButton(
               child: const Text('Add 100,000 Rows'),
               onPressed: () => handleAddRowButton(count: 100000),
+            ),
+            ElevatedButton(
+              onPressed: handleRemoveCurrentColumnButton,
+              child: const Text('Remove Current Column'),
             ),
             ElevatedButton(
               onPressed: handleRemoveCurrentRowButton,

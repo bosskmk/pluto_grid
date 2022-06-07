@@ -12,7 +12,7 @@ class PlutoRightFrozenRows extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoRightFrozenRowsState createState() => _PlutoRightFrozenRowsState();
+  PlutoRightFrozenRowsState createState() => PlutoRightFrozenRowsState();
 }
 
 abstract class _PlutoRightFrozenRowsStateWithState
@@ -22,7 +22,13 @@ abstract class _PlutoRightFrozenRowsStateWithState
   List<PlutoRow?>? _rows;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _columns = update<List<PlutoColumn>?>(
         _columns,
@@ -30,17 +36,18 @@ abstract class _PlutoRightFrozenRowsStateWithState
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
-        _rows,
-        widget.stateManager.refRows,
-        compare: listEquals,
-        destructureList: true,
-      );
+      _rows = [
+        ...update<List<PlutoRow?>?>(
+          _rows,
+          widget.stateManager.refRows,
+          compare: listEquals,
+        )!
+      ];
     });
   }
 }
 
-class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
+class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
   ScrollController? _scroll;
 
   @override
@@ -68,7 +75,6 @@ class _PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
           key: ValueKey('right_frozen_row_${_rows![i]!.key}'),
-          stateManager: widget.stateManager,
           rowIdx: i,
           row: _rows![i]!,
           columns: _columns!,

@@ -225,8 +225,8 @@ mixin EditingState implements IPlutoGridState {
 
     int columnEndIdx = refColumns.length - 1;
 
-    final List<Key> selectingRowKeys =
-        currentSelectingRows.map((e) => e.key).toList();
+    final Set<Key> selectingRowKeys =
+        Set.from(currentSelectingRows.map((e) => e.key));
 
     List<int> rowIdxList = [];
 
@@ -234,7 +234,7 @@ mixin EditingState implements IPlutoGridState {
       final currentRowKey = refRows[i].key;
 
       if (selectingRowKeys.contains(currentRowKey)) {
-        selectingRowKeys.removeWhere((key) => key == currentRowKey);
+        selectingRowKeys.remove(currentRowKey);
         rowIdxList.add(i);
       }
 

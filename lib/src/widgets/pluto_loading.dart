@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class PlutoLoading extends StatelessWidget {
   final Color? backgroundColor;
   final Color? indicatorColor;
-  final String? indicatorText;
-  final double? indicatorSize;
+  final String? text;
+  final TextStyle? textStyle;
 
   const PlutoLoading({
     this.backgroundColor,
     this.indicatorColor,
-    this.indicatorText,
-    this.indicatorSize,
+    this.text,
+    this.textStyle,
     Key? key,
   }) : super(key: key);
 
@@ -28,19 +28,24 @@ class PlutoLoading extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.center,
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: backgroundColor ?? Colors.white,
-              border: Border.all(color: indicatorColor ?? Colors.black),
-            ),
-            child: Text(
-              indicatorText ?? 'Loading...',
-              style: TextStyle(
-                color: indicatorColor ?? Colors.black,
-                fontSize: indicatorSize ?? 14,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                backgroundColor: backgroundColor ?? Colors.white,
+                color: indicatorColor ?? Colors.lightBlue,
+                strokeWidth: 2,
               ),
-            ),
+              const SizedBox(height: 10),
+              Text(
+                text ?? 'Loading',
+                style: textStyle ??
+                    const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
+              )
+            ],
           ),
         ),
       ],

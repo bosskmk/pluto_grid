@@ -93,7 +93,7 @@ mixin ColumnGroupState implements IPlutoGridState {
       return;
     }
 
-    final columnFields = columns.map((e) => e.field).toList(growable: false);
+    final Set<String> columnFields = Set.from(columns.map((e) => e.field));
 
     refColumnGroups!.removeWhereFromOriginal((group) {
       return _emptyGroupAfterRemoveColumns(
@@ -109,7 +109,7 @@ mixin ColumnGroupState implements IPlutoGridState {
 
   bool _emptyGroupAfterRemoveColumns({
     required PlutoColumnGroup columnGroup,
-    required List<String> columnFields,
+    required Set<String> columnFields,
   }) {
     if (columnGroup.hasFields) {
       columnGroup.fields!.removeWhere((field) => columnFields.contains(field));

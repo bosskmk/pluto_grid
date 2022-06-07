@@ -1,3 +1,21 @@
+## [4.0.0] - 2022. 6. 7
+
+* Rendering speed improvements.  
+  Please check the performance in profile or build mode.  
+  Debug mode can be slow if there are many lines.
+* Some state management is applied as a Provider.
+* Added PlutoGridStateManager.initializeRowsAsync static method.   
+  To avoid UI freezing when starting the grid with a large number of rows.    
+  [Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
+
+## [3.1.2] - 2022. 6. 2
+
+* Fixed the date popup not opening when the value is wrong.
+
+## [3.1.1] - 2022. 5. 29
+
+* Improved row deletion speed improvement.
+
 ## [3.1.0] - 2022. 5. 29
 
 * Improved column width adjustment performance.

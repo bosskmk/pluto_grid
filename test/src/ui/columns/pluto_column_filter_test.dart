@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../matcher/pluto_object_matcher.dart';
 import 'pluto_column_filter_test.mocks.dart';
@@ -16,6 +17,7 @@ import 'pluto_column_filter_test.mocks.dart';
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
+  late PublishSubject<PlutoStreamNotifierEvent> subject;
   MockPlutoGridEventManager? eventManager;
   MockStreamSubscription<PlutoGridEvent> streamSubscription;
 
@@ -23,9 +25,11 @@ void main() {
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
     streamSubscription = MockStreamSubscription();
+    subject = PublishSubject<PlutoStreamNotifierEvent>();
 
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
     when(stateManager.columnHeight).thenReturn(
@@ -36,6 +40,10 @@ void main() {
     );
 
     when(eventManager!.listener(any)).thenReturn(streamSubscription);
+  });
+
+  tearDown(() {
+    subject.close();
   });
 
   testWidgets(

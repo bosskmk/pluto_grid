@@ -95,6 +95,8 @@ void main() {
             ),
           );
 
+          await tester.pump();
+
           await tester.tap(find.text('headerA0 value 0'));
         });
 

@@ -12,7 +12,7 @@ class PlutoBodyRows extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoBodyRowsState createState() => _PlutoBodyRowsState();
+  PlutoBodyRowsState createState() => PlutoBodyRowsState();
 }
 
 abstract class _PlutoBodyRowsStateWithChange
@@ -22,7 +22,13 @@ abstract class _PlutoBodyRowsStateWithChange
   List<PlutoRow?>? _rows;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _columns = update<List<PlutoColumn>?>(
         _columns,
@@ -30,12 +36,13 @@ abstract class _PlutoBodyRowsStateWithChange
         compare: listEquals,
       );
 
-      _rows = update<List<PlutoRow?>?>(
-        _rows,
-        widget.stateManager.refRows,
-        compare: listEquals,
-        destructureList: true,
-      );
+      _rows = [
+        ...update<List<PlutoRow?>?>(
+          _rows,
+          widget.stateManager.refRows,
+          compare: listEquals,
+        )!
+      ];
     });
   }
 
@@ -46,7 +53,7 @@ abstract class _PlutoBodyRowsStateWithChange
   }
 }
 
-class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
+class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
   ScrollController? _verticalScroll;
 
   ScrollController? _horizontalScroll;
@@ -109,7 +116,6 @@ class _PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
                 key: ValueKey('body_row_${_rows![i]!.key}'),
-                stateManager: widget.stateManager,
                 rowIdx: i,
                 row: _rows![i]!,
                 columns: _columns!,

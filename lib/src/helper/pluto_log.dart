@@ -21,7 +21,7 @@ class PlutoLog {
     Object? error,
   }) {
     developer.log(
-      '[${type.toShortString()}] $message',
+      '[${type.toShortString()} ${DateTime.now()}] $message',
       error: error,
     );
   }

@@ -73,10 +73,11 @@ class PlutoScrollbar extends StatefulWidget {
   final Radius radiusWhileDragging;
 
   @override
-  _CupertinoScrollbarState createState() => _CupertinoScrollbarState();
+  PlutoGridCupertinoScrollbarState createState() =>
+      PlutoGridCupertinoScrollbarState();
 }
 
-class _CupertinoScrollbarState extends State<PlutoScrollbar>
+class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     with TickerProviderStateMixin {
   final GlobalKey _customPaintKey = GlobalKey();
   ScrollbarPainter? _painter;

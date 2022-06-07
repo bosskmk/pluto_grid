@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:demo/screen/feature/export_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,6 +10,7 @@ import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_column_row_screen.dart';
+import 'feature/add_rows_asynchronously.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
@@ -25,6 +25,7 @@ import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
 import 'feature/dual_mode_screen.dart';
 import 'feature/editing_state_screen.dart';
+import 'feature/export_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
@@ -336,6 +337,17 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Add rows asynchronously',
+            description: 'Adds or sets rows asynchronously.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(
+                context,
+                AddRowsAsynchronouslyScreen.routeName,
+              );
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Cell selection',
             description:
                 'In cell selection mode, Shift + tap or long tap and then move to select cells.',
@@ -498,6 +510,13 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/Hu-Wentao');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Majed DH',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/MajedDH');
             },
           ),
           PlutoContributorTile.invisible(

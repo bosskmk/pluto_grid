@@ -17,7 +17,7 @@ class PlutoColumnFilter extends PlutoStatefulWidget {
   }) : super(key: ValueKey('column_filter_${column.key}'));
 
   @override
-  _PlutoColumnFilterState createState() => _PlutoColumnFilterState();
+  PlutoColumnFilterState createState() => PlutoColumnFilterState();
 }
 
 abstract class _PlutoColumnFilterStateWithChange
@@ -73,7 +73,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _filterRows = update<List<PlutoRow?>?>(
         _filterRows,
@@ -192,7 +192,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 }
 
-class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
+class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   InputBorder get _border => OutlineInputBorder(
         borderSide: BorderSide(
             color: widget.stateManager.configuration!.borderColor, width: 0.0),

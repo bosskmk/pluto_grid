@@ -390,7 +390,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hour',
     this.minute = 'Minute',
     // Common
-    this.loadingText = 'Loading...',
+    this.loadingText = 'Loading',
   });
 
   const PlutoGridLocaleText.china({
@@ -430,7 +430,7 @@ class PlutoGridLocaleText {
     this.hour = '时',
     this.minute = '分',
     // Common
-    this.loadingText = '加载中...',
+    this.loadingText = '加载中',
   });
 
   const PlutoGridLocaleText.korean({
@@ -470,7 +470,7 @@ class PlutoGridLocaleText {
     this.hour = '시',
     this.minute = '분',
     // Common
-    this.loadingText = '로딩중...',
+    this.loadingText = '로딩중',
   });
 
   const PlutoGridLocaleText.russian({
@@ -510,7 +510,7 @@ class PlutoGridLocaleText {
     this.hour = 'Часы',
     this.minute = 'Минуты',
     // Common
-    this.loadingText = 'Загрузка...',
+    this.loadingText = 'Загрузка',
   });
 
   const PlutoGridLocaleText.czech({
@@ -550,7 +550,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hodina',
     this.minute = 'Minuta',
     // Common
-    this.loadingText = 'Načítání...',
+    this.loadingText = 'Načítání',
   });
 
   const PlutoGridLocaleText.brazilianPortuguese({
@@ -590,7 +590,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hora',
     this.minute = 'Minuto',
     // Common
-    this.loadingText = 'Carregando...',
+    this.loadingText = 'Carregando',
   });
 
   const PlutoGridLocaleText.spanish({
@@ -630,7 +630,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hora',
     this.minute = 'Minuto',
     // Common
-    this.loadingText = 'Cargando...',
+    this.loadingText = 'Cargando',
   });
 
   const PlutoGridLocaleText.persian({
@@ -670,7 +670,7 @@ class PlutoGridLocaleText {
     this.hour = 'ساعت',
     this.minute = 'دقیقه',
     // Common
-    this.loadingText = 'در حال بارگیری...',
+    this.loadingText = 'در حال بارگیری',
   });
 }
 

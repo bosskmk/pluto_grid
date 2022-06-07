@@ -336,7 +336,11 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    refColumns.removeWhereFromOriginal((column) => columns.contains(column));
+    final removeKeys = Set.from(columns.map((e) => e.key));
+
+    refColumns.removeWhereFromOriginal(
+      (column) => removeKeys.contains(column.key),
+    );
 
     _removeCellsInRows(columns);
 

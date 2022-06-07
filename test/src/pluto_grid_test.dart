@@ -87,34 +87,6 @@ void main() {
     expect(found, findsOneWidget);
   });
 
-  testWidgets('showLoading 을 설정 한 경우 PlutoLoadingWidget 이 출력 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final columns = ColumnHelper.textColumn('header');
-    final rows = RowHelper.count(3, columns);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoGrid(
-            columns: columns,
-            rows: rows,
-            onLoaded: (event) {
-              event.stateManager.setShowLoading(true);
-            },
-          ),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    // then
-    final loading = find.byType(PlutoLoading);
-    expect(loading, findsOneWidget);
-  });
-
   testWidgets('cell 값이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = ColumnHelper.textColumn('header');
@@ -131,6 +103,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // then
     final cell1 = find.text('header0 value 0');
@@ -205,6 +179,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
@@ -286,6 +262,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // when
     // first cell of first column
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
@@ -295,13 +273,13 @@ void main() {
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     Offset selectedCellOffset =
-        tester.getCenter(find.byKey(rows[7].cells['header5']!.key));
+        tester.getCenter(find.byKey(rows[7].cells['header3']!.key));
 
     stateManager!.setCurrentSelectingPositionWithOffset(selectedCellOffset);
 
     // then
     expect(stateManager!.currentSelectingPosition!.rowIdx, 7);
-    expect(stateManager!.currentSelectingPosition!.columnIdx, 5);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 3);
   });
 
   testWidgets(
@@ -329,6 +307,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // when
     // first cell of first column
@@ -799,6 +779,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -854,6 +836,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -911,6 +895,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -966,6 +952,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1023,6 +1011,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1073,6 +1063,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1125,6 +1117,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1175,6 +1169,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');

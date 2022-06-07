@@ -12,7 +12,7 @@ class PlutoLeftFrozenColumns extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoLeftFrozenColumnsState createState() => _PlutoLeftFrozenColumnsState();
+  PlutoLeftFrozenColumnsState createState() => PlutoLeftFrozenColumnsState();
 }
 
 abstract class _PlutoLeftFrozenColumnsStateWithChange
@@ -26,7 +26,13 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
   int? _itemCount;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
@@ -55,7 +61,7 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
   }
 }
 
-class _PlutoLeftFrozenColumnsState
+class PlutoLeftFrozenColumnsState
     extends _PlutoLeftFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {

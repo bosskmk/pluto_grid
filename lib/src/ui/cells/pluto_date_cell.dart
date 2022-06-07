@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/pluto_grid_date_picker.dart';
 
 import 'popup_cell.dart';
 
@@ -26,10 +25,10 @@ class PlutoDateCell extends StatefulWidget implements PopupCell {
   }) : super(key: key);
 
   @override
-  _PlutoDateCellState createState() => _PlutoDateCellState();
+  PlutoDateCellState createState() => PlutoDateCellState();
 }
 
-class _PlutoDateCellState extends State<PlutoDateCell>
+class PlutoDateCellState extends State<PlutoDateCell>
     with PopupCellState<PlutoDateCell> {
   PlutoGridStateManager? popupStateManager;
 
@@ -54,13 +53,17 @@ class _PlutoDateCellState extends State<PlutoDateCell>
 
     PlutoGridDatePicker(
       context: context,
-      stateManager: widget.stateManager,
-      initDate: widget.column.type.date!.dateFormat.parse(widget.cell.value),
+      initDate: PlutoDateTimeHelper.parseOrNullWithFormat(
+        widget.cell.value,
+        widget.column.type.date!.format,
+      ),
       startDate: widget.column.type.date!.startDate,
       endDate: widget.column.type.date!.endDate,
       dateFormat: widget.column.type.date!.dateFormat,
       headerDateFormat: widget.column.type.date!.headerDateFormat,
       onSelected: onSelected,
+      itemHeight: widget.stateManager.rowTotalHeight,
+      configuration: widget.stateManager.configuration!,
     );
   }
 }

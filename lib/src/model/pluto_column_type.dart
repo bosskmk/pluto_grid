@@ -299,11 +299,7 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
   @override
   int compare(dynamic a, dynamic b) {
     return compareWithNull(a, b, () {
-      final _a = items.indexOf(a);
-
-      final _b = items.indexOf(b);
-
-      return _a.compareTo(_b);
+      return items.indexOf(a).compareTo(items.indexOf(b));
     });
   }
 

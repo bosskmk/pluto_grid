@@ -38,6 +38,8 @@ void main() {
           ),
         );
 
+        await tester.pump();
+
         await tester.tap(find.text('header1 value 3'));
 
         stateManager!
@@ -145,6 +147,8 @@ void main() {
             ),
           ),
         );
+
+        await tester.pump();
 
         await tester.tap(find.text('header3 value 5'));
 

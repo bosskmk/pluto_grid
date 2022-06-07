@@ -212,7 +212,7 @@ mixin CellState implements IPlutoGridState {
     setEditing(autoEditing, notify: false);
 
     if (notify) {
-      notifyListeners();
+      notifyStreamListeners(PlutoSetCurrentCellStreamNotifierEvent());
     }
   }
 

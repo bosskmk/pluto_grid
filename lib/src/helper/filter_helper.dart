@@ -62,11 +62,10 @@ class FilterHelper {
     return (PlutoRow? row) {
       bool? flag;
 
-      for (var _row in rows) {
-        final filterType =
-            _row!.cells[filterFieldType]!.value as PlutoFilterType?;
+      for (var e in rows) {
+        final filterType = e!.cells[filterFieldType]!.value as PlutoFilterType?;
 
-        if (_row.cells[filterFieldColumn]!.value == filterFieldAllColumns) {
+        if (e.cells[filterFieldColumn]!.value == filterFieldAllColumns) {
           bool? flagAllColumns;
 
           row!.cells.forEach((key, value) {
@@ -80,7 +79,7 @@ class FilterHelper {
                 compareByFilterType(
                   filterType: filterType!,
                   base: value.value.toString(),
-                  search: _row.cells[filterFieldValue]!.value.toString(),
+                  search: e.cells[filterFieldValue]!.value.toString(),
                   column: foundColumn,
                 ),
               );
@@ -90,7 +89,7 @@ class FilterHelper {
           flag = compareAnd(flag, flagAllColumns);
         } else {
           var foundColumn = enabledFilterColumns!.firstWhereOrNull(
-            (element) => element.field == _row.cells[filterFieldColumn]!.value,
+            (element) => element.field == e.cells[filterFieldColumn]!.value,
           );
 
           if (foundColumn != null) {
@@ -98,9 +97,9 @@ class FilterHelper {
               flag,
               compareByFilterType(
                 filterType: filterType!,
-                base: row!.cells[_row.cells[filterFieldColumn]!.value]!.value
+                base: row!.cells[e.cells[filterFieldColumn]!.value]!.value
                     .toString(),
-                search: _row.cells[filterFieldValue]!.value.toString(),
+                search: e.cells[filterFieldValue]!.value.toString(),
                 column: foundColumn,
               ),
             );
@@ -359,9 +358,9 @@ class FilterPopupState {
     handleApplyFilter(_stateManager);
   }
 
-  _FilterPopupHeader createHeader(PlutoGridStateManager _stateManager) {
-    return _FilterPopupHeader(
-      stateManager: _stateManager,
+  PlutoGridFilterPopupHeader createHeader(PlutoGridStateManager stateManager) {
+    return PlutoGridFilterPopupHeader(
+      stateManager: stateManager,
       configuration: configuration,
       handleAddNewFilter: handleAddNewFilter,
     );
@@ -427,12 +426,12 @@ class FilterPopupState {
   }
 }
 
-class _FilterPopupHeader extends StatelessWidget {
+class PlutoGridFilterPopupHeader extends StatelessWidget {
   final PlutoGridStateManager? stateManager;
   final PlutoGridConfiguration? configuration;
   final SetFilterPopupHandler? handleAddNewFilter;
 
-  const _FilterPopupHeader({
+  const PlutoGridFilterPopupHeader({
     Key? key,
     this.stateManager,
     this.configuration,

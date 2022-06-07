@@ -25,10 +25,10 @@ class PlutoTimeCell extends StatefulWidget implements PopupCell {
   }) : super(key: key);
 
   @override
-  _PlutoTimeCellState createState() => _PlutoTimeCellState();
+  PlutoTimeCellState createState() => PlutoTimeCellState();
 }
 
-class _PlutoTimeCellState extends State<PlutoTimeCell>
+class PlutoTimeCellState extends State<PlutoTimeCell>
     with PopupCellState<PlutoTimeCell> {
   PlutoGridStateManager? popupStateManager;
 
@@ -43,9 +43,12 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
     Icons.access_time,
   );
 
-  String get cellHour => widget.cell.value.toString().substring(0, 2);
+  String get cellValue =>
+      widget.cell.value ?? widget.column.type.time!.defaultValue;
 
-  String get cellMinute => widget.cell.value.toString().substring(3, 5);
+  String get cellHour => cellValue.toString().substring(0, 2);
+
+  String get cellMinute => cellValue.toString().substring(3, 5);
 
   @override
   void openPopup() {
@@ -81,6 +84,8 @@ class _PlutoTimeCellState extends State<PlutoTimeCell>
         isOpenedPopup = false;
 
         if (event.gridA == null || event.gridB == null) {
+          widget.stateManager.setKeepFocus(true);
+          textFocus.requestFocus();
           return;
         }
 

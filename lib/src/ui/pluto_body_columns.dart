@@ -13,7 +13,7 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoBodyColumnsState createState() => _PlutoBodyColumnsState();
+  PlutoBodyColumnsState createState() => PlutoBodyColumnsState();
 }
 
 abstract class _PlutoBodyColumnsStateWithChange
@@ -27,7 +27,13 @@ abstract class _PlutoBodyColumnsStateWithChange
   int? _itemCount;
 
   @override
-  void onChange() {
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
+
+  @override
+  void onChange(event) {
     resetState((update) {
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
@@ -62,7 +68,7 @@ abstract class _PlutoBodyColumnsStateWithChange
   }
 }
 
-class _PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
+class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
   ScrollController? _scroll;
 
   @override
