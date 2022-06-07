@@ -179,7 +179,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         if (widget.divider.show == true)
           LayoutId(
             id: _PlutoDualGridId.divider,
-            child: _Divider(
+            child: PlutoDualGridDividerWidget(
               backgroundColor: widget.divider.backgroundColor,
               indicatorColor: widget.divider.indicatorColor,
               draggingColor: widget.divider.draggingColor,
@@ -209,8 +209,8 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
   }
 }
 
-class _Divider extends StatefulWidget {
-  const _Divider({
+class PlutoDualGridDividerWidget extends StatefulWidget {
+  const PlutoDualGridDividerWidget({
     required this.backgroundColor,
     required this.indicatorColor,
     required this.draggingColor,
@@ -224,10 +224,12 @@ class _Divider extends StatefulWidget {
   final void Function(DragUpdateDetails) dragCallback;
 
   @override
-  State<_Divider> createState() => _DividerState();
+  State<PlutoDualGridDividerWidget> createState() =>
+      PlutoDualGridDividerWidgetState();
 }
 
-class _DividerState extends State<_Divider> {
+class PlutoDualGridDividerWidgetState
+    extends State<PlutoDualGridDividerWidget> {
   bool isDragging = false;
 
   void onHorizontalDragStart(DragStartDetails details) {
