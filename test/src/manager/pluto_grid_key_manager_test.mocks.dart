@@ -213,6 +213,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#showFrozenColumn),
           returnValue: false) as bool);
   @override
+  bool get showColumnTitle => (super
+          .noSuchMethod(Invocation.getter(#showColumnTitle), returnValue: false)
+      as bool);
+  @override
   bool get showColumnFilter =>
       (super.noSuchMethod(Invocation.getter(#showColumnFilter),
           returnValue: false) as bool);
@@ -838,6 +842,11 @@ class MockPlutoGridStateManager extends _i1.Mock
   void resetShowFrozenColumn({bool? notify = true}) => super.noSuchMethod(
       Invocation.method(#resetShowFrozenColumn, [], {#notify: notify}),
       returnValueForMissingStub: null);
+  @override
+  void setShowColumnTitle(bool? flag, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setShowColumnTitle, [flag], {#notify: notify}),
+          returnValueForMissingStub: null);
   @override
   void setShowColumnFilter(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
