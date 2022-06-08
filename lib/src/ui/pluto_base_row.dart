@@ -80,12 +80,13 @@ class PlutoBaseRow extends StatelessWidget {
       id: column.field,
       child: Builder(
         builder: (buildContext) {
-          buildContext.select<PlutoGridStateManager, bool>(
-            (value) => column.visible,
+          final visible = buildContext.select<PlutoGridStateManager, bool>(
+            (value) =>
+                value.isCurrentCell(row.cells[column.field]!) || column.visible,
           );
 
           return Visibility(
-            visible: column.visible,
+            visible: visible,
             child: PlutoBaseCell(
               cell: row.cells[column.field]!,
               column: column,
