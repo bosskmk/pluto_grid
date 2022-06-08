@@ -14,6 +14,13 @@ class PlutoDualGridDivider {
     this.draggingColor = const Color(0xFFDCF5FF),
   });
 
+  const PlutoDualGridDivider.dark({
+    this.show = true,
+    this.backgroundColor = const Color(0xFF111111),
+    this.indicatorColor = const Color(0xFF000000),
+    this.draggingColor = const Color(0xFF313131),
+  });
+
   final bool show;
 
   final Color backgroundColor;
