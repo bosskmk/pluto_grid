@@ -46,10 +46,8 @@ class PlutoGridDatePicker {
     double rowsHeight = 6 * itemHeight;
 
     // itemHeight * 2 = Header Height + Column Height
-    double popupHeight = (itemHeight * 2) +
-        rowsHeight +
-        PlutoGridSettings.totalShadowLineWidth +
-        PlutoGridSettings.gridInnerSpacing;
+    double popupHeight =
+        (itemHeight * 2) + rowsHeight + PlutoGridSettings.totalShadowLineWidth + PlutoGridSettings.gridInnerSpacing;
 
     final popupColumns = _buildColumns();
 
@@ -82,7 +80,7 @@ class PlutoGridDatePicker {
       configuration: configuration.copyWith(
         gridBorderRadius: configuration.gridPopupBorderRadius,
         defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-        defaultCellPadding: 3,
+        defaultCellPadding: const EdgeInsets.symmetric(horizontal: 3),
         rowHeight: configuration.rowHeight,
         enableRowColorAnimation: false,
         enableColumnBorder: false,
@@ -432,9 +430,7 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   Widget build(BuildContext context) {
     return Container(
       height: widget.stateManager.rowTotalHeight,
-      padding: const EdgeInsets.symmetric(
-        horizontal: PlutoGridSettings.cellPadding,
-      ),
+      padding: PlutoGridSettings.cellPadding,
       alignment: Alignment.center,
       child: Row(
         children: [

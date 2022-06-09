@@ -84,8 +84,8 @@ class PlutoGridConfiguration {
 
   /// Customise cell padding
   /// If there is no cellPadding of PlutoColumn,
-  /// it is the padding value of cell. (Horizontal only)
-  final double defaultCellPadding;
+  /// it is the padding value of cell.
+  final EdgeInsets defaultCellPadding;
 
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
@@ -254,7 +254,7 @@ class PlutoGridConfiguration {
     double? columnHeight,
     double? columnFilterHeight,
     double? defaultColumnTitlePadding,
-    double? defaultCellPadding,
+    EdgeInsets? defaultCellPadding,
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
     bool? enableRowColorAnimation,

@@ -52,7 +52,7 @@ class PlutoColumn {
 
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
-  double? cellPadding;
+  EdgeInsets? cellPadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;

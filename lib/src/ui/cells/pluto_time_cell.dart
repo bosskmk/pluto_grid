@@ -65,7 +65,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
           widget.stateManager.configuration?.gridPopupBorderRadius ??
               BorderRadius.zero,
       defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-      defaultCellPadding: 3,
+      defaultCellPadding: const EdgeInsets.symmetric(horizontal: 3),
       rowHeight: widget.stateManager.configuration!.rowHeight,
       enableRowColorAnimation: false,
       enableColumnBorder: false,

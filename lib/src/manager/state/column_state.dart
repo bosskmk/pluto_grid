@@ -456,12 +456,12 @@ mixin ColumnState implements IPlutoGridState {
 
     // todo : Apply (popup type icon, checkbox, drag indicator, renderer)
 
-    double cellPadding =
+    EdgeInsets cellPadding =
         column.cellPadding ?? configuration!.defaultCellPadding;
 
     resizeColumn(
       column,
-      textPainter.width - column.width + (cellPadding * 2) + 2,
+      textPainter.width - column.width + (cellPadding.left + cellPadding.right) + 2,
     );
   }
 

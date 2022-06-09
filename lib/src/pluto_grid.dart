@@ -1078,7 +1078,7 @@ class PlutoGridSettings {
   static const double rowTotalHeight = rowHeight + rowBorderWidth;
 
   /// Cell - padding
-  static const double cellPadding = 10;
+  static const EdgeInsets cellPadding = EdgeInsets.symmetric(horizontal: 10);
 
   /// Column title - padding
   static const double columnTitlePadding = 10;

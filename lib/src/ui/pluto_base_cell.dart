@@ -102,8 +102,7 @@ class PlutoBaseCell extends StatelessWidget {
         rowIdx: rowIdx,
         row: row,
         column: column,
-        cellPadding: column.cellPadding ??
-            stateManager.configuration!.defaultCellPadding,
+        cellPadding: column.cellPadding ?? stateManager.configuration!.defaultCellPadding,
         child: _BuildCell(
           stateManager: stateManager,
           rowIdx: rowIdx,
@@ -121,7 +120,7 @@ class _CellContainer extends StatelessWidget {
   final PlutoRow row;
   final int rowIdx;
   final PlutoColumn column;
-  final double cellPadding;
+  final EdgeInsets cellPadding;
   final Widget child;
 
   const _CellContainer({
@@ -242,9 +241,7 @@ class _CellContainer extends StatelessWidget {
         builder: (_, decoration, child) {
           return Container(
             decoration: decoration,
-            padding: EdgeInsets.symmetric(
-              horizontal: cellPadding,
-            ),
+            padding: cellPadding,
             clipBehavior: Clip.hardEdge,
             alignment: Alignment.centerLeft,
             child: child,
