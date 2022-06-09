@@ -8,7 +8,7 @@ class PlutoColumnGroup {
 
   final List<PlutoColumnGroup>? children;
 
-  final double? titlePadding;
+  final EdgeInsets? titlePadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
   final PlutoColumnTextAlign titleTextAlign;

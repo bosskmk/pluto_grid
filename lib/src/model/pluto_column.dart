@@ -31,7 +31,7 @@ class PlutoColumn {
 
   /// Customisable title padding.
   /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
-  double? titlePadding;
+  EdgeInsets? titlePadding;
 
   /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
   ///

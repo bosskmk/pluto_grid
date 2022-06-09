@@ -79,8 +79,8 @@ class PlutoGridConfiguration {
 
   /// Customise column title padding
   /// If there is no titlePadding of PlutoColumn,
-  /// it is the title padding of the default column. (Horizontal only)
-  final double defaultColumnTitlePadding;
+  /// it is the title padding of the default column.
+  final EdgeInsets defaultColumnTitlePadding;
 
   /// Customise cell padding
   /// If there is no cellPadding of PlutoColumn,
@@ -253,7 +253,7 @@ class PlutoGridConfiguration {
     double? rowHeight,
     double? columnHeight,
     double? columnFilterHeight,
-    double? defaultColumnTitlePadding,
+    EdgeInsets? defaultColumnTitlePadding,
     EdgeInsets? defaultCellPadding,
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,

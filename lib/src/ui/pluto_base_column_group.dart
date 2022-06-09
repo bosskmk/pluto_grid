@@ -84,7 +84,7 @@ class _ColumnGroupTitle extends StatelessWidget {
     required this.childrenDepth,
   });
 
-  double get _padding =>
+  EdgeInsets get _padding =>
       columnGroup.group.titlePadding ??
       stateManager.configuration!.defaultColumnTitlePadding;
 
@@ -103,7 +103,7 @@ class _ColumnGroupTitle extends StatelessWidget {
 
     return Container(
       height: groupTitleHeight,
-      padding: EdgeInsets.symmetric(horizontal: _padding),
+      padding: _padding,
       decoration: BoxDecoration(
         color: columnGroup.group.backgroundColor,
         border: Border(

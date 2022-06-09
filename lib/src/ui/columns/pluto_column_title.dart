@@ -312,7 +312,7 @@ class _BuildColumnWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  double get padding =>
+  EdgeInsets get padding =>
       column.titlePadding ??
       stateManager.configuration!.defaultColumnTitlePadding;
 
@@ -324,7 +324,7 @@ class _BuildColumnWidget extends StatelessWidget {
     return Container(
       width: column.width,
       height: height,
-      padding: EdgeInsets.symmetric(horizontal: padding),
+      padding: padding,
       decoration: BoxDecoration(
         color: column.backgroundColor,
         border: Border(

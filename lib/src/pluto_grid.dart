@@ -1081,7 +1081,8 @@ class PlutoGridSettings {
   static const EdgeInsets cellPadding = EdgeInsets.symmetric(horizontal: 10);
 
   /// Column title - padding
-  static const double columnTitlePadding = 10;
+  static const EdgeInsets columnTitlePadding =
+      EdgeInsets.symmetric(horizontal: 10);
 
   /// Cell - fontSize
   static const double cellFontSize = 14;

@@ -210,7 +210,7 @@ class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
       ? widget.stateManager.configuration!.cellColorInEditState
       : widget.stateManager.configuration!.cellColorInReadOnlyState;
 
-  double get _padding =>
+  EdgeInsets get _padding =>
       widget.column.titlePadding ??
       widget.stateManager.configuration!.defaultColumnTitlePadding;
 
@@ -240,7 +240,7 @@ class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
 
     return Container(
       height: widget.stateManager.columnFilterHeight,
-      padding: EdgeInsets.symmetric(horizontal: _padding),
+      padding: _padding,
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
