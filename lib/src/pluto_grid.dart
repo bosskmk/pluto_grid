@@ -274,6 +274,8 @@ class PlutoGridState extends State<PlutoGrid> {
 
     _initEventManager();
 
+    _initVisibility();
+
     _initOnLoadedEvent();
 
     _initSelectMode();
@@ -340,6 +342,19 @@ class PlutoGridState extends State<PlutoGrid> {
     // Dispose
     _disposeList.add(() {
       _eventManager.dispose();
+    });
+  }
+
+  void _initVisibility() {
+    _stateManager.scroll!.horizontal!.addOffsetChangedListener(
+      _stateManager.updateHorizontalVisibilityState,
+    );
+
+    // Dispose
+    _disposeList.add(() {
+      _stateManager.scroll!.horizontal!.removeOffsetChangedListener(
+        _stateManager.updateHorizontalVisibilityState,
+      );
     });
   }
 
@@ -455,8 +470,11 @@ class PlutoGridState extends State<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _stateManager,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: _stateManager),
+        ChangeNotifierProvider.value(value: _stateManager.visibilityNotifier),
+      ],
       child: FocusScope(
         onFocusChange: _stateManager.setKeepFocus,
         onKey: _handleGridFocusOnKey,

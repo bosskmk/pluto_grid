@@ -50,6 +50,3 @@ class PlutoEmptyStreamNotifierEvent extends PlutoStreamNotifierEvent {}
 class PlutoInitStateStreamNotifierEvent extends PlutoStreamNotifierEvent {}
 
 class PlutoSetCurrentCellStreamNotifierEvent extends PlutoStreamNotifierEvent {}
-
-class PlutoVisibilityColumnStreamNotifierEvent
-    extends PlutoStreamNotifierEvent {}

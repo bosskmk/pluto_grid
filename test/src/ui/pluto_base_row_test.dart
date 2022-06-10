@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/manager/state/visibility_state.dart';
 import 'package:provider/provider.dart';
 
 import '../../helper/column_helper.dart';
@@ -24,6 +25,9 @@ void main() {
       const PlutoGridConfiguration(),
     );
     when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager!.visibilityNotifier).thenReturn(
+      VisibilityStateNotifier(),
+    );
     when(stateManager!.rowHeight).thenReturn(45);
     when(stateManager!.isSelecting).thenReturn(true);
     when(stateManager!.hasCurrentSelectingPosition).thenReturn(true);
@@ -76,8 +80,15 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager!,
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<PlutoGridStateManager>.value(
+                    value: stateManager!,
+                  ),
+                  ChangeNotifierProvider.value(
+                    value: stateManager!.visibilityNotifier,
+                  ),
+                ],
                 child: PlutoBaseRow(
                   rowIdx: rowIdx,
                   row: row,

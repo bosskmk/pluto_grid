@@ -18,6 +18,8 @@ class PlutoBodyColumns extends PlutoStatefulWidget {
 
 abstract class _PlutoBodyColumnsStateWithChange
     extends PlutoStateWithChange<PlutoBodyColumns> {
+  ScrollController? _scroll;
+
   bool? _showColumnGroups;
 
   bool? _showColumnTitle;
@@ -30,8 +32,21 @@ abstract class _PlutoBodyColumnsStateWithChange
 
   @override
   bool allowStream(event) {
-    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
-        event is PlutoVisibilityColumnStreamNotifierEvent);
+    return event is! PlutoSetCurrentCellStreamNotifierEvent;
+  }
+
+  @override
+  void dispose() {
+    _scroll!.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
   }
 
   @override
@@ -52,6 +67,10 @@ abstract class _PlutoBodyColumnsStateWithChange
         _getColumns(),
         compare: listEquals,
       );
+
+      if (changed) {
+        widget.stateManager.updateColumnStartPosition();
+      }
 
       if (changed && _showColumnGroups == true) {
         _columnGroups = widget.stateManager.separateLinkedGroup(
@@ -76,22 +95,6 @@ abstract class _PlutoBodyColumnsStateWithChange
 }
 
 class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
-  ScrollController? _scroll;
-
-  @override
-  void dispose() {
-    _scroll!.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

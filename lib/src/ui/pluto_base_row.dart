@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
+import '../manager/state/visibility_state.dart';
+
 class PlutoBaseRow extends StatelessWidget {
   final int rowIdx;
 
@@ -79,22 +81,21 @@ class PlutoBaseRow extends StatelessWidget {
     return LayoutId(
       id: column.field,
       child: Builder(
-        builder: (buildContext) {
-          final visible = buildContext.select<PlutoGridStateManager, bool>(
-            (value) =>
-                value.isCurrentCell(row.cells[column.field]!) || column.visible,
-          );
+        builder: (context) {
+          final visible =
+              context.select<VisibilityStateNotifier, bool>((value) {
+            return value.visibleColumn(column);
+          });
 
-          return Visibility(
-            visible: visible,
-            child: PlutoBaseCell(
-              cell: row.cells[column.field]!,
-              column: column,
-              rowIdx: rowIdx,
-              row: row,
-              key: row.cells[column.field]!.key,
-            ),
-          );
+          return visible
+              ? PlutoBaseCell(
+                  cell: row.cells[column.field]!,
+                  column: column,
+                  rowIdx: rowIdx,
+                  row: row,
+                  key: row.cells[column.field]!.key,
+                )
+              : const SizedBox.shrink();
         },
       ),
     );

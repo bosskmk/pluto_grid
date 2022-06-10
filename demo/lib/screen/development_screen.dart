@@ -19,205 +19,43 @@ class DevelopmentScreen extends StatefulWidget {
 }
 
 class _DevelopmentScreenState extends State<DevelopmentScreen> {
-  late List<PlutoColumn> columns;
+  final List<PlutoColumn> columns = [];
 
-  late List<PlutoRow> rows;
+  final List<PlutoRow> rows = [];
 
-  late List<PlutoColumnGroup> columnGroups;
+  final List<PlutoColumnGroup> columnGroups = [];
 
   late PlutoGridStateManager stateManager;
+
+  Color Function(PlutoRowColorContext)? rowColorCallback;
 
   @override
   void initState() {
     super.initState();
 
-    columns = [
-      PlutoColumn(
-        title: 'column1',
-        field: 'column1',
-        type: PlutoColumnType.text(),
-        enableRowDrag: true,
-        enableRowChecked: true,
-        enableContextMenu: false,
-        enableDropToResize: true,
-        enableAutoEditing: true,
-        titleTextAlign: PlutoColumnTextAlign.right,
-        titleSpan: const TextSpan(
-          children: [
-            WidgetSpan(
-              child: Text(
-                '* ',
-                style: TextStyle(color: Colors.red),
-              ),
-              alignment: PlaceholderAlignment.bottom,
-            ),
-            TextSpan(text: 'column1'),
-          ],
-        ),
-        width: 250,
-        minWidth: 175,
-        renderer: (rendererContext) {
-          return Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.add_circle,
-                ),
-                onPressed: () {
-                  rendererContext.stateManager.insertRows(
-                    rendererContext.rowIdx,
-                    rendererContext.stateManager.getNewRows(count: 1),
-                  );
-                },
-                iconSize: 18,
-                color: Colors.green,
-                padding: const EdgeInsets.all(0),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.remove_circle_outlined,
-                ),
-                onPressed: () {
-                  rendererContext.stateManager
-                      .removeRows([rendererContext.row]);
-                },
-                iconSize: 18,
-                color: Colors.red,
-                padding: const EdgeInsets.all(0),
-              ),
-              Expanded(
-                child: Text(
-                  '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field]!.value.toString()})',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-      PlutoColumn(
-        title: 'column2',
-        field: 'column2',
-        enableContextMenu: false,
-        textAlign: PlutoColumnTextAlign.right,
-        titleTextAlign: PlutoColumnTextAlign.right,
-        frozen: PlutoColumnFrozen.right,
-        type: PlutoColumnType.select(
-          <String>['red', 'blue', 'green'],
-          enableColumnFilter: true,
-        ),
-        renderer: (rendererContext) {
-          Color textColor = Colors.black;
+    /// Test A
+    // columns.addAll(testColumnsA);
+    // columnGroups.addAll(testColumnGroupsA);
+    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
+    //   return rowColorContext.row.cells['column2']!.value == 'green'
+    //       ? const Color(0xFFE2F6DF)
+    //       : Colors.white;
+    // };
 
-          if (rendererContext.cell.value == 'red') {
-            textColor = Colors.red;
-          } else if (rendererContext.cell.value == 'blue') {
-            textColor = Colors.blue;
-          } else if (rendererContext.cell.value == 'green') {
-            textColor = Colors.green;
-          }
-
-          return Text(
-            rendererContext.cell.value.toString(),
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: rendererContext.column.textAlign.value,
-          );
-        },
-      ),
-      PlutoColumn(
-        title: 'column3',
-        field: 'column3',
-        textAlign: PlutoColumnTextAlign.left,
-        titleTextAlign: PlutoColumnTextAlign.center,
-        enableAutoEditing: true,
-        type: PlutoColumnType.date(
-            // headerFormat: 'yyyy 년 MM 월',
-            // startDate: DateTime(2022, 01, 09),
-            // endDate: DateTime(2022, 08, 10),
-            ),
-      ),
-      PlutoColumn(
-        title: 'column4',
-        field: 'column4',
-        textAlign: PlutoColumnTextAlign.center,
-        titleTextAlign: PlutoColumnTextAlign.right,
-        type: PlutoColumnType.time(),
-      ),
-      PlutoColumn(
-        title: 'column5',
-        field: 'column5',
-        textAlign: PlutoColumnTextAlign.center,
-        titleTextAlign: PlutoColumnTextAlign.left,
-        type: PlutoColumnType.number(
-          negative: true,
-          format: '#,###.###',
-          allowFirstDot: true,
-        ),
-      ),
-      PlutoColumn(
-        title: 'column6',
-        field: 'column6',
-        type: PlutoColumnType.text(),
-        enableFilterMenuItem: false,
-        enableEditingMode: false,
-        renderer: (rendererContext) {
-          return Image.asset(
-            'assets/images/cat.jpg',
-            fit: BoxFit.fitWidth,
-          );
-        },
-      ),
-      PlutoColumn(
-        title: 'column7',
-        field: 'column7',
-        type: PlutoColumnType.number(),
-        enableFilterMenuItem: false,
-        enableEditingMode: false,
-        // NEW Custom cellPadding
-        cellPadding: 0,
-        width: 80,
-        renderer: (rendererContext) {
-          return Container(
-            color: rendererContext.cell.value % 2 == 0
-                ? Colors.yellow
-                : Colors.teal,
-          );
-        },
-      ),
-    ];
-
-    columnGroups = [
-      PlutoColumnGroup(
-        title: 'Expanded Column Group',
-        fields: ['column1'],
-        expandedColumn: true,
-      ),
-      PlutoColumnGroup(
-        title: 'Group A',
-        children: [
-          PlutoColumnGroup(title: 'SubA', fields: ['column2']),
-          PlutoColumnGroup(
-            title: 'SubB',
-            fields: ['column3'],
-            expandedColumn: true,
-          ),
-        ],
-      ),
-      PlutoColumnGroup(
-        title: 'Group B',
-        fields: ['column4', 'column5', 'column6'],
-      ),
-      PlutoColumnGroup(
-        title: 'Group C',
-        fields: ['column7'],
-      ),
-    ];
-
-    rows = DummyData.rowsByColumns(length: 10000, columns: columns);
+    /// Test B
+    columns.addAll(DummyData(100, 0).columns);
+    DummyData.fetchRows(
+      columns,
+      chunkSize: 100,
+      chunkCount: 100,
+    ).then((fetchedRows) {
+      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+          .then((initializedRows) {
+        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+        stateManager.notifyListeners();
+      });
+    });
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -245,10 +83,6 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
-
-            stateManager.setShowColumnFilter(true, notify: false);
-
-            // stateManager!.setAutoEditing(true, notify: false);
           },
           // onSelected: (event) {
           //   print(event.cell!.value);
@@ -273,15 +107,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               columns: columns,
             );
           },
-          createFooter: (stateManager) {
-            stateManager.setPageSize(100, notify: false);
-            return PlutoPagination(stateManager);
-          },
-          rowColorCallback: (rowColorContext) {
-            return rowColorContext.row.cells['column2']!.value == 'green'
-                ? const Color(0xFFE2F6DF)
-                : Colors.white;
-          },
+          // createFooter: (stateManager) {
+          //   stateManager.setPageSize(100, notify: false);
+          //   return PlutoPagination(stateManager);
+          // },
+          rowColorCallback: rowColorCallback,
           configuration: PlutoGridConfiguration(
             // columnHeight: 30.0,
             // columnFilterHeight: 30.0,
@@ -511,3 +341,187 @@ class _HeaderState extends State<_Header> {
     );
   }
 }
+
+final testColumnsA = [
+  PlutoColumn(
+    title: 'column1',
+    field: 'column1',
+    type: PlutoColumnType.text(),
+    enableRowDrag: true,
+    enableRowChecked: true,
+    enableContextMenu: false,
+    enableDropToResize: true,
+    enableAutoEditing: true,
+    titleTextAlign: PlutoColumnTextAlign.right,
+    titleSpan: const TextSpan(
+      children: [
+        WidgetSpan(
+          child: Text(
+            '* ',
+            style: TextStyle(color: Colors.red),
+          ),
+          alignment: PlaceholderAlignment.bottom,
+        ),
+        TextSpan(text: 'column1'),
+      ],
+    ),
+    width: 250,
+    minWidth: 175,
+    renderer: (rendererContext) {
+      return Row(
+        children: [
+          IconButton(
+            icon: const Icon(
+              Icons.add_circle,
+            ),
+            onPressed: () {
+              rendererContext.stateManager.insertRows(
+                rendererContext.rowIdx,
+                rendererContext.stateManager.getNewRows(count: 1),
+              );
+            },
+            iconSize: 18,
+            color: Colors.green,
+            padding: const EdgeInsets.all(0),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.remove_circle_outlined,
+            ),
+            onPressed: () {
+              rendererContext.stateManager.removeRows([rendererContext.row]);
+            },
+            iconSize: 18,
+            color: Colors.red,
+            padding: const EdgeInsets.all(0),
+          ),
+          Expanded(
+            child: Text(
+              '${rendererContext.row.sortIdx.toString()}(${rendererContext.row.cells[rendererContext.column.field]!.value.toString()})',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      );
+    },
+  ),
+  PlutoColumn(
+    title: 'column2',
+    field: 'column2',
+    enableContextMenu: false,
+    textAlign: PlutoColumnTextAlign.right,
+    titleTextAlign: PlutoColumnTextAlign.right,
+    frozen: PlutoColumnFrozen.right,
+    type: PlutoColumnType.select(
+      <String>['red', 'blue', 'green'],
+      enableColumnFilter: true,
+    ),
+    renderer: (rendererContext) {
+      Color textColor = Colors.black;
+
+      if (rendererContext.cell.value == 'red') {
+        textColor = Colors.red;
+      } else if (rendererContext.cell.value == 'blue') {
+        textColor = Colors.blue;
+      } else if (rendererContext.cell.value == 'green') {
+        textColor = Colors.green;
+      }
+
+      return Text(
+        rendererContext.cell.value.toString(),
+        style: TextStyle(
+          color: textColor,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: rendererContext.column.textAlign.value,
+      );
+    },
+  ),
+  PlutoColumn(
+    title: 'column3',
+    field: 'column3',
+    textAlign: PlutoColumnTextAlign.left,
+    titleTextAlign: PlutoColumnTextAlign.center,
+    enableAutoEditing: true,
+    type: PlutoColumnType.date(
+        // headerFormat: 'yyyy 년 MM 월',
+        // startDate: DateTime(2022, 01, 09),
+        // endDate: DateTime(2022, 08, 10),
+        ),
+  ),
+  PlutoColumn(
+    title: 'column4',
+    field: 'column4',
+    textAlign: PlutoColumnTextAlign.center,
+    titleTextAlign: PlutoColumnTextAlign.right,
+    type: PlutoColumnType.time(),
+  ),
+  PlutoColumn(
+    title: 'column5',
+    field: 'column5',
+    textAlign: PlutoColumnTextAlign.center,
+    titleTextAlign: PlutoColumnTextAlign.left,
+    type: PlutoColumnType.number(
+      negative: true,
+      format: '#,###.###',
+      allowFirstDot: true,
+    ),
+  ),
+  PlutoColumn(
+    title: 'column6',
+    field: 'column6',
+    type: PlutoColumnType.text(),
+    enableFilterMenuItem: false,
+    enableEditingMode: false,
+    renderer: (rendererContext) {
+      return Image.asset(
+        'assets/images/cat.jpg',
+        fit: BoxFit.fitWidth,
+      );
+    },
+  ),
+  PlutoColumn(
+    title: 'column7',
+    field: 'column7',
+    type: PlutoColumnType.number(),
+    enableFilterMenuItem: false,
+    enableEditingMode: false,
+    // NEW Custom cellPadding
+    cellPadding: 0,
+    width: 80,
+    renderer: (rendererContext) {
+      return Container(
+        color:
+            rendererContext.cell.value % 2 == 0 ? Colors.yellow : Colors.teal,
+      );
+    },
+  ),
+];
+
+final testColumnGroupsA = [
+  PlutoColumnGroup(
+    title: 'Expanded Column Group',
+    fields: ['column1'],
+    expandedColumn: true,
+  ),
+  PlutoColumnGroup(
+    title: 'Group A',
+    children: [
+      PlutoColumnGroup(title: 'SubA', fields: ['column2']),
+      PlutoColumnGroup(
+        title: 'SubB',
+        fields: ['column3'],
+        expandedColumn: true,
+      ),
+    ],
+  ),
+  PlutoColumnGroup(
+    title: 'Group B',
+    fields: ['column4', 'column5', 'column6'],
+  ),
+  PlutoColumnGroup(
+    title: 'Group C',
+    fields: ['column7'],
+  ),
+];

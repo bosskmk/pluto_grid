@@ -215,16 +215,8 @@ mixin LayoutState implements IPlutoGridState {
   double get footerTopOffset =>
       maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
-  /// Each column is checked whether it is currently visible on the screen
-  /// with the VisibilityDetector widget.
-  /// Decide whether to render each Row.cells
-  /// according to whether the column is displayed on the screen or not.
-  /// Because of this, the column must always exist.
-  /// For this reason,
-  /// hide the column area at a height of 0.1 and operate as if it were not shown.
   @override
-  double get columnHeight =>
-      showColumnTitle ? configuration!.columnHeight : 0.1;
+  double get columnHeight => showColumnTitle ? configuration!.columnHeight : 0;
 
   @override
   double get columnGroupHeight =>
@@ -347,6 +339,10 @@ mixin LayoutState implements IPlutoGridState {
     _maxHeight = size.maxHeight;
     _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateColumnStartPosition();
+    });
   }
 
   @override
@@ -417,6 +413,8 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
+    updateColumnStartPosition();
+
     _resizingChangeNotifier.notifyListeners();
   }
 }
