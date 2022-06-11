@@ -46,8 +46,10 @@ class PlutoGridDatePicker {
     double rowsHeight = 6 * itemHeight;
 
     // itemHeight * 2 = Header Height + Column Height
-    double popupHeight =
-        (itemHeight * 2) + rowsHeight + PlutoGridSettings.totalShadowLineWidth + PlutoGridSettings.gridInnerSpacing;
+    double popupHeight = (itemHeight * 2) +
+        rowsHeight +
+        PlutoGridSettings.totalShadowLineWidth +
+        PlutoGridSettings.gridInnerSpacing;
 
     final popupColumns = _buildColumns();
 

@@ -461,7 +461,10 @@ mixin ColumnState implements IPlutoGridState {
 
     resizeColumn(
       column,
-      textPainter.width - column.width + (cellPadding.left + cellPadding.right) + 2,
+      textPainter.width -
+          column.width +
+          (cellPadding.left + cellPadding.right) +
+          2,
     );
   }
 

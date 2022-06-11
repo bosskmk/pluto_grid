@@ -30,28 +30,28 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     super.initState();
 
     /// Test A
-    // columns.addAll(testColumnsA);
-    // columnGroups.addAll(testColumnGroupsA);
-    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
-    //   return rowColorContext.row.cells['column2']!.value == 'green'
-    //       ? const Color(0xFFE2F6DF)
-    //       : Colors.white;
-    // };
+    columns.addAll(testColumnsA);
+    columnGroups.addAll(testColumnGroupsA);
+    rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+    rowColorCallback = (PlutoRowColorContext rowColorContext) {
+      return rowColorContext.row.cells['column2']!.value == 'green'
+          ? const Color(0xFFE2F6DF)
+          : Colors.white;
+    };
 
     /// Test B
-    columns.addAll(DummyData(100, 0).columns);
-    DummyData.fetchRows(
-      columns,
-      chunkSize: 100,
-      chunkCount: 100,
-    ).then((fetchedRows) {
-      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
-          .then((initializedRows) {
-        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-        stateManager.notifyListeners();
-      });
-    });
+    // columns.addAll(DummyData(100, 0).columns);
+    // DummyData.fetchRows(
+    //   columns,
+    //   chunkSize: 100,
+    //   chunkCount: 100,
+    // ).then((fetchedRows) {
+    //   PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+    //       .then((initializedRows) {
+    //     stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+    //     stateManager.notifyListeners();
+    //   });
+    // });
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -475,7 +475,7 @@ final testColumnsA = [
     enableFilterMenuItem: false,
     enableEditingMode: false,
     // NEW Custom cellPadding
-    cellPadding: 0,
+    cellPadding: EdgeInsets.zero,
     width: 80,
     renderer: (rendererContext) {
       return Container(
