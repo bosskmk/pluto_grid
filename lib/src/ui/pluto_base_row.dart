@@ -154,7 +154,30 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   }
 }
 
-class _RowContainerWidget extends StatelessWidget {
+class _RowContainerWidgetProvider {
+  _RowContainerWidgetProvider({
+    required this.decoration,
+    required this.keepAlive,
+  });
+
+  BoxDecoration decoration;
+
+  bool keepAlive;
+
+  @override
+  bool operator ==(Object other) =>
+      other is _RowContainerWidgetProvider &&
+      other.decoration == decoration &&
+      other.keepAlive == keepAlive;
+
+  @override
+  int get hashCode => hashValues(
+        decoration,
+        keepAlive,
+      );
+}
+
+class _RowContainerWidget extends StatefulWidget {
   final int rowIdx;
 
   final PlutoRow row;
@@ -171,6 +194,14 @@ class _RowContainerWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<_RowContainerWidget> createState() => _RowContainerWidgetState();
+}
+
+class _RowContainerWidgetState extends State<_RowContainerWidget>
+    with
+        AutomaticKeepAliveClientMixin,
+        PlutoStateWithKeepAlive<_RowContainerWidget> {
   Color _getDefaultRowColor(PlutoGridStateManager stateManager) {
     if (stateManager.rowColorCallback == null) {
       return stateManager.configuration!.gridBackgroundColor;
@@ -178,8 +209,8 @@ class _RowContainerWidget extends StatelessWidget {
 
     return stateManager.rowColorCallback!(
       PlutoRowColorContext(
-        rowIdx: rowIdx,
-        row: row,
+        rowIdx: widget.rowIdx,
+        row: widget.row,
         stateManager: stateManager,
       ),
     );
@@ -203,7 +234,7 @@ class _RowContainerWidget extends StatelessWidget {
           (!isSelecting && !hasCurrentSelectingPosition);
 
       final bool checkSelectedRow = stateManager.selectingMode.isRow &&
-          stateManager.isSelectedRow(row.key);
+          stateManager.isSelectedRow(widget.row.key);
 
       if (checkCurrentRow || checkSelectedRow) {
         color = stateManager.configuration!.activatedColor;
@@ -216,27 +247,27 @@ class _RowContainerWidget extends StatelessWidget {
   }
 
   BoxDecoration _getBoxDecoration(PlutoGridStateManager stateManager) {
-    final bool isCurrentRow = stateManager.currentRowIdx == rowIdx;
+    final bool isCurrentRow = stateManager.currentRowIdx == widget.rowIdx;
 
     final bool isSelecting = stateManager.isSelecting;
 
-    final bool isCheckedRow = row.checked == true;
+    final bool isCheckedRow = widget.row.checked == true;
 
     final alreadyTarget = stateManager.dragRows
-            .firstWhereOrNull((element) => element.key == row.key) !=
+            .firstWhereOrNull((element) => element.key == widget.row.key) !=
         null;
 
     final isDraggingRow = stateManager.isDraggingRow;
 
     final bool isDragTarget = isDraggingRow &&
         !alreadyTarget &&
-        stateManager.isRowIdxDragTarget(rowIdx);
+        stateManager.isRowIdxDragTarget(widget.rowIdx);
 
     final bool isTopDragTarget =
-        isDraggingRow && stateManager.isRowIdxTopDragTarget(rowIdx);
+        isDraggingRow && stateManager.isRowIdxTopDragTarget(widget.rowIdx);
 
     final bool isBottomDragTarget =
-        isDraggingRow && stateManager.isRowIdxBottomDragTarget(rowIdx);
+        isDraggingRow && stateManager.isRowIdxBottomDragTarget(widget.rowIdx);
 
     final bool hasCurrentSelectingPosition =
         stateManager.hasCurrentSelectingPosition;
@@ -273,17 +304,24 @@ class _RowContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProxyProvider<PlutoGridStateManager, BoxDecoration>(
-      update: (_, stateManager, __) => _getBoxDecoration(stateManager),
-      child: Consumer<BoxDecoration>(
-        builder: (_, decoration, child) {
+    super.build(context);
+
+    return ProxyProvider<PlutoGridStateManager, _RowContainerWidgetProvider>(
+      update: (_, stateManager, __) => _RowContainerWidgetProvider(
+        decoration: _getBoxDecoration(stateManager),
+        keepAlive: stateManager.currentRowIdx == widget.rowIdx,
+      ),
+      child: Consumer<_RowContainerWidgetProvider>(
+        builder: (_, state, child) {
+          setKeepAlive(state.keepAlive);
+
           return _AnimatedOrNormalContainer(
-            enable: enableRowColorAnimation,
-            decoration: decoration,
+            enable: widget.enableRowColorAnimation,
+            decoration: state.decoration,
             child: child!,
           );
         },
-        child: child,
+        child: widget.child,
       ),
     );
   }

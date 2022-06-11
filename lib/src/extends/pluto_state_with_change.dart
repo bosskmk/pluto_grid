@@ -87,8 +87,8 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   }
 }
 
-abstract class PlutoStateWithChangeKeepAlive<T extends PlutoStatefulWidget>
-    extends PlutoStateWithChange<T> with AutomaticKeepAliveClientMixin {
+mixin PlutoStateWithKeepAlive<T extends StatefulWidget>
+    on AutomaticKeepAliveClientMixin<T> {
   bool _keepAlive = false;
 
   KeepAliveHandle? _keepAliveHandle;
