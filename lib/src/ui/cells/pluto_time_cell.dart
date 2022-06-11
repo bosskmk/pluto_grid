@@ -84,6 +84,8 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
         isOpenedPopup = false;
 
         if (event.gridA == null || event.gridB == null) {
+          widget.stateManager.setKeepFocus(true);
+          textFocus.requestFocus();
           return;
         }
 
@@ -175,6 +177,9 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
       mode: PlutoGridMode.select,
       width: 276,
       height: 300,
+      divider: const PlutoDualGridDivider(
+        show: false,
+      ),
     );
   }
 

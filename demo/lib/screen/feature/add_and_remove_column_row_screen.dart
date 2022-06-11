@@ -189,7 +189,9 @@ class _HeaderState extends State<_Header> {
   void initState() {
     super.initState();
 
-    widget.stateManager.setSelectingMode(gridSelectingMode);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.stateManager.setSelectingMode(gridSelectingMode);
+    });
   }
 
   void handleAddColumns() {

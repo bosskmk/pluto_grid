@@ -19,6 +19,8 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
     extends PlutoStateWithChange<PlutoLeftFrozenColumns> {
   bool? _showColumnGroups;
 
+  bool? _showColumnTitle;
+
   List<PlutoColumn>? _columns;
 
   List<PlutoColumnGroupPair>? _columnGroups;
@@ -27,8 +29,7 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
 
   @override
   bool allowStream(event) {
-    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
-        event is PlutoVisibilityColumnStreamNotifierEvent);
+    return event is! PlutoSetCurrentCellStreamNotifierEvent;
   }
 
   @override
@@ -37,6 +38,11 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
         widget.stateManager.showColumnGroups,
+      );
+
+      _showColumnTitle = update<bool?>(
+        _showColumnTitle,
+        widget.stateManager.showColumnTitle,
       );
 
       _columns = update<List<PlutoColumn>?>(

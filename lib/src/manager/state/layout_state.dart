@@ -28,6 +28,8 @@ abstract class ILayoutState {
   /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
   bool get showFrozenColumn;
 
+  bool get showColumnTitle;
+
   bool get showColumnFilter;
 
   bool get showHeader;
@@ -84,6 +86,8 @@ abstract class ILayoutState {
   void setLayout(BoxConstraints size);
 
   void resetShowFrozenColumn({bool notify = true});
+
+  void setShowColumnTitle(bool flag, {bool notify = true});
 
   void setShowColumnFilter(bool flag, {bool notify = true});
 
@@ -178,6 +182,11 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showFrozenColumn;
 
   @override
+  bool get showColumnTitle => _showColumnTitle == true;
+
+  bool? _showColumnTitle = true;
+
+  @override
   bool get showColumnFilter => _showColumnFilter == true;
 
   bool? _showColumnFilter;
@@ -207,7 +216,7 @@ mixin LayoutState implements IPlutoGridState {
       maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
   @override
-  double get columnHeight => configuration!.columnHeight;
+  double get columnHeight => showColumnTitle ? configuration!.columnHeight : 0;
 
   @override
   double get columnGroupHeight =>
@@ -330,11 +339,28 @@ mixin LayoutState implements IPlutoGridState {
     _maxHeight = size.maxHeight;
     _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateColumnStartPosition();
+    });
   }
 
   @override
   void resetShowFrozenColumn({bool notify = true}) {
     _showFrozenColumn = shouldShowFrozenColumns(_maxWidth!);
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void setShowColumnTitle(bool flag, {bool notify = true}) {
+    if (_showColumnTitle == flag) {
+      return;
+    }
+
+    _showColumnTitle = flag;
 
     if (notify) {
       notifyListeners();
@@ -387,6 +413,8 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
+    updateColumnStartPosition();
+
     _resizingChangeNotifier.notifyListeners();
   }
 }

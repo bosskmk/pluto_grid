@@ -23,8 +23,7 @@ abstract class _PlutoLeftFrozenRowsStateWithState
 
   @override
   bool allowStream(event) {
-    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
-        event is PlutoVisibilityColumnStreamNotifierEvent);
+    return event is! PlutoSetCurrentCellStreamNotifierEvent;
   }
 
   @override
