@@ -315,8 +315,6 @@ mixin SelectingState implements IPlutoGridState {
 
     double currentWidth = 0.0;
     currentWidth += gridGlobalOffset!.dx;
-    currentWidth += PlutoGridSettings.gridPadding;
-    currentWidth += PlutoGridSettings.gridBorderWidth;
 
     final columnIndexes = columnIndexesByShowFrozen;
 
