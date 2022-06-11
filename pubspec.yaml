@@ -16,7 +16,6 @@ dependencies:
   linked_scroll_controller: ^0.2.0
   collection: ^1.16.0
   provider: ^6.0.3
-  visibility_detector: ^0.3.3
 
 dev_dependencies:
   flutter_test:

@@ -10,9 +10,10 @@ class PlutoDualGridPopup {
   final PlutoDualGridProps gridPropsB;
   final PlutoGridMode? mode;
   final PlutoDualOnSelectedEventCallback? onSelected;
-  final PlutoDualGridDisplay display;
+  final PlutoDualGridDisplay? display;
   final double? width;
   final double? height;
+  final PlutoDualGridDivider? divider;
 
   PlutoDualGridPopup({
     required this.context,
@@ -20,9 +21,10 @@ class PlutoDualGridPopup {
     required this.gridPropsB,
     this.mode,
     this.onSelected,
-    this.display = const PlutoDualGridDisplayRatio(),
+    this.display,
     this.width,
     this.height,
+    this.divider,
   }) {
     open();
   }
@@ -61,7 +63,8 @@ class PlutoDualGridPopup {
                         onSelected: (PlutoDualOnSelectedEvent event) {
                           Navigator.pop(ctx, event);
                         },
-                        display: display,
+                        display: display ?? PlutoDualGridDisplayRatio(),
+                        divider: divider ?? const PlutoDualGridDivider(),
                       ),
                     );
                   },
@@ -74,27 +77,22 @@ class PlutoDualGridPopup {
   }
 
   List<BorderRadius>? _splitBorderRadius() {
-    final left = gridPropsA.configuration?.gridBorderRadius;
+    final left = gridPropsA.configuration.gridBorderRadius;
 
-    final right = gridPropsB.configuration?.gridBorderRadius;
-
-    if (left == null && right == null) {
-      return null;
-    }
+    final right = gridPropsB.configuration.gridBorderRadius;
 
     return [
       BorderRadius.only(
-        topLeft: left?.resolve(TextDirection.ltr).topLeft ?? Radius.zero,
-        bottomLeft: left?.resolve(TextDirection.ltr).bottomLeft ?? Radius.zero,
+        topLeft: left.resolve(TextDirection.ltr).topLeft,
+        bottomLeft: left.resolve(TextDirection.ltr).bottomLeft,
         topRight: Radius.zero,
         bottomRight: Radius.zero,
       ),
       BorderRadius.only(
         topLeft: Radius.zero,
         bottomLeft: Radius.zero,
-        topRight: right?.resolve(TextDirection.ltr).topRight ?? Radius.zero,
-        bottomRight:
-            right?.resolve(TextDirection.ltr).bottomRight ?? Radius.zero,
+        topRight: right.resolve(TextDirection.ltr).topRight,
+        bottomRight: right.resolve(TextDirection.ltr).bottomRight,
       ),
     ];
   }
@@ -118,7 +116,7 @@ class PlutoDualGridPopup {
     }
 
     return gridProps.copyWith(
-      configuration: gridProps.configuration?.copyWith(
+      configuration: gridProps.configuration.copyWith(
         gridBorderRadius: borderRadius,
       ),
     );

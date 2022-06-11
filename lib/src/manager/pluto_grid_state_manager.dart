@@ -20,6 +20,7 @@ import 'state/pagination_row_state.dart';
 import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
+import 'state/visibility_state.dart';
 
 abstract class IPlutoGridState
     implements
@@ -37,7 +38,8 @@ abstract class IPlutoGridState
         IPaginationRowState,
         IRowState,
         IScrollState,
-        ISelectingState {}
+        ISelectingState,
+        IVisibilityState {}
 
 class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     with
@@ -54,7 +56,8 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         PaginationRowState,
         RowState,
         ScrollState,
-        SelectingState {}
+        SelectingState,
+        VisibilityState {}
 
 /// It manages the state of the [PlutoGrid] and contains methods used by the grid.
 ///

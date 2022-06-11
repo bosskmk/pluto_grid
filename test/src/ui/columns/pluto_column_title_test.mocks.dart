@@ -2,13 +2,14 @@
 // in pluto_grid/test/src/ui/columns/pluto_column_title_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i7;
-import 'dart:ui' as _i5;
+import 'dart:async' as _i8;
+import 'dart:ui' as _i6;
 
 import 'package:flutter/material.dart' as _i4;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i6;
+import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_grid/pluto_grid.dart' as _i3;
+import 'package:pluto_grid/src/manager/state/visibility_state.dart' as _i5;
 import 'package:rxdart/rxdart.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -34,12 +35,15 @@ class _FakePlutoGridKeyPressed_3 extends _i1.Fake
 
 class _FakeChangeNotifier_4 extends _i1.Fake implements _i4.ChangeNotifier {}
 
-class _FakePlutoGridCellPosition_5 extends _i1.Fake
+class _FakeVisibilityStateNotifier_5 extends _i1.Fake
+    implements _i5.VisibilityStateNotifier {}
+
+class _FakePlutoGridCellPosition_6 extends _i1.Fake
     implements _i3.PlutoGridCellPosition {}
 
-class _FakePlutoRow_6 extends _i1.Fake implements _i3.PlutoRow {}
+class _FakePlutoRow_7 extends _i1.Fake implements _i3.PlutoRow {}
 
-class _FakeScrollController_7 extends _i1.Fake implements _i4.ScrollController {
+class _FakeScrollController_8 extends _i1.Fake implements _i4.ScrollController {
 }
 
 /// A class which mocks [PlutoGridStateManager].
@@ -218,6 +222,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#showFrozenColumn),
           returnValue: false) as bool);
   @override
+  bool get showColumnTitle => (super
+          .noSuchMethod(Invocation.getter(#showColumnTitle), returnValue: false)
+      as bool);
+  @override
   bool get showColumnFilter =>
       (super.noSuchMethod(Invocation.getter(#showColumnFilter),
           returnValue: false) as bool);
@@ -394,6 +402,11 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#currentSelectingText),
           returnValue: '') as String);
   @override
+  _i5.VisibilityStateNotifier get visibilityNotifier =>
+      (super.noSuchMethod(Invocation.getter(#visibilityNotifier),
+              returnValue: _FakeVisibilityStateNotifier_5())
+          as _i5.VisibilityStateNotifier);
+  @override
   set headerHeight(double? value) =>
       super.noSuchMethod(Invocation.setter(#headerHeight, value),
           returnValueForMissingStub: null);
@@ -416,11 +429,11 @@ class MockPlutoGridStateManager extends _i1.Mock
   dynamic notifyStreamListeners(_i3.PlutoStreamNotifierEvent? event) =>
       super.noSuchMethod(Invocation.method(#notifyStreamListeners, [event]));
   @override
-  void addListener(_i5.VoidCallback? listener) =>
+  void addListener(_i6.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i5.VoidCallback? listener) =>
+  void removeListener(_i6.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -780,7 +793,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
               Invocation.method(#cellPositionToMove, [cellPosition, direction]),
-              returnValue: _FakePlutoGridCellPosition_5())
+              returnValue: _FakePlutoGridCellPosition_6())
           as _i3.PlutoGridCellPosition);
   @override
   void moveCurrentCell(_i3.PlutoMoveDirection? direction,
@@ -844,6 +857,11 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#resetShowFrozenColumn, [], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
+  void setShowColumnTitle(bool? flag, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setShowColumnTitle, [flag], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
   void setShowColumnFilter(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setShowColumnFilter, [flag], {#notify: notify}),
@@ -853,7 +871,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setShowLoading, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setGridGlobalOffset(_i5.Offset? offset) =>
+  void setGridGlobalOffset(_i6.Offset? offset) =>
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
@@ -879,7 +897,7 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   _i3.PlutoRow getNewRow() =>
       (super.noSuchMethod(Invocation.method(#getNewRow, []),
-          returnValue: _FakePlutoRow_6()) as _i3.PlutoRow);
+          returnValue: _FakePlutoRow_7()) as _i3.PlutoRow);
   @override
   List<_i3.PlutoRow> getNewRows({int? count = 1}) =>
       (super.noSuchMethod(Invocation.method(#getNewRows, [], {#count: count}),
@@ -973,7 +991,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#moveScrollByColumn, [direction, columnIdx]),
           returnValueForMissingStub: null);
   @override
-  bool needMovingScroll(_i5.Offset? offset, _i3.PlutoMoveDirection? move) =>
+  bool needMovingScroll(_i6.Offset? offset, _i3.PlutoMoveDirection? move) =>
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
@@ -1013,7 +1031,7 @@ class MockPlutoGridStateManager extends _i1.Mock
               {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setCurrentSelectingPositionWithOffset(_i5.Offset? offset) =>
+  void setCurrentSelectingPositionWithOffset(_i6.Offset? offset) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentSelectingPositionWithOffset, [offset]),
           returnValueForMissingStub: null);
@@ -1052,6 +1070,16 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
   @override
+  void updateHorizontalVisibilityState({bool? notify = true}) => super
+      .noSuchMethod(
+          Invocation.method(
+              #updateHorizontalVisibilityState, [], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  void updateColumnStartPosition() =>
+      super.noSuchMethod(Invocation.method(#updateColumnStartPosition, []),
+          returnValueForMissingStub: null);
+  @override
   bool shouldShowFrozenColumns(double? width) =>
       (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
           returnValue: false) as bool);
@@ -1063,11 +1091,11 @@ class MockPlutoGridStateManager extends _i1.Mock
 class MockPlutoGridScrollController extends _i1.Mock
     implements _i3.PlutoGridScrollController {
   @override
-  set vertical(_i6.LinkedScrollControllerGroup? _vertical) =>
+  set vertical(_i7.LinkedScrollControllerGroup? _vertical) =>
       super.noSuchMethod(Invocation.setter(#vertical, _vertical),
           returnValueForMissingStub: null);
   @override
-  set horizontal(_i6.LinkedScrollControllerGroup? _horizontal) =>
+  set horizontal(_i7.LinkedScrollControllerGroup? _horizontal) =>
       super.noSuchMethod(Invocation.setter(#horizontal, _horizontal),
           returnValueForMissingStub: null);
   @override
@@ -1101,7 +1129,7 @@ class MockPlutoGridScrollController extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinkedScrollControllerGroup extends _i1.Mock
-    implements _i6.LinkedScrollControllerGroup {
+    implements _i7.LinkedScrollControllerGroup {
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
@@ -1109,23 +1137,23 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   _i4.ScrollController addAndGet() =>
       (super.noSuchMethod(Invocation.method(#addAndGet, []),
-          returnValue: _FakeScrollController_7()) as _i4.ScrollController);
+          returnValue: _FakeScrollController_8()) as _i4.ScrollController);
   @override
-  void addOffsetChangedListener(_i5.VoidCallback? onChanged) => super
+  void addOffsetChangedListener(_i6.VoidCallback? onChanged) => super
       .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
           returnValueForMissingStub: null);
   @override
-  void removeOffsetChangedListener(_i5.VoidCallback? listener) => super
+  void removeOffsetChangedListener(_i6.VoidCallback? listener) => super
       .noSuchMethod(Invocation.method(#removeOffsetChangedListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  _i7.Future<void> animateTo(double? offset,
+  _i8.Future<void> animateTo(double? offset,
           {_i4.Curve? curve, Duration? duration}) =>
       (super.noSuchMethod(
           Invocation.method(
               #animateTo, [offset], {#curve: curve, #duration: duration}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
   void jumpTo(double? value) =>
       super.noSuchMethod(Invocation.method(#jumpTo, [value]),

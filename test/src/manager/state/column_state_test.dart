@@ -19,6 +19,7 @@ void main() {
 
   when(scroll.maxScrollHorizontal).thenReturn(0);
   when(scroll.bodyRowsHorizontal).thenReturn(scrollController);
+  when(scrollController.hasClients).thenReturn(true);
   when(scrollController.offset).thenReturn(0);
 
   testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',

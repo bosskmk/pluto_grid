@@ -166,7 +166,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
           },
           configuration: const PlutoGridConfiguration(),
         ),
-        display: const PlutoDualGridDisplayRatio(ratio: 0.5),
+        display: PlutoDualGridDisplayRatio(ratio: 0.5),
       ),
     );
   }

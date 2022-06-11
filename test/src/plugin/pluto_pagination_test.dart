@@ -25,6 +25,8 @@ void main() {
       const PlutoGridConfiguration(),
     );
 
+    when(stateManager!.footerHeight).thenReturn(45);
+
     when(stateManager!.streamNotifier).thenAnswer((_) => subject);
   });
 

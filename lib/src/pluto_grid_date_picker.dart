@@ -390,17 +390,33 @@ class _DateCellHeader extends PlutoStatefulWidget {
 
 abstract class _DateCellHeaderStateWithChange
     extends PlutoStateWithChange<_DateCellHeader> {
-  PlutoCell? currentCell;
+  ScrollController? _scroll;
 
-  int? currentYear;
+  PlutoCell? _currentCell;
 
-  int? currentMonth;
+  int? _currentYear;
+
+  int? _currentMonth;
+
+  @override
+  void dispose() {
+    _scroll!.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+  }
 
   @override
   void onChange(event) {
     resetState((update) {
-      currentCell = update<PlutoCell?>(
-        currentCell,
+      _currentCell = update<PlutoCell?>(
+        _currentCell,
         widget.stateManager.currentCell,
         compare: identical,
       );
@@ -409,13 +425,13 @@ abstract class _DateCellHeaderStateWithChange
         widget.stateManager.rows[1].cells.entries.first.value.value,
       );
 
-      currentYear = update<int?>(
-        currentYear,
+      _currentYear = update<int?>(
+        _currentYear,
         date.year,
       );
 
-      currentMonth = update<int?>(
-        currentMonth,
+      _currentMonth = update<int?>(
+        _currentMonth,
         date.month,
       );
     });
@@ -432,30 +448,34 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
       height: widget.stateManager.rowTotalHeight,
       padding: PlutoGridSettings.cellPadding,
       alignment: Alignment.center,
-      child: Row(
-        children: [
-          IconButton(
-            padding: const EdgeInsets.all(0),
-            iconSize: widget.stateManager.configuration!.iconSize,
-            onPressed: () => widget.changeMonth(-12),
-            icon: Icon(
-              Icons.navigate_before,
-              color: widget.stateManager.configuration!.iconColor,
+      child: SingleChildScrollView(
+        controller: _scroll,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              padding: const EdgeInsets.all(0),
+              iconSize: widget.stateManager.configuration!.iconSize,
+              onPressed: () => widget.changeMonth(-12),
+              icon: Icon(
+                Icons.navigate_before,
+                color: widget.stateManager.configuration!.iconColor,
+              ),
             ),
-          ),
-          IconButton(
-            padding: const EdgeInsets.all(0),
-            iconSize: widget.stateManager.configuration!.iconSize,
-            onPressed: () => widget.changeMonth(12),
-            icon: Icon(
-              Icons.navigate_next,
-              color: widget.stateManager.configuration!.iconColor,
+            IconButton(
+              padding: const EdgeInsets.all(0),
+              iconSize: widget.stateManager.configuration!.iconSize,
+              onPressed: () => widget.changeMonth(12),
+              icon: Icon(
+                Icons.navigate_next,
+                color: widget.stateManager.configuration!.iconColor,
+              ),
             ),
-          ),
-          Expanded(
-            child: Text(
+            const SizedBox(width: 10),
+            Text(
               widget.headerDateFormat.format(
-                DateTime(currentYear!, currentMonth!),
+                DateTime(_currentYear!, _currentMonth!),
               ),
               style: TextStyle(
                 color: textColor,
@@ -466,32 +486,33 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               ),
               textAlign: TextAlign.center,
             ),
-          ),
-          RotatedBox(
-            quarterTurns: 3,
-            child: IconButton(
-              padding: const EdgeInsets.all(0),
-              iconSize: widget.stateManager.configuration!.iconSize,
-              onPressed: () => widget.changeMonth(-1),
-              icon: Icon(
-                Icons.navigate_next,
-                color: widget.stateManager.configuration!.iconColor,
+            const SizedBox(width: 10),
+            RotatedBox(
+              quarterTurns: 3,
+              child: IconButton(
+                padding: const EdgeInsets.all(0),
+                iconSize: widget.stateManager.configuration!.iconSize,
+                onPressed: () => widget.changeMonth(-1),
+                icon: Icon(
+                  Icons.navigate_next,
+                  color: widget.stateManager.configuration!.iconColor,
+                ),
               ),
             ),
-          ),
-          RotatedBox(
-            quarterTurns: 3,
-            child: IconButton(
-              padding: const EdgeInsets.all(0),
-              iconSize: widget.stateManager.configuration!.iconSize,
-              onPressed: () => widget.changeMonth(1),
-              icon: Icon(
-                Icons.navigate_before,
-                color: widget.stateManager.configuration!.iconColor,
+            RotatedBox(
+              quarterTurns: 3,
+              child: IconButton(
+                padding: const EdgeInsets.all(0),
+                iconSize: widget.stateManager.configuration!.iconSize,
+                onPressed: () => widget.changeMonth(1),
+                icon: Icon(
+                  Icons.navigate_before,
+                  color: widget.stateManager.configuration!.iconColor,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

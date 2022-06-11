@@ -199,7 +199,9 @@ class PlutoColumn {
     return titleList.reversed.join(' ');
   }
 
-  bool visible = false;
+  /// [startPosition] is the position value for the position of the column from the left.
+  /// Updated when the [PlutoGridStateManager.updateColumnStartPosition] method is called.
+  double startPosition = 0;
 
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
     if (!hasCheckReadOnly || row == null || cell == null) {

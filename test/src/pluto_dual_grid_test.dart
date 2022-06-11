@@ -59,6 +59,190 @@ void main() {
     },
   );
 
+  group('divider 테스트', () {
+    GlobalKey gridAKey = GlobalKey();
+    GlobalKey gridBKey = GlobalKey();
+
+    dualGrid(
+      PlutoDualGridDivider divider, {
+      PlutoDualGridDisplay? display,
+    }) {
+      return PlutoWidgetTestHelper('그리드 생성.', (tester) async {
+        final gridAColumns = ColumnHelper.textColumn('headerA', count: 3);
+        final gridARows = RowHelper.count(3, gridAColumns);
+
+        final gridBColumns = ColumnHelper.textColumn('headerB', count: 3);
+        final gridBRows = RowHelper.count(3, gridBColumns);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: PlutoDualGrid(
+                gridPropsA: PlutoDualGridProps(
+                  columns: gridAColumns,
+                  rows: gridARows,
+                  key: gridAKey,
+                ),
+                gridPropsB: PlutoDualGridProps(
+                  columns: gridBColumns,
+                  rows: gridBRows,
+                  key: gridBKey,
+                ),
+                divider: divider,
+                display: display,
+              ),
+            ),
+          ),
+        );
+      });
+    }
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 위젯이 렌더링 되어야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        expect(findDivider, findsOneWidget);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 가 기본 컬러로 렌더링 되어야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final coloredBox = tester.widget<ColoredBox>(
+          find.descendant(of: findDivider, matching: find.byType(ColoredBox)),
+        );
+
+        expect(coloredBox.color, Colors.white);
+
+        final icon = tester.widget<Icon>(
+          find.descendant(of: findDivider, matching: find.byType(Icon)),
+        );
+
+        expect(icon.color, const Color(0xFFA1A5AE));
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider(
+      backgroundColor: Colors.deepOrange,
+      indicatorColor: Colors.indigoAccent,
+    )).test(
+      'Divider 가변경 된 컬러로 렌더링 되어야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final coloredBox = tester.widget<ColoredBox>(
+          find.descendant(of: findDivider, matching: find.byType(ColoredBox)),
+        );
+
+        expect(coloredBox.color, Colors.deepOrange);
+
+        final icon = tester.widget<Icon>(
+          find.descendant(of: findDivider, matching: find.byType(Icon)),
+        );
+
+        expect(icon.color, Colors.indigoAccent);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider(
+      show: false,
+    )).test(
+      'show 가 false 인 경우 Divider 가 렌더링 되지 않아야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        expect(findDivider, findsNothing);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 를 우측으로 드래그 하는 경우 Divider 의 위치가 증가해야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final firstCenter = tester.getCenter(findDivider);
+
+        await tester.drag(findDivider, const Offset(100, 0));
+
+        await tester.pump();
+
+        final movedCenter = tester.getCenter(findDivider);
+
+        expect(movedCenter.dx, firstCenter.dx + 100);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 를 좌측으로 드래그 하는 경우 Divider 의 위치가 증가해야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final firstCenter = tester.getCenter(findDivider);
+
+        await tester.drag(findDivider, const Offset(-100, 0));
+
+        await tester.pump();
+
+        final movedCenter = tester.getCenter(findDivider);
+
+        expect(movedCenter.dx, firstCenter.dx - 100);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 를 우측으로 100 드래그 하는 경우,'
+      ' 좌측 그리드의 위치가 100 늘어나고, '
+      '우측 그리드의 위치가 100 줄어들어야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final findGridA = find.byKey(gridAKey);
+        final findGridB = find.byKey(gridBKey);
+
+        final firstAWidth = tester.getSize(findGridA).width;
+        final firstBWidth = tester.getSize(findGridB).width;
+
+        await tester.drag(findDivider, const Offset(100, 0));
+
+        await tester.pump();
+
+        final movedAWidth = tester.getSize(findGridA).width;
+        final movedBWidth = tester.getSize(findGridB).width;
+
+        expect(movedAWidth, firstAWidth + 100);
+        expect(movedBWidth, firstBWidth - 100);
+      },
+    );
+
+    dualGrid(const PlutoDualGridDivider()).test(
+      'Divider 를 좌측으로 100 드래그 하는 경우,'
+      ' 좌측 그리드의 위치가 100 즐어들고, '
+      '우측 그리드의 위치가 100 늘어나야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final findGridA = find.byKey(gridAKey);
+        final findGridB = find.byKey(gridBKey);
+
+        final firstAWidth = tester.getSize(findGridA).width;
+        final firstBWidth = tester.getSize(findGridB).width;
+
+        await tester.drag(findDivider, const Offset(-100, 0));
+
+        await tester.pump();
+
+        final movedAWidth = tester.getSize(findGridA).width;
+        final movedBWidth = tester.getSize(findGridB).width;
+
+        expect(movedAWidth, firstAWidth - 100);
+        expect(movedBWidth, firstBWidth + 100);
+      },
+    );
+  });
+
   group(
     '그리드간 셀 이동 테스트',
     () {
@@ -199,7 +383,7 @@ void main() {
     });
 
     test('ratio 가 0.5 인 경우 width 가 5:5', () {
-      const display = PlutoDualGridDisplayRatio(ratio: 0.5);
+      var display = PlutoDualGridDisplayRatio(ratio: 0.5);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -208,7 +392,7 @@ void main() {
     });
 
     test('ratio 가 0.1 인 경우 width 가 1:9', () {
-      const display = PlutoDualGridDisplayRatio(ratio: 0.1);
+      var display = PlutoDualGridDisplayRatio(ratio: 0.1);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -219,7 +403,7 @@ void main() {
 
   group('PlutoDualGridDisplayFixedAndExpanded', () {
     test('width 가 100', () {
-      const display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
+      var display = PlutoDualGridDisplayFixedAndExpanded(width: 100);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -228,7 +412,7 @@ void main() {
     });
 
     test('width 가 50', () {
-      const display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
+      var display = PlutoDualGridDisplayFixedAndExpanded(width: 50);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -239,7 +423,7 @@ void main() {
 
   group('PlutoDualGridDisplayExpandedAndFixed', () {
     test('width 가 100', () {
-      const display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
+      var display = PlutoDualGridDisplayExpandedAndFixed(width: 100);
 
       const size = BoxConstraints(maxWidth: 200);
 
@@ -248,7 +432,7 @@ void main() {
     });
 
     test('width 가 50', () {
-      const display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
+      var display = PlutoDualGridDisplayExpandedAndFixed(width: 50);
 
       const size = BoxConstraints(maxWidth: 200);
 

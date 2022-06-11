@@ -26,9 +26,9 @@ abstract class GridPopupProps {
 
 mixin PopupCellState<T extends PopupCell> on State<T>
     implements GridPopupProps {
-  TextEditingController? _textController;
+  late final TextEditingController textController;
 
-  FocusNode? _textFocus;
+  late final FocusNode textFocus;
 
   bool isOpenedPopup = false;
 
@@ -55,9 +55,9 @@ mixin PopupCellState<T extends PopupCell> on State<T>
   void dispose() {
     widget.stateManager.keyPressed.reset();
 
-    _textController!.dispose();
+    textController.dispose();
 
-    _textFocus!.dispose();
+    textFocus.dispose();
 
     super.dispose();
   }
@@ -66,11 +66,11 @@ mixin PopupCellState<T extends PopupCell> on State<T>
   void initState() {
     super.initState();
 
-    _textController = TextEditingController()
+    textController = TextEditingController()
       ..text =
           widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
-    _textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+    textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
   }
 
   void openPopup() {
@@ -179,6 +179,8 @@ mixin PopupCellState<T extends PopupCell> on State<T>
     } else if (event.cell != null) {
       selectedValue = event.cell!.value;
     } else {
+      widget.stateManager.setKeepFocus(true);
+      textFocus.requestFocus();
       return;
     }
 
@@ -188,47 +190,46 @@ mixin PopupCellState<T extends PopupCell> on State<T>
   void handleSelected(dynamic value) {
     widget.stateManager.handleAfterSelectingRow(widget.cell, value);
 
-    _textController!.text = widget.column.formattedValueForDisplayInEditing(
+    textController.text = widget.column.formattedValueForDisplayInEditing(
       widget.cell.value,
     );
+
+    if (!widget.stateManager.configuration!.enableMoveDownAfterSelecting) {
+      textFocus.requestFocus();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
-      _textFocus!.requestFocus();
+      textFocus.requestFocus();
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        TextField(
-          controller: _textController,
-          focusNode: _textFocus,
-          readOnly: true,
-          textInputAction: TextInputAction.none,
-          onTap: openPopup,
-          style: widget.stateManager.configuration!.cellTextStyle,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.all(0),
-            isDense: true,
-          ),
-          maxLines: 1,
-          textAlign: widget.column.textAlign.value,
+    final popupButton = IconButton(
+      icon: icon!,
+      color: widget.stateManager.configuration!.iconColor,
+      iconSize: widget.stateManager.configuration!.iconSize,
+      onPressed: openPopup,
+    );
+
+    return TextField(
+      focusNode: textFocus,
+      controller: textController,
+      readOnly: true,
+      textInputAction: TextInputAction.none,
+      onTap: openPopup,
+      style: widget.stateManager.configuration!.cellTextStyle,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(
+          borderSide: BorderSide.none,
         ),
-        Positioned(
-          top: -14,
-          right: !widget.column.textAlign.isRight ? -10 : null,
-          left: widget.column.textAlign.isRight ? -10 : null,
-          child: IconButton(
-            icon: icon!,
-            color: widget.stateManager.configuration!.iconColor,
-            iconSize: widget.stateManager.configuration!.iconSize,
-            onPressed: openPopup,
-          ),
-        ),
-      ],
+        contentPadding: EdgeInsets.zero,
+        prefixIcon: widget.column.textAlign.isRight ? popupButton : null,
+        suffixIcon: !widget.column.textAlign.isRight ? popupButton : null,
+      ),
+      maxLines: 1,
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: widget.column.textAlign.value,
     );
   }
 }
