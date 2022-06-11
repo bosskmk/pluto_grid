@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 import '../dummy_data/development.dart';
 import 'empty_screen.dart';
@@ -230,13 +226,6 @@ class _HeaderState extends State<_Header> {
         .setShowColumnFilter(!widget.stateManager.showColumnFilter);
   }
 
-  void handleExport() async {
-    String title = "pluto_grid_export";
-    var exported = const Utf8Encoder().convert(
-        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
-    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
-  }
-
   void setGridSelectingMode(PlutoGridSelectingMode? mode) {
     if (gridSelectingMode == mode || mode == null) {
       return;
@@ -296,8 +285,6 @@ class _HeaderState extends State<_Header> {
               onPressed: handleRemoveSelectedRowsButton,
               child: const Text('Remove Selected Rows'),
             ),
-            ElevatedButton(
-                onPressed: handleExport, child: const Text("Export to CSV")),
             DropdownButtonHideUnderline(
               child: DropdownButton(
                 value: gridSelectingMode,
