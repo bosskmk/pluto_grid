@@ -241,7 +241,6 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     }
 
     return TextField(
-      textAlignVertical: TextAlignVertical.center,
       focusNode: cellFocus,
       controller: _textController,
       readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
@@ -259,6 +258,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       maxLines: 1,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
+      textAlignVertical: TextAlignVertical.center,
       textAlign: widget.column.textAlign.value,
     );
   }
