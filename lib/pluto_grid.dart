@@ -42,6 +42,7 @@ export './src/ui/cells/pluto_text_cell.dart';
 export './src/ui/cells/pluto_time_cell.dart';
 export './src/ui/columns/pluto_column_filter.dart';
 export './src/ui/columns/pluto_column_title.dart';
+export './src/ui/miscellaneous/pluto_visibility_column.dart';
 export './src/ui/pluto_base_cell.dart';
 export './src/ui/pluto_base_column.dart';
 export './src/ui/pluto_base_column_group.dart';

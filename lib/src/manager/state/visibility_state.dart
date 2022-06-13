@@ -17,9 +17,17 @@ class VisibilityStateNotifier extends ChangeNotifier {
 
   bool _showFrozenColumn = false;
 
+  double _lastLeftBoundX1 = 0;
+
+  double _lastLeftBoundX2 = 0;
+
+  double _lastRightBoundX1 = 0;
+
+  double _lastRightBoundX2 = 0;
+
   /// Calculate the width of the column as wide as the [visibleMarginWidth] value
   /// to the left and right of the area visible on the screen.
-  static double visibleMarginWidth = 100;
+  static double visibleMarginWidth = 0;
 
   /// Returns whether the column is located in the screen area.
   bool visibleColumn(PlutoColumn column) {
@@ -40,6 +48,7 @@ class VisibilityStateNotifier extends ChangeNotifier {
     required double right,
     required double maxWidth,
     required showFrozenColumn,
+    required FilteredList<PlutoColumn> columns,
   }) {
     if (_visibleLeft == left &&
         _visibleRight == right &&
@@ -52,6 +61,47 @@ class VisibilityStateNotifier extends ChangeNotifier {
     _visibleRight = right;
     _visibleMaxWidth = maxWidth;
     _showFrozenColumn = showFrozenColumn;
+
+    final bool sameBoundScroll = _lastLeftBoundX1 <= _visibleLeft &&
+        _visibleLeft <= _lastLeftBoundX2 &&
+        _lastRightBoundX1 <= _visibleRight &&
+        _visibleRight <= _lastRightBoundX2;
+
+    if (sameBoundScroll) {
+      return;
+    }
+
+    PlutoColumn? leftVisibleColumn;
+    PlutoColumn? rightVisibleColumn;
+    PlutoColumn? previous;
+
+    for (final column in columns) {
+      final visible = visibleColumn(column);
+
+      if (leftVisibleColumn == null && visible) {
+        leftVisibleColumn = column;
+      } else if (leftVisibleColumn != null && !visible) {
+        rightVisibleColumn = previous;
+      }
+
+      if (rightVisibleColumn != null) {
+        break;
+      }
+
+      previous = column;
+    }
+
+    if (leftVisibleColumn != null) {
+      _lastLeftBoundX1 = leftVisibleColumn.startPosition;
+      _lastLeftBoundX2 =
+          leftVisibleColumn.startPosition + leftVisibleColumn.width;
+    }
+
+    if (rightVisibleColumn != null) {
+      _lastRightBoundX1 = rightVisibleColumn.startPosition;
+      _lastRightBoundX2 =
+          rightVisibleColumn.startPosition + rightVisibleColumn.width;
+    }
 
     notifyListeners();
   }
@@ -88,13 +138,15 @@ mixin VisibilityState implements IPlutoGridState {
     }
 
     final visibleLeft = scroll!.bodyRowsHorizontal!.offset;
-    final visibleRight = visibleLeft + maxWidth!;
+    final visibleRight =
+        visibleLeft + scroll!.bodyRowsHorizontal!.position.viewportDimension;
 
     _visibilityNotifier.update(
       left: visibleLeft,
       right: visibleRight,
       maxWidth: scroll!.maxScrollHorizontal,
       showFrozenColumn: showFrozenColumn,
+      columns: refColumns,
     );
   }
 

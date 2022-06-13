@@ -30,28 +30,29 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     super.initState();
 
     /// Test A
-    columns.addAll(testColumnsA);
-    columnGroups.addAll(testColumnGroupsA);
-    rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-    rowColorCallback = (PlutoRowColorContext rowColorContext) {
-      return rowColorContext.row.cells['column2']!.value == 'green'
-          ? const Color(0xFFE2F6DF)
-          : Colors.white;
-    };
+    // columns.addAll(testColumnsA);
+    // columnGroups.addAll(testColumnGroupsA);
+    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
+    //   return rowColorContext.row.cells['column2']!.value == 'green'
+    //       ? const Color(0xFFE2F6DF)
+    //       : Colors.white;
+    // };
 
     /// Test B
-    // columns.addAll(DummyData(100, 0).columns);
-    // DummyData.fetchRows(
-    //   columns,
-    //   chunkSize: 100,
-    //   chunkCount: 100,
-    // ).then((fetchedRows) {
-    //   PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
-    //       .then((initializedRows) {
-    //     stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-    //     stateManager.notifyListeners();
-    //   });
-    // });
+    columns.addAll(DummyData(100, 0).columns);
+    columnGroups.addAll(testColumnGroupsB);
+    DummyData.fetchRows(
+      columns,
+      chunkSize: 100,
+      chunkCount: 1,
+    ).then((fetchedRows) {
+      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+          .then((initializedRows) {
+        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+        stateManager.notifyListeners();
+      });
+    });
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -510,5 +511,32 @@ final testColumnGroupsA = [
   PlutoColumnGroup(
     title: 'Group C',
     fields: ['column7'],
+  ),
+];
+
+final testColumnGroupsB = [
+  PlutoColumnGroup(
+    title: 'Expanded Column Group',
+    fields: ['0'],
+    expandedColumn: true,
+  ),
+  PlutoColumnGroup(
+    title: 'Group A',
+    children: [
+      PlutoColumnGroup(title: 'SubA', fields: ['1']),
+      PlutoColumnGroup(
+        title: 'SubB',
+        fields: ['2'],
+        expandedColumn: true,
+      ),
+    ],
+  ),
+  PlutoColumnGroup(
+    title: 'Group B',
+    fields: ['3', '4', '5'],
+  ),
+  PlutoColumnGroup(
+    title: 'Group C',
+    fields: ['6'],
   ),
 ];

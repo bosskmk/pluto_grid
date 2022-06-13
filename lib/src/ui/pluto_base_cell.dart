@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
-class PlutoBaseCell extends StatelessWidget {
+class PlutoBaseCell extends StatelessWidget with VisibilityColumnWidget {
   final PlutoCell cell;
 
+  @override
   final PlutoColumn column;
 
   final int rowIdx;
