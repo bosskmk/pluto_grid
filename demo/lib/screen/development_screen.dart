@@ -40,7 +40,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     // };
 
     /// Test B
-    columns.addAll(DummyData(100, 0).columns);
+    columns.addAll(DummyData(30, 0).columns);
     columnGroups.addAll(testColumnGroupsB);
     DummyData.fetchRows(
       columns,

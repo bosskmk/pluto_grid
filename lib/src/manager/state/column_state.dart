@@ -116,7 +116,7 @@ abstract class IColumnState {
 
 mixin ColumnState implements IPlutoGridState {
   @override
-  List<PlutoColumn> get columns => [...refColumns];
+  List<PlutoColumn> get columns => List.from(refColumns, growable: false);
 
   @override
   FilteredList<PlutoColumn> get refColumns => _refColumns;
@@ -130,41 +130,71 @@ mixin ColumnState implements IPlutoGridState {
   FilteredList<PlutoColumn> _refColumns = FilteredList();
 
   @override
-  List<int> get columnIndexes => refColumns.asMap().keys.toList();
+  List<int> get columnIndexes => List.generate(
+        refColumns.length,
+        (index) => index,
+        growable: false,
+      );
 
   @override
   List<int> get columnIndexesForShowFrozen {
-    return [
-      ...leftFrozenColumnIndexes,
-      ...bodyColumnIndexes,
-      ...rightFrozenColumnIndexes
-    ];
+    final leftIndexes = <int>[];
+    final bodyIndexes = <int>[];
+    final rightIndexes = <int>[];
+    final length = refColumns.length;
+
+    for (int i = 0; i < length; i += 1) {
+      refColumns[i].frozen.isNone
+          ? bodyIndexes.add(i)
+          : refColumns[i].frozen.isLeft
+              ? leftIndexes.add(i)
+              : rightIndexes.add(i);
+    }
+
+    return leftIndexes + bodyIndexes + rightIndexes;
   }
 
   @override
   double get columnsWidth {
-    return refColumns.fold(0, (double value, element) => value + element.width);
+    double width = 0;
+
+    for (final column in refColumns) {
+      width += column.width;
+    }
+
+    return width;
   }
 
   @override
   List<PlutoColumn> get leftFrozenColumns {
-    return refColumns.where((e) => e.frozen.isLeft).toList();
+    return refColumns.where((e) => e.frozen.isLeft).toList(growable: false);
   }
 
   @override
   List<int> get leftFrozenColumnIndexes {
-    return refColumns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.frozen.isLeft) {
-        return [...previousValue, refColumns.indexOf(element)];
+    final indexes = <int>[];
+    final length = refColumns.length;
+
+    for (int i = 0; i < length; i += 1) {
+      if (refColumns[i].frozen.isLeft) {
+        indexes.add(i);
       }
-      return previousValue;
-    }).toList();
+    }
+
+    return indexes;
   }
 
   @override
   double get leftFrozenColumnsWidth {
-    return leftFrozenColumns.fold(
-        0, (double value, element) => value + element.width);
+    double width = 0;
+
+    for (final column in refColumns) {
+      if (column.frozen.isLeft) {
+        width += column.width;
+      }
+    }
+
+    return width;
   }
 
   @override
@@ -174,18 +204,29 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   List<int> get rightFrozenColumnIndexes {
-    return refColumns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.frozen.isRight) {
-        return [...previousValue, refColumns.indexOf(element)];
+    final indexes = <int>[];
+    final length = refColumns.length;
+
+    for (int i = 0; i < length; i += 1) {
+      if (refColumns[i].frozen.isRight) {
+        indexes.add(i);
       }
-      return previousValue;
-    }).toList();
+    }
+
+    return indexes;
   }
 
   @override
   double get rightFrozenColumnsWidth {
-    return rightFrozenColumns.fold(
-        0, (double value, element) => value + element.width);
+    double width = 0;
+
+    for (final column in refColumns) {
+      if (column.frozen.isRight) {
+        width += column.width;
+      }
+    }
+
+    return width;
   }
 
   @override
@@ -195,18 +236,29 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   List<int> get bodyColumnIndexes {
-    return bodyColumns.fold<List<int>>([], (List<int> previousValue, element) {
-      if (element.frozen.isNone) {
-        return [...previousValue, refColumns.indexOf(element)];
+    final indexes = <int>[];
+    final length = refColumns.length;
+
+    for (int i = 0; i < length; i += 1) {
+      if (refColumns[i].frozen.isNone) {
+        indexes.add(i);
       }
-      return previousValue;
-    }).toList();
+    }
+
+    return indexes;
   }
 
   @override
   double get bodyColumnsWidth {
-    return bodyColumns.fold(
-        0, (double value, element) => value + element.width);
+    double width = 0;
+
+    for (final column in refColumns) {
+      if (column.frozen.isNone) {
+        width += column.width;
+      }
+    }
+
+    return width;
   }
 
   @override
@@ -215,31 +267,51 @@ mixin ColumnState implements IPlutoGridState {
       return null;
     }
 
-    return refColumns
-        .firstWhereOrNull((element) => element.field == currentColumnField);
+    for (final column in refColumns) {
+      if (column.field == currentColumnField) {
+        return column;
+      }
+    }
+
+    return null;
   }
 
   @override
   String? get currentColumnField {
-    if (currentRow == null) {
+    if (currentRow == null || currentCell == null) {
       return null;
     }
 
-    return currentRow!.cells.keys.firstWhereOrNull(
-        (key) => currentRow!.cells[key]!.key == currentCell?.key);
+    for (final entry in currentRow!.cells.entries) {
+      if (entry.value.key == currentCell!.key) {
+        return entry.key;
+      }
+    }
+
+    return null;
   }
 
   @override
-  bool get hasSortedColumn =>
-      refColumns.firstWhereOrNull(
-        (element) => !element.sort.isNone,
-      ) !=
-      null;
+  bool get hasSortedColumn {
+    for (final column in refColumns) {
+      if (column.sort.isNone == false) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   @override
-  PlutoColumn? get getSortedColumn => refColumns.firstWhereOrNull(
-        (element) => !element.sort.isNone,
-      );
+  PlutoColumn? get getSortedColumn {
+    for (final column in refColumns) {
+      if (column.sort.isNone == false) {
+        return column;
+      }
+    }
+
+    return null;
+  }
 
   @override
   List<int> get columnIndexesByShowFrozen {
@@ -248,7 +320,9 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
-    for (var i = 0; i < refColumns.length; i += 1) {
+    final length = refColumns.length;
+
+    for (int i = 0; i < length; i += 1) {
       if (refColumns[i].key == columnKey) {
         refColumns[i].frozen =
             refColumns[i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
@@ -297,8 +371,9 @@ mixin ColumnState implements IPlutoGridState {
   @override
   int? columnIndex(PlutoColumn column) {
     final columnIndexes = columnIndexesByShowFrozen;
+    final length = columnIndexes.length;
 
-    for (var i = 0; i < columnIndexes.length; i += 1) {
+    for (int i = 0; i < length; i += 1) {
       if (refColumns[columnIndexes[i]].field == column.field) {
         return i;
       }

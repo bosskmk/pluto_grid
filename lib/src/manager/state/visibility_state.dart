@@ -154,7 +154,7 @@ mixin VisibilityState implements IPlutoGridState {
   void updateColumnStartPosition() {
     double x = 0;
 
-    for (var column in refColumns) {
+    for (final column in refColumns) {
       if (showFrozenColumn && column.frozen.isFrozen) {
         continue;
       }

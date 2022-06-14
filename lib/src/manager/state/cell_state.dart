@@ -137,7 +137,9 @@ mixin CellState implements IPlutoGridState {
       return null;
     }
 
-    for (var rowIdx = 0; rowIdx < refRows.length; rowIdx += 1) {
+    final length = refRows.length;
+
+    for (int rowIdx = 0; rowIdx < length; rowIdx += 1) {
       final columnIdx = columnIdxByCellKeyAndRowIdx(cellKey, rowIdx);
 
       if (columnIdx != null) {
@@ -155,8 +157,9 @@ mixin CellState implements IPlutoGridState {
     }
 
     final columnIndexes = columnIndexesByShowFrozen;
+    final length = columnIndexes.length;
 
-    for (var columnIdx = 0; columnIdx < columnIndexes.length; columnIdx += 1) {
+    for (int columnIdx = 0; columnIdx < length; columnIdx += 1) {
       final field = refColumns[columnIndexes[columnIdx]].field;
 
       if (refRows[rowIdx].cells[field]!.key == cellKey) {

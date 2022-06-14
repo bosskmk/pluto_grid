@@ -226,13 +226,13 @@ mixin RowState implements IPlutoGridState {
   }) {
     int sortIdx = start;
 
-    return rows.map((row) {
+    for (final row in rows) {
       row.sortIdx = sortIdx;
 
       sortIdx = increase ? ++sortIdx : --sortIdx;
+    }
 
-      return row;
-    }).toList(growable: false);
+    return rows;
   }
 
   @override
@@ -277,7 +277,7 @@ mixin RowState implements IPlutoGridState {
         start: sortIdx ?? 0,
       );
 
-      for (var i = 0; i < refRows.originalLength; i += 1) {
+      for (int i = 0; i < refRows.originalLength; i += 1) {
         if (sortIdx! <= refRows.originalList[i].sortIdx!) {
           refRows.originalList[i].sortIdx =
               refRows.originalList[i].sortIdx! + rows.length;
@@ -338,7 +338,7 @@ mixin RowState implements IPlutoGridState {
 
     final start = minSortIdx - rows.length;
 
-    for (var element in refRows.originalList) {
+    for (final element in refRows.originalList) {
       if (element.sortIdx != null && element.sortIdx! < minSortIdx) {
         element.sortIdx = element.sortIdx! - rows.length;
       }
@@ -400,7 +400,7 @@ mixin RowState implements IPlutoGridState {
             : refRows.last.sortIdx! + 1
         : 0;
 
-    for (var element in refRows.originalList) {
+    for (final element in refRows.originalList) {
       if (element.sortIdx != null && element.sortIdx! > start - 1) {
         element.sortIdx = element.sortIdx! + rows.length;
       }
@@ -495,7 +495,7 @@ mixin RowState implements IPlutoGridState {
       indexToMove = refRows.length - rows.length;
     }
 
-    for (var row in rows) {
+    for (final row in rows) {
       refRows.removeFromOriginal(row);
     }
 
@@ -533,8 +533,8 @@ mixin RowState implements IPlutoGridState {
     bool? flag, {
     bool notify = true,
   }) {
-    for (var e in refRows) {
-      e.setChecked(flag == true);
+    for (final row in refRows) {
+      row.setChecked(flag == true);
     }
 
     if (notify) {
@@ -552,7 +552,7 @@ mixin RowState implements IPlutoGridState {
     }
 
     if (state != null) {
-      for (var row in rows) {
+      for (final row in rows) {
         row.setState(state);
       }
     }
