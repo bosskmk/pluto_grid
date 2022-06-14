@@ -12,15 +12,19 @@ import 'column_state_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
   MockSpec<ScrollController>(returnNullOnMissingStub: true),
+  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
 ])
 void main() {
   final MockPlutoGridScrollController scroll = MockPlutoGridScrollController();
   final MockScrollController scrollController = MockScrollController();
+  final MockScrollPosition scrollPosition = MockScrollPosition();
 
   when(scroll.maxScrollHorizontal).thenReturn(0);
   when(scroll.bodyRowsHorizontal).thenReturn(scrollController);
   when(scrollController.hasClients).thenReturn(true);
   when(scrollController.offset).thenReturn(0);
+  when(scrollController.position).thenReturn(scrollPosition);
+  when(scrollPosition.viewportDimension).thenReturn(0.0);
 
   testWidgets('columnIndexes - columns 에 맞는 index list 가 리턴 되어야 한다.',
       (WidgetTester tester) async {

@@ -35,6 +35,7 @@ void main() {
     when(stateManager!.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
     when(stateManager!.hasFocus).thenReturn(true);
     when(stateManager!.canRowDrag).thenReturn(true);
+    when(stateManager!.showFrozenColumn).thenReturn(false);
   });
 
   buildRowWidget({

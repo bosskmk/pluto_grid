@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/manager/state/visibility_state.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -30,6 +31,8 @@ void main() {
     );
 
     when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+
+    when(stateManager!.showFrozenColumn).thenReturn(false);
 
     when(stateManager!.columnGroupDepth(any)).thenAnswer((realInvocation) {
       return PlutoColumnGroupHelper.maxDepth(
@@ -71,6 +74,10 @@ void main() {
       when(stateManager!.showColumnFilter).thenReturn(showColumnFilter);
       when(stateManager!.isFilteredColumn(any)).thenReturn(isFilteredColumn);
       when(stateManager!.columnFilterHeight).thenReturn(columnHeight);
+      when(stateManager!.rowHeight).thenReturn(45);
+      when(stateManager!.visibilityNotifier).thenReturn(
+        VisibilityStateNotifier(),
+      );
 
       await tester.pumpWidget(
         MaterialApp(
@@ -78,8 +85,15 @@ void main() {
             child: SizedBox(
               width: 1920,
               height: 1080,
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager!,
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<PlutoGridStateManager>.value(
+                    value: stateManager!,
+                  ),
+                  ChangeNotifierProvider<VisibilityStateNotifier>.value(
+                    value: stateManager!.visibilityNotifier,
+                  ),
+                ],
                 child: PlutoBaseColumnGroup(
                   stateManager: stateManager!,
                   columnGroup: columnGroup,
