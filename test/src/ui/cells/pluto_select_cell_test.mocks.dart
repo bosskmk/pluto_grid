@@ -539,14 +539,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#toggleSortColumn, [column]),
           returnValueForMissingStub: null);
   @override
-  double columnsWidthAtColumnIdx(int? columnIdx) => (super.noSuchMethod(
-      Invocation.method(#columnsWidthAtColumnIdx, [columnIdx]),
-      returnValue: 0.0) as double);
-  @override
-  double bodyColumnsWidthAtColumnIdx(int? columnIdx) => (super.noSuchMethod(
-      Invocation.method(#bodyColumnsWidthAtColumnIdx, [columnIdx]),
-      returnValue: 0.0) as double);
-  @override
   int? columnIndex(_i3.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#columnIndex, [column])) as int?);
   @override
@@ -910,8 +902,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setRowChecked, [row, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void insertRows(int? rowIdx, List<_i3.PlutoRow>? rows) =>
-      super.noSuchMethod(Invocation.method(#insertRows, [rowIdx, rows]),
+  void insertRows(int? rowIdx, List<_i3.PlutoRow>? rows,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#insertRows, [rowIdx, rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void prependNewRows({int? count = 1}) => super.noSuchMethod(
@@ -937,6 +931,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   void removeRows(List<_i3.PlutoRow>? rows, {bool? notify = true}) => super
       .noSuchMethod(Invocation.method(#removeRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
+  @override
+  void removeAllRows({bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#removeAllRows, [], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void moveRowsByOffset(List<_i3.PlutoRow>? rows, double? offset,
           {bool? notify = true}) =>
