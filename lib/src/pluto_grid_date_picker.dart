@@ -184,6 +184,11 @@ class PlutoGridDatePicker {
       return;
     }
 
+    PlutoGridCellPosition? currentCellPosition =
+        datePickerStateManager.currentCellPosition;
+
+    PlutoGridCellPosition? cellPosition;
+
     currentYear = offsetDate.year;
 
     currentMonth = offsetDate.month;
@@ -195,36 +200,34 @@ class PlutoGridDatePicker {
 
     final popupRows = _buildRows(days);
 
-    datePickerStateManager.refRows.clear();
+    datePickerStateManager.removeAllRows(notify: false);
 
-    datePickerStateManager.refRows.addAll(popupRows);
-
-    PlutoGridCellPosition? cellPosition;
+    datePickerStateManager.insertRows(0, popupRows, notify: false);
 
     switch (offset) {
       case -12:
         cellPosition = PlutoGridCellPosition(
           columnIdx: datePickerStateManager.refColumns.length - 1,
-          rowIdx: min(datePickerStateManager.currentCellPosition?.rowIdx ?? 0,
+          rowIdx: min(currentCellPosition?.rowIdx ?? 0,
               datePickerStateManager.refRows.length - 1),
         );
         break;
       case 12:
         cellPosition = PlutoGridCellPosition(
           columnIdx: 0,
-          rowIdx: min(datePickerStateManager.currentCellPosition?.rowIdx ?? 0,
+          rowIdx: min(currentCellPosition?.rowIdx ?? 0,
               datePickerStateManager.refRows.length - 1),
         );
         break;
       case -1:
         cellPosition = PlutoGridCellPosition(
-          columnIdx: datePickerStateManager.currentCellPosition?.columnIdx ?? 0,
+          columnIdx: currentCellPosition?.columnIdx ?? 0,
           rowIdx: datePickerStateManager.refRows.length - 1,
         );
         break;
       case 1:
         cellPosition = PlutoGridCellPosition(
-          columnIdx: datePickerStateManager.currentCellPosition?.columnIdx ?? 0,
+          columnIdx: currentCellPosition?.columnIdx ?? 0,
           rowIdx: 0,
         );
         break;

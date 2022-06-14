@@ -48,7 +48,11 @@ abstract class IRowState {
     bool notify = true,
   });
 
-  void insertRows(int rowIdx, List<PlutoRow> rows);
+  void insertRows(
+    int rowIdx,
+    List<PlutoRow> rows, {
+    bool notify = true,
+  });
 
   void prependNewRows({
     int count = 1,
@@ -65,6 +69,8 @@ abstract class IRowState {
   void removeCurrentRow();
 
   void removeRows(List<PlutoRow> rows);
+
+  void removeAllRows({bool notify = true});
 
   void moveRowsByOffset(
     List<PlutoRow> rows,
@@ -257,7 +263,11 @@ mixin RowState implements IPlutoGridState {
   }
 
   @override
-  void insertRows(int rowIdx, List<PlutoRow> rows) {
+  void insertRows(
+    int rowIdx,
+    List<PlutoRow> rows, {
+    bool notify = true,
+  }) {
     if (rows.isEmpty) {
       return;
     }
@@ -314,7 +324,9 @@ mixin RowState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   @override
@@ -464,6 +476,21 @@ mixin RowState implements IPlutoGridState {
     setCurrentSelectingPositionByCellKey(selectingCellKey, notify: false);
 
     currentSelectingRows.removeWhere((row) => removeKeys.contains(row.key));
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void removeAllRows({bool notify = true}) {
+    if (refRows.originalList.isEmpty) {
+      return;
+    }
+
+    refRows.clearFromOriginal();
+
+    resetCurrentState(notify: false);
 
     if (notify) {
       notifyListeners();
