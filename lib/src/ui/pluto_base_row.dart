@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
+import '../extends/pluto_multi_child_layout.dart';
+
 class PlutoBaseRow extends StatelessWidget {
   final int rowIdx;
 
@@ -57,12 +59,35 @@ class PlutoBaseRow extends StatelessWidget {
         enableRowColorAnimation:
             stateManager.configuration!.enableRowColorAnimation,
         key: ValueKey('rowContainer_${row.key}'),
-        child: CustomMultiChildLayout(
+        child: PlutoMultiChildLayout(
           key: ValueKey('rowContainer_${row.key}_row'),
+          stateManager: stateManager,
           delegate: _RowCellsLayoutDelegate(
             stateManager: stateManager,
             columns: columns,
           ),
+          visibilityListener: (children) {
+            for (final child in children) {
+              child.visitChildElements((element) {
+                if (element.widget is PlutoVisibilityColumn) {
+                  final columnWidget = element.widget as PlutoVisibilityColumn;
+
+                  final visible = stateManager.visibilityNotifier.visibleColumn(
+                    columnWidget.child.column,
+                  );
+
+                  element.visitChildElements((elementChild) {
+                    final oldVisible = elementChild.widget
+                        is! PlutoVisibilityReplacementWidget;
+
+                    if (oldVisible != visible) {
+                      element.markNeedsBuild();
+                    }
+                  });
+                }
+              });
+            }
+          },
           children: columns.map(_buildCell).toList(growable: false),
         ),
       );

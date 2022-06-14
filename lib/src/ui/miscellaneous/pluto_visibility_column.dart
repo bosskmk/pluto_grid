@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../pluto_grid.dart';
-import '../../manager/state/visibility_state.dart';
 
 mixin VisibilityColumnWidget implements Widget {
   PlutoColumn get column;
+}
+
+class PlutoVisibilityReplacementWidget extends ConstrainedBox {
+  PlutoVisibilityReplacementWidget({
+    Key? key,
+    required super.constraints,
+  }) : super(key: key);
 }
 
 class PlutoVisibilityColumn extends StatelessWidget {
@@ -20,20 +26,16 @@ class PlutoVisibilityColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateManager = context.read<PlutoGridStateManager>();
 
-    if (stateManager.showFrozenColumn && child.column.frozen.isFrozen) {
+    if ((stateManager.showFrozenColumn && child.column.frozen.isFrozen) ||
+        stateManager.visibilityNotifier.visibleColumn(child.column)) {
       return child;
     }
 
-    final visible = context.select<VisibilityStateNotifier, bool>((value) {
-      return value.visibleColumn(child.column);
-    });
-
-    return ConstrainedBox(
+    return PlutoVisibilityReplacementWidget(
       constraints: BoxConstraints.tightFor(
         width: child.column.width,
         height: stateManager.rowHeight,
       ),
-      child: visible ? child : null,
     );
   }
 }
