@@ -66,12 +66,6 @@ abstract class IColumnState {
   /// Toggle column sorting.
   void toggleSortColumn(PlutoColumn column);
 
-  /// Column width to index location based on full column.
-  double columnsWidthAtColumnIdx(int columnIdx);
-
-  /// Column width to index location based on Body column
-  double bodyColumnsWidthAtColumnIdx(int columnIdx);
-
   /// Index of [column] in [columns]
   ///
   /// Depending on the state of the frozen column, the column order index
@@ -348,24 +342,6 @@ mixin ColumnState implements IPlutoGridState {
     updateCurrentCellPosition(notify: false);
 
     notifyListeners();
-  }
-
-  @override
-  double columnsWidthAtColumnIdx(int columnIdx) {
-    double width = 0.0;
-    columnIndexes.getRange(0, columnIdx).forEach((idx) {
-      width += refColumns[idx].width;
-    });
-    return width;
-  }
-
-  @override
-  double bodyColumnsWidthAtColumnIdx(int columnIdx) {
-    double width = 0.0;
-    bodyColumnIndexes.getRange(0, columnIdx).forEach((idx) {
-      width += refColumns[idx].width;
-    });
-    return width;
   }
 
   @override

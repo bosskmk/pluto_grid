@@ -114,11 +114,7 @@ mixin ScrollState implements IPlutoGridState {
       return;
     }
 
-    // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
-    double offsetToMove = showFrozenColumn == true
-        ? bodyColumnsWidthAtColumnIdx(
-            columnIdx + direction.offset - leftFrozenColumnIndexes.length)
-        : columnsWidthAtColumnIdx(columnIdx + direction.offset);
+    double offsetToMove = columnToMove.startPosition;
 
     final double? screenOffset = showFrozenColumn == true
         ? maxWidth! - leftFrozenColumnsWidth - rightFrozenColumnsWidth
