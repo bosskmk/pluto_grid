@@ -257,32 +257,12 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   PlutoColumn? get currentColumn {
-    if (currentColumnField == null) {
-      return null;
-    }
-
-    for (final column in refColumns) {
-      if (column.field == currentColumnField) {
-        return column;
-      }
-    }
-
-    return null;
+    return currentCell == null ? null : currentCell!.column;
   }
 
   @override
   String? get currentColumnField {
-    if (currentRow == null || currentCell == null) {
-      return null;
-    }
-
-    for (final entry in currentRow!.cells.entries) {
-      if (entry.value.key == currentCell!.key) {
-        return entry.key;
-      }
-    }
-
-    return null;
+    return currentCell == null ? null : currentCell!.column.field;
   }
 
   @override
