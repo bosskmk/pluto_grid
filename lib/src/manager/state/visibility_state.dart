@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 typedef VisibilityElements
@@ -45,7 +44,9 @@ class VisibilityBuildController {
     required double right,
     required double maxWidth,
     required showFrozenColumn,
-    required FilteredList<PlutoColumn> columns,
+    required List<PlutoColumn> columns,
+    required void Function(PlutoGridEvent) addEvent,
+    bool forceUpdate = false,
   }) {
     if (!_needsUpdate(
       left: left,
@@ -53,29 +54,36 @@ class VisibilityBuildController {
       maxWidth: maxWidth,
       showFrozenColumn: showFrozenColumn,
     )) {
-      return;
+      if (forceUpdate != false) {
+        return;
+      }
     }
 
     PlutoColumn? leftVisibleColumn;
     PlutoColumn? rightVisibleColumn;
     PlutoColumn? previous;
 
-    final List<PlutoVisibilityColumnElement> buildElements = [];
+    final List<PlutoVisibilityColumnElement> visibleElements = [];
+    final List<PlutoVisibilityColumnElement> invisibleElements = [];
 
     for (final column in columns) {
       column.visible = visibleColumn(column);
 
       if (leftVisibleColumn == null && column.visible) {
         leftVisibleColumn = column;
-      } else if (leftVisibleColumn != null && !column.visible) {
+      } else if (leftVisibleColumn != null &&
+          rightVisibleColumn == null &&
+          !column.visible) {
         rightVisibleColumn = previous;
       }
 
       previous = column;
 
-      buildElements.addAll(
-        _elementsToBuild(column: column, visible: column.visible),
-      );
+      final elements = _elements(column: column, visible: column.visible);
+
+      column.visible
+          ? visibleElements.addAll(elements)
+          : invisibleElements.addAll(elements);
     }
 
     _updateHorizontalVisibleBound(
@@ -83,11 +91,15 @@ class VisibilityBuildController {
       rightVisibleColumn: rightVisibleColumn,
     );
 
-    SchedulerBinding.instance.scheduleTask(() {
-      for (final element in buildElements) {
-        element.markNeedsBuild();
-      }
-    }, Priority.touch);
+    addEvent(PlutoBuildVisibilityEvent(
+      elements: visibleElements,
+    ));
+
+    addEvent(PlutoBuildVisibilityEvent(
+      elements: invisibleElements,
+      type: PlutoGridEventType.throttle,
+      duration: const Duration(milliseconds: 300),
+    ));
   }
 
   void addVisibilityColumnElement({
@@ -142,7 +154,7 @@ class VisibilityBuildController {
     return true;
   }
 
-  List<PlutoVisibilityColumnElement> _elementsToBuild({
+  Iterable<PlutoVisibilityColumnElement> _elements({
     required PlutoColumn column,
     required bool visible,
   }) {
@@ -157,20 +169,7 @@ class VisibilityBuildController {
       return [];
     }
 
-    final List<PlutoVisibilityColumnElement> found = [];
-
-    for (final element in elements.values) {
-      element.visitChildElements((elementChild) {
-        final oldVisible =
-            elementChild.widget is! PlutoVisibilityReplacementWidget;
-
-        if (visible != oldVisible) {
-          found.add(element);
-        }
-      });
-    }
-
-    return found;
+    return elements.values;
   }
 
   void _updateHorizontalVisibleBound({
@@ -194,9 +193,11 @@ class VisibilityBuildController {
 abstract class IVisibilityState {
   VisibilityBuildController get visibilityBuildController;
 
-  void updateHorizontalVisibilityState({bool notify = true});
+  void updateHorizontalVisibilityState({bool forceUpdate = false});
 
-  void updateColumnStartPosition();
+  void updateColumnStartPosition({bool forceUpdate = false});
+
+  void removeVisibilityColumnElements(Set<String> columnFields);
 }
 
 mixin VisibilityState implements IPlutoGridState {
@@ -207,7 +208,7 @@ mixin VisibilityState implements IPlutoGridState {
       _visibilityBuildController;
 
   @override
-  void updateHorizontalVisibilityState({bool notify = true}) {
+  void updateHorizontalVisibilityState({bool forceUpdate = false}) {
     if (scroll?.bodyRowsHorizontal?.hasClients == null) {
       return;
     }
@@ -221,12 +222,14 @@ mixin VisibilityState implements IPlutoGridState {
       right: visibleRight,
       maxWidth: scroll!.maxScrollHorizontal,
       showFrozenColumn: showFrozenColumn,
-      columns: refColumns,
+      columns: refColumns.originalList,
+      addEvent: eventManager!.addEvent,
+      forceUpdate: forceUpdate,
     );
   }
 
   @override
-  void updateColumnStartPosition() {
+  void updateColumnStartPosition({bool forceUpdate = false}) {
     double x = 0;
 
     for (final column in refColumns) {
@@ -239,6 +242,17 @@ mixin VisibilityState implements IPlutoGridState {
       x += column.width;
     }
 
-    updateHorizontalVisibilityState();
+    updateHorizontalVisibilityState(forceUpdate: forceUpdate);
+  }
+
+  @override
+  void removeVisibilityColumnElements(Set<String> columnFields) {
+    visibilityBuildController.visibilityColumnElements.removeWhere(
+      (key, value) => columnFields.contains(key),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateColumnStartPosition(forceUpdate: true);
+    });
   }
 }

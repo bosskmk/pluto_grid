@@ -12,6 +12,7 @@ export './src/helper/pluto_key_manager_event.dart';
 export './src/helper/pluto_log.dart';
 export './src/helper/pluto_move_direction.dart';
 export './src/helper/show_column_menu.dart';
+export './src/manager/event/pluto_grid_build_visibility_event.dart';
 export './src/manager/event/pluto_grid_cannot_move_current_cell_event.dart';
 export './src/manager/event/pluto_grid_cell_gesture_event.dart';
 export './src/manager/event/pluto_grid_change_column_filter_event.dart';

@@ -101,6 +101,8 @@ void main() {
           ),
         );
 
+        await tester.pumpAndSettle(const Duration(milliseconds: 300));
+
         stateManager!.hideColumn(columns[0].key, true, notify: false);
         stateManager!.hideColumn(columns[5].key, true);
       },

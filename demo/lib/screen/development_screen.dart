@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -40,12 +41,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     // };
 
     /// Test B
-    columns.addAll(DummyData(1000, 0).columns);
+    columns.addAll(DummyData(100, 0).columns);
     columnGroups.addAll(testColumnGroupsB);
     DummyData.fetchRows(
       columns,
       chunkSize: 100,
-      chunkCount: 10,
+      chunkCount: 1,
     ).then((fetchedRows) {
       PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
           .then((initializedRows) {
@@ -53,6 +54,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         stateManager.notifyListeners();
       });
     });
+    columns.first.hide = true;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -195,6 +197,19 @@ class _HeaderState extends State<_Header> {
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
+  void handleAddColumnButton() {
+    widget.stateManager.insertColumns(
+      0,
+      [
+        PlutoColumn(
+          title: faker.food.cuisine(),
+          field: 'new_${DateTime.now()}',
+          type: PlutoColumnType.text(),
+        ),
+      ],
+    );
+  }
+
   void handleAddRowButton({int? count}) {
     final List<PlutoRow> rows = count == null
         ? [DummyData.rowByColumns(widget.columns)]
@@ -258,6 +273,12 @@ class _HeaderState extends State<_Header> {
               child: const Text('Go Empty'),
               onPressed: () {
                 Navigator.pushNamed(context, EmptyScreen.routeName);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Add Column'),
+              onPressed: () {
+                handleAddColumnButton();
               },
             ),
             ElevatedButton(

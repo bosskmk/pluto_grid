@@ -379,6 +379,10 @@ mixin ColumnState implements IPlutoGridState {
 
     removeColumnsInFilterRows(columns, notify: false);
 
+    removeVisibilityColumnElements(
+      Set.from(columns.map((e) => e.field)),
+    );
+
     resetCurrentState(notify: false);
 
     notifyListeners();

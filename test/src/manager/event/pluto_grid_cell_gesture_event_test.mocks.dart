@@ -1070,14 +1070,21 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
   @override
-  void updateHorizontalVisibilityState({bool? notify = true}) => super
-      .noSuchMethod(
-          Invocation.method(
-              #updateHorizontalVisibilityState, [], {#notify: notify}),
+  void updateHorizontalVisibilityState({bool? forceUpdate = false}) =>
+      super.noSuchMethod(
+          Invocation.method(#updateHorizontalVisibilityState, [],
+              {#forceUpdate: forceUpdate}),
           returnValueForMissingStub: null);
   @override
-  void updateColumnStartPosition() =>
-      super.noSuchMethod(Invocation.method(#updateColumnStartPosition, []),
+  void updateColumnStartPosition({bool? forceUpdate = false}) => super
+      .noSuchMethod(
+          Invocation.method(
+              #updateColumnStartPosition, [], {#forceUpdate: forceUpdate}),
+          returnValueForMissingStub: null);
+  @override
+  void removeVisibilityColumnElements(Set<String>? columnFields) =>
+      super.noSuchMethod(
+          Invocation.method(#removeVisibilityColumnElements, [columnFields]),
           returnValueForMissingStub: null);
   @override
   bool shouldShowFrozenColumns(double? width) =>
