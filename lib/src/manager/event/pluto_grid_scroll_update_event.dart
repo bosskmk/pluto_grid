@@ -14,8 +14,8 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
         );
 
   @override
-  void handler(PlutoGridStateManager? stateManager) {
-    if (stateManager!.needMovingScroll(offset, PlutoMoveDirection.left)) {
+  void handler(PlutoGridStateManager stateManager) {
+    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.left)) {
       _scroll(stateManager, PlutoMoveDirection.left);
     } else if (stateManager.needMovingScroll(
         offset, PlutoMoveDirection.right)) {

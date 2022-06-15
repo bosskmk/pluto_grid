@@ -42,7 +42,10 @@ class _FakePlutoGridCellPosition_6 extends _i1.Fake
 
 class _FakePlutoRow_7 extends _i1.Fake implements _i3.PlutoRow {}
 
-class _FakeStreamSubscription_8<T> extends _i1.Fake
+class _FakePlutoGridStateManager_8 extends _i1.Fake
+    implements _i3.PlutoGridStateManager {}
+
+class _FakeStreamSubscription_9<T> extends _i1.Fake
     implements _i6.StreamSubscription<T> {}
 
 /// A class which mocks [PlutoGridStateManager].
@@ -1088,9 +1091,10 @@ class MockPlutoGridStateManager extends _i1.Mock
 class MockPlutoGridEventManager extends _i1.Mock
     implements _i3.PlutoGridEventManager {
   @override
-  set stateManager(_i3.PlutoGridStateManager? _stateManager) =>
-      super.noSuchMethod(Invocation.setter(#stateManager, _stateManager),
-          returnValueForMissingStub: null);
+  _i3.PlutoGridStateManager get stateManager =>
+      (super.noSuchMethod(Invocation.getter(#stateManager),
+              returnValue: _FakePlutoGridStateManager_8())
+          as _i3.PlutoGridStateManager);
   @override
   _i2.PublishSubject<_i3.PlutoGridEvent> get subject =>
       (super.noSuchMethod(Invocation.getter(#subject),
@@ -1099,7 +1103,7 @@ class MockPlutoGridEventManager extends _i1.Mock
   @override
   _i6.StreamSubscription<dynamic> get subscription =>
       (super.noSuchMethod(Invocation.getter(#subscription),
-              returnValue: _FakeStreamSubscription_8<dynamic>())
+              returnValue: _FakeStreamSubscription_9<dynamic>())
           as _i6.StreamSubscription<dynamic>);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
@@ -1115,7 +1119,7 @@ class MockPlutoGridEventManager extends _i1.Mock
   _i6.StreamSubscription<_i3.PlutoGridEvent> listener(
           void Function(_i3.PlutoGridEvent)? onData) =>
       (super.noSuchMethod(Invocation.method(#listener, [onData]),
-              returnValue: _FakeStreamSubscription_8<_i3.PlutoGridEvent>())
+              returnValue: _FakeStreamSubscription_9<_i3.PlutoGridEvent>())
           as _i6.StreamSubscription<_i3.PlutoGridEvent>);
 }
 

@@ -17,25 +17,25 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   }) : super();
 
   @override
-  void handler(PlutoGridStateManager? stateManager) {
+  void handler(PlutoGridStateManager stateManager) {
     switch (gestureType) {
       case PlutoGridGestureType.onTapUp:
-        _onTapUp(stateManager!);
+        _onTapUp(stateManager);
         break;
       case PlutoGridGestureType.onLongPressStart:
-        _onLongPressStart(stateManager!);
+        _onLongPressStart(stateManager);
         break;
       case PlutoGridGestureType.onLongPressMoveUpdate:
-        _onLongPressMoveUpdate(stateManager!);
+        _onLongPressMoveUpdate(stateManager);
         break;
       case PlutoGridGestureType.onLongPressEnd:
-        _onLongPressEnd(stateManager!);
+        _onLongPressEnd(stateManager);
         break;
       case PlutoGridGestureType.onDoubleTap:
-        _onDoubleTap(stateManager!);
+        _onDoubleTap(stateManager);
         break;
       case PlutoGridGestureType.onSecondaryTap:
-        _onSecondaryTap(stateManager!);
+        _onSecondaryTap(stateManager);
         break;
       default:
     }

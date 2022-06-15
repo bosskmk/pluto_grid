@@ -20,12 +20,12 @@ class PlutoGridDragRowsEvent extends PlutoGridEvent {
   static bool _pause = false;
 
   @override
-  void handler(PlutoGridStateManager? stateManager) async {
+  void handler(PlutoGridStateManager stateManager) async {
     if (_pause) {
       return;
     }
 
-    stateManager!.moveRowsByIndex(
+    stateManager.moveRowsByIndex(
       rows,
       targetIdx,
     );

@@ -27,5 +27,5 @@ abstract class PlutoGridEvent {
 
   final Duration? duration;
 
-  void handler(PlutoGridStateManager? stateManager);
+  void handler(PlutoGridStateManager stateManager);
 }

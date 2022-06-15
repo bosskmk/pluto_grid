@@ -17,8 +17,8 @@ class PlutoGridDragColumnEvent extends PlutoGridEvent {
   static const int resumeMilliseconds = debounceMilliseconds + 100;
 
   @override
-  void handler(PlutoGridStateManager? stateManager) async {
-    if (stateManager!.eventManager!.subscription.isPaused) {
+  void handler(PlutoGridStateManager stateManager) async {
+    if (stateManager.eventManager!.subscription.isPaused) {
       return;
     }
 
