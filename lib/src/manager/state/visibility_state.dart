@@ -1,14 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-/// [VisibilityStateNotifier]
-/// checks whether the scrollable widget is located within the screen area.
-///
-/// [PlutoRow] automatically checks whether to render according to the scroll position in ListView.builder.
-///
-/// [PlutoCell] refers to the value of [PlutoColumn.startPosition]
-/// to manually check whether to render as a child of [CustomMultiChildLayout].
-class VisibilityStateNotifier extends ChangeNotifier {
+typedef VisibilityElements
+    = Map<String, Map<Key, PlutoVisibilityColumnElement>>;
+
+class VisibilityBuildController {
   double _visibleLeft = 0;
 
   double _visibleRight = 0;
@@ -25,11 +22,12 @@ class VisibilityStateNotifier extends ChangeNotifier {
 
   double _lastRightBoundX2 = 0;
 
-  /// Calculate the width of the column as wide as the [visibleMarginWidth] value
-  /// to the left and right of the area visible on the screen.
   static double visibleMarginWidth = 0;
 
-  /// Returns whether the column is located in the screen area.
+  final VisibilityElements _visibilityColumnElements = {};
+
+  VisibilityElements get visibilityColumnElements => _visibilityColumnElements;
+
   bool visibleColumn(PlutoColumn column) {
     if (_showFrozenColumn && column.frozen.isFrozen) {
       return true;
@@ -42,7 +40,6 @@ class VisibilityStateNotifier extends ChangeNotifier {
     }
   }
 
-  /// Update the values for calculating the screen area according to the scroll position.
   void update({
     required double left,
     required double right,
@@ -50,11 +47,82 @@ class VisibilityStateNotifier extends ChangeNotifier {
     required showFrozenColumn,
     required FilteredList<PlutoColumn> columns,
   }) {
+    if (!_needsUpdate(
+      left: left,
+      right: right,
+      maxWidth: maxWidth,
+      showFrozenColumn: showFrozenColumn,
+    )) {
+      return;
+    }
+
+    PlutoColumn? leftVisibleColumn;
+    PlutoColumn? rightVisibleColumn;
+    PlutoColumn? previous;
+
+    final List<PlutoVisibilityColumnElement> buildElements = [];
+
+    for (final column in columns) {
+      column.visible = visibleColumn(column);
+
+      if (leftVisibleColumn == null && column.visible) {
+        leftVisibleColumn = column;
+      } else if (leftVisibleColumn != null && !column.visible) {
+        rightVisibleColumn = previous;
+      }
+
+      previous = column;
+
+      buildElements.addAll(
+        _elementsToBuild(column: column, visible: column.visible),
+      );
+    }
+
+    _updateHorizontalVisibleBound(
+      leftVisibleColumn: leftVisibleColumn,
+      rightVisibleColumn: rightVisibleColumn,
+    );
+
+    SchedulerBinding.instance.scheduleTask(() {
+      for (final element in buildElements) {
+        element.markNeedsBuild();
+      }
+    }, Priority.touch);
+  }
+
+  void addVisibilityColumnElement({
+    required String field,
+    required PlutoVisibilityColumnElement element,
+  }) {
+    if (!_visibilityColumnElements.containsKey(field)) {
+      _visibilityColumnElements[field] = <Key, PlutoVisibilityColumnElement>{};
+    }
+
+    _visibilityColumnElements[field]![element.widget.key!] = element;
+  }
+
+  void removeVisibilityColumnElement({
+    required String field,
+    required PlutoVisibilityColumnElement element,
+  }) {
+    if (!_visibilityColumnElements.containsKey(field)) {
+      return;
+    }
+
+    _visibilityColumnElements[field]!.remove(element.widget.key!);
+  }
+
+  bool _needsUpdate({
+    required double left,
+    required double right,
+    required double maxWidth,
+    required showFrozenColumn,
+  }) {
     if (_visibleLeft == left &&
         _visibleRight == right &&
         _visibleMaxWidth == maxWidth &&
         _showFrozenColumn == showFrozenColumn) {
-      return;
+      return false;
     }
 
     _visibleLeft = left;
@@ -68,29 +136,47 @@ class VisibilityStateNotifier extends ChangeNotifier {
         _visibleRight <= _lastRightBoundX2;
 
     if (sameBoundScroll) {
-      return;
+      return false;
     }
 
-    PlutoColumn? leftVisibleColumn;
-    PlutoColumn? rightVisibleColumn;
-    PlutoColumn? previous;
+    return true;
+  }
 
-    for (final column in columns) {
-      final visible = visibleColumn(column);
-
-      if (leftVisibleColumn == null && visible) {
-        leftVisibleColumn = column;
-      } else if (leftVisibleColumn != null && !visible) {
-        rightVisibleColumn = previous;
-      }
-
-      if (rightVisibleColumn != null) {
-        break;
-      }
-
-      previous = column;
+  List<PlutoVisibilityColumnElement> _elementsToBuild({
+    required PlutoColumn column,
+    required bool visible,
+  }) {
+    if (!_visibilityColumnElements.containsKey(column.field)) {
+      return [];
     }
 
+    final Map<Key, PlutoVisibilityColumnElement> elements =
+        _visibilityColumnElements[column.field]!;
+
+    if (elements.isEmpty) {
+      return [];
+    }
+
+    final List<PlutoVisibilityColumnElement> found = [];
+
+    for (final element in elements.values) {
+      element.visitChildElements((elementChild) {
+        final oldVisible =
+            elementChild.widget is! PlutoVisibilityReplacementWidget;
+
+        if (visible != oldVisible) {
+          found.add(element);
+        }
+      });
+    }
+
+    return found;
+  }
+
+  void _updateHorizontalVisibleBound({
+    required PlutoColumn? leftVisibleColumn,
+    required PlutoColumn? rightVisibleColumn,
+  }) {
     if (leftVisibleColumn != null) {
       _lastLeftBoundX1 = leftVisibleColumn.startPosition;
       _lastLeftBoundX2 =
@@ -102,34 +188,23 @@ class VisibilityStateNotifier extends ChangeNotifier {
       _lastRightBoundX2 =
           rightVisibleColumn.startPosition + rightVisibleColumn.width;
     }
-
-    notifyListeners();
   }
 }
 
-/// Check whether the widget is rendered according to the scroll position
 abstract class IVisibilityState {
-  /// The [PlutoBaseCell] widget listens to this listener when built within the [PlutoBaseRow] widget.
-  VisibilityStateNotifier get visibilityNotifier;
+  VisibilityBuildController get visibilityBuildController;
 
-  /// [updateHorizontalVisibilityState] is added to the Offset change event listener
-  /// of the grid's horizontal scroll when the [PlutoGrid] is initialized.
-  ///
-  /// Update the scroll position and screen area information of [VisibilityStateNotifier].
   void updateHorizontalVisibilityState({bool notify = true});
 
-  /// [updateColumnStartPosition] is called when the width or position of a column
-  /// or the show/hide state of a column is changed.
-  ///
-  /// When called, the value of [PlutoColumn.startPosition] is updated.
   void updateColumnStartPosition();
 }
 
 mixin VisibilityState implements IPlutoGridState {
-  final _visibilityNotifier = VisibilityStateNotifier();
+  final _visibilityBuildController = VisibilityBuildController();
 
   @override
-  VisibilityStateNotifier get visibilityNotifier => _visibilityNotifier;
+  VisibilityBuildController get visibilityBuildController =>
+      _visibilityBuildController;
 
   @override
   void updateHorizontalVisibilityState({bool notify = true}) {
@@ -141,7 +216,7 @@ mixin VisibilityState implements IPlutoGridState {
     final visibleRight =
         visibleLeft + scroll!.bodyRowsHorizontal!.position.viewportDimension;
 
-    _visibilityNotifier.update(
+    _visibilityBuildController.update(
       left: visibleLeft,
       right: visibleRight,
       maxWidth: scroll!.maxScrollHorizontal,

@@ -118,6 +118,7 @@ class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
                 rowIdx: i,
                 row: _rows![i]!,
                 columns: _columns!,
+                stateManager: widget.stateManager,
               );
             },
           ),

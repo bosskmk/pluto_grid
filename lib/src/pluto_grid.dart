@@ -470,11 +470,8 @@ class PlutoGridState extends State<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: _stateManager),
-        ChangeNotifierProvider.value(value: _stateManager.visibilityNotifier),
-      ],
+    return ChangeNotifierProvider.value(
+      value: _stateManager,
       child: FocusScope(
         onFocusChange: _stateManager.setKeepFocus,
         onKey: _handleGridFocusOnKey,

@@ -17,6 +17,8 @@ class PlutoBaseColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlutoVisibilityColumn(
+      key: ValueKey('${column.key}_visibility'),
+      stateManager: stateManager,
       child: PlutoBaseColumnWidget(
         stateManager: stateManager,
         column: column,

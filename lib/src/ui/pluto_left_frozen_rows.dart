@@ -77,6 +77,7 @@ class PlutoLeftFrozenRowsState extends _PlutoLeftFrozenRowsStateWithState {
           rowIdx: i,
           row: _rows![i]!,
           columns: _columns!,
+          stateManager: widget.stateManager,
         );
       },
     );

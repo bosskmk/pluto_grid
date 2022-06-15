@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../pluto_grid.dart';
 
@@ -17,17 +16,24 @@ class PlutoVisibilityReplacementWidget extends ConstrainedBox {
 class PlutoVisibilityColumn extends StatelessWidget {
   final VisibilityColumnWidget child;
 
+  final PlutoGridStateManager stateManager;
+
   const PlutoVisibilityColumn({
     required this.child,
-    Key? key,
+    required this.stateManager,
+    required Key key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final stateManager = context.read<PlutoGridStateManager>();
+  PlutoVisibilityColumnElement createElement() => PlutoVisibilityColumnElement(
+        this,
+        stateManager: stateManager,
+      );
 
+  @override
+  Widget build(BuildContext context) {
     if ((stateManager.showFrozenColumn && child.column.frozen.isFrozen) ||
-        stateManager.visibilityNotifier.visibleColumn(child.column)) {
+        child.column.visible) {
       return child;
     }
 
@@ -37,5 +43,34 @@ class PlutoVisibilityColumn extends StatelessWidget {
         height: stateManager.rowHeight,
       ),
     );
+  }
+}
+
+class PlutoVisibilityColumnElement extends StatelessElement {
+  PlutoVisibilityColumnElement(
+    super.widget, {
+    required this.stateManager,
+  });
+
+  final PlutoGridStateManager stateManager;
+
+  @override
+  void mount(Element? parent, Object? newSlot) {
+    stateManager.visibilityBuildController.addVisibilityColumnElement(
+      field: (widget as PlutoVisibilityColumn).child.column.field,
+      element: this,
+    );
+
+    super.mount(parent, newSlot);
+  }
+
+  @override
+  void unmount() {
+    stateManager.visibilityBuildController.removeVisibilityColumnElement(
+      field: (widget as PlutoVisibilityColumn).child.column.field,
+      element: this,
+    );
+
+    super.unmount();
   }
 }

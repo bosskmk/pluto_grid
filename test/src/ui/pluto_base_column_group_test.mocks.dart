@@ -33,8 +33,8 @@ class _FakePlutoGridKeyPressed_3 extends _i1.Fake
 
 class _FakeChangeNotifier_4 extends _i1.Fake implements _i4.ChangeNotifier {}
 
-class _FakeVisibilityStateNotifier_5 extends _i1.Fake
-    implements _i5.VisibilityStateNotifier {}
+class _FakeVisibilityBuildController_5 extends _i1.Fake
+    implements _i5.VisibilityBuildController {}
 
 class _FakePlutoGridCellPosition_6 extends _i1.Fake
     implements _i3.PlutoGridCellPosition {}
@@ -397,10 +397,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#currentSelectingText),
           returnValue: '') as String);
   @override
-  _i5.VisibilityStateNotifier get visibilityNotifier =>
-      (super.noSuchMethod(Invocation.getter(#visibilityNotifier),
-              returnValue: _FakeVisibilityStateNotifier_5())
-          as _i5.VisibilityStateNotifier);
+  _i5.VisibilityBuildController get visibilityBuildController =>
+      (super.noSuchMethod(Invocation.getter(#visibilityBuildController),
+              returnValue: _FakeVisibilityBuildController_5())
+          as _i5.VisibilityBuildController);
   @override
   set headerHeight(double? value) =>
       super.noSuchMethod(Invocation.setter(#headerHeight, value),

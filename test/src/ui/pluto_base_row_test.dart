@@ -25,8 +25,8 @@ void main() {
       const PlutoGridConfiguration(),
     );
     when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager!.visibilityNotifier).thenReturn(
-      VisibilityStateNotifier(),
+    when(stateManager!.visibilityBuildController).thenReturn(
+      VisibilityBuildController(),
     );
     when(stateManager!.rowHeight).thenReturn(45);
     when(stateManager!.isSelecting).thenReturn(true);
@@ -81,19 +81,13 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider<PlutoGridStateManager>.value(
-                    value: stateManager!,
-                  ),
-                  ChangeNotifierProvider.value(
-                    value: stateManager!.visibilityNotifier,
-                  ),
-                ],
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager!,
                 child: PlutoBaseRow(
                   rowIdx: rowIdx,
                   row: row,
                   columns: columns,
+                  stateManager: stateManager!,
                 ),
               ),
             ),

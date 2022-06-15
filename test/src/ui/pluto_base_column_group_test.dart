@@ -75,8 +75,8 @@ void main() {
       when(stateManager!.isFilteredColumn(any)).thenReturn(isFilteredColumn);
       when(stateManager!.columnFilterHeight).thenReturn(columnHeight);
       when(stateManager!.rowHeight).thenReturn(45);
-      when(stateManager!.visibilityNotifier).thenReturn(
-        VisibilityStateNotifier(),
+      when(stateManager!.visibilityBuildController).thenReturn(
+        VisibilityBuildController(),
       );
 
       await tester.pumpWidget(
@@ -85,15 +85,8 @@ void main() {
             child: SizedBox(
               width: 1920,
               height: 1080,
-              child: MultiProvider(
-                providers: [
-                  ChangeNotifierProvider<PlutoGridStateManager>.value(
-                    value: stateManager!,
-                  ),
-                  ChangeNotifierProvider<VisibilityStateNotifier>.value(
-                    value: stateManager!.visibilityNotifier,
-                  ),
-                ],
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager!,
                 child: PlutoBaseColumnGroup(
                   stateManager: stateManager!,
                   columnGroup: columnGroup,

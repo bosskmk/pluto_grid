@@ -35,7 +35,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 세번 째 컬럼 왼쪽 고정
     stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
@@ -81,6 +81,8 @@ void main() {
 
     // 우측 고정 컬럼 바로 전 컬럼인 Body 의 마지막 컬럼 셀 값 확인
     expect(stateManager!.currentCell!.value, 'headerB2 value 0');
+
+    await tester.pumpAndSettle();
   });
 
   testWidgets(
@@ -109,7 +111,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -150,6 +152,8 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+
+    await tester.pumpAndSettle();
 
     // Check currentColumn
     expect(stateManager!.currentColumn!.title, 'header2');

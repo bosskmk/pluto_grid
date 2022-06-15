@@ -3,9 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import '../extends/pluto_multi_child_layout.dart';
-import '../helper/descendant_element_helper.dart';
-
 class PlutoBodyColumns extends PlutoStatefulWidget {
   @override
   final PlutoGridStateManager stateManager;
@@ -104,31 +101,8 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
       controller: _scroll,
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
-      child: PlutoMultiChildLayout(
-          stateManager: widget.stateManager,
+      child: CustomMultiChildLayout(
           delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
-          visibilityListener: (children) {
-            final elements = DescendantElementHelper(children)
-                .findByWidgetType<PlutoVisibilityColumn>();
-
-            for (final element in elements) {
-              final columnWidget = element.widget as PlutoVisibilityColumn;
-
-              final visible =
-                  widget.stateManager.visibilityNotifier.visibleColumn(
-                columnWidget.child.column,
-              );
-
-              element.visitChildElements((elementChild) {
-                final oldVisible =
-                    elementChild.widget is! PlutoVisibilityReplacementWidget;
-
-                if (oldVisible != visible) {
-                  element.markNeedsBuild();
-                }
-              });
-            }
-          },
           children: _showColumnGroups == true
               ? _columnGroups!
                   .map((PlutoColumnGroupPair e) => LayoutId(

@@ -28,6 +28,8 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     // then
     final footer = find.text('Footer widget.');
     expect(footer, findsOneWidget);
@@ -54,6 +56,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     // then
     final found = find.byType(PlutoPagination);
@@ -82,6 +86,8 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     // then
     final found = find.byType(PlutoPagination);
     expect(found, findsOneWidget);
@@ -104,7 +110,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // then
     final cell1 = find.text('header0 value 0');
@@ -133,6 +139,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     Finder headerInkWell = find.descendant(
         of: find.byKey(columns.first.key), matching: find.byType(InkWell));
@@ -180,7 +188,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
@@ -262,7 +270,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -308,7 +316,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -369,6 +377,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 0);
       expect(stateManager!.rows[1].cells['header']!.value, 12);
@@ -418,6 +428,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 'not a number');
       expect(stateManager!.rows[1].cells['header']!.value, 12);
@@ -464,6 +476,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 1234567);
@@ -512,6 +526,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 12345);
       expect(stateManager!.rows[1].cells['header']!.value, 0);
@@ -554,6 +570,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].sortIdx, 0);
       expect(stateManager!.rows[1].sortIdx, 1);
@@ -595,6 +613,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].sortIdx, 5);
       expect(stateManager!.rows[1].sortIdx, 6);
@@ -632,6 +652,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // when
       stateManager!.moveColumn(column: columns[0], targetColumn: columns[2]);
 
@@ -667,6 +689,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       // when
       stateManager!.moveColumn(column: columns[9], targetColumn: columns[0]);
@@ -779,7 +803,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -837,7 +861,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -895,7 +919,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -953,7 +977,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1011,7 +1035,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1027,6 +1051,8 @@ void main() {
     await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+
+    await tester.pumpAndSettle();
 
     expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
@@ -1064,7 +1090,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1117,7 +1143,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1170,7 +1196,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');

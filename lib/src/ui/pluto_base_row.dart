@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
-import '../extends/pluto_multi_child_layout.dart';
-
 class PlutoBaseRow extends StatelessWidget {
   final int rowIdx;
 
@@ -12,91 +10,42 @@ class PlutoBaseRow extends StatelessWidget {
 
   final List<PlutoColumn> columns;
 
+  final PlutoGridStateManager stateManager;
+
   const PlutoBaseRow({
     required this.rowIdx,
     required this.row,
     required this.columns,
+    required this.stateManager,
     Key? key,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final stateManager = context.read<PlutoGridStateManager>();
-
-    bool _handleOnWillAccept(PlutoRow? draggingRow) {
-      if (draggingRow == null) {
-        return false;
-      }
-
-      final List<PlutoRow> selectedRows =
-          stateManager.currentSelectingRows.isNotEmpty
-              ? stateManager.currentSelectingRows
-              : [draggingRow];
-
-      return selectedRows.firstWhereOrNull(
-            (element) => element.key == row.key,
-          ) ==
-          null;
+  bool _handleOnWillAccept(PlutoRow? draggingRow) {
+    if (draggingRow == null) {
+      return false;
     }
 
-    void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
-      final draggingRows = stateManager.currentSelectingRows.isNotEmpty
-          ? stateManager.currentSelectingRows
-          : [details.data];
+    final List<PlutoRow> selectedRows =
+        stateManager.currentSelectingRows.isNotEmpty
+            ? stateManager.currentSelectingRows
+            : [draggingRow];
 
-      stateManager.eventManager!.addEvent(
-        PlutoGridDragRowsEvent(
-          rows: draggingRows,
-          targetIdx: rowIdx,
-        ),
-      );
-    }
+    return selectedRows.firstWhereOrNull(
+          (element) => element.key == row.key,
+        ) ==
+        null;
+  }
 
-    Widget _dragTargetBuilder(dragContext, candidate, rejected) {
-      return _RowContainerWidget(
-        rowIdx: rowIdx,
-        row: row,
-        enableRowColorAnimation:
-            stateManager.configuration!.enableRowColorAnimation,
-        key: ValueKey('rowContainer_${row.key}'),
-        child: PlutoMultiChildLayout(
-          key: ValueKey('rowContainer_${row.key}_row'),
-          stateManager: stateManager,
-          delegate: _RowCellsLayoutDelegate(
-            stateManager: stateManager,
-            columns: columns,
-          ),
-          visibilityListener: (children) {
-            for (final child in children) {
-              child.visitChildElements((element) {
-                if (element.widget is PlutoVisibilityColumn) {
-                  final columnWidget = element.widget as PlutoVisibilityColumn;
+  void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
+    final draggingRows = stateManager.currentSelectingRows.isNotEmpty
+        ? stateManager.currentSelectingRows
+        : [details.data];
 
-                  final visible = stateManager.visibilityNotifier.visibleColumn(
-                    columnWidget.child.column,
-                  );
-
-                  element.visitChildElements((elementChild) {
-                    final oldVisible = elementChild.widget
-                        is! PlutoVisibilityReplacementWidget;
-
-                    if (oldVisible != visible) {
-                      element.markNeedsBuild();
-                    }
-                  });
-                }
-              });
-            }
-          },
-          children: columns.map(_buildCell).toList(growable: false),
-        ),
-      );
-    }
-
-    return DragTarget<PlutoRow>(
-      onWillAccept: _handleOnWillAccept,
-      onMove: _handleOnMove,
-      builder: _dragTargetBuilder,
+    stateManager.eventManager!.addEvent(
+      PlutoGridDragRowsEvent(
+        rows: draggingRows,
+        targetIdx: rowIdx,
+      ),
     );
   }
 
@@ -104,6 +53,8 @@ class PlutoBaseRow extends StatelessWidget {
     return LayoutId(
       id: column.field,
       child: PlutoVisibilityColumn(
+        key: ValueKey('${row.cells[column.field]!.key}_visibility'),
+        stateManager: stateManager,
         child: PlutoBaseCell(
           cell: row.cells[column.field]!,
           column: column,
@@ -112,6 +63,33 @@ class PlutoBaseRow extends StatelessWidget {
           key: row.cells[column.field]!.key,
         ),
       ),
+    );
+  }
+
+  Widget _dragTargetBuilder(dragContext, candidate, rejected) {
+    return _RowContainerWidget(
+      rowIdx: rowIdx,
+      row: row,
+      enableRowColorAnimation:
+          stateManager.configuration!.enableRowColorAnimation,
+      key: ValueKey('rowContainer_${row.key}'),
+      child: CustomMultiChildLayout(
+        key: ValueKey('rowContainer_${row.key}_row'),
+        delegate: _RowCellsLayoutDelegate(
+          stateManager: stateManager,
+          columns: columns,
+        ),
+        children: columns.map(_buildCell).toList(growable: false),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<PlutoRow>(
+      onWillAccept: _handleOnWillAccept,
+      onMove: _handleOnMove,
+      builder: _dragTargetBuilder,
     );
   }
 }
