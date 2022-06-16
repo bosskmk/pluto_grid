@@ -101,11 +101,12 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
       controller: _scroll,
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
-      child: CustomMultiChildLayout(
+      child: PlutoVisibilityLayout(
           delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+          stateManager: widget.stateManager,
           children: _showColumnGroups == true
               ? _columnGroups!
-                  .map((PlutoColumnGroupPair e) => LayoutId(
+                  .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(
                         id: e.key,
                         child: PlutoBaseColumnGroup(
                           stateManager: widget.stateManager,
@@ -117,7 +118,7 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
                       ))
                   .toList()
               : _columns!
-                  .map((e) => LayoutId(
+                  .map((e) => PlutoVisibilityLayoutId(
                         id: e.field,
                         child: PlutoBaseColumn(
                           stateManager: widget.stateManager,
@@ -142,44 +143,59 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   Size getSize(BoxConstraints constraints) {
     totalColumnsHeight = 0;
+
     if (stateManager.showColumnGroups) {
       totalColumnsHeight =
           stateManager.columnGroupHeight + stateManager.columnHeight;
     } else {
       totalColumnsHeight = stateManager.columnHeight;
     }
+
     totalColumnsHeight += stateManager.columnFilterHeight;
+
+    final double width =
+        columns.isEmpty ? 0 : columns.last.startPosition + columns.last.width;
+
     return Size(
-        columns.fold(
-            0, (previousValue, element) => previousValue += element.width),
-        totalColumnsHeight);
+      width,
+      totalColumnsHeight,
+    );
   }
 
   @override
   void performLayout(Size size) {
     if (stateManager.showColumnGroups) {
       var separateLinkedGroup = stateManager.separateLinkedGroup(
-          columnGroupList: stateManager.columnGroups, columns: columns);
-      double dx = 0;
+        columnGroupList: stateManager.columnGroups,
+        columns: columns,
+      );
+
       for (PlutoColumnGroupPair pair in separateLinkedGroup) {
         if (!hasChild(pair.key)) continue;
-        final double width = pair.columns.fold<double>(
-            0, (previousValue, element) => previousValue + element.width);
-        var boxConstraints =
-            BoxConstraints.tight(Size(width, totalColumnsHeight));
+
+        final double width = pair.lastColumn.startPosition +
+            pair.lastColumn.width -
+            pair.firstColumn.startPosition;
+
+        var boxConstraints = BoxConstraints.tight(
+          Size(width, totalColumnsHeight),
+        );
+
         layoutChild(pair.key, boxConstraints);
-        positionChild(pair.key, Offset(dx, 0));
-        dx += width;
+        positionChild(pair.key, Offset(pair.firstColumn.startPosition, 0));
       }
     } else {
-      double dx = 0;
       for (PlutoColumn col in columns) {
+        if (!hasChild(col.field)) continue;
+
         var width = col.width;
-        var boxConstraints =
-            BoxConstraints.tight(Size(width, totalColumnsHeight));
+
+        var boxConstraints = BoxConstraints.tight(
+          Size(width, totalColumnsHeight),
+        );
+
         layoutChild(col.field, boxConstraints);
-        positionChild(col.field, Offset(dx, 0));
-        dx += width;
+        positionChild(col.field, Offset(col.startPosition, 0));
       }
     }
   }

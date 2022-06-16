@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseColumn extends StatelessWidget {
+class PlutoBaseColumn extends PlutoStatefulWidget
+    implements PlutoVisibilityLayoutChild {
+  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -15,43 +17,15 @@ class PlutoBaseColumn extends StatelessWidget {
   }) : super(key: column.key);
 
   @override
-  Widget build(BuildContext context) {
-    return PlutoIgnoreParentNeedsLayout(
-      child: PlutoVisibilityColumn(
-        key: ValueKey('${column.key}_visibility'),
-        stateManager: stateManager,
-        child: PlutoBaseColumnWidget(
-          stateManager: stateManager,
-          column: column,
-          columnTitleHeight: columnTitleHeight,
-        ),
-      ),
-    );
+  PlutoBaseColumnState createState() => PlutoBaseColumnState();
+
+  @override
+  bool visible() {
+    return stateManager.visibilityBuildController.visibleColumn(column);
   }
 }
 
-class PlutoBaseColumnWidget extends PlutoStatefulWidget
-    with VisibilityColumnWidget {
-  @override
-  final PlutoGridStateManager stateManager;
-
-  @override
-  final PlutoColumn column;
-
-  final double? columnTitleHeight;
-
-  PlutoBaseColumnWidget({
-    required this.stateManager,
-    required this.column,
-    this.columnTitleHeight,
-  }) : super(key: column.key);
-
-  @override
-  PlutoBaseColumnWidgetState createState() => PlutoBaseColumnWidgetState();
-}
-
-class PlutoBaseColumnWidgetState
-    extends PlutoStateWithChange<PlutoBaseColumnWidget> {
+class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
   bool? _showColumnFilter;
 
   @override

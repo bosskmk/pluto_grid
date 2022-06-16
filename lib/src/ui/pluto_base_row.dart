@@ -50,20 +50,15 @@ class PlutoBaseRow extends StatelessWidget {
   }
 
   Widget _buildCell(PlutoColumn column) {
-    return LayoutId(
+    return PlutoVisibilityLayoutId(
       id: column.field,
-      child: PlutoIgnoreParentNeedsLayout(
-        child: PlutoVisibilityColumn(
-          key: ValueKey('${row.cells[column.field]!.key}_visibility'),
-          stateManager: stateManager,
-          child: PlutoBaseCell(
-            cell: row.cells[column.field]!,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-            key: row.cells[column.field]!.key,
-          ),
-        ),
+      child: PlutoBaseCell(
+        key: row.cells[column.field]!.key,
+        cell: row.cells[column.field]!,
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
+        stateManager: stateManager,
       ),
     );
   }
@@ -75,12 +70,13 @@ class PlutoBaseRow extends StatelessWidget {
       enableRowColorAnimation:
           stateManager.configuration!.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
-      child: CustomMultiChildLayout(
+      child: PlutoVisibilityLayout(
         key: ValueKey('rowContainer_${row.key}_row'),
         delegate: _RowCellsLayoutDelegate(
           stateManager: stateManager,
           columns: columns,
         ),
+        stateManager: stateManager,
         children: columns.map(_buildCell).toList(growable: false),
       ),
     );
@@ -108,12 +104,10 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   Size getSize(BoxConstraints constraints) {
-    final double width = columns.fold(
-      0,
-      (previousValue, element) => previousValue + element.width,
+    return Size(
+      columns.isEmpty ? 0 : columns.last.startPosition + columns.last.width,
+      stateManager.rowHeight,
     );
-
-    return Size(width, stateManager.rowHeight);
   }
 
   @override
@@ -123,8 +117,6 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    double dx = 0;
-
     for (var element in columns) {
       if (!hasChild(element.field)) continue;
 
@@ -140,10 +132,8 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
       positionChild(
         element.field,
-        Offset(dx, 0),
+        Offset(element.startPosition, 0),
       );
-
-      dx += width;
     }
   }
 }

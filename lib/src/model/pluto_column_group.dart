@@ -102,4 +102,12 @@ class PlutoColumnGroupPair {
   Key get key => _key;
 
   final Key _key;
+
+  PlutoColumn get firstColumn {
+    return columns.first;
+  }
+
+  PlutoColumn get lastColumn {
+    return columns.last;
+  }
 }

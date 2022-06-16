@@ -2,92 +2,98 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
-class PlutoBaseCell extends StatelessWidget with VisibilityColumnWidget {
+class PlutoBaseCell extends StatelessWidget
+    implements PlutoVisibilityLayoutChild {
   final PlutoCell cell;
 
-  @override
   final PlutoColumn column;
 
   final int rowIdx;
 
   final PlutoRow row;
 
+  final PlutoGridStateManager stateManager;
+
   const PlutoBaseCell({
+    Key? key,
     required this.cell,
     required this.column,
     required this.rowIdx,
     required this.row,
-    Key? key,
+    required this.stateManager,
   }) : super(key: key);
 
   @override
+  bool visible() {
+    return stateManager.visibilityBuildController.visibleColumn(column);
+  }
+
+  void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
+    stateManager.eventManager!.addEvent(
+      PlutoGridCellGestureEvent(
+        gestureType: gestureType,
+        offset: offset,
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+      ),
+    );
+  }
+
+  void _handleOnTapUp(TapUpDetails details) {
+    _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
+  }
+
+  void _handleOnLongPressStart(LongPressStartDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+      PlutoGridGestureType.onLongPressStart,
+      details.globalPosition,
+    );
+  }
+
+  void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+        PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
+  }
+
+  void _handleOnLongPressEnd(LongPressEndDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+        PlutoGridGestureType.onLongPressEnd, details.globalPosition);
+  }
+
+  void _handleOnDoubleTap() {
+    _addGestureEvent(PlutoGridGestureType.onDoubleTap, Offset.zero);
+  }
+
+  void _handleOnSecondaryTap(TapDownDetails details) {
+    _addGestureEvent(
+        PlutoGridGestureType.onSecondaryTap, details.globalPosition);
+  }
+
+  void Function()? _onDoubleTapOrNull() {
+    return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
+  }
+
+  void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
+    return stateManager.onRowSecondaryTap == null
+        ? null
+        : _handleOnSecondaryTap;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final stateManager = context.read<PlutoGridStateManager>();
-
-    void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
-      stateManager.eventManager!.addEvent(
-        PlutoGridCellGestureEvent(
-          gestureType: gestureType,
-          offset: offset,
-          cell: cell,
-          column: column,
-          rowIdx: rowIdx,
-        ),
-      );
-    }
-
-    void _handleOnTapUp(TapUpDetails details) {
-      _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
-    }
-
-    void _handleOnLongPressStart(LongPressStartDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-        PlutoGridGestureType.onLongPressStart,
-        details.globalPosition,
-      );
-    }
-
-    void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-          PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
-    }
-
-    void _handleOnLongPressEnd(LongPressEndDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-          PlutoGridGestureType.onLongPressEnd, details.globalPosition);
-    }
-
-    void _handleOnDoubleTap() {
-      _addGestureEvent(PlutoGridGestureType.onDoubleTap, Offset.zero);
-    }
-
-    void _handleOnSecondaryTap(TapDownDetails details) {
-      _addGestureEvent(
-          PlutoGridGestureType.onSecondaryTap, details.globalPosition);
-    }
-
-    void Function()? _onDoubleTapOrNull() {
-      return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
-    }
-
-    void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
-      return stateManager.onRowSecondaryTap == null
-          ? null
-          : _handleOnSecondaryTap;
-    }
-
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       // Essential gestures.

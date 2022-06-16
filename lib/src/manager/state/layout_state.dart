@@ -413,13 +413,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
-    eventManager!.addEvent(PlutoGridCallbackEvent(
-      type: PlutoGridEventType.debounce,
-      duration: const Duration(milliseconds: 10),
-      callback: () {
-        updateColumnStartPosition(forceUpdate: true);
-      },
-    ));
+    updateColumnStartPosition();
 
     _resizingChangeNotifier.notifyListeners();
   }

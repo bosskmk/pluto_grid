@@ -203,8 +203,6 @@ class PlutoColumn {
   /// Updated when the [PlutoGridStateManager.updateColumnStartPosition] method is called.
   double startPosition = 0;
 
-  bool visible = false;
-
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
     if (!hasCheckReadOnly || row == null || cell == null) {
       return readOnly;

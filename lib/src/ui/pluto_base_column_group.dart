@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseColumnGroup extends StatelessWidget {
+class PlutoBaseColumnGroup extends StatelessWidget
+    implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;
   final PlutoColumnGroupPair columnGroup;
   final int depth;
@@ -15,6 +16,13 @@ class PlutoBaseColumnGroup extends StatelessWidget {
   int get _childrenDepth => columnGroup.group.hasChildren
       ? stateManager.columnGroupDepth(columnGroup.group.children!)
       : 0;
+
+  @override
+  bool visible() {
+    return stateManager.visibilityBuildController.visibleColumnGroupPair(
+      columnGroup,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,13 +193,13 @@ class _ColumnGroup extends StatelessWidget {
       );
     }
     return CustomMultiChildLayout(
-      delegate: ColumnGroupLayouter(stateManager, _separateLinkedGroup, depth),
+      delegate: ColumnGroupLayout(stateManager, _separateLinkedGroup, depth),
       children: _separateLinkedGroup.map(_makeChildWidget).toList(),
     );
   }
 }
 
-class ColumnGroupLayouter extends MultiChildLayoutDelegate {
+class ColumnGroupLayout extends MultiChildLayoutDelegate {
   PlutoGridStateManager stateManager;
   List<PlutoColumnGroupPair> separateLinkedGroups;
 
@@ -199,7 +207,7 @@ class ColumnGroupLayouter extends MultiChildLayoutDelegate {
 
   int depth;
 
-  ColumnGroupLayouter(this.stateManager, this.separateLinkedGroups, this.depth)
+  ColumnGroupLayout(this.stateManager, this.separateLinkedGroups, this.depth)
       : super();
 
   @override

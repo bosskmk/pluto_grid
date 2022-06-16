@@ -8,7 +8,6 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    bool visible = true,
     dynamic defaultValue = '',
   }) {
     return Iterable<int>.generate(count).map((e) {
@@ -20,7 +19,7 @@ class ColumnHelper {
         frozen: frozen,
         readOnly: readOnly,
         type: PlutoColumnType.text(defaultValue: defaultValue),
-      )..visible = visible;
+      );
     }).toList();
   }
 
@@ -51,7 +50,7 @@ class ColumnHelper {
           format: format,
           applyFormatOnInit: applyFormatOnInit,
         ),
-      )..visible = visible;
+      );
     }).toList();
   }
 
@@ -76,7 +75,7 @@ class ColumnHelper {
         type: PlutoColumnType.time(
           defaultValue: defaultValue,
         ),
-      )..visible = visible;
+      );
     }).toList();
   }
 }

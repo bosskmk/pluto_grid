@@ -429,6 +429,8 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
+    updateColumnStartPosition(forceUpdate: true);
+
     notifyListeners();
   }
 

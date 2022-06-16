@@ -71,11 +71,12 @@ class PlutoLeftFrozenColumnsState
     extends _PlutoLeftFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {
-    return CustomMultiChildLayout(
+    return PlutoVisibilityLayout(
         delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+        stateManager: widget.stateManager,
         children: _showColumnGroups == true
             ? _columnGroups!
-                .map((PlutoColumnGroupPair e) => LayoutId(
+                .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(
                       id: e.key,
                       child: PlutoBaseColumnGroup(
                         stateManager: widget.stateManager,
@@ -87,7 +88,7 @@ class PlutoLeftFrozenColumnsState
                     ))
                 .toList()
             : _columns!
-                .map((e) => LayoutId(
+                .map((e) => PlutoVisibilityLayoutId(
                       id: e.field,
                       child: PlutoBaseColumn(
                         stateManager: widget.stateManager,
