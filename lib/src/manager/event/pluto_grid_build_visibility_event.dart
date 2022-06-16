@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBuildVisibilityEvent extends PlutoGridEvent {
@@ -15,6 +16,10 @@ class PlutoBuildVisibilityEvent extends PlutoGridEvent {
     final List<PlutoVisibilityColumnElement> found = [];
 
     for (final element in elements) {
+      if (!element.mounted) {
+        continue;
+      }
+
       final widget = element.widget as PlutoVisibilityColumn;
 
       element.visitChildElements((elementChild) {
@@ -22,21 +27,19 @@ class PlutoBuildVisibilityEvent extends PlutoGridEvent {
             elementChild.widget is! PlutoVisibilityReplacementWidget;
 
         if (widget.child.column.visible != oldVisible) {
-          found.add(element);
+          if (widget.child.column.visible) {
+            found.add(element);
+          } else {
+            element.performRebuild();
+          }
         }
       });
     }
 
-    if (type.isNormal) {
+    WidgetsBinding.instance.scheduleTask(() {
       for (final element in found) {
         element.markNeedsBuild();
       }
-    } else {
-      WidgetsBinding.instance.endOfFrame.then((value) {
-        for (final element in found) {
-          element.markNeedsBuild();
-        }
-      });
-    }
+    }, Priority.touch);
   }
 }

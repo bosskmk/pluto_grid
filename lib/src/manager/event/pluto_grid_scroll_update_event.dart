@@ -9,7 +9,7 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
   PlutoGridScrollUpdateEvent({
     required this.offset,
   }) : super(
-          type: PlutoGridEventType.throttle,
+          type: PlutoGridEventType.throttleTrailing,
           duration: const Duration(milliseconds: 800),
         );
 

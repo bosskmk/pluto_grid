@@ -12,6 +12,8 @@ class PlutoKeyManagerEvent {
 }
 
 extension PlutoKeyManagerEventExtention on PlutoKeyManagerEvent {
+  bool get needsThrottle => isMoving || isTab || isPageUp || isPageDown;
+
   bool get isKeyDownEvent => event.runtimeType == RawKeyDownEvent;
 
   bool get isKeyUpEvent => event.runtimeType == RawKeyUpEvent;

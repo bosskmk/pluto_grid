@@ -105,7 +105,7 @@ class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         child: CustomSingleChildLayout(
-          delegate: ListResizeDelegate(widget.stateManager, _getColumns()),
+          delegate: ListResizeDelegate(widget.stateManager, _columns!),
           child: ListView.builder(
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,

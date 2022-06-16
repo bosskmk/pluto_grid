@@ -54,7 +54,7 @@ class VisibilityBuildController {
       maxWidth: maxWidth,
       showFrozenColumn: showFrozenColumn,
     )) {
-      if (forceUpdate != false) {
+      if (!forceUpdate) {
         return;
       }
     }
@@ -69,11 +69,12 @@ class VisibilityBuildController {
     for (final column in columns) {
       column.visible = visibleColumn(column);
 
-      if (leftVisibleColumn == null && column.visible) {
+      if (leftVisibleColumn == null && column.visible && column.frozen.isNone) {
         leftVisibleColumn = column;
       } else if (leftVisibleColumn != null &&
           rightVisibleColumn == null &&
-          !column.visible) {
+          !column.visible &&
+          column.frozen.isNone) {
         rightVisibleColumn = previous;
       }
 
@@ -97,8 +98,8 @@ class VisibilityBuildController {
 
     addEvent(PlutoBuildVisibilityEvent(
       elements: invisibleElements,
-      type: PlutoGridEventType.throttle,
-      duration: const Duration(milliseconds: 300),
+      type: PlutoGridEventType.throttleTrailing,
+      duration: const Duration(seconds: 1),
     ));
   }
 
@@ -232,8 +233,8 @@ mixin VisibilityState implements IPlutoGridState {
   void updateColumnStartPosition({bool forceUpdate = false}) {
     double x = 0;
 
-    for (final column in refColumns) {
-      if (showFrozenColumn && column.frozen.isFrozen) {
+    for (final column in refColumns.originalList) {
+      if (column.hide || (showFrozenColumn && column.frozen.isFrozen)) {
         continue;
       }
 

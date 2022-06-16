@@ -52,15 +52,17 @@ class PlutoBaseRow extends StatelessWidget {
   Widget _buildCell(PlutoColumn column) {
     return LayoutId(
       id: column.field,
-      child: PlutoVisibilityColumn(
-        key: ValueKey('${row.cells[column.field]!.key}_visibility'),
-        stateManager: stateManager,
-        child: PlutoBaseCell(
-          cell: row.cells[column.field]!,
-          column: column,
-          rowIdx: rowIdx,
-          row: row,
-          key: row.cells[column.field]!.key,
+      child: PlutoIgnoreParentNeedsLayout(
+        child: PlutoVisibilityColumn(
+          key: ValueKey('${row.cells[column.field]!.key}_visibility'),
+          stateManager: stateManager,
+          child: PlutoBaseCell(
+            cell: row.cells[column.field]!,
+            column: column,
+            rowIdx: rowIdx,
+            row: row,
+            key: row.cells[column.field]!.key,
+          ),
         ),
       ),
     );

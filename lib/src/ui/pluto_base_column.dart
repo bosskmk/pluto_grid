@@ -16,13 +16,15 @@ class PlutoBaseColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlutoVisibilityColumn(
-      key: ValueKey('${column.key}_visibility'),
-      stateManager: stateManager,
-      child: PlutoBaseColumnWidget(
+    return PlutoIgnoreParentNeedsLayout(
+      child: PlutoVisibilityColumn(
+        key: ValueKey('${column.key}_visibility'),
         stateManager: stateManager,
-        column: column,
-        columnTitleHeight: columnTitleHeight,
+        child: PlutoBaseColumnWidget(
+          stateManager: stateManager,
+          column: column,
+          columnTitleHeight: columnTitleHeight,
+        ),
       ),
     );
   }

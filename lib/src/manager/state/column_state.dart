@@ -306,6 +306,8 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
+    updateColumnStartPosition(forceUpdate: true);
+
     notifyListeners();
   }
 
@@ -357,6 +359,8 @@ mixin ColumnState implements IPlutoGridState {
     _fillCellsInRows(columns);
 
     resetCurrentState(notify: false);
+
+    updateColumnStartPosition(forceUpdate: true);
 
     notifyListeners();
   }
@@ -523,6 +527,8 @@ mixin ColumnState implements IPlutoGridState {
     refColumns.update();
 
     resetCurrentState(notify: false);
+
+    updateColumnStartPosition(forceUpdate: true);
 
     if (notify) {
       notifyListeners();
