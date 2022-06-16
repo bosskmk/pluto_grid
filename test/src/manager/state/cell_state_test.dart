@@ -92,8 +92,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
-      stateManager.toggleFrozenColumn(columns[4].key, PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
@@ -130,8 +130,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
-      stateManager.toggleFrozenColumn(columns[4].key, PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));

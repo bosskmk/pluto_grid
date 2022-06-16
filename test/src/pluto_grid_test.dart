@@ -744,7 +744,7 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager!.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
+      stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.left);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 

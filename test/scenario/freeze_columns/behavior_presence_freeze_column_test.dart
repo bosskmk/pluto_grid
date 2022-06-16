@@ -38,7 +38,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // 세번 째 컬럼 왼쪽 고정
-    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
     // 첫번 째 컬럼의 첫번 째 셀
     Finder firstCell = find.byKey(rows.first.cells['headerL0']!.key);
@@ -128,7 +128,7 @@ void main() {
     expect(stateManager!.showFrozenColumn, false);
 
     // Freeze the 3rd column
-    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.right);
 
     // Await re-build by toggleFrozenColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));

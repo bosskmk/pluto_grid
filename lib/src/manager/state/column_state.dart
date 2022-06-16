@@ -61,7 +61,7 @@ abstract class IColumnState {
   List<int> get columnIndexesByShowFrozen;
 
   /// Toggle whether the column is frozen or not.
-  void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen);
+  void toggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen);
 
   /// Toggle column sorting.
   void toggleSortColumn(PlutoColumn column);
@@ -293,16 +293,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   @override
-  void toggleFrozenColumn(Key columnKey, PlutoColumnFrozen frozen) {
-    final length = refColumns.length;
-
-    for (int i = 0; i < length; i += 1) {
-      if (refColumns[i].key == columnKey) {
-        refColumns[i].frozen =
-            refColumns[i].frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
-        break;
-      }
-    }
+  void toggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen) {
+    column.frozen = column.frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
 
     updateCurrentCellPosition(notify: false);
 

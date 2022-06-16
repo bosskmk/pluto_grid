@@ -585,7 +585,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
@@ -614,7 +614,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
@@ -692,7 +692,7 @@ void main() {
         scroll: scroll,
       );
 
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
@@ -733,7 +733,7 @@ void main() {
         scroll: scroll,
       );
 
-      stateManager.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.right);
 
       stateManager
           .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
