@@ -198,6 +198,17 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   ///
   /// [duration] determines the processing interval when setting rows.
   ///
+  /// If pagination is set, [PlutoGridStateManager.setPage] must be called
+  /// after Future is completed before Rows appear on the screen.
+  ///
+  /// ```dart
+  /// PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows).then((initializedRows) {
+  ///   stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+  ///   stateManager.setPage(1, notify: false);
+  ///   stateManager.notifyListeners();
+  /// });
+  /// ```
+  ///
   /// {@macro initialize_rows_sync_or_async}
   static Future<List<PlutoRow>> initializeRowsAsync(
     List<PlutoColumn> refColumns,
