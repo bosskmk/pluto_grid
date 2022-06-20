@@ -292,14 +292,17 @@ void main() {
           (tester) async {
             // 0 > 1
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
             // 1 > 2
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode!.hasFocus, isTrue);
             expect(stateManagerB!.gridFocusNode!.hasFocus, isFalse);
 
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
             expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
@@ -318,10 +321,13 @@ void main() {
           (tester) async {
             // 0 > 1
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
             // 1 > 2
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
             expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
@@ -342,23 +348,31 @@ void main() {
           (tester) async {
             // 0 > 1
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
             // 1 > 2
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+            await tester.pumpAndSettle();
             // 2 > right grid
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode!.hasFocus, isFalse);
             expect(stateManagerB!.gridFocusNode!.hasFocus, isTrue);
 
             // right grid > 0
             await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+            await tester.pumpAndSettle();
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.pumpAndSettle();
             await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+            await tester.pumpAndSettle();
             expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
 
             // right grid > left grid
             await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
+            await tester.pumpAndSettle();
             await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.pumpAndSettle();
             await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
             expect(stateManagerA!.gridFocusNode!.hasFocus, isTrue);

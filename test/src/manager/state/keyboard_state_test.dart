@@ -13,6 +13,7 @@ import 'keyboard_state_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
 ])
 void main() {
   late List<PlutoColumn> columns;
@@ -20,6 +21,8 @@ void main() {
   late List<PlutoRow> rows;
 
   PlutoGridScrollController scrollController;
+
+  PlutoGridEventManager eventManager;
 
   LinkedScrollControllerGroup horizontal;
 
@@ -36,6 +39,8 @@ void main() {
     rows = RowHelper.count(10, columns);
 
     scrollController = MockPlutoGridScrollController();
+
+    eventManager = MockPlutoGridEventManager();
 
     horizontal = MockLinkedScrollControllerGroup();
 
@@ -58,6 +63,7 @@ void main() {
       scroll: scrollController,
     );
 
+    stateManager.setEventManager(eventManager);
     stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 500));
   });
 

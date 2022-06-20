@@ -306,7 +306,7 @@ void main() {
       await tester.tap(find.text('Freeze to left'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.left,
       )).called(1);
     });
@@ -316,7 +316,7 @@ void main() {
       await tester.tap(find.text('Freeze to right'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.right,
       )).called(1);
     });
@@ -372,7 +372,7 @@ void main() {
       await tester.tap(find.text('Unfreeze'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.none,
       )).called(1);
     });
@@ -424,7 +424,7 @@ void main() {
       await tester.tap(find.text('Unfreeze'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.none,
       )).called(1);
     });

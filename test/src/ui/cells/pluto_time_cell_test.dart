@@ -121,7 +121,9 @@ void main() {
 
     tapCell.test('12:28 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '12:28')).called(1);
@@ -129,8 +131,11 @@ void main() {
 
     tapCell.test('12:33 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '12:33')).called(1);
@@ -145,11 +150,17 @@ void main() {
 
     tapCell.test('15:28 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '15:28')).called(1);
@@ -273,6 +284,7 @@ void main() {
         '30의 color 가 비활성, 11의 color 가 활성이 되어야 한다.(11:30)',
         (tester) async {
           await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+          await tester.pumpAndSettle();
           await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
           await tester.pumpAndSettle();
 

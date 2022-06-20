@@ -530,9 +530,10 @@ class MockPlutoGridStateManager extends _i1.Mock
               #removeColumnsInColumnGroup, [columns], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void toggleFrozenColumn(_i4.Key? columnKey, _i3.PlutoColumnFrozen? frozen) =>
+  void toggleFrozenColumn(
+          _i3.PlutoColumn? column, _i3.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
-          Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
+          Invocation.method(#toggleFrozenColumn, [column, frozen]),
           returnValueForMissingStub: null);
   @override
   void toggleSortColumn(_i3.PlutoColumn? column) =>
