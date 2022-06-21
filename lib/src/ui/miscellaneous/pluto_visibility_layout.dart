@@ -280,8 +280,6 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     );
 
     _forgottenChildren.clear();
-
-    renderObject.markNeedsLayout();
   }
 }
 
