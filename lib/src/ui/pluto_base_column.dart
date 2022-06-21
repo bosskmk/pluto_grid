@@ -50,8 +50,13 @@ class PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
     return VisibilityDetector(
       key: widget.column.key,
       onVisibilityChanged: (info) {
-        final bool visible = info.visibleFraction * 100 > 0;
-
+        bool? visible;
+        try {
+          // visibleFraction error when moving from tab view to another tab.
+          visible = info.visibleFraction * 100 > 0;
+        } catch (e) {
+          visible = true;
+        }
         if (visible != widget.column.visible) {
           widget.column.visible = visible;
 
