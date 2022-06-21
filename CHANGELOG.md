@@ -1,3 +1,7 @@
+## [4.0.1] - 2022. 6. 21
+
+* Fixed visibleFraction error when moving from tab view to another tab.
+
 ## [4.0.0] - 2022. 6. 7
 
 * Rendering speed improvements.  
