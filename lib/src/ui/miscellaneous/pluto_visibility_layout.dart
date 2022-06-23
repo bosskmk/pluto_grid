@@ -4,21 +4,26 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../../pluto_grid.dart';
-
 class PlutoVisibilityLayout extends CustomMultiChildLayout {
   PlutoVisibilityLayout({
     super.key,
     required super.children,
     required super.delegate,
-    required this.stateManager,
+    required this.scrollController,
+    this.initialViewportDimensions = 1920,
   });
 
-  final PlutoGridStateManager stateManager;
+  final ScrollController scrollController;
+
+  final double initialViewportDimensions;
 
   @override
   PlutoVisibilityLayoutRenderObjectElement createElement() =>
-      PlutoVisibilityLayoutRenderObjectElement(this, stateManager);
+      PlutoVisibilityLayoutRenderObjectElement(
+        widget: this,
+        scrollController: scrollController,
+        initialViewportDimensions: initialViewportDimensions,
+      );
 
   @override
   RenderCustomMultiChildLayoutBox createRenderObject(BuildContext context) {
@@ -36,13 +41,16 @@ class PlutoVisibilityLayout extends CustomMultiChildLayout {
 
 class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     implements MultiChildRenderObjectElement {
-  PlutoVisibilityLayoutRenderObjectElement(
-    PlutoVisibilityLayout widget,
-    this.stateManager,
-  )   : assert(!debugChildrenHaveDuplicateKeys(widget, widget.children)),
+  PlutoVisibilityLayoutRenderObjectElement({
+    required PlutoVisibilityLayout widget,
+    required this.scrollController,
+    this.initialViewportDimensions = 1920,
+  })  : assert(!debugChildrenHaveDuplicateKeys(widget, widget.children)),
         super(widget);
 
-  final PlutoGridStateManager stateManager;
+  final ScrollController scrollController;
+
+  final double initialViewportDimensions;
 
   @override
   ContainerRenderObjectMixin<RenderObject,
@@ -59,68 +67,124 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
       });
 
   late List<Element> _children;
-  // We keep a set of forgotten children to avoid O(n^2) work walking _children
-  // repeatedly to remove children.
+
   final Set<Element> _forgottenChildren = HashSet<Element>();
 
+  double get visibleLeft => scrollController.offset;
+
+  double get visibleRight {
+    try {
+      return visibleLeft + scrollController.position.viewportDimension;
+    } catch (e) {
+      return visibleLeft + initialViewportDimensions;
+    }
+  }
+
+  double _lastMaxScroll = 0;
+
+  double _lastVisibleStartX1 = 0;
+
+  double _lastVisibleStartX2 = 0;
+
+  double _lastVisibleEndX1 = 0;
+
+  double _lastVisibleEndX2 = 0;
+
   void scrollListener() {
+    final bool sameBoundScroll = _lastVisibleStartX1 <= visibleLeft &&
+        visibleLeft <= _lastVisibleStartX2 &&
+        _lastVisibleEndX1 <= visibleRight &&
+        visibleRight <= _lastVisibleEndX2;
+
+    if (sameBoundScroll &&
+        _lastMaxScroll == scrollController.position.maxScrollExtent) {
+      return;
+    }
+
+    _lastMaxScroll = scrollController.position.maxScrollExtent;
+
     markNeedsBuild();
+  }
+
+  bool visible({
+    required double startOffset,
+    required double width,
+  }) {
+    return startOffset <= visibleRight && startOffset + width >= visibleLeft;
+  }
+
+  double getChildWidth(Widget widget) {
+    assert(widget is PlutoVisibilityLayoutId);
+    return ((widget as PlutoVisibilityLayoutId).child
+            as PlutoVisibilityLayoutChild)
+        .width;
+  }
+
+  Element? findChildByLayoutId(Object layoutId) {
+    return _children.firstWhereOrNull((element) {
+      if (element.widget is PlutoVisibilityLayoutId) {
+        return (element.widget as PlutoVisibilityLayoutId).id == layoutId;
+      }
+      return false;
+    });
   }
 
   @override
   void performRebuild() {
     super.performRebuild();
 
-    final MultiChildRenderObjectWidget renderWidget =
-        widget as MultiChildRenderObjectWidget;
-
-    Element? findByLayoutId(Object layoutId) {
-      return _children.firstWhereOrNull((element) {
-        if (element is _NullElement ||
-            element.widget is! PlutoVisibilityLayoutId) {
-          return false;
-        }
-        return (element.widget as PlutoVisibilityLayoutId).id == layoutId;
-      });
-    }
+    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
 
     final visibleWidgets = <Widget>[];
     final slots = <IndexedSlot>[];
+
     Element? previousChild;
+    double startOffset = 0;
+    bool updatedFirst = false;
 
-    /// visible 컬럼만 체크
-    for (int i = 0; i < renderWidget.children.length; i += 1) {
-      final child = renderWidget.children[i];
-      final childWidget = child as PlutoVisibilityLayoutId;
+    for (int i = 0; i < layoutWidget.children.length; i += 1) {
+      final child = layoutWidget.children[i] as PlutoVisibilityLayoutId;
+      final double width = getChildWidth(child);
 
-      if (!(childWidget.child as PlutoVisibilityLayoutChild).visible()) {
-        continue;
+      if (visible(startOffset: startOffset, width: width)) {
+        final foundElement = findChildByLayoutId(child.id);
+
+        if (foundElement != null) {
+          visibleWidgets.add(foundElement.widget);
+          slots.add(IndexedSlot<Element?>(i, previousChild));
+          previousChild = foundElement;
+        } else {
+          final element = child.createElement();
+          visibleWidgets.add(element.widget);
+          slots.add(IndexedSlot<Element?>(i, previousChild));
+          previousChild = element;
+        }
+
+        if (!updatedFirst) {
+          _lastVisibleStartX1 = startOffset;
+          _lastVisibleStartX2 = startOffset + width;
+          updatedFirst = true;
+        }
+
+        _lastVisibleEndX1 = startOffset;
+        _lastVisibleEndX2 = startOffset + width;
       }
 
-      final foundElement = findByLayoutId(childWidget.id);
-
-      if (foundElement != null) {
-        visibleWidgets.add(foundElement.widget);
-        slots.add(IndexedSlot<Element?>(i, previousChild));
-        previousChild = foundElement;
-      } else {
-        final element = child.createElement();
-        visibleWidgets.add(element.widget);
-        slots.add(IndexedSlot<Element?>(i, previousChild));
-        previousChild = element;
-      }
+      startOffset += width;
     }
 
-    /// 기존 자식에서 비활성화 된 것만 체크
     for (final child in _children) {
-      if (child is _NullElement || child.widget is! PlutoVisibilityLayoutId) {
+      if (child is _NullElement) {
         continue;
       }
 
       final childWidget = ((child.widget as PlutoVisibilityLayoutId).child
           as PlutoVisibilityLayoutChild);
 
-      if (!childWidget.visible()) {
+      if (!visible(
+        startOffset: childWidget.startPosition,
+        width: childWidget.width,
+      )) {
         deactivateChild(child);
         _forgottenChildren.add(child);
       }
@@ -131,6 +195,106 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
       visibleWidgets,
       forgottenChildren: _forgottenChildren,
       slots: slots,
+    );
+
+    _forgottenChildren.clear();
+  }
+
+  @override
+  void mount(Element? parent, Object? newSlot) {
+    super.mount(parent, newSlot);
+
+    scrollController.addListener(scrollListener);
+
+    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
+
+    final List<Element> children = List<Element>.filled(
+      layoutWidget.children.length,
+      _NullElement.instance,
+    );
+
+    Element? previousChild;
+    double startOffset = 0;
+    bool updatedFirst = false;
+
+    for (int i = 0; i < children.length; i += 1) {
+      final width = getChildWidth(layoutWidget.children[i]);
+
+      if (visible(startOffset: startOffset, width: width)) {
+        final Element newChild = inflateWidget(
+          layoutWidget.children[i],
+          IndexedSlot<Element?>(i, previousChild),
+        );
+
+        children[i] = newChild;
+
+        previousChild = newChild;
+
+        if (!updatedFirst) {
+          _lastVisibleStartX1 = startOffset;
+          _lastVisibleStartX2 = startOffset + width;
+          updatedFirst = true;
+        }
+
+        _lastVisibleEndX1 = startOffset;
+        _lastVisibleEndX2 = startOffset + width;
+      } else {
+        _forgottenChildren.add(children[i]);
+      }
+
+      startOffset += width;
+    }
+
+    _children = children;
+  }
+
+  @override
+  void unmount() {
+    super.unmount();
+
+    scrollController.removeListener(scrollListener);
+  }
+
+  @override
+  void update(PlutoVisibilityLayout newWidget) {
+    super.update(newWidget);
+
+    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
+
+    assert(widget == newWidget);
+
+    assert(!debugChildrenHaveDuplicateKeys(
+      widget,
+      layoutWidget.children,
+    ));
+
+    final List<Widget> visibleWidgets = [];
+    double startOffset = 0;
+    bool updatedFirst = false;
+
+    for (int i = 0; i < layoutWidget.children.length; i += 1) {
+      final width = getChildWidth(layoutWidget.children[i]);
+
+      if (visible(startOffset: startOffset, width: width)) {
+        visibleWidgets.add(layoutWidget.children[i]);
+
+        if (!updatedFirst) {
+          _lastVisibleStartX1 = startOffset;
+          _lastVisibleStartX2 = startOffset + width;
+          updatedFirst = true;
+        }
+
+        _lastVisibleEndX1 = startOffset;
+        _lastVisibleEndX2 = startOffset + width;
+      }
+
+      startOffset += width;
+    }
+
+    _children = updateChildren(
+      _children,
+      visibleWidgets,
+      forgottenChildren: _forgottenChildren,
     );
 
     _forgottenChildren.clear();
@@ -182,6 +346,13 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     super.forgetChild(child);
   }
 
+  @override
+  Element inflateWidget(Widget newWidget, Object? newSlot) {
+    final Element newChild = super.inflateWidget(newWidget, newSlot);
+    assert(_debugCheckHasAssociatedRenderObject(newChild));
+    return newChild;
+  }
+
   bool _debugCheckHasAssociatedRenderObject(Element newChild) {
     assert(() {
       if (newChild.renderObject == null) {
@@ -205,82 +376,6 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     }());
     return true;
   }
-
-  @override
-  Element inflateWidget(Widget newWidget, Object? newSlot) {
-    final Element newChild = super.inflateWidget(newWidget, newSlot);
-    assert(_debugCheckHasAssociatedRenderObject(newChild));
-    return newChild;
-  }
-
-  @override
-  void mount(Element? parent, Object? newSlot) {
-    super.mount(parent, newSlot);
-
-    stateManager.visibilityBuildController.addListener(scrollListener);
-
-    final MultiChildRenderObjectWidget childrenWidgets =
-        widget as MultiChildRenderObjectWidget;
-
-    final List<Element> children = List<Element>.filled(
-      childrenWidgets.children.length,
-      _NullElement.instance,
-    );
-
-    Element? previousChild;
-
-    for (int i = 0; i < children.length; i += 1) {
-      if (!((childrenWidgets.children[i] as PlutoVisibilityLayoutId).child
-              as PlutoVisibilityLayoutChild)
-          .visible()) {
-        _forgottenChildren.add(children[i]);
-      } else {
-        final Element newChild = inflateWidget(
-          childrenWidgets.children[i],
-          IndexedSlot<Element?>(i, previousChild),
-        );
-
-        children[i] = newChild;
-
-        previousChild = newChild;
-      }
-    }
-
-    _children = children;
-  }
-
-  @override
-  void unmount() {
-    stateManager.visibilityBuildController.removeListener(scrollListener);
-    super.unmount();
-  }
-
-  @override
-  void update(PlutoVisibilityLayout newWidget) {
-    super.update(newWidget);
-
-    final PlutoVisibilityLayout multiChildRenderObjectWidget =
-        widget as PlutoVisibilityLayout;
-
-    assert(widget == newWidget);
-
-    assert(!debugChildrenHaveDuplicateKeys(
-      widget,
-      multiChildRenderObjectWidget.children,
-    ));
-
-    _children = updateChildren(
-      _children,
-      multiChildRenderObjectWidget.children
-          .where((e) => ((e as PlutoVisibilityLayoutId).child
-                  as PlutoVisibilityLayoutChild)
-              .visible())
-          .toList(),
-      forgottenChildren: _forgottenChildren,
-    );
-
-    _forgottenChildren.clear();
-  }
 }
 
 class PlutoVisibilityLayoutId extends LayoutId {
@@ -292,7 +387,8 @@ class PlutoVisibilityLayoutId extends LayoutId {
 }
 
 abstract class PlutoVisibilityLayoutChild implements Widget {
-  bool visible();
+  double get width;
+  double get startPosition;
 }
 
 class _NullElement extends Element {

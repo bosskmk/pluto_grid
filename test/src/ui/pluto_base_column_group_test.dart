@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/manager/state/visibility_state.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -75,9 +74,6 @@ void main() {
       when(stateManager!.isFilteredColumn(any)).thenReturn(isFilteredColumn);
       when(stateManager!.columnFilterHeight).thenReturn(columnHeight);
       when(stateManager!.rowHeight).thenReturn(45);
-      when(stateManager!.visibilityBuildController).thenReturn(
-        VisibilityBuildController(),
-      );
 
       await tester.pumpWidget(
         MaterialApp(

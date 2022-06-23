@@ -12,11 +12,14 @@ class PlutoBaseRow extends StatelessWidget {
 
   final PlutoGridStateManager stateManager;
 
+  final bool visibilityLayout;
+
   const PlutoBaseRow({
     required this.rowIdx,
     required this.row,
     required this.columns,
     required this.stateManager,
+    this.visibilityLayout = false,
     Key? key,
   }) : super(key: key);
 
@@ -64,21 +67,37 @@ class PlutoBaseRow extends StatelessWidget {
   }
 
   Widget _dragTargetBuilder(dragContext, candidate, rejected) {
+    Widget layout;
+
+    if (visibilityLayout) {
+      layout = PlutoVisibilityLayout(
+        key: ValueKey('rowContainer_${row.key}_row'),
+        delegate: _RowCellsLayoutDelegate(
+          stateManager: stateManager,
+          columns: columns,
+        ),
+        scrollController: stateManager.scroll!.bodyRowsHorizontal!,
+        initialViewportDimensions: MediaQuery.of(dragContext).size.width,
+        children: columns.map(_buildCell).toList(growable: false),
+      );
+    } else {
+      layout = CustomMultiChildLayout(
+        key: ValueKey('rowContainer_${row.key}_row'),
+        delegate: _RowCellsLayoutDelegate(
+          stateManager: stateManager,
+          columns: columns,
+        ),
+        children: columns.map(_buildCell).toList(growable: false),
+      );
+    }
+
     return _RowContainerWidget(
       rowIdx: rowIdx,
       row: row,
       enableRowColorAnimation:
           stateManager.configuration!.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
-      child: PlutoVisibilityLayout(
-        key: ValueKey('rowContainer_${row.key}_row'),
-        delegate: _RowCellsLayoutDelegate(
-          stateManager: stateManager,
-          columns: columns,
-        ),
-        stateManager: stateManager,
-        children: columns.map(_buildCell).toList(growable: false),
-      ),
+      child: layout,
     );
   }
 
@@ -104,10 +123,12 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   Size getSize(BoxConstraints constraints) {
-    return Size(
-      columns.isEmpty ? 0 : columns.last.startPosition + columns.last.width,
-      stateManager.rowHeight,
+    final double width = columns.fold(
+      0,
+      (previousValue, element) => previousValue + element.width,
     );
+
+    return Size(width, stateManager.rowHeight);
   }
 
   @override
@@ -117,23 +138,27 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    for (var element in columns) {
-      if (!hasChild(element.field)) continue;
+    double dx = 0;
 
+    for (var element in columns) {
       var width = element.width;
 
-      layoutChild(
-        element.field,
-        BoxConstraints.tightFor(
-          width: width,
-          height: stateManager.rowHeight,
-        ),
-      );
+      if (hasChild(element.field)) {
+        layoutChild(
+          element.field,
+          BoxConstraints.tightFor(
+            width: width,
+            height: stateManager.rowHeight,
+          ),
+        );
 
-      positionChild(
-        element.field,
-        Offset(element.startPosition, 0),
-      );
+        positionChild(
+          element.field,
+          Offset(dx, 0),
+        );
+      }
+
+      dx += width;
     }
   }
 }

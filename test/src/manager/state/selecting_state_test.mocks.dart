@@ -3,10 +3,9 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i5;
-import 'dart:ui' as _i7;
+import 'dart:ui' as _i6;
 
 import 'package:flutter/material.dart' as _i2;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_grid/pluto_grid.dart' as _i3;
 import 'package:rxdart/rxdart.dart' as _i4;
@@ -37,7 +36,7 @@ class _FakeStreamSubscription_3<T> extends _i1.Fake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinkedScrollControllerGroup extends _i1.Mock
-    implements _i6.LinkedScrollControllerGroup {
+    implements _i3.LinkedScrollControllerGroup {
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
@@ -47,11 +46,11 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#addAndGet, []),
           returnValue: _FakeScrollController_0()) as _i2.ScrollController);
   @override
-  void addOffsetChangedListener(_i7.VoidCallback? onChanged) => super
+  void addOffsetChangedListener(_i6.VoidCallback? onChanged) => super
       .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
           returnValueForMissingStub: null);
   @override
-  void removeOffsetChangedListener(_i7.VoidCallback? listener) => super
+  void removeOffsetChangedListener(_i6.VoidCallback? listener) => super
       .noSuchMethod(Invocation.method(#removeOffsetChangedListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -69,6 +68,14 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   void resetScroll() => super.noSuchMethod(Invocation.method(#resetScroll, []),
       returnValueForMissingStub: null);
+  @override
+  void applyViewportDimension(double? value) =>
+      super.noSuchMethod(Invocation.method(#applyViewportDimension, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
 }
 
 /// A class which mocks [PlutoGridEventManager].

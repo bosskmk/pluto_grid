@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// An event that occurs when dragging or moving after a long tap.

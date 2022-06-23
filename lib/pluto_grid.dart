@@ -53,6 +53,7 @@ export './src/ui/pluto_left_frozen_columns.dart';
 export './src/ui/pluto_left_frozen_rows.dart';
 export './src/ui/pluto_right_frozen_columns.dart';
 export './src/ui/pluto_right_frozen_rows.dart';
+export './src/widgets/pluto_linked_scroll_controller.dart';
 export './src/widgets/pluto_loading.dart';
 export './src/widgets/pluto_scaled_checkbox.dart';
 export './src/widgets/pluto_scrollbar.dart';

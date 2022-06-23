@@ -298,7 +298,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
-    updateColumnStartPosition(forceUpdate: true);
+    updateColumnStartPosition();
 
     notifyListeners();
   }
@@ -352,7 +352,7 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    updateColumnStartPosition(forceUpdate: true);
+    updateColumnStartPosition();
 
     notifyListeners();
   }
@@ -375,9 +375,7 @@ mixin ColumnState implements IPlutoGridState {
 
     removeColumnsInFilterRows(columns, notify: false);
 
-    removeVisibilityColumnElements(
-      Set.from(columns.map((e) => e.field)),
-    );
+    updateColumnStartPosition();
 
     resetCurrentState(notify: false);
 
@@ -429,7 +427,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
-    updateColumnStartPosition(forceUpdate: true);
+    updateColumnStartPosition();
 
     notifyListeners();
   }
@@ -522,7 +520,7 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    updateColumnStartPosition(forceUpdate: true);
+    updateColumnStartPosition();
 
     if (notify) {
       notifyListeners();

@@ -103,11 +103,15 @@ class PlutoColumnGroupPair {
 
   final Key _key;
 
-  PlutoColumn get firstColumn {
-    return columns.first;
+  double get width {
+    double sumWidth = 0;
+
+    for (final column in columns) {
+      sumWidth += column.width;
+    }
+
+    return sumWidth;
   }
 
-  PlutoColumn get lastColumn {
-    return columns.last;
-  }
+  double get startPosition => columns.first.startPosition;
 }

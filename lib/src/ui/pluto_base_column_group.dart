@@ -18,11 +18,10 @@ class PlutoBaseColumnGroup extends StatelessWidget
       : 0;
 
   @override
-  bool visible() {
-    return stateManager.visibilityBuildController.visibleColumnGroupPair(
-      columnGroup,
-    );
-  }
+  double get width => columnGroup.width;
+
+  @override
+  double get startPosition => columnGroup.startPosition;
 
   @override
   Widget build(BuildContext context) {

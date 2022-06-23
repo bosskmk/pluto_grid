@@ -119,6 +119,7 @@ class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
                 row: _rows![i]!,
                 columns: _columns!,
                 stateManager: widget.stateManager,
+                visibilityLayout: true,
               );
             },
           ),
@@ -142,9 +143,10 @@ class ListResizeDelegate extends SingleChildLayoutDelegate {
   }
 
   double _getWidth() {
-    return columns.isEmpty
-        ? 0
-        : columns.last.startPosition + columns.last.width;
+    return columns.fold(
+      0,
+      (previousValue, element) => previousValue + element.width,
+    );
   }
 
   @override

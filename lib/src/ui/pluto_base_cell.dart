@@ -24,9 +24,10 @@ class PlutoBaseCell extends StatelessWidget
   }) : super(key: key);
 
   @override
-  bool visible() {
-    return stateManager.visibilityBuildController.visibleColumn(column);
-  }
+  double get width => column.width;
+
+  @override
+  double get startPosition => column.startPosition;
 
   void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
     stateManager.eventManager!.addEvent(

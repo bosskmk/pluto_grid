@@ -340,9 +340,7 @@ mixin LayoutState implements IPlutoGridState {
     _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      updateColumnStartPosition();
-    });
+    updateColumnStartPosition();
   }
 
   @override
@@ -413,7 +411,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
-    updateColumnStartPosition();
+    updateColumnStartPosition(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
   }

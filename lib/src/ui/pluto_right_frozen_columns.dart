@@ -71,9 +71,12 @@ class PlutoRightFrozenColumnsState
     extends _PlutoRightFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {
-    return PlutoVisibilityLayout(
-        delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
-        stateManager: widget.stateManager,
+    return CustomMultiChildLayout(
+        delegate: MainColumnLayoutDelegate(
+          stateManager: widget.stateManager,
+          columns: _columns!,
+          frozen: PlutoColumnFrozen.right,
+        ),
         children: _showColumnGroups == true
             ? _columnGroups!
                 .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(

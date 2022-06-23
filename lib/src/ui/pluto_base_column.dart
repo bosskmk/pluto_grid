@@ -20,9 +20,10 @@ class PlutoBaseColumn extends PlutoStatefulWidget
   PlutoBaseColumnState createState() => PlutoBaseColumnState();
 
   @override
-  bool visible() {
-    return stateManager.visibilityBuildController.visibleColumn(column);
-  }
+  double get width => column.width;
+
+  @override
+  double get startPosition => column.startPosition;
 }
 
 class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {

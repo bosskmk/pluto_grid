@@ -68,10 +68,6 @@ abstract class _PlutoBodyColumnsStateWithChange
         compare: listEquals,
       );
 
-      if (changed) {
-        widget.stateManager.updateColumnStartPosition();
-      }
-
       if (changed && _showColumnGroups == true) {
         _columnGroups = widget.stateManager.separateLinkedGroup(
           columnGroupList: widget.stateManager.refColumnGroups!,
@@ -102,8 +98,13 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
       child: PlutoVisibilityLayout(
-          delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
-          stateManager: widget.stateManager,
+          delegate: MainColumnLayoutDelegate(
+            stateManager: widget.stateManager,
+            columns: _columns!,
+            frozen: PlutoColumnFrozen.none,
+          ),
+          scrollController: _scroll!,
+          initialViewportDimensions: MediaQuery.of(context).size.width,
           children: _showColumnGroups == true
               ? _columnGroups!
                   .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(
@@ -135,8 +136,13 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
 
   List<PlutoColumn> columns;
 
-  MainColumnLayoutDelegate(this.stateManager, this.columns)
-      : super(relayout: stateManager.resizingChangeNotifier);
+  PlutoColumnFrozen frozen;
+
+  MainColumnLayoutDelegate({
+    required this.stateManager,
+    required this.columns,
+    required this.frozen,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
 
@@ -153,11 +159,11 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
 
     totalColumnsHeight += stateManager.columnFilterHeight;
 
-    final double width =
-        columns.isEmpty ? 0 : columns.last.startPosition + columns.last.width;
-
     return Size(
-      width,
+      columns.fold(
+        0,
+        (previousValue, element) => previousValue += element.width,
+      ),
       totalColumnsHeight,
     );
   }
@@ -170,32 +176,43 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
         columns: columns,
       );
 
+      double dx = 0;
+
       for (PlutoColumnGroupPair pair in separateLinkedGroup) {
-        if (!hasChild(pair.key)) continue;
-
-        final double width = pair.lastColumn.startPosition +
-            pair.lastColumn.width -
-            pair.firstColumn.startPosition;
-
-        var boxConstraints = BoxConstraints.tight(
-          Size(width, totalColumnsHeight),
+        final double width = pair.columns.fold<double>(
+          0,
+          (previousValue, element) => previousValue + element.width,
         );
 
-        layoutChild(pair.key, boxConstraints);
-        positionChild(pair.key, Offset(pair.firstColumn.startPosition, 0));
+        if (hasChild(pair.key)) {
+          var boxConstraints = BoxConstraints.tight(
+            Size(width, totalColumnsHeight),
+          );
+
+          layoutChild(pair.key, boxConstraints);
+
+          positionChild(pair.key, Offset(dx, 0));
+        }
+
+        dx += width;
       }
     } else {
-      for (PlutoColumn col in columns) {
-        if (!hasChild(col.field)) continue;
+      double dx = 0;
 
+      for (PlutoColumn col in columns) {
         var width = col.width;
 
-        var boxConstraints = BoxConstraints.tight(
-          Size(width, totalColumnsHeight),
-        );
+        if (hasChild(col.field)) {
+          var boxConstraints = BoxConstraints.tight(
+            Size(width, totalColumnsHeight),
+          );
 
-        layoutChild(col.field, boxConstraints);
-        positionChild(col.field, Offset(col.startPosition, 0));
+          layoutChild(col.field, boxConstraints);
+
+          positionChild(col.field, Offset(dx, 0));
+        }
+
+        dx += width;
       }
     }
   }

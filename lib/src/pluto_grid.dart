@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
@@ -274,8 +273,6 @@ class PlutoGridState extends State<PlutoGrid> {
 
     _initEventManager();
 
-    _initVisibility();
-
     _initOnLoadedEvent();
 
     _initSelectMode();
@@ -342,19 +339,6 @@ class PlutoGridState extends State<PlutoGrid> {
     // Dispose
     _disposeList.add(() {
       _eventManager.dispose();
-    });
-  }
-
-  void _initVisibility() {
-    _stateManager.scroll!.horizontal!.addOffsetChangedListener(
-      _stateManager.updateHorizontalVisibilityState,
-    );
-
-    // Dispose
-    _disposeList.add(() {
-      _stateManager.scroll!.horizontal!.removeOffsetChangedListener(
-        _stateManager.updateHorizontalVisibilityState,
-      );
     });
   }
 
