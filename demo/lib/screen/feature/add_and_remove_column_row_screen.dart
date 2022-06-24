@@ -50,6 +50,7 @@ class _AddAndRemoveColumnRowScreenState
           )),
           TextSpan(text: 'Id'),
         ]),
+        enableInsertColumn: true,
       ),
       PlutoColumn(
         title: 'Name',
@@ -146,6 +147,22 @@ class _AddAndRemoveColumnRowScreenState
         columns: columns,
         rows: rows,
         columnGroups: columnGroups,
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          stateManager = event.stateManager;
+          event.stateManager.eventManager!
+              .listener((PlutoGridEvent plutoEvent) {
+            if (plutoEvent is PlutoGridInsertColumnEvent) {
+              final columnIdx = plutoEvent.index;
+              stateManager.insertColumns(columnIdx, [
+                PlutoColumn(
+                  title: 'New Column',
+                  field: 'New Field ID{${stateManager.columnIndexes.length}}',
+                  type: PlutoColumnType.text(),
+                )
+              ]);
+            }
+          });
+        },
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
 
@@ -154,9 +171,6 @@ class _AddAndRemoveColumnRowScreenState
           }
 
           stateManager.notifyListeners();
-        },
-        onLoaded: (PlutoGridOnLoadedEvent event) {
-          stateManager = event.stateManager;
         },
         createHeader: (stateManager) => _Header(stateManager: stateManager),
       ),
