@@ -311,6 +311,8 @@ class PlutoGridConfiguration {
 
 class PlutoGridLocaleText {
   // Column menu
+  final String insertToLeft;
+  final String insertToRight;
   final String unfreezeColumn;
   final String freezeColumnToLeft;
   final String freezeColumnToRight;
@@ -355,6 +357,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'Unfreeze',
     this.freezeColumnToLeft = 'Freeze to left',
     this.freezeColumnToRight = 'Freeze to right',
@@ -395,6 +399,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.china({
     // Column menu
+    this.insertToLeft = '向左插入列',
+    this.insertToRight = '向右插入列',
     this.unfreezeColumn = '解冻',
     this.freezeColumnToLeft = '冻结至左侧',
     this.freezeColumnToRight = '冻结至右侧',
@@ -435,6 +441,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.korean({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = '고정 해제',
     this.freezeColumnToLeft = '왼쪽 고정',
     this.freezeColumnToRight = '오른쪽 고정',
@@ -475,6 +483,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.russian({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'Открепить',
     this.freezeColumnToLeft = 'Закрепить слева',
     this.freezeColumnToRight = 'Закрепить справа',
@@ -515,6 +525,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.czech({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'Uvolnit',
     this.freezeColumnToLeft = 'Ukotvit vlevo',
     this.freezeColumnToRight = 'Ukotvit vpravo',
@@ -555,6 +567,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.brazilianPortuguese({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'Descongelar',
     this.freezeColumnToLeft = 'Congelar à esquerda',
     this.freezeColumnToRight = 'Congelar à direita',
@@ -595,6 +609,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.spanish({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'Descongelar',
     this.freezeColumnToLeft = 'Congelar a la izquierda',
     this.freezeColumnToRight = 'Congelar a la derecha',
@@ -635,6 +651,8 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.persian({
     // Column menu
+    this.insertToLeft = 'Insert to left',
+    this.insertToRight = 'Insert to right',
     this.unfreezeColumn = 'جدا کردن',
     this.freezeColumnToLeft = 'چسباندن به چپ',
     this.freezeColumnToRight = 'چسباندن به راست',

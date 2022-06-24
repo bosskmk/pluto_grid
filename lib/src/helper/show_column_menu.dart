@@ -54,31 +54,23 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     position: RelativeRect.fromRect(
         position & const Size(40, 40), Offset.zero & overlay.size),
     items: [
-      if (column!.frozen.isFrozen == true)
+      if (column!.enableInsertColumn == true) ...[
         _buildMenuItem(
-          value: PlutoGridColumnMenuItem.unfreeze,
+          value: PlutoGridColumnMenuItem.insertToLeft,
           child: _buildTextItem(
-            text: localeText.unfreezeColumn,
-            textColor: textColor,
-          ),
-        ),
-      if (column.frozen.isFrozen != true) ...[
-        _buildMenuItem(
-          value: PlutoGridColumnMenuItem.freezeToLeft,
-          child: _buildTextItem(
-            text: localeText.freezeColumnToLeft,
+            text: localeText.insertToLeft,
             textColor: textColor,
           ),
         ),
         _buildMenuItem(
-          value: PlutoGridColumnMenuItem.freezeToRight,
+          value: PlutoGridColumnMenuItem.insertToRight,
           child: _buildTextItem(
-            text: localeText.freezeColumnToRight,
+            text: localeText.insertToRight,
             textColor: textColor,
           ),
         ),
+        const PopupMenuDivider(),
       ],
-      const PopupMenuDivider(),
       _buildMenuItem(
         value: PlutoGridColumnMenuItem.autoFit,
         child: _buildTextItem(
@@ -123,12 +115,39 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
           enabled: stateManager.hasFilter,
         ),
       ],
+      const PopupMenuDivider(),
+      if (column.frozen.isFrozen == true)
+        _buildMenuItem(
+          value: PlutoGridColumnMenuItem.unfreeze,
+          child: _buildTextItem(
+            text: localeText.unfreezeColumn,
+            textColor: textColor,
+          ),
+        ),
+      if (column.frozen.isFrozen != true) ...[
+        _buildMenuItem(
+          value: PlutoGridColumnMenuItem.freezeToLeft,
+          child: _buildTextItem(
+            text: localeText.freezeColumnToLeft,
+            textColor: textColor,
+          ),
+        ),
+        _buildMenuItem(
+          value: PlutoGridColumnMenuItem.freezeToRight,
+          child: _buildTextItem(
+            text: localeText.freezeColumnToRight,
+            textColor: textColor,
+          ),
+        ),
+      ],
     ],
   );
 }
 
 /// Items in the context menu on the right side of the column
 enum PlutoGridColumnMenuItem {
+  insertToLeft,
+  insertToRight,
   unfreeze,
   freezeToLeft,
   freezeToRight,
