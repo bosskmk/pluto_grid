@@ -30,14 +30,27 @@ class PlutoColumnTitleState extends State<PlutoColumnTitle> {
   bool _isPointMoving = false;
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
+    final PlutoGridColumnMenuItem? selectedMenu = (await showColumnMenu(
       context: context,
       position: position,
       stateManager: widget.stateManager,
       column: widget.column,
-    );
+    ));
+    if (selectedMenu == null) return;
 
     switch (selectedMenu) {
+      case PlutoGridColumnMenuItem.insertToLeft:
+        final columnIdx = selectedMenu.index;
+        widget.stateManager.eventManager?.addEvent(PlutoGridInsertColumnEvent(
+          index: columnIdx,
+        ));
+        break;
+      case PlutoGridColumnMenuItem.insertToRight:
+        final columnIdx = selectedMenu.index + 1;
+        widget.stateManager.eventManager?.addEvent(PlutoGridInsertColumnEvent(
+          index: columnIdx,
+        ));
+        break;
       case PlutoGridColumnMenuItem.unfreeze:
         widget.stateManager
             .toggleFrozenColumn(widget.column.key, PlutoColumnFrozen.none);
