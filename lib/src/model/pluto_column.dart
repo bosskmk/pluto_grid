@@ -115,6 +115,30 @@ class PlutoColumn {
   /// Entering the Enter key or tapping the cell enters the Editing mode.
   bool? enableEditingMode;
 
+  /// You can insert columns on [PlutoGridInsertColumnEvent]
+  /// ```dart
+  /// PlutoGrid(
+  ///   // ...
+  ///   onLoaded: (PlutoGridOnLoadedEvent event) {
+  ///     stateManager = event.stateManager;
+  ///     event.stateManager.eventManager!
+  ///         .listener((PlutoGridEvent plutoEvent) {
+  ///       if (plutoEvent is PlutoGridInsertColumnEvent) {
+  ///         final columnIdx = plutoEvent.index;
+  ///         stateManager.insertColumns(columnIdx, [
+  ///           PlutoColumn(
+  ///             title: 'New Column',
+  ///             field: 'New Field ID{${stateManager.columnIndexes.length}}',
+  ///             type: PlutoColumnType.text(),
+  ///           )
+  ///         ]);
+  ///       }
+  ///     });
+  ///   },
+  ///   // ...
+  /// ```
+  bool enableInsertColumn;
+
   /// Hide the column.
   bool hide;
 
@@ -148,6 +172,7 @@ class PlutoColumn {
     this.enableSetColumnsMenuItem = true,
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
+    this.enableInsertColumn = false,
     this.hide = false,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
