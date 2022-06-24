@@ -1,6 +1,17 @@
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IVisibilityState {
+  /// Set [PlutoColumn.startPosition] to [PlutoColumn.width].
+  ///
+  /// Set the horizontal position of the columns in the left area, center area, and right area
+  /// according to the [PlutoColumn.frozen] value in [PlutoColumn.startPosition].
+  ///
+  /// This method should be called in an operation that dynamically changes the position of a column.
+  /// Example) resizeColumn, frozenColumn, hideColumn...
+  ///
+  /// [notify] is called false in the normal case.
+  /// When [notify] is called true,
+  /// the notifyListeners of scrollController is forcibly called when build is not triggered.
   void updateColumnStartPosition({bool notify = false});
 }
 

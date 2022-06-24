@@ -104,7 +104,7 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
             frozen: PlutoColumnFrozen.none,
           ),
           scrollController: _scroll!,
-          initialViewportDimensions: MediaQuery.of(context).size.width,
+          initialViewportDimension: MediaQuery.of(context).size.width,
           children: _showColumnGroups == true
               ? _columnGroups!
                   .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(

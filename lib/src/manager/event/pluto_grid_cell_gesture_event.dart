@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// [PlutoCell] This event handles the gesture of the widget.
 class PlutoGridCellGestureEvent extends PlutoGridEvent {
   final PlutoGridGestureType gestureType;
   final Offset offset;

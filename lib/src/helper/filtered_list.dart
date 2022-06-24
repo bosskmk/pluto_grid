@@ -51,19 +51,18 @@ class FilteredListRange {
   /// Used as getRange(from, to)
   FilteredListRange(this._from, this._to);
 
-  /// start index
   int _from = 0;
 
-  /// get from
+  /// The starting index of the range.
   int get from => _from;
 
-  /// end index
   int _to = 0;
 
-  /// get to
+  /// The end index of the range.
   int get to => _to;
 
-  /// setRange
+  /// Set the range of the list.
+  /// If [from] and [to] are set on a page-by-page basis, pagination can be used.
   void setRange(int from, int to) {
     _from = from;
     _to = to;
@@ -126,21 +125,24 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
 
   List<E> _filteredList = [];
 
+  /// Returns all elements regardless of filtering or ranging.
   @override
   List<E> get originalList => [..._list];
 
+  /// Returns the filtered elements.
   @override
   List<E> get filteredList => [..._filteredList];
 
   @override
   bool get hasFilter => _filter != null;
 
-  /// hasRange
   bool get hasRange => _range != null;
 
+  /// Returns the length of the elements with filtering or ranging applied.
   @override
   int get length => _effectiveList.length;
 
+  /// Returns the length of all elements, regardless of filtering or ranging.
   int get originalLength => _list.length;
 
   @override
@@ -148,6 +150,8 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
     _list.length = length;
   }
 
+  /// Apply the filtering state to the list
+  /// by implementing a [filter] callback that returns a bool.
   @override
   void setFilter(FilteredListFilter<E>? filter) {
     _filter = filter;
@@ -155,7 +159,7 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
     _updateFilteredList();
   }
 
-  ///
+  /// Apply the range setting to the list by passing [FilteredListRange].
   void setFilterRange(FilteredListRange? range) {
     _range = range;
   }

@@ -6,6 +6,12 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
+/// It dynamically determines whether the cells of the column are in the edit state.
+///
+/// Once the [readOnly] value is set,
+/// whether the cell is editable cannot be changed during runtime,
+/// but if this callback is implemented,
+/// it can be determined whether the cell can be edited or not according to the state of the cell.
 typedef PlutoColumnCheckReadOnly = bool Function(
   PlutoRow row,
   PlutoCell cell,
@@ -20,11 +26,13 @@ class PlutoColumn {
   String field;
 
   /// Set the column type.
+  ///
+  /// Text, number, select, date, time, etc.
+  /// ex) PlutoColumnType.text(), PlutoColumnType.number() ...
   PlutoColumnType type;
 
   bool readOnly;
 
-  /// Set the width of the column.
   double width;
 
   double minWidth;
@@ -152,7 +160,6 @@ class PlutoColumn {
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 
-  /// Column key
   final Key _key;
 
   final PlutoColumnCheckReadOnly? _checkReadOnly;
@@ -200,7 +207,11 @@ class PlutoColumn {
   }
 
   /// [startPosition] is the position value for the position of the column from the left.
+  ///
   /// Updated when the [PlutoGridStateManager.updateColumnStartPosition] method is called.
+  ///
+  /// [startPosition] is used to determine the position to scroll left and right when moving the keyboard
+  /// or whether the columns in the center area are displayed in the screen area.
   double startPosition = 0;
 
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {

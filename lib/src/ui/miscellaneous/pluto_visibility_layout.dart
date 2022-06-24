@@ -4,25 +4,30 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+/// It is used to lay out the widgets
+/// of [PlutoCell] or [PlutoColumn], [PlutoColumnGroup] of [PlutoRow]
+/// or render only the widgets displayed according to the screen width.
 class PlutoVisibilityLayout extends CustomMultiChildLayout {
   PlutoVisibilityLayout({
     super.key,
     required super.children,
     required super.delegate,
     required this.scrollController,
-    this.initialViewportDimensions = 1920,
+    this.initialViewportDimension = 1920,
   });
 
   final ScrollController scrollController;
 
-  final double initialViewportDimensions;
+  /// When the viewportDimension of scrollPosition cannot be obtained in the first build stage,
+  /// it is used instead of viewportDimension of scroll.
+  final double initialViewportDimension;
 
   @override
   PlutoVisibilityLayoutRenderObjectElement createElement() =>
       PlutoVisibilityLayoutRenderObjectElement(
         widget: this,
         scrollController: scrollController,
-        initialViewportDimensions: initialViewportDimensions,
+        initialViewportDimension: initialViewportDimension,
       );
 
   @override
@@ -44,13 +49,13 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
   PlutoVisibilityLayoutRenderObjectElement({
     required PlutoVisibilityLayout widget,
     required this.scrollController,
-    this.initialViewportDimensions = 1920,
+    this.initialViewportDimension = 1920,
   })  : assert(!debugChildrenHaveDuplicateKeys(widget, widget.children)),
         super(widget);
 
   final ScrollController scrollController;
 
-  final double initialViewportDimensions;
+  final double initialViewportDimension;
 
   @override
   ContainerRenderObjectMixin<RenderObject,
@@ -76,7 +81,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     try {
       return visibleLeft + scrollController.position.viewportDimension;
     } catch (e) {
-      return visibleLeft + initialViewportDimensions;
+      return visibleLeft + initialViewportDimension;
     }
   }
 
