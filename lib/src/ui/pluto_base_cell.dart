@@ -126,10 +126,15 @@ class PlutoBaseCell extends StatelessWidget
 
 class _CellContainer extends StatelessWidget {
   final PlutoCell cell;
+
   final PlutoRow row;
+
   final int rowIdx;
+
   final PlutoColumn column;
+
   final EdgeInsets cellPadding;
+
   final Widget child;
 
   const _CellContainer({
@@ -264,9 +269,13 @@ class _CellContainer extends StatelessWidget {
 
 class _BuildCell extends StatelessWidget {
   final PlutoGridStateManager stateManager;
+
   final int rowIdx;
+
   final PlutoRow row;
+
   final PlutoColumn column;
+
   final PlutoCell cell;
 
   const _BuildCell({

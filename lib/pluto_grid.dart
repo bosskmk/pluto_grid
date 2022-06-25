@@ -1,7 +1,5 @@
 library pluto_grid;
 
-export './src/extends/pluto_change_notifier.dart';
-export './src/extends/pluto_state_with_change.dart';
 export './src/helper/filter_helper.dart';
 export './src/helper/filtered_list.dart';
 export './src/helper/pluto_clipboard_transformation.dart';
@@ -59,3 +57,5 @@ export './src/widgets/pluto_scaled_checkbox.dart';
 export './src/widgets/pluto_scrollbar.dart';
 export './src/widgets/pluto_shadow_container.dart';
 export './src/widgets/pluto_shadow_line.dart';
+export 'src/manager/pluto_change_notifier.dart';
+export 'src/ui/miscellaneous/pluto_state_with_change.dart';

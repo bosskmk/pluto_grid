@@ -20,8 +20,8 @@ class PlutoBaseRow extends StatelessWidget {
     required this.columns,
     required this.stateManager,
     this.visibilityLayout = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   bool _handleOnWillAccept(PlutoRow? draggingRow) {
     if (draggingRow == null) {
@@ -132,11 +132,6 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return true;
-  }
-
-  @override
   void performLayout(Size size) {
     double dx = 0;
 
@@ -160,6 +155,11 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
       dx += width;
     }
+  }
+
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
+    return true;
   }
 }
 

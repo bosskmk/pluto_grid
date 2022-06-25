@@ -6,8 +6,11 @@ import 'package:pluto_grid/src/helper/platform_helper.dart';
 
 abstract class TextCell extends StatefulWidget {
   final PlutoGridStateManager stateManager;
+
   final PlutoCell cell;
+
   final PlutoColumn column;
+
   final PlutoRow row;
 
   const TextCell({
@@ -26,46 +29,21 @@ abstract class TextFieldProps {
 }
 
 mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
+  dynamic _initialCellValue;
+
   final _textController = TextEditingController();
 
   final PlutoDebounceByHashCode _debounce = PlutoDebounceByHashCode();
 
-  CellEditingStatus? _cellEditingStatus;
+  late final FocusNode cellFocus;
 
-  dynamic _initialCellValue;
-
-  FocusNode? cellFocus;
+  late CellEditingStatus _cellEditingStatus;
 
   @override
   TextInputType get keyboardType => TextInputType.text;
 
   @override
   List<TextInputFormatter>? get inputFormatters => [];
-
-  @override
-  void dispose() {
-    _debounce.dispose();
-
-    _textController.dispose();
-
-    cellFocus!.dispose();
-
-    /**
-     * Saves the changed value when moving a cell while text is being input.
-     * if user do not press enter key, onEditingComplete is not called and the value is not saved.
-     */
-    if (_cellEditingStatus.isChanged) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _changeValue(notify: false);
-
-        widget.stateManager.notifyListenersOnPostFrame();
-      });
-    }
-
-    widget.stateManager.textEditingController = null;
-
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -86,6 +64,31 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     _textController.addListener(() {
       _handleOnChanged(_textController.text.toString());
     });
+  }
+
+  @override
+  void dispose() {
+    _debounce.dispose();
+
+    _textController.dispose();
+
+    cellFocus.dispose();
+
+    /**
+     * Saves the changed value when moving a cell while text is being input.
+     * if user do not press enter key, onEditingComplete is not called and the value is not saved.
+     */
+    if (_cellEditingStatus.isChanged) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _changeValue(notify: false);
+
+        widget.stateManager.notifyListenersOnPostFrame();
+      });
+    }
+
+    widget.stateManager.textEditingController = null;
+
+    super.dispose();
   }
 
   void _restoreText() {
@@ -237,7 +240,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
-      cellFocus!.requestFocus();
+      cellFocus.requestFocus();
     }
 
     return TextField(

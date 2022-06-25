@@ -9,14 +9,23 @@ import 'package:pluto_grid/pluto_grid.dart';
 /// Select the date by using the keyboard action of [PlutoGrid].
 class PlutoGridDatePicker {
   final BuildContext context;
+
   final intl.DateFormat dateFormat;
+
   final intl.DateFormat headerDateFormat;
+
   final DateTime? initDate;
+
   final DateTime? startDate;
+
   final DateTime? endDate;
+
   final PlutoOnLoadedEventCallback? onLoaded;
+
   final PlutoOnSelectedEventCallback? onSelected;
+
   final double itemHeight;
+
   final PlutoGridConfiguration configuration;
 
   PlutoGridDatePicker({
@@ -395,51 +404,51 @@ class _DateCellHeader extends PlutoStatefulWidget {
 
 abstract class _DateCellHeaderStateWithChange
     extends PlutoStateWithChange<_DateCellHeader> {
-  ScrollController? _scroll;
-
   PlutoCell? _currentCell;
 
-  int? _currentYear;
+  int _currentYear = 0;
 
-  int? _currentMonth;
+  int _currentMonth = 0;
 
-  @override
-  void dispose() {
-    _scroll!.dispose();
-
-    super.dispose();
-  }
+  late final ScrollController _scroll;
 
   @override
   void initState() {
     super.initState();
 
     _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+
+    updateState();
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _currentCell = update<PlutoCell?>(
-        _currentCell,
-        widget.stateManager.currentCell,
-        compare: identical,
-      );
+  void dispose() {
+    _scroll.dispose();
 
-      final date = widget.dateFormat.parse(
-        widget.stateManager.rows[1].cells.entries.first.value.value,
-      );
+    super.dispose();
+  }
 
-      _currentYear = update<int?>(
-        _currentYear,
-        date.year,
-      );
+  @override
+  void updateState() {
+    _currentCell = update<PlutoCell?>(
+      _currentCell,
+      widget.stateManager.currentCell,
+      compare: identical,
+    );
 
-      _currentMonth = update<int?>(
-        _currentMonth,
-        date.month,
-      );
-    });
+    final date = widget.dateFormat.parse(
+      widget.stateManager.rows[1].cells.entries.first.value.value,
+    );
+
+    _currentYear = update<int>(
+      _currentYear,
+      date.year,
+    );
+
+    _currentMonth = update<int>(
+      _currentMonth,
+      date.month,
+    );
   }
 }
 
@@ -480,7 +489,7 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
             const SizedBox(width: 10),
             Text(
               widget.headerDateFormat.format(
-                DateTime(_currentYear!, _currentMonth!),
+                DateTime(_currentYear, _currentMonth),
               ),
               style: TextStyle(
                 color: textColor,

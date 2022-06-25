@@ -8,18 +8,36 @@ class PlutoRightFrozenRows extends PlutoStatefulWidget {
 
   const PlutoRightFrozenRows(
     this.stateManager, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoRightFrozenRowsState createState() => PlutoRightFrozenRowsState();
 }
 
-abstract class _PlutoRightFrozenRowsStateWithState
+class PlutoRightFrozenRowsState
     extends PlutoStateWithChange<PlutoRightFrozenRows> {
-  List<PlutoColumn>? _columns;
+  List<PlutoColumn> _columns = [];
 
-  List<PlutoRow?>? _rows;
+  List<PlutoRow> _rows = [];
+
+  late final ScrollController _scroll;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scroll = widget.stateManager.scroll!.vertical!.addAndGet();
+
+    updateState();
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+
+    super.dispose();
+  }
 
   @override
   bool allowStream(event) {
@@ -27,40 +45,20 @@ abstract class _PlutoRightFrozenRowsStateWithState
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _columns = update<List<PlutoColumn>?>(
-        _columns,
-        widget.stateManager.rightFrozenColumns,
+  void updateState() {
+    _columns = update<List<PlutoColumn>>(
+      _columns,
+      widget.stateManager.rightFrozenColumns,
+      compare: listEquals,
+    );
+
+    _rows = [
+      ...update<List<PlutoRow>>(
+        _rows,
+        widget.stateManager.refRows,
         compare: listEquals,
-      );
-
-      _rows = [
-        ...update<List<PlutoRow?>?>(
-          _rows,
-          widget.stateManager.refRows,
-          compare: listEquals,
-        )!
-      ];
-    });
-  }
-}
-
-class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
-  ScrollController? _scroll;
-
-  @override
-  void dispose() {
-    _scroll!.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scroll = widget.stateManager.scroll!.vertical!.addAndGet();
+      )
+    ];
   }
 
   @override
@@ -69,14 +67,14 @@ class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
       controller: _scroll,
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
-      itemCount: _rows!.length,
+      itemCount: _rows.length,
       itemExtent: widget.stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('right_frozen_row_${_rows![i]!.key}'),
+          key: ValueKey('right_frozen_row_${_rows[i].key}'),
           rowIdx: i,
-          row: _rows![i]!,
-          columns: _columns!,
+          row: _rows[i],
+          columns: _columns,
           stateManager: widget.stateManager,
         );
       },

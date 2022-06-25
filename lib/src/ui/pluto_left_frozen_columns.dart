@@ -8,24 +8,31 @@ class PlutoLeftFrozenColumns extends PlutoStatefulWidget {
 
   const PlutoLeftFrozenColumns(
     this.stateManager, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoLeftFrozenColumnsState createState() => PlutoLeftFrozenColumnsState();
 }
 
-abstract class _PlutoLeftFrozenColumnsStateWithChange
+class PlutoLeftFrozenColumnsState
     extends PlutoStateWithChange<PlutoLeftFrozenColumns> {
-  bool? _showColumnGroups;
+  List<PlutoColumn> _columns = [];
 
-  bool? _showColumnTitle;
+  List<PlutoColumnGroupPair> _columnGroups = [];
 
-  List<PlutoColumn>? _columns;
+  bool _showColumnGroups = false;
 
-  List<PlutoColumnGroupPair>? _columnGroups;
+  bool _showColumnTitle = false;
 
-  int? _itemCount;
+  int _itemCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
 
   @override
   bool allowStream(event) {
@@ -33,71 +40,70 @@ abstract class _PlutoLeftFrozenColumnsStateWithChange
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _showColumnGroups = update<bool?>(
-        _showColumnGroups,
-        widget.stateManager.showColumnGroups,
+  void updateState() {
+    _showColumnGroups = update<bool>(
+      _showColumnGroups,
+      widget.stateManager.showColumnGroups,
+    );
+
+    _showColumnTitle = update<bool>(
+      _showColumnTitle,
+      widget.stateManager.showColumnTitle,
+    );
+
+    _columns = update<List<PlutoColumn>>(
+      _columns,
+      widget.stateManager.leftFrozenColumns,
+      compare: listEquals,
+    );
+
+    if (changed && _showColumnGroups == true) {
+      _columnGroups = widget.stateManager.separateLinkedGroup(
+        columnGroupList: widget.stateManager.refColumnGroups!,
+        columns: _columns,
       );
+    }
 
-      _showColumnTitle = update<bool?>(
-        _showColumnTitle,
-        widget.stateManager.showColumnTitle,
-      );
-
-      _columns = update<List<PlutoColumn>?>(
-        _columns,
-        widget.stateManager.leftFrozenColumns,
-        compare: listEquals,
-      );
-
-      if (changed && _showColumnGroups == true) {
-        _columnGroups = widget.stateManager.separateLinkedGroup(
-          columnGroupList: widget.stateManager.refColumnGroups!,
-          columns: _columns!,
-        );
-      }
-
-      _itemCount = update<int?>(_itemCount, _getItemCount());
-    });
+    _itemCount = update<int>(_itemCount, _getItemCount());
   }
 
   int _getItemCount() {
-    return _showColumnGroups == true ? _columnGroups!.length : _columns!.length;
+    return _showColumnGroups == true ? _columnGroups.length : _columns.length;
   }
-}
 
-class PlutoLeftFrozenColumnsState
-    extends _PlutoLeftFrozenColumnsStateWithChange {
+  Widget _buildColumnGroup(PlutoColumnGroupPair e) {
+    return PlutoVisibilityLayoutId(
+      id: e.key,
+      child: PlutoBaseColumnGroup(
+        stateManager: widget.stateManager,
+        columnGroup: e,
+        depth: widget.stateManager.columnGroupDepth(
+          widget.stateManager.refColumnGroups!,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildColumn(e) {
+    return PlutoVisibilityLayoutId(
+      id: e.field,
+      child: PlutoBaseColumn(
+        stateManager: widget.stateManager,
+        column: e,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
         delegate: MainColumnLayoutDelegate(
           stateManager: widget.stateManager,
-          columns: _columns!,
+          columns: _columns,
           frozen: PlutoColumnFrozen.left,
         ),
         children: _showColumnGroups == true
-            ? _columnGroups!
-                .map((PlutoColumnGroupPair e) => PlutoVisibilityLayoutId(
-                      id: e.key,
-                      child: PlutoBaseColumnGroup(
-                        stateManager: widget.stateManager,
-                        columnGroup: e,
-                        depth: widget.stateManager.columnGroupDepth(
-                          widget.stateManager.refColumnGroups!,
-                        ),
-                      ),
-                    ))
-                .toList()
-            : _columns!
-                .map((e) => PlutoVisibilityLayoutId(
-                      id: e.field,
-                      child: PlutoBaseColumn(
-                        stateManager: widget.stateManager,
-                        column: e,
-                      ),
-                    ))
-                .toList());
+            ? _columnGroups.map(_buildColumnGroup).toList()
+            : _columns.map(_buildColumn).toList());
   }
 }

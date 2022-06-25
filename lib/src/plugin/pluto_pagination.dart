@@ -15,9 +15,9 @@ class PlutoPagination extends PlutoStatefulWidget {
 
 abstract class _PlutoPaginationStateWithChange
     extends PlutoStateWithChange<PlutoPagination> {
-  int page = 1;
+  late int page;
 
-  int totalPage = 1;
+  late int totalPage;
 
   @override
   void initState() {
@@ -31,18 +31,16 @@ abstract class _PlutoPaginationStateWithChange
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      page = update<int>(
-        page,
-        widget.stateManager.page,
-      );
+  void updateState() {
+    page = update<int>(
+      page,
+      widget.stateManager.page,
+    );
 
-      totalPage = update<int>(
-        totalPage,
-        widget.stateManager.totalPage,
-      );
-    });
+    totalPage = update<int>(
+      totalPage,
+      widget.stateManager.totalPage,
+    );
   }
 }
 

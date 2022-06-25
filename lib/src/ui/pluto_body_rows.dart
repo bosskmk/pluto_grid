@@ -8,63 +8,21 @@ class PlutoBodyRows extends PlutoStatefulWidget {
 
   const PlutoBodyRows(
     this.stateManager, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoBodyRowsState createState() => PlutoBodyRowsState();
 }
 
-abstract class _PlutoBodyRowsStateWithChange
-    extends PlutoStateWithChange<PlutoBodyRows> {
-  List<PlutoColumn>? _columns;
+class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
+  List<PlutoColumn> _columns = [];
 
-  List<PlutoRow?>? _rows;
+  List<PlutoRow> _rows = [];
 
-  @override
-  bool allowStream(event) {
-    return event is! PlutoSetCurrentCellStreamNotifierEvent;
-  }
+  late final ScrollController _verticalScroll;
 
-  @override
-  void onChange(event) {
-    resetState((update) {
-      _columns = update<List<PlutoColumn>?>(
-        _columns,
-        _getColumns(),
-        compare: listEquals,
-      );
-
-      _rows = [
-        ...update<List<PlutoRow?>?>(
-          _rows,
-          widget.stateManager.refRows,
-          compare: listEquals,
-        )!
-      ];
-    });
-  }
-
-  List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn == true
-        ? widget.stateManager.bodyColumns
-        : widget.stateManager.columns;
-  }
-}
-
-class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
-  ScrollController? _verticalScroll;
-
-  ScrollController? _horizontalScroll;
-
-  @override
-  void dispose() {
-    _verticalScroll!.dispose();
-
-    _horizontalScroll!.dispose();
-
-    super.dispose();
-  }
+  late final ScrollController _horizontalScroll;
 
   @override
   void initState() {
@@ -77,47 +35,79 @@ class PlutoBodyRowsState extends _PlutoBodyRowsStateWithChange {
     _verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
 
     widget.stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
+
+    updateState();
+  }
+
+  @override
+  void dispose() {
+    _verticalScroll.dispose();
+
+    _horizontalScroll.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  bool allowStream(event) {
+    return event is! PlutoSetCurrentCellStreamNotifierEvent;
+  }
+
+  @override
+  void updateState() {
+    _columns = update<List<PlutoColumn>>(
+      _columns,
+      _getColumns(),
+      compare: listEquals,
+    );
+
+    _rows = [
+      ...update<List<PlutoRow>>(
+        _rows,
+        widget.stateManager.refRows,
+        compare: listEquals,
+      )
+    ];
+  }
+
+  List<PlutoColumn> _getColumns() {
+    return widget.stateManager.showFrozenColumn == true
+        ? widget.stateManager.bodyColumns
+        : widget.stateManager.columns;
   }
 
   @override
   Widget build(BuildContext context) {
+    final scrollbarConfig = widget.stateManager.configuration!.scrollbarConfig;
+
     return PlutoScrollbar(
       verticalController:
-          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? _verticalScroll
-              : null,
+          scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
       horizontalController:
-          widget.stateManager.configuration!.scrollbarConfig.draggableScrollbar
-              ? _horizontalScroll
-              : null,
-      isAlwaysShown:
-          widget.stateManager.configuration!.scrollbarConfig.isAlwaysShown,
-      thickness:
-          widget.stateManager.configuration!.scrollbarConfig.scrollbarThickness,
-      thicknessWhileDragging: widget.stateManager.configuration!.scrollbarConfig
-          .scrollbarThicknessWhileDragging,
-      radius:
-          widget.stateManager.configuration!.scrollbarConfig.scrollbarRadius,
-      radiusWhileDragging: widget.stateManager.configuration!.scrollbarConfig
-          .scrollbarRadiusWhileDragging,
+          scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
+      isAlwaysShown: scrollbarConfig.isAlwaysShown,
+      thickness: scrollbarConfig.scrollbarThickness,
+      thicknessWhileDragging: scrollbarConfig.scrollbarThicknessWhileDragging,
+      radius: scrollbarConfig.scrollbarRadius,
+      radiusWhileDragging: scrollbarConfig.scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         child: CustomSingleChildLayout(
-          delegate: ListResizeDelegate(widget.stateManager, _columns!),
+          delegate: ListResizeDelegate(widget.stateManager, _columns),
           child: ListView.builder(
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
-            itemCount: _rows!.length,
+            itemCount: _rows.length,
             itemExtent: widget.stateManager.rowTotalHeight,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
-                key: ValueKey('body_row_${_rows![i]!.key}'),
+                key: ValueKey('body_row_${_rows[i].key}'),
                 rowIdx: i,
-                row: _rows![i]!,
-                columns: _columns!,
+                row: _rows[i],
+                columns: _columns,
                 stateManager: widget.stateManager,
                 visibilityLayout: true,
               );

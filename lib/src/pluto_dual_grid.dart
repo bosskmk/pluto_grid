@@ -5,6 +5,14 @@ typedef PlutoDualOnSelectedEventCallback = void Function(
     PlutoDualOnSelectedEvent event);
 
 class PlutoDualGridDivider {
+  final bool show;
+
+  final Color backgroundColor;
+
+  final Color indicatorColor;
+
+  final Color draggingColor;
+
   const PlutoDualGridDivider({
     this.show = true,
     this.backgroundColor = Colors.white,
@@ -18,14 +26,6 @@ class PlutoDualGridDivider {
     this.indicatorColor = const Color(0xFF000000),
     this.draggingColor = const Color(0xFF313131),
   });
-
-  final bool show;
-
-  final Color backgroundColor;
-
-  final Color indicatorColor;
-
-  final Color draggingColor;
 }
 
 /// [PlutoDualGrid] can connect the keyboard movement between the two grids
@@ -215,6 +215,14 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
 }
 
 class PlutoDualGridDividerWidget extends StatefulWidget {
+  final Color backgroundColor;
+
+  final Color indicatorColor;
+
+  final Color draggingColor;
+
+  final void Function(DragUpdateDetails) dragCallback;
+
   const PlutoDualGridDividerWidget({
     required this.backgroundColor,
     required this.indicatorColor,
@@ -222,11 +230,6 @@ class PlutoDualGridDividerWidget extends StatefulWidget {
     required this.dragCallback,
     Key? key,
   }) : super(key: key);
-
-  final Color backgroundColor;
-  final Color indicatorColor;
-  final Color draggingColor;
-  final void Function(DragUpdateDetails) dragCallback;
 
   @override
   State<PlutoDualGridDividerWidget> createState() =>
@@ -385,6 +388,7 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
 
 class PlutoDualOnSelectedEvent {
   PlutoGridOnSelectedEvent? gridA;
+
   PlutoGridOnSelectedEvent? gridB;
 
   PlutoDualOnSelectedEvent({
@@ -454,12 +458,19 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 
 class PlutoDualGridProps {
   final List<PlutoColumn> columns;
+
   final List<PlutoRow> rows;
+
   final List<PlutoColumnGroup>? columnGroups;
+
   final PlutoOnLoadedEventCallback? onLoaded;
+
   final PlutoOnChangedEventCallback? onChanged;
+
   final CreateHeaderCallBack? createHeader;
+
   final CreateFooterCallBack? createFooter;
+
   final PlutoGridConfiguration configuration;
 
   const PlutoDualGridProps({

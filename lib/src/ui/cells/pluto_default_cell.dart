@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
+typedef DragUpdatedCallback = Function(Offset offset);
+
 class _PlutoDefaultCellState {
+  final bool hasFocus;
+
+  final bool canRowDrag;
+
+  final bool isCurrentCell;
+
+  final String text;
+
   _PlutoDefaultCellState({
     required this.hasFocus,
     required this.canRowDrag,
     required this.isCurrentCell,
     required this.text,
   });
-
-  bool hasFocus;
-
-  bool canRowDrag;
-
-  bool isCurrentCell;
-
-  String text;
 
   @override
   bool operator ==(Object other) =>
@@ -104,8 +106,6 @@ class PlutoDefaultCell extends StatelessWidget {
   }
 }
 
-typedef DragUpdatedCallback = Function(Offset offset);
-
 class _RowDragIconWidget extends StatelessWidget {
   final PlutoColumn column;
 
@@ -146,6 +146,35 @@ class _RowDragIconWidget extends StatelessWidget {
     return [row];
   }
 
+  void _handleOnPointerDown(PointerDownEvent event) {
+    stateManager.setIsDraggingRow(true, notify: false);
+
+    stateManager.setDragRows(_draggingRows);
+  }
+
+  void _handleOnPointerMove(PointerMoveEvent event) {
+    // Do not drag while rows are selected.
+    if (stateManager.isSelecting) {
+      stateManager.setIsDraggingRow(false);
+
+      return;
+    }
+
+    stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
+      offset: event.position,
+    ));
+
+    int? targetRowIdx = stateManager.getRowIdxByOffset(
+      event.position.dy,
+    );
+
+    stateManager.setDragTargetRowIdx(targetRowIdx);
+  }
+
+  void _handleOnPointerUp(PointerUpEvent event) {
+    stateManager.setIsDraggingRow(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -178,35 +207,6 @@ class _RowDragIconWidget extends StatelessWidget {
       ),
     );
   }
-
-  void _handleOnPointerDown(PointerDownEvent event) {
-    stateManager.setIsDraggingRow(true, notify: false);
-
-    stateManager.setDragRows(_draggingRows);
-  }
-
-  void _handleOnPointerMove(PointerMoveEvent event) {
-    // Do not drag while rows are selected.
-    if (stateManager.isSelecting) {
-      stateManager.setIsDraggingRow(false);
-
-      return;
-    }
-
-    stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
-      offset: event.position,
-    ));
-
-    int? targetRowIdx = stateManager.getRowIdxByOffset(
-      event.position.dy,
-    );
-
-    stateManager.setDragTargetRowIdx(targetRowIdx);
-  }
-
-  void _handleOnPointerUp(PointerUpEvent event) {
-    stateManager.setIsDraggingRow(false);
-  }
 }
 
 class _CheckboxSelectionWidget extends StatefulWidget {
@@ -226,11 +226,11 @@ class _CheckboxSelectionWidget extends StatefulWidget {
   });
 
   @override
-  __CheckboxSelectionWidgetState createState() =>
-      __CheckboxSelectionWidgetState();
+  _CheckboxSelectionWidgetState createState() =>
+      _CheckboxSelectionWidgetState();
 }
 
-class __CheckboxSelectionWidgetState extends State<_CheckboxSelectionWidget> {
+class _CheckboxSelectionWidgetState extends State<_CheckboxSelectionWidget> {
   bool? _checked;
 
   @override
@@ -300,22 +300,24 @@ class _BuildDefaultCellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return column.hasRenderer
-        ? column.renderer!(PlutoColumnRendererContext(
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-            cell: cell,
-            stateManager: stateManager,
-          ))
-        : Text(
-            column.formattedValueForDisplay(cell.value),
-            style: stateManager.configuration!.cellTextStyle.copyWith(
-              decoration: TextDecoration.none,
-              fontWeight: FontWeight.normal,
-            ),
-            overflow: TextOverflow.ellipsis,
-            textAlign: column.textAlign.value,
-          );
+    if (column.hasRenderer) {
+      return column.renderer!(PlutoColumnRendererContext(
+        column: column,
+        rowIdx: rowIdx,
+        row: row,
+        cell: cell,
+        stateManager: stateManager,
+      ));
+    }
+
+    return Text(
+      column.formattedValueForDisplay(cell.value),
+      style: stateManager.configuration!.cellTextStyle.copyWith(
+        decoration: TextDecoration.none,
+        fontWeight: FontWeight.normal,
+      ),
+      overflow: TextOverflow.ellipsis,
+      textAlign: column.textAlign.value,
+    );
   }
 }

@@ -47,6 +47,4 @@ abstract class PlutoStreamNotifierEvent {}
 
 class PlutoEmptyStreamNotifierEvent extends PlutoStreamNotifierEvent {}
 
-class PlutoInitStateStreamNotifierEvent extends PlutoStreamNotifierEvent {}
-
 class PlutoSetCurrentCellStreamNotifierEvent extends PlutoStreamNotifierEvent {}

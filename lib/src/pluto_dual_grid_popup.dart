@@ -6,13 +6,21 @@ import 'package:pluto_grid/pluto_grid.dart';
 /// It works as a popup.
 class PlutoDualGridPopup {
   final BuildContext context;
+
   final PlutoDualGridProps gridPropsA;
+
   final PlutoDualGridProps gridPropsB;
+
   final PlutoGridMode? mode;
+
   final PlutoDualOnSelectedEventCallback? onSelected;
+
   final PlutoDualGridDisplay? display;
+
   final double? width;
+
   final double? height;
+
   final PlutoDualGridDivider? divider;
 
   PlutoDualGridPopup({

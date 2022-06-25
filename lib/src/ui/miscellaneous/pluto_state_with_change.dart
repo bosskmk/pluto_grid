@@ -31,10 +31,21 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   StatefulElement? get _statefulElement =>
       mounted ? context as StatefulElement? : null;
 
-  void onChange(PlutoStreamNotifierEvent event);
+  void updateState() {}
 
   bool allowStream(PlutoStreamNotifierEvent event) {
     return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _subscription = widget.stateManager.streamNotifier.stream
+        .where(allowStream)
+        .listen(_onChange);
+
+    _initialized = true;
   }
 
   @override
@@ -44,32 +55,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    onChange(PlutoInitStateStreamNotifierEvent());
-
-    _subscription = widget.stateManager.streamNotifier.stream
-        .where(allowStream)
-        .listen(onChange);
-
-    _initialized = true;
-  }
-
-  void resetState(PlutoStateResetStateCallback callback) {
-    callback(_update);
-    // it may have not been layout yet.
-    if (mounted &&
-        _initialized &&
-        _changed &&
-        widget.stateManager.maxWidth != null) {
-      _changed = false;
-      _statefulElement?.markNeedsBuild();
-    }
-  }
-
-  U _update<U>(
+  U update<U>(
     U oldValue,
     U newValue, {
     bool Function(U a, U b)? compare,
@@ -84,6 +70,18 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     }
 
     return newValue;
+  }
+
+  void _onChange(PlutoStreamNotifierEvent event) {
+    updateState();
+
+    if (mounted &&
+        _initialized &&
+        _changed &&
+        widget.stateManager.maxWidth != null) {
+      _changed = false;
+      _statefulElement?.markNeedsBuild();
+    }
   }
 }
 

@@ -4,16 +4,27 @@ import 'package:pluto_grid/pluto_grid.dart';
 /// [PlutoGridPopup] calls [PlutoGrid] in the form of a popup.
 class PlutoGridPopup {
   final BuildContext context;
+
   final List<PlutoColumn> columns;
+
   final List<PlutoRow> rows;
+
   final PlutoGridMode? mode;
+
   final PlutoOnLoadedEventCallback? onLoaded;
+
   final PlutoOnChangedEventCallback? onChanged;
+
   final PlutoOnSelectedEventCallback? onSelected;
+
   final double? width;
+
   final double? height;
+
   final CreateHeaderCallBack? createHeader;
+
   final CreateFooterCallBack? createFooter;
+
   final PlutoGridConfiguration? configuration;
 
   PlutoGridPopup({

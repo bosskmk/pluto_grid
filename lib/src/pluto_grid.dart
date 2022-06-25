@@ -210,6 +210,30 @@ class PlutoGrid extends StatefulWidget {
 }
 
 class PlutoGridState extends State<PlutoGrid> {
+  bool _showFrozenColumn = false;
+
+  bool _hasLeftFrozenColumns = false;
+
+  double _bodyLeftOffset = 0.0;
+
+  double _bodyRightOffset = 0.0;
+
+  bool _hasRightFrozenColumns = false;
+
+  double _rightFrozenLeftOffset = 0.0;
+
+  bool _showColumnGroups = false;
+
+  bool _showColumnTitle = false;
+
+  bool _showColumnFilter = false;
+
+  bool _showLoading = false;
+
+  Widget? _header;
+
+  Widget? _footer;
+
   final FocusNode _gridFocusNode = FocusNode();
 
   final LinkedScrollControllerGroup _verticalScroll =
@@ -225,39 +249,6 @@ class PlutoGridState extends State<PlutoGrid> {
   late final PlutoGridKeyManager _keyManager;
 
   late final PlutoGridEventManager _eventManager;
-
-  bool? _showFrozenColumn;
-
-  bool? _hasLeftFrozenColumns;
-
-  double? _bodyLeftOffset;
-
-  double? _bodyRightOffset;
-
-  bool? _hasRightFrozenColumns;
-
-  double? _rightFrozenLeftOffset;
-
-  bool? _showColumnGroups;
-
-  bool? _showColumnTitle;
-
-  bool? _showColumnFilter;
-
-  bool? _showLoading;
-
-  Widget? _header;
-
-  Widget? _footer;
-
-  @override
-  void dispose() {
-    for (var dispose in _disposeList) {
-      dispose();
-    }
-
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -278,6 +269,15 @@ class PlutoGridState extends State<PlutoGrid> {
     _initSelectMode();
 
     _initHeaderFooter();
+  }
+
+  @override
+  void dispose() {
+    for (var dispose in _disposeList) {
+      dispose();
+    }
+
+    super.dispose();
   }
 
   void _initStateManager() {

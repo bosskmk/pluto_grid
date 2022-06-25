@@ -236,7 +236,9 @@ class PlutoGridColumnIcon extends StatelessWidget {
 
 class _BuildDraggableWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
+
   final PlutoColumn column;
+
   final Widget child;
 
   const _BuildDraggableWidget({
@@ -277,7 +279,9 @@ class _BuildDraggableWidget extends StatelessWidget {
 
 class _BuildSortableWidget extends StatelessWidget {
   final PlutoGridStateManager? stateManager;
+
   final PlutoColumn? column;
+
   final Widget? child;
 
   const _BuildSortableWidget({
@@ -302,7 +306,9 @@ class _BuildSortableWidget extends StatelessWidget {
 
 class _BuildColumnWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
+
   final PlutoColumn column;
+
   final double height;
 
   const _BuildColumnWidget({
@@ -391,27 +397,29 @@ class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  __CheckboxAllSelectionWidgetState createState() =>
-      __CheckboxAllSelectionWidgetState();
+  _CheckboxAllSelectionWidgetState createState() =>
+      _CheckboxAllSelectionWidgetState();
 }
 
-abstract class __CheckboxAllSelectionWidgetStateWithChange
+class _CheckboxAllSelectionWidgetState
     extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
   bool? _checked;
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _checked = update<bool?>(
-        _checked,
-        widget.stateManager.tristateCheckedRow,
-      );
-    });
-  }
-}
+  void initState() {
+    super.initState();
 
-class __CheckboxAllSelectionWidgetState
-    extends __CheckboxAllSelectionWidgetStateWithChange {
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    _checked = update<bool?>(
+      _checked,
+      widget.stateManager.tristateCheckedRow,
+    );
+  }
+
   void _handleOnChanged(bool? changed) {
     if (changed == _checked) {
       return;
@@ -466,21 +474,25 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  __ColumnTextWidgetState createState() => __ColumnTextWidgetState();
+  _ColumnTextWidgetState createState() => _ColumnTextWidgetState();
 }
 
-abstract class __ColumnTextWidgetStateWithChange
-    extends PlutoStateWithChange<_ColumnTextWidget> {
-  bool? _isFilteredList;
+class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
+  bool _isFilteredList = false;
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _isFilteredList = update<bool?>(
-        _isFilteredList,
-        widget.stateManager.isFilteredColumn(widget.column),
-      );
-    });
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    _isFilteredList = update<bool>(
+      _isFilteredList,
+      widget.stateManager.isFilteredColumn(widget.column),
+    );
   }
 
   void _handleOnPressedFilter() {
@@ -489,15 +501,13 @@ abstract class __ColumnTextWidgetStateWithChange
       calledColumn: widget.column,
     );
   }
-}
 
-class __ColumnTextWidgetState extends __ColumnTextWidgetStateWithChange {
   String? get _title =>
       widget.column.titleSpan == null ? widget.column.title : null;
 
-  List<InlineSpan>? get _children => [
+  List<InlineSpan> get _children => [
         if (widget.column.titleSpan != null) widget.column.titleSpan!,
-        if (_isFilteredList!)
+        if (_isFilteredList)
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
