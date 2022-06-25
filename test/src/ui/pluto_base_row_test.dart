@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -15,11 +15,14 @@ import 'pluto_base_row_test.mocks.dart';
 ])
 void main() {
   MockPlutoGridStateManager? stateManager;
+  PublishSubject<PlutoStreamNotifierEvent> streamNotifier;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    streamNotifier = PublishSubject<PlutoStreamNotifierEvent>();
+    when(stateManager!.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
@@ -77,14 +80,11 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager!,
-                child: PlutoBaseRow(
-                  rowIdx: rowIdx,
-                  row: row,
-                  columns: columns,
-                  stateManager: stateManager!,
-                ),
+              child: PlutoBaseRow(
+                rowIdx: rowIdx,
+                row: row,
+                columns: columns,
+                stateManager: stateManager!,
               ),
             ),
           ),

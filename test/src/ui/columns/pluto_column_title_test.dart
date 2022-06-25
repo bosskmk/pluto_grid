@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
@@ -51,12 +50,9 @@ void main() {
   }) {
     return MaterialApp(
       home: Material(
-        child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-          value: stateManager,
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
+        child: PlutoColumnTitle(
+          stateManager: stateManager,
+          column: column,
         ),
       ),
     );

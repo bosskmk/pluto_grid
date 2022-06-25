@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 
 class PlutoBaseRow extends StatelessWidget {
   final int rowIdx;
@@ -92,6 +91,7 @@ class PlutoBaseRow extends StatelessWidget {
     }
 
     return _RowContainerWidget(
+      stateManager: stateManager,
       rowIdx: rowIdx,
       row: row,
       enableRowColorAnimation:
@@ -163,30 +163,10 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   }
 }
 
-class _RowContainerWidgetProvider {
-  _RowContainerWidgetProvider({
-    required this.decoration,
-    required this.keepAlive,
-  });
-
-  BoxDecoration decoration;
-
-  bool keepAlive;
-
+class _RowContainerWidget extends PlutoStatefulWidget {
   @override
-  bool operator ==(Object other) =>
-      other is _RowContainerWidgetProvider &&
-      other.decoration == decoration &&
-      other.keepAlive == keepAlive;
+  final PlutoGridStateManager stateManager;
 
-  @override
-  int get hashCode => hashValues(
-        decoration,
-        keepAlive,
-      );
-}
-
-class _RowContainerWidget extends StatefulWidget {
   final int rowIdx;
 
   final PlutoRow row;
@@ -196,6 +176,7 @@ class _RowContainerWidget extends StatefulWidget {
   final Widget child;
 
   const _RowContainerWidget({
+    required this.stateManager,
     required this.rowIdx,
     required this.row,
     required this.enableRowColorAnimation,
@@ -207,11 +188,37 @@ class _RowContainerWidget extends StatefulWidget {
   State<_RowContainerWidget> createState() => _RowContainerWidgetState();
 }
 
-class _RowContainerWidgetState extends State<_RowContainerWidget>
+class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     with
         AutomaticKeepAliveClientMixin,
         PlutoStateWithKeepAlive<_RowContainerWidget> {
-  Color _getDefaultRowColor(PlutoGridStateManager stateManager) {
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  BoxDecoration _decoration = const BoxDecoration();
+
+  bool _keepAlive = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    _decoration = update<BoxDecoration>(
+      _decoration,
+      _getBoxDecoration(),
+    );
+
+    _keepAlive = update<bool>(
+      _keepAlive,
+      stateManager.currentRowIdx == widget.rowIdx,
+    );
+  }
+
+  Color _getDefaultRowColor() {
     if (stateManager.rowColorCallback == null) {
       return stateManager.configuration!.gridBackgroundColor;
     }
@@ -226,14 +233,13 @@ class _RowContainerWidgetState extends State<_RowContainerWidget>
   }
 
   Color _getRowColor({
-    required PlutoGridStateManager stateManager,
     required bool isDragTarget,
     required bool isFocusedCurrentRow,
     required bool isSelecting,
     required bool hasCurrentSelectingPosition,
     required bool isCheckedRow,
   }) {
-    Color color = _getDefaultRowColor(stateManager);
+    Color color = _getDefaultRowColor();
 
     if (isDragTarget) {
       color = stateManager.configuration!.cellColorInReadOnlyState;
@@ -255,7 +261,7 @@ class _RowContainerWidgetState extends State<_RowContainerWidget>
         : color;
   }
 
-  BoxDecoration _getBoxDecoration(PlutoGridStateManager stateManager) {
+  BoxDecoration _getBoxDecoration() {
     final bool isCurrentRow = stateManager.currentRowIdx == widget.rowIdx;
 
     final bool isSelecting = stateManager.isSelecting;
@@ -284,7 +290,6 @@ class _RowContainerWidgetState extends State<_RowContainerWidget>
     final bool isFocusedCurrentRow = isCurrentRow && stateManager.hasFocus;
 
     final Color rowColor = _getRowColor(
-      stateManager: stateManager,
       isDragTarget: isDragTarget,
       isFocusedCurrentRow: isFocusedCurrentRow,
       isSelecting: isSelecting,
@@ -315,23 +320,10 @@ class _RowContainerWidgetState extends State<_RowContainerWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return ProxyProvider<PlutoGridStateManager, _RowContainerWidgetProvider>(
-      update: (_, stateManager, __) => _RowContainerWidgetProvider(
-        decoration: _getBoxDecoration(stateManager),
-        keepAlive: stateManager.currentRowIdx == widget.rowIdx,
-      ),
-      child: Consumer<_RowContainerWidgetProvider>(
-        builder: (_, state, child) {
-          setKeepAlive(state.keepAlive);
-
-          return _AnimatedOrNormalContainer(
-            enable: widget.enableRowColorAnimation,
-            decoration: state.decoration,
-            child: child!,
-          );
-        },
-        child: widget.child,
-      ),
+    return _AnimatedOrNormalContainer(
+      enable: widget.enableRowColorAnimation,
+      decoration: _decoration,
+      child: widget.child,
     );
   }
 }

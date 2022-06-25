@@ -16,7 +16,6 @@ dependencies:
 #  https://github.com/google/flutter.widgets/pull/397/files
 #  linked_scroll_controller: ^0.2.0
   collection: ^1.16.0
-  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:

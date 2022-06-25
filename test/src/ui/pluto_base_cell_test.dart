@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
@@ -17,10 +17,13 @@ import 'pluto_base_cell_test.mocks.dart';
 void main() {
   late MockPlutoGridStateManager stateManager;
   MockPlutoGridEventManager? eventManager;
+  PublishSubject<PlutoStreamNotifierEvent> streamNotifier;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
+    streamNotifier = PublishSubject<PlutoStreamNotifierEvent>();
+    when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
@@ -53,15 +56,12 @@ void main() {
   }) {
     return MaterialApp(
       home: Material(
-        child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-          value: stateManager,
-          child: PlutoBaseCell(
-            cell: cell,
-            column: column,
-            rowIdx: rowIdx,
-            row: row,
-            stateManager: stateManager,
-          ),
+        child: PlutoBaseCell(
+          cell: cell,
+          column: column,
+          rowIdx: rowIdx,
+          row: row,
+          stateManager: stateManager,
         ),
       ),
     );

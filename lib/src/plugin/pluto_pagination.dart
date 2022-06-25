@@ -28,6 +28,8 @@ abstract class _PlutoPaginationStateWithChange
     totalPage = widget.stateManager.totalPage;
 
     widget.stateManager.setPage(page, notify: false);
+
+    updateState();
   }
 
   @override

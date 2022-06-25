@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 
-class PlutoColumnTitle extends StatefulWidget {
+class PlutoColumnTitle extends PlutoStatefulWidget {
+  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -22,12 +22,29 @@ class PlutoColumnTitle extends StatefulWidget {
   PlutoColumnTitleState createState() => PlutoColumnTitleState();
 }
 
-class PlutoColumnTitleState extends State<PlutoColumnTitle> {
+class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   late Offset _columnLeftPosition;
 
   late Offset _columnRightPosition;
 
   bool _isPointMoving = false;
+
+  PlutoColumnSort _sort = PlutoColumnSort.none;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    _sort = update<PlutoColumnSort>(
+      _sort,
+      widget.column.sort,
+    );
+  }
 
   void _showContextMenu(BuildContext context, Offset position) async {
     final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
@@ -125,13 +142,9 @@ class PlutoColumnTitleState extends State<PlutoColumnTitle> {
 
   @override
   Widget build(BuildContext context) {
-    final sort = context.select<PlutoGridStateManager, PlutoColumnSort>((_) {
-      return widget.column.sort;
-    });
-
     final showContextIcon = widget.column.enableContextMenu ||
         widget.column.enableDropToResize ||
-        !sort.isNone;
+        !_sort.isNone;
 
     final enableGesture =
         widget.column.enableContextMenu || widget.column.enableDropToResize;
@@ -151,7 +164,7 @@ class PlutoColumnTitleState extends State<PlutoColumnTitle> {
       alignment: Alignment.center,
       child: IconButton(
         icon: PlutoGridColumnIcon(
-          sort: sort,
+          sort: _sort,
           color: widget.stateManager.configuration!.iconColor,
           icon: widget.column.enableContextMenu
               ? widget.stateManager.configuration!.columnContextIcon

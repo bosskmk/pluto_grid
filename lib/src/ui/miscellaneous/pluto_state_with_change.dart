@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoStateResetStateCallback = void Function(
-    PlutoStateUpdateStateFunction update);
-
-typedef PlutoStateUpdateStateFunction = T Function<T>(
+typedef PlutoUpdateState = T Function<T>(
   T oldValue,
   T newValue, {
   bool Function(T a, T b)? compare,
