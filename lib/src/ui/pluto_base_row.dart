@@ -196,8 +196,6 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   BoxDecoration _decoration = const BoxDecoration();
 
-  bool _keepAlive = false;
-
   @override
   void initState() {
     super.initState();
@@ -212,10 +210,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
       _getBoxDecoration(),
     );
 
-    _keepAlive = update<bool>(
-      _keepAlive,
-      stateManager.currentRowIdx == widget.rowIdx,
-    );
+    setKeepAlive(stateManager.currentRowIdx == widget.rowIdx);
   }
 
   Color _getDefaultRowColor() {

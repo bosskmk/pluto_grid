@@ -44,6 +44,8 @@ class _TestLayoutChild extends Container implements PlutoVisibilityLayoutChild {
     this.width = defaultChildWidth,
     // ignore: unused_element
     this.startPosition = 0,
+    // ignore: unused_element
+    this.keepAlive = false,
   }) : super(width: width, height: childHeight);
 
   @override
@@ -51,6 +53,9 @@ class _TestLayoutChild extends Container implements PlutoVisibilityLayoutChild {
 
   @override
   final double startPosition;
+
+  @override
+  final bool keepAlive;
 }
 
 class _TestDelegate extends MultiChildLayoutDelegate {

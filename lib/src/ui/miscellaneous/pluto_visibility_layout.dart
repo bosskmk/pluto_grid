@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 /// It is used to lay out the widgets
 /// of [PlutoCell] or [PlutoColumn], [PlutoColumnGroup] of [PlutoRow]
@@ -95,6 +96,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
   double _lastVisibleEndX2 = 0;
 
+  bool _firstVisible = true;
+
   void scrollListener() {
     final bool sameBoundScroll = _lastVisibleStartX1 <= visibleLeft &&
         visibleLeft <= _lastVisibleStartX2 &&
@@ -113,14 +116,30 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
   bool visible({
     required double startOffset,
-    required double width,
+    required PlutoVisibilityLayoutChild layoutChild,
   }) {
-    return startOffset <= visibleRight && startOffset + width >= visibleLeft;
+    return layoutChild.keepAlive ||
+        (startOffset <= visibleRight &&
+            startOffset + layoutChild.width >= visibleLeft);
   }
 
-  double getChildWidth(Widget widget) {
-    assert(widget is PlutoVisibilityLayoutId);
-    return (widget as PlutoVisibilityLayoutId).layoutChild.width;
+  void updateLastVisible({
+    required double startOffset,
+    required double width,
+  }) {
+    if (_firstVisible) {
+      _lastVisibleStartX1 = startOffset;
+      _lastVisibleStartX2 = startOffset + width;
+      _firstVisible = false;
+    }
+
+    _lastVisibleEndX1 = startOffset;
+    _lastVisibleEndX2 = startOffset + width;
+  }
+
+  PlutoVisibilityLayoutChild getLayoutChild(Widget child) {
+    assert(child is PlutoVisibilityLayoutId);
+    return (child as PlutoVisibilityLayoutId).layoutChild;
   }
 
   Element? findChildByLayoutId(Object layoutId) {
@@ -143,13 +162,14 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
     Element? previousChild;
     double startOffset = 0;
-    bool updatedFirst = false;
+    _firstVisible = true;
 
     for (int i = 0; i < layoutWidget.children.length; i += 1) {
       final child = layoutWidget.children[i] as PlutoVisibilityLayoutId;
-      final double width = getChildWidth(child);
+      final layoutChild = getLayoutChild(child);
+      final width = layoutChild.width;
 
-      if (visible(startOffset: startOffset, width: width)) {
+      if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
         final foundElement = findChildByLayoutId(child.id);
 
         if (foundElement != null) {
@@ -163,14 +183,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
           previousChild = element;
         }
 
-        if (!updatedFirst) {
-          _lastVisibleStartX1 = startOffset;
-          _lastVisibleStartX2 = startOffset + width;
-          updatedFirst = true;
-        }
-
-        _lastVisibleEndX1 = startOffset;
-        _lastVisibleEndX2 = startOffset + width;
+        updateLastVisible(startOffset: startOffset, width: width);
       }
 
       startOffset += width;
@@ -181,11 +194,11 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
         continue;
       }
 
-      final childWidget = (child.widget as PlutoVisibilityLayoutId).layoutChild;
+      final layoutChild = getLayoutChild(child.widget);
 
       if (!visible(
-        startOffset: childWidget.startPosition,
-        width: childWidget.width,
+        startOffset: layoutChild.startPosition,
+        layoutChild: layoutChild,
       )) {
         deactivateChild(child);
         _forgottenChildren.add(child);
@@ -217,29 +230,21 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
     Element? previousChild;
     double startOffset = 0;
-    bool updatedFirst = false;
+    _firstVisible = true;
 
     for (int i = 0; i < children.length; i += 1) {
-      final width = getChildWidth(layoutWidget.children[i]);
+      final layoutChild = getLayoutChild(layoutWidget.children[i]);
+      final width = layoutChild.width;
 
-      if (visible(startOffset: startOffset, width: width)) {
+      if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
         final Element newChild = inflateWidget(
           layoutWidget.children[i],
           IndexedSlot<Element?>(i, previousChild),
         );
-
         children[i] = newChild;
-
         previousChild = newChild;
 
-        if (!updatedFirst) {
-          _lastVisibleStartX1 = startOffset;
-          _lastVisibleStartX2 = startOffset + width;
-          updatedFirst = true;
-        }
-
-        _lastVisibleEndX1 = startOffset;
-        _lastVisibleEndX2 = startOffset + width;
+        updateLastVisible(startOffset: startOffset, width: width);
       } else {
         _forgottenChildren.add(children[i]);
       }
@@ -272,22 +277,16 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
     final List<Widget> visibleWidgets = [];
     double startOffset = 0;
-    bool updatedFirst = false;
+    _firstVisible = true;
 
     for (int i = 0; i < layoutWidget.children.length; i += 1) {
-      final width = getChildWidth(layoutWidget.children[i]);
+      final layoutChild = getLayoutChild(layoutWidget.children[i]);
+      final width = layoutChild.width;
 
-      if (visible(startOffset: startOffset, width: width)) {
+      if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
         visibleWidgets.add(layoutWidget.children[i]);
 
-        if (!updatedFirst) {
-          _lastVisibleStartX1 = startOffset;
-          _lastVisibleStartX2 = startOffset + width;
-          updatedFirst = true;
-        }
-
-        _lastVisibleEndX1 = startOffset;
-        _lastVisibleEndX2 = startOffset + width;
+        updateLastVisible(startOffset: startOffset, width: width);
       }
 
       startOffset += width;
@@ -393,7 +392,10 @@ class PlutoVisibilityLayoutId extends LayoutId {
 
 abstract class PlutoVisibilityLayoutChild implements Widget {
   double get width;
+
   double get startPosition;
+
+  bool get keepAlive => false;
 }
 
 class _NullElement extends Element {

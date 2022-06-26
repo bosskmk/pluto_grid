@@ -28,6 +28,9 @@ class PlutoBaseCell extends StatelessWidget
   @override
   double get startPosition => column.startPosition;
 
+  @override
+  bool get keepAlive => stateManager.currentCell == cell;
+
   void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
     stateManager.eventManager!.addEvent(
       PlutoGridCellGestureEvent(
