@@ -861,6 +861,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
+  bool shouldShowFrozenColumns(double? width) =>
+      (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
+          returnValue: false) as bool);
+  @override
   void notifyResizingListeners() =>
       super.noSuchMethod(Invocation.method(#notifyResizingListeners, []),
           returnValueForMissingStub: null);
@@ -1065,10 +1069,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   void updateColumnStartPosition({bool? notify = false}) => super.noSuchMethod(
       Invocation.method(#updateColumnStartPosition, [], {#notify: notify}),
       returnValueForMissingStub: null);
-  @override
-  bool shouldShowFrozenColumns(double? width) =>
-      (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
-          returnValue: false) as bool);
 }
 
 /// A class which mocks [PlutoGridEventManager].
