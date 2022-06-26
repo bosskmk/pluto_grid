@@ -594,12 +594,13 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void showSetColumnsPopup(BuildContext context) {
+    const titleField = 'title';
     const columnField = 'field';
 
     var columns = [
       PlutoColumn(
         title: configuration!.localeText.setColumnsTitle,
-        field: 'title',
+        field: titleField,
         type: PlutoColumnType.text(),
         enableRowChecked: true,
         enableEditingMode: false,
@@ -608,14 +609,17 @@ mixin ColumnState implements IPlutoGridState {
         enableColumnDrag: false,
       ),
       PlutoColumn(
-        title: 'column field',
+        title: 'hidden column',
         field: columnField,
         type: PlutoColumnType.text(),
         hide: true,
       ),
     ];
 
-    var toRow = _toRowByColumnField(columnField);
+    var toRow = _toRowByColumnField(
+      titleField: titleField,
+      columnField: columnField,
+    );
 
     var rows = refColumns.originalList.map(toRow).toList();
 
@@ -668,13 +672,14 @@ mixin ColumnState implements IPlutoGridState {
     return found.values.toList();
   }
 
-  PlutoRow Function(PlutoColumn column) _toRowByColumnField(
-    String columnField,
-  ) {
+  PlutoRow Function(PlutoColumn column) _toRowByColumnField({
+    required String titleField,
+    required String columnField,
+  }) {
     return (PlutoColumn column) {
       return PlutoRow(
         cells: {
-          'title': PlutoCell(value: column.titleWithGroup),
+          titleField: PlutoCell(value: column.titleWithGroup),
           columnField: PlutoCell(value: column.field),
         },
         checked: !column.hide,
