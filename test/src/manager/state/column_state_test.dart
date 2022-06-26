@@ -746,7 +746,7 @@ void main() {
 
   testWidgets(
     '고정 컬럼이 있고 넓이가 넓이가 충분한 경우 고정 컬럼이 보여지는 상태에서, '
-    '고정 컬럼 넓이를 넓히면 고정 컬럼이 풀려야 한다.',
+    '고정 컬럼 넓이를 제약범위보다 크게 변경하면 넓이가 변경 되지 않아야 한다.',
     (WidgetTester tester) async {
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn(
@@ -778,11 +778,13 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 550, maxHeight: 600));
 
       expect(stateManager.showFrozenColumn, true);
+      expect(columns.first.width, 150);
 
       // 최소 넓이에서 남는 50 이상 크기를 키움
       stateManager.resizeColumn(columns.first, 60);
 
-      expect(stateManager.showFrozenColumn, false);
+      expect(stateManager.showFrozenColumn, true);
+      expect(columns.first.width, 150);
     },
   );
 

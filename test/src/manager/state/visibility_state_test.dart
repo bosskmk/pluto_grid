@@ -121,8 +121,10 @@ void main() {
     );
 
     testWidgets(
-      '좌측고정 2개, 비고정 2개, 우측고정 2개. 컬럼의 startPosition 이 설정 되어야 한다.',
-      (widgetTester) async {
+      '그리드 넓이가 충분한 상태에서.'
+      '좌측고정 2개, 비고정 2개, 우측고정 2개. '
+      '컬럼의 startPosition 이 설정 되어야 한다.',
+      (tester) async {
         const defaultWidth = PlutoGridSettings.columnWidth;
 
         final columns = [
@@ -144,6 +146,8 @@ void main() {
         ];
 
         final stateManager = createStateManager(columns: columns, rows: []);
+        stateManager.setLayout(const BoxConstraints(maxWidth: 1300));
+        expect(stateManager.showFrozenColumn, true);
 
         stateManager.updateColumnStartPosition();
 
@@ -155,6 +159,48 @@ void main() {
 
         expect(stateManager.columns[4].startPosition, 0);
         expect(stateManager.columns[5].startPosition, defaultWidth * 1);
+      },
+    );
+
+    testWidgets(
+      '그리드 넓이가 부족한 상태에서.'
+      '좌측고정 2개, 비고정 2개, 우측고정 2개. '
+      '컬럼의 startPosition 이 설정 되어야 한다.',
+      (tester) async {
+        const defaultWidth = PlutoGridSettings.columnWidth;
+
+        final columns = [
+          ...ColumnHelper.textColumn(
+            'left',
+            count: 2,
+            frozen: PlutoColumnFrozen.left,
+          ),
+          ...ColumnHelper.textColumn(
+            'body',
+            count: 2,
+            frozen: PlutoColumnFrozen.none,
+          ),
+          ...ColumnHelper.textColumn(
+            'right',
+            count: 2,
+            frozen: PlutoColumnFrozen.right,
+          ),
+        ];
+
+        final stateManager = createStateManager(columns: columns, rows: []);
+        stateManager.setLayout(const BoxConstraints(maxWidth: 600));
+        expect(stateManager.showFrozenColumn, false);
+
+        stateManager.updateColumnStartPosition();
+
+        expect(stateManager.columns[0].startPosition, 0);
+        expect(stateManager.columns[1].startPosition, defaultWidth * 1);
+
+        expect(stateManager.columns[2].startPosition, defaultWidth * 2);
+        expect(stateManager.columns[3].startPosition, defaultWidth * 3);
+
+        expect(stateManager.columns[4].startPosition, defaultWidth * 4);
+        expect(stateManager.columns[5].startPosition, defaultWidth * 5);
       },
     );
 
