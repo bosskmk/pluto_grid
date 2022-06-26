@@ -120,9 +120,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
   double getChildWidth(Widget widget) {
     assert(widget is PlutoVisibilityLayoutId);
-    return ((widget as PlutoVisibilityLayoutId).child
-            as PlutoVisibilityLayoutChild)
-        .width;
+    return (widget as PlutoVisibilityLayoutId).layoutChild.width;
   }
 
   Element? findChildByLayoutId(Object layoutId) {
@@ -183,8 +181,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
         continue;
       }
 
-      final childWidget = ((child.widget as PlutoVisibilityLayoutId).child
-          as PlutoVisibilityLayoutChild);
+      final childWidget = (child.widget as PlutoVisibilityLayoutId).layoutChild;
 
       if (!visible(
         startOffset: childWidget.startPosition,
@@ -388,7 +385,10 @@ class PlutoVisibilityLayoutId extends LayoutId {
     Key? key,
     required super.id,
     required PlutoVisibilityLayoutChild child,
-  }) : super(key: key, child: child);
+  }) : super(key: key, child: RepaintBoundary(child: child));
+
+  PlutoVisibilityLayoutChild get layoutChild =>
+      (child as RepaintBoundary).child as PlutoVisibilityLayoutChild;
 }
 
 abstract class PlutoVisibilityLayoutChild implements Widget {
