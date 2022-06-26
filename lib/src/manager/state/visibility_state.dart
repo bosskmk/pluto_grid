@@ -22,11 +22,7 @@ mixin VisibilityState implements IPlutoGridState {
     double bodyX = 0;
     double rightX = 0;
 
-    for (final column in refColumns.originalList) {
-      if (column.hide) {
-        continue;
-      }
-
+    void updateShowFrozen(PlutoColumn column) {
       switch (column.frozen) {
         case PlutoColumnFrozen.none:
           column.startPosition = bodyX;
@@ -41,6 +37,21 @@ mixin VisibilityState implements IPlutoGridState {
           rightX += column.width;
           break;
       }
+    }
+
+    void updateNoneFrozen(PlutoColumn column) {
+      column.startPosition = bodyX;
+      bodyX += column.width;
+    }
+
+    final updater = showFrozenColumn ? updateShowFrozen : updateNoneFrozen;
+
+    for (final column in refColumns.originalList) {
+      if (column.hide) {
+        continue;
+      }
+
+      updater(column);
     }
 
     try {

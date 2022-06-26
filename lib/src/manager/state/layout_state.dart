@@ -96,6 +96,8 @@ abstract class ILayoutState {
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
 
+  bool shouldShowFrozenColumns(double width);
+
   void notifyResizingListeners();
 }
 
@@ -397,6 +399,7 @@ mixin LayoutState implements IPlutoGridState {
     _gridGlobalOffset = offset;
   }
 
+  @override
   bool shouldShowFrozenColumns(double width) {
     final bool hasFrozenColumn =
         leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;

@@ -439,6 +439,10 @@ mixin ColumnState implements IPlutoGridState {
     bool notify = true,
     bool checkScroll = true,
   }) {
+    if (_limitResizeFrozenColumn(column, offset)) {
+      return;
+    }
+
     final setWidth = column.width + offset;
 
     column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
@@ -717,5 +721,13 @@ mixin ColumnState implements IPlutoGridState {
         row.cells.remove(column.field);
       }
     }
+  }
+
+  bool _limitResizeFrozenColumn(PlutoColumn column, double offset) {
+    if (column.frozen.isNone || offset <= 0) {
+      return false;
+    }
+
+    return !shouldShowFrozenColumns(maxWidth! - offset);
   }
 }
