@@ -61,11 +61,7 @@ class _TestDelegate extends MultiChildLayoutDelegate {
   @override
   Size getSize(BoxConstraints constraints) {
     return Size(
-      children.fold(
-          0,
-          (previousValue, element) =>
-              previousValue +
-              (element.child as PlutoVisibilityLayoutChild).width),
+      children.fold(0, (pre, element) => pre + element.layoutChild.width),
       children.length * childHeight,
     );
   }
@@ -76,7 +72,7 @@ class _TestDelegate extends MultiChildLayoutDelegate {
 
     for (final child in children) {
       final childId = child.id;
-      final childWidget = child.child as PlutoVisibilityLayoutChild;
+      final childWidget = child.layoutChild;
       if (hasChild(childId)) {
         layoutChild(
           childId,
