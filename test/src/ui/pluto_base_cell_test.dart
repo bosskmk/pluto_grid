@@ -17,12 +17,12 @@ import 'pluto_base_cell_test.mocks.dart';
 void main() {
   late MockPlutoGridStateManager stateManager;
   MockPlutoGridEventManager? eventManager;
-  PublishSubject<PlutoStreamNotifierEvent> streamNotifier;
+  PublishSubject<PlutoNotifierEvent> streamNotifier;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
-    streamNotifier = PublishSubject<PlutoStreamNotifierEvent>();
+    streamNotifier = PublishSubject<PlutoNotifierEvent>();
     when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());

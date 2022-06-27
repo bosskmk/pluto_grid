@@ -35,11 +35,6 @@ class PlutoLeftFrozenColumnsState
   }
 
   @override
-  bool allowStream(event) {
-    return event is! PlutoSetCurrentCellStreamNotifierEvent;
-  }
-
-  @override
   void updateState() {
     _showColumnGroups = update<bool>(
       _showColumnGroups,

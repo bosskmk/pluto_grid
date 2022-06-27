@@ -15,13 +15,13 @@ import 'pluto_base_row_test.mocks.dart';
 ])
 void main() {
   MockPlutoGridStateManager? stateManager;
-  PublishSubject<PlutoStreamNotifierEvent> streamNotifier;
+  PublishSubject<PlutoNotifierEvent> streamNotifier;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    streamNotifier = PublishSubject<PlutoStreamNotifierEvent>();
+    streamNotifier = PublishSubject<PlutoNotifierEvent>();
     when(stateManager!.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlutoChangeNotifier extends ChangeNotifier {
-  final PublishSubject<PlutoStreamNotifierEvent> _streamNotifier =
-      PublishSubject<PlutoStreamNotifierEvent>();
+  final PublishSubject<PlutoNotifierEvent> _streamNotifier =
+      PublishSubject<PlutoNotifierEvent>();
 
-  PublishSubject<PlutoStreamNotifierEvent> get streamNotifier =>
-      _streamNotifier;
+  PublishSubject<PlutoNotifierEvent> get streamNotifier => _streamNotifier;
 
   bool _disposed = false;
 
@@ -24,7 +23,7 @@ class PlutoChangeNotifier extends ChangeNotifier {
     if (!_disposed) {
       super.notifyListeners();
 
-      _streamNotifier.add(PlutoEmptyStreamNotifierEvent());
+      _streamNotifier.add(PlutoNotifierEvent.instance);
     }
   }
 
@@ -33,18 +32,10 @@ class PlutoChangeNotifier extends ChangeNotifier {
       notifyListeners();
     });
   }
-
-  notifyStreamListeners(PlutoStreamNotifierEvent event) {
-    if (!_disposed) {
-      super.notifyListeners();
-
-      _streamNotifier.add(event);
-    }
-  }
 }
 
-abstract class PlutoStreamNotifierEvent {}
+class PlutoNotifierEvent {
+  const PlutoNotifierEvent();
 
-class PlutoEmptyStreamNotifierEvent extends PlutoStreamNotifierEvent {}
-
-class PlutoSetCurrentCellStreamNotifierEvent extends PlutoStreamNotifierEvent {}
+  static PlutoNotifierEvent instance = const PlutoNotifierEvent();
+}

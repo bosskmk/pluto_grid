@@ -46,11 +46,6 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   }
 
   @override
-  bool allowStream(event) {
-    return event is! PlutoSetCurrentCellStreamNotifierEvent;
-  }
-
-  @override
   void updateState() {
     _showColumnGroups = update<bool>(
       _showColumnGroups,

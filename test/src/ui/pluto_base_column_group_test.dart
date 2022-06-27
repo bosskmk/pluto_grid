@@ -15,14 +15,14 @@ import 'pluto_base_column_group_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
-  late PublishSubject<PlutoStreamNotifierEvent> subject;
+  late PublishSubject<PlutoNotifierEvent> subject;
 
   const columnHeight = PlutoGridSettings.rowHeight;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
 
-    subject = PublishSubject<PlutoStreamNotifierEvent>();
+    subject = PublishSubject<PlutoNotifierEvent>();
 
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),

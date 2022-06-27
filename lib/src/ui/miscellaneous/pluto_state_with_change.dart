@@ -30,17 +30,11 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
   void updateState() {}
 
-  bool allowStream(PlutoStreamNotifierEvent event) {
-    return true;
-  }
-
   @override
   void initState() {
     super.initState();
 
-    _subscription = widget.stateManager.streamNotifier.stream
-        .where(allowStream)
-        .listen(_onChange);
+    _subscription = widget.stateManager.streamNotifier.stream.listen(_onChange);
 
     _initialized = true;
   }
@@ -69,7 +63,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     return newValue;
   }
 
-  void _onChange(PlutoStreamNotifierEvent event) {
+  void _onChange(PlutoNotifierEvent event) {
     updateState();
 
     if (mounted &&

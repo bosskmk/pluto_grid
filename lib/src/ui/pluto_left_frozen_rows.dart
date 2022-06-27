@@ -40,11 +40,6 @@ class PlutoLeftFrozenRowsState
   }
 
   @override
-  bool allowStream(event) {
-    return event is! PlutoSetCurrentCellStreamNotifierEvent;
-  }
-
-  @override
   void updateState() {
     _columns = update<List<PlutoColumn>>(
       _columns,

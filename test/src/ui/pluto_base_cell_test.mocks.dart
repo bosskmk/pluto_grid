@@ -50,11 +50,10 @@ class _FakeStreamSubscription_8<T> extends _i1.Fake
 class MockPlutoGridStateManager extends _i1.Mock
     implements _i3.PlutoGridStateManager {
   @override
-  _i2.PublishSubject<_i3.PlutoStreamNotifierEvent> get streamNotifier =>
+  _i2.PublishSubject<_i3.PlutoNotifierEvent> get streamNotifier =>
       (super.noSuchMethod(Invocation.getter(#streamNotifier),
-              returnValue:
-                  _FakePublishSubject_0<_i3.PlutoStreamNotifierEvent>())
-          as _i2.PublishSubject<_i3.PlutoStreamNotifierEvent>);
+              returnValue: _FakePublishSubject_0<_i3.PlutoNotifierEvent>())
+          as _i2.PublishSubject<_i3.PlutoNotifierEvent>);
   @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
@@ -418,9 +417,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   void notifyListenersOnPostFrame() =>
       super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
           returnValueForMissingStub: null);
-  @override
-  dynamic notifyStreamListeners(_i3.PlutoStreamNotifierEvent? event) =>
-      super.noSuchMethod(Invocation.method(#notifyStreamListeners, [event]));
   @override
   void addListener(_i6.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),

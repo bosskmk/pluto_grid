@@ -18,13 +18,13 @@ void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
   late MockLinkedScrollControllerGroup horizontalScroll;
-  late PublishSubject<PlutoStreamNotifierEvent> subject;
+  late PublishSubject<PlutoNotifierEvent> subject;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
     horizontalScroll = MockLinkedScrollControllerGroup();
-    subject = PublishSubject<PlutoStreamNotifierEvent>();
+    subject = PublishSubject<PlutoNotifierEvent>();
 
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
