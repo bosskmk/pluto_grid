@@ -149,17 +149,15 @@ void main() {
     // Check showFrozenColumn after freezing column.
     expect(stateManager!.showFrozenColumn, true);
 
-    // Move current cell position to 3rd column (0 -> 1 -> 2)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.pumpAndSettle();
+    expect(stateManager!.currentColumn!.title, 'header0');
+
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.pumpAndSettle();
+    expect(stateManager!.currentColumn!.title, 'header1');
 
-    // Check currentColumn
-    expect(stateManager!.currentColumn!.title, isNot('header2'));
-    expect(stateManager!.currentColumn!.title, 'header3');
-
-    // Move current cell position to 10rd column (2 -> 9)
+    // Move current cell position to 10rd column (1 -> 9)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -175,7 +173,11 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.pumpAndSettle();
 
-    // Check currentColumn
+    expect(stateManager!.currentColumn!.title, 'header9');
+
+    // Right frozen column
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     expect(stateManager!.currentColumn!.title, 'header2');
   });
 }

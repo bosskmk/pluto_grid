@@ -35,6 +35,8 @@ void main() {
     when(stateManager.columnHeight).thenReturn(45);
     when(stateManager.isInvalidHorizontalScroll).thenReturn(false);
     when(stateManager.scroll).thenReturn(scroll);
+    when(stateManager.maxWidth).thenReturn(1000);
+    when(stateManager.enoughFrozenColumnsWidth(any)).thenReturn(true);
     when(scroll.maxScrollHorizontal).thenReturn(0);
     when(scroll.horizontal).thenReturn(horizontalScroll);
     when(horizontalScroll.offset).thenReturn(0);

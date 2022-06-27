@@ -10,11 +10,15 @@ class PlutoGridConfiguration {
   /// Activate the shadow that separates each area of the grid.
   final bool enableGridBorderShadow;
 
-  /// Grid corners can be rounded.
-  final BorderRadiusGeometry gridBorderRadius;
+  /// When you select a value in the pop-up grid, it moves down.
+  final bool enableMoveDownAfterSelecting;
 
-  /// The corners of the popup-type grid used inside the grid can be rounded.
-  final BorderRadiusGeometry gridPopupBorderRadius;
+  /// Moves the current cell when focus reaches the left or right edge in the edit state.
+  final bool enableMoveHorizontalInEditing;
+
+  /// Animation of background color transition of rows,
+  /// such as when the current row or rows are dragged.
+  final bool enableRowColorAnimation;
 
   final Color gridBackgroundColor;
 
@@ -42,11 +46,9 @@ class PlutoGridConfiguration {
   /// Cell color in read-only state
   final Color cellColorInReadOnlyState;
 
-  /// Column - text style
-  final TextStyle columnTextStyle;
-
-  /// Cell - text style
-  final TextStyle cellTextStyle;
+  /// The background color of the column to be dragged.
+  /// When moving a column by dragging it.
+  final Color dragTargetColumnColor;
 
   /// Icon color. (column menu, cell of popup type, pagination plugin)
   final Color iconColor;
@@ -54,8 +56,14 @@ class PlutoGridConfiguration {
   /// Disabled icon color. (pagination plugin)
   final Color disabledIconColor;
 
-  /// Icon size. (column menu, cell of popup type)
-  final double iconSize;
+  /// BackgroundColor of Popup menu. (column menu)
+  final Color menuBackgroundColor;
+
+  /// Column - text style
+  final TextStyle columnTextStyle;
+
+  /// Cell - text style
+  final TextStyle cellTextStyle;
 
   /// Icon that can open a pop-up menu next to the column title
   /// when [enableContextMenu] of [PlutoColumn] is true.
@@ -65,8 +73,8 @@ class PlutoGridConfiguration {
   /// only the width of the column can be adjusted.
   final IconData columnResizeIcon;
 
-  /// BackgroundColor of Popup menu. (column menu)
-  final Color menuBackgroundColor;
+  /// Icon size. (column menu, cell of popup type)
+  final double iconSize;
 
   /// Height of a row.
   final double rowHeight;
@@ -87,19 +95,23 @@ class PlutoGridConfiguration {
   /// it is the padding value of cell.
   final EdgeInsets defaultCellPadding;
 
-  /// When you select a value in the pop-up grid, it moves down.
-  final bool enableMoveDownAfterSelecting;
+  /// Grid corners can be rounded.
+  final BorderRadiusGeometry gridBorderRadius;
 
-  /// Moves the current cell when focus reaches the left or right edge in the edit state.
-  final bool enableMoveHorizontalInEditing;
+  /// The corners of the popup-type grid used inside the grid can be rounded.
+  final BorderRadiusGeometry gridPopupBorderRadius;
 
-  /// Animation of background color transition of rows, such as when the current row or rows are dragged.
-  final bool enableRowColorAnimation;
-
-  /// PlutoEnterKeyAction.EditingAndMoveDown : It switches to the editing state, and moves down in the editing state.
-  /// PlutoEnterKeyAction.EditingAndMoveRight : It switches to the editing state, and moves to the right in the editing state.
-  /// PlutoEnterKeyAction.ToggleEditing : The editing state is toggled and cells are not moved.
-  /// PlutoEnterKeyAction.None : There is no action.
+  /// [PlutoEnterKeyAction.EditingAndMoveDown]
+  /// It switches to the editing state, and moves down in the editing state.
+  ///
+  /// [PlutoEnterKeyAction.EditingAndMoveRight]
+  /// It switches to the editing state, and moves to the right in the editing state.
+  ///
+  /// [PlutoEnterKeyAction.ToggleEditing]
+  /// The editing state is toggled and cells are not moved.
+  ///
+  /// [PlutoEnterKeyAction.None]
+  /// There is no action.
   final PlutoGridEnterKeyAction enterKeyAction;
 
   final PlutoGridLocaleText localeText;
@@ -113,8 +125,9 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
-    this.gridBorderRadius = BorderRadius.zero,
-    this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableMoveDownAfterSelecting = false,
+    this.enableMoveHorizontalInEditing = false,
+    this.enableRowColorAnimation = true,
     this.gridBackgroundColor = Colors.white,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.activatedColor = const Color(0xFFDCF5FF),
@@ -124,6 +137,10 @@ class PlutoGridConfiguration {
     this.borderColor = const Color(0xFFDDE2EB),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
+    this.dragTargetColumnColor = const Color(0xFFDCF5FF),
+    this.iconColor = Colors.black26,
+    this.disabledIconColor = Colors.black12,
+    this.menuBackgroundColor = Colors.white,
     this.columnTextStyle = const TextStyle(
       color: Colors.black,
       decoration: TextDecoration.none,
@@ -134,20 +151,16 @@ class PlutoGridConfiguration {
       color: Colors.black,
       fontSize: 14,
     ),
-    this.iconColor = Colors.black26,
-    this.disabledIconColor = Colors.black12,
-    this.iconSize = 18,
     this.columnContextIcon = Icons.dehaze,
     this.columnResizeIcon = Icons.code_sharp,
-    this.menuBackgroundColor = Colors.white,
+    this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.enableMoveDownAfterSelecting = false,
-    this.enableMoveHorizontalInEditing = false,
-    this.enableRowColorAnimation = true,
+    this.gridBorderRadius = BorderRadius.zero,
+    this.gridPopupBorderRadius = BorderRadius.zero,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -157,17 +170,22 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration.dark({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
-    this.gridBorderRadius = BorderRadius.zero,
-    this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableMoveDownAfterSelecting = false,
+    this.enableMoveHorizontalInEditing = false,
+    this.enableRowColorAnimation = true,
     this.gridBackgroundColor = const Color(0xFF111111),
-    this.gridBorderColor = const Color(0xFF000000),
+    this.gridBorderColor = const Color(0xFF666666),
     this.activatedColor = const Color(0xFF313131),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
     this.inactivatedBorderColor = const Color(0xFF666666),
     this.checkedColor = const Color(0x11202020),
-    this.borderColor = const Color(0xFF000000),
+    this.borderColor = const Color(0xFF222222),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
+    this.dragTargetColumnColor = const Color(0xFF313131),
+    this.iconColor = Colors.white38,
+    this.disabledIconColor = Colors.white12,
+    this.menuBackgroundColor = const Color(0xFF414141),
     this.columnTextStyle = const TextStyle(
       color: Colors.white,
       decoration: TextDecoration.none,
@@ -178,20 +196,16 @@ class PlutoGridConfiguration {
       color: Colors.white,
       fontSize: 14,
     ),
-    this.iconColor = Colors.white38,
-    this.disabledIconColor = Colors.white12,
-    this.iconSize = 18,
     this.columnContextIcon = Icons.dehaze,
     this.columnResizeIcon = Icons.code_sharp,
-    this.menuBackgroundColor = const Color(0xFF414141),
+    this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.enableMoveDownAfterSelecting = false,
-    this.enableMoveHorizontalInEditing = false,
-    this.enableRowColorAnimation = true,
+    this.gridBorderRadius = BorderRadius.zero,
+    this.gridPopupBorderRadius = BorderRadius.zero,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
@@ -229,10 +243,10 @@ class PlutoGridConfiguration {
 
   PlutoGridConfiguration copyWith({
     bool? enableColumnBorder,
-    bool? enableColumnGroupBorder,
     bool? enableGridBorderShadow,
-    BorderRadiusGeometry? gridBorderRadius,
-    BorderRadiusGeometry? gridPopupBorderRadius,
+    bool? enableMoveDownAfterSelecting,
+    bool? enableMoveHorizontalInEditing,
+    bool? enableRowColorAnimation,
     Color? gridBackgroundColor,
     Color? gridBorderColor,
     Color? activatedColor,
@@ -242,22 +256,22 @@ class PlutoGridConfiguration {
     Color? borderColor,
     Color? cellColorInEditState,
     Color? cellColorInReadOnlyState,
-    TextStyle? columnTextStyle,
-    TextStyle? cellTextStyle,
+    Color? dragTargetColumnColor,
     Color? iconColor,
     Color? disabledIconColor,
-    double? iconSize,
+    Color? menuBackgroundColor,
+    TextStyle? columnTextStyle,
+    TextStyle? cellTextStyle,
     IconData? columnContextIcon,
     IconData? columnResizeIcon,
-    Color? menuBackgroundColor,
+    double? iconSize,
     double? rowHeight,
     double? columnHeight,
     double? columnFilterHeight,
     EdgeInsets? defaultColumnTitlePadding,
     EdgeInsets? defaultCellPadding,
-    bool? enableMoveDownAfterSelecting,
-    bool? enableMoveHorizontalInEditing,
-    bool? enableRowColorAnimation,
+    BorderRadiusGeometry? gridBorderRadius,
+    BorderRadiusGeometry? gridPopupBorderRadius,
     PlutoGridEnterKeyAction? enterKeyAction,
     PlutoGridLocaleText? localeText,
     PlutoGridScrollbarConfig? scrollbarConfig,
@@ -267,9 +281,12 @@ class PlutoGridConfiguration {
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
       enableGridBorderShadow:
           enableGridBorderShadow ?? this.enableGridBorderShadow,
-      gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
-      gridPopupBorderRadius:
-          gridPopupBorderRadius ?? this.gridPopupBorderRadius,
+      enableMoveDownAfterSelecting:
+          enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
+      enableMoveHorizontalInEditing:
+          enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      enableRowColorAnimation:
+          enableRowColorAnimation ?? this.enableRowColorAnimation,
       gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
       gridBorderColor: gridBorderColor ?? this.gridBorderColor,
       activatedColor: activatedColor ?? this.activatedColor,
@@ -281,26 +298,25 @@ class PlutoGridConfiguration {
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
       cellColorInReadOnlyState:
           cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
-      columnTextStyle: columnTextStyle ?? this.columnTextStyle,
-      cellTextStyle: cellTextStyle ?? this.cellTextStyle,
+      dragTargetColumnColor:
+          dragTargetColumnColor ?? this.dragTargetColumnColor,
       iconColor: iconColor ?? this.iconColor,
       disabledIconColor: disabledIconColor ?? this.disabledIconColor,
-      iconSize: iconSize ?? this.iconSize,
+      menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
+      columnTextStyle: columnTextStyle ?? this.columnTextStyle,
+      cellTextStyle: cellTextStyle ?? this.cellTextStyle,
       columnContextIcon: columnContextIcon ?? this.columnContextIcon,
       columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
-      menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
+      iconSize: iconSize ?? this.iconSize,
       rowHeight: rowHeight ?? this.rowHeight,
       columnHeight: columnHeight ?? this.columnHeight,
       columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,
-      enableMoveDownAfterSelecting:
-          enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
-      enableMoveHorizontalInEditing:
-          enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
-      enableRowColorAnimation:
-          enableRowColorAnimation ?? this.enableRowColorAnimation,
+      gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
+      gridPopupBorderRadius:
+          gridPopupBorderRadius ?? this.gridPopupBorderRadius,
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,

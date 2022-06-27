@@ -585,6 +585,34 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#showSetColumnsPopup, [context]),
           returnValueForMissingStub: null);
   @override
+  bool limitResizeColumn(_i3.PlutoColumn? column, double? offset) => (super
+      .noSuchMethod(Invocation.method(#limitResizeColumn, [column, offset]),
+          returnValue: false) as bool);
+  @override
+  bool limitMoveColumn(
+          {_i3.PlutoColumn? column, _i3.PlutoColumn? targetColumn}) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitMoveColumn, [],
+              {#column: column, #targetColumn: targetColumn}),
+          returnValue: false) as bool);
+  @override
+  bool limitToggleFrozenColumn(
+          _i3.PlutoColumn? column, _i3.PlutoColumnFrozen? frozen) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitToggleFrozenColumn, [column, frozen]),
+          returnValue: false) as bool);
+  @override
+  bool limitHideColumn(_i3.PlutoColumn? column, bool? flag) =>
+      (super.noSuchMethod(Invocation.method(#limitHideColumn, [column, flag]),
+          returnValue: false) as bool);
+  @override
+  bool limitInsertColumn(_i3.PlutoColumn? column,
+          {double? accumulateWidth = 0.0}) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitInsertColumn, [column],
+              {#accumulateWidth: accumulateWidth}),
+          returnValue: false) as bool);
+  @override
   void setIsDraggingRow(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setIsDraggingRow, [flag], {#notify: notify}),
@@ -832,10 +860,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setLayout, [size]),
           returnValueForMissingStub: null);
   @override
-  void resetShowFrozenColumn({bool? notify = true}) => super.noSuchMethod(
-      Invocation.method(#resetShowFrozenColumn, [], {#notify: notify}),
-      returnValueForMissingStub: null);
-  @override
   void setShowColumnTitle(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setShowColumnTitle, [flag], {#notify: notify}),
@@ -856,6 +880,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   bool shouldShowFrozenColumns(double? width) =>
       (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
+          returnValue: false) as bool);
+  @override
+  bool enoughFrozenColumnsWidth(double? width) =>
+      (super.noSuchMethod(Invocation.method(#enoughFrozenColumnsWidth, [width]),
           returnValue: false) as bool);
   @override
   void notifyResizingListeners() =>

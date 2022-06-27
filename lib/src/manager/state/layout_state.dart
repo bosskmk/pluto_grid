@@ -85,8 +85,6 @@ abstract class ILayoutState {
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
-  void resetShowFrozenColumn({bool notify = true});
-
   void setShowColumnTitle(bool flag, {bool notify = true});
 
   void setShowColumnFilter(bool flag, {bool notify = true});
@@ -97,6 +95,8 @@ abstract class ILayoutState {
   void setGridGlobalOffset(Offset offset);
 
   bool shouldShowFrozenColumns(double width);
+
+  bool enoughFrozenColumnsWidth(double width);
 
   void notifyResizingListeners();
 }
@@ -336,22 +336,19 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
-    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 
-    updateColumnStartPosition();
-  }
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
 
-  @override
-  void resetShowFrozenColumn({bool notify = true}) {
-    _showFrozenColumn = shouldShowFrozenColumns(_maxWidth!);
-
-    if (notify) {
-      notifyListeners();
+    if (showFrozenColumn != _showFrozenColumn && showFrozenColumn == false) {
+      _resetShowFrozenColumn();
     }
+
+    _showFrozenColumn = showFrozenColumn;
+
+    updateColumnStartPosition();
   }
 
   @override
@@ -404,12 +401,16 @@ mixin LayoutState implements IPlutoGridState {
     final bool hasFrozenColumn =
         leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
 
-    return hasFrozenColumn &&
-        width >
-            (leftFrozenColumnsWidth +
-                rightFrozenColumnsWidth +
-                PlutoGridSettings.bodyMinWidth +
-                PlutoGridSettings.totalShadowLineWidth);
+    return hasFrozenColumn && enoughFrozenColumnsWidth(width);
+  }
+
+  @override
+  bool enoughFrozenColumnsWidth(double width) {
+    return width >
+        (leftFrozenColumnsWidth +
+            rightFrozenColumnsWidth +
+            PlutoGridSettings.bodyMinWidth +
+            PlutoGridSettings.totalShadowLineWidth);
   }
 
   @override
@@ -417,5 +418,11 @@ mixin LayoutState implements IPlutoGridState {
     updateColumnStartPosition(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
+  }
+
+  void _resetShowFrozenColumn() {
+    for (var column in refColumns.originalList) {
+      column.frozen = PlutoColumnFrozen.none;
+    }
   }
 }

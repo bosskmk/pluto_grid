@@ -106,6 +106,22 @@ abstract class IColumnState {
   void sortBySortIdx(PlutoColumn column, {bool notify = true});
 
   void showSetColumnsPopup(BuildContext context);
+
+  bool limitResizeColumn(PlutoColumn column, double offset);
+
+  bool limitMoveColumn({
+    required PlutoColumn column,
+    required PlutoColumn targetColumn,
+  });
+
+  bool limitToggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen);
+
+  bool limitHideColumn(PlutoColumn column, bool flag);
+
+  bool limitInsertColumn(
+    PlutoColumn column, {
+    double accumulateWidth = 0,
+  });
 }
 
 mixin ColumnState implements IPlutoGridState {
@@ -294,9 +310,13 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void toggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen) {
+    if (limitToggleFrozenColumn(column, frozen)) {
+      return;
+    }
+
     column.frozen = column.frozen.isFrozen ? PlutoColumnFrozen.none : frozen;
 
-    updateCurrentCellPosition(notify: false);
+    resetCurrentState(notify: false);
 
     updateColumnStartPosition();
 
@@ -341,6 +361,8 @@ mixin ColumnState implements IPlutoGridState {
     if (columnIdx < 0 || refColumns.length < columnIdx) {
       return;
     }
+
+    _updateFrozenToInsertColumns(columns);
 
     if (columnIdx >= refColumns.originalLength) {
       refColumns.addAll(columns.cast<PlutoColumn>());
@@ -387,6 +409,10 @@ mixin ColumnState implements IPlutoGridState {
     required PlutoColumn column,
     required PlutoColumn targetColumn,
   }) {
+    if (limitMoveColumn(column: column, targetColumn: targetColumn)) {
+      return;
+    }
+
     final foundIndexes = _findIndexOfColumns([column, targetColumn]);
 
     if (foundIndexes.length != 2) {
@@ -401,13 +427,11 @@ mixin ColumnState implements IPlutoGridState {
 
     final targetFrozen = refColumns[targetIndex].frozen;
 
-    bool moveColumn = true;
-
     if (frozen != targetFrozen) {
       if (targetFrozen.isRight && index > targetIndex) {
-        moveColumn = false;
+        targetIndex += 1;
       } else if (targetFrozen.isLeft && index < targetIndex) {
-        moveColumn = false;
+        targetIndex -= 1;
       } else if (frozen.isLeft && index > targetIndex) {
         targetIndex += 1;
       } else if (frozen.isRight && index < targetIndex) {
@@ -417,13 +441,11 @@ mixin ColumnState implements IPlutoGridState {
 
     refColumns[index].frozen = targetFrozen;
 
-    if (moveColumn) {
-      var columnToMove = refColumns[index];
+    var columnToMove = refColumns[index];
 
-      refColumns.removeAt(index);
+    refColumns.removeAt(index);
 
-      refColumns.insert(targetIndex, columnToMove);
-    }
+    refColumns.insert(targetIndex, columnToMove);
 
     updateCurrentCellPosition(notify: false);
 
@@ -439,15 +461,13 @@ mixin ColumnState implements IPlutoGridState {
     bool notify = true,
     bool checkScroll = true,
   }) {
-    if (_limitResizeFrozenColumn(column, offset)) {
+    if (limitResizeColumn(column, offset)) {
       return;
     }
 
     final setWidth = column.width + offset;
 
     column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
-
-    resetShowFrozenColumn(notify: false);
 
     if (notify) {
       notifyListeners();
@@ -510,15 +530,19 @@ mixin ColumnState implements IPlutoGridState {
     bool notify = true,
     bool checkScroll = true,
   }) {
-    var found = refColumns.originalList.firstWhereOrNull(
+    var column = refColumns.originalList.firstWhereOrNull(
       (element) => element.key == columnKey,
     );
 
-    if (found == null || found.hide == flag) {
+    if (column == null || column.hide == flag) {
       return;
     }
 
-    found.hide = flag;
+    if (limitHideColumn(column, flag)) {
+      column.frozen = PlutoColumnFrozen.none;
+    }
+
+    column.hide = flag;
 
     refColumns.update();
 
@@ -647,6 +671,58 @@ mixin ColumnState implements IPlutoGridState {
     );
   }
 
+  @override
+  bool limitResizeColumn(PlutoColumn column, double offset) {
+    if (column.frozen.isNone || offset <= 0) {
+      return false;
+    }
+
+    return !shouldShowFrozenColumns(maxWidth! - offset);
+  }
+
+  @override
+  bool limitMoveColumn({
+    required PlutoColumn column,
+    required PlutoColumn targetColumn,
+  }) {
+    if (column.frozen.isFrozen || targetColumn.frozen.isNone) {
+      return false;
+    }
+
+    return !shouldShowFrozenColumns(maxWidth! - column.width);
+  }
+
+  @override
+  bool limitToggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen) {
+    if (column.frozen.isFrozen) {
+      return false;
+    }
+
+    return !enoughFrozenColumnsWidth(maxWidth! - column.width);
+  }
+
+  @override
+  bool limitHideColumn(PlutoColumn column, bool flag) {
+    if (flag == false || column.frozen.isNone) {
+      return false;
+    }
+
+    return !enoughFrozenColumnsWidth(maxWidth! - column.width);
+  }
+
+  @override
+  bool limitInsertColumn(
+    PlutoColumn column, {
+    double accumulateWidth = 0,
+  }) {
+    if (column.frozen.isNone) {
+      return false;
+    }
+
+    return !enoughFrozenColumnsWidth(
+        maxWidth! - (column.width + accumulateWidth));
+  }
+
   void _resetColumnSort() {
     for (var i = 0; i < refColumns.originalList.length; i += 1) {
       refColumns.originalList[i].sort = PlutoColumnSort.none;
@@ -728,11 +804,17 @@ mixin ColumnState implements IPlutoGridState {
     }
   }
 
-  bool _limitResizeFrozenColumn(PlutoColumn column, double offset) {
-    if (column.frozen.isNone || offset <= 0) {
-      return false;
-    }
+  void _updateFrozenToInsertColumns(List<PlutoColumn> columns) {
+    double accumulateWidth = 0;
 
-    return !shouldShowFrozenColumns(maxWidth! - offset);
+    for (final column in columns) {
+      if (limitInsertColumn(column, accumulateWidth: accumulateWidth)) {
+        column.frozen = PlutoColumnFrozen.none;
+      }
+
+      if (column.frozen.isFrozen) {
+        accumulateWidth += column.width;
+      }
+    }
   }
 }

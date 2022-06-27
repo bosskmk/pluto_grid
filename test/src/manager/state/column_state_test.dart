@@ -465,7 +465,9 @@ void main() {
       scroll: scroll,
     );
 
-    stateManager.setLayout(const BoxConstraints());
+    stateManager.setLayout(
+      const BoxConstraints(maxWidth: 1000, maxHeight: 600),
+    );
 
     // when
     String selectColumnField = 'body2';
@@ -584,13 +586,19 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 1000, maxHeight: 600),
+      );
+
       // when
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 600));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 1000, maxHeight: 600),
+      );
 
       // then
+      expect(stateManager.showFrozenColumn, true);
       expect(stateManager.columnIndexesByShowFrozen, [2, 0, 1, 3, 4]);
     });
 
@@ -613,11 +621,16 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 300, maxHeight: 600),
+      );
+
       // when
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 600));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 300, maxHeight: 600),
+      );
 
       // then
       expect(stateManager.columnIndexesByShowFrozen, [0, 1, 2, 3, 4]);
@@ -692,10 +705,15 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 700, maxHeight: 600),
+      );
+
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 700, maxHeight: 600),
+      );
 
       // when
       // then
@@ -733,10 +751,15 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 700, maxHeight: 600),
+      );
+
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.right);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 700, maxHeight: 600));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 700, maxHeight: 600),
+      );
 
       // when
       // then
@@ -789,8 +812,8 @@ void main() {
   );
 
   testWidgets(
-    '고정 컬럼이 있지만 넓이가 좁아 고정 컬럼이 풀린 상태에서, '
-    '고정 컬럼 넓이를 줄이면 고정 컬럼이 나타나야 한다.',
+    '고정 컬럼이 있지만 넓이가 좁아 고정 컬럼이 풀리면, '
+    '고정 시킨 컬럼 설정이 풀려야 된다.',
     (WidgetTester tester) async {
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn(
@@ -818,15 +841,16 @@ void main() {
       );
 
       // 150 + 200 + 150 = 최소 500 필요
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 450, maxHeight: 600));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 450, maxHeight: 600),
+      );
 
       expect(stateManager.showFrozenColumn, false);
-
-      // 부족한 50 이상 컬럼 사이즈를 줄임
-      stateManager.resizeColumn(columns.first, -60);
-
-      expect(stateManager.showFrozenColumn, true);
+      expect(stateManager.columns[0].frozen, PlutoColumnFrozen.none);
+      expect(stateManager.columns[1].frozen, PlutoColumnFrozen.none);
+      expect(stateManager.columns[2].frozen, PlutoColumnFrozen.none);
+      expect(stateManager.columns[3].frozen, PlutoColumnFrozen.none);
+      expect(stateManager.columns[4].frozen, PlutoColumnFrozen.none);
     },
   );
 

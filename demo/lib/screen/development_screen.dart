@@ -196,7 +196,7 @@ class _HeaderState extends State<_Header> {
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
 
-  void handleAddColumnButton() {
+  void handleAddColumnButton(PlutoColumnFrozen frozen) {
     widget.stateManager.insertColumns(
       0,
       [
@@ -204,6 +204,7 @@ class _HeaderState extends State<_Header> {
           title: faker.food.cuisine(),
           field: 'new_${DateTime.now()}',
           type: PlutoColumnType.text(),
+          frozen: frozen,
         ),
       ],
     );
@@ -275,9 +276,21 @@ class _HeaderState extends State<_Header> {
               },
             ),
             ElevatedButton(
-              child: const Text('Add Column'),
+              child: const Text('Add Left Column'),
               onPressed: () {
-                handleAddColumnButton();
+                handleAddColumnButton(PlutoColumnFrozen.left);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Add Body Column'),
+              onPressed: () {
+                handleAddColumnButton(PlutoColumnFrozen.none);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Add Right Column'),
+              onPressed: () {
+                handleAddColumnButton(PlutoColumnFrozen.right);
               },
             ),
             ElevatedButton(

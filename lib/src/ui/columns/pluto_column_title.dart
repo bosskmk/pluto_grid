@@ -340,37 +340,44 @@ class _BuildColumnWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: column.width,
-      height: height,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: column.backgroundColor,
-        border: Border(
-          right: stateManager.configuration!.enableColumnBorder
-              ? BorderSide(
-                  color: stateManager.configuration!.borderColor,
-                  width: 1.0,
-                )
-              : BorderSide.none,
-        ),
-      ),
-      child: DragTarget<PlutoColumn>(
-        onWillAccept: (PlutoColumn? columnToDrag) {
-          return columnToDrag != null && columnToDrag.key != column.key;
-        },
-        onMove: (DragTargetDetails<PlutoColumn> details) async {
-          final columnToMove = details.data;
-
-          if (columnToMove.key != column.key) {
-            stateManager.eventManager!.addEvent(PlutoGridDragColumnEvent(
-              column: columnToMove,
+    return DragTarget<PlutoColumn>(
+      onWillAccept: (PlutoColumn? columnToDrag) {
+        return columnToDrag != null &&
+            columnToDrag.key != column.key &&
+            !stateManager.limitMoveColumn(
+              column: columnToDrag,
               targetColumn: column,
-            ));
-          }
-        },
-        builder: (dragContext, candidate, rejected) {
-          return Align(
+            );
+      },
+      onAccept: (PlutoColumn columnToMove) {
+        if (columnToMove.key != column.key) {
+          stateManager.moveColumn(column: columnToMove, targetColumn: column);
+        }
+      },
+      builder: (dragContext, candidate, rejected) {
+        final bool noDragTarget = candidate.isEmpty;
+
+        final PlutoGridConfiguration configuration =
+            stateManager.configuration!;
+
+        return Container(
+          width: column.width,
+          height: height,
+          padding: padding,
+          decoration: BoxDecoration(
+            color: noDragTarget
+                ? column.backgroundColor
+                : configuration.dragTargetColumnColor,
+            border: Border(
+              right: configuration.enableColumnBorder
+                  ? BorderSide(
+                      color: configuration.borderColor,
+                      width: 1.0,
+                    )
+                  : BorderSide.none,
+            ),
+          ),
+          child: Align(
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
@@ -387,12 +394,12 @@ class _BuildColumnWidget extends StatelessWidget {
                   ),
                 ),
                 if (showSizedBoxForIcon)
-                  SizedBox(width: stateManager.configuration!.iconSize),
+                  SizedBox(width: configuration.iconSize),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

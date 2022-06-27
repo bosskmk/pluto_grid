@@ -708,11 +708,8 @@ void main() {
       expect(columns[9].title, 'body8');
     });
 
-    testWidgets(
-        '넓이가 충분하지 않고 '
-        '고정 컬럼이 없는 상태에서 '
-        '3번 컬럼을 고정 왼쪽 토글 하고 '
-        '5번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
+    testWidgets('넓이가 충분하지 않은 상태에서 고정 컬럼으로 설정하면 설정 되지 않아야 한다.',
+        (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 10, width: 100),
@@ -748,27 +745,14 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
-      stateManager!
-          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
-
-      stateManager!.moveColumn(column: columns[5], targetColumn: columns[0]);
-      //
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      // 3번 컬럼을 토글하면 컬럼 위치는 바뀌지 않고 고정 컬럼으로 상태만 바뀜.
-      // 그리고 5번 컬럼을 이동 시키면 넓이가 충분하지 않은 상태에서
-      // 왼쪽 끝에는 0번 컬럼이 위치하게 되고, 5번 컬럼이 0번 컬럼 앞으로 이동.
-      // 0번 컬럼이 고정 컬럼이 아니어서 5번도 고정 컬럼이 아니게 됨.
-
       // then
-      expect(columns[0].title, 'body5');
-      expect(columns[0].frozen, PlutoColumnFrozen.none);
-      expect(columns[1].title, 'body0');
-      expect(columns[2].title, 'body1');
-      expect(columns[3].title, 'body2');
-      expect(columns[4].title, 'body3');
-      expect(columns[4].frozen, PlutoColumnFrozen.left);
-      expect(columns[5].title, 'body4');
+      expect(columns[0].title, 'body0');
+      expect(columns[1].title, 'body1');
+      expect(columns[2].title, 'body2');
+      expect(columns[3].title, 'body3');
+      expect(columns[3].frozen, PlutoColumnFrozen.none);
+      expect(columns[4].title, 'body4');
+      expect(columns[5].title, 'body5');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
       expect(columns[8].title, 'body8');

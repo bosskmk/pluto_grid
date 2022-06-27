@@ -480,8 +480,6 @@ void main() {
           layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
-        stateManager.resetShowFrozenColumn(notify: false);
-
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: columns.first,
           newValue: 'abc',

@@ -30,19 +30,21 @@ PopupMenuItem<PlutoGridColumnMenuItem> _buildMenuItem<PlutoGridColumnMenuItem>({
 
 /// Open the context menu on the right side of the column.
 Future<PlutoGridColumnMenuItem?>? showColumnMenu({
-  BuildContext? context,
-  Offset? position,
-  PlutoGridStateManager? stateManager,
-  PlutoColumn? column,
+  required BuildContext context,
+  required Offset position,
+  required PlutoGridStateManager stateManager,
+  required PlutoColumn column,
 }) {
-  if (position == null) {
-    return null;
-  }
-
   final RenderBox overlay =
-      Overlay.of(context!)!.context.findRenderObject() as RenderBox;
+      Overlay.of(context)!.context.findRenderObject() as RenderBox;
 
-  final Color? textColor = stateManager!.configuration!.cellTextStyle.color;
+  final Color textColor = stateManager.configuration!.cellTextStyle.color!;
+
+  final Color disableTextColor = textColor.withOpacity(0.5);
+
+  final bool enoughFrozenColumnsWidth = stateManager.enoughFrozenColumnsWidth(
+    stateManager.maxWidth! - column.width,
+  );
 
   final Color backgroundColor = stateManager.configuration!.menuBackgroundColor;
 
@@ -54,7 +56,7 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     position: RelativeRect.fromRect(
         position & const Size(40, 40), Offset.zero & overlay.size),
     items: [
-      if (column!.frozen.isFrozen == true)
+      if (column.frozen.isFrozen == true)
         _buildMenuItem(
           value: PlutoGridColumnMenuItem.unfreeze,
           child: _buildTextItem(
@@ -65,16 +67,18 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
       if (column.frozen.isFrozen != true) ...[
         _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToLeft,
+          enabled: enoughFrozenColumnsWidth,
           child: _buildTextItem(
             text: localeText.freezeColumnToLeft,
-            textColor: textColor,
+            textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
           ),
         ),
         _buildMenuItem(
           value: PlutoGridColumnMenuItem.freezeToRight,
+          enabled: enoughFrozenColumnsWidth,
           child: _buildTextItem(
             text: localeText.freezeColumnToRight,
-            textColor: textColor,
+            textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
           ),
         ),
       ],

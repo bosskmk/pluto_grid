@@ -123,12 +123,17 @@ void main() {
         scroll: null,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 300, maxHeight: 500),
+      );
+
       // when
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
       stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 300, maxHeight: 500));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 300, maxHeight: 500),
+      );
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);
@@ -161,12 +166,17 @@ void main() {
         scroll: null,
       );
 
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 1900, maxHeight: 500),
+      );
+
       // when
       stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
       stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
 
-      stateManager
-          .setLayout(const BoxConstraints(maxWidth: 1900, maxHeight: 500));
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 1900, maxHeight: 500),
+      );
 
       String selectColumnField = 'body2';
       stateManager.setCurrentCell(rows[5].cells[selectColumnField], 5);

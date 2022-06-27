@@ -119,8 +119,6 @@ mixin CellState implements IPlutoGridState {
       return;
     }
 
-    resetShowFrozenColumn(notify: false);
-
     setCurrentCellPosition(
       cellPositionByCellKey(_currentCell!.key),
       notify: false,

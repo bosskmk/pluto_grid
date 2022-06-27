@@ -13,7 +13,6 @@ export './src/manager/event/pluto_grid_callback_event.dart';
 export './src/manager/event/pluto_grid_cannot_move_current_cell_event.dart';
 export './src/manager/event/pluto_grid_cell_gesture_event.dart';
 export './src/manager/event/pluto_grid_change_column_filter_event.dart';
-export './src/manager/event/pluto_grid_drag_column_event.dart';
 export './src/manager/event/pluto_grid_drag_rows_event.dart';
 export './src/manager/event/pluto_grid_event.dart';
 export './src/manager/event/pluto_grid_scroll_update_event.dart';
