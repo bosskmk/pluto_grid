@@ -83,7 +83,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     return _showColumnGroups == true ? _columnGroups.length : _columns.length;
   }
 
-  Widget _buildColumnGroup(PlutoColumnGroupPair e) {
+  PlutoVisibilityLayoutId _buildColumnGroup(PlutoColumnGroupPair e) {
     return PlutoVisibilityLayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
@@ -96,7 +96,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     );
   }
 
-  Widget _buildColumn(e) {
+  PlutoVisibilityLayoutId _buildColumn(e) {
     return PlutoVisibilityLayoutId(
       id: e.field,
       child: PlutoBaseColumn(

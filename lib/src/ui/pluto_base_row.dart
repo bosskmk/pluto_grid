@@ -51,7 +51,7 @@ class PlutoBaseRow extends StatelessWidget {
     );
   }
 
-  Widget _buildCell(PlutoColumn column) {
+  PlutoVisibilityLayoutId _buildCell(PlutoColumn column) {
     return PlutoVisibilityLayoutId(
       id: column.field,
       child: PlutoBaseCell(

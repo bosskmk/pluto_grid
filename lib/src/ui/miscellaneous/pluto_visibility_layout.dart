@@ -8,14 +8,20 @@ import 'package:pluto_grid/pluto_grid.dart';
 /// It is used to lay out the widgets
 /// of [PlutoCell] or [PlutoColumn], [PlutoColumnGroup] of [PlutoRow]
 /// or render only the widgets displayed according to the screen width.
-class PlutoVisibilityLayout extends CustomMultiChildLayout {
-  PlutoVisibilityLayout({
+class PlutoVisibilityLayout extends RenderObjectWidget
+    implements MultiChildRenderObjectWidget {
+  const PlutoVisibilityLayout({
     super.key,
-    required super.children,
-    required super.delegate,
+    required this.children,
+    required this.delegate,
     required this.scrollController,
     this.initialViewportDimension = 1920,
   });
+
+  @override
+  final List<PlutoVisibilityLayoutId> children;
+
+  final MultiChildLayoutDelegate delegate;
 
   final ScrollController scrollController;
 
@@ -137,11 +143,6 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     _lastVisibleEndX2 = startOffset + width;
   }
 
-  PlutoVisibilityLayoutChild getLayoutChild(Widget child) {
-    assert(child is PlutoVisibilityLayoutId);
-    return (child as PlutoVisibilityLayoutId).layoutChild;
-  }
-
   Element? findChildByLayoutId(Object layoutId) {
     return _children.firstWhereOrNull((element) {
       if (element.widget is PlutoVisibilityLayoutId) {
@@ -165,8 +166,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     _firstVisible = true;
 
     for (int i = 0; i < layoutWidget.children.length; i += 1) {
-      final child = layoutWidget.children[i] as PlutoVisibilityLayoutId;
-      final layoutChild = getLayoutChild(child);
+      final child = layoutWidget.children[i];
+      final layoutChild = child.layoutChild;
       final width = layoutChild.width;
 
       if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
@@ -194,7 +195,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
         continue;
       }
 
-      final layoutChild = getLayoutChild(child.widget);
+      final layoutChild = (child.widget as PlutoVisibilityLayoutId).layoutChild;
 
       if (!visible(
         startOffset: layoutChild.startPosition,
@@ -233,7 +234,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     _firstVisible = true;
 
     for (int i = 0; i < children.length; i += 1) {
-      final layoutChild = getLayoutChild(layoutWidget.children[i]);
+      final layoutChild = layoutWidget.children[i].layoutChild;
       final width = layoutChild.width;
 
       if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
@@ -280,7 +281,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     _firstVisible = true;
 
     for (int i = 0; i < layoutWidget.children.length; i += 1) {
-      final layoutChild = getLayoutChild(layoutWidget.children[i]);
+      final layoutChild = layoutWidget.children[i].layoutChild;
       final width = layoutChild.width;
 
       if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
