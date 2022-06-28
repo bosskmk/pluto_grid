@@ -174,6 +174,11 @@ class _RowDragIconWidget extends StatelessWidget {
 
   void _handleOnPointerUp(PointerUpEvent event) {
     stateManager.setIsDraggingRow(false);
+
+    PlutoGridScrollUpdateEvent.stopScroll(
+      stateManager,
+      PlutoGridScrollUpdateDirection.all,
+    );
   }
 
   @override

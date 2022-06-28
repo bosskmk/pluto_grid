@@ -268,23 +268,15 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   double get bodyLeftScrollOffset {
-    final double leftFrozenColumnWidth =
-        showFrozenColumn ? leftFrozenColumnsWidth : 0;
-
     return gridGlobalOffset!.dx +
         PlutoGridSettings.gridPadding +
         PlutoGridSettings.gridBorderWidth +
-        leftFrozenColumnWidth +
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 
   @override
   double get bodyRightScrollOffset {
-    final double rightFrozenColumnWidth =
-        showFrozenColumn ? rightFrozenColumnsWidth : 0;
-
     return (gridGlobalOffset!.dx + maxWidth!) -
-        rightFrozenColumnWidth -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 

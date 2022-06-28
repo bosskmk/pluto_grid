@@ -84,6 +84,11 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     _setCurrentCell(stateManager, cell, rowIdx);
 
     stateManager.setSelecting(false);
+
+    PlutoGridScrollUpdateEvent.stopScroll(
+      stateManager,
+      PlutoGridScrollUpdateDirection.all,
+    );
   }
 
   void _onDoubleTap(PlutoGridStateManager stateManager) {

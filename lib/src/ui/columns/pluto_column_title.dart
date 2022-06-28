@@ -278,31 +278,49 @@ class _BuildDraggableWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  void _handleOnPointerMove(PointerMoveEvent event) {
+    stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
+      offset: event.position,
+      scrollDirection: PlutoGridScrollUpdateDirection.horizontal,
+    ));
+  }
+
+  void _handleOnPointerUp(PointerUpEvent event) {
+    PlutoGridScrollUpdateEvent.stopScroll(
+      stateManager,
+      PlutoGridScrollUpdateDirection.horizontal,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Draggable<PlutoColumn>(
-      data: column,
-      dragAnchorStrategy: pointerDragAnchorStrategy,
-      feedback: FractionalTranslation(
-        translation: const Offset(-0.5, -0.5),
-        child: PlutoShadowContainer(
-          alignment: column.titleTextAlign.alignmentValue,
-          width: PlutoGridSettings.minColumnWidth,
-          height: stateManager.columnHeight,
-          backgroundColor: stateManager.configuration!.gridBackgroundColor,
-          borderColor: stateManager.configuration!.gridBorderColor,
-          child: Text(
-            column.title,
-            style: stateManager.configuration!.columnTextStyle.copyWith(
-              fontSize: 12,
+    return Listener(
+      onPointerMove: _handleOnPointerMove,
+      onPointerUp: _handleOnPointerUp,
+      child: Draggable<PlutoColumn>(
+        data: column,
+        dragAnchorStrategy: pointerDragAnchorStrategy,
+        feedback: FractionalTranslation(
+          translation: const Offset(-0.5, -0.5),
+          child: PlutoShadowContainer(
+            alignment: column.titleTextAlign.alignmentValue,
+            width: PlutoGridSettings.minColumnWidth,
+            height: stateManager.columnHeight,
+            backgroundColor: stateManager.configuration!.gridBackgroundColor,
+            borderColor: stateManager.configuration!.gridBorderColor,
+            child: Text(
+              column.title,
+              style: stateManager.configuration!.columnTextStyle.copyWith(
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              softWrap: false,
             ),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            softWrap: false,
           ),
         ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

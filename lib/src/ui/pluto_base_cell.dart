@@ -64,7 +64,9 @@ class PlutoBaseCell extends StatelessWidget
     }
 
     _addGestureEvent(
-        PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
+      PlutoGridGestureType.onLongPressMoveUpdate,
+      details.globalPosition,
+    );
   }
 
   void _handleOnLongPressEnd(LongPressEndDetails details) {
@@ -73,7 +75,9 @@ class PlutoBaseCell extends StatelessWidget
     }
 
     _addGestureEvent(
-        PlutoGridGestureType.onLongPressEnd, details.globalPosition);
+      PlutoGridGestureType.onLongPressEnd,
+      details.globalPosition,
+    );
   }
 
   void _handleOnDoubleTap() {
@@ -82,7 +86,9 @@ class PlutoBaseCell extends StatelessWidget
 
   void _handleOnSecondaryTap(TapDownDetails details) {
     _addGestureEvent(
-        PlutoGridGestureType.onSecondaryTap, details.globalPosition);
+      PlutoGridGestureType.onSecondaryTap,
+      details.globalPosition,
+    );
   }
 
   void Function()? _onDoubleTapOrNull() {

@@ -54,6 +54,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         stateManager.notifyListeners();
       });
     });
+    columns.first.enableRowDrag = true;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
