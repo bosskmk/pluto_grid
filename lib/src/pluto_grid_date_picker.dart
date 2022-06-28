@@ -343,6 +343,7 @@ class PlutoGridDatePicker {
         enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,
+        enableDropToResize: false,
         textAlign: PlutoColumnTextAlign.center,
         titleTextAlign: PlutoColumnTextAlign.center,
         renderer: _cellRenderer,

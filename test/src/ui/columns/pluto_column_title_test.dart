@@ -19,14 +19,16 @@ void main() {
   late MockPlutoGridScrollController scroll;
   late MockLinkedScrollControllerGroup horizontalScroll;
   late PublishSubject<PlutoNotifierEvent> subject;
+  late PlutoGridConfiguration configuration;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
     horizontalScroll = MockLinkedScrollControllerGroup();
     subject = PublishSubject<PlutoNotifierEvent>();
+    configuration = const PlutoGridConfiguration();
 
-    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(configuration);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
@@ -186,45 +188,114 @@ void main() {
     expect(draggable, findsOneWidget);
   });
 
-  testWidgets('enableContextMenu 이 false 면 ColumnIcon 이 출력 되지 않아야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoColumn column = PlutoColumn(
-      title: 'column title',
-      field: 'column_field_name',
-      type: PlutoColumnType.text(),
-      enableContextMenu: false,
-    );
+  testWidgets(
+    'enableContextMenu 이 false, enableDropToResize 가 false 면 '
+    'ColumnIcon 이 출력 되지 않아야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: false,
+        enableDropToResize: false,
+      );
 
-    // when
-    await tester.pumpWidget(
-      buildApp(column: column),
-    );
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
 
-    // then
-    expect(find.byType(PlutoGridColumnIcon), findsNothing);
-  });
+      // then
+      expect(find.byType(PlutoGridColumnIcon), findsNothing);
+    },
+  );
 
-  testWidgets('enableContextMenu 이 true 면 ColumnIcon 이 출력 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-      enableContextMenu: true,
-    );
+  testWidgets(
+    'enableContextMenu 이 true, enableDropToResize 가 true 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: true,
+        enableDropToResize: true,
+      );
 
-    // when
-    await tester.pumpWidget(
-      buildApp(column: column),
-    );
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
 
-    // then
-    final headerIcon = find.byType(PlutoGridColumnIcon);
+      final found = find.byType(PlutoGridColumnIcon);
 
-    expect(headerIcon, findsOneWidget);
-  });
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.columnContextIcon);
+    },
+  );
+
+  testWidgets(
+    'enableContextMenu 이 true, enableDropToResize 가 false 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: true,
+        enableDropToResize: false,
+      );
+
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
+
+      // then
+      final found = find.byType(PlutoGridColumnIcon);
+
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.columnContextIcon);
+    },
+  );
+
+  testWidgets(
+    'enableContextMenu 이 false, enableDropToResize 가 true 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: false,
+        enableDropToResize: true,
+      );
+
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
+
+      // then
+      final found = find.byType(PlutoGridColumnIcon);
+
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.columnResizeIcon);
+    },
+  );
 
   group('enableRowChecked', () {
     buildColumn(bool enable) {
