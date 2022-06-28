@@ -116,6 +116,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
           delegate: MainColumnLayoutDelegate(
             stateManager: widget.stateManager,
             columns: _columns,
+            columnGroups: _columnGroups,
             frozen: PlutoColumnFrozen.none,
           ),
           scrollController: _scroll,
@@ -128,15 +129,18 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
 }
 
 class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumn> columns;
+  final List<PlutoColumn> columns;
 
-  PlutoColumnFrozen frozen;
+  final List<PlutoColumnGroupPair> columnGroups;
+
+  final PlutoColumnFrozen frozen;
 
   MainColumnLayoutDelegate({
     required this.stateManager,
     required this.columns,
+    required this.columnGroups,
     required this.frozen,
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
@@ -167,14 +171,9 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     if (stateManager.showColumnGroups) {
-      var separateLinkedGroup = stateManager.separateLinkedGroup(
-        columnGroupList: stateManager.columnGroups,
-        columns: columns,
-      );
-
       double dx = 0;
 
-      for (PlutoColumnGroupPair pair in separateLinkedGroup) {
+      for (PlutoColumnGroupPair pair in columnGroups) {
         final double width = pair.columns.fold<double>(
           0,
           (previousValue, element) => previousValue + element.width,

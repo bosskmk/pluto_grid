@@ -66,30 +66,6 @@ class PlutoBaseRow extends StatelessWidget {
   }
 
   Widget _dragTargetBuilder(dragContext, candidate, rejected) {
-    Widget layout;
-
-    if (visibilityLayout) {
-      layout = PlutoVisibilityLayout(
-        key: ValueKey('rowContainer_${row.key}_row'),
-        delegate: _RowCellsLayoutDelegate(
-          stateManager: stateManager,
-          columns: columns,
-        ),
-        scrollController: stateManager.scroll!.bodyRowsHorizontal!,
-        initialViewportDimension: MediaQuery.of(dragContext).size.width,
-        children: columns.map(_buildCell).toList(growable: false),
-      );
-    } else {
-      layout = CustomMultiChildLayout(
-        key: ValueKey('rowContainer_${row.key}_row'),
-        delegate: _RowCellsLayoutDelegate(
-          stateManager: stateManager,
-          columns: columns,
-        ),
-        children: columns.map(_buildCell).toList(growable: false),
-      );
-    }
-
     return _RowContainerWidget(
       stateManager: stateManager,
       rowIdx: rowIdx,
@@ -97,7 +73,25 @@ class PlutoBaseRow extends StatelessWidget {
       enableRowColorAnimation:
           stateManager.configuration!.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
-      child: layout,
+      child: visibilityLayout
+          ? PlutoVisibilityLayout(
+              key: ValueKey('rowContainer_${row.key}_row'),
+              delegate: _RowCellsLayoutDelegate(
+                stateManager: stateManager,
+                columns: columns,
+              ),
+              scrollController: stateManager.scroll!.bodyRowsHorizontal!,
+              initialViewportDimension: MediaQuery.of(dragContext).size.width,
+              children: columns.map(_buildCell).toList(growable: false),
+            )
+          : CustomMultiChildLayout(
+              key: ValueKey('rowContainer_${row.key}_row'),
+              delegate: _RowCellsLayoutDelegate(
+                stateManager: stateManager,
+                columns: columns,
+              ),
+              children: columns.map(_buildCell).toList(growable: false),
+            ),
     );
   }
 

@@ -95,6 +95,7 @@ class PlutoRightFrozenColumnsState
         delegate: MainColumnLayoutDelegate(
           stateManager: widget.stateManager,
           columns: _columns,
+          columnGroups: _columnGroups,
           frozen: PlutoColumnFrozen.right,
         ),
         children: _showColumnGroups == true
