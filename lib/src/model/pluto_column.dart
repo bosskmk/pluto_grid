@@ -100,10 +100,24 @@ class PlutoColumn {
   bool enableSorting;
 
   /// Displays the right icon of the column title.
+  ///
+  /// The [PlutoGridConfiguration.columnContextIcon] icon appears.
+  /// Tap this icon to bring up the context menu.
+  ///
+  /// If [enableDropToResize] is also activated,
+  /// you can adjust the column width by dragging this icon.
   bool enableContextMenu;
 
   /// Display the right icon for drop to resize the column
-  /// Valid only when [enableContextMenu] is disabled.
+  ///
+  /// The [PlutoGridConfiguration.columnResizeIcon] icon appears.
+  /// By dragging this icon to the left or right, the width of the column can be adjusted.
+  /// Can't narrow down to less than [minWidth].
+  /// Also, if [frozen] is set,
+  /// it can be expanded only within the limit of the width of the frozen column.
+  ///
+  /// If [enableContextMenu] is enabled, the contextMenu icon appears.
+  /// In this case, dragging the context menu icon adjusts the column width.
   bool enableDropToResize;
 
   /// Displays filter-related menus in the column context menu.
@@ -150,7 +164,7 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
-    this.enableDropToResize = false,
+    this.enableDropToResize = true,
     this.enableFilterMenuItem = true,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,

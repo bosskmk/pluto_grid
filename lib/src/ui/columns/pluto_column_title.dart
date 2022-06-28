@@ -31,6 +31,26 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
   PlutoColumnSort _sort = PlutoColumnSort.none;
 
+  bool get showContextIcon {
+    return widget.column.enableContextMenu ||
+        widget.column.enableDropToResize ||
+        !_sort.isNone;
+  }
+
+  bool get enableGesture {
+    return widget.column.enableContextMenu || widget.column.enableDropToResize;
+  }
+
+  MouseCursor get contextMenuCursor {
+    if (enableGesture) {
+      return widget.column.enableDropToResize
+          ? SystemMouseCursors.resizeLeftRight
+          : SystemMouseCursors.click;
+    }
+
+    return SystemMouseCursors.basic;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -102,8 +122,26 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = _columnRightPosition - event.position != Offset.zero;
+    _isPointMoving = true;
 
+    if (widget.column.enableDropToResize) {
+      _resizeColumn(event);
+    }
+
+    _columnRightPosition = event.position;
+  }
+
+  void _handleOnPointUp(PointerUpEvent event) {
+    if (_isPointMoving) {
+      widget.stateManager.updateCorrectScroll();
+    } else if (mounted && widget.column.enableContextMenu) {
+      _showContextMenu(context, event.position);
+    }
+
+    _isPointMoving = false;
+  }
+
+  void _resizeColumn(PointerMoveEvent event) {
     if (_isPointMoving &&
         _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
       return;
@@ -126,29 +164,10 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
           ? widget.stateManager.scroll!.maxScrollHorizontal
           : widget.stateManager.scroll!.horizontal!.offset,
     );
-
-    _columnRightPosition = event.position;
-  }
-
-  void _handleOnPointUp(PointerUpEvent event) {
-    if (_isPointMoving) {
-      widget.stateManager.updateCorrectScroll();
-    } else if (mounted && widget.column.enableContextMenu) {
-      _showContextMenu(context, event.position);
-    }
-
-    _isPointMoving = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final showContextIcon = widget.column.enableContextMenu ||
-        widget.column.enableDropToResize ||
-        !_sort.isNone;
-
-    final enableGesture =
-        widget.column.enableContextMenu || widget.column.enableDropToResize;
-
     final columnWidget = _BuildSortableWidget(
       stateManager: widget.stateManager,
       column: widget.column,
@@ -171,9 +190,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
               : widget.stateManager.configuration!.columnResizeIcon,
         ),
         iconSize: widget.stateManager.configuration!.iconSize,
-        mouseCursor: enableGesture
-            ? SystemMouseCursors.resizeLeftRight
-            : SystemMouseCursors.basic,
+        mouseCursor: contextMenuCursor,
         onPressed: null,
       ),
     );
