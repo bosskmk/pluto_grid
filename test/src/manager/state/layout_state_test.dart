@@ -90,26 +90,24 @@ void main() {
     );
 
     hasFrozenColumnAndWidthEnough.test(
-      'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되어야 한다.',
+      'bodyLeftScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset!.dx +
               PlutoGridSettings.gridPadding +
               PlutoGridSettings.gridBorderWidth +
-              stateManager.leftFrozenColumnsWidth +
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
 
     hasFrozenColumnAndWidthEnough.test(
-      'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되어야 한다.',
+      'bodyRightScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
-              stateManager.rightFrozenColumnsWidth -
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
@@ -141,26 +139,24 @@ void main() {
     );
 
     hasFrozenColumnAndWidthNotEnough.test(
-      'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되지 않아야 한다.',
+      'bodyLeftScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset!.dx +
               PlutoGridSettings.gridPadding +
               PlutoGridSettings.gridBorderWidth +
-              // stateManager.leftFrozenColumnsWidth +
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
 
     hasFrozenColumnAndWidthNotEnough.test(
-      'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되지 않아야 한다.',
+      'bodyRightScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
           (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
-              // stateManager.rightFrozenColumnsWidth -
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },

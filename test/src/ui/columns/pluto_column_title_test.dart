@@ -13,22 +13,28 @@ import 'pluto_column_title_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
   late MockLinkedScrollControllerGroup horizontalScroll;
+  late MockScrollController horizontalScrollController;
   late PublishSubject<PlutoNotifierEvent> subject;
+  late PlutoGridEventManager eventManager;
   late PlutoGridConfiguration configuration;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
     horizontalScroll = MockLinkedScrollControllerGroup();
+    horizontalScrollController = MockScrollController();
     subject = PublishSubject<PlutoNotifierEvent>();
+    eventManager = PlutoGridEventManager(stateManager: stateManager);
     configuration = const PlutoGridConfiguration();
 
     when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
@@ -41,6 +47,8 @@ void main() {
     when(stateManager.enoughFrozenColumnsWidth(any)).thenReturn(true);
     when(scroll.maxScrollHorizontal).thenReturn(0);
     when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0);
     when(horizontalScroll.offset).thenReturn(0);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });

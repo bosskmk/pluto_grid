@@ -14,14 +14,25 @@ import 'pluto_default_cell_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
+  late MockPlutoGridScrollController scroll;
+  late MockLinkedScrollControllerGroup horizontalScroll;
+  late MockScrollController horizontalScrollController;
+  late MockScrollController verticalScrollController;
   MockPlutoGridEventManager? eventManager;
   PublishSubject<PlutoNotifierEvent> streamNotifier;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    scroll = MockPlutoGridScrollController();
+    horizontalScroll = MockLinkedScrollControllerGroup();
+    horizontalScrollController = MockScrollController();
+    verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
     streamNotifier = PublishSubject<PlutoNotifierEvent>();
     when(stateManager.eventManager).thenReturn(eventManager);
@@ -37,6 +48,13 @@ void main() {
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.rowHeight).thenReturn(0);
     when(stateManager.currentSelectingRows).thenReturn([]);
+    when(stateManager.scroll).thenReturn(scroll);
+    when(scroll.maxScrollHorizontal).thenReturn(0);
+    when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(scroll.bodyRowsVertical).thenReturn(verticalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0);
+    when(verticalScrollController.offset).thenReturn(0);
     when(stateManager.isCurrentCell(any)).thenReturn(false);
   });
 

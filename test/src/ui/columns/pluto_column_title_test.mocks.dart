@@ -41,6 +41,8 @@ class _FakePlutoRow_6 extends _i1.Fake implements _i3.PlutoRow {}
 class _FakeScrollController_7 extends _i1.Fake implements _i4.ScrollController {
 }
 
+class _FakeScrollPosition_8 extends _i1.Fake implements _i4.ScrollPosition {}
+
 /// A class which mocks [PlutoGridStateManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -1178,6 +1180,86 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   void applyViewportDimension(double? value) =>
       super.noSuchMethod(Invocation.method(#applyViewportDimension, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [ScrollController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScrollController extends _i1.Mock implements _i4.ScrollController {
+  @override
+  bool get keepScrollOffset =>
+      (super.noSuchMethod(Invocation.getter(#keepScrollOffset),
+          returnValue: false) as bool);
+  @override
+  double get initialScrollOffset =>
+      (super.noSuchMethod(Invocation.getter(#initialScrollOffset),
+          returnValue: 0.0) as double);
+  @override
+  Iterable<_i4.ScrollPosition> get positions =>
+      (super.noSuchMethod(Invocation.getter(#positions),
+          returnValue: <_i4.ScrollPosition>[]) as Iterable<_i4.ScrollPosition>);
+  @override
+  bool get hasClients =>
+      (super.noSuchMethod(Invocation.getter(#hasClients), returnValue: false)
+          as bool);
+  @override
+  _i4.ScrollPosition get position =>
+      (super.noSuchMethod(Invocation.getter(#position),
+          returnValue: _FakeScrollPosition_8()) as _i4.ScrollPosition);
+  @override
+  double get offset =>
+      (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
+          as double);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  _i6.Future<void> animateTo(double? offset,
+          {Duration? duration, _i4.Curve? curve}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #animateTo, [offset], {#duration: duration, #curve: curve}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  void jumpTo(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpTo, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void attach(_i4.ScrollPosition? position) =>
+      super.noSuchMethod(Invocation.method(#attach, [position]),
+          returnValueForMissingStub: null);
+  @override
+  void detach(_i4.ScrollPosition? position) =>
+      super.noSuchMethod(Invocation.method(#detach, [position]),
+          returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  _i4.ScrollPosition createScrollPosition(_i4.ScrollPhysics? physics,
+          _i4.ScrollContext? context, _i4.ScrollPosition? oldPosition) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #createScrollPosition, [physics, context, oldPosition]),
+          returnValue: _FakeScrollPosition_8()) as _i4.ScrollPosition);
+  @override
+  void debugFillDescription(List<String>? description) => super.noSuchMethod(
+      Invocation.method(#debugFillDescription, [description]),
+      returnValueForMissingStub: null);
+  @override
+  void addListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
   void notifyListeners() =>

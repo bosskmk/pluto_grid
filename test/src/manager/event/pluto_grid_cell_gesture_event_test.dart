@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -10,9 +11,17 @@ import 'pluto_grid_cell_gesture_event_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
+  late MockPlutoGridScrollController scroll;
+  late MockLinkedScrollControllerGroup horizontalScroll;
+  late MockScrollController horizontalScrollController;
+  late MockLinkedScrollControllerGroup verticalScroll;
+  late MockScrollController verticalScrollController;
   late MockPlutoGridEventManager eventManager;
 
   eventBuilder({
@@ -37,8 +46,21 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    scroll = MockPlutoGridScrollController();
+    horizontalScroll = MockLinkedScrollControllerGroup();
+    horizontalScrollController = MockScrollController();
+    verticalScroll = MockLinkedScrollControllerGroup();
+    verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
+
     when(stateManager.eventManager).thenReturn(eventManager);
+    when(stateManager.scroll).thenReturn(scroll);
+    when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(scroll.vertical).thenReturn(verticalScroll);
+    when(scroll.bodyRowsVertical).thenReturn(verticalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0.0);
+    when(verticalScrollController.offset).thenReturn(0.0);
   });
 
   group('onTapUp', () {
