@@ -22,26 +22,35 @@ class PlutoBaseRow extends StatelessWidget {
     super.key,
   });
 
-  bool _handleOnWillAccept(PlutoRow? draggingRow) {
-    if (draggingRow == null) {
-      return false;
-    }
-
+  bool _checkSameDragRows(PlutoRow draggingRow) {
     final List<PlutoRow> selectedRows =
         stateManager.currentSelectingRows.isNotEmpty
             ? stateManager.currentSelectingRows
             : [draggingRow];
 
-    return selectedRows.firstWhereOrNull(
-          (element) => element.key == row.key,
-        ) ==
-        null;
+    final end = rowIdx + selectedRows.length;
+
+    for (int i = rowIdx; i < end; i += 1) {
+      if (stateManager.refRows[i].key != selectedRows[i - rowIdx].key) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  void _handleOnMove(DragTargetDetails<PlutoRow> details) async {
+  bool _handleOnWillAccept(PlutoRow? draggingRow) {
+    if (draggingRow == null) {
+      return false;
+    }
+
+    return !_checkSameDragRows(draggingRow);
+  }
+
+  void _handleOnAccept(PlutoRow draggingRow) async {
     final draggingRows = stateManager.currentSelectingRows.isNotEmpty
         ? stateManager.currentSelectingRows
-        : [details.data];
+        : [draggingRow];
 
     stateManager.eventManager!.addEvent(
       PlutoGridDragRowsEvent(
@@ -99,7 +108,7 @@ class PlutoBaseRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return DragTarget<PlutoRow>(
       onWillAccept: _handleOnWillAccept,
-      onMove: _handleOnMove,
+      onAccept: _handleOnAccept,
       builder: _dragTargetBuilder,
     );
   }
