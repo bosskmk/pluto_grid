@@ -100,6 +100,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     PlutoGridMode? mode,
     PlutoOnChangedEventCallback? onChangedEventCallback,
     PlutoOnSelectedEventCallback? onSelectedEventCallback,
+    PlutoOnSortedEventCallback? onSortedEventCallback,
     PlutoOnRowCheckedEventCallback? onRowCheckedEventCallback,
     PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
     PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
@@ -117,6 +118,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     setGridMode(mode);
     setOnChanged(onChangedEventCallback);
     setOnSelected(onSelectedEventCallback);
+    setOnSorted(onSortedEventCallback);
     setOnRowChecked(onRowCheckedEventCallback);
     setOnRowDoubleTap(onRowDoubleTapEventCallback);
     setOnRowSecondaryTap(onRowSecondaryTapEventCallback);

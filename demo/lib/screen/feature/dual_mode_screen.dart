@@ -154,6 +154,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
             gridAStateManager = event.stateManager;
             event.stateManager.addListener(gridAHandler);
           },
+          onSorted: (PlutoGridOnSortedEvent event) {
+            print('Grid A : $event');
+          },
         ),
         gridPropsB: PlutoDualGridProps(
           columns: gridBColumns,
@@ -163,6 +166,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
           },
           onLoaded: (PlutoGridOnLoadedEvent event) {
             gridBStateManager = event.stateManager;
+          },
+          onSorted: (PlutoGridOnSortedEvent event) {
+            print('Grid B : $event');
           },
           configuration: const PlutoGridConfiguration(),
         ),

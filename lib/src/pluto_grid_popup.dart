@@ -17,6 +17,8 @@ class PlutoGridPopup {
 
   final PlutoOnSelectedEventCallback? onSelected;
 
+  final PlutoOnSortedEventCallback? onSorted;
+
   final double? width;
 
   final double? height;
@@ -35,6 +37,7 @@ class PlutoGridPopup {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.onSorted,
     this.width,
     this.height,
     this.createHeader,
@@ -70,6 +73,7 @@ class PlutoGridPopup {
                         onSelected: (PlutoGridOnSelectedEvent event) {
                           Navigator.pop(ctx, event);
                         },
+                        onSorted: onSorted,
                         createHeader: createHeader,
                         createFooter: createFooter,
                         configuration: configuration,

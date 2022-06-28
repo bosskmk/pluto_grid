@@ -157,6 +157,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
               );
             }
           },
+          onSorted: props.onSorted,
           createHeader: props.createHeader,
           createFooter: props.createFooter,
           configuration: props.configuration,
@@ -467,6 +468,8 @@ class PlutoDualGridProps {
 
   final PlutoOnChangedEventCallback? onChanged;
 
+  final PlutoOnSortedEventCallback? onSorted;
+
   final CreateHeaderCallBack? createHeader;
 
   final CreateFooterCallBack? createFooter;
@@ -479,6 +482,7 @@ class PlutoDualGridProps {
     this.columnGroups,
     this.onLoaded,
     this.onChanged,
+    this.onSorted,
     this.createHeader,
     this.createFooter,
     this.configuration = const PlutoGridConfiguration(),
@@ -493,6 +497,7 @@ class PlutoDualGridProps {
     List<PlutoColumnGroup>? columnGroups,
     PlutoOnLoadedEventCallback? onLoaded,
     PlutoOnChangedEventCallback? onChanged,
+    PlutoOnSortedEventCallback? onSorted,
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
@@ -504,6 +509,7 @@ class PlutoDualGridProps {
       columnGroups: columnGroups ?? this.columnGroups,
       onLoaded: onLoaded ?? this.onLoaded,
       onChanged: onChanged ?? this.onChanged,
+      onSorted: onSorted ?? this.onSorted,
       createHeader: createHeader ?? this.createHeader,
       createFooter: createFooter ?? this.createFooter,
       configuration: configuration ?? this.configuration,

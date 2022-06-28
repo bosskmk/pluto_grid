@@ -82,6 +82,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
           },
+          onSorted: (PlutoGridOnSortedEvent event) {
+            print(event);
+          },
           // onSelected: (event) {
           //   print(event.cell!.value);
           // },

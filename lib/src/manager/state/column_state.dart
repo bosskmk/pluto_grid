@@ -64,6 +64,12 @@ abstract class IColumnState {
   void toggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen);
 
   /// Toggle column sorting.
+  ///
+  /// It works when you tap the title area of a column.
+  /// When called, [PlutoGrid.onSorted] callback is called. (If registered)
+  ///
+  /// [sortAscending], [sortDescending], [sortBySortIdx] also sort the column,
+  /// but do not call the [PlutoGrid.onSorted] callback.
   void toggleSortColumn(PlutoColumn column);
 
   /// Index of [column] in [columns]
@@ -92,6 +98,7 @@ abstract class IColumnState {
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
 
+  /// Hide or show the column with [flag] value.
   void hideColumn(
     Key columnKey,
     bool flag, {
@@ -325,6 +332,8 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void toggleSortColumn(PlutoColumn column) {
+    final oldSort = column.sort;
+
     if (column.sort.isNone) {
       sortAscending(column, notify: false);
     } else if (column.sort.isAscending) {
@@ -334,6 +343,8 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     updateCurrentCellPosition(notify: false);
+
+    _fireOnSorted(column, oldSort);
 
     notifyListeners();
   }
@@ -778,6 +789,14 @@ mixin ColumnState implements IPlutoGridState {
 
       notifyListeners();
     };
+  }
+
+  void _fireOnSorted(PlutoColumn column, PlutoColumnSort oldSort) {
+    if (onSorted == null) {
+      return;
+    }
+
+    onSorted!(PlutoGridOnSortedEvent(column: column, oldSort: oldSort));
   }
 
   void _fillCellsInRows(List<PlutoColumn> columns) {

@@ -12,12 +12,11 @@ abstract class IGridState {
 
   PlutoGridEventManager? get eventManager;
 
-  /// Event callback fired when cell value changes.
   PlutoOnChangedEventCallback? get onChanged;
 
-  /// Event callback that occurs when a row is selected
-  /// when the grid mode is selectRow.
   PlutoOnSelectedEventCallback? get onSelected;
+
+  PlutoOnSortedEventCallback? get onSorted;
 
   PlutoOnRowCheckedEventCallback? get onRowChecked;
 
@@ -48,6 +47,8 @@ abstract class IGridState {
   void setCreateFooter(CreateFooterCallBack createFooter);
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
+
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted);
 
   void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked);
 
@@ -101,6 +102,11 @@ mixin GridState implements IPlutoGridState {
   PlutoOnSelectedEventCallback? get onSelected => _onSelected;
 
   PlutoOnSelectedEventCallback? _onSelected;
+
+  @override
+  PlutoOnSortedEventCallback? get onSorted => _onSorted;
+
+  PlutoOnSortedEventCallback? _onSorted;
 
   @override
   PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
@@ -159,6 +165,11 @@ mixin GridState implements IPlutoGridState {
   @override
   void setOnSelected(PlutoOnSelectedEventCallback? onSelected) {
     _onSelected = onSelected;
+  }
+
+  @override
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted) {
+    _onSorted = onSorted;
   }
 
   @override

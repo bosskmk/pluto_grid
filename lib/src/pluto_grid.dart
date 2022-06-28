@@ -5,6 +5,39 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
+typedef PlutoOnLoadedEventCallback = void Function(
+    PlutoGridOnLoadedEvent event);
+
+typedef PlutoOnChangedEventCallback = void Function(
+    PlutoGridOnChangedEvent event);
+
+typedef PlutoOnSelectedEventCallback = void Function(
+    PlutoGridOnSelectedEvent event);
+
+typedef PlutoOnSortedEventCallback = void Function(
+    PlutoGridOnSortedEvent event);
+
+typedef PlutoOnRowCheckedEventCallback = void Function(
+    PlutoGridOnRowCheckedEvent event);
+
+typedef PlutoOnRowDoubleTapEventCallback = void Function(
+    PlutoGridOnRowDoubleTapEvent event);
+
+typedef PlutoOnRowSecondaryTapEventCallback = void Function(
+    PlutoGridOnRowSecondaryTapEvent event);
+
+typedef PlutoOnRowsMovedEventCallback = void Function(
+    PlutoGridOnRowsMovedEvent event);
+
+typedef CreateHeaderCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
+
+typedef CreateFooterCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
+
+typedef PlutoRowColorCallback = Color Function(
+    PlutoRowColorContext rowColorContext);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -22,6 +55,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.onSorted,
     this.onRowChecked,
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
@@ -76,9 +110,17 @@ class PlutoGrid extends StatefulWidget {
   /// [columnGroups] can be expressed in UI by grouping columns.
   final List<PlutoColumnGroup>? columnGroups;
 
-  /// When the constructor of [PlutoGrid] works, the callback is answered.
+  /// [PlutoGrid] completes setting and passes [PlutoGridStateManager] to [event].
   ///
-  /// [onLoaded] can be used to receive [PlutoGridStateManager].
+  /// When the [PlutoGrid] starts,
+  /// the desired setting can be made through [PlutoGridStateManager].
+  ///
+  /// ex) Change the selection mode to cell selection.
+  /// ```dart
+  /// onLoaded: (PlutoGridOnLoadedEvent event) {
+  ///   event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
+  /// },
+  /// ```
   final PlutoOnLoadedEventCallback? onLoaded;
 
   /// [onChanged] is called when the cell value changes.
@@ -99,6 +141,9 @@ class PlutoGrid extends StatefulWidget {
   /// This will require a double tap if no row is selected.
   /// In [PlutoGridMode.selectWithOneTap], the [onLoaded] callback works when the unselected row is tapped once.
   final PlutoOnSelectedEventCallback? onSelected;
+
+  /// [onSorted] is a callback that is called when column sorting is changed.
+  final PlutoOnSortedEventCallback? onSorted;
 
   /// [onRowChecked] can receive the check status change of the checkbox
   /// when [PlutoColumn.enableRowChecked] is enabled.
@@ -170,12 +215,43 @@ class PlutoGrid extends StatefulWidget {
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
   final PlutoGridConfiguration? configuration;
 
-  /// [PlutoGridMode.normal]
-  /// Normal grid with cell editing.
+  /// Execution mode of [PlutoGrid].
   ///
-  /// [PlutoGridMode.select]
-  /// Editing is not possible, and if you press enter or tap on the list,
-  /// you can receive the selected row and cell from the onSelected callback.
+  /// [PlutoGridMode.normal]
+  /// {@template pluto_grid_mode_normal}
+  /// Basic mode with most functions not limited, such as editing and selection.
+  /// {@endtemplate}
+  ///
+  /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
+  /// {@template pluto_grid_mode_select}
+  /// Mode for selecting one list from a specific list.
+  /// Tap a row or press Enter to select the current row.
+  ///
+  /// [select]
+  /// Call the [PlutoGrid.onSelected] callback when the selected row is tapped.
+  /// To select an unselected row, select the row and then tap once more.
+  /// [selectWithOneTap]
+  /// Same as [select], but calls [PlutoGrid.onSelected] with one tap.
+  ///
+  /// This mode is non-editable, but programmatically possible.
+  /// ```dart
+  /// stateManager.changeCellValue(
+  ///   stateManager.currentRow!.cells['column_1']!,
+  ///   value,
+  ///   force: true,
+  /// );
+  /// ```
+  /// {@endtemplate}
+  ///
+  /// [PlutoGridMode.popup]
+  /// {@template pluto_grid_mode_popup}
+  /// This is a mode for popup type.
+  /// It is used when calling a popup for filtering or column setting
+  /// inside [PlutoGrid], and it is not a mode for users.
+  ///
+  /// If the user wants to run [PlutoGrid] as a popup,
+  /// use [PlutoGridPopup] or [PlutoGridDualGridPopup].
+  /// {@endtemplate}
   final PlutoGridMode? mode;
 
   /// [setDefaultLocale] sets locale when [Intl] package is used in [PlutoGrid].
@@ -191,7 +267,6 @@ class PlutoGrid extends StatefulWidget {
   /// initializeDateFormatting();
   /// ```
   /// {@endtemplate}
-  /// ```
   static setDefaultLocale(String locale) {
     Intl.defaultLocale = locale;
   }
@@ -292,6 +367,7 @@ class PlutoGridState extends State<PlutoGrid> {
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
+      onSortedEventCallback: widget.onSorted,
       onRowCheckedEventCallback: widget.onRowChecked,
       onRowDoubleTapEventCallback: widget.onRowDoubleTap,
       onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
@@ -875,9 +951,18 @@ class PlutoGridOnLoadedEvent {
   });
 }
 
-/// Caution
+/// Event called when the value of [PlutoCell] is changed.
 ///
-/// [columnIdx] and [rowIdx] are values in the currently displayed state.
+/// Notice.
+/// [columnIdx], [rowIdx] are the values in the current screen state.
+/// Values in their current state, not actual data values
+/// with filtering, sorting, or pagination applied.
+/// This value is from
+/// [PlutoGridStateManager.columns] and [PlutoGridStateManager.rows].
+///
+/// All data is in
+/// [PlutoGridStateManager.refColumns.originalList]
+/// [PlutoGridStateManager.refRows.originalList]
 class PlutoGridOnChangedEvent {
   final int? columnIdx;
   final PlutoColumn? column;
@@ -915,6 +1000,22 @@ class PlutoGridOnSelectedEvent {
     this.rowIdx,
     this.cell,
   });
+}
+
+class PlutoGridOnSortedEvent {
+  final PlutoColumn column;
+
+  final PlutoColumnSort oldSort;
+
+  PlutoGridOnSortedEvent({
+    required this.column,
+    required this.oldSort,
+  });
+
+  @override
+  String toString() {
+    return '[PlutoGridOnSortedEvent] ${column.title} (changed: ${column.sort}, old: $oldSort)';
+  }
 }
 
 abstract class PlutoGridOnRowCheckedEvent {
@@ -1008,9 +1109,16 @@ class PlutoRowColorContext {
 }
 
 enum PlutoGridMode {
+  /// {@macro pluto_grid_mode_normal}
   normal,
+
+  /// {@macro pluto_grid_mode_select}
   select,
+
+  /// {@macro pluto_grid_mode_select}
   selectWithOneTap,
+
+  /// {@macro pluto_grid_mode_popup}
   popup,
 }
 
@@ -1023,23 +1131,6 @@ extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isSelectModeWithOneTap => this == PlutoGridMode.selectWithOneTap;
 
   bool get isPopup => this == PlutoGridMode.popup;
-}
-
-enum _StackName {
-  header,
-  headerDivider,
-  leftFrozenColumns,
-  leftFrozenRows,
-  leftFrozenDivider,
-  bodyColumns,
-  bodyRows,
-  rightFrozenColumns,
-  rightFrozenRows,
-  rightFrozenDivider,
-  columnRowDivider,
-  footer,
-  footerDivider,
-  loading,
 }
 
 class PlutoGridSettings {
@@ -1097,32 +1188,19 @@ class PlutoGridSettings {
   static const int debounceMillisecondsForColumnFilter = 300;
 }
 
-typedef PlutoOnLoadedEventCallback = void Function(
-    PlutoGridOnLoadedEvent event);
-
-typedef PlutoOnChangedEventCallback = void Function(
-    PlutoGridOnChangedEvent event);
-
-typedef PlutoOnSelectedEventCallback = void Function(
-    PlutoGridOnSelectedEvent event);
-
-typedef PlutoOnRowCheckedEventCallback = void Function(
-    PlutoGridOnRowCheckedEvent event);
-
-typedef PlutoOnRowDoubleTapEventCallback = void Function(
-    PlutoGridOnRowDoubleTapEvent event);
-
-typedef PlutoOnRowSecondaryTapEventCallback = void Function(
-    PlutoGridOnRowSecondaryTapEvent event);
-
-typedef PlutoOnRowsMovedEventCallback = void Function(
-    PlutoGridOnRowsMovedEvent event);
-
-typedef CreateHeaderCallBack = Widget Function(
-    PlutoGridStateManager stateManager);
-
-typedef CreateFooterCallBack = Widget Function(
-    PlutoGridStateManager stateManager);
-
-typedef PlutoRowColorCallback = Color Function(
-    PlutoRowColorContext rowColorContext);
+enum _StackName {
+  header,
+  headerDivider,
+  leftFrozenColumns,
+  leftFrozenRows,
+  leftFrozenDivider,
+  bodyColumns,
+  bodyRows,
+  rightFrozenColumns,
+  rightFrozenRows,
+  rightFrozenDivider,
+  columnRowDivider,
+  footer,
+  footerDivider,
+  loading,
+}
