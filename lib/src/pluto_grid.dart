@@ -1032,6 +1032,13 @@ abstract class PlutoGridOnRowCheckedEvent {
     this.rowIdx,
     this.isChecked,
   });
+
+  @override
+  String toString() {
+    String checkMessage = isAll ? 'All rows ' : 'RowIdx $rowIdx ';
+    checkMessage += isChecked == true ? 'checked' : 'unchecked';
+    return '[PlutoGridOnRowCheckedEvent] $checkMessage';
+  }
 }
 
 class PlutoGridOnRowDoubleTapEvent {

@@ -1217,7 +1217,7 @@ void main() {
       // when
       expect(stateManager.columns.first.hide, isFalse);
 
-      stateManager.hideColumn(columns.first.key, true);
+      stateManager.hideColumn(columns.first, true);
 
       // then
       expect(stateManager.refColumns.originalList.first.hide, isTrue);
@@ -1248,7 +1248,7 @@ void main() {
       // when
       expect(stateManager.refColumns.originalList.first.hide, isTrue);
 
-      stateManager.hideColumn(columns.first.key, false);
+      stateManager.hideColumn(columns.first, false);
 
       // then
       expect(stateManager.columns.first.hide, isFalse);
@@ -1277,7 +1277,7 @@ void main() {
       // when
       expect(stateManager.columns.first.hide, isFalse);
 
-      stateManager.hideColumn(columns.first.key, true);
+      stateManager.hideColumn(columns.first, true);
 
       // then
       verify(listeners.onChangeVoidNoParamListener()).called(1);
@@ -1307,7 +1307,7 @@ void main() {
       // when
       expect(stateManager.columns.first.hide, isFalse);
 
-      stateManager.hideColumn(columns.first.key, false);
+      stateManager.hideColumn(columns.first, false);
 
       // then
       verifyNever(listeners.onChangeVoidNoParamListener());

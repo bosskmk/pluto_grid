@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -61,6 +60,11 @@ abstract class IColumnState {
   List<int> get columnIndexesByShowFrozen;
 
   /// Toggle whether the column is frozen or not.
+  ///
+  /// When [column] is changed to a frozen column,
+  /// the [PlutoColumn.frozen] is not changed if the frozen column width constraint is insufficient.
+  /// Unfreeze the existing frozen or widen the entire grid width
+  /// to set it wider than the frozen column width constraint.
   void toggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen);
 
   /// Toggle column sorting.
@@ -78,17 +82,28 @@ abstract class IColumnState {
   /// must be referenced with the columnIndexesByShowFrozen function.
   int? columnIndex(PlutoColumn column);
 
+  /// Insert [columns] at [columnIdx] position.
+  ///
+  /// If there is a [PlutoColumn.frozen.isFrozen] column in [columns],
+  /// If the width constraint of the frozen column is greater than the range,
+  /// the columns are unfreeze in order.
   void insertColumns(int columnIdx, List<PlutoColumn> columns);
 
   void removeColumns(List<PlutoColumn> columns);
 
-  /// Change column position.
+  /// Move [column] position to [targetColumn].
+  ///
+  /// In case of [column.frozen.isNone] and [targetColumn.frozen.isFroze],
+  /// If the width constraint of a frozen column is narrow, it cannot be moved.
   void moveColumn({
     required PlutoColumn column,
     required PlutoColumn targetColumn,
   });
 
-  /// Change column size
+  /// Resize column size
+  ///
+  /// In case of [column.frozen.isFrozen],
+  /// it is not changed if the width constraint of the frozen column is narrow.
   void resizeColumn(
     PlutoColumn column,
     double offset, {
@@ -98,10 +113,26 @@ abstract class IColumnState {
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
 
-  /// Hide or show the column with [flag] value.
+  /// Hide or show the [column] with [hide] value.
+  ///
+  /// When [column.frozen.isFrozen] and [hide] is false,
+  /// [column.frozen] is changed to [PlutoColumnFrozen.none]
+  /// if the frozen column width constraint is narrow.
   void hideColumn(
-    Key columnKey,
-    bool flag, {
+    PlutoColumn column,
+    bool hide, {
+    bool notify = true,
+    bool checkScroll = true,
+  });
+
+  /// Hide or show the [columns] with [hide] value.
+  ///
+  /// When [column.frozen.isFrozen] in [columns] and [hide] is false,
+  /// [column.frozen] is changed to [PlutoColumnFrozen.none]
+  /// if the frozen column width constraint is narrow.
+  void hideColumns(
+    List<PlutoColumn> columns,
+    bool hide, {
     bool notify = true,
     bool checkScroll = true,
   });
@@ -114,19 +145,30 @@ abstract class IColumnState {
 
   void showSetColumnsPopup(BuildContext context);
 
+  /// When expanding the width of the freeze column,
+  /// check the width constraint of the freeze column.
   bool limitResizeColumn(PlutoColumn column, double offset);
 
+  /// When moving from a non-frozen column to a frozen column area,
+  /// check the frozen column width constraint.
   bool limitMoveColumn({
     required PlutoColumn column,
     required PlutoColumn targetColumn,
   });
 
+  /// When changing the value of [PlutoColumn.frozen],
+  /// check the frozen column width constraint.
+  ///
+  /// [frozen] is the value you want to change.
   bool limitToggleFrozenColumn(PlutoColumn column, PlutoColumnFrozen frozen);
 
-  bool limitHideColumn(PlutoColumn column, bool flag);
-
-  bool limitInsertColumn(
-    PlutoColumn column, {
+  /// When changing a column from hidden state to unhidden state,
+  /// Check the constraint on the frozen column.
+  /// If the hidden column is a frozen column
+  /// The width of the currently frozen column is limited.
+  bool limitHideColumn(
+    PlutoColumn column,
+    bool hide, {
     double accumulateWidth = 0,
   });
 }
@@ -373,7 +415,7 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    _updateFrozenToInsertColumns(columns);
+    _updateLimitedFrozenColumns(columns);
 
     if (columnIdx >= refColumns.originalLength) {
       refColumns.addAll(columns.cast<PlutoColumn>());
@@ -536,38 +578,38 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void hideColumn(
-    Key columnKey,
-    bool flag, {
+    PlutoColumn column,
+    bool hide, {
     bool notify = true,
     bool checkScroll = true,
   }) {
-    var column = refColumns.originalList.firstWhereOrNull(
-      (element) => element.key == columnKey,
-    );
-
-    if (column == null || column.hide == flag) {
+    if (column.hide == hide) {
       return;
     }
 
-    if (limitHideColumn(column, flag)) {
+    if (limitHideColumn(column, hide)) {
       column.frozen = PlutoColumnFrozen.none;
     }
 
-    column.hide = flag;
+    column.hide = hide;
 
-    refColumns.update();
+    _updateAfterHideColumn(notify: notify, checkScroll: checkScroll);
+  }
 
-    resetCurrentState(notify: false);
-
-    updateColumnStartPosition();
-
-    if (notify) {
-      notifyListeners();
+  @override
+  void hideColumns(
+    List<PlutoColumn> columns,
+    bool hide, {
+    bool notify = true,
+    bool checkScroll = true,
+  }) {
+    if (columns.isEmpty) {
+      return;
     }
 
-    if (checkScroll) {
-      updateCorrectScroll();
-    }
+    _updateLimitedHideColumns(columns, hide);
+
+    _updateAfterHideColumn(notify: notify, checkScroll: checkScroll);
   }
 
   @override
@@ -632,7 +674,7 @@ mixin ColumnState implements IPlutoGridState {
     const titleField = 'title';
     const columnField = 'field';
 
-    var columns = [
+    final columns = [
       PlutoColumn(
         title: configuration!.localeText.setColumnsTitle,
         field: titleField,
@@ -651,14 +693,24 @@ mixin ColumnState implements IPlutoGridState {
       ),
     ];
 
-    var toRow = _toRowByColumnField(
+    final toRow = _toRowByColumnField(
       titleField: titleField,
       columnField: columnField,
     );
 
-    var rows = refColumns.originalList.map(toRow).toList();
+    final rows = refColumns.originalList.map(toRow).toList(growable: false);
 
-    PlutoGridStateManager? stateManager;
+    void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
+      if (event.isAll) {
+        hideColumns(refColumns.originalList, event.isChecked != true);
+      } else {
+        final checkedField = event.row!.cells[columnField]!.value.toString();
+        final checkedColumn = refColumns.originalList.firstWhere(
+          (column) => column.field == checkedField,
+        );
+        hideColumn(checkedColumn, event.isChecked != true);
+      }
+    }
 
     PlutoGridPopup(
       context: context,
@@ -673,22 +725,19 @@ mixin ColumnState implements IPlutoGridState {
       height: 500,
       mode: PlutoGridMode.popup,
       onLoaded: (e) {
-        stateManager = e.stateManager;
-        stateManager!.setSelectingMode(PlutoGridSelectingMode.none);
-        stateManager!.addListener(
-          _handleSetColumnsListener(stateManager!, columnField),
-        );
+        e.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
       },
+      onRowChecked: handleOnRowChecked,
     );
   }
 
   @override
   bool limitResizeColumn(PlutoColumn column, double offset) {
-    if (column.frozen.isNone || offset <= 0) {
+    if (offset <= 0) {
       return false;
     }
 
-    return !shouldShowFrozenColumns(maxWidth! - offset);
+    return _limitFrozenColumn(column.frozen, offset);
   }
 
   @override
@@ -696,11 +745,11 @@ mixin ColumnState implements IPlutoGridState {
     required PlutoColumn column,
     required PlutoColumn targetColumn,
   }) {
-    if (column.frozen.isFrozen || targetColumn.frozen.isNone) {
+    if (column.frozen.isFrozen) {
       return false;
     }
 
-    return !shouldShowFrozenColumns(maxWidth! - column.width);
+    return _limitFrozenColumn(targetColumn.frozen, column.width);
   }
 
   @override
@@ -709,29 +758,49 @@ mixin ColumnState implements IPlutoGridState {
       return false;
     }
 
-    return !enoughFrozenColumnsWidth(maxWidth! - column.width);
+    return _limitFrozenColumn(frozen, column.width);
   }
 
   @override
-  bool limitHideColumn(PlutoColumn column, bool flag) {
-    if (flag == false || column.frozen.isNone) {
-      return false;
-    }
-
-    return !enoughFrozenColumnsWidth(maxWidth! - column.width);
-  }
-
-  @override
-  bool limitInsertColumn(
-    PlutoColumn column, {
+  bool limitHideColumn(
+    PlutoColumn column,
+    bool hide, {
     double accumulateWidth = 0,
   }) {
-    if (column.frozen.isNone) {
+    if (hide == true) {
       return false;
     }
 
-    return !enoughFrozenColumnsWidth(
-        maxWidth! - (column.width + accumulateWidth));
+    return _limitFrozenColumn(
+      column.frozen,
+      column.width + accumulateWidth,
+    );
+  }
+
+  /// Check the width limit before changing the PlutoColumnFrozen value.
+  ///
+  /// In the following situations, need to check the frozen column width limit.
+  /// 1. Change the width of the frozen column
+  /// 2. Set a non-frozen column to a frozen column
+  /// 3. If the column to be unhidden in the hidden state is a frozen column
+  /// 4. Add a frozen column
+  ///
+  /// [frozen] The value to be changed.
+  ///
+  /// [offsetWidth] The size to be changed. Usually [PlutoColumn.width].
+  /// Check the width limit of the frozen column
+  /// by subtracting the offsetWidth value from the total width of the grid.
+  /// Assume that a column has been added by subtracting the [offsetWidth] value
+  /// from the total width while no column has been added yet.
+  bool _limitFrozenColumn(
+    PlutoColumnFrozen frozen,
+    double offsetWidth,
+  ) {
+    if (frozen.isNone) {
+      return false;
+    }
+
+    return !enoughFrozenColumnsWidth(maxWidth! - offsetWidth);
   }
 
   void _resetColumnSort() {
@@ -774,23 +843,7 @@ mixin ColumnState implements IPlutoGridState {
     };
   }
 
-  void Function() _handleSetColumnsListener(
-      PlutoGridStateManager stateManager, String columnField) {
-    return () {
-      for (var row in stateManager.refRows) {
-        var found = refColumns.originalList.firstWhereOrNull(
-          (column) => column.field == row.cells[columnField]!.value.toString(),
-        );
-
-        if (found != null) {
-          hideColumn(found.key, row.checked != true, notify: false);
-        }
-      }
-
-      notifyListeners();
-    };
-  }
-
+  /// [PlutoGrid.onSorted] Called when a callback is registered.
   void _fireOnSorted(PlutoColumn column, PlutoColumnSort oldSort) {
     if (onSorted == null) {
       return;
@@ -799,6 +852,8 @@ mixin ColumnState implements IPlutoGridState {
     onSorted!(PlutoGridOnSortedEvent(column: column, oldSort: oldSort));
   }
 
+  /// Add [PlutoCell] to the whole [PlutoRow.cells].
+  /// Called when a new column is added.
   void _fillCellsInRows(List<PlutoColumn> columns) {
     for (var row in refRows.originalList) {
       final List<MapEntry<String, PlutoCell>> cells = [];
@@ -815,6 +870,8 @@ mixin ColumnState implements IPlutoGridState {
     }
   }
 
+  /// Delete [PlutoCell] with matching [columns.field] from [PlutoRow.cells].
+  /// When a column is deleted, the corresponding [PlutoCell] is also called to be deleted.
   void _removeCellsInRows(List<PlutoColumn> columns) {
     for (var row in refRows.originalList) {
       for (var column in columns) {
@@ -823,17 +880,64 @@ mixin ColumnState implements IPlutoGridState {
     }
   }
 
-  void _updateFrozenToInsertColumns(List<PlutoColumn> columns) {
+  /// If there is a [PlutoColumn.frozen] column in [columns],
+  /// check the width limit of the frozen column.
+  /// If there are more frozen columns in [columns] than the width limit,
+  /// they are updated in order to unfreeze them.
+  void _updateLimitedFrozenColumns(List<PlutoColumn> columns) {
     double accumulateWidth = 0;
 
     for (final column in columns) {
-      if (limitInsertColumn(column, accumulateWidth: accumulateWidth)) {
+      if (_limitFrozenColumn(
+        column.frozen,
+        column.width + accumulateWidth,
+      )) {
         column.frozen = PlutoColumnFrozen.none;
       }
 
       if (column.frozen.isFrozen) {
         accumulateWidth += column.width;
       }
+    }
+  }
+
+  /// Change the value of [PlutoColumn.hide] of [columns] to [hide].
+  ///
+  /// When there is a frozen column when it is unhidden in a hidden state,
+  /// it is limited to the width of the frozen column area.
+  /// Updated to unfreeze [PlutoColumn.frozen].
+  void _updateLimitedHideColumns(List<PlutoColumn> columns, bool hide) {
+    double accumulateWidth = 0;
+
+    for (final column in columns) {
+      if (limitHideColumn(column, hide, accumulateWidth: accumulateWidth)) {
+        column.frozen = PlutoColumnFrozen.none;
+      }
+
+      if (column.frozen.isFrozen) {
+        accumulateWidth += column.width;
+      }
+
+      column.hide = hide;
+    }
+  }
+
+  void _updateAfterHideColumn({
+    required bool notify,
+    required bool checkScroll,
+  }) {
+    refColumns.update();
+
+    resetCurrentState(notify: false);
+
+    updateColumnStartPosition();
+
+    if (notify) {
+      notifyListeners();
+    }
+
+    if (checkScroll) {
+      updateCorrectScroll();
     }
   }
 }

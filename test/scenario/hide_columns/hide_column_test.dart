@@ -46,7 +46,7 @@ void main() {
 
         expect(column, findsOneWidget);
 
-        stateManager!.hideColumn(columns[1].key, true);
+        stateManager!.hideColumn(columns[1], true);
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
@@ -103,8 +103,8 @@ void main() {
 
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
-        stateManager!.hideColumn(columns[0].key, true, notify: false);
-        stateManager!.hideColumn(columns[5].key, true);
+        stateManager!.hideColumn(columns[0], true, notify: false);
+        stateManager!.hideColumn(columns[5], true);
       },
     );
 
@@ -116,7 +116,7 @@ void main() {
         expect(column, findsNothing);
 
         stateManager!.hideColumn(
-          stateManager!.refColumns.originalList[0].key,
+          stateManager!.refColumns.originalList[0],
           false,
         );
 

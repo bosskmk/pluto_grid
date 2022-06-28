@@ -555,10 +555,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#autoFitColumn, [context, column]),
           returnValueForMissingStub: null);
   @override
-  void hideColumn(_i4.Key? columnKey, bool? flag,
+  void hideColumn(_i3.PlutoColumn? column, bool? hide,
           {bool? notify = true, bool? checkScroll = true}) =>
       super.noSuchMethod(
-          Invocation.method(#hideColumn, [columnKey, flag],
+          Invocation.method(#hideColumn, [column, hide],
+              {#notify: notify, #checkScroll: checkScroll}),
+          returnValueForMissingStub: null);
+  @override
+  void hideColumns(List<_i3.PlutoColumn>? columns, bool? hide,
+          {bool? notify = true, bool? checkScroll = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#hideColumns, [columns, hide],
               {#notify: notify, #checkScroll: checkScroll}),
           returnValueForMissingStub: null);
   @override
@@ -598,14 +605,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#limitToggleFrozenColumn, [column, frozen]),
           returnValue: false) as bool);
   @override
-  bool limitHideColumn(_i3.PlutoColumn? column, bool? flag) =>
-      (super.noSuchMethod(Invocation.method(#limitHideColumn, [column, flag]),
-          returnValue: false) as bool);
-  @override
-  bool limitInsertColumn(_i3.PlutoColumn? column,
+  bool limitHideColumn(_i3.PlutoColumn? column, bool? hide,
           {double? accumulateWidth = 0.0}) =>
       (super.noSuchMethod(
-          Invocation.method(#limitInsertColumn, [column],
+          Invocation.method(#limitHideColumn, [column, hide],
               {#accumulateWidth: accumulateWidth}),
           returnValue: false) as bool);
   @override
@@ -757,6 +760,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void setOnSelected(_i3.PlutoOnSelectedEventCallback? onSelected) =>
       super.noSuchMethod(Invocation.method(#setOnSelected, [onSelected]),
+          returnValueForMissingStub: null);
+  @override
+  void setOnSorted(_i3.PlutoOnSortedEventCallback? onSorted) =>
+      super.noSuchMethod(Invocation.method(#setOnSorted, [onSorted]),
           returnValueForMissingStub: null);
   @override
   void setOnRowChecked(_i3.PlutoOnRowCheckedEventCallback? onRowChecked) =>

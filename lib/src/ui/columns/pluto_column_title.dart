@@ -73,7 +73,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
         widget.stateManager.notifyResizingListeners();
         break;
       case PlutoGridColumnMenuItem.hideColumn:
-        widget.stateManager.hideColumn(widget.column.key, true);
+        widget.stateManager.hideColumn(widget.column, true);
         break;
       case PlutoGridColumnMenuItem.setColumns:
         if (!mounted) return;

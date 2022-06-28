@@ -50,6 +50,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
         title: 'Username',
         field: 'username',
         type: PlutoColumnType.text(),
+        enableRowChecked: true,
       ),
       PlutoColumn(
         title: 'Point',
@@ -73,6 +74,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
         title: 'Activity',
         field: 'activity',
         type: PlutoColumnType.text(),
+        enableRowChecked: true,
       ),
       PlutoColumn(
         title: 'Date',
@@ -157,6 +159,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
           onSorted: (PlutoGridOnSortedEvent event) {
             print('Grid A : $event');
           },
+          onRowChecked: (PlutoGridOnRowCheckedEvent event) {
+            print('Grid A : $event');
+          },
         ),
         gridPropsB: PlutoDualGridProps(
           columns: gridBColumns,
@@ -168,6 +173,9 @@ class _DualModeScreenState extends State<DualModeScreen> {
             gridBStateManager = event.stateManager;
           },
           onSorted: (PlutoGridOnSortedEvent event) {
+            print('Grid B : $event');
+          },
+          onRowChecked: (PlutoGridOnRowCheckedEvent event) {
             print('Grid B : $event');
           },
           configuration: const PlutoGridConfiguration(),
