@@ -54,7 +54,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         stateManager.notifyListeners();
       });
     });
-    columns.first.enableRowDrag = true;
+    columns[0].enableRowDrag = true;
+    columns[0].enableRowChecked = true;
+    columns[1].enableContextMenu = false;
+    columns[2].enableContextMenu = true;
+    columns[2].enableDropToResize = false;
+    columns[2].titleTextAlign = PlutoColumnTextAlign.right;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {

@@ -196,7 +196,7 @@ class PlutoColumn {
       _defaultFilter ?? const PlutoFilterTypeContains();
 
   bool get isShowRightIcon =>
-      enableContextMenu || !sort.isNone || enableRowDrag;
+      enableContextMenu || enableDropToResize || !sort.isNone;
 
   PlutoColumnGroup? group;
 
