@@ -13,7 +13,7 @@ jobs:
       # Without this, there are no files in the directory.
       - uses: actions/checkout@v3
       # using flutter
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2.4.0
         with:
           channel: 'stable'
       - run: dart --version
