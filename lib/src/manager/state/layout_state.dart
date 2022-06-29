@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -205,10 +206,12 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showLoading;
 
   @override
-  bool get hasLeftFrozenColumns => leftFrozenColumnsWidth > 0;
+  bool get hasLeftFrozenColumns =>
+      refColumns.firstWhereOrNull((e) => e.frozen.isLeft) != null;
 
   @override
-  bool get hasRightFrozenColumns => rightFrozenColumnsWidth > 0;
+  bool get hasRightFrozenColumns =>
+      refColumns.firstWhereOrNull((e) => e.frozen.isRight) != null;
 
   @override
   double get headerBottomOffset => maxHeight! - headerHeight;

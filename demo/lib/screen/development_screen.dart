@@ -60,6 +60,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     columns[2].enableContextMenu = true;
     columns[2].enableDropToResize = false;
     columns[2].titleTextAlign = PlutoColumnTextAlign.right;
+    columns[3].frozen = PlutoColumnFrozen.left;
+    columns[4].frozen = PlutoColumnFrozen.right;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {

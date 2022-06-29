@@ -197,12 +197,6 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     // 이동 및 엔터키, 수정불가 셀의 좌우 이동을 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
     if (skip) {
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 :
-      /// ```dart
-      /// return KeyEventResult.skipRemainingHandlers;
-      /// ```
       return widget.stateManager.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );

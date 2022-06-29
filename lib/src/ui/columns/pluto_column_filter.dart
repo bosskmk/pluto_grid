@@ -154,19 +154,10 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
     final skip = !(handleMoveDown || handleMoveHorizontal || keyManager.isF3);
 
     if (skip) {
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 : 삭제
       if (keyManager.isUp) {
         return KeyEventResult.handled;
       }
 
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 :
-      /// ```dart
-      /// return KeyEventResult.skipRemainingHandlers;
-      /// ```
       return widget.stateManager.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );

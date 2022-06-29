@@ -23,8 +23,6 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
 
   bool _showColumnGroups = false;
 
-  bool _showColumnTitle = false;
-
   int _itemCount = 0;
 
   late final ScrollController _scroll;
@@ -50,11 +48,6 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     _showColumnGroups = update<bool>(
       _showColumnGroups,
       widget.stateManager.showColumnGroups,
-    );
-
-    _showColumnTitle = update<bool>(
-      _showColumnTitle,
-      widget.stateManager.showColumnTitle,
     );
 
     _columns = update<List<PlutoColumn>>(

@@ -39,9 +39,6 @@ class PlutoGridKeyEventResult {
 class PlutoGridKeyManager {
   PlutoGridStateManager stateManager;
 
-  /// 2021-11-19
-  /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-  /// 이슈 해결 후 : 삭제
   PlutoGridKeyEventResult eventResult = PlutoGridKeyEventResult();
 
   PlutoGridKeyManager({
