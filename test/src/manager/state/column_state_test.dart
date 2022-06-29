@@ -1197,6 +1197,189 @@ void main() {
     );
   });
 
+  group('moveColumn', () {
+    test('고정 컬럼 제한으로 컬럼이동이 불가하면 notifyListeners 가 호출 되지 않아야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+      final listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      final column = columns[0];
+
+      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.left;
+
+      stateManager.moveColumn(
+        column: column,
+        targetColumn: targetColumn,
+      );
+
+      verifyNever(listeners.onChangeVoidNoParamListener());
+    });
+
+    test('고정 컬럼 넓이가 충분하면 notifyListeners 가 호출 되어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+      final listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      final column = columns[0]..width = 50;
+
+      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.left;
+
+      stateManager.moveColumn(
+        column: column,
+        targetColumn: targetColumn,
+      );
+
+      verify(listeners.onChangeVoidNoParamListener()).called(1);
+    });
+
+    test('0 번 비고정 컬럼을 4번 우측 고정 컬럼으로 이동 시키면 컬럼 순서가 바뀌어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      columns[0].frozen = PlutoColumnFrozen.none;
+      columns[1].frozen = PlutoColumnFrozen.none;
+      columns[2].frozen = PlutoColumnFrozen.left;
+      columns[3].frozen = PlutoColumnFrozen.left;
+      columns[4].frozen = PlutoColumnFrozen.right;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1200));
+
+      stateManager.moveColumn(
+        column: columns[0],
+        targetColumn: columns[4],
+      );
+
+      expect(stateManager.refColumns[0].title, 'title1');
+      expect(stateManager.refColumns[1].title, 'title2');
+      expect(stateManager.refColumns[2].title, 'title3');
+      expect(stateManager.refColumns[3].title, 'title4');
+      expect(stateManager.refColumns[4].title, 'title0');
+    });
+
+    test('4 번 비고정 컬럼을 1번 좌측 고정 컬럼으로 이동 시키면 컬럼 순서가 바뀌어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      columns[0].frozen = PlutoColumnFrozen.none;
+      columns[1].frozen = PlutoColumnFrozen.left;
+      columns[2].frozen = PlutoColumnFrozen.none;
+      columns[3].frozen = PlutoColumnFrozen.none;
+      columns[4].frozen = PlutoColumnFrozen.none;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1200));
+
+      stateManager.moveColumn(
+        column: columns[4],
+        targetColumn: columns[1],
+      );
+
+      expect(stateManager.refColumns[0].title, 'title0');
+      expect(stateManager.refColumns[1].title, 'title4');
+      expect(stateManager.refColumns[2].title, 'title1');
+      expect(stateManager.refColumns[3].title, 'title2');
+      expect(stateManager.refColumns[4].title, 'title3');
+    });
+
+    test('3번 좌측 고정을 1번 비고정 컬럼으로 이동 시키면 컬럼 순서가 바뀌어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      columns[0].frozen = PlutoColumnFrozen.none;
+      columns[1].frozen = PlutoColumnFrozen.none;
+      columns[2].frozen = PlutoColumnFrozen.none;
+      columns[3].frozen = PlutoColumnFrozen.left;
+      columns[4].frozen = PlutoColumnFrozen.none;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1200));
+
+      stateManager.moveColumn(
+        column: columns[3],
+        targetColumn: columns[1],
+      );
+
+      // 3번이 좌측 고정 되어있어 1번 보다 우측에 있다.
+      // 3번 컬럼이 1번 컬럼 우측으로 이동하면 1번 좌측에 있는 3번이 빠지면서
+      // 3번이 1번의 위치에 위치한다.
+      expect(stateManager.refColumns[0].title, 'title0');
+      expect(stateManager.refColumns[1].title, 'title1');
+      expect(stateManager.refColumns[2].title, 'title3');
+      expect(stateManager.refColumns[3].title, 'title2');
+      expect(stateManager.refColumns[4].title, 'title4');
+    });
+
+    test('1번 우측 고정을 4번 비고정 컬럼으로 이동 시키면 컬럼 순서가 바뀌어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      columns[0].frozen = PlutoColumnFrozen.none;
+      columns[1].frozen = PlutoColumnFrozen.right;
+      columns[2].frozen = PlutoColumnFrozen.none;
+      columns[3].frozen = PlutoColumnFrozen.none;
+      columns[4].frozen = PlutoColumnFrozen.none;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 1200));
+
+      stateManager.moveColumn(
+        column: columns[1],
+        targetColumn: columns[4],
+      );
+
+      // 1번이 우측 고정 되어 4번 보다 우측에 있는 상태에서
+      // 1번이 4번 위치로 가고 4번은 1번 좌측에 위치하게 된다.
+      expect(stateManager.refColumns[0].title, 'title0');
+      expect(stateManager.refColumns[1].title, 'title2');
+      expect(stateManager.refColumns[2].title, 'title3');
+      expect(stateManager.refColumns[3].title, 'title1');
+      expect(stateManager.refColumns[4].title, 'title4');
+    });
+  });
+
   group('hideColumn', () {
     testWidgets('flag 를 true 로 호출 한 경우 컬럼의 hide 가 true 로 변경 되어야 한다.',
         (WidgetTester tester) async {
@@ -1312,5 +1495,671 @@ void main() {
       // then
       verifyNever(listeners.onChangeVoidNoParamListener());
     });
+  });
+
+  group('hideColumns', () {
+    test('columns 가 empty 면 notifyListeners 가 호출 되지 않아야 한다.', () async {
+      final columns = <PlutoColumn>[];
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      var listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      stateManager.hideColumns(columns, true);
+
+      verifyNever(listeners.onChangeVoidNoParamListener());
+    });
+
+    test('columns 가 empty 가 아니면 notifyListeners 가 호출 되어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      var listeners = MockOnChangeListener();
+
+      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+
+      stateManager.hideColumns(columns, true);
+
+      verify(listeners.onChangeVoidNoParamListener()).called(1);
+    });
+
+    test('hide 가 true 면 컬럼이 모두 업데이트 되어야 한다.', () async {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.hideColumns(columns, true);
+
+      final hideList = stateManager.refColumns.originalList.where(
+        (element) => element.hide,
+      );
+
+      expect(hideList.length, 5);
+    });
+
+    test(
+      '0, 1 번 컬럼을 hide 를 false 로 호출 하면 컬럼이 모두 업데이트 되어야 한다.',
+      () async {
+        final columns = ColumnHelper.textColumn('title', count: 5, hide: true);
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 1000));
+
+        stateManager.hideColumns(columns.getRange(0, 2).toList(), false);
+
+        // 호출 한 컬럼
+        expect(columns[0].hide, false);
+        expect(columns[1].hide, false);
+        // 호출 하지 않은 컬럼
+        expect(columns[2].hide, true);
+        expect(columns[3].hide, true);
+        expect(columns[4].hide, true);
+      },
+    );
+
+    test(
+      '고정 컬럼 제약 조건이 부족한 상태에서 0, 1번 컬럼을 hide 를 false 로 호출 하면 '
+      'frozen 컬럼이 none 으로 변경 되어야 한다.',
+      () async {
+        final columns = ColumnHelper.textColumn(
+          'title',
+          count: 5,
+          hide: true,
+          frozen: PlutoColumnFrozen.left,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 300));
+
+        // setLayout 실행 시 고정 컬럼이 하나도 없어 showFrozenColumn 이 false 이면
+        // 모든 컬럼의 frozen 을 none 으로 초기화 하여 테스트를 위해 다시 고정 컬럼으로 설정.
+        for (final column in columns) {
+          column.frozen = PlutoColumnFrozen.left;
+        }
+
+        stateManager.hideColumns(columns.getRange(0, 2).toList(), false);
+
+        // 호출 한 컬럼
+        expect(columns[0].hide, false);
+        expect(columns[0].frozen, PlutoColumnFrozen.none);
+        expect(columns[1].hide, false);
+        expect(columns[1].frozen, PlutoColumnFrozen.none);
+        // 호출 하지 않은 컬럼
+        expect(columns[2].hide, true);
+        expect(columns[2].frozen, PlutoColumnFrozen.left);
+        expect(columns[3].hide, true);
+        expect(columns[3].frozen, PlutoColumnFrozen.left);
+        expect(columns[4].hide, true);
+        expect(columns[4].frozen, PlutoColumnFrozen.left);
+      },
+    );
+  });
+
+  group('limitResizeColumn', () {
+    test('offset 이 0 보다 작으면 false 를 리턴해야 한다.', () {
+      final PlutoColumn column = PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+      );
+
+      const offset = -1.0;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      expect(stateManager.limitResizeColumn(column, offset), false);
+    });
+
+    test('column 의 frozen 이 none 이면 false 를 리턴해야 한다.', () {
+      final PlutoColumn column = PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        frozen: PlutoColumnFrozen.none,
+      );
+
+      const offset = 1.0;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: [column],
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      expect(stateManager.limitResizeColumn(column, offset), false);
+    });
+
+    test('고정 컬럼의 넓이를 제약 조건 범위에서 offset 을 호출 하면 false 를 리턴해야 한다.', () {
+      final PlutoColumn column = PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        frozen: PlutoColumnFrozen.left,
+        width: 100,
+      );
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: [
+          column,
+          ...ColumnHelper.textColumn('title', count: 3, width: 100),
+        ],
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+      // 500 - 306 = 194 보다 작게 크기 증가 가능.
+      // print(stateManager.maxWidth);
+      // 좌측 고정 컬럼 하나 100
+      // print(stateManager.leftFrozenColumnsWidth);
+      // 우측 고정 컬럼 없음 0
+      // print(stateManager.rightFrozenColumnsWidth);
+      // 200
+      // print(PlutoGridSettings.bodyMinWidth);
+      // 6
+      // print(PlutoGridSettings.totalShadowLineWidth);
+
+      expect(stateManager.limitResizeColumn(column, 193.0), false);
+    });
+
+    test('고정 컬럼의 넓이를 제약 조건 범위 보다 크게 offset 을 호출 하면 true 를 리턴해야 한다.', () {
+      final PlutoColumn column = PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        frozen: PlutoColumnFrozen.left,
+        width: 100,
+      );
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: [
+          column,
+          ...ColumnHelper.textColumn('title', count: 3, width: 100),
+        ],
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+      // 500 - 306 = 194 보다 작게 크기 증가 가능.
+      // print(stateManager.maxWidth);
+      // 좌측 고정 컬럼 하나 100
+      // print(stateManager.leftFrozenColumnsWidth);
+      // 우측 고정 컬럼 없음 0
+      // print(stateManager.rightFrozenColumnsWidth);
+      // 200
+      // print(PlutoGridSettings.bodyMinWidth);
+      // 6
+      // print(PlutoGridSettings.totalShadowLineWidth);
+
+      expect(stateManager.limitResizeColumn(column, 194.0), true);
+    });
+  });
+
+  group('limitMoveColumn', () {
+    test(
+      'column 이 고정 컬럼이면 고정 컬럼 넓이 제약을 초과 하지 않으므로 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          width: 100,
+        );
+
+        final PlutoColumn targetColumn = PlutoColumn(
+          title: 'title2',
+          field: 'field2',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.right,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 406 = 94 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth);
+        // 좌측 고정 컬럼 하나 100
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 하나 100
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitMoveColumn(
+            column: column,
+            targetColumn: targetColumn,
+          ),
+          false,
+        );
+      },
+    );
+
+    test(
+      '고정 컬럼을 일반 컬럼 영역으로 이동 하면 제약이 없으므로 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          width: 100,
+        );
+
+        final PlutoColumn targetColumn = PlutoColumn(
+          title: 'title2',
+          field: 'field2',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 306 = 294 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth);
+        // 좌측 고정 컬럼 하나 100
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitMoveColumn(
+            column: column,
+            targetColumn: targetColumn,
+          ),
+          false,
+        );
+      },
+    );
+
+    test(
+      '일반 컬럼을 고정 컬럼 영역으로 이동 할 때 제약 조건 넓이가 충분하면 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          width: 100,
+        );
+
+        final PlutoColumn targetColumn = PlutoColumn(
+          title: 'title2',
+          field: 'field2',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 306 = 294 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth);
+        // 좌측 고정 컬럼 하나 100
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitMoveColumn(
+            column: column,
+            targetColumn: targetColumn,
+          ),
+          false,
+        );
+      },
+    );
+
+    test(
+      '일반 컬럼을 고정 컬럼 영역으로 이동 할 때 제약 조건 넓이가 부족하면 true 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          width: 294,
+        );
+
+        final PlutoColumn targetColumn = PlutoColumn(
+          title: 'title2',
+          field: 'field2',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 306 = 294 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth! - column.width);
+        // 좌측 고정 컬럼 하나 100
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitMoveColumn(
+            column: column,
+            targetColumn: targetColumn,
+          ),
+          true,
+        );
+      },
+    );
+  });
+
+  group('limitToggleFrozenColumn', () {
+    test(
+      'column 의 frozen 이 isFrozen 이면 토글 되었을 때 고정이 풀리므로 '
+      '제약조건을 받지 않아 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        expect(
+          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.none),
+          false,
+        );
+      },
+    );
+
+    test(
+      'column 의 frozen 이 none 이고 frozen 컬럼으로 토글 할 때, '
+      '제약 조건 범위가 충분하면 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          width: 100,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 206 = 394 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth! - column.width);
+        // 좌측 고정 컬럼 없음 0
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.left),
+          false,
+        );
+      },
+    );
+
+    test(
+      'column 의 frozen 이 none 이고 frozen 컬럼으로 토글 할 때, '
+      '제약 조건 범위가 부족하면 true 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          width: 394,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // 500 - 206 = 394 보다 작은 컬럼 이동 가능.
+        // print(stateManager.maxWidth! - column.width);
+        // 좌측 고정 컬럼 없음 0
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(
+          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.left),
+          true,
+        );
+      },
+    );
+  });
+
+  group('limitHideColumn', () {
+    test(
+      'column 의 hide 를 true 로 호출하면 숨겨지므로 제약조건을 받지 않아 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.right,
+          width: 394,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        expect(stateManager.limitHideColumn(column, true), false);
+      },
+    );
+
+    test(
+      'column 의 frozen 이 none 이면 제약 조건을 받지 않으므로 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.none,
+          hide: true,
+          width: 394,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        expect(stateManager.limitHideColumn(column, false), false);
+      },
+    );
+
+    test(
+      '고정 컬럼을 숨김 해제 해도 제약 조건이 충분하면 false 를 리턴 해야 한다.',
+      () async {
+        final PlutoColumn column = PlutoColumn(
+          title: 'title1',
+          field: 'field1',
+          type: PlutoColumnType.text(),
+          frozen: PlutoColumnFrozen.left,
+          hide: true,
+          width: 394,
+        );
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: [
+            column,
+            ...ColumnHelper.textColumn('title', count: 3, width: 100),
+          ],
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 500));
+
+        // stateManager.setLayout 에서 showFrozenColumn 이 아닌 경우
+        // 강제로 컬럼의 고정 상태를 none 으로 업데이트 해서 강제로 left 로 변경.
+        column.frozen = PlutoColumnFrozen.left;
+
+        // 500 - 206 = 394 보다 작은 컬럼 숨김 해제 가능.
+        // print(stateManager.maxWidth! - column.width);
+        // 좌측 고정 컬럼 없음 0
+        // print(stateManager.leftFrozenColumnsWidth);
+        // 우측 고정 컬럼 없음 0
+        // print(stateManager.rightFrozenColumnsWidth);
+        // 200
+        // print(PlutoGridSettings.bodyMinWidth);
+        // 6
+        // print(PlutoGridSettings.totalShadowLineWidth);
+
+        expect(stateManager.limitHideColumn(column, false), true);
+      },
+    );
   });
 }

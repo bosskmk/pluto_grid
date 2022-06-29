@@ -8,6 +8,7 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
+    bool hide = false,
     dynamic defaultValue = '',
   }) {
     return Iterable<int>.generate(count).map((e) {
@@ -18,6 +19,7 @@ class ColumnHelper {
         width: width,
         frozen: frozen,
         readOnly: readOnly,
+        hide: hide,
         type: PlutoColumnType.text(defaultValue: defaultValue),
       );
     }).toList();
@@ -30,7 +32,7 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    bool visible = true,
+    bool hide = false,
     DateTime? startDate,
     DateTime? endDate,
     String format = 'yyyy-MM-dd',
@@ -44,6 +46,7 @@ class ColumnHelper {
         width: width,
         frozen: frozen,
         readOnly: readOnly,
+        hide: hide,
         type: PlutoColumnType.date(
           startDate: startDate,
           endDate: endDate,
@@ -61,7 +64,7 @@ class ColumnHelper {
     double width = PlutoGridSettings.columnWidth,
     PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    bool visible = true,
+    bool hide = false,
     dynamic defaultValue = '00:00',
   }) {
     return Iterable<int>.generate(count).map((e) {
@@ -72,6 +75,7 @@ class ColumnHelper {
         width: width,
         frozen: frozen,
         readOnly: readOnly,
+        hide: hide,
         type: PlutoColumnType.time(
           defaultValue: defaultValue,
         ),
