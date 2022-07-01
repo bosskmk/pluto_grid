@@ -22,29 +22,32 @@ import 'package:rxdart/rxdart.dart' as _i5;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeScrollPosition_0 extends _i1.Fake implements _i2.ScrollPosition {}
-
-class _FakeScrollPhysics_1 extends _i1.Fake implements _i2.ScrollPhysics {}
-
-class _FakeScrollContext_2 extends _i1.Fake implements _i2.ScrollContext {}
-
-class _FakeValueNotifier_3<T> extends _i1.Fake implements _i2.ValueNotifier<T> {
+class _FakeScrollController_0 extends _i1.Fake implements _i2.ScrollController {
 }
 
-class _FakeScrollHoldController_4 extends _i1.Fake
+class _FakeScrollPosition_1 extends _i1.Fake implements _i2.ScrollPosition {}
+
+class _FakeScrollPhysics_2 extends _i1.Fake implements _i2.ScrollPhysics {}
+
+class _FakeScrollContext_3 extends _i1.Fake implements _i2.ScrollContext {}
+
+class _FakeValueNotifier_4<T> extends _i1.Fake implements _i2.ValueNotifier<T> {
+}
+
+class _FakeScrollHoldController_5 extends _i1.Fake
     implements _i2.ScrollHoldController {}
 
-class _FakeDrag_5 extends _i1.Fake implements _i3.Drag {}
+class _FakeDrag_6 extends _i1.Fake implements _i3.Drag {}
 
-class _FakeScrollMetrics_6 extends _i1.Fake implements _i2.ScrollMetrics {}
+class _FakeScrollMetrics_7 extends _i1.Fake implements _i2.ScrollMetrics {}
 
-class _FakePlutoGridStateManager_7 extends _i1.Fake
+class _FakePlutoGridStateManager_8 extends _i1.Fake
     implements _i4.PlutoGridStateManager {}
 
-class _FakePublishSubject_8<T> extends _i1.Fake
+class _FakePublishSubject_9<T> extends _i1.Fake
     implements _i5.PublishSubject<T> {}
 
-class _FakeStreamSubscription_9<T> extends _i1.Fake
+class _FakeStreamSubscription_10<T> extends _i1.Fake
     implements _i6.StreamSubscription<T> {}
 
 /// A class which mocks [PlutoGridScrollController].
@@ -87,6 +90,52 @@ class MockPlutoGridScrollController extends _i1.Mock
           returnValueForMissingStub: null);
 }
 
+/// A class which mocks [LinkedScrollControllerGroup].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLinkedScrollControllerGroup extends _i1.Mock
+    implements _i4.LinkedScrollControllerGroup {
+  @override
+  double get offset =>
+      (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
+          as double);
+  @override
+  _i2.ScrollController addAndGet() =>
+      (super.noSuchMethod(Invocation.method(#addAndGet, []),
+          returnValue: _FakeScrollController_0()) as _i2.ScrollController);
+  @override
+  void addOffsetChangedListener(_i7.VoidCallback? onChanged) => super
+      .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
+          returnValueForMissingStub: null);
+  @override
+  void removeOffsetChangedListener(_i7.VoidCallback? listener) => super
+      .noSuchMethod(Invocation.method(#removeOffsetChangedListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  _i6.Future<void> animateTo(double? offset,
+          {_i2.Curve? curve, Duration? duration}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #animateTo, [offset], {#curve: curve, #duration: duration}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  void jumpTo(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpTo, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void resetScroll() => super.noSuchMethod(Invocation.method(#resetScroll, []),
+      returnValueForMissingStub: null);
+  @override
+  void applyViewportDimension(double? value) =>
+      super.noSuchMethod(Invocation.method(#applyViewportDimension, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
 /// A class which mocks [ScrollController].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -110,7 +159,7 @@ class MockScrollController extends _i1.Mock implements _i2.ScrollController {
   @override
   _i2.ScrollPosition get position =>
       (super.noSuchMethod(Invocation.getter(#position),
-          returnValue: _FakeScrollPosition_0()) as _i2.ScrollPosition);
+          returnValue: _FakeScrollPosition_1()) as _i2.ScrollPosition);
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
@@ -148,7 +197,7 @@ class MockScrollController extends _i1.Mock implements _i2.ScrollController {
       (super.noSuchMethod(
           Invocation.method(
               #createScrollPosition, [physics, context, oldPosition]),
-          returnValue: _FakeScrollPosition_0()) as _i2.ScrollPosition);
+          returnValue: _FakeScrollPosition_1()) as _i2.ScrollPosition);
   @override
   void debugFillDescription(List<String>? description) => super.noSuchMethod(
       Invocation.method(#debugFillDescription, [description]),
@@ -174,11 +223,11 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
   @override
   _i2.ScrollPhysics get physics =>
       (super.noSuchMethod(Invocation.getter(#physics),
-          returnValue: _FakeScrollPhysics_1()) as _i2.ScrollPhysics);
+          returnValue: _FakeScrollPhysics_2()) as _i2.ScrollPhysics);
   @override
   _i2.ScrollContext get context =>
       (super.noSuchMethod(Invocation.getter(#context),
-          returnValue: _FakeScrollContext_2()) as _i2.ScrollContext);
+          returnValue: _FakeScrollContext_3()) as _i2.ScrollContext);
   @override
   bool get keepScrollOffset =>
       (super.noSuchMethod(Invocation.getter(#keepScrollOffset),
@@ -186,7 +235,7 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
   @override
   _i2.ValueNotifier<bool> get isScrollingNotifier => (super.noSuchMethod(
       Invocation.getter(#isScrollingNotifier),
-      returnValue: _FakeValueNotifier_3<bool>()) as _i2.ValueNotifier<bool>);
+      returnValue: _FakeValueNotifier_4<bool>()) as _i2.ValueNotifier<bool>);
   @override
   double get minScrollExtent =>
       (super.noSuchMethod(Invocation.getter(#minScrollExtent), returnValue: 0.0)
@@ -372,14 +421,14 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
   @override
   _i2.ScrollHoldController hold(_i7.VoidCallback? holdCancelCallback) =>
       (super.noSuchMethod(Invocation.method(#hold, [holdCancelCallback]),
-              returnValue: _FakeScrollHoldController_4())
+              returnValue: _FakeScrollHoldController_5())
           as _i2.ScrollHoldController);
   @override
   _i3.Drag drag(_i2.DragStartDetails? details,
           _i7.VoidCallback? dragCancelCallback) =>
       (super.noSuchMethod(
           Invocation.method(#drag, [details, dragCancelCallback]),
-          returnValue: _FakeDrag_5()) as _i3.Drag);
+          returnValue: _FakeDrag_6()) as _i3.Drag);
   @override
   void beginActivity(_i2.ScrollActivity? newActivity) =>
       super.noSuchMethod(Invocation.method(#beginActivity, [newActivity]),
@@ -446,7 +495,7 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
             #viewportDimension: viewportDimension,
             #axisDirection: axisDirection
           }),
-          returnValue: _FakeScrollMetrics_6()) as _i2.ScrollMetrics);
+          returnValue: _FakeScrollMetrics_7()) as _i2.ScrollMetrics);
 }
 
 /// A class which mocks [PlutoGridEventManager].
@@ -457,17 +506,17 @@ class MockPlutoGridEventManager extends _i1.Mock
   @override
   _i4.PlutoGridStateManager get stateManager =>
       (super.noSuchMethod(Invocation.getter(#stateManager),
-              returnValue: _FakePlutoGridStateManager_7())
+              returnValue: _FakePlutoGridStateManager_8())
           as _i4.PlutoGridStateManager);
   @override
   _i5.PublishSubject<_i4.PlutoGridEvent> get subject =>
       (super.noSuchMethod(Invocation.getter(#subject),
-              returnValue: _FakePublishSubject_8<_i4.PlutoGridEvent>())
+              returnValue: _FakePublishSubject_9<_i4.PlutoGridEvent>())
           as _i5.PublishSubject<_i4.PlutoGridEvent>);
   @override
   _i6.StreamSubscription<dynamic> get subscription =>
       (super.noSuchMethod(Invocation.getter(#subscription),
-              returnValue: _FakeStreamSubscription_9<dynamic>())
+              returnValue: _FakeStreamSubscription_10<dynamic>())
           as _i6.StreamSubscription<dynamic>);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
@@ -483,6 +532,6 @@ class MockPlutoGridEventManager extends _i1.Mock
   _i6.StreamSubscription<_i4.PlutoGridEvent> listener(
           void Function(_i4.PlutoGridEvent)? onData) =>
       (super.noSuchMethod(Invocation.method(#listener, [onData]),
-              returnValue: _FakeStreamSubscription_9<_i4.PlutoGridEvent>())
+              returnValue: _FakeStreamSubscription_10<_i4.PlutoGridEvent>())
           as _i6.StreamSubscription<_i4.PlutoGridEvent>);
 }

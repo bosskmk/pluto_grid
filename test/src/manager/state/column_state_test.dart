@@ -11,22 +11,27 @@ import 'column_state_test.mocks.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
   MockSpec<ScrollController>(returnNullOnMissingStub: true),
   MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
 ])
 void main() {
-  final MockPlutoGridScrollController scroll = MockPlutoGridScrollController();
-  final MockScrollController scrollController = MockScrollController();
-  final MockScrollPosition scrollPosition = MockScrollPosition();
-  final MockPlutoGridEventManager eventManager = MockPlutoGridEventManager();
+  final PlutoGridScrollController scroll = MockPlutoGridScrollController();
+  final LinkedScrollControllerGroup horizontal =
+      MockLinkedScrollControllerGroup();
+  final ScrollController scrollController = MockScrollController();
+  final ScrollPosition scrollPosition = MockScrollPosition();
+  final PlutoGridEventManager eventManager = MockPlutoGridEventManager();
 
+  when(scroll.horizontal).thenReturn(horizontal);
   when(scroll.maxScrollHorizontal).thenReturn(0);
   when(scroll.bodyRowsHorizontal).thenReturn(scrollController);
   when(scrollController.hasClients).thenReturn(true);
   when(scrollController.offset).thenReturn(0);
   when(scrollController.position).thenReturn(scrollPosition);
   when(scrollPosition.viewportDimension).thenReturn(0.0);
+  when(scrollPosition.hasViewportDimension).thenReturn(true);
 
   PlutoGridStateManager getStateManager({
     required List<PlutoColumn> columns,
@@ -362,6 +367,8 @@ void main() {
       gridFocusNode: null,
       scroll: scroll,
     );
+
+    stateManager.setLayout(const BoxConstraints(maxWidth: 1800));
 
     // when
     final List<PlutoColumn> result = stateManager.bodyColumns;
@@ -876,6 +883,8 @@ void main() {
           scroll: scroll,
         );
 
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
         stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
 
         expect(stateManager.refColumns.length, 1);
@@ -907,6 +916,8 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
         );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
         stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
 
@@ -945,6 +956,8 @@ void main() {
           scroll: scroll,
         );
 
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
         stateManager.insertColumns(columnIdxToInsert, columnsToInsert);
 
         expect(
@@ -978,6 +991,8 @@ void main() {
           scroll: scroll,
         );
 
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
         stateManager.removeColumns([columns[0]]);
 
         expect(stateManager.refColumns.length, 9);
@@ -1000,6 +1015,8 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
         );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
         expect(stateManager.refRows[0].cells.entries.length, 10);
 
@@ -1025,6 +1042,8 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
         );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
         expect(stateManager.refRows[0].cells.entries.length, 10);
 
@@ -1062,6 +1081,8 @@ void main() {
           scroll: scroll,
         );
 
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
         stateManager.removeColumns([columns[0]]);
 
         expect(stateManager.columnGroups.length, 1);
@@ -1097,6 +1118,8 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
         );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
         stateManager.removeColumns([columns[1]]);
 
@@ -1146,6 +1169,8 @@ void main() {
           scroll: scroll,
         );
 
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
         expect(stateManager.columnGroups[1].children!.length, 2);
 
         stateManager.removeColumns([columns[1]]);
@@ -1185,6 +1210,8 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
         );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
         stateManager.setFilterWithFilterRows(filterRows);
 
@@ -1400,6 +1427,8 @@ void main() {
       // when
       expect(stateManager.columns.first.hide, isFalse);
 
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
       stateManager.hideColumn(columns.first, true);
 
       // then
@@ -1428,6 +1457,8 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
       // when
       expect(stateManager.refColumns.originalList.first.hide, isTrue);
 
@@ -1452,6 +1483,8 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
       );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
       var listeners = MockOnChangeListener();
 
@@ -1527,6 +1560,8 @@ void main() {
         scroll: scroll,
       );
 
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
       var listeners = MockOnChangeListener();
 
       stateManager.addListener(listeners.onChangeVoidNoParamListener);
@@ -1545,6 +1580,8 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
       );
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
       stateManager.hideColumns(columns, true);
 

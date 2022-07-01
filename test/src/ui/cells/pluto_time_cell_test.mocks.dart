@@ -1027,6 +1027,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#updateCorrectScrollOffset, []),
           returnValueForMissingStub: null);
   @override
+  void updateScrollViewport() =>
+      super.noSuchMethod(Invocation.method(#updateScrollViewport, []),
+          returnValueForMissingStub: null);
+  @override
   void resetScrollToZero() =>
       super.noSuchMethod(Invocation.method(#resetScrollToZero, []),
           returnValueForMissingStub: null);

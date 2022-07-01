@@ -10,6 +10,7 @@ import 'visibility_state_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
   MockSpec<ScrollController>(returnNullOnMissingStub: true),
+  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
 ])
 void main() {
   PlutoGridStateManager createStateManager({
@@ -250,6 +251,14 @@ void main() {
         final LinkedScrollControllerGroup horizontalScroll =
             MockLinkedScrollControllerGroup();
 
+        final ScrollController rowsScroll = MockScrollController();
+
+        final ScrollPosition scrollPosition = MockScrollPosition();
+
+        when(rowsScroll.position).thenReturn(scrollPosition);
+
+        when(scrollPosition.hasViewportDimension).thenReturn(true);
+
         final columns = ColumnHelper.textColumn(
           'column',
           count: 5,
@@ -264,6 +273,8 @@ void main() {
           ),
           layout: const BoxConstraints(maxWidth: 800),
         );
+
+        stateManager.scroll!.setBodyRowsHorizontal(rowsScroll);
 
         // setLayout 메서드에서 applyViewportDimension 한번 호출 되어 리셋.
         reset(horizontalScroll);
