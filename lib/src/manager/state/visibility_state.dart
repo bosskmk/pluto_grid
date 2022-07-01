@@ -55,16 +55,10 @@ mixin VisibilityState implements IPlutoGridState {
       updater(column);
     }
 
-    try {
-      // todo : https://github.com/google/flutter.widgets/pull/398
-      final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
-      scroll!.horizontal!.applyViewportDimension(bodyWidth);
+    updateScrollViewport();
 
-      if (notify) {
-        scroll!.horizontal!.notifyListeners();
-      }
-    } catch (e) {
-      //
+    if (notify) {
+      scroll?.horizontal?.notifyListeners();
     }
   }
 }

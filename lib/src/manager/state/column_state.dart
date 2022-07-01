@@ -416,6 +416,8 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
+    resetShowFrozenColumn();
+
     updateVisibility();
 
     notifyListeners();
@@ -438,6 +440,8 @@ mixin ColumnState implements IPlutoGridState {
     removeColumnsInColumnGroup(columns, notify: false);
 
     removeColumnsInFilterRows(columns, notify: false);
+
+    resetShowFrozenColumn();
 
     updateVisibility();
 
@@ -490,6 +494,8 @@ mixin ColumnState implements IPlutoGridState {
     refColumns.insert(targetIndex, columnToMove);
 
     updateCurrentCellPosition(notify: false);
+
+    resetShowFrozenColumn();
 
     updateVisibility();
 
@@ -899,6 +905,10 @@ mixin ColumnState implements IPlutoGridState {
     double accumulateWidth = 0;
 
     for (final column in columns) {
+      if (hide == column.hide) {
+        continue;
+      }
+
       if (limitHideColumn(column, hide, accumulateWidth: accumulateWidth)) {
         column.frozen = PlutoColumnFrozen.none;
       }
@@ -918,6 +928,10 @@ mixin ColumnState implements IPlutoGridState {
     refColumns.update();
 
     resetCurrentState(notify: false);
+
+    resetShowFrozenColumn();
+
+    updateVisibility();
 
     if (notify) {
       notifyListeners();

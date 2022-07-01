@@ -31,6 +31,8 @@ abstract class IScrollState {
 
   void updateCorrectScrollOffset();
 
+  void updateScrollViewport();
+
   void resetScrollToZero();
 }
 
@@ -184,6 +186,18 @@ mixin ScrollState implements IPlutoGridState {
         scroll!.horizontal!.jumpTo(correctHorizontalOffset);
       }
     });
+  }
+
+  @override
+  void updateScrollViewport() {
+    if (maxWidth == null ||
+        scroll?.bodyRowsHorizontal?.position.hasViewportDimension != true) {
+      return;
+    }
+
+    final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
+
+    scroll!.horizontal!.applyViewportDimension(bodyWidth);
   }
 
   /// Called to fix an error
