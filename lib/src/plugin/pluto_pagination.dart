@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoPagination extends PlutoStatefulWidget {
-  const PlutoPagination(this.stateManager, {Key? key}) : super(key: key);
+  const PlutoPagination(
+    this.stateManager, {
+    super.key,
+  });
 
-  @override
   final PlutoGridStateManager stateManager;
 
   @override
@@ -20,14 +22,17 @@ abstract class _PlutoPaginationStateWithChange
   late int totalPage;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
-    page = widget.stateManager.page;
+    page = stateManager.page;
 
-    totalPage = widget.stateManager.totalPage;
+    totalPage = stateManager.totalPage;
 
-    widget.stateManager.setPage(page, notify: false);
+    stateManager.setPage(page, notify: false);
 
     updateState();
   }
@@ -36,12 +41,12 @@ abstract class _PlutoPaginationStateWithChange
   void updateState() {
     page = update<int>(
       page,
-      widget.stateManager.page,
+      stateManager.page,
     );
 
     totalPage = update<int>(
       totalPage,
-      widget.stateManager.totalPage,
+      stateManager.totalPage,
     );
   }
 }
@@ -129,7 +134,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   }
 
   void _movePage(int page) {
-    widget.stateManager.setPage(page);
+    stateManager.setPage(page);
   }
 
   ButtonStyle _getNumberButtonStyle(bool isCurrentIndex) {
@@ -144,11 +149,10 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   TextStyle _getNumberTextStyle(bool isCurrentIndex) {
     return TextStyle(
-      fontSize:
-          isCurrentIndex ? widget.stateManager.configuration!.iconSize : null,
+      fontSize: isCurrentIndex ? stateManager.configuration!.iconSize : null,
       color: isCurrentIndex
-          ? widget.stateManager.configuration!.activatedBorderColor
-          : widget.stateManager.configuration!.iconColor,
+          ? stateManager.configuration!.activatedBorderColor
+          : stateManager.configuration!.iconColor,
     );
   }
 
@@ -159,7 +163,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
     return TextButton(
       onPressed: () {
-        widget.stateManager.setPage(pageFromIndex);
+        stateManager.setPage(pageFromIndex);
       },
       style: _getNumberButtonStyle(isCurrentIndex),
       child: Text(
@@ -175,14 +179,14 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
       builder: (_, size) {
         _maxWidth = size.maxWidth;
 
-        final Color iconColor = widget.stateManager.configuration!.iconColor;
+        final Color iconColor = stateManager.configuration!.iconColor;
 
         final Color disabledIconColor =
-            widget.stateManager.configuration!.disabledIconColor;
+            stateManager.configuration!.disabledIconColor;
 
         return Container(
           width: _maxWidth,
-          height: widget.stateManager.footerHeight,
+          height: stateManager.footerHeight,
           alignment: Alignment.center,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,

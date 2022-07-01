@@ -46,7 +46,7 @@ typedef PlutoRowColorCallback = Color Function(
 /// Pop-ups such as date selection, time selection,
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
-class PlutoGrid extends StatefulWidget {
+class PlutoGrid extends PlutoStatefulWidget {
   const PlutoGrid({
     Key? key,
     required this.columns,
@@ -283,26 +283,26 @@ class PlutoGrid extends StatefulWidget {
   PlutoGridState createState() => PlutoGridState();
 }
 
-class PlutoGridState extends State<PlutoGrid> {
+class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
+  bool _showColumnTitle = false;
+
+  bool _showColumnFilter = false;
+
+  bool _showColumnGroups = false;
+
   bool _showFrozenColumn = false;
 
+  bool _showLoading = false;
+
   bool _hasLeftFrozenColumns = false;
+
+  bool _hasRightFrozenColumns = false;
 
   double _bodyLeftOffset = 0.0;
 
   double _bodyRightOffset = 0.0;
 
-  bool _hasRightFrozenColumns = false;
-
   double _rightFrozenLeftOffset = 0.0;
-
-  bool _showColumnGroups = false;
-
-  bool _showColumnTitle = false;
-
-  bool _showColumnFilter = false;
-
-  bool _showLoading = false;
 
   Widget? _header;
 
@@ -325,13 +325,10 @@ class PlutoGridState extends State<PlutoGrid> {
   late final PlutoGridEventManager _eventManager;
 
   @override
+  PlutoGridStateManager get stateManager => _stateManager;
+
+  @override
   void initState() {
-    super.initState();
-
-    _disposeList.add(() {
-      _gridFocusNode.dispose();
-    });
-
     _initStateManager();
 
     _initKeyManager();
@@ -343,6 +340,16 @@ class PlutoGridState extends State<PlutoGrid> {
     _initSelectMode();
 
     _initHeaderFooter();
+
+    _disposeList.add(() {
+      _gridFocusNode.dispose();
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateState();
+    });
+
+    super.initState();
   }
 
   @override
@@ -352,6 +359,59 @@ class PlutoGridState extends State<PlutoGrid> {
     }
 
     super.dispose();
+  }
+
+  @override
+  void updateState() {
+    _showColumnTitle = update<bool>(
+      _showColumnTitle,
+      stateManager.showColumnTitle,
+    );
+
+    _showColumnFilter = update<bool>(
+      _showColumnFilter,
+      stateManager.showColumnFilter,
+    );
+
+    _showColumnGroups = update<bool>(
+      _showColumnGroups,
+      stateManager.showColumnGroups,
+    );
+
+    _showFrozenColumn = update<bool>(
+      _showFrozenColumn,
+      stateManager.showFrozenColumn,
+    );
+
+    _showLoading = update<bool>(
+      _showLoading,
+      stateManager.showLoading,
+    );
+
+    _hasLeftFrozenColumns = update<bool>(
+      _hasLeftFrozenColumns,
+      stateManager.hasLeftFrozenColumns,
+    );
+
+    _hasRightFrozenColumns = update<bool>(
+      _hasRightFrozenColumns,
+      stateManager.hasRightFrozenColumns,
+    );
+
+    _bodyLeftOffset = update<double>(
+      _bodyLeftOffset,
+      stateManager.bodyLeftOffset,
+    );
+
+    _bodyRightOffset = update<double>(
+      _bodyRightOffset,
+      stateManager.bodyRightOffset,
+    );
+
+    _rightFrozenLeftOffset = update<double>(
+      _rightFrozenLeftOffset,
+      stateManager.rightFrozenLeftOffset,
+    );
   }
 
   void _initStateManager() {
@@ -378,11 +438,8 @@ class PlutoGridState extends State<PlutoGrid> {
       configuration: widget.configuration,
     );
 
-    _stateManager.addListener(_changeStateListener);
-
     // Dispose
     _disposeList.add(() {
-      _stateManager.removeListener(_changeStateListener);
       _stateManager.dispose();
     });
   }
@@ -458,24 +515,6 @@ class PlutoGridState extends State<PlutoGrid> {
     }
   }
 
-  void _changeStateListener() {
-    if (_showFrozenColumn != _stateManager.showFrozenColumn ||
-        _hasLeftFrozenColumns != _stateManager.hasLeftFrozenColumns ||
-        _bodyLeftOffset != _stateManager.bodyLeftOffset ||
-        _bodyRightOffset != _stateManager.bodyRightOffset ||
-        _hasRightFrozenColumns != _stateManager.hasRightFrozenColumns ||
-        _rightFrozenLeftOffset != _stateManager.rightFrozenLeftOffset ||
-        _showColumnGroups != _stateManager.showColumnGroups ||
-        _showColumnTitle != _stateManager.showColumnTitle ||
-        _showColumnFilter != _stateManager.showColumnFilter ||
-        _showLoading != _stateManager.showLoading) {
-      // it has been layout
-      if (_stateManager.maxWidth != null) {
-        setState(_resetState);
-      }
-    }
-  }
-
   KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
     if (_keyManager.eventResult.isSkip == false) {
       _keyManager.subject.add(PlutoKeyManagerEvent(
@@ -485,31 +524,6 @@ class PlutoGridState extends State<PlutoGrid> {
     }
 
     return _keyManager.eventResult.consume(KeyEventResult.handled);
-  }
-
-  void _resetState() {
-    _showFrozenColumn = _stateManager.showFrozenColumn;
-
-    _hasLeftFrozenColumns = _stateManager.hasLeftFrozenColumns;
-
-    _hasRightFrozenColumns = _stateManager.hasRightFrozenColumns;
-
-    _showColumnGroups = _stateManager.showColumnGroups;
-
-    _showColumnTitle = _stateManager.showColumnTitle;
-
-    _showColumnFilter = _stateManager.showColumnFilter;
-
-    _showLoading = _stateManager.showLoading;
-
-    // it may be called before layout
-    if (_stateManager.maxWidth != null) {
-      _bodyLeftOffset = _stateManager.bodyLeftOffset;
-
-      _bodyRightOffset = _stateManager.bodyRightOffset;
-
-      _rightFrozenLeftOffset = _stateManager.rightFrozenLeftOffset;
-    }
   }
 
   @override

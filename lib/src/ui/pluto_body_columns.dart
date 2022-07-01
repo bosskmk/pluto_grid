@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBodyColumns extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoBodyColumns(
@@ -28,10 +27,13 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   late final ScrollController _scroll;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
-    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll!.horizontal!.addAndGet();
 
     updateState();
   }
@@ -47,7 +49,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   void updateState() {
     _showColumnGroups = update<bool>(
       _showColumnGroups,
-      widget.stateManager.showColumnGroups,
+      stateManager.showColumnGroups,
     );
 
     _columns = update<List<PlutoColumn>>(
@@ -57,8 +59,8 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     );
 
     if (changed && _showColumnGroups == true) {
-      _columnGroups = widget.stateManager.separateLinkedGroup(
-        columnGroupList: widget.stateManager.refColumnGroups!,
+      _columnGroups = stateManager.separateLinkedGroup(
+        columnGroupList: stateManager.refColumnGroups!,
         columns: _columns,
       );
     }
@@ -67,9 +69,9 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   }
 
   List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn
-        ? widget.stateManager.bodyColumns
-        : widget.stateManager.columns;
+    return stateManager.showFrozenColumn
+        ? stateManager.bodyColumns
+        : stateManager.columns;
   }
 
   int _getItemCount() {
@@ -80,10 +82,10 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     return PlutoVisibilityLayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
-        stateManager: widget.stateManager,
+        stateManager: stateManager,
         columnGroup: e,
-        depth: widget.stateManager.columnGroupDepth(
-          widget.stateManager.refColumnGroups!,
+        depth: stateManager.columnGroupDepth(
+          stateManager.refColumnGroups!,
         ),
       ),
     );
@@ -93,7 +95,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     return PlutoVisibilityLayoutId(
       id: e.field,
       child: PlutoBaseColumn(
-        stateManager: widget.stateManager,
+        stateManager: stateManager,
         column: e,
       ),
     );
@@ -107,7 +109,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
       physics: const ClampingScrollPhysics(),
       child: PlutoVisibilityLayout(
           delegate: MainColumnLayoutDelegate(
-            stateManager: widget.stateManager,
+            stateManager: stateManager,
             columns: _columns,
             columnGroups: _columnGroups,
             frozen: PlutoColumnFrozen.none,

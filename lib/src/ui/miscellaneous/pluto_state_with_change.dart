@@ -10,8 +10,7 @@ typedef PlutoUpdateState = T Function<T>(
   bool? ignoreChange,
 });
 
-abstract class PlutoStatefulWidget<StateManager extends ChangeNotifier>
-    extends StatefulWidget implements _HasPlutoStateManager {
+abstract class PlutoStatefulWidget extends StatefulWidget {
   const PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
@@ -28,13 +27,15 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   StatefulElement? get _statefulElement =>
       mounted ? context as StatefulElement? : null;
 
+  PlutoGridStateManager get stateManager;
+
   void updateState() {}
 
   @override
   void initState() {
     super.initState();
 
-    _subscription = widget.stateManager.streamNotifier.stream.listen(_onChange);
+    _subscription = stateManager.streamNotifier.stream.listen(_onChange);
 
     _initialized = true;
   }
@@ -66,10 +67,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   void _onChange(PlutoNotifierEvent event) {
     updateState();
 
-    if (mounted &&
-        _initialized &&
-        _changed &&
-        widget.stateManager.maxWidth != null) {
+    if (mounted && _initialized && _changed && stateManager.maxWidth != null) {
       _changed = false;
       _statefulElement?.markNeedsBuild();
     }
@@ -113,8 +111,4 @@ mixin PlutoStateWithKeepAlive<T extends StatefulWidget>
     _keepAliveHandle!.release();
     _keepAliveHandle = null;
   }
-}
-
-abstract class _HasPlutoStateManager {
-  PlutoGridStateManager get stateManager;
 }

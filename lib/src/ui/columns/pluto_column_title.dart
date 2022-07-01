@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnTitle extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -52,6 +51,9 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -70,44 +72,41 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
       context: context,
       position: position,
-      stateManager: widget.stateManager,
+      stateManager: stateManager,
       column: widget.column,
     );
 
     switch (selectedMenu) {
       case PlutoGridColumnMenuItem.unfreeze:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column, PlutoColumnFrozen.none);
+        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.none);
         break;
       case PlutoGridColumnMenuItem.freezeToLeft:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column, PlutoColumnFrozen.left);
+        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.left);
         break;
       case PlutoGridColumnMenuItem.freezeToRight:
-        widget.stateManager
-            .toggleFrozenColumn(widget.column, PlutoColumnFrozen.right);
+        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.right);
         break;
       case PlutoGridColumnMenuItem.autoFit:
         if (!mounted) return;
-        widget.stateManager.autoFitColumn(context, widget.column);
-        widget.stateManager.notifyResizingListeners();
+        stateManager.autoFitColumn(context, widget.column);
+        stateManager.notifyResizingListeners();
         break;
       case PlutoGridColumnMenuItem.hideColumn:
-        widget.stateManager.hideColumn(widget.column, true);
+        stateManager.hideColumn(widget.column, true);
         break;
       case PlutoGridColumnMenuItem.setColumns:
         if (!mounted) return;
-        widget.stateManager.showSetColumnsPopup(context);
+        stateManager.showSetColumnsPopup(context);
         break;
       case PlutoGridColumnMenuItem.setFilter:
         if (!mounted) return;
-        widget.stateManager.showFilterPopup(
+        stateManager.showFilterPopup(
           context,
           calledColumn: widget.column,
         );
         break;
       case PlutoGridColumnMenuItem.resetFilter:
-        widget.stateManager.setFilter(null);
+        stateManager.setFilter(null);
         break;
       default:
         break;
@@ -133,7 +132,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
   void _handleOnPointUp(PointerUpEvent event) {
     if (_isPointMoving) {
-      widget.stateManager.updateCorrectScroll();
+      stateManager.updateCorrectScroll();
     } else if (mounted && widget.column.enableContextMenu) {
       _showContextMenu(context, event.position);
     }
@@ -149,30 +148,30 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
     final moveOffset = event.position.dx - _columnRightPosition.dx;
 
-    widget.stateManager.resizeColumn(
+    stateManager.resizeColumn(
       widget.column,
       moveOffset,
       notify: false,
       checkScroll: false,
     );
 
-    widget.stateManager.notifyResizingListeners();
+    stateManager.notifyResizingListeners();
 
-    widget.stateManager.scrollByDirection(
+    stateManager.scrollByDirection(
       PlutoMoveDirection.right,
-      widget.stateManager.isInvalidHorizontalScroll
-          ? widget.stateManager.scroll!.maxScrollHorizontal
-          : widget.stateManager.scroll!.horizontal!.offset,
+      stateManager.isInvalidHorizontalScroll
+          ? stateManager.scroll!.maxScrollHorizontal
+          : stateManager.scroll!.horizontal!.offset,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final columnWidget = _BuildSortableWidget(
-      stateManager: widget.stateManager,
+      stateManager: stateManager,
       column: widget.column,
       child: _BuildColumnWidget(
-        stateManager: widget.stateManager,
+        stateManager: stateManager,
         column: widget.column,
         height: widget.height,
       ),
@@ -184,12 +183,12 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
       child: IconButton(
         icon: PlutoGridColumnIcon(
           sort: _sort,
-          color: widget.stateManager.configuration!.iconColor,
+          color: stateManager.configuration!.iconColor,
           icon: widget.column.enableContextMenu
-              ? widget.stateManager.configuration!.columnContextIcon
-              : widget.stateManager.configuration!.columnResizeIcon,
+              ? stateManager.configuration!.columnContextIcon
+              : stateManager.configuration!.columnResizeIcon,
         ),
-        iconSize: widget.stateManager.configuration!.iconSize,
+        iconSize: stateManager.configuration!.iconSize,
         mouseCursor: contextMenuCursor,
         onPressed: null,
       ),
@@ -202,7 +201,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
           right: 0,
           child: widget.column.enableColumnDrag
               ? _BuildDraggableWidget(
-                  stateManager: widget.stateManager,
+                  stateManager: stateManager,
                   column: widget.column,
                   child: columnWidget,
                 )
@@ -440,7 +439,6 @@ class _BuildColumnWidget extends StatelessWidget {
 }
 
 class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn? column;
@@ -461,6 +459,9 @@ class _CheckboxAllSelectionWidgetState
   bool? _checked;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -471,7 +472,7 @@ class _CheckboxAllSelectionWidgetState
   void updateState() {
     _checked = update<bool?>(
       _checked,
-      widget.stateManager.tristateCheckedRow,
+      stateManager.tristateCheckedRow,
     );
   }
 
@@ -486,10 +487,10 @@ class _CheckboxAllSelectionWidgetState
       changed = true;
     }
 
-    widget.stateManager.toggleAllRowChecked(changed);
+    stateManager.toggleAllRowChecked(changed);
 
-    if (widget.stateManager.onRowChecked != null) {
-      widget.stateManager.onRowChecked!(
+    if (stateManager.onRowChecked != null) {
+      stateManager.onRowChecked!(
         PlutoGridOnRowCheckedAllEvent(isChecked: changed),
       );
     }
@@ -506,15 +507,14 @@ class _CheckboxAllSelectionWidgetState
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,
-      unselectedColor: widget.stateManager.configuration!.iconColor,
-      activeColor: widget.stateManager.configuration!.activatedBorderColor,
-      checkColor: widget.stateManager.configuration!.activatedColor,
+      unselectedColor: stateManager.configuration!.iconColor,
+      activeColor: stateManager.configuration!.activatedBorderColor,
+      checkColor: stateManager.configuration!.activatedColor,
     );
   }
 }
 
 class _ColumnTextWidget extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -536,6 +536,9 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   bool _isFilteredList = false;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -546,12 +549,12 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   void updateState() {
     _isFilteredList = update<bool>(
       _isFilteredList,
-      widget.stateManager.isFilteredColumn(widget.column),
+      stateManager.isFilteredColumn(widget.column),
     );
   }
 
   void _handleOnPressedFilter() {
-    widget.stateManager.showFilterPopup(
+    stateManager.showFilterPopup(
       context,
       calledColumn: widget.column,
     );
@@ -568,8 +571,8 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
             child: IconButton(
               icon: Icon(
                 Icons.filter_alt_outlined,
-                color: widget.stateManager.configuration!.iconColor,
-                size: widget.stateManager.configuration!.iconSize,
+                color: stateManager.configuration!.iconColor,
+                size: stateManager.configuration!.iconSize,
               ),
               onPressed: _handleOnPressedFilter,
               constraints: BoxConstraints(
@@ -587,7 +590,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
         text: _title,
         children: _children,
       ),
-      style: widget.stateManager.configuration!.columnTextStyle,
+      style: stateManager.configuration!.columnTextStyle,
       overflow: TextOverflow.ellipsis,
       softWrap: false,
       maxLines: 1,
