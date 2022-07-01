@@ -41,7 +41,7 @@ void main() {
     when(stateManager.hasUnCheckedRow).thenReturn(false);
     when(stateManager.hasFilter).thenReturn(false);
     when(stateManager.columnHeight).thenReturn(45);
-    when(stateManager.isInvalidHorizontalScroll).thenReturn(false);
+    when(stateManager.isHorizontalOverScrolled).thenReturn(false);
     when(stateManager.scroll).thenReturn(scroll);
     when(stateManager.maxWidth).thenReturn(1000);
     when(stateManager.enoughFrozenColumnsWidth(any)).thenReturn(true);

@@ -12,12 +12,12 @@ abstract class IVisibilityState {
   /// [notify] is called false in the normal case.
   /// When [notify] is called true,
   /// the notifyListeners of scrollController is forcibly called when build is not triggered.
-  void updateColumnStartPosition({bool notify = false});
+  void updateVisibility({bool notify = false});
 }
 
 mixin VisibilityState implements IPlutoGridState {
   @override
-  void updateColumnStartPosition({bool notify = false}) {
+  void updateVisibility({bool notify = false}) {
     double leftX = 0;
     double bodyX = 0;
     double rightX = 0;
@@ -41,6 +41,7 @@ mixin VisibilityState implements IPlutoGridState {
 
     void updateNoneFrozen(PlutoColumn column) {
       column.startPosition = bodyX;
+      column.frozen = PlutoColumnFrozen.none;
       bodyX += column.width;
     }
 

@@ -53,7 +53,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -77,7 +77,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -104,7 +104,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         double startPosition = 0;
 
@@ -149,7 +149,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxWidth: 1300));
         expect(stateManager.showFrozenColumn, true);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -191,7 +191,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxWidth: 600));
         expect(stateManager.showFrozenColumn, false);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -219,7 +219,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         expect(stateManager.refColumns.originalList[0].startPosition, 0);
         expect(
@@ -268,7 +268,7 @@ void main() {
         // setLayout 메서드에서 applyViewportDimension 한번 호출 되어 리셋.
         reset(horizontalScroll);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibility();
 
         final bodyWidth = stateManager.maxWidth! -
             stateManager.bodyLeftOffset -
@@ -299,7 +299,7 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
-        stateManager.updateColumnStartPosition(notify: true);
+        stateManager.updateVisibility(notify: true);
 
         verify(horizontalScroll.notifyListeners()).called(1);
       },
@@ -326,7 +326,7 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
-        stateManager.updateColumnStartPosition(notify: false);
+        stateManager.updateVisibility(notify: false);
 
         verifyNever(horizontalScroll.notifyListeners());
       },

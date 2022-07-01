@@ -331,19 +331,18 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
+    final bool changedMaxWidth = _maxWidth != size.maxWidth;
+
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
+    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 
-    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
-
-    if (showFrozenColumn != _showFrozenColumn && showFrozenColumn == false) {
-      _resetShowFrozenColumn();
+    if (changedShowFrozenColumn || changedMaxWidth) {
+      updateVisibility();
     }
-
-    _showFrozenColumn = showFrozenColumn;
-
-    updateColumnStartPosition();
   }
 
   @override
@@ -410,14 +409,8 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
-    updateColumnStartPosition(notify: true);
+    updateVisibility(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
-  }
-
-  void _resetShowFrozenColumn() {
-    for (var column in refColumns.originalList) {
-      column.frozen = PlutoColumnFrozen.none;
-    }
   }
 }

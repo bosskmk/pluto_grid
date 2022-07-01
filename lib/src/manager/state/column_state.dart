@@ -354,7 +354,7 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    updateColumnStartPosition();
+    updateVisibility();
 
     notifyListeners();
   }
@@ -414,7 +414,7 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    updateColumnStartPosition();
+    updateVisibility();
 
     notifyListeners();
   }
@@ -437,7 +437,7 @@ mixin ColumnState implements IPlutoGridState {
 
     removeColumnsInFilterRows(columns, notify: false);
 
-    updateColumnStartPosition();
+    updateVisibility();
 
     resetCurrentState(notify: false);
 
@@ -489,7 +489,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
-    updateColumnStartPosition();
+    updateVisibility();
 
     notifyListeners();
   }
@@ -514,7 +514,7 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     if (checkScroll) {
-      updateCorrectScroll();
+      updateCorrectScrollOffset();
     }
   }
 
@@ -917,14 +917,12 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    updateColumnStartPosition();
-
     if (notify) {
       notifyListeners();
     }
 
     if (checkScroll) {
-      updateCorrectScroll();
+      updateCorrectScrollOffset();
     }
   }
 }

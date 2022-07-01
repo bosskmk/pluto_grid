@@ -132,7 +132,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
   void _handleOnPointUp(PointerUpEvent event) {
     if (_isPointMoving) {
-      stateManager.updateCorrectScroll();
+      stateManager.updateCorrectScrollOffset();
     } else if (mounted && widget.column.enableContextMenu) {
       _showContextMenu(context, event.position);
     }
@@ -159,9 +159,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
     stateManager.scrollByDirection(
       PlutoMoveDirection.right,
-      stateManager.isInvalidHorizontalScroll
-          ? stateManager.scroll!.maxScrollHorizontal
-          : stateManager.scroll!.horizontal!.offset,
+      stateManager.correctHorizontalOffset,
     );
   }
 
