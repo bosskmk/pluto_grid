@@ -343,7 +343,17 @@ mixin LayoutState implements IPlutoGridState {
     _gridGlobalOffset = null;
 
     if (changedShowFrozenColumn || changedMaxWidth) {
-      updateVisibility();
+      updateVisibilityLayout();
+
+      if (activatedColumnsAutoSize) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          notifyResizingListeners();
+        });
+      }
+    }
+
+    if (enableColumnsAutoSize && !activatedColumnsAutoSize) {
+      activateColumnsAutoSize();
     }
   }
 
@@ -410,7 +420,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
-    updateVisibility(notify: true);
+    updateVisibilityLayout(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
   }

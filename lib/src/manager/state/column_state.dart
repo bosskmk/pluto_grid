@@ -356,7 +356,11 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn();
 
-    updateVisibility();
+    if (!columnSizeConfig.restoreAutoSizeAfterFrozenColumn) {
+      deactivateColumnsAutoSize();
+    }
+
+    updateVisibilityLayout();
 
     notifyListeners();
   }
@@ -418,7 +422,11 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn();
 
-    updateVisibility();
+    if (!columnSizeConfig.restoreAutoSizeAfterInsertColumn) {
+      deactivateColumnsAutoSize();
+    }
+
+    updateVisibilityLayout();
 
     notifyListeners();
   }
@@ -443,7 +451,11 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn();
 
-    updateVisibility();
+    if (!columnSizeConfig.restoreAutoSizeAfterRemoveColumn) {
+      deactivateColumnsAutoSize();
+    }
+
+    updateVisibilityLayout();
 
     resetCurrentState(notify: false);
 
@@ -497,7 +509,11 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn();
 
-    updateVisibility();
+    if (!columnSizeConfig.restoreAutoSizeAfterMoveColumn) {
+      deactivateColumnsAutoSize();
+    }
+
+    updateVisibilityLayout();
 
     notifyListeners();
   }
@@ -509,21 +525,30 @@ mixin ColumnState implements IPlutoGridState {
     bool notify = true,
     bool checkScroll = true,
   }) {
+    if (columnsResizeMode.isNone || !column.enableDropToResize) {
+      return;
+    }
+
     if (limitResizeColumn(column, offset)) {
       return;
     }
 
-    final setWidth = column.width + offset;
+    deactivateColumnsAutoSize();
 
-    column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
+    if (columnsResizeMode.isNormal) {
+      final setWidth = column.width + offset;
 
-    if (notify) {
-      notifyListeners();
+      column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
+    } else {
+      _updateResizeColumns(column: column, offset: offset);
     }
 
-    if (checkScroll) {
-      updateCorrectScrollOffset();
-    }
+    notifyResizingListeners();
+
+    scrollByDirection(
+      PlutoMoveDirection.right,
+      correctHorizontalOffset,
+    );
   }
 
   @override
@@ -931,7 +956,11 @@ mixin ColumnState implements IPlutoGridState {
 
     resetShowFrozenColumn();
 
-    updateVisibility();
+    if (!columnSizeConfig.restoreAutoSizeAfterHideColumn) {
+      deactivateColumnsAutoSize();
+    }
+
+    updateVisibilityLayout();
 
     if (notify) {
       notifyListeners();
@@ -939,6 +968,29 @@ mixin ColumnState implements IPlutoGridState {
 
     if (checkScroll) {
       updateCorrectScrollOffset();
+    }
+  }
+
+  void _updateResizeColumns({
+    required PlutoColumn column,
+    required double offset,
+  }) {
+    if (offset == 0 || columnsResizeMode.isNone || columnsResizeMode.isNormal) {
+      return;
+    }
+
+    final columns = showFrozenColumn
+        ? leftFrozenColumns + bodyColumns + rightFrozenColumns
+        : refColumns;
+
+    final resizeHelper = getColumnsResizeHelper(
+      columns: columns,
+      column: column,
+      offset: offset,
+    );
+
+    if (resizeHelper.update()) {
+      scroll?.horizontal?.notifyListeners();
     }
   }
 }

@@ -95,6 +95,10 @@ class PlutoGridDatePicker {
         rowHeight: configuration.rowHeight,
         enableRowColorAnimation: false,
         enableColumnBorder: false,
+        columnSizeConfig: const PlutoGridColumnSizeConfig(
+          autoSizeMode: PlutoAutoSizeMode.none,
+          resizeMode: PlutoResizeMode.none,
+        ),
         borderColor: configuration.gridBackgroundColor,
         activatedBorderColor: configuration.gridBackgroundColor,
         activatedColor: configuration.gridBackgroundColor,

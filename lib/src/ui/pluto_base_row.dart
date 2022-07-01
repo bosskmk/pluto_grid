@@ -122,7 +122,7 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   _RowCellsLayoutDelegate({
     required this.stateManager,
     required this.columns,
-  });
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   Size getSize(BoxConstraints constraints) {

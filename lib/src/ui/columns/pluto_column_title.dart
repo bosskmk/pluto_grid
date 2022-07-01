@@ -22,8 +22,6 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
 }
 
 class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
-  late Offset _columnLeftPosition;
-
   late Offset _columnRightPosition;
 
   bool _isPointMoving = false;
@@ -117,15 +115,19 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     _isPointMoving = false;
 
     _columnRightPosition = event.position;
-    _columnLeftPosition = _columnRightPosition - Offset(widget.column.width, 0);
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
     _isPointMoving = true;
 
-    if (widget.column.enableDropToResize) {
-      _resizeColumn(event);
-    }
+    final moveOffset = event.position.dx - _columnRightPosition.dx;
+
+    stateManager.resizeColumn(
+      widget.column,
+      moveOffset,
+      notify: false,
+      checkScroll: false,
+    );
 
     _columnRightPosition = event.position;
   }
@@ -138,29 +140,6 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     }
 
     _isPointMoving = false;
-  }
-
-  void _resizeColumn(PointerMoveEvent event) {
-    if (_isPointMoving &&
-        _columnLeftPosition.dx + widget.column.minWidth > event.position.dx) {
-      return;
-    }
-
-    final moveOffset = event.position.dx - _columnRightPosition.dx;
-
-    stateManager.resizeColumn(
-      widget.column,
-      moveOffset,
-      notify: false,
-      checkScroll: false,
-    );
-
-    stateManager.notifyResizingListeners();
-
-    stateManager.scrollByDirection(
-      PlutoMoveDirection.right,
-      stateManager.correctHorizontalOffset,
-    );
   }
 
   @override

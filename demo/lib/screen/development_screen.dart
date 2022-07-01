@@ -41,12 +41,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     // };
 
     /// Test B
-    columns.addAll(DummyData(1000, 0).columns);
+    columns.addAll(DummyData(10, 0).columns);
     columnGroups.addAll(testColumnGroupsB);
     DummyData.fetchRows(
       columns,
       chunkSize: 100,
-      chunkCount: 10,
+      chunkCount: 1,
     ).then((fetchedRows) {
       PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
           .then((initializedRows) {
@@ -132,6 +132,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             // enableGridBorderShadow: true,
             enableMoveHorizontalInEditing: true,
             // enableRowColorAnimation: false,
+            columnSizeConfig: const PlutoGridColumnSizeConfig(
+              autoSizeMode: PlutoAutoSizeMode.equal,
+              resizeMode: PlutoResizeMode.pushAndPull,
+              restoreAutoSizeAfterHideColumn: true,
+              restoreAutoSizeAfterFrozenColumn: false,
+              restoreAutoSizeAfterMoveColumn: false,
+              restoreAutoSizeAfterInsertColumn: false,
+              restoreAutoSizeAfterRemoveColumn: false,
+            ),
             // checkedColor: const Color(0x876FB0FF),
             enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
             enableMoveDownAfterSelecting: false,

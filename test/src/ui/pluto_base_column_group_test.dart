@@ -19,6 +19,8 @@ void main() {
 
   const columnHeight = PlutoGridSettings.rowHeight;
 
+  final resizingNotifier = ChangeNotifier();
+
   setUp(() {
     stateManager = MockPlutoGridStateManager();
 
@@ -29,6 +31,8 @@ void main() {
     );
 
     when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+
+    when(stateManager!.resizingChangeNotifier).thenReturn(resizingNotifier);
 
     when(stateManager!.showFrozenColumn).thenReturn(false);
 

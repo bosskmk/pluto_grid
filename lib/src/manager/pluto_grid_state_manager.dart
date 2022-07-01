@@ -7,6 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_group_state.dart';
+import 'state/column_sizing_state.dart';
 import 'state/column_state.dart';
 import 'state/dragging_row_state.dart';
 import 'state/editing_state.dart';
@@ -19,13 +20,14 @@ import 'state/pagination_row_state.dart';
 import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
-import 'state/visibility_state.dart';
+import 'state/visibility_layout_state.dart';
 
 abstract class IPlutoGridState
     implements
         PlutoChangeNotifier,
         ICellState,
         IColumnGroupState,
+        IColumnSizingState,
         IColumnState,
         IDraggingRowState,
         IEditingState,
@@ -38,12 +40,13 @@ abstract class IPlutoGridState
         IRowState,
         IScrollState,
         ISelectingState,
-        IVisibilityState {}
+        IVisibilityLayoutState {}
 
 class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     with
         CellState,
         ColumnGroupState,
+        ColumnSizingState,
         ColumnState,
         DraggingRowState,
         EditingState,
@@ -56,7 +59,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         RowState,
         ScrollState,
         SelectingState,
-        VisibilityState {}
+        VisibilityLayoutState {}
 
 /// It manages the state of the [PlutoGrid] and contains methods used by the grid.
 ///
