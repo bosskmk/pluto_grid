@@ -368,9 +368,13 @@ class MockPlutoGridStateManager extends _i1.Mock
           .noSuchMethod(Invocation.getter(#hasUnCheckedRow), returnValue: false)
       as bool);
   @override
-  bool get isInvalidHorizontalScroll =>
-      (super.noSuchMethod(Invocation.getter(#isInvalidHorizontalScroll),
+  bool get isHorizontalOverScrolled =>
+      (super.noSuchMethod(Invocation.getter(#isHorizontalOverScrolled),
           returnValue: false) as bool);
+  @override
+  double get correctHorizontalOffset =>
+      (super.noSuchMethod(Invocation.getter(#correctHorizontalOffset),
+          returnValue: 0.0) as double);
   @override
   bool get isSelecting =>
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
@@ -883,8 +887,8 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setShowLoading, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setGridGlobalOffset(_i5.Offset? offset) =>
-      super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
+  void resetShowFrozenColumn() =>
+      super.noSuchMethod(Invocation.method(#resetShowFrozenColumn, []),
           returnValueForMissingStub: null);
   @override
   bool shouldShowFrozenColumns(double? width) =>
@@ -897,6 +901,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void notifyResizingListeners() =>
       super.noSuchMethod(Invocation.method(#notifyResizingListeners, []),
+          returnValueForMissingStub: null);
+  @override
+  void setGridGlobalOffset(_i5.Offset? offset) =>
+      super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
   void setPageSize(int? pageSize, {bool? notify = true}) => super.noSuchMethod(
@@ -1021,8 +1029,8 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
-  void updateCorrectScroll() =>
-      super.noSuchMethod(Invocation.method(#updateCorrectScroll, []),
+  void updateCorrectScrollOffset() =>
+      super.noSuchMethod(Invocation.method(#updateCorrectScrollOffset, []),
           returnValueForMissingStub: null);
   @override
   void resetScrollToZero() =>
@@ -1096,8 +1104,8 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
   @override
-  void updateColumnStartPosition({bool? notify = false}) => super.noSuchMethod(
-      Invocation.method(#updateColumnStartPosition, [], {#notify: notify}),
+  void updateVisibility({bool? notify = false}) => super.noSuchMethod(
+      Invocation.method(#updateVisibility, [], {#notify: notify}),
       returnValueForMissingStub: null);
 }
 

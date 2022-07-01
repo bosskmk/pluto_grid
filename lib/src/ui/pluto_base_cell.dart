@@ -295,7 +295,6 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 }
 
 class _BuildCell extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;

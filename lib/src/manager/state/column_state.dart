@@ -354,6 +354,8 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
+    resetShowFrozenColumn();
+
     updateVisibility();
 
     notifyListeners();

@@ -92,14 +92,16 @@ abstract class ILayoutState {
 
   void setShowLoading(bool flag, {bool notify = true});
 
-  @visibleForTesting
-  void setGridGlobalOffset(Offset offset);
+  void resetShowFrozenColumn();
 
   bool shouldShowFrozenColumns(double width);
 
   bool enoughFrozenColumnsWidth(double width);
 
   void notifyResizingListeners();
+
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset);
 }
 
 mixin LayoutState implements IPlutoGridState {
@@ -385,9 +387,8 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  @visibleForTesting
-  void setGridGlobalOffset(Offset offset) {
-    _gridGlobalOffset = offset;
+  void resetShowFrozenColumn() {
+    _showFrozenColumn = shouldShowFrozenColumns(maxWidth!);
   }
 
   @override
@@ -412,5 +413,11 @@ mixin LayoutState implements IPlutoGridState {
     updateVisibility(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
+  }
+
+  @override
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset) {
+    _gridGlobalOffset = offset;
   }
 }
