@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRightFrozenRows extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoRightFrozenRows(
@@ -24,10 +23,13 @@ class PlutoRightFrozenRowsState
   late final ScrollController _scroll;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
-    _scroll = widget.stateManager.scroll!.vertical!.addAndGet();
+    _scroll = stateManager.scroll!.vertical!.addAndGet();
 
     updateState();
   }
@@ -43,14 +45,14 @@ class PlutoRightFrozenRowsState
   void updateState() {
     _columns = update<List<PlutoColumn>>(
       _columns,
-      widget.stateManager.rightFrozenColumns,
+      stateManager.rightFrozenColumns,
       compare: listEquals,
     );
 
     _rows = [
       ...update<List<PlutoRow>>(
         _rows,
-        widget.stateManager.refRows,
+        stateManager.refRows,
         compare: listEquals,
       )
     ];
@@ -63,14 +65,14 @@ class PlutoRightFrozenRowsState
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
       itemCount: _rows.length,
-      itemExtent: widget.stateManager.rowTotalHeight,
+      itemExtent: stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
           key: ValueKey('right_frozen_row_${_rows[i].key}'),
           rowIdx: i,
           row: _rows[i],
           columns: _columns,
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
         );
       },
     );

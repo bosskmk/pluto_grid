@@ -213,7 +213,8 @@ class ColumnGroupLayout extends MultiChildLayoutDelegate {
 
   int depth;
 
-  ColumnGroupLayout(this.stateManager, this.separateLinkedGroups, this.depth);
+  ColumnGroupLayout(this.stateManager, this.separateLinkedGroups, this.depth)
+      : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   Size getSize(BoxConstraints constraints) {
@@ -267,7 +268,8 @@ class ColumnsLayout extends MultiChildLayoutDelegate {
 
   List<PlutoColumn> columns;
 
-  ColumnsLayout(this.stateManager, this.columns);
+  ColumnsLayout(this.stateManager, this.columns)
+      : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
 

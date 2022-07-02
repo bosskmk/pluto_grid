@@ -18,11 +18,13 @@ void main() {
   PublishSubject<PlutoNotifierEvent> streamNotifier;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
+  final resizingNotifier = ChangeNotifier();
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     streamNotifier = PublishSubject<PlutoNotifierEvent>();
     when(stateManager!.streamNotifier).thenAnswer((_) => streamNotifier);
+    when(stateManager!.resizingChangeNotifier).thenReturn(resizingNotifier);
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );

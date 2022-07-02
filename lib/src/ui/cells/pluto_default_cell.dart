@@ -12,7 +12,6 @@ class PlutoDefaultCell extends PlutoStatefulWidget {
 
   final PlutoRow row;
 
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoDefaultCell({
@@ -38,6 +37,9 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   String _text = '';
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -48,17 +50,17 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   void updateState() {
     _hasFocus = update<bool>(
       _hasFocus,
-      widget.stateManager.hasFocus,
+      stateManager.hasFocus,
     );
 
     _canRowDrag = update<bool>(
       _canRowDrag,
-      widget.column.enableRowDrag && widget.stateManager.canRowDrag,
+      widget.column.enableRowDrag && stateManager.canRowDrag,
     );
 
     _isCurrentCell = update<bool>(
       _isCurrentCell,
-      widget.stateManager.isCurrentCell(widget.cell),
+      stateManager.isCurrentCell(widget.cell),
     );
 
     _text = update<String>(
@@ -70,7 +72,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   @override
   Widget build(BuildContext context) {
     final cellWidget = _BuildDefaultCellWidget(
-      stateManager: widget.stateManager,
+      stateManager: stateManager,
       rowIdx: widget.rowIdx,
       row: widget.row,
       column: widget.column,
@@ -84,12 +86,12 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             column: widget.column,
             row: widget.row,
             rowIdx: widget.rowIdx,
-            stateManager: widget.stateManager,
+            stateManager: stateManager,
             feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
-              size: widget.stateManager.configuration!.iconSize,
-              color: widget.stateManager.configuration!.iconColor,
+              size: stateManager.configuration!.iconSize,
+              color: stateManager.configuration!.iconColor,
             ),
           ),
         if (widget.column.enableRowChecked)
@@ -97,7 +99,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             column: widget.column,
             row: widget.row,
             rowIdx: widget.rowIdx,
-            stateManager: widget.stateManager,
+            stateManager: stateManager,
           ),
         Expanded(
           child: cellWidget,
@@ -216,7 +218,6 @@ class _RowDragIconWidget extends StatelessWidget {
 }
 
 class _CheckboxSelectionWidget extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -242,6 +243,9 @@ class _CheckboxSelectionWidgetState
   bool? _checked;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -261,10 +265,10 @@ class _CheckboxSelectionWidgetState
       return;
     }
 
-    widget.stateManager.setRowChecked(widget.row, changed == true);
+    stateManager.setRowChecked(widget.row, changed == true);
 
-    if (widget.stateManager.onRowChecked != null) {
-      widget.stateManager.onRowChecked!(
+    if (stateManager.onRowChecked != null) {
+      stateManager.onRowChecked!(
         PlutoGridOnRowCheckedOneEvent(
           row: widget.row,
           rowIdx: widget.rowIdx,
@@ -284,9 +288,9 @@ class _CheckboxSelectionWidgetState
       value: _checked,
       handleOnChanged: _handleOnChanged,
       scale: 0.86,
-      unselectedColor: widget.stateManager.configuration!.iconColor,
-      activeColor: widget.stateManager.configuration!.activatedBorderColor,
-      checkColor: widget.stateManager.configuration!.activatedColor,
+      unselectedColor: stateManager.configuration!.iconColor,
+      activeColor: stateManager.configuration!.activatedBorderColor,
+      checkColor: stateManager.configuration!.activatedColor,
     );
   }
 }

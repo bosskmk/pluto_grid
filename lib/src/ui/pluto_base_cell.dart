@@ -144,7 +144,6 @@ class _CellContainer extends PlutoStatefulWidget {
 
   final EdgeInsets cellPadding;
 
-  @override
   final PlutoGridStateManager stateManager;
 
   final Widget child;
@@ -167,6 +166,9 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
   BoxDecoration _decoration = const BoxDecoration();
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -175,18 +177,18 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   void updateState() {
-    final configuration = widget.stateManager.configuration!;
+    final configuration = stateManager.configuration!;
 
-    final isCurrentCell = widget.stateManager.isCurrentCell(widget.cell);
+    final isCurrentCell = stateManager.isCurrentCell(widget.cell);
 
     _decoration = update(
       _decoration,
       _boxDecoration(
-        hasFocus: widget.stateManager.hasFocus,
+        hasFocus: stateManager.hasFocus,
         readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
-        isEditing: widget.stateManager.isEditing,
+        isEditing: stateManager.isEditing,
         isCurrentCell: isCurrentCell,
-        isSelectedCell: widget.stateManager.isSelectedCell(
+        isSelectedCell: stateManager.isSelectedCell(
           widget.cell,
           widget.column,
           widget.rowIdx,
@@ -199,7 +201,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         gridBackgroundColor: configuration.gridBackgroundColor,
         cellColorInEditState: configuration.cellColorInEditState,
         cellColorInReadOnlyState: configuration.cellColorInReadOnlyState,
-        selectingMode: widget.stateManager.selectingMode,
+        selectingMode: stateManager.selectingMode,
       ),
     );
   }
@@ -293,7 +295,6 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 }
 
 class _BuildCell extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;
@@ -321,6 +322,9 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
   bool _showTypedCell = false;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -333,8 +337,7 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
 
     _showTypedCell = update<bool>(
       _showTypedCell,
-      widget.stateManager.isEditing &&
-          widget.stateManager.isCurrentCell(widget.cell),
+      stateManager.isEditing && stateManager.isCurrentCell(widget.cell),
     );
   }
 
@@ -343,35 +346,35 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
     if (_showTypedCell && widget.column.enableEditingMode == true) {
       if (widget.column.type.isSelect) {
         return PlutoSelectCell(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
         );
       } else if (widget.column.type.isNumber) {
         return PlutoNumberCell(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
         );
       } else if (widget.column.type.isDate) {
         return PlutoDateCell(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
         );
       } else if (widget.column.type.isTime) {
         return PlutoTimeCell(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
         );
       } else if (widget.column.type.isText) {
         return PlutoTextCell(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
@@ -384,7 +387,7 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
       column: widget.column,
       rowIdx: widget.rowIdx,
       row: widget.row,
-      stateManager: widget.stateManager,
+      stateManager: stateManager,
     );
   }
 }

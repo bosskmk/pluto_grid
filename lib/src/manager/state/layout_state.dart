@@ -92,14 +92,16 @@ abstract class ILayoutState {
 
   void setShowLoading(bool flag, {bool notify = true});
 
-  @visibleForTesting
-  void setGridGlobalOffset(Offset offset);
+  void resetShowFrozenColumn();
 
   bool shouldShowFrozenColumns(double width);
 
   bool enoughFrozenColumnsWidth(double width);
 
   void notifyResizingListeners();
+
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset);
 }
 
 mixin LayoutState implements IPlutoGridState {
@@ -331,19 +333,28 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
+    final bool changedMaxWidth = _maxWidth != size.maxWidth;
+
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
+    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 
-    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    if (changedShowFrozenColumn || changedMaxWidth) {
+      updateVisibilityLayout();
 
-    if (showFrozenColumn != _showFrozenColumn && showFrozenColumn == false) {
-      _resetShowFrozenColumn();
+      if (activatedColumnsAutoSize) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          notifyResizingListeners();
+        });
+      }
     }
 
-    _showFrozenColumn = showFrozenColumn;
-
-    updateColumnStartPosition();
+    if (enableColumnsAutoSize && !activatedColumnsAutoSize) {
+      activateColumnsAutoSize();
+    }
   }
 
   @override
@@ -386,9 +397,8 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  @visibleForTesting
-  void setGridGlobalOffset(Offset offset) {
-    _gridGlobalOffset = offset;
+  void resetShowFrozenColumn() {
+    _showFrozenColumn = shouldShowFrozenColumns(maxWidth!);
   }
 
   @override
@@ -410,14 +420,14 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void notifyResizingListeners() {
-    updateColumnStartPosition(notify: true);
+    updateVisibilityLayout(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
   }
 
-  void _resetShowFrozenColumn() {
-    for (var column in refColumns.originalList) {
-      column.frozen = PlutoColumnFrozen.none;
-    }
+  @override
+  @visibleForTesting
+  void setGridGlobalOffset(Offset offset) {
+    _gridGlobalOffset = offset;
   }
 }

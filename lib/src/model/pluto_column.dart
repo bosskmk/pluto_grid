@@ -222,7 +222,7 @@ class PlutoColumn {
 
   /// [startPosition] is the position value for the position of the column from the left.
   ///
-  /// Updated when the [PlutoGridStateManager.updateColumnStartPosition] method is called.
+  /// Updated when the [PlutoGridStateManager.updateVisibilityLayout] method is called.
   ///
   /// [startPosition] is used to determine the position to scroll left and right when moving the keyboard
   /// or whether the columns in the center area are displayed in the screen area.

@@ -10,6 +10,7 @@ import 'visibility_state_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
   MockSpec<ScrollController>(returnNullOnMissingStub: true),
+  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
 ])
 void main() {
   PlutoGridStateManager createStateManager({
@@ -53,7 +54,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -77,7 +78,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -104,7 +105,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         double startPosition = 0;
 
@@ -149,7 +150,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxWidth: 1300));
         expect(stateManager.showFrozenColumn, true);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -191,7 +192,7 @@ void main() {
         stateManager.setLayout(const BoxConstraints(maxWidth: 600));
         expect(stateManager.showFrozenColumn, false);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         expect(stateManager.columns[0].startPosition, 0);
         expect(stateManager.columns[1].startPosition, defaultWidth * 1);
@@ -219,7 +220,7 @@ void main() {
 
         final stateManager = createStateManager(columns: columns, rows: []);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         expect(stateManager.refColumns.originalList[0].startPosition, 0);
         expect(
@@ -250,6 +251,14 @@ void main() {
         final LinkedScrollControllerGroup horizontalScroll =
             MockLinkedScrollControllerGroup();
 
+        final ScrollController rowsScroll = MockScrollController();
+
+        final ScrollPosition scrollPosition = MockScrollPosition();
+
+        when(rowsScroll.position).thenReturn(scrollPosition);
+
+        when(scrollPosition.hasViewportDimension).thenReturn(true);
+
         final columns = ColumnHelper.textColumn(
           'column',
           count: 5,
@@ -265,10 +274,12 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
+        stateManager.scroll!.setBodyRowsHorizontal(rowsScroll);
+
         // setLayout 메서드에서 applyViewportDimension 한번 호출 되어 리셋.
         reset(horizontalScroll);
 
-        stateManager.updateColumnStartPosition();
+        stateManager.updateVisibilityLayout();
 
         final bodyWidth = stateManager.maxWidth! -
             stateManager.bodyLeftOffset -
@@ -299,7 +310,7 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
-        stateManager.updateColumnStartPosition(notify: true);
+        stateManager.updateVisibilityLayout(notify: true);
 
         verify(horizontalScroll.notifyListeners()).called(1);
       },
@@ -326,7 +337,7 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
-        stateManager.updateColumnStartPosition(notify: false);
+        stateManager.updateVisibilityLayout(notify: false);
 
         verifyNever(horizontalScroll.notifyListeners());
       },

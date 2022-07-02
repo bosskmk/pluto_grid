@@ -5,7 +5,9 @@ abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
   PlutoGridScrollController? get scroll;
 
-  bool get isInvalidHorizontalScroll;
+  bool get isHorizontalOverScrolled;
+
+  double get correctHorizontalOffset;
 
   void setScroll(PlutoGridScrollController scroll);
 
@@ -27,7 +29,9 @@ abstract class IScrollState {
 
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 
-  void updateCorrectScroll();
+  void updateCorrectScrollOffset();
+
+  void updateScrollViewport();
 
   void resetScrollToZero();
 }
@@ -39,8 +43,18 @@ mixin ScrollState implements IPlutoGridState {
   PlutoGridScrollController? _scroll;
 
   @override
-  bool get isInvalidHorizontalScroll =>
-      scroll!.maxScrollHorizontal < scroll!.bodyRowsHorizontal!.offset;
+  bool get isHorizontalOverScrolled =>
+      scroll!.bodyRowsHorizontal!.offset > scroll!.maxScrollHorizontal ||
+      scroll!.bodyRowsHorizontal!.offset < 0;
+
+  @override
+  double get correctHorizontalOffset {
+    if (isHorizontalOverScrolled) {
+      return scroll!.horizontalOffset < 0 ? 0 : scroll!.maxScrollHorizontal;
+    }
+
+    return scroll!.horizontalOffset;
+  }
 
   @override
   void setScroll(PlutoGridScrollController? scroll) {
@@ -166,16 +180,24 @@ mixin ScrollState implements IPlutoGridState {
   }
 
   @override
-  void updateCorrectScroll() {
+  void updateCorrectScrollOffset() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (isInvalidHorizontalScroll) {
-        scroll!.horizontal!.animateTo(
-          scroll!.maxScrollHorizontal,
-          curve: Curves.ease,
-          duration: const Duration(milliseconds: 300),
-        );
+      if (isHorizontalOverScrolled) {
+        scroll!.horizontal!.jumpTo(correctHorizontalOffset);
       }
     });
+  }
+
+  @override
+  void updateScrollViewport() {
+    if (maxWidth == null ||
+        scroll?.bodyRowsHorizontal?.position.hasViewportDimension != true) {
+      return;
+    }
+
+    final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
+
+    scroll!.horizontal!.applyViewportDimension(bodyWidth);
   }
 
   /// Called to fix an error

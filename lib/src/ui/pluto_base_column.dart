@@ -3,7 +3,6 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBaseColumn extends PlutoStatefulWidget
     implements PlutoVisibilityLayoutChild {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -33,6 +32,9 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
   bool _showColumnFilter = false;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -43,7 +45,7 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
   void updateState() {
     _showColumnFilter = update<bool>(
       _showColumnFilter,
-      widget.stateManager.showColumnFilter,
+      stateManager.showColumnFilter,
     );
   }
 
@@ -56,13 +58,11 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
           top: 0,
           left: 0,
           right: 0,
-          bottom:
-              _showColumnFilter ? widget.stateManager.columnFilterHeight : 0,
+          bottom: _showColumnFilter ? stateManager.columnFilterHeight : 0,
           child: PlutoColumnTitle(
-            stateManager: widget.stateManager,
+            stateManager: stateManager,
             column: widget.column,
-            height:
-                widget.columnTitleHeight ?? widget.stateManager.columnHeight,
+            height: widget.columnTitleHeight ?? stateManager.columnHeight,
           ),
         ),
         if (_showColumnFilter)
@@ -71,7 +71,7 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
             right: 0,
             left: 0,
             child: PlutoColumnFilter(
-              stateManager: widget.stateManager,
+              stateManager: stateManager,
               column: widget.column,
             ),
           ),

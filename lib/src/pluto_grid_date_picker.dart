@@ -95,6 +95,10 @@ class PlutoGridDatePicker {
         rowHeight: configuration.rowHeight,
         enableRowColorAnimation: false,
         enableColumnBorder: false,
+        columnSizeConfig: const PlutoGridColumnSizeConfig(
+          autoSizeMode: PlutoAutoSizeMode.none,
+          resizeMode: PlutoResizeMode.none,
+        ),
         borderColor: configuration.gridBackgroundColor,
         activatedBorderColor: configuration.gridBackgroundColor,
         activatedColor: configuration.gridBackgroundColor,
@@ -383,7 +387,6 @@ class PlutoGridDatePicker {
 }
 
 class _DateCellHeader extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final intl.DateFormat dateFormat;
@@ -414,10 +417,13 @@ abstract class _DateCellHeaderStateWithChange
   late final ScrollController _scroll;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
-    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll!.horizontal!.addAndGet();
 
     updateState();
   }
@@ -433,12 +439,12 @@ abstract class _DateCellHeaderStateWithChange
   void updateState() {
     _currentCell = update<PlutoCell?>(
       _currentCell,
-      widget.stateManager.currentCell,
+      stateManager.currentCell,
       compare: identical,
     );
 
     final date = widget.dateFormat.parse(
-      widget.stateManager.rows[1].cells.entries.first.value.value,
+      stateManager.rows[1].cells.entries.first.value.value,
     );
 
     _currentYear = update<int>(
@@ -454,13 +460,12 @@ abstract class _DateCellHeaderStateWithChange
 }
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
-  Color? get textColor =>
-      widget.stateManager.configuration!.columnTextStyle.color;
+  Color? get textColor => stateManager.configuration!.columnTextStyle.color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.stateManager.rowTotalHeight,
+      height: stateManager.rowTotalHeight,
       padding: PlutoGridSettings.cellPadding,
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -471,20 +476,20 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
           children: [
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: widget.stateManager.configuration!.iconSize,
+              iconSize: stateManager.configuration!.iconSize,
               onPressed: () => widget.changeMonth(-12),
               icon: Icon(
                 Icons.navigate_before,
-                color: widget.stateManager.configuration!.iconColor,
+                color: stateManager.configuration!.iconColor,
               ),
             ),
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: widget.stateManager.configuration!.iconSize,
+              iconSize: stateManager.configuration!.iconSize,
               onPressed: () => widget.changeMonth(12),
               icon: Icon(
                 Icons.navigate_next,
-                color: widget.stateManager.configuration!.iconColor,
+                color: stateManager.configuration!.iconColor,
               ),
             ),
             const SizedBox(width: 10),
@@ -494,10 +499,9 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               ),
               style: TextStyle(
                 color: textColor,
-                fontSize:
-                    widget.stateManager.configuration!.columnTextStyle.fontSize,
-                fontWeight: widget
-                    .stateManager.configuration!.columnTextStyle.fontWeight,
+                fontSize: stateManager.configuration!.columnTextStyle.fontSize,
+                fontWeight:
+                    stateManager.configuration!.columnTextStyle.fontWeight,
               ),
               textAlign: TextAlign.center,
             ),
@@ -506,11 +510,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: widget.stateManager.configuration!.iconSize,
+                iconSize: stateManager.configuration!.iconSize,
                 onPressed: () => widget.changeMonth(-1),
                 icon: Icon(
                   Icons.navigate_next,
-                  color: widget.stateManager.configuration!.iconColor,
+                  color: stateManager.configuration!.iconColor,
                 ),
               ),
             ),
@@ -518,11 +522,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: widget.stateManager.configuration!.iconSize,
+                iconSize: stateManager.configuration!.iconSize,
                 onPressed: () => widget.changeMonth(1),
                 icon: Icon(
                   Icons.navigate_before,
-                  color: widget.stateManager.configuration!.iconColor,
+                  color: stateManager.configuration!.iconColor,
                 ),
               ),
             ),

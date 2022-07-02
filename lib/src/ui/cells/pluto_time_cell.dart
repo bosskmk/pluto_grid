@@ -69,6 +69,10 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
       rowHeight: widget.stateManager.configuration!.rowHeight,
       enableRowColorAnimation: false,
       enableColumnBorder: false,
+      columnSizeConfig: const PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.none,
+        resizeMode: PlutoResizeMode.none,
+      ),
       borderColor: widget.stateManager.configuration!.gridBackgroundColor,
       activatedBorderColor:
           widget.stateManager.configuration!.gridBackgroundColor,

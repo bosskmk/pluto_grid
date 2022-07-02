@@ -122,6 +122,8 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  final PlutoGridColumnSizeConfig columnSizeConfig;
+
   const PlutoGridConfiguration({
     this.enableColumnBorder = false,
     this.enableGridBorderShadow = false,
@@ -165,6 +167,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.columnSizeConfig = const PlutoGridColumnSizeConfig(),
   });
 
   const PlutoGridConfiguration.dark({
@@ -210,6 +213,7 @@ class PlutoGridConfiguration {
     this.localeText = const PlutoGridLocaleText(),
     this.scrollbarConfig = const PlutoGridScrollbarConfig(),
     this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
+    this.columnSizeConfig = const PlutoGridColumnSizeConfig(),
   });
 
   void updateLocale() {
@@ -276,6 +280,7 @@ class PlutoGridConfiguration {
     PlutoGridLocaleText? localeText,
     PlutoGridScrollbarConfig? scrollbarConfig,
     PlutoGridColumnFilterConfig? columnFilterConfig,
+    PlutoGridColumnSizeConfig? columnSizeConfig,
   }) {
     return PlutoGridConfiguration(
       enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
@@ -321,6 +326,7 @@ class PlutoGridConfiguration {
       localeText: localeText ?? this.localeText,
       scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
       columnFilterConfig: columnFilterConfig ?? this.columnFilterConfig,
+      columnSizeConfig: columnSizeConfig ?? this.columnSizeConfig,
     );
   }
 }
@@ -842,4 +848,30 @@ class PlutoGridColumnFilterConfig {
 
     return resolvedFilter;
   }
+}
+
+class PlutoGridColumnSizeConfig {
+  const PlutoGridColumnSizeConfig({
+    this.autoSizeMode = PlutoAutoSizeMode.none,
+    this.resizeMode = PlutoResizeMode.normal,
+    this.restoreAutoSizeAfterHideColumn = true,
+    this.restoreAutoSizeAfterFrozenColumn = true,
+    this.restoreAutoSizeAfterMoveColumn = true,
+    this.restoreAutoSizeAfterInsertColumn = true,
+    this.restoreAutoSizeAfterRemoveColumn = true,
+  });
+
+  final PlutoAutoSizeMode autoSizeMode;
+
+  final PlutoResizeMode resizeMode;
+
+  final bool restoreAutoSizeAfterHideColumn;
+
+  final bool restoreAutoSizeAfterFrozenColumn;
+
+  final bool restoreAutoSizeAfterMoveColumn;
+
+  final bool restoreAutoSizeAfterInsertColumn;
+
+  final bool restoreAutoSizeAfterRemoveColumn;
 }

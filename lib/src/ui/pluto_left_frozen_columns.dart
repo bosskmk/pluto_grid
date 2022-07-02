@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoLeftFrozenColumns extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoLeftFrozenColumns(
@@ -26,6 +25,9 @@ class PlutoLeftFrozenColumnsState
   int _itemCount = 0;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
@@ -36,18 +38,18 @@ class PlutoLeftFrozenColumnsState
   void updateState() {
     _showColumnGroups = update<bool>(
       _showColumnGroups,
-      widget.stateManager.showColumnGroups,
+      stateManager.showColumnGroups,
     );
 
     _columns = update<List<PlutoColumn>>(
       _columns,
-      widget.stateManager.leftFrozenColumns,
+      stateManager.leftFrozenColumns,
       compare: listEquals,
     );
 
     if (changed && _showColumnGroups == true) {
-      _columnGroups = widget.stateManager.separateLinkedGroup(
-        columnGroupList: widget.stateManager.refColumnGroups!,
+      _columnGroups = stateManager.separateLinkedGroup(
+        columnGroupList: stateManager.refColumnGroups!,
         columns: _columns,
       );
     }
@@ -63,10 +65,10 @@ class PlutoLeftFrozenColumnsState
     return PlutoVisibilityLayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
-        stateManager: widget.stateManager,
+        stateManager: stateManager,
         columnGroup: e,
-        depth: widget.stateManager.columnGroupDepth(
-          widget.stateManager.refColumnGroups!,
+        depth: stateManager.columnGroupDepth(
+          stateManager.refColumnGroups!,
         ),
       ),
     );
@@ -76,7 +78,7 @@ class PlutoLeftFrozenColumnsState
     return PlutoVisibilityLayoutId(
       id: e.field,
       child: PlutoBaseColumn(
-        stateManager: widget.stateManager,
+        stateManager: stateManager,
         column: e,
       ),
     );
@@ -86,7 +88,7 @@ class PlutoLeftFrozenColumnsState
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
         delegate: MainColumnLayoutDelegate(
-          stateManager: widget.stateManager,
+          stateManager: stateManager,
           columns: _columns,
           columnGroups: _columnGroups,
           frozen: PlutoColumnFrozen.left,

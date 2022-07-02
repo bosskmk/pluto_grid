@@ -122,7 +122,7 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   _RowCellsLayoutDelegate({
     required this.stateManager,
     required this.columns,
-  });
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   Size getSize(BoxConstraints constraints) {
@@ -167,7 +167,6 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 }
 
 class _RowContainerWidget extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;
@@ -195,6 +194,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     with
         AutomaticKeepAliveClientMixin,
         PlutoStateWithKeepAlive<_RowContainerWidget> {
+  @override
   PlutoGridStateManager get stateManager => widget.stateManager;
 
   BoxDecoration _decoration = const BoxDecoration();

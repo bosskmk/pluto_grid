@@ -217,9 +217,9 @@ void main() {
 
       await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowDown);
 
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      final expectDate = DateTime(now.year, now.month + 1);
+      final expectDate = DateTime(2022, 7);
 
       final expectMonthYear = headerFormat.format(expectDate);
 
@@ -245,7 +245,7 @@ void main() {
 
       await tester.pump();
 
-      final expectDate = DateTime(now.year, now.month - 12);
+      final expectDate = DateTime(2021, 6);
 
       final expectMonthYear = headerFormat.format(expectDate);
 
@@ -271,7 +271,7 @@ void main() {
 
       await tester.pump();
 
-      final expectDate = DateTime(now.year, now.month + 12);
+      final expectDate = DateTime(2023, 6);
 
       final expectMonthYear = headerFormat.format(expectDate);
 

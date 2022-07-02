@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoBodyRows(
@@ -25,16 +24,19 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   late final ScrollController _horizontalScroll;
 
   @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
   void initState() {
     super.initState();
 
-    _horizontalScroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    _horizontalScroll = stateManager.scroll!.horizontal!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsHorizontal(_horizontalScroll);
+    stateManager.scroll!.setBodyRowsHorizontal(_horizontalScroll);
 
-    _verticalScroll = widget.stateManager.scroll!.vertical!.addAndGet();
+    _verticalScroll = stateManager.scroll!.vertical!.addAndGet();
 
-    widget.stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
+    stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
 
     updateState();
   }
@@ -59,21 +61,21 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
     _rows = [
       ...update<List<PlutoRow>>(
         _rows,
-        widget.stateManager.refRows,
+        stateManager.refRows,
         compare: listEquals,
       )
     ];
   }
 
   List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn == true
-        ? widget.stateManager.bodyColumns
-        : widget.stateManager.columns;
+    return stateManager.showFrozenColumn == true
+        ? stateManager.bodyColumns
+        : stateManager.columns;
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollbarConfig = widget.stateManager.configuration!.scrollbarConfig;
+    final scrollbarConfig = stateManager.configuration!.scrollbarConfig;
 
     return PlutoScrollbar(
       verticalController:
@@ -90,13 +92,13 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
         child: CustomSingleChildLayout(
-          delegate: ListResizeDelegate(widget.stateManager, _columns),
+          delegate: ListResizeDelegate(stateManager, _columns),
           child: ListView.builder(
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
             itemCount: _rows.length,
-            itemExtent: widget.stateManager.rowTotalHeight,
+            itemExtent: stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
@@ -104,7 +106,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 rowIdx: i,
                 row: _rows[i],
                 columns: _columns,
-                stateManager: widget.stateManager,
+                stateManager: stateManager,
                 visibilityLayout: true,
               );
             },
