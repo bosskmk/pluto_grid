@@ -1,14 +1,35 @@
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Automatically adjust column width or manage width adjustment mode.
 abstract class IColumnSizingState {
+  /// Refers to the value set in [PlutoGridConfiguration].
   PlutoGridColumnSizeConfig get columnSizeConfig;
 
+  /// Automatically adjust the column width at the start of the grid
+  /// or when the grid width is changed.
   PlutoAutoSizeMode get columnsAutoSizeMode;
 
+  /// Condition for changing column width.
   PlutoResizeMode get columnsResizeMode;
 
+  /// Whether [columnsAutoSizeMode] is enabled.
   bool get enableColumnsAutoSize;
 
+  /// Whether [columnsAutoSizeMode] should be applied while [columnsAutoSizeMode] is enabled.
+  ///
+  /// After changing the state of the column,
+  /// set whether to apply [columnsAutoSizeMode] again according to the value below.
+  /// [PlutoGridColumnSizeConfig.restoreAutoSizeAfterHideColumn]
+  /// [PlutoGridColumnSizeConfig.restoreAutoSizeAfterFrozenColumn]
+  /// [PlutoGridColumnSizeConfig.restoreAutoSizeAfterMoveColumn]
+  /// [PlutoGridColumnSizeConfig.restoreAutoSizeAfterInsertColumn]
+  /// [PlutoGridColumnSizeConfig.restoreAutoSizeAfterRemoveColumn]
+  ///
+  /// If the above values are set to false,
+  /// [columnsAutoSizeMode] is not applied after changing the column state.
+  ///
+  /// In this case, if the width of the grid is changed again or there is a layout change,
+  /// it will be activated again.
   bool get activatedColumnsAutoSize;
 
   void activateColumnsAutoSize();

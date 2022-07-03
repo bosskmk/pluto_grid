@@ -2,6 +2,16 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 
+/// This mode is for adjusting the size of columns, etc.
+///
+/// [none] blocks resizing.
+///
+/// [normal] only changes the size of the object to be resized
+/// while maintaining the size of the other siblings.
+/// Also, this increases or decreases the overall area.
+///
+/// [pushAndPull] pushes or pulls the size of other siblings.
+/// Also, this keeps the overall width.
 enum PlutoResizeMode {
   none,
   normal,
@@ -12,6 +22,13 @@ enum PlutoResizeMode {
   bool get isPushAndPull => this == PlutoResizeMode.pushAndPull;
 }
 
+/// This mode automatically changes the width of columns, etc.
+///
+/// [none] does not automatically change the width.
+///
+/// [equal] changes the width equally regardless of the current size.
+///
+/// [scale] scales the width proportionally according to the current size.
 enum PlutoAutoSizeMode {
   none,
   equal,
@@ -22,6 +39,21 @@ enum PlutoAutoSizeMode {
   bool get isScale => this == PlutoAutoSizeMode.scale;
 }
 
+/// Returns the auto-sizing class according to
+/// [PlutoAutoSizeMode.equal] or [PlutoAutoSizeMode.scale].
+///
+/// {@template exceeds_max_size}
+/// If [itemMinSize] * [length] is greater than [maxSize],
+/// all items are changed to [itemMinSize]
+/// The total size of items exceeds [maxSize].
+/// {@endtemplate}
+///
+/// {@template auto_size_scale_mode}
+/// If [mode] is [PlutoAutoSizeMode.scale], you must pass the value of [scale].
+/// If the screen size is 1,000 and the total width of the items is 500
+/// scale is 1,000 / 500 = 2
+/// In this case, the size of the items is doubled.
+/// {@endtemplate}
 class PlutoAutoSizeHelper {
   static PlutoAutoSize items({
     required double maxSize,
@@ -56,6 +88,11 @@ abstract class PlutoAutoSize {
   double getItemSize(double originalSize);
 }
 
+/// Change the width of the items equally within the [maxSize] range.
+///
+/// [getItemSize] must be called for the length of the items.
+///
+/// {@macro exceeds_max_size}
 class PlutoAutoSizeEqual implements PlutoAutoSize {
   PlutoAutoSizeEqual({
     required this.maxSize,
@@ -107,6 +144,13 @@ class PlutoAutoSizeEqual implements PlutoAutoSize {
   }
 }
 
+/// Change the size of items according to the ratio.
+///
+/// [getItemSize] must be called for the length of the items.
+///
+/// {@macro exceeds_max_size}
+///
+/// {@macro auto_size_scale_mode}
 class PlutoAutoSizeScale implements PlutoAutoSize {
   PlutoAutoSizeScale({
     required this.maxSize,
@@ -171,6 +215,29 @@ class PlutoAutoSizeScale implements PlutoAutoSize {
   }
 }
 
+/// Returns a class for changing the width of a column, etc.
+///
+/// Cannot be called with [PlutoResizeMode.none] or [PlutoResizeMode.normal] .
+///
+/// {@template resize_helper_params}
+/// Change the width of the item corresponding to isMainItem by [offset].
+/// Negative or positive.
+///
+/// [items] are all siblings that will be affected
+/// when the size of the item corresponding to isMainItem is changed.
+///
+/// [isMainItem] is a callback
+/// that should return whether or not the [item] is subject to resizing.
+///
+/// [getItemSize] is a callback
+/// that should return the size of [item].
+///
+/// [getItemMinSize] is a callback
+/// that should return the minimum width of [item].
+///
+/// [setItemSize] is a callback
+/// that should change the size of [item] to [size].
+/// {@endtemplate}
 class PlutoResizeHelper {
   static PlutoResize items<T>({
     required double offset,
@@ -198,6 +265,10 @@ class PlutoResizeHelper {
   }
 }
 
+/// This is the implementation
+/// that must be inherited when implementing the class according to [PlutoResizeMode].
+///
+/// {@macro resize_helper_params}
 abstract class PlutoResize<T> {
   PlutoResize({
     required this.offset,
@@ -289,6 +360,12 @@ abstract class PlutoResize<T> {
   bool update();
 }
 
+/// Changes the size of the object to be changed by [offset]
+/// and pushes or pulls the size of the remaining items.
+///
+/// {@macro resize_helper_params}
+///
+/// [update] finishes resizing and returns whether or not to change.
 class PlutoResizePushAndPull<T> extends PlutoResize<T> {
   PlutoResizePushAndPull({
     required super.offset,

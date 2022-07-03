@@ -122,6 +122,7 @@ class PlutoGridConfiguration {
   /// Customise filter of columns
   final PlutoGridColumnFilterConfig columnFilterConfig;
 
+  /// Automatically adjust the column width or set the width change condition.
   final PlutoGridColumnSizeConfig columnSizeConfig;
 
   const PlutoGridConfiguration({
@@ -850,6 +851,7 @@ class PlutoGridColumnFilterConfig {
   }
 }
 
+/// Automatically change the column width or set the mode when changing the width.
 class PlutoGridColumnSizeConfig {
   const PlutoGridColumnSizeConfig({
     this.autoSizeMode = PlutoAutoSizeMode.none,
@@ -861,17 +863,34 @@ class PlutoGridColumnSizeConfig {
     this.restoreAutoSizeAfterRemoveColumn = true,
   });
 
+  /// Automatically change the column width.
   final PlutoAutoSizeMode autoSizeMode;
 
+  /// This is the condition for changing the width of the column.
   final PlutoResizeMode resizeMode;
 
+  /// [PlutoColumn.hide] Whether to apply autoSizeMode after state change.
+  /// If false, autoSizeMode is not applied after the state change
+  /// and the state after the change is maintained.
   final bool restoreAutoSizeAfterHideColumn;
 
+  /// [PlutoColumn.frozen] Whether to apply autoSizeMode after state change.
+  /// If false, autoSizeMode is not applied after the state change
+  /// and the state after the change is maintained.
   final bool restoreAutoSizeAfterFrozenColumn;
 
+  /// Whether to apply autoSizeMode after [PlutoColumn] is moved.
+  /// If false, do not apply autoSizeMode after moving
+  /// and keep the state after change.
   final bool restoreAutoSizeAfterMoveColumn;
 
+  /// Whether to apply autoSizeMode after adding [PlutoColumn].
+  /// If false, autoSizeMode is not applied after column addition
+  /// and the state after change is maintained.
   final bool restoreAutoSizeAfterInsertColumn;
 
+  /// [PlutoColumn] Whether to apply autoSizeMode after deletion.
+  /// If false, autoSizeMode is not applied after deletion
+  /// and the state after change is maintained.
   final bool restoreAutoSizeAfterRemoveColumn;
 }
