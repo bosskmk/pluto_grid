@@ -54,6 +54,8 @@ abstract class IColumnState {
 
   bool get hasSortedColumn;
 
+  PlutoColumn? get getSortedColumn;
+
   /// Column Index List by frozen Column
   List<int> get columnIndexesByShowFrozen;
 
@@ -337,6 +339,17 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     return false;
+  }
+
+  @override
+  PlutoColumn? get getSortedColumn {
+    for (final column in refColumns) {
+      if (column.sort.isNone == false) {
+        return column;
+      }
+    }
+
+    return null;
   }
 
   @override
