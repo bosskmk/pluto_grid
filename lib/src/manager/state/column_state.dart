@@ -533,15 +533,23 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    deactivateColumnsAutoSize();
+    bool updated = false;
 
     if (columnsResizeMode.isNormal) {
       final setWidth = column.width + offset;
 
       column.width = setWidth > column.minWidth ? setWidth : column.minWidth;
+
+      updated = setWidth == column.width;
     } else {
-      _updateResizeColumns(column: column, offset: offset);
+      updated = _updateResizeColumns(column: column, offset: offset);
     }
+
+    if (updated == false) {
+      return;
+    }
+
+    deactivateColumnsAutoSize();
 
     notifyResizingListeners();
 
@@ -971,12 +979,12 @@ mixin ColumnState implements IPlutoGridState {
     }
   }
 
-  void _updateResizeColumns({
+  bool _updateResizeColumns({
     required PlutoColumn column,
     required double offset,
   }) {
     if (offset == 0 || columnsResizeMode.isNone || columnsResizeMode.isNormal) {
-      return;
+      return false;
     }
 
     final columns = showFrozenColumn
@@ -989,8 +997,6 @@ mixin ColumnState implements IPlutoGridState {
       offset: offset,
     );
 
-    if (resizeHelper.update()) {
-      scroll?.horizontal?.notifyListeners();
-    }
+    return resizeHelper.update();
   }
 }

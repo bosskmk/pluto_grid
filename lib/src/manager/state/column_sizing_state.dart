@@ -62,6 +62,9 @@ mixin ColumnSizingState implements IPlutoGridState {
     required Iterable<PlutoColumn> columns,
     required double maxWidth,
   }) {
+    assert(columnsAutoSizeMode.isNone == false);
+    assert(columns.isNotEmpty);
+
     double? scale;
 
     if (columnsAutoSizeMode.isScale) {
@@ -85,6 +88,9 @@ mixin ColumnSizingState implements IPlutoGridState {
     required PlutoColumn column,
     required double offset,
   }) {
+    assert(!columnsResizeMode.isNone && !columnsResizeMode.isNormal);
+    assert(columns.isNotEmpty);
+
     return PlutoResizeHelper.items<PlutoColumn>(
       offset: offset,
       items: columns,

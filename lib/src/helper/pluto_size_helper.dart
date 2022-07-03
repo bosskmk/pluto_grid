@@ -91,7 +91,9 @@ class PlutoAutoSizeEqual implements PlutoAutoSize {
 
       // Last item
       if (_count == length) {
-        size += maxSize - _accumulateSize - size;
+        size = maxSize - _accumulateSize;
+
+        ++_count;
 
         return size;
       }
@@ -155,6 +157,8 @@ class PlutoAutoSizeScale implements PlutoAutoSize {
 
       // Last item
       if (_count == length) {
+        ++_count;
+
         return maxSize - _accumulateSize;
       }
     }
@@ -234,6 +238,10 @@ abstract class PlutoResize<T> {
 
   late final Iterable<T> _negativeSiblings;
 
+  bool get isFirstMain => isMainItem(items.first);
+
+  bool get isLastMain => isMainItem(items.last);
+
   T? getFirstItemPositive() {
     return _positiveSiblings.isEmpty ? null : _positiveSiblings.first;
   }
@@ -254,6 +262,28 @@ abstract class PlutoResize<T> {
     return _negativeSiblings.lastWhereOrNull(
       (e) => getItemSize(e) - absOffset > getItemMinSize(e),
     );
+  }
+
+  Iterable<T> iterateWideItemPositive() sync* {
+    final iterator = _positiveSiblings.iterator;
+    while (iterator.moveNext()) {
+      final current = iterator.current;
+
+      if (getItemSize(current) > getItemMinSize(current)) {
+        yield current;
+      }
+    }
+  }
+
+  Iterable<T> iterateWideItemNegative() sync* {
+    final iterator = _negativeSiblings.toList().reversed.iterator;
+    while (iterator.moveNext()) {
+      final current = iterator.current;
+
+      if (getItemSize(current) > getItemMinSize(current)) {
+        yield current;
+      }
+    }
   }
 
   bool update();
@@ -282,97 +312,93 @@ class PlutoResizePushAndPull<T> extends PlutoResize<T> {
         mainSize + offset > mainMinSize ? mainSize + offset : mainMinSize;
 
     if (offset > 0) {
-      double totalWidth = mainSize;
-      T? firstWideItemPositive;
-      T? firstWideItemNegative;
-      double firstWideItemPositiveWidth = 0;
-      double firstWideItemNegativeWidth = 0;
+      double remaining = offset;
 
-      firstWideItemPositive = getFirstWideItemPositive();
-
-      if (firstWideItemPositive != null) {
-        firstWideItemPositiveWidth = getItemSize(firstWideItemPositive);
-        totalWidth += firstWideItemPositiveWidth;
-      }
-
-      if (firstWideItemPositive == null) {
-        firstWideItemNegative = getFirstWideItemNegative();
-        if (firstWideItemNegative != null) {
-          firstWideItemNegativeWidth = getItemSize(firstWideItemNegative);
-          totalWidth += firstWideItemNegativeWidth;
+      final iterPositive = iterateWideItemPositive().iterator;
+      while (iterPositive.moveNext()) {
+        final siblingSize = getItemSize(iterPositive.current);
+        final siblingMinSize = getItemMinSize(iterPositive.current);
+        final enough = siblingSize - siblingMinSize;
+        final siblingOffsetToSet = enough > remaining ? remaining : enough;
+        setItemSize(iterPositive.current, siblingSize - siblingOffsetToSet);
+        remaining -= siblingOffsetToSet;
+        if (remaining <= 0) {
+          setItemSize(_mainItem, mainSize + offset);
+          return true;
         }
       }
 
-      if (firstWideItemPositive == null && firstWideItemNegative == null) {
+      final iterNegative = iterateWideItemNegative().iterator;
+      while (iterNegative.moveNext()) {
+        final siblingSize = getItemSize(iterNegative.current);
+        final siblingMinSize = getItemMinSize(iterNegative.current);
+        final enough = siblingSize - siblingMinSize;
+        final siblingOffsetToSet = enough > remaining ? remaining : enough;
+        setItemSize(iterNegative.current, siblingSize - siblingOffsetToSet);
+        remaining -= siblingOffsetToSet;
+        if (remaining <= 0) {
+          setItemSize(_mainItem, mainSize + offset);
+          return true;
+        }
+      }
+
+      if (offset == remaining) {
+        return false;
+      }
+
+      setItemSize(_mainItem, mainSize + (offset - remaining));
+
+      return true;
+    } else {
+      if (isFirstMain || isLastMain) {
+        if (setMainSize == mainSize) {
+          return false;
+        }
+        final firstSiblingItem =
+            isFirstMain ? getFirstItemPositive() : getFirstItemNegative();
+        if (firstSiblingItem == null) {
+          return false;
+        }
+        setItemSize(_mainItem, setMainSize);
+        final firstSiblingItemWidth = getItemSize(firstSiblingItem);
+        setItemSize(
+          firstSiblingItem,
+          firstSiblingItemWidth + mainSize - setMainSize,
+        );
+        return true;
+      }
+
+      double remainingNegative = offset.abs() - (mainSize - setMainSize);
+      if (remainingNegative > 0) {
+        final iterNegative = iterateWideItemNegative().iterator;
+        while (iterNegative.moveNext()) {
+          final siblingSize = getItemSize(iterNegative.current);
+          final siblingMinSize = getItemMinSize(iterNegative.current);
+          final enough = siblingSize - siblingMinSize;
+          final siblingOffsetToSet =
+              enough > remainingNegative ? remainingNegative : enough;
+          setItemSize(iterNegative.current, siblingSize - siblingOffsetToSet);
+          remainingNegative -= siblingOffsetToSet;
+          if (remainingNegative <= 0) {
+            break;
+          }
+        }
+      }
+
+      if (mainSize == setMainSize &&
+          remainingNegative == offset.abs() - (mainSize - setMainSize)) {
         return false;
       }
 
       setItemSize(_mainItem, setMainSize);
-      totalWidth -= setMainSize;
 
-      if (firstWideItemPositive != null) {
-        final double positiveWidthToSet = firstWideItemNegative == null
-            ? totalWidth
-            : firstWideItemPositiveWidth - offset;
-        setItemSize(firstWideItemPositive, positiveWidthToSet);
-        totalWidth -= positiveWidthToSet;
-      }
-
-      if (firstWideItemNegative != null) {
-        setItemSize(firstWideItemNegative, totalWidth);
-      }
-    } else {
-      if (setMainSize > mainMinSize) {
-        T? nearestSibling = getFirstItemPositive();
-
-        if (nearestSibling == null) {
-          nearestSibling = getFirstItemNegative();
-
-          if (nearestSibling == null) {
-            return false;
-          }
-        }
-
-        final nearestSiblingWidth = getItemSize(nearestSibling);
-        double totalWidth = setMainSize + nearestSiblingWidth + offset.abs();
-
-        setItemSize(_mainItem, setMainSize);
-        totalWidth -= setMainSize;
-
-        setItemSize(nearestSibling, totalWidth);
-      } else {
-        double totalWidth = setMainSize;
-        T? firstWideItemNegative = getFirstWideItemNegative();
-        T? firstItemPositive;
-        double firstWideItemNegativeWidth = 0;
-        double firstItemPositiveWidth = 0;
-
-        if (firstWideItemNegative == null) {
-          return false;
-        } else {
-          firstWideItemNegativeWidth = getItemSize(firstWideItemNegative);
-          totalWidth += firstWideItemNegativeWidth;
-        }
-
-        firstItemPositive = getFirstItemPositive();
-
-        if (firstItemPositive != null) {
-          firstItemPositiveWidth = getItemSize(firstItemPositive);
-          totalWidth += firstItemPositiveWidth;
-        }
-
-        totalWidth -= setMainSize;
-
-        firstWideItemNegativeWidth = firstItemPositive != null
-            ? firstWideItemNegativeWidth - offset.abs()
-            : firstWideItemNegativeWidth;
-        setItemSize(firstWideItemNegative, firstWideItemNegativeWidth);
-        totalWidth -= firstWideItemNegativeWidth;
-
-        if (firstItemPositive != null) {
-          setItemSize(firstItemPositive, totalWidth);
-        }
-      }
+      final firstPositiveItem = getFirstItemPositive();
+      assert(firstPositiveItem != null);
+      final firstPositiveItemSize = getItemSize(firstPositiveItem as T);
+      setItemSize(
+        firstPositiveItem,
+        firstPositiveItemSize + offset.abs() - remainingNegative,
+      );
     }
 
     return true;

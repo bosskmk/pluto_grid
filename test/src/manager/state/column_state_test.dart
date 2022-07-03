@@ -25,6 +25,7 @@ void main() {
   final PlutoGridEventManager eventManager = MockPlutoGridEventManager();
 
   when(scroll.horizontal).thenReturn(horizontal);
+  when(scroll.horizontalOffset).thenReturn(0);
   when(scroll.maxScrollHorizontal).thenReturn(0);
   when(scroll.bodyRowsHorizontal).thenReturn(scrollController);
   when(scrollController.hasClients).thenReturn(true);
@@ -39,6 +40,7 @@ void main() {
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController scroll,
     List<PlutoColumnGroup>? columnGroups,
+    PlutoGridConfiguration? configuration,
   }) {
     return PlutoGridStateManager(
       columns: columns,
@@ -46,6 +48,7 @@ void main() {
       columnGroups: columnGroups,
       gridFocusNode: gridFocusNode,
       scroll: scroll,
+      configuration: configuration,
     )..setEventManager(eventManager);
   }
 
@@ -861,6 +864,37 @@ void main() {
     },
   );
 
+  group('toggleFrozenColumn', () {
+    test(
+        'columnSizeConfig.restoreAutoSizeAfterFrozenColumn 이 false 면, '
+        'activatedColumnsAutoSize 가 false 로 변경 되어야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+        configuration: const PlutoGridConfiguration(
+          columnSizeConfig: PlutoGridColumnSizeConfig(
+            autoSizeMode: PlutoAutoSizeMode.equal,
+            restoreAutoSizeAfterFrozenColumn: false,
+          ),
+        ),
+      );
+
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 450, maxHeight: 600),
+      );
+
+      expect(stateManager.activatedColumnsAutoSize, true);
+
+      stateManager.toggleFrozenColumn(columns.first, PlutoColumnFrozen.left);
+
+      expect(stateManager.activatedColumnsAutoSize, false);
+    });
+  });
+
   group('insertColumns', () {
     testWidgets(
       '기존 컬럼이 없는 상태에서 0번 인덱스에 컬럼 1개가 추가 되어야 한다.',
@@ -971,6 +1005,35 @@ void main() {
         );
       },
     );
+
+    test(
+        'columnSizeConfig.restoreAutoSizeAfterInsertColumn 이 false 면, '
+        'activatedColumnsAutoSize 가 false 로 변경 되어야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+        configuration: const PlutoGridConfiguration(
+          columnSizeConfig: PlutoGridColumnSizeConfig(
+            autoSizeMode: PlutoAutoSizeMode.equal,
+            restoreAutoSizeAfterInsertColumn: false,
+          ),
+        ),
+      );
+
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 450, maxHeight: 600),
+      );
+
+      expect(stateManager.activatedColumnsAutoSize, true);
+
+      stateManager.insertColumns(0, ColumnHelper.textColumn('title'));
+
+      expect(stateManager.activatedColumnsAutoSize, false);
+    });
   });
 
   group('removeColumns', () {
@@ -1222,6 +1285,35 @@ void main() {
         expect(stateManager.filterRows.length, 0);
       },
     );
+
+    test(
+        'columnSizeConfig.restoreAutoSizeAfterRemoveColumn 이 false 면, '
+        'activatedColumnsAutoSize 가 false 로 변경 되어야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+        configuration: const PlutoGridConfiguration(
+          columnSizeConfig: PlutoGridColumnSizeConfig(
+            autoSizeMode: PlutoAutoSizeMode.equal,
+            restoreAutoSizeAfterRemoveColumn: false,
+          ),
+        ),
+      );
+
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 450, maxHeight: 600),
+      );
+
+      expect(stateManager.activatedColumnsAutoSize, true);
+
+      stateManager.removeColumns([columns.first]);
+
+      expect(stateManager.activatedColumnsAutoSize, false);
+    });
   });
 
   group('moveColumn', () {
@@ -1405,6 +1497,162 @@ void main() {
       expect(stateManager.refColumns[3].title, 'title1');
       expect(stateManager.refColumns[4].title, 'title4');
     });
+
+    test(
+        'columnSizeConfig.restoreAutoSizeAfterMoveColumn 이 false 면, '
+        'activatedColumnsAutoSize 가 false 로 변경 되어야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+        configuration: const PlutoGridConfiguration(
+          columnSizeConfig: PlutoGridColumnSizeConfig(
+            autoSizeMode: PlutoAutoSizeMode.equal,
+            restoreAutoSizeAfterMoveColumn: false,
+          ),
+        ),
+      );
+
+      stateManager.setLayout(
+        const BoxConstraints(maxWidth: 450, maxHeight: 600),
+      );
+
+      expect(stateManager.activatedColumnsAutoSize, true);
+
+      stateManager.moveColumn(
+        column: columns.first,
+        targetColumn: columns.last,
+      );
+
+      expect(stateManager.activatedColumnsAutoSize, false);
+    });
+  });
+
+  group('resizeColumn', () {
+    test('columnsResizeMode.isNone 이면 notifyResizingListeners 가 호출 되지 않아야 한다.',
+        () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+      final mockListener = MockOnChangeListener();
+
+      PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+          configuration: const PlutoGridConfiguration(
+            columnSizeConfig: PlutoGridColumnSizeConfig(
+              resizeMode: PlutoResizeMode.none,
+            ),
+          ));
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
+      stateManager.resizingChangeNotifier.addListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+
+      stateManager.resizeColumn(columns.first, 10);
+
+      verifyNever(mockListener.onChangeVoidNoParamListener());
+
+      stateManager.resizingChangeNotifier.removeListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+    });
+
+    test(
+        'column.enableDropToResize 가 false 이면 notifyResizingListeners 가 호출 되지 않아야 한다.',
+        () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+      final mockListener = MockOnChangeListener();
+
+      PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+          configuration: const PlutoGridConfiguration(
+            columnSizeConfig: PlutoGridColumnSizeConfig(
+              resizeMode: PlutoResizeMode.normal,
+            ),
+          ));
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
+      stateManager.resizingChangeNotifier.addListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+
+      stateManager.resizeColumn(columns.first..enableDropToResize = false, 10);
+
+      verifyNever(mockListener.onChangeVoidNoParamListener());
+
+      stateManager.resizingChangeNotifier.removeListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+    });
+
+    test('offset 10 만큼 컬럼의 넓이가 늘어나야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 5);
+      final mockListener = MockOnChangeListener();
+
+      PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+          configuration: const PlutoGridConfiguration(
+            columnSizeConfig: PlutoGridColumnSizeConfig(
+              resizeMode: PlutoResizeMode.normal,
+            ),
+          ));
+
+      stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
+      stateManager.resizingChangeNotifier.addListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+
+      expect(columns.first.width, 200);
+
+      stateManager.resizeColumn(columns.first, 10);
+
+      verify(mockListener.onChangeVoidNoParamListener()).called(1);
+      expect(columns.first.width, 210);
+
+      stateManager.resizingChangeNotifier.removeListener(
+        mockListener.onChangeVoidNoParamListener,
+      );
+    });
+
+    test(
+      'PlutoResizeMode.pushAndPull 인경우 scroll.horizontal.notifyListeners 호출 되어야 한다.',
+      () {
+        final columns = ColumnHelper.textColumn('title', count: 5);
+
+        PlutoGridStateManager stateManager = getStateManager(
+            columns: columns,
+            rows: [],
+            gridFocusNode: null,
+            scroll: scroll,
+            configuration: const PlutoGridConfiguration(
+              columnSizeConfig: PlutoGridColumnSizeConfig(
+                resizeMode: PlutoResizeMode.pushAndPull,
+              ),
+            ));
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
+        reset(horizontal);
+
+        stateManager.resizeColumn(columns.first, 10);
+
+        verify(horizontal.notifyListeners()).called(1);
+      },
+    );
   });
 
   group('hideColumn', () {
