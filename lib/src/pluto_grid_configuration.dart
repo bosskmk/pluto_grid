@@ -893,4 +893,56 @@ class PlutoGridColumnSizeConfig {
   /// If false, autoSizeMode is not applied after deletion
   /// and the state after change is maintained.
   final bool restoreAutoSizeAfterRemoveColumn;
+
+  PlutoGridColumnSizeConfig copyWith({
+    PlutoAutoSizeMode? autoSizeMode,
+    PlutoResizeMode? resizeMode,
+    bool? restoreAutoSizeAfterHideColumn,
+    bool? restoreAutoSizeAfterFrozenColumn,
+    bool? restoreAutoSizeAfterMoveColumn,
+    bool? restoreAutoSizeAfterInsertColumn,
+    bool? restoreAutoSizeAfterRemoveColumn,
+  }) {
+    return PlutoGridColumnSizeConfig(
+      autoSizeMode: autoSizeMode ?? this.autoSizeMode,
+      resizeMode: resizeMode ?? this.resizeMode,
+      restoreAutoSizeAfterHideColumn:
+          restoreAutoSizeAfterHideColumn ?? this.restoreAutoSizeAfterHideColumn,
+      restoreAutoSizeAfterFrozenColumn: restoreAutoSizeAfterFrozenColumn ??
+          this.restoreAutoSizeAfterFrozenColumn,
+      restoreAutoSizeAfterMoveColumn:
+          restoreAutoSizeAfterMoveColumn ?? this.restoreAutoSizeAfterMoveColumn,
+      restoreAutoSizeAfterInsertColumn: restoreAutoSizeAfterInsertColumn ??
+          this.restoreAutoSizeAfterInsertColumn,
+      restoreAutoSizeAfterRemoveColumn: restoreAutoSizeAfterRemoveColumn ??
+          this.restoreAutoSizeAfterRemoveColumn,
+    );
+  }
+
+  @override
+  bool operator ==(covariant PlutoGridColumnSizeConfig other) {
+    return autoSizeMode == other.autoSizeMode &&
+        resizeMode == other.resizeMode &&
+        restoreAutoSizeAfterHideColumn ==
+            other.restoreAutoSizeAfterHideColumn &&
+        restoreAutoSizeAfterFrozenColumn ==
+            other.restoreAutoSizeAfterFrozenColumn &&
+        restoreAutoSizeAfterMoveColumn ==
+            other.restoreAutoSizeAfterMoveColumn &&
+        restoreAutoSizeAfterInsertColumn ==
+            other.restoreAutoSizeAfterInsertColumn &&
+        restoreAutoSizeAfterRemoveColumn ==
+            other.restoreAutoSizeAfterRemoveColumn;
+  }
+
+  @override
+  int get hashCode => hashValues(
+        autoSizeMode,
+        resizeMode,
+        restoreAutoSizeAfterHideColumn,
+        restoreAutoSizeAfterFrozenColumn,
+        restoreAutoSizeAfterMoveColumn,
+        restoreAutoSizeAfterInsertColumn,
+        restoreAutoSizeAfterRemoveColumn,
+      );
 }

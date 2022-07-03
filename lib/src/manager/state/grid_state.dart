@@ -59,7 +59,11 @@ abstract class IGridState {
 
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
 
-  void setConfiguration(PlutoGridConfiguration configuration);
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  });
 
   void resetCurrentState({bool notify = true});
 
@@ -204,12 +208,20 @@ mixin GridState implements IPlutoGridState {
   }
 
   @override
-  void setConfiguration(PlutoGridConfiguration? configuration) {
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  }) {
     _configuration = configuration ?? const PlutoGridConfiguration();
 
-    _configuration!.updateLocale();
+    if (updateLocale) {
+      _configuration!.updateLocale();
+    }
 
-    _configuration!.applyColumnFilter(refColumns);
+    if (applyColumnFilter) {
+      _configuration!.applyColumnFilter(refColumns);
+    }
   }
 
   @override

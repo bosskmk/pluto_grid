@@ -18,6 +18,10 @@ abstract class IVisibilityLayoutState {
 mixin VisibilityLayoutState implements IPlutoGridState {
   @override
   void updateVisibilityLayout({bool notify = false}) {
+    if (refColumns.isEmpty) {
+      return;
+    }
+
     double leftX = 0;
     double bodyX = 0;
     double rightX = 0;

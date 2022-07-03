@@ -1,3 +1,4 @@
+import 'package:demo/dummy_data/development.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -18,51 +19,21 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
 
   final List<PlutoRow> rows = [];
 
+  late final PlutoGridStateManager stateManager;
+
+  void setColumnSizeConfig(PlutoGridColumnSizeConfig config) {
+    stateManager.setColumnSizeConfig(config);
+  }
+
   @override
   void initState() {
     super.initState();
 
-    columns.addAll([
-      PlutoColumn(
-        title: 'Column A',
-        field: 'column_a',
-        type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
-        title: 'Column B',
-        field: 'column_b',
-        type: PlutoColumnType.text(),
-      ),
-      PlutoColumn(
-        title: 'Column C',
-        field: 'column_c',
-        type: PlutoColumnType.text(),
-      ),
-    ]);
+    final dummyData = DummyData(10, 30);
 
-    rows.addAll([
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a1'),
-          'column_b': PlutoCell(value: 'b1'),
-          'column_c': PlutoCell(value: 'c1'),
-        },
-      ),
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a2'),
-          'column_b': PlutoCell(value: 'b2'),
-          'column_c': PlutoCell(value: 'c2'),
-        },
-      ),
-      PlutoRow(
-        cells: {
-          'column_a': PlutoCell(value: 'a3'),
-          'column_b': PlutoCell(value: 'b3'),
-          'column_c': PlutoCell(value: 'c3'),
-        },
-      ),
-    ]);
+    columns.addAll(dummyData.columns);
+
+    rows.addAll(dummyData.rows);
   }
 
   @override
@@ -72,12 +43,8 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
       topTitle: 'Column resizing',
       topContents: const [
         Text(
-            'Dragging the icon to the right of the column title left or right changes the width of the column.'),
-        SizedBox(
-          height: 10,
+          'You can resize the column by dragging the icon to the right of the column.',
         ),
-        Text(
-            'If you tap the icon to the right of the column title, the dropdown menu appears. And if you tap AutoSize, the width of the column is automatically changed according to the size of the cell value.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -88,10 +55,220 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
       body: PlutoGrid(
         columns: columns,
         rows: rows,
-        onChanged: (PlutoGridOnChangedEvent event) {
-          print(event);
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          stateManager = event.stateManager;
         },
+        createHeader: (stateManager) => _Header(
+          setConfig: setColumnSizeConfig,
+        ),
       ),
     );
   }
+}
+
+class _Header extends StatefulWidget {
+  const _Header({
+    required this.setConfig,
+    Key? key,
+  }) : super(key: key);
+
+  final void Function(PlutoGridColumnSizeConfig) setConfig;
+
+  @override
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  PlutoGridColumnSizeConfig columnSizeConfig =
+      const PlutoGridColumnSizeConfig();
+
+  final Map<_RestoreAutoSizeOptions, bool> restoreOptions = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    restoreOptions[_RestoreAutoSizeOptions.restoreAutoSizeAfterHideColumn] =
+        columnSizeConfig.restoreAutoSizeAfterHideColumn;
+    restoreOptions[_RestoreAutoSizeOptions.restoreAutoSizeAfterFrozenColumn] =
+        columnSizeConfig.restoreAutoSizeAfterFrozenColumn;
+    restoreOptions[_RestoreAutoSizeOptions.restoreAutoSizeAfterMoveColumn] =
+        columnSizeConfig.restoreAutoSizeAfterMoveColumn;
+    restoreOptions[_RestoreAutoSizeOptions.restoreAutoSizeAfterInsertColumn] =
+        columnSizeConfig.restoreAutoSizeAfterInsertColumn;
+    restoreOptions[_RestoreAutoSizeOptions.restoreAutoSizeAfterRemoveColumn] =
+        columnSizeConfig.restoreAutoSizeAfterRemoveColumn;
+  }
+
+  void _setAutoSize(PlutoAutoSizeMode mode) {
+    setState(() {
+      columnSizeConfig = columnSizeConfig.copyWith(
+        autoSizeMode: mode,
+      );
+      widget.setConfig(columnSizeConfig);
+    });
+  }
+
+  void _setResizeMode(PlutoResizeMode mode) {
+    setState(() {
+      columnSizeConfig = columnSizeConfig.copyWith(
+        resizeMode: mode,
+      );
+      widget.setConfig(columnSizeConfig);
+    });
+  }
+
+  void _setRestoreOptions(_RestoreAutoSizeOptions option, bool? flag) {
+    setState(() {
+      restoreOptions[option] = flag == true;
+
+      columnSizeConfig = columnSizeConfig.copyWith(
+        restoreAutoSizeAfterHideColumn: restoreOptions[
+            _RestoreAutoSizeOptions.restoreAutoSizeAfterHideColumn],
+        restoreAutoSizeAfterFrozenColumn: restoreOptions[
+            _RestoreAutoSizeOptions.restoreAutoSizeAfterFrozenColumn],
+        restoreAutoSizeAfterMoveColumn: restoreOptions[
+            _RestoreAutoSizeOptions.restoreAutoSizeAfterMoveColumn],
+        restoreAutoSizeAfterInsertColumn: restoreOptions[
+            _RestoreAutoSizeOptions.restoreAutoSizeAfterInsertColumn],
+        restoreAutoSizeAfterRemoveColumn: restoreOptions[
+            _RestoreAutoSizeOptions.restoreAutoSizeAfterRemoveColumn],
+      );
+
+      widget.setConfig(columnSizeConfig);
+    });
+  }
+
+  void _handleAutoSizeNone() {
+    _setAutoSize(PlutoAutoSizeMode.none);
+  }
+
+  void _handleAutoSizeEqual() {
+    _setAutoSize(PlutoAutoSizeMode.equal);
+  }
+
+  void _handleAutoSizeScale() {
+    _setAutoSize(PlutoAutoSizeMode.scale);
+  }
+
+  void _handleResizeNone() {
+    _setResizeMode(PlutoResizeMode.none);
+  }
+
+  void _handleResizeNormal() {
+    _setResizeMode(PlutoResizeMode.normal);
+  }
+
+  void _handleResizePushAndPull() {
+    _setResizeMode(PlutoResizeMode.pushAndPull);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Wrap(
+          spacing: 10,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.autoSizeMode.isNone
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleAutoSizeNone,
+              child: const Text('AutoSize none'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.autoSizeMode.isEqual
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleAutoSizeEqual,
+              child: const Text('AutoSize equal'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.autoSizeMode.isScale
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleAutoSizeScale,
+              child: const Text('AutoSize scale'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.resizeMode.isNone
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleResizeNone,
+              child: const Text('Resize none'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.resizeMode.isNormal
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleResizeNormal,
+              child: const Text('Resize normal'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: columnSizeConfig.resizeMode.isPushAndPull
+                    ? Colors.blue
+                    : Colors.grey,
+              ),
+              onPressed: _handleResizePushAndPull,
+              child: const Text('Resize pushAndPull'),
+            ),
+            DropdownButtonHideUnderline(
+              child: DropdownButton(
+                hint: const Text('restoreAutoSizeOptions'),
+                onChanged: (_RestoreAutoSizeOptions? option) {},
+                items: _RestoreAutoSizeOptions.values
+                    .map<DropdownMenuItem<_RestoreAutoSizeOptions>>(
+                        (_RestoreAutoSizeOptions option) {
+                  return DropdownMenuItem<_RestoreAutoSizeOptions>(
+                    value: option,
+                    onTap: () {
+                      _setRestoreOptions(option, !restoreOptions[option]!);
+                    },
+                    child: Row(
+                      children: [
+                        StatefulBuilder(builder: (_, setter) {
+                          return PlutoScaledCheckbox(
+                            value: restoreOptions[option],
+                            handleOnChanged: (flag) {
+                              setter(() {
+                                _setRestoreOptions(option, flag);
+                              });
+                            },
+                          );
+                        }),
+                        Text(option.name),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum _RestoreAutoSizeOptions {
+  restoreAutoSizeAfterHideColumn,
+  restoreAutoSizeAfterFrozenColumn,
+  restoreAutoSizeAfterMoveColumn,
+  restoreAutoSizeAfterInsertColumn,
+  restoreAutoSizeAfterRemoveColumn,
 }

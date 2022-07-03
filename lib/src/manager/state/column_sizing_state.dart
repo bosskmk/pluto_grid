@@ -46,6 +46,8 @@ abstract class IColumnSizingState {
     required PlutoColumn column,
     required double offset,
   });
+
+  void setColumnSizeConfig(PlutoGridColumnSizeConfig config);
 }
 
 mixin ColumnSizingState implements IPlutoGridState {
@@ -121,5 +123,20 @@ mixin ColumnSizingState implements IPlutoGridState {
       setItemSize: (e, size) => e.width = size,
       mode: columnsResizeMode,
     );
+  }
+
+  @override
+  void setColumnSizeConfig(PlutoGridColumnSizeConfig config) {
+    setConfiguration(
+      configuration!.copyWith(columnSizeConfig: config),
+      updateLocale: false,
+      applyColumnFilter: false,
+    );
+
+    if (enableColumnsAutoSize) {
+      activateColumnsAutoSize();
+
+      notifyResizingListeners();
+    }
   }
 }
