@@ -581,6 +581,10 @@ class MockPlutoGridStateManager extends _i1.Mock
               returnValue: _FakePlutoResize_7<dynamic>())
           as _i3.PlutoResize<dynamic>);
   @override
+  void setColumnSizeConfig(_i3.PlutoGridColumnSizeConfig? config) =>
+      super.noSuchMethod(Invocation.method(#setColumnSizeConfig, [config]),
+          returnValueForMissingStub: null);
+  @override
   void toggleFrozenColumn(
           _i3.PlutoColumn? column, _i3.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
@@ -850,8 +854,15 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setOnRowsMoved, [onRowsMoved]),
           returnValueForMissingStub: null);
   @override
-  void setConfiguration(_i3.PlutoGridConfiguration? configuration) =>
-      super.noSuchMethod(Invocation.method(#setConfiguration, [configuration]),
+  void setConfiguration(_i3.PlutoGridConfiguration? configuration,
+          {bool? updateLocale = true, bool? applyColumnFilter = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setConfiguration, [
+            configuration
+          ], {
+            #updateLocale: updateLocale,
+            #applyColumnFilter: applyColumnFilter
+          }),
           returnValueForMissingStub: null);
   @override
   void resetCurrentState({bool? notify = true}) => super.noSuchMethod(

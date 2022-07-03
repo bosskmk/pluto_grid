@@ -45,6 +45,9 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
         Text(
           'You can resize the column by dragging the icon to the right of the column.',
         ),
+        Text(
+          'In autoSize mode, you must select Resize.pushAndPull mode to maintain the overall size when adjusting the column width.',
+        ),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -60,6 +63,12 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
         },
         createHeader: (stateManager) => _Header(
           setConfig: setColumnSizeConfig,
+        ),
+        configuration: const PlutoGridConfiguration(
+          columnSizeConfig: PlutoGridColumnSizeConfig(
+            autoSizeMode: PlutoAutoSizeMode.none,
+            resizeMode: PlutoResizeMode.normal,
+          ),
         ),
       ),
     );
