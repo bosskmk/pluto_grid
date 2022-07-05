@@ -31,37 +31,37 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     super.initState();
 
     /// Test A
-    // columns.addAll(testColumnsA);
-    // columnGroups.addAll(testColumnGroupsA);
-    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
-    //   return rowColorContext.row.cells['column2']!.value == 'green'
-    //       ? const Color(0xFFE2F6DF)
-    //       : Colors.white;
-    // };
+    columns.addAll(testColumnsA);
+    columnGroups.addAll(testColumnGroupsA);
+    rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+    rowColorCallback = (PlutoRowColorContext rowColorContext) {
+      return rowColorContext.row.cells['column2']!.value == 'green'
+          ? const Color(0xFFE2F6DF)
+          : Colors.white;
+    };
 
     /// Test B
-    columns.addAll(DummyData(10, 0).columns);
-    columnGroups.addAll(testColumnGroupsB);
-    DummyData.fetchRows(
-      columns,
-      chunkSize: 100,
-      chunkCount: 1,
-    ).then((fetchedRows) {
-      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
-          .then((initializedRows) {
-        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-        stateManager.notifyListeners();
-      });
-    });
-    columns[0].enableRowDrag = true;
-    columns[0].enableRowChecked = true;
-    columns[1].enableContextMenu = false;
-    columns[2].enableContextMenu = true;
-    columns[2].enableDropToResize = false;
-    columns[2].titleTextAlign = PlutoColumnTextAlign.right;
-    columns[3].frozen = PlutoColumnFrozen.left;
-    columns[4].frozen = PlutoColumnFrozen.right;
+    // columns.addAll(DummyData(10, 0).columns);
+    // columnGroups.addAll(testColumnGroupsB);
+    // DummyData.fetchRows(
+    //   columns,
+    //   chunkSize: 100,
+    //   chunkCount: 1,
+    // ).then((fetchedRows) {
+    //   PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+    //       .then((initializedRows) {
+    //     stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+    //     stateManager.notifyListeners();
+    //   });
+    // });
+    // columns[0].enableRowDrag = true;
+    // columns[0].enableRowChecked = true;
+    // columns[1].enableContextMenu = false;
+    // columns[2].enableContextMenu = true;
+    // columns[2].enableDropToResize = false;
+    // columns[2].titleTextAlign = PlutoColumnTextAlign.right;
+    // columns[3].frozen = PlutoColumnFrozen.start;
+    // columns[4].frozen = PlutoColumnFrozen.end;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -79,92 +79,95 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(15),
-        child: PlutoGrid(
-          columns: columns,
-          rows: rows,
-          columnGroups: columnGroups,
-          // mode: PlutoGridMode.selectWithOneTap,
-          onChanged: (PlutoGridOnChangedEvent event) {
-            print(event);
-          },
-          onLoaded: (PlutoGridOnLoadedEvent event) {
-            stateManager = event.stateManager;
-          },
-          onSorted: (PlutoGridOnSortedEvent event) {
-            print(event);
-          },
-          // onSelected: (event) {
-          //   print(event.cell!.value);
-          // },
-          // onRowChecked: handleOnRowChecked,
-          // onRowsMoved: (event) {
-          //   print(event.idx);
-          //   print(event.rows);
-          // },
-          // onRowDoubleTap: (e) {
-          //   print('Double click A Row.');
-          //   print(e.row?.cells['column1']?.value);
-          // },
-          // onRowSecondaryTap: (e) {
-          //   print('Secondary click A Row.(${e.offset})');
-          //   print(e.row?.cells['column1']?.value);
-          // },
-          createHeader: (PlutoGridStateManager stateManager) {
-            // stateManager.headerHeight = 200;
-            return _Header(
-              stateManager: stateManager,
-              columns: columns,
-            );
-          },
-          // createFooter: (stateManager) {
-          //   stateManager.setPageSize(100, notify: false);
-          //   return PlutoPagination(stateManager);
-          // },
-          rowColorCallback: rowColorCallback,
-          configuration: PlutoGridConfiguration(
-            // columnHeight: 30.0,
-            // columnFilterHeight: 30.0,
-            // rowHeight: 30.0,
-            // defaultCellPadding: 15,
-            // defaultColumnTitlePadding: 15,
-            // iconSize: 15,
-            enableColumnBorder: true,
-            // enableGridBorderShadow: true,
-            enableMoveHorizontalInEditing: true,
-            // enableRowColorAnimation: false,
-            columnSizeConfig: const PlutoGridColumnSizeConfig(
-              autoSizeMode: PlutoAutoSizeMode.equal,
-              resizeMode: PlutoResizeMode.pushAndPull,
-              restoreAutoSizeAfterHideColumn: true,
-              restoreAutoSizeAfterFrozenColumn: false,
-              restoreAutoSizeAfterMoveColumn: false,
-              restoreAutoSizeAfterInsertColumn: false,
-              restoreAutoSizeAfterRemoveColumn: false,
-            ),
-            // checkedColor: const Color(0x876FB0FF),
-            enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
-            enableMoveDownAfterSelecting: false,
-            gridBorderRadius: BorderRadius.circular(10),
-            gridPopupBorderRadius: BorderRadius.circular(7),
-            scrollbarConfig: const PlutoGridScrollbarConfig(
-              isAlwaysShown: false,
-              scrollbarThickness: 8,
-              scrollbarThicknessWhileDragging: 10,
-            ),
-            // localeText: const PlutoGridLocaleText.korean(),
-            columnFilterConfig: PlutoGridColumnFilterConfig(
-              filters: const [
-                ...FilterHelper.defaultFilters,
-                ClassYouImplemented(),
-              ],
-              resolveDefaultColumnFilter: (column, resolver) {
-                if (column.field == 'column3') {
-                  return resolver<PlutoFilterTypeGreaterThan>()
-                      as PlutoFilterType;
-                }
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            columnGroups: columnGroups,
+            // mode: PlutoGridMode.selectWithOneTap,
+            onChanged: (PlutoGridOnChangedEvent event) {
+              print(event);
+            },
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
+            onSorted: (PlutoGridOnSortedEvent event) {
+              print(event);
+            },
+            // onSelected: (event) {
+            //   print(event.cell!.value);
+            // },
+            // onRowChecked: handleOnRowChecked,
+            // onRowsMoved: (event) {
+            //   print(event.idx);
+            //   print(event.rows);
+            // },
+            // onRowDoubleTap: (e) {
+            //   print('Double click A Row.');
+            //   print(e.row?.cells['column1']?.value);
+            // },
+            // onRowSecondaryTap: (e) {
+            //   print('Secondary click A Row.(${e.offset})');
+            //   print(e.row?.cells['column1']?.value);
+            // },
+            createHeader: (PlutoGridStateManager stateManager) {
+              // stateManager.headerHeight = 200;
+              return _Header(
+                stateManager: stateManager,
+                columns: columns,
+              );
+            },
+            // createFooter: (stateManager) {
+            //   stateManager.setPageSize(100, notify: false);
+            //   return PlutoPagination(stateManager);
+            // },
+            rowColorCallback: rowColorCallback,
+            configuration: PlutoGridConfiguration(
+              // columnHeight: 30.0,
+              // columnFilterHeight: 30.0,
+              // rowHeight: 30.0,
+              // defaultCellPadding: 15,
+              // defaultColumnTitlePadding: 15,
+              // iconSize: 15,
+              enableColumnBorder: true,
+              // enableGridBorderShadow: true,
+              enableMoveHorizontalInEditing: true,
+              // enableRowColorAnimation: false,
+              columnSizeConfig: const PlutoGridColumnSizeConfig(
+                // autoSizeMode: PlutoAutoSizeMode.equal,
+                // resizeMode: PlutoResizeMode.pushAndPull,
+                restoreAutoSizeAfterHideColumn: true,
+                restoreAutoSizeAfterFrozenColumn: false,
+                restoreAutoSizeAfterMoveColumn: false,
+                restoreAutoSizeAfterInsertColumn: false,
+                restoreAutoSizeAfterRemoveColumn: false,
+              ),
+              // checkedColor: const Color(0x876FB0FF),
+              enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
+              enableMoveDownAfterSelecting: false,
+              gridBorderRadius: BorderRadius.circular(10),
+              gridPopupBorderRadius: BorderRadius.circular(7),
+              scrollbarConfig: const PlutoGridScrollbarConfig(
+                isAlwaysShown: false,
+                scrollbarThickness: 8,
+                scrollbarThicknessWhileDragging: 10,
+              ),
+              // localeText: const PlutoGridLocaleText.korean(),
+              columnFilterConfig: PlutoGridColumnFilterConfig(
+                filters: const [
+                  ...FilterHelper.defaultFilters,
+                  ClassYouImplemented(),
+                ],
+                resolveDefaultColumnFilter: (column, resolver) {
+                  if (column.field == 'column3') {
+                    return resolver<PlutoFilterTypeGreaterThan>()
+                        as PlutoFilterType;
+                  }
 
-                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-              },
+                  return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+                },
+              ),
             ),
           ),
         ),

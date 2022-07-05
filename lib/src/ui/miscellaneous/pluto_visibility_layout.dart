@@ -16,6 +16,7 @@ class PlutoVisibilityLayout extends RenderObjectWidget
     required this.delegate,
     required this.scrollController,
     this.initialViewportDimension = 1920,
+    this.textDirection = TextDirection.ltr,
   });
 
   @override
@@ -29,12 +30,15 @@ class PlutoVisibilityLayout extends RenderObjectWidget
   /// it is used instead of viewportDimension of scroll.
   final double initialViewportDimension;
 
+  final TextDirection textDirection;
+
   @override
   PlutoVisibilityLayoutRenderObjectElement createElement() =>
       PlutoVisibilityLayoutRenderObjectElement(
         widget: this,
         scrollController: scrollController,
         initialViewportDimension: initialViewportDimension,
+        textDirection: textDirection,
       );
 
   @override
@@ -57,12 +61,15 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     required PlutoVisibilityLayout widget,
     required this.scrollController,
     this.initialViewportDimension = 1920,
+    this.textDirection = TextDirection.ltr,
   })  : assert(!debugChildrenHaveDuplicateKeys(widget, widget.children)),
         super(widget);
 
   final ScrollController scrollController;
 
   final double initialViewportDimension;
+
+  final TextDirection textDirection;
 
   @override
   ContainerRenderObjectMixin<RenderObject,
@@ -81,6 +88,14 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
   late List<Element> _children;
 
   final Set<Element> _forgottenChildren = HashSet<Element>();
+
+  Iterable<PlutoVisibilityLayoutId> get _widgetChildren {
+    if (textDirection == TextDirection.ltr) {
+      return (widget as PlutoVisibilityLayout).children;
+    }
+
+    return (widget as PlutoVisibilityLayout).children.reversed;
+  }
 
   double get visibleLeft => scrollController.offset;
 
@@ -156,8 +171,6 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
   void performRebuild() {
     super.performRebuild();
 
-    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
-
     final visibleWidgets = <Widget>[];
     final slots = <IndexedSlot>[];
 
@@ -165,8 +178,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     double startOffset = 0;
     _firstVisible = true;
 
-    for (int i = 0; i < layoutWidget.children.length; i += 1) {
-      final child = layoutWidget.children[i];
+    for (int i = 0; i < _widgetChildren.length; i += 1) {
+      final child = _widgetChildren.elementAt(i);
       final layoutChild = child.layoutChild;
       final width = layoutChild.width;
 
@@ -222,10 +235,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
     scrollController.addListener(scrollListener);
 
-    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
-
     final List<Element> children = List<Element>.filled(
-      layoutWidget.children.length,
+      _widgetChildren.length,
       _NullElement.instance,
     );
 
@@ -234,12 +245,12 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     _firstVisible = true;
 
     for (int i = 0; i < children.length; i += 1) {
-      final layoutChild = layoutWidget.children[i].layoutChild;
+      final layoutChild = _widgetChildren.elementAt(i).layoutChild;
       final width = layoutChild.width;
 
       if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
         final Element newChild = inflateWidget(
-          layoutWidget.children[i],
+          _widgetChildren.elementAt(i),
           IndexedSlot<Element?>(i, previousChild),
         );
         children[i] = newChild;
@@ -267,25 +278,23 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
   void update(PlutoVisibilityLayout newWidget) {
     super.update(newWidget);
 
-    final PlutoVisibilityLayout layoutWidget = widget as PlutoVisibilityLayout;
-
     assert(widget == newWidget);
 
     assert(!debugChildrenHaveDuplicateKeys(
       widget,
-      layoutWidget.children,
+      _widgetChildren,
     ));
 
     final List<Widget> visibleWidgets = [];
     double startOffset = 0;
     _firstVisible = true;
 
-    for (int i = 0; i < layoutWidget.children.length; i += 1) {
-      final layoutChild = layoutWidget.children[i].layoutChild;
+    for (int i = 0; i < _widgetChildren.length; i += 1) {
+      final layoutChild = _widgetChildren.elementAt(i).layoutChild;
       final width = layoutChild.width;
 
       if (visible(startOffset: startOffset, layoutChild: layoutChild)) {
-        visibleWidgets.add(layoutWidget.children[i]);
+        visibleWidgets.add(_widgetChildren.elementAt(i));
 
         updateLastVisible(startOffset: startOffset, width: width);
       }

@@ -69,9 +69,12 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   }
 
   List<PlutoColumn> _getColumns() {
-    return stateManager.showFrozenColumn
+    final columns = stateManager.showFrozenColumn
         ? stateManager.bodyColumns
         : stateManager.columns;
+    return stateManager.isLTR
+        ? columns
+        : columns.reversed.toList(growable: false);
   }
 
   int _getItemCount() {
@@ -116,6 +119,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
           ),
           scrollController: _scroll,
           initialViewportDimension: MediaQuery.of(context).size.width,
+          textDirection: stateManager.textDirection,
           children: _showColumnGroups == true
               ? _columnGroups.map(_buildColumnGroup).toList()
               : _columns.map(_buildColumn).toList()),

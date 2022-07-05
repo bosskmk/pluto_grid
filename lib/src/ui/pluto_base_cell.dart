@@ -271,8 +271,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     } else {
       return enableColumnBorder
           ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
+              border: BorderDirectional(
+                end: BorderSide(
                   color: borderColor,
                   width: 1.0,
                 ),

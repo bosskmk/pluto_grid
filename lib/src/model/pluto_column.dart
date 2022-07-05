@@ -151,8 +151,8 @@ class PlutoColumn {
     this.titlePadding,
     this.titleSpan,
     this.cellPadding,
-    this.textAlign = PlutoColumnTextAlign.left,
-    this.titleTextAlign = PlutoColumnTextAlign.left,
+    this.textAlign = PlutoColumnTextAlign.start,
+    this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
@@ -295,33 +295,53 @@ class PlutoColumnRendererContext {
 }
 
 enum PlutoColumnTextAlign {
+  start,
   left,
   center,
   right,
+  end,
 }
 
 extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
-    return this == PlutoColumnTextAlign.left
-        ? TextAlign.left
-        : this == PlutoColumnTextAlign.right
-            ? TextAlign.right
-            : TextAlign.center;
+    switch (this) {
+      case PlutoColumnTextAlign.start:
+        return TextAlign.start;
+      case PlutoColumnTextAlign.left:
+        return TextAlign.left;
+      case PlutoColumnTextAlign.center:
+        return TextAlign.center;
+      case PlutoColumnTextAlign.right:
+        return TextAlign.right;
+      case PlutoColumnTextAlign.end:
+        return TextAlign.end;
+    }
   }
 
   AlignmentGeometry get alignmentValue {
-    return this == PlutoColumnTextAlign.left
-        ? Alignment.centerLeft
-        : this == PlutoColumnTextAlign.right
-            ? Alignment.centerRight
-            : Alignment.center;
+    switch (this) {
+      case PlutoColumnTextAlign.start:
+        return AlignmentDirectional.centerStart;
+      case PlutoColumnTextAlign.left:
+        return Alignment.centerLeft;
+      case PlutoColumnTextAlign.center:
+        return Alignment.center;
+      case PlutoColumnTextAlign.right:
+        return Alignment.centerRight;
+      case PlutoColumnTextAlign.end:
+        return AlignmentDirectional.centerEnd;
+    }
   }
+
+  bool get isStart => this == PlutoColumnTextAlign.start;
 
   bool get isLeft => this == PlutoColumnTextAlign.left;
 
+  bool get isCenter => this == PlutoColumnTextAlign.center;
+
   bool get isRight => this == PlutoColumnTextAlign.right;
 
-  bool get isCenter => this == PlutoColumnTextAlign.center;
+  bool get isEnd => this == PlutoColumnTextAlign.end;
 }
 
 enum PlutoColumnFrozen {

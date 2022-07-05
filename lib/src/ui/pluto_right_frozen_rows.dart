@@ -45,7 +45,7 @@ class PlutoRightFrozenRowsState
   void updateState() {
     _columns = update<List<PlutoColumn>>(
       _columns,
-      stateManager.rightFrozenColumns,
+      _getColumns(),
       compare: listEquals,
     );
 
@@ -56,6 +56,12 @@ class PlutoRightFrozenRowsState
         compare: listEquals,
       )
     ];
+  }
+
+  List<PlutoColumn> _getColumns() {
+    return stateManager.isLTR
+        ? stateManager.rightFrozenColumns
+        : stateManager.rightFrozenColumns.reversed.toList(growable: false);
   }
 
   @override

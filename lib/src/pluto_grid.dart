@@ -537,6 +537,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     final bool showColumnRowDivider =
         _stateManager.showColumnTitle || _stateManager.showColumnFilter;
 
+    _stateManager.setTextDirection(Directionality.of(context));
+
     return FocusScope(
       onFocusChange: _stateManager.setKeepFocus,
       onKey: _handleGridFocusOnKey,
@@ -676,6 +678,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     _stateManager.setLayout(BoxConstraints.tight(size));
 
+    bool isLTR = _stateManager.isLTR;
     double bodyRowsTopOffset = 0;
     double bodyRowsBottomOffset = 0;
     double columnsTopOffset = 0;
@@ -744,12 +747,18 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(size),
       );
 
+      final double posX = isLTR ? 0 : size.width - s.width;
+
       positionChild(
         _StackName.leftFrozenColumns,
-        Offset(0, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyLeftOffset = s.width;
+      if (isLTR) {
+        bodyLeftOffset = s.width;
+      } else {
+        bodyRightOffset = s.width;
+      }
     }
 
     if (hasChild(_StackName.leftFrozenDivider)) {
@@ -763,12 +772,20 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
+      final double posX = isLTR
+          ? bodyLeftOffset
+          : size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth;
+
       positionChild(
         _StackName.leftFrozenDivider,
-        Offset(bodyLeftOffset, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyLeftOffset += s.width;
+      if (isLTR) {
+        bodyLeftOffset += s.width;
+      } else {
+        bodyRightOffset += s.width;
+      }
     }
 
     if (hasChild(_StackName.rightFrozenColumns)) {
@@ -777,15 +794,19 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(size),
       );
 
+      final double posX =
+          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+
       positionChild(
         _StackName.rightFrozenColumns,
-        Offset(
-          size.width - s.width + PlutoGridSettings.gridBorderWidth,
-          columnsTopOffset,
-        ),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyRightOffset = s.width;
+      if (isLTR) {
+        bodyRightOffset = s.width;
+      } else {
+        bodyLeftOffset = s.width;
+      }
     }
 
     if (hasChild(_StackName.rightFrozenDivider)) {
@@ -799,31 +820,36 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
+      final double posX = isLTR
+          ? size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth
+          : bodyLeftOffset;
+
       positionChild(
         _StackName.rightFrozenDivider,
-        Offset(
-          size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth,
-          columnsTopOffset,
-        ),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyRightOffset += s.width;
+      if (isLTR) {
+        bodyRightOffset += s.width;
+      } else {
+        bodyLeftOffset += s.width;
+      }
     }
 
     if (hasChild(_StackName.bodyColumns)) {
       var s = layoutChild(
         _StackName.bodyColumns,
         BoxConstraints.loose(
-          Size(
-            size.width - bodyLeftOffset - bodyRightOffset,
-            size.height,
-          ),
+          Size(size.width - bodyLeftOffset - bodyRightOffset, size.height),
         ),
       );
 
+      final double posX =
+          isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+
       positionChild(
         _StackName.bodyColumns,
-        Offset(bodyLeftOffset, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
       bodyRowsTopOffset += s.height;
@@ -834,10 +860,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       var s = layoutChild(
         _StackName.columnRowDivider,
         BoxConstraints.tight(
-          Size(
-            size.width,
-            PlutoGridSettings.gridBorderWidth,
-          ),
+          Size(size.width, PlutoGridSettings.gridBorderWidth),
         ),
       );
 
@@ -852,39 +875,40 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.leftFrozenRows)) {
+      final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
+      final double posX = isLTR
+          ? 0
+          : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
+
       layoutChild(
         _StackName.leftFrozenRows,
         BoxConstraints.loose(
-          Size(
-            bodyLeftOffset,
-            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
-          ),
+          Size(offset, size.height - bodyRowsTopOffset - bodyRowsBottomOffset),
         ),
       );
 
       positionChild(
         _StackName.leftFrozenRows,
-        Offset(0, bodyRowsTopOffset),
+        Offset(posX, bodyRowsTopOffset),
       );
     }
 
     if (hasChild(_StackName.rightFrozenRows)) {
+      final double offset = isLTR ? bodyRightOffset : bodyLeftOffset;
+      final double posX = isLTR
+          ? size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth
+          : 0;
+
       layoutChild(
         _StackName.rightFrozenRows,
         BoxConstraints.loose(
-          Size(
-            bodyRightOffset,
-            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
-          ),
+          Size(offset, size.height - bodyRowsTopOffset - bodyRowsBottomOffset),
         ),
       );
 
       positionChild(
         _StackName.rightFrozenRows,
-        Offset(
-          size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth,
-          bodyRowsTopOffset,
-        ),
+        Offset(posX, bodyRowsTopOffset),
       );
     }
 

@@ -64,15 +64,18 @@ class PlutoDualGridPopup {
                       width: (width ?? size.maxWidth) +
                           PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,
-                      child: PlutoDualGrid(
-                        gridPropsA: propsA,
-                        gridPropsB: propsB,
-                        mode: mode,
-                        onSelected: (PlutoDualOnSelectedEvent event) {
-                          Navigator.pop(ctx, event);
-                        },
-                        display: display ?? PlutoDualGridDisplayRatio(),
-                        divider: divider ?? const PlutoDualGridDivider(),
+                      child: Directionality(
+                        textDirection: Directionality.of(context),
+                        child: PlutoDualGrid(
+                          gridPropsA: propsA,
+                          gridPropsB: propsB,
+                          mode: mode,
+                          onSelected: (PlutoDualOnSelectedEvent event) {
+                            Navigator.pop(ctx, event);
+                          },
+                          display: display ?? PlutoDualGridDisplayRatio(),
+                          divider: divider ?? const PlutoDualGridDivider(),
+                        ),
                       ),
                     );
                   },

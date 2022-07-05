@@ -314,7 +314,7 @@ mixin SelectingState implements IPlutoGridState {
     int? columnIdx;
 
     double currentWidth = 0.0;
-    currentWidth += gridGlobalOffset!.dx;
+    currentWidth += isLTR ? gridGlobalOffset!.dx : 0;
 
     final columnIndexes = columnIndexesByShowFrozen;
 

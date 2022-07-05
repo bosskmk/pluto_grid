@@ -83,6 +83,12 @@ abstract class ILayoutState {
 
   double get scrollOffsetByFrozenColumn;
 
+  TextDirection get textDirection;
+
+  bool get isLTR;
+
+  bool get isRTL;
+
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
@@ -99,6 +105,8 @@ abstract class ILayoutState {
   bool enoughFrozenColumnsWidth(double width);
 
   void notifyResizingListeners();
+
+  void setTextDirection(TextDirection textDirection);
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -332,6 +340,17 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
+  TextDirection get textDirection => _textDirection;
+
+  TextDirection _textDirection = TextDirection.ltr;
+
+  @override
+  bool get isLTR => textDirection == TextDirection.ltr;
+
+  @override
+  bool get isRTL => textDirection == TextDirection.rtl;
+
+  @override
   void setLayout(BoxConstraints size) {
     final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
@@ -423,6 +442,11 @@ mixin LayoutState implements IPlutoGridState {
     updateVisibilityLayout(notify: true);
 
     _resizingChangeNotifier.notifyListeners();
+  }
+
+  @override
+  void setTextDirection(TextDirection textDirection) {
+    _textDirection = textDirection;
   }
 
   @override

@@ -67,20 +67,23 @@ class PlutoGridPopup {
                       width: (width ?? size.maxWidth) +
                           PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,
-                      child: PlutoGrid(
-                        columns: columns,
-                        rows: rows,
-                        mode: mode,
-                        onLoaded: onLoaded,
-                        onChanged: onChanged,
-                        onSelected: (PlutoGridOnSelectedEvent event) {
-                          Navigator.pop(ctx, event);
-                        },
-                        onSorted: onSorted,
-                        onRowChecked: onRowChecked,
-                        createHeader: createHeader,
-                        createFooter: createFooter,
-                        configuration: configuration,
+                      child: Directionality(
+                        textDirection: Directionality.of(context),
+                        child: PlutoGrid(
+                          columns: columns,
+                          rows: rows,
+                          mode: mode,
+                          onLoaded: onLoaded,
+                          onChanged: onChanged,
+                          onSelected: (PlutoGridOnSelectedEvent event) {
+                            Navigator.pop(ctx, event);
+                          },
+                          onSorted: onSorted,
+                          onRowChecked: onRowChecked,
+                          createHeader: createHeader,
+                          createFooter: createFooter,
+                          configuration: configuration,
+                        ),
                       ),
                     );
                   },

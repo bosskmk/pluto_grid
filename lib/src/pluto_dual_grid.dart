@@ -170,11 +170,14 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLTR = Directionality.of(context) == TextDirection.ltr;
+
     return CustomMultiChildLayout(
       delegate: PlutoDualGridLayoutDelegate(
         notifier: resizeNotifier,
         display: display,
         showDraggableDivider: widget.divider.show,
+        isLTR: isLTR,
       ),
       children: [
         _buildGrid(
@@ -307,11 +310,14 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
     required ChangeNotifier notifier,
     required this.display,
     required this.showDraggableDivider,
+    required this.isLTR,
   }) : super(relayout: notifier);
 
   final PlutoDualGridDisplay display;
 
   final bool showDraggableDivider;
+
+  final bool isLTR;
 
   @override
   void performLayout(Size size) {
@@ -320,24 +326,35 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       maxHeight: size.height,
     );
 
-    final dividerOffset =
+    final dividerHalf =
         showDraggableDivider ? PlutoDualGrid.dividerWidth / 2 : 0;
+
+    final dividerWidth = dividerHalf * 2;
 
     double gridAWidth = showDraggableDivider
         ? display.offset == null
-            ? display.gridAWidth(constrains) - dividerOffset
-            : display.offset! - dividerOffset
-        : display.gridAWidth(constrains) - dividerOffset;
+            ? display.gridAWidth(constrains) - dividerHalf
+            : display.offset! - dividerHalf
+        : display.gridAWidth(constrains) - dividerHalf;
+    double gridBWidth = size.width - gridAWidth - dividerWidth;
 
-    if (showDraggableDivider) {
-      if (gridAWidth < dividerOffset) {
-        gridAWidth = 0;
-      } else if (gridAWidth > size.width - dividerOffset) {
-        gridAWidth = size.width - dividerOffset;
-      }
+    if (!isLTR) {
+      final savedGridBWidth = gridBWidth;
+      gridBWidth = gridAWidth;
+      gridAWidth = savedGridBWidth;
     }
 
-    final gridBWidth = size.width - gridAWidth - dividerOffset;
+    if (gridAWidth < 0) {
+      gridAWidth = 0;
+    } else if (gridAWidth > size.width - dividerWidth) {
+      gridAWidth = size.width - dividerWidth;
+    }
+
+    if (gridBWidth < 0) {
+      gridBWidth = 0;
+    } else if (gridBWidth > size.width - dividerWidth) {
+      gridBWidth = size.width - dividerWidth;
+    }
 
     if (hasChild(_PlutoDualGridId.gridA)) {
       layoutChild(
@@ -347,10 +364,9 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
-      positionChild(
-        _PlutoDualGridId.gridA,
-        const Offset(0, 0),
-      );
+      final double posX = isLTR ? 0 : gridBWidth + dividerWidth;
+
+      positionChild(_PlutoDualGridId.gridA, Offset(posX, 0));
     }
 
     if (hasChild(_PlutoDualGridId.divider)) {
@@ -361,10 +377,9 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
-      positionChild(
-        _PlutoDualGridId.divider,
-        Offset(gridAWidth, 0),
-      );
+      final double posX = isLTR ? gridAWidth : gridBWidth;
+
+      positionChild(_PlutoDualGridId.divider, Offset(posX, 0));
     }
 
     if (hasChild(_PlutoDualGridId.gridB)) {
@@ -375,10 +390,9 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
-      positionChild(
-        _PlutoDualGridId.gridB,
-        Offset(gridAWidth + (dividerOffset * 2), 0),
-      );
+      final double posX = isLTR ? gridAWidth + dividerWidth : 0;
+
+      positionChild(_PlutoDualGridId.gridB, Offset(posX, 0));
     }
   }
 

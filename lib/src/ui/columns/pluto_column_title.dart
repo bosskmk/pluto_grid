@@ -121,10 +121,11 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     _isPointMoving = true;
 
     final moveOffset = event.position.dx - _columnRightPosition.dx;
+    final bool isLTR = stateManager.isLTR;
 
     stateManager.resizeColumn(
       widget.column,
-      moveOffset,
+      isLTR ? moveOffset : -moveOffset,
       notify: false,
       checkScroll: false,
     );
@@ -185,8 +186,9 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
               : columnWidget,
         ),
         if (showContextIcon)
-          Positioned(
-            right: -3,
+          Positioned.directional(
+            textDirection: stateManager.textDirection,
+            end: -3,
             child: enableGesture
                 ? Listener(
                     onPointerDown: _handleOnPointDown,
@@ -347,7 +349,8 @@ class _BuildColumnWidget extends StatelessWidget {
       stateManager.configuration!.defaultColumnTitlePadding;
 
   bool get showSizedBoxForIcon =>
-      column.isShowRightIcon && column.titleTextAlign.isRight;
+      column.isShowRightIcon &&
+      (column.titleTextAlign.isRight || stateManager.isRTL);
 
   @override
   Widget build(BuildContext context) {
@@ -379,8 +382,8 @@ class _BuildColumnWidget extends StatelessWidget {
             color: noDragTarget
                 ? column.backgroundColor
                 : configuration.dragTargetColumnColor,
-            border: Border(
-              right: configuration.enableColumnBorder
+            border: BorderDirectional(
+              end: configuration.enableColumnBorder
                   ? BorderSide(
                       color: configuration.borderColor,
                       width: 1.0,
