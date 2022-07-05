@@ -315,6 +315,7 @@ mixin LayoutState implements IPlutoGridState {
       rightFrozenLeftOffset -
       leftFrozenColumnsWidth -
       bodyColumnsWidth +
+      PlutoGridSettings.totalShadowLineWidth +
       scroll!.horizontal!.offset;
 
   @override
