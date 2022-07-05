@@ -348,6 +348,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#scrollOffsetByFrozenColumn),
           returnValue: 0.0) as double);
   @override
+  _i5.TextDirection get textDirection =>
+      (super.noSuchMethod(Invocation.getter(#textDirection),
+          returnValue: _i5.TextDirection.rtl) as _i5.TextDirection);
+  @override
+  bool get isLTR =>
+      (super.noSuchMethod(Invocation.getter(#isLTR), returnValue: false)
+          as bool);
+  @override
+  bool get isRTL =>
+      (super.noSuchMethod(Invocation.getter(#isRTL), returnValue: false)
+          as bool);
+  @override
   int get page =>
       (super.noSuchMethod(Invocation.getter(#page), returnValue: 0) as int);
   @override
@@ -959,6 +971,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void notifyResizingListeners() =>
       super.noSuchMethod(Invocation.method(#notifyResizingListeners, []),
+          returnValueForMissingStub: null);
+  @override
+  void setTextDirection(_i5.TextDirection? textDirection) =>
+      super.noSuchMethod(Invocation.method(#setTextDirection, [textDirection]),
           returnValueForMissingStub: null);
   @override
   void setGridGlobalOffset(_i5.Offset? offset) =>

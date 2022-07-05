@@ -36,6 +36,10 @@ void main() {
 
     when(stateManager!.showFrozenColumn).thenReturn(false);
 
+    when(stateManager!.textDirection).thenReturn(TextDirection.ltr);
+
+    when(stateManager!.isRTL).thenReturn(false);
+
     when(stateManager!.columnGroupDepth(any)).thenAnswer((realInvocation) {
       return PlutoColumnGroupHelper.maxDepth(
         columnGroupList:

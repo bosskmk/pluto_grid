@@ -208,13 +208,6 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       textFocus.requestFocus();
     }
 
-    final popupButton = IconButton(
-      icon: icon!,
-      color: widget.stateManager.configuration!.iconColor,
-      iconSize: widget.stateManager.configuration!.iconSize,
-      onPressed: openPopup,
-    );
-
     return TextField(
       focusNode: textFocus,
       controller: textController,
@@ -227,8 +220,12 @@ mixin PopupCellState<T extends PopupCell> on State<T>
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.zero,
-        prefixIcon: widget.column.textAlign.isRight ? popupButton : null,
-        suffixIcon: !widget.column.textAlign.isRight ? popupButton : null,
+        suffixIcon: IconButton(
+          icon: icon!,
+          color: widget.stateManager.configuration!.iconColor,
+          iconSize: widget.stateManager.configuration!.iconSize,
+          onPressed: openPopup,
+        ),
       ),
       maxLines: 1,
       textAlignVertical: TextAlignVertical.center,

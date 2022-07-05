@@ -55,6 +55,7 @@ void main() {
 
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.scroll).thenReturn(scroll);
+    when(stateManager.isLTR).thenReturn(true);
     when(scroll.horizontal).thenReturn(horizontalScroll);
     when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
     when(scroll.vertical).thenReturn(verticalScroll);

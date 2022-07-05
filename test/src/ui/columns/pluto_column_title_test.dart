@@ -45,6 +45,9 @@ void main() {
     when(stateManager.correctHorizontalOffset).thenReturn(0);
     when(stateManager.scroll).thenReturn(scroll);
     when(stateManager.maxWidth).thenReturn(1000);
+    when(stateManager.textDirection).thenReturn(TextDirection.ltr);
+    when(stateManager.isRTL).thenReturn(false);
+    when(stateManager.isLTR).thenReturn(true);
     when(stateManager.enoughFrozenColumnsWidth(any)).thenReturn(true);
     when(scroll.maxScrollHorizontal).thenReturn(0);
     when(scroll.horizontal).thenReturn(horizontalScroll);
@@ -634,10 +637,10 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right.width, 1.0);
-        expect(border.right.color, Colors.deepOrange);
+        expect(border.end.width, 1.0);
+        expect(border.end.color, Colors.deepOrange);
       },
     );
 
@@ -658,9 +661,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right, BorderSide.none);
+        expect(border.end, BorderSide.none);
       },
     );
   });
