@@ -90,6 +90,8 @@ class PlutoGridConfiguration {
   /// it is the title padding of the default column.
   final EdgeInsets defaultColumnTitlePadding;
 
+  final EdgeInsets defaultColumnFilterPadding;
+
   /// Customise cell padding
   /// If there is no cellPadding of PlutoColumn,
   /// it is the padding value of cell.
@@ -161,6 +163,7 @@ class PlutoGridConfiguration {
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
@@ -207,6 +210,7 @@ class PlutoGridConfiguration {
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
@@ -274,6 +278,7 @@ class PlutoGridConfiguration {
     double? columnHeight,
     double? columnFilterHeight,
     EdgeInsets? defaultColumnTitlePadding,
+    EdgeInsets? defaultColumnFilterPadding,
     EdgeInsets? defaultCellPadding,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
@@ -319,6 +324,8 @@ class PlutoGridConfiguration {
       columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
+      defaultColumnFilterPadding:
+          defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:

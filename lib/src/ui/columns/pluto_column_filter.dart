@@ -64,8 +64,8 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
       : stateManager.configuration!.cellColorInReadOnlyState;
 
   EdgeInsets get _padding =>
-      widget.column.titlePadding ??
-      stateManager.configuration!.defaultColumnTitlePadding;
+      widget.column.filterPadding ??
+      stateManager.configuration!.defaultColumnFilterPadding;
 
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
@@ -254,13 +254,12 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
           onEditingComplete: _handleOnEditingComplete,
           decoration: InputDecoration(
             hintText: _enabled ? widget.column.defaultFilter.title : '',
-            isDense: true,
             filled: true,
             fillColor: _textFieldColor,
             border: _border,
             enabledBorder: _border,
             focusedBorder: _enabledBorder,
-            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+            contentPadding: const EdgeInsets.all(5),
           ),
         ),
       ),
