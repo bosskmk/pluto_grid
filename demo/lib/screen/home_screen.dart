@@ -9,6 +9,7 @@ import '../widget/pluto_grid_title.dart';
 import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
+import 'development_screen.dart';
 import 'feature/add_and_remove_column_row_screen.dart';
 import 'feature/add_rows_asynchronously.dart';
 import 'feature/cell_renderer_screen.dart';
@@ -35,6 +36,7 @@ import 'feature/row_moving_screen.dart';
 import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/row_with_checkbox_screen.dart';
+import 'feature/rtl_screen.dart';
 import 'feature/selection_type_column_screen.dart';
 import 'feature/text_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
@@ -388,6 +390,14 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'RTL - TextDirection.',
+            description: 'Activate Right-To-Left which is a TextDirection.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RTLScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Add and Remove Columns, Rows',
             description: 'You can add or delete columns, rows.',
             onTapLiveDemo: () {
@@ -432,6 +442,14 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Change the entire theme of the grid to Dark.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DarkModeScreen.routeName);
+            },
+          ),
+          PlutoListTile.amber(
+            title: 'Development',
+            description:
+                'This screen is used during development, and various functions can be tested.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, DevelopmentScreen.routeName);
             },
           ),
         ],

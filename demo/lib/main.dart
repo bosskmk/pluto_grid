@@ -30,6 +30,7 @@ import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_pagination_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/row_with_checkbox_screen.dart';
+import 'screen/feature/rtl_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
 import 'screen/feature/time_type_column_screen.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
             const AddRowsAsynchronouslyScreen(),
         CellRendererScreen.routeName: (context) => const CellRendererScreen(),
         CellSelectionScreen.routeName: (context) => const CellSelectionScreen(),
+        RTLScreen.routeName: (context) => const RTLScreen(),
         ColumnFilteringScreen.routeName: (context) =>
             const ColumnFilteringScreen(),
         ColumnFreezingScreen.routeName: (context) =>
