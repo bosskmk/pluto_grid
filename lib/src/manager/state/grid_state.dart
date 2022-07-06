@@ -69,6 +69,8 @@ abstract class IGridState {
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
+
+  void forceUpdate();
 }
 
 mixin GridState implements IPlutoGridState {
@@ -251,5 +253,17 @@ mixin GridState implements IPlutoGridState {
         ),
       );
     }
+  }
+
+  @override
+  void forceUpdate() {
+    if (gridKey?.currentContext == null) {
+      return;
+    }
+
+    gridKey!.currentContext!
+        .findAncestorStateOfType<PlutoGridState>()!
+        // ignore: invalid_use_of_protected_member
+        .setState(() {});
   }
 }

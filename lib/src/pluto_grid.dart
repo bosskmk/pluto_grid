@@ -195,20 +195,13 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// [rowColorCallback] can change the row background color dynamically according to the state.
   ///
   /// Implement a callback that returns a [Color] by referring to the value passed as a callback argument.
+  /// An exception should be handled when a column is deleted.
   /// ```dart
-  /// rowColorCallback: (rowColorContext) {
-  ///   if (rowColorContext.row.cells.entries.elementAt(4).value.value ==
-  ///       'One') {
-  ///     return Colors.blueAccent;
-  ///   } else if (rowColorContext.row.cells.entries
-  ///           .elementAt(4)
-  ///           .value
-  ///           .value ==
-  ///       'Two') {
-  ///     return Colors.cyanAccent;
-  ///   }
-  ///   return Colors.deepOrange;
-  /// },
+  /// rowColorCallback = (PlutoRowColorContext rowColorContext) {
+  ///   return rowColorContext.row.cells['column2']?.value == 'green'
+  ///       ? const Color(0xFFE2F6DF)
+  ///       : Colors.white;
+  /// }
   /// ```
   final PlutoRowColorCallback? rowColorCallback;
 

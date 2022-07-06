@@ -69,7 +69,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
   final double initialViewportDimension;
 
-  final TextDirection textDirection;
+  TextDirection textDirection;
 
   @override
   ContainerRenderObjectMixin<RenderObject,
@@ -279,6 +279,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     super.update(newWidget);
 
     assert(widget == newWidget);
+
+    textDirection = newWidget.textDirection;
 
     assert(!debugChildrenHaveDuplicateKeys(
       widget,

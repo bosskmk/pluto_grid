@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_menu_bar/pluto_menu_bar.dart';
 
 import '../dummy_data/development.dart';
-import 'empty_screen.dart';
 import 'home_screen.dart';
 
 class DevelopmentScreen extends StatefulWidget {
@@ -26,42 +26,38 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   Color Function(PlutoRowColorContext)? rowColorCallback;
 
+  TextDirection textDirection = TextDirection.ltr;
+
   @override
   void initState() {
     super.initState();
 
     /// Test A
-    columns.addAll(testColumnsA);
-    columnGroups.addAll(testColumnGroupsA);
-    rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-    rowColorCallback = (PlutoRowColorContext rowColorContext) {
-      return rowColorContext.row.cells['column2']!.value == 'green'
-          ? const Color(0xFFE2F6DF)
-          : Colors.white;
-    };
+    // columns.addAll(testColumnsA);
+    // columnGroups.addAll(testColumnGroupsA);
+    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
+    //   return rowColorContext.row.cells['column2']?.value == 'green'
+    //       ? const Color(0xFFE2F6DF)
+    //       : Colors.white;
+    // };
 
     /// Test B
-    // columns.addAll(DummyData(10, 0).columns);
-    // columnGroups.addAll(testColumnGroupsB);
-    // DummyData.fetchRows(
-    //   columns,
-    //   chunkSize: 100,
-    //   chunkCount: 1,
-    // ).then((fetchedRows) {
-    //   PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
-    //       .then((initializedRows) {
-    //     stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-    //     stateManager.notifyListeners();
-    //   });
-    // });
-    // columns[0].enableRowDrag = true;
-    // columns[0].enableRowChecked = true;
-    // columns[1].enableContextMenu = false;
-    // columns[2].enableContextMenu = true;
-    // columns[2].enableDropToResize = false;
-    // columns[2].titleTextAlign = PlutoColumnTextAlign.right;
-    // columns[3].frozen = PlutoColumnFrozen.start;
-    // columns[4].frozen = PlutoColumnFrozen.end;
+    columns.addAll(DummyData(10, 0).columns);
+    columnGroups.addAll(testColumnGroupsB);
+    DummyData.fetchRows(
+      columns,
+      chunkSize: 100,
+      chunkCount: 10,
+    ).then((fetchedRows) {
+      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+          .then((initializedRows) {
+        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+        stateManager.notifyListeners();
+      });
+    });
+    columns[0].enableRowDrag = true;
+    columns[0].enableRowChecked = true;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -74,13 +70,19 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     }
   }
 
+  void setTextDirection(TextDirection direction) {
+    setState(() {
+      textDirection = direction;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(15),
         child: Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection: textDirection,
           child: PlutoGrid(
             columns: columns,
             rows: rows,
@@ -116,10 +118,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               return _Header(
                 stateManager: stateManager,
                 columns: columns,
+                textDirection: textDirection,
+                setTextDirection: setTextDirection,
               );
             },
             // createFooter: (stateManager) {
-            //   stateManager.setPageSize(100, notify: false);
+            //   stateManager.setPageSize(30, notify: false);
             //   return PlutoPagination(stateManager);
             // },
             rowColorCallback: rowColorCallback,
@@ -134,15 +138,15 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               // enableGridBorderShadow: true,
               enableMoveHorizontalInEditing: true,
               // enableRowColorAnimation: false,
-              columnSizeConfig: const PlutoGridColumnSizeConfig(
-                // autoSizeMode: PlutoAutoSizeMode.equal,
-                // resizeMode: PlutoResizeMode.pushAndPull,
-                restoreAutoSizeAfterHideColumn: true,
-                restoreAutoSizeAfterFrozenColumn: false,
-                restoreAutoSizeAfterMoveColumn: false,
-                restoreAutoSizeAfterInsertColumn: false,
-                restoreAutoSizeAfterRemoveColumn: false,
-              ),
+              // columnSizeConfig: const PlutoGridColumnSizeConfig(
+              // autoSizeMode: PlutoAutoSizeMode.equal,
+              // resizeMode: PlutoResizeMode.pushAndPull,
+              // restoreAutoSizeAfterHideColumn: true,
+              // restoreAutoSizeAfterFrozenColumn: false,
+              // restoreAutoSizeAfterMoveColumn: false,
+              // restoreAutoSizeAfterInsertColumn: false,
+              // restoreAutoSizeAfterRemoveColumn: false,
+              // ),
               // checkedColor: const Color(0x876FB0FF),
               enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
               enableMoveDownAfterSelecting: false,
@@ -199,9 +203,15 @@ class _Header extends StatefulWidget {
 
   final List<PlutoColumn> columns;
 
+  final TextDirection textDirection;
+
+  final void Function(TextDirection) setTextDirection;
+
   const _Header({
     required this.stateManager,
     required this.columns,
+    required this.textDirection,
+    required this.setTextDirection,
     Key? key,
   }) : super(key: key);
 
@@ -215,9 +225,15 @@ class _HeaderState extends State<_Header> {
     super.initState();
 
     widget.stateManager.setSelectingMode(gridSelectingMode, notify: false);
+
+    textDirection = widget.textDirection;
   }
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
+
+  late TextDirection textDirection;
+
+  _Locale currentLocale = _Locale.english;
 
   void handleAddColumnButton(PlutoColumnFrozen frozen) {
     widget.stateManager.insertColumns(
@@ -247,12 +263,28 @@ class _HeaderState extends State<_Header> {
     }
   }
 
+  void handleRemoveAllColumnsButton() {
+    widget.stateManager.removeColumns(
+      widget.stateManager.refColumns.originalList,
+    );
+  }
+
   void handleRemoveCurrentRowButton() {
     widget.stateManager.removeCurrentRow();
   }
 
   void handleRemoveSelectedRowsButton() {
     widget.stateManager.removeRows(widget.stateManager.currentSelectingRows);
+  }
+
+  void handleRemoveAllRowsButton() {
+    widget.stateManager.removeRows(widget.stateManager.refRows.originalList);
+  }
+
+  void handleToggleColumnGroup() {
+    widget.stateManager.setShowColumnGroups(
+      !widget.stateManager.showColumnGroups,
+    );
   }
 
   void handleToggleColumnTitle() {
@@ -263,6 +295,128 @@ class _HeaderState extends State<_Header> {
   void handleToggleColumnFilter() {
     widget.stateManager
         .setShowColumnFilter(!widget.stateManager.showColumnFilter);
+  }
+
+  void handleSelectingMode(Object? mode) {
+    setState(() {
+      gridSelectingMode = mode as PlutoGridSelectingMode;
+      widget.stateManager.setSelectingMode(mode);
+    });
+  }
+
+  void handleSelectAll() {
+    widget.stateManager.setAllCurrentSelecting();
+  }
+
+  void handleUnselect() {
+    widget.stateManager.clearCurrentSelecting();
+  }
+
+  void handleAutoSize(Object? mode) {
+    setState(() {
+      widget.stateManager.setColumnSizeConfig(
+        widget.stateManager.columnSizeConfig.copyWith(
+          autoSizeMode: mode as PlutoAutoSizeMode,
+        ),
+      );
+    });
+  }
+
+  void handleRestoreAutoSize(_RestoreAutoSizeOptions option, bool? flag) {
+    setState(() {
+      PlutoGridColumnSizeConfig config;
+      switch (option) {
+        case _RestoreAutoSizeOptions.restoreAutoSizeAfterHideColumn:
+          config = widget.stateManager.columnSizeConfig.copyWith(
+            restoreAutoSizeAfterHideColumn: flag,
+          );
+          break;
+        case _RestoreAutoSizeOptions.restoreAutoSizeAfterFrozenColumn:
+          config = widget.stateManager.columnSizeConfig.copyWith(
+            restoreAutoSizeAfterFrozenColumn: flag,
+          );
+          break;
+        case _RestoreAutoSizeOptions.restoreAutoSizeAfterMoveColumn:
+          config = widget.stateManager.columnSizeConfig.copyWith(
+            restoreAutoSizeAfterMoveColumn: flag,
+          );
+          break;
+        case _RestoreAutoSizeOptions.restoreAutoSizeAfterInsertColumn:
+          config = widget.stateManager.columnSizeConfig.copyWith(
+            restoreAutoSizeAfterInsertColumn: flag,
+          );
+          break;
+        case _RestoreAutoSizeOptions.restoreAutoSizeAfterRemoveColumn:
+          config = widget.stateManager.columnSizeConfig.copyWith(
+            restoreAutoSizeAfterRemoveColumn: flag,
+          );
+          break;
+      }
+      widget.stateManager.setColumnSizeConfig(config);
+    });
+  }
+
+  void handleResize(Object? mode) {
+    setState(() {
+      widget.stateManager.setColumnSizeConfig(
+        widget.stateManager.columnSizeConfig.copyWith(
+          resizeMode: mode as PlutoResizeMode,
+        ),
+      );
+    });
+  }
+
+  void handleLocale(Object? locale) {
+    setState(() {
+      currentLocale = locale as _Locale;
+
+      PlutoGridLocaleText localeText;
+
+      switch (currentLocale) {
+        case _Locale.english:
+          localeText = const PlutoGridLocaleText();
+          break;
+        case _Locale.korean:
+          localeText = const PlutoGridLocaleText.korean();
+          break;
+        case _Locale.china:
+          localeText = const PlutoGridLocaleText.china();
+          break;
+        case _Locale.russian:
+          localeText = const PlutoGridLocaleText.russian();
+          break;
+        case _Locale.czech:
+          localeText = const PlutoGridLocaleText.czech();
+          break;
+        case _Locale.brazilianPortuguese:
+          localeText = const PlutoGridLocaleText.brazilianPortuguese();
+          break;
+        case _Locale.spanish:
+          localeText = const PlutoGridLocaleText.spanish();
+          break;
+        case _Locale.persian:
+          localeText = const PlutoGridLocaleText.persian();
+          break;
+        case _Locale.arabic:
+          localeText = const PlutoGridLocaleText.arabic();
+          break;
+      }
+
+      widget.stateManager.setConfiguration(
+        widget.stateManager.configuration!.copyWith(
+          localeText: localeText,
+        ),
+      );
+
+      widget.stateManager.forceUpdate();
+    });
+  }
+
+  void handleTextDirection(Object? direction) {
+    setState(() {
+      textDirection = direction as TextDirection;
+      widget.setTextDirection(direction);
+    });
   }
 
   void setGridSelectingMode(PlutoGridSelectingMode? mode) {
@@ -278,110 +432,232 @@ class _HeaderState extends State<_Header> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        height: widget.stateManager.headerHeight,
-        child: Wrap(
-          spacing: 10,
-          crossAxisAlignment: WrapCrossAlignment.center,
+    return PlutoMenuBar(
+      borderColor: Colors.transparent,
+      textStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+      ),
+      menus: [
+        PlutoMenuItem(
+          title: 'Home',
+          onTap: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
+        ),
+        PlutoMenuItem(
+          title: 'Add & Remove',
           children: [
-            ElevatedButton(
-              child: const Text('Go Home'),
-              onPressed: () {
-                Navigator.pushNamed(context, HomeScreen.routeName);
-              },
+            PlutoMenuItem(
+              title: 'Column',
+              children: [
+                PlutoMenuItem(
+                  title: 'Add to start',
+                  onTap: () {
+                    handleAddColumnButton(PlutoColumnFrozen.start);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Add to body',
+                  onTap: () {
+                    handleAddColumnButton(PlutoColumnFrozen.none);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Add to end',
+                  onTap: () {
+                    handleAddColumnButton(PlutoColumnFrozen.end);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Remove current column',
+                  onTap: handleRemoveCurrentColumnButton,
+                ),
+                PlutoMenuItem(
+                  title: 'Remove all columns',
+                  onTap: handleRemoveAllColumnsButton,
+                ),
+              ],
             ),
-            ElevatedButton(
-              child: const Text('Go Empty'),
-              onPressed: () {
-                Navigator.pushNamed(context, EmptyScreen.routeName);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add Left Column'),
-              onPressed: () {
-                handleAddColumnButton(PlutoColumnFrozen.start);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add Body Column'),
-              onPressed: () {
-                handleAddColumnButton(PlutoColumnFrozen.none);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add Right Column'),
-              onPressed: () {
-                handleAddColumnButton(PlutoColumnFrozen.end);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add 10'),
-              onPressed: () {
-                handleAddRowButton(count: 10);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Add 100 Rows'),
-              onPressed: () => handleAddRowButton(count: 100),
-            ),
-            ElevatedButton(
-              child: const Text('Add 100,000 Rows'),
-              onPressed: () => handleAddRowButton(count: 100000),
-            ),
-            ElevatedButton(
-              onPressed: handleRemoveCurrentColumnButton,
-              child: const Text('Remove Current Column'),
-            ),
-            ElevatedButton(
-              onPressed: handleRemoveCurrentRowButton,
-              child: const Text('Remove Current Row'),
-            ),
-            ElevatedButton(
-              onPressed: handleRemoveSelectedRowsButton,
-              child: const Text('Remove Selected Rows'),
-            ),
-            DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: gridSelectingMode,
-                items: PlutoGridStateManager.selectingModes
-                    .map<DropdownMenuItem<PlutoGridSelectingMode>>(
-                        (PlutoGridSelectingMode item) {
-                  final color = gridSelectingMode == item ? Colors.blue : null;
-
-                  return DropdownMenuItem<PlutoGridSelectingMode>(
-                    value: item,
-                    child: Text(
-                      item.toShortString(),
-                      style: TextStyle(color: color),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (PlutoGridSelectingMode? mode) {
-                  setGridSelectingMode(mode);
-                },
-              ),
-            ),
-            ElevatedButton(
-              onPressed: handleToggleColumnTitle,
-              child: const Text('Toggle title'),
-            ),
-            ElevatedButton(
-              onPressed: handleToggleColumnFilter,
-              child: const Text('Toggle filter'),
-            ),
-            ElevatedButton(
-              child: const Text('Toggle group'),
-              onPressed: () {
-                widget.stateManager.setShowColumnGroups(
-                  !widget.stateManager.showColumnGroups,
-                );
-              },
+            PlutoMenuItem(
+              title: 'Row',
+              children: [
+                PlutoMenuItem(
+                  title: 'Add 1 row',
+                  onTap: () {
+                    handleAddRowButton(count: 1);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Add 10 rows',
+                  onTap: () {
+                    handleAddRowButton(count: 10);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Add 100 rows',
+                  onTap: () {
+                    handleAddRowButton(count: 100);
+                  },
+                ),
+                PlutoMenuItem(
+                  title: 'Remove current row',
+                  onTap: handleRemoveCurrentRowButton,
+                ),
+                PlutoMenuItem(
+                  title: 'Remove selected rows',
+                  onTap: handleRemoveSelectedRowsButton,
+                ),
+                PlutoMenuItem(
+                  title: 'Remove all rows',
+                  onTap: handleRemoveAllRowsButton,
+                ),
+              ],
             ),
           ],
         ),
-      ),
+        PlutoMenuItem(
+          title: 'Show',
+          children: [
+            PlutoMenuItem(
+              title: 'Toggle column group',
+              onTap: handleToggleColumnGroup,
+            ),
+            PlutoMenuItem(
+              title: 'Toggle column title',
+              onTap: handleToggleColumnTitle,
+            ),
+            PlutoMenuItem(
+              title: 'Toggle column filter',
+              onTap: handleToggleColumnFilter,
+            ),
+          ],
+        ),
+        PlutoMenuItem(
+          title: 'Select',
+          children: [
+            PlutoMenuItem(title: 'Select all', onTap: handleSelectAll),
+            PlutoMenuItem(title: 'Unselect all', onTap: handleUnselect),
+            PlutoMenuItem(title: 'Select mode', enable: false),
+            PlutoMenuItem.radio(
+              title: 'Mode',
+              initialRadioValue: gridSelectingMode,
+              radioItems: PlutoGridSelectingMode.values,
+              getTitle: (option) => (option as PlutoGridSelectingMode).name,
+              onChanged: handleSelectingMode,
+            ),
+          ],
+        ),
+        PlutoMenuItem(
+          title: 'Size',
+          children: [
+            PlutoMenuItem(
+              title: 'AutoSizeMode',
+              enable: false,
+            ),
+            PlutoMenuItem.radio(
+              title: 'AutoSize',
+              initialRadioValue:
+                  widget.stateManager.columnSizeConfig.autoSizeMode,
+              radioItems: PlutoAutoSizeMode.values,
+              onChanged: handleAutoSize,
+              getTitle: (option) => (option as PlutoAutoSizeMode).name,
+            ),
+            PlutoMenuItem(
+              title: 'AutoSize options',
+              children: [
+                PlutoMenuItem.checkbox(
+                  title: 'Restore after hide column',
+                  initialCheckValue: widget.stateManager.columnSizeConfig
+                      .restoreAutoSizeAfterHideColumn,
+                  onChanged: (flag) => handleRestoreAutoSize(
+                    _RestoreAutoSizeOptions.restoreAutoSizeAfterHideColumn,
+                    flag,
+                  ),
+                ),
+                PlutoMenuItem.checkbox(
+                  title: 'Restore after frozen column',
+                  initialCheckValue: widget.stateManager.columnSizeConfig
+                      .restoreAutoSizeAfterFrozenColumn,
+                  onChanged: (flag) => handleRestoreAutoSize(
+                    _RestoreAutoSizeOptions.restoreAutoSizeAfterFrozenColumn,
+                    flag,
+                  ),
+                ),
+                PlutoMenuItem.checkbox(
+                  title: 'Restore after move column',
+                  initialCheckValue: widget.stateManager.columnSizeConfig
+                      .restoreAutoSizeAfterMoveColumn,
+                  onChanged: (flag) => handleRestoreAutoSize(
+                    _RestoreAutoSizeOptions.restoreAutoSizeAfterMoveColumn,
+                    flag,
+                  ),
+                ),
+                PlutoMenuItem.checkbox(
+                  title: 'Restore after insert column',
+                  initialCheckValue: widget.stateManager.columnSizeConfig
+                      .restoreAutoSizeAfterInsertColumn,
+                  onChanged: (flag) => handleRestoreAutoSize(
+                    _RestoreAutoSizeOptions.restoreAutoSizeAfterInsertColumn,
+                    flag,
+                  ),
+                ),
+                PlutoMenuItem.checkbox(
+                  title: 'Restore after remove column',
+                  initialCheckValue: widget.stateManager.columnSizeConfig
+                      .restoreAutoSizeAfterRemoveColumn,
+                  onChanged: (flag) => handleRestoreAutoSize(
+                    _RestoreAutoSizeOptions.restoreAutoSizeAfterRemoveColumn,
+                    flag,
+                  ),
+                ),
+              ],
+            ),
+            PlutoMenuItem(
+              title: 'ReSizeMode',
+              enable: false,
+            ),
+            PlutoMenuItem.radio(
+              title: 'Resize',
+              initialRadioValue:
+                  widget.stateManager.columnSizeConfig.resizeMode,
+              radioItems: PlutoResizeMode.values,
+              onChanged: handleResize,
+              getTitle: (option) => (option as PlutoResizeMode).name,
+            ),
+          ],
+        ),
+        PlutoMenuItem(
+          title: 'Internationalization',
+          children: [
+            PlutoMenuItem(
+              title: 'Language',
+              children: [
+                PlutoMenuItem.radio(
+                  title: 'Locale',
+                  initialRadioValue: currentLocale,
+                  radioItems: _Locale.values,
+                  onChanged: handleLocale,
+                  getTitle: (option) => (option as _Locale).name,
+                ),
+              ],
+            ),
+            PlutoMenuItem(
+              title: 'TextDirection',
+              children: [
+                PlutoMenuItem.radio(
+                  title: 'TextDirection',
+                  initialRadioValue: textDirection,
+                  radioItems: TextDirection.values,
+                  onChanged: handleTextDirection,
+                  getTitle: (option) =>
+                      (option as TextDirection).name.toUpperCase(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -596,3 +872,23 @@ final testColumnGroupsB = [
     fields: ['6'],
   ),
 ];
+
+enum _RestoreAutoSizeOptions {
+  restoreAutoSizeAfterHideColumn,
+  restoreAutoSizeAfterFrozenColumn,
+  restoreAutoSizeAfterMoveColumn,
+  restoreAutoSizeAfterInsertColumn,
+  restoreAutoSizeAfterRemoveColumn,
+}
+
+enum _Locale {
+  english,
+  korean,
+  china,
+  russian,
+  czech,
+  brazilianPortuguese,
+  spanish,
+  persian,
+  arabic,
+}
