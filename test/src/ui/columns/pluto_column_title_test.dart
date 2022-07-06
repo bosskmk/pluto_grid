@@ -387,7 +387,7 @@ void main() {
 
       verify(stateManager.toggleFrozenColumn(
         column,
-        PlutoColumnFrozen.left,
+        PlutoColumnFrozen.start,
       )).called(1);
     });
 
@@ -397,7 +397,7 @@ void main() {
 
       verify(stateManager.toggleFrozenColumn(
         column,
-        PlutoColumnFrozen.right,
+        PlutoColumnFrozen.end,
       )).called(1);
     });
 
@@ -422,7 +422,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.left,
+      frozen: PlutoColumnFrozen.start,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -474,7 +474,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -526,7 +526,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
@@ -603,7 +603,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     aColumnWithConfiguration(PlutoGridConfiguration configuration) {

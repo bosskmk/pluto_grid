@@ -298,14 +298,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
       ];
 
@@ -359,14 +359,14 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
       ];
 

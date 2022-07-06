@@ -217,11 +217,11 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   bool get hasLeftFrozenColumns =>
-      refColumns.firstWhereOrNull((e) => e.frozen.isLeft) != null;
+      refColumns.firstWhereOrNull((e) => e.frozen.isStart) != null;
 
   @override
   bool get hasRightFrozenColumns =>
-      refColumns.firstWhereOrNull((e) => e.frozen.isRight) != null;
+      refColumns.firstWhereOrNull((e) => e.frozen.isEnd) != null;
 
   @override
   double get headerBottomOffset => maxHeight! - headerHeight;

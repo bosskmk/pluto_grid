@@ -58,11 +58,11 @@ mixin VisibilityLayoutState implements IPlutoGridState {
             column.startPosition = bodyX;
             bodyX += column.width;
             break;
-          case PlutoColumnFrozen.left:
+          case PlutoColumnFrozen.start:
             column.startPosition = leftX;
             leftX += column.width;
             break;
-          case PlutoColumnFrozen.right:
+          case PlutoColumnFrozen.end:
             column.startPosition = rightX;
             rightX += column.width;
             break;

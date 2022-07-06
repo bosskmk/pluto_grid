@@ -301,7 +301,7 @@ class _HeaderState extends State<_Header> {
             ElevatedButton(
               child: const Text('Add Left Column'),
               onPressed: () {
-                handleAddColumnButton(PlutoColumnFrozen.left);
+                handleAddColumnButton(PlutoColumnFrozen.start);
               },
             ),
             ElevatedButton(
@@ -313,7 +313,7 @@ class _HeaderState extends State<_Header> {
             ElevatedButton(
               child: const Text('Add Right Column'),
               onPressed: () {
-                handleAddColumnButton(PlutoColumnFrozen.right);
+                handleAddColumnButton(PlutoColumnFrozen.end);
               },
             ),
             ElevatedButton(
@@ -456,7 +456,7 @@ final testColumnsA = [
     enableContextMenu: false,
     textAlign: PlutoColumnTextAlign.right,
     titleTextAlign: PlutoColumnTextAlign.right,
-    frozen: PlutoColumnFrozen.right,
+    frozen: PlutoColumnFrozen.end,
     type: PlutoColumnType.select(
       <String>['red', 'blue', 'green'],
       enableColumnFilter: true,

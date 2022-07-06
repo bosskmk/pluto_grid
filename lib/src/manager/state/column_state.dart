@@ -198,7 +198,7 @@ mixin ColumnState implements IPlutoGridState {
     for (int i = 0; i < length; i += 1) {
       refColumns[i].frozen.isNone
           ? bodyIndexes.add(i)
-          : refColumns[i].frozen.isLeft
+          : refColumns[i].frozen.isStart
               ? leftIndexes.add(i)
               : rightIndexes.add(i);
     }
@@ -219,7 +219,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   List<PlutoColumn> get leftFrozenColumns {
-    return refColumns.where((e) => e.frozen.isLeft).toList(growable: false);
+    return refColumns.where((e) => e.frozen.isStart).toList(growable: false);
   }
 
   @override
@@ -228,7 +228,7 @@ mixin ColumnState implements IPlutoGridState {
     final length = refColumns.length;
 
     for (int i = 0; i < length; i += 1) {
-      if (refColumns[i].frozen.isLeft) {
+      if (refColumns[i].frozen.isStart) {
         indexes.add(i);
       }
     }
@@ -241,7 +241,7 @@ mixin ColumnState implements IPlutoGridState {
     double width = 0;
 
     for (final column in refColumns) {
-      if (column.frozen.isLeft) {
+      if (column.frozen.isStart) {
         width += column.width;
       }
     }
@@ -251,7 +251,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   List<PlutoColumn> get rightFrozenColumns {
-    return refColumns.where((e) => e.frozen.isRight).toList();
+    return refColumns.where((e) => e.frozen.isEnd).toList();
   }
 
   @override
@@ -260,7 +260,7 @@ mixin ColumnState implements IPlutoGridState {
     final length = refColumns.length;
 
     for (int i = 0; i < length; i += 1) {
-      if (refColumns[i].frozen.isRight) {
+      if (refColumns[i].frozen.isEnd) {
         indexes.add(i);
       }
     }
@@ -273,7 +273,7 @@ mixin ColumnState implements IPlutoGridState {
     double width = 0;
 
     for (final column in refColumns) {
-      if (column.frozen.isRight) {
+      if (column.frozen.isEnd) {
         width += column.width;
       }
     }
@@ -492,13 +492,13 @@ mixin ColumnState implements IPlutoGridState {
     final targetFrozen = refColumns[targetIndex].frozen;
 
     if (frozen != targetFrozen) {
-      if (targetFrozen.isRight && index > targetIndex) {
+      if (targetFrozen.isEnd && index > targetIndex) {
         targetIndex += 1;
-      } else if (targetFrozen.isLeft && index < targetIndex) {
+      } else if (targetFrozen.isStart && index < targetIndex) {
         targetIndex -= 1;
-      } else if (frozen.isLeft && index > targetIndex) {
+      } else if (frozen.isStart && index > targetIndex) {
         targetIndex += 1;
-      } else if (frozen.isRight && index < targetIndex) {
+      } else if (frozen.isEnd && index < targetIndex) {
         targetIndex -= 1;
       }
     }

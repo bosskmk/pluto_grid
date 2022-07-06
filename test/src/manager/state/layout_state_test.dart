@@ -29,7 +29,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'left',
               count: 1,
-              frozen: PlutoColumnFrozen.left,
+              frozen: PlutoColumnFrozen.start,
               width: 150,
             ),
             ...ColumnHelper.textColumn(
@@ -40,7 +40,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'right',
               count: 1,
-              frozen: PlutoColumnFrozen.right,
+              frozen: PlutoColumnFrozen.end,
               width: 150,
             ),
           ];

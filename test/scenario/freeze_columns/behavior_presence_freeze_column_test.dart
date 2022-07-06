@@ -19,9 +19,9 @@ void main() {
 
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -42,7 +42,7 @@ void main() {
       ),
     );
     // 세번 째 컬럼 왼쪽 고정
-    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
 
     await tester.pumpAndSettle();
 
@@ -141,7 +141,7 @@ void main() {
     expect(stateManager!.showFrozenColumn, false);
 
     // Freeze the 3rd column
-    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.right);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.end);
 
     // Await re-build by toggleFrozenColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));

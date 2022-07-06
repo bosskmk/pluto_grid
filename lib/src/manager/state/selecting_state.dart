@@ -327,7 +327,7 @@ mixin SelectingState implements IPlutoGridState {
       currentWidth += column.width;
 
       final rightFrozenColumnOffset =
-          column.frozen.isRight && showFrozenColumn ? savedRightBlankOffset : 0;
+          column.frozen.isEnd && showFrozenColumn ? savedRightBlankOffset : 0;
 
       if (currentWidth + rightFrozenColumnOffset >
           offset.dx + savedHorizontalScrollOffset) {

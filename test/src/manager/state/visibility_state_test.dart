@@ -132,7 +132,7 @@ void main() {
           ...ColumnHelper.textColumn(
             'left',
             count: 2,
-            frozen: PlutoColumnFrozen.left,
+            frozen: PlutoColumnFrozen.start,
           ),
           ...ColumnHelper.textColumn(
             'body',
@@ -142,7 +142,7 @@ void main() {
           ...ColumnHelper.textColumn(
             'right',
             count: 2,
-            frozen: PlutoColumnFrozen.right,
+            frozen: PlutoColumnFrozen.end,
           ),
         ];
 
@@ -174,7 +174,7 @@ void main() {
           ...ColumnHelper.textColumn(
             'left',
             count: 2,
-            frozen: PlutoColumnFrozen.left,
+            frozen: PlutoColumnFrozen.start,
           ),
           ...ColumnHelper.textColumn(
             'body',
@@ -184,7 +184,7 @@ void main() {
           ...ColumnHelper.textColumn(
             'right',
             count: 2,
-            frozen: PlutoColumnFrozen.right,
+            frozen: PlutoColumnFrozen.end,
           ),
         ];
 

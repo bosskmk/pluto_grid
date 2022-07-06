@@ -346,8 +346,8 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
 
 enum PlutoColumnFrozen {
   none,
-  left,
-  right,
+  start,
+  end,
 }
 
 extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
@@ -355,16 +355,16 @@ extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
     return this == PlutoColumnFrozen.none;
   }
 
-  bool get isLeft {
-    return this == PlutoColumnFrozen.left;
+  bool get isStart {
+    return this == PlutoColumnFrozen.start;
   }
 
-  bool get isRight {
-    return this == PlutoColumnFrozen.right;
+  bool get isEnd {
+    return this == PlutoColumnFrozen.end;
   }
 
   bool get isFrozen {
-    return this == PlutoColumnFrozen.left || this == PlutoColumnFrozen.right;
+    return this == PlutoColumnFrozen.start || this == PlutoColumnFrozen.end;
   }
 }
 

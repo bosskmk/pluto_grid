@@ -45,10 +45,10 @@ class DummyData {
         }(i),
         frozen: (int i) {
           if (leftFrozenColumnIndexes.contains(i)) {
-            return PlutoColumnFrozen.left;
+            return PlutoColumnFrozen.start;
           }
           if (rightFrozenColumnIndexes.contains(i)) {
-            return PlutoColumnFrozen.right;
+            return PlutoColumnFrozen.end;
           }
           return PlutoColumnFrozen.none;
         }(i),

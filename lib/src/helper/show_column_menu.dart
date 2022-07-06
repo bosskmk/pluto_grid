@@ -66,22 +66,18 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
         ),
       if (column.frozen.isFrozen != true) ...[
         _buildMenuItem(
-          value: PlutoGridColumnMenuItem.freezeToLeft,
+          value: PlutoGridColumnMenuItem.freezeToStart,
           enabled: enoughFrozenColumnsWidth,
           child: _buildTextItem(
-            text: stateManager.isLTR
-                ? localeText.freezeColumnToLeft
-                : localeText.freezeColumnToRight,
+            text: localeText.freezeColumnToStart,
             textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
           ),
         ),
         _buildMenuItem(
-          value: PlutoGridColumnMenuItem.freezeToRight,
+          value: PlutoGridColumnMenuItem.freezeToEnd,
           enabled: enoughFrozenColumnsWidth,
           child: _buildTextItem(
-            text: stateManager.isLTR
-                ? localeText.freezeColumnToRight
-                : localeText.freezeColumnToLeft,
+            text: localeText.freezeColumnToEnd,
             textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
           ),
         ),
@@ -138,8 +134,8 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
 /// Items in the context menu on the right side of the column
 enum PlutoGridColumnMenuItem {
   unfreeze,
-  freezeToLeft,
-  freezeToRight,
+  freezeToStart,
+  freezeToEnd,
   hideColumn,
   setColumns,
   autoFit,

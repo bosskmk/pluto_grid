@@ -95,7 +95,7 @@ class PlutoRightFrozenColumnsState
           stateManager: stateManager,
           columns: _columns,
           columnGroups: _columnGroups,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
         children: _showColumnGroups == true
             ? _columnGroups.map(_buildColumnGroup).toList()

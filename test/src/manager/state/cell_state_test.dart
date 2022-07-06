@@ -47,10 +47,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -75,10 +75,10 @@ void main() {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ];
 
       List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -128,8 +128,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
-      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
+      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.end);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 300, maxHeight: 500),
@@ -171,8 +171,8 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
-      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
+      stateManager.toggleFrozenColumn(columns[4], PlutoColumnFrozen.end);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 1900, maxHeight: 500),

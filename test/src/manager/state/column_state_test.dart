@@ -83,14 +83,14 @@ void main() {
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
         PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: '',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
       ],
       rows: [],
@@ -151,14 +151,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
       ],
       rows: [],
@@ -184,14 +184,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
       ],
       rows: [],
@@ -216,7 +216,7 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         PlutoColumn(
@@ -229,7 +229,7 @@ void main() {
           title: 'left2',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
       ],
@@ -254,14 +254,14 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
       ],
       rows: [],
@@ -286,14 +286,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
         PlutoColumn(title: 'body', field: '', type: PlutoColumnType.text()),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
         ),
       ],
       rows: [],
@@ -319,14 +319,14 @@ void main() {
           title: 'right1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 120,
         ),
         PlutoColumn(
           title: 'right2',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 120,
         ),
         PlutoColumn(
@@ -339,7 +339,7 @@ void main() {
           title: 'left1',
           field: '',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 120,
         ),
       ],
@@ -361,10 +361,10 @@ void main() {
     PlutoGridStateManager stateManager = getStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ],
       rows: [],
       gridFocusNode: null,
@@ -389,10 +389,10 @@ void main() {
     PlutoGridStateManager stateManager = getStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ],
       rows: [],
       gridFocusNode: null,
@@ -415,10 +415,10 @@ void main() {
     PlutoGridStateManager stateManager = getStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ],
       rows: [],
       gridFocusNode: null,
@@ -438,10 +438,10 @@ void main() {
     PlutoGridStateManager stateManager = getStateManager(
       columns: [
         ...ColumnHelper.textColumn('left',
-            count: 3, frozen: PlutoColumnFrozen.left),
+            count: 3, frozen: PlutoColumnFrozen.start),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn('right',
-            count: 3, frozen: PlutoColumnFrozen.right),
+            count: 3, frozen: PlutoColumnFrozen.end),
       ],
       rows: [],
       gridFocusNode: null,
@@ -460,10 +460,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, frozen: PlutoColumnFrozen.left),
+          count: 3, frozen: PlutoColumnFrozen.start),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, frozen: PlutoColumnFrozen.right),
+          count: 3, frozen: PlutoColumnFrozen.end),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -496,10 +496,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, frozen: PlutoColumnFrozen.left),
+          count: 3, frozen: PlutoColumnFrozen.start),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, frozen: PlutoColumnFrozen.right),
+          count: 3, frozen: PlutoColumnFrozen.end),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -524,10 +524,10 @@ void main() {
     // given
     List<PlutoColumn> columns = [
       ...ColumnHelper.textColumn('left',
-          count: 3, frozen: PlutoColumnFrozen.left),
+          count: 3, frozen: PlutoColumnFrozen.start),
       ...ColumnHelper.textColumn('body', count: 3, width: 150),
       ...ColumnHelper.textColumn('right',
-          count: 3, frozen: PlutoColumnFrozen.right),
+          count: 3, frozen: PlutoColumnFrozen.end),
     ];
 
     List<PlutoRow> rows = RowHelper.count(10, columns);
@@ -601,7 +601,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 1000, maxHeight: 600),
@@ -636,7 +636,7 @@ void main() {
       );
 
       // when
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 300, maxHeight: 600),
@@ -655,14 +655,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 150,
         ),
       ];
@@ -694,14 +694,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 150,
         ),
       ];
@@ -719,7 +719,7 @@ void main() {
         const BoxConstraints(maxWidth: 700, maxHeight: 600),
       );
 
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 700, maxHeight: 600),
@@ -740,14 +740,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 150,
         ),
       ];
@@ -765,7 +765,7 @@ void main() {
         const BoxConstraints(maxWidth: 700, maxHeight: 600),
       );
 
-      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.right);
+      stateManager.toggleFrozenColumn(columns[2], PlutoColumnFrozen.end);
 
       stateManager.setLayout(
         const BoxConstraints(maxWidth: 700, maxHeight: 600),
@@ -785,14 +785,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 150,
         ),
       ];
@@ -829,14 +829,14 @@ void main() {
         ...ColumnHelper.textColumn(
           'left',
           count: 1,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 150,
         ),
         ...ColumnHelper.textColumn('body', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 150,
         ),
       ];
@@ -889,7 +889,7 @@ void main() {
 
       expect(stateManager.activatedColumnsAutoSize, true);
 
-      stateManager.toggleFrozenColumn(columns.first, PlutoColumnFrozen.left);
+      stateManager.toggleFrozenColumn(columns.first, PlutoColumnFrozen.start);
 
       expect(stateManager.activatedColumnsAutoSize, false);
     });
@@ -1335,7 +1335,7 @@ void main() {
 
       final column = columns[0];
 
-      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.left;
+      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.start;
 
       stateManager.moveColumn(
         column: column,
@@ -1363,7 +1363,7 @@ void main() {
 
       final column = columns[0]..width = 50;
 
-      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.left;
+      final targetColumn = columns[1]..frozen = PlutoColumnFrozen.start;
 
       stateManager.moveColumn(
         column: column,
@@ -1378,9 +1378,9 @@ void main() {
 
       columns[0].frozen = PlutoColumnFrozen.none;
       columns[1].frozen = PlutoColumnFrozen.none;
-      columns[2].frozen = PlutoColumnFrozen.left;
-      columns[3].frozen = PlutoColumnFrozen.left;
-      columns[4].frozen = PlutoColumnFrozen.right;
+      columns[2].frozen = PlutoColumnFrozen.start;
+      columns[3].frozen = PlutoColumnFrozen.start;
+      columns[4].frozen = PlutoColumnFrozen.end;
 
       PlutoGridStateManager stateManager = getStateManager(
         columns: columns,
@@ -1407,7 +1407,7 @@ void main() {
       final columns = ColumnHelper.textColumn('title', count: 5);
 
       columns[0].frozen = PlutoColumnFrozen.none;
-      columns[1].frozen = PlutoColumnFrozen.left;
+      columns[1].frozen = PlutoColumnFrozen.start;
       columns[2].frozen = PlutoColumnFrozen.none;
       columns[3].frozen = PlutoColumnFrozen.none;
       columns[4].frozen = PlutoColumnFrozen.none;
@@ -1439,7 +1439,7 @@ void main() {
       columns[0].frozen = PlutoColumnFrozen.none;
       columns[1].frozen = PlutoColumnFrozen.none;
       columns[2].frozen = PlutoColumnFrozen.none;
-      columns[3].frozen = PlutoColumnFrozen.left;
+      columns[3].frozen = PlutoColumnFrozen.start;
       columns[4].frozen = PlutoColumnFrozen.none;
 
       PlutoGridStateManager stateManager = getStateManager(
@@ -1470,7 +1470,7 @@ void main() {
       final columns = ColumnHelper.textColumn('title', count: 5);
 
       columns[0].frozen = PlutoColumnFrozen.none;
-      columns[1].frozen = PlutoColumnFrozen.right;
+      columns[1].frozen = PlutoColumnFrozen.end;
       columns[2].frozen = PlutoColumnFrozen.none;
       columns[3].frozen = PlutoColumnFrozen.none;
       columns[4].frozen = PlutoColumnFrozen.none;
@@ -1874,7 +1874,7 @@ void main() {
           'title',
           count: 5,
           hide: true,
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
         );
 
         PlutoGridStateManager stateManager = getStateManager(
@@ -1889,7 +1889,7 @@ void main() {
         // setLayout 실행 시 고정 컬럼이 하나도 없어 showFrozenColumn 이 false 이면
         // 모든 컬럼의 frozen 을 none 으로 초기화 하여 테스트를 위해 다시 고정 컬럼으로 설정.
         for (final column in columns) {
-          column.frozen = PlutoColumnFrozen.left;
+          column.frozen = PlutoColumnFrozen.start;
         }
 
         stateManager.hideColumns(columns.getRange(0, 2).toList(), false);
@@ -1901,11 +1901,11 @@ void main() {
         expect(columns[1].frozen, PlutoColumnFrozen.none);
         // 호출 하지 않은 컬럼
         expect(columns[2].hide, true);
-        expect(columns[2].frozen, PlutoColumnFrozen.left);
+        expect(columns[2].frozen, PlutoColumnFrozen.start);
         expect(columns[3].hide, true);
-        expect(columns[3].frozen, PlutoColumnFrozen.left);
+        expect(columns[3].frozen, PlutoColumnFrozen.start);
         expect(columns[4].hide, true);
-        expect(columns[4].frozen, PlutoColumnFrozen.left);
+        expect(columns[4].frozen, PlutoColumnFrozen.start);
       },
     );
   });
@@ -1955,7 +1955,7 @@ void main() {
         title: 'title',
         field: 'field',
         type: PlutoColumnType.text(),
-        frozen: PlutoColumnFrozen.left,
+        frozen: PlutoColumnFrozen.start,
         width: 100,
       );
 
@@ -1990,7 +1990,7 @@ void main() {
         title: 'title',
         field: 'field',
         type: PlutoColumnType.text(),
-        frozen: PlutoColumnFrozen.left,
+        frozen: PlutoColumnFrozen.start,
         width: 100,
       );
 
@@ -2029,7 +2029,7 @@ void main() {
           title: 'title1',
           field: 'field1',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 100,
         );
 
@@ -2037,7 +2037,7 @@ void main() {
           title: 'title2',
           field: 'field2',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 100,
         );
 
@@ -2081,7 +2081,7 @@ void main() {
           title: 'title1',
           field: 'field1',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 100,
         );
 
@@ -2141,7 +2141,7 @@ void main() {
           title: 'title2',
           field: 'field2',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 100,
         );
 
@@ -2193,7 +2193,7 @@ void main() {
           title: 'title2',
           field: 'field2',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 100,
         );
 
@@ -2240,7 +2240,7 @@ void main() {
           title: 'title1',
           field: 'field1',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           width: 100,
         );
 
@@ -2299,7 +2299,7 @@ void main() {
         // print(PlutoGridSettings.totalShadowLineWidth);
 
         expect(
-          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.left),
+          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.start),
           false,
         );
       },
@@ -2341,7 +2341,7 @@ void main() {
         // print(PlutoGridSettings.totalShadowLineWidth);
 
         expect(
-          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.left),
+          stateManager.limitToggleFrozenColumn(column, PlutoColumnFrozen.start),
           true,
         );
       },
@@ -2356,7 +2356,7 @@ void main() {
           title: 'title1',
           field: 'field1',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.right,
+          frozen: PlutoColumnFrozen.end,
           width: 394,
         );
 
@@ -2411,7 +2411,7 @@ void main() {
           title: 'title1',
           field: 'field1',
           type: PlutoColumnType.text(),
-          frozen: PlutoColumnFrozen.left,
+          frozen: PlutoColumnFrozen.start,
           hide: true,
           width: 394,
         );
@@ -2430,7 +2430,7 @@ void main() {
 
         // stateManager.setLayout 에서 showFrozenColumn 이 아닌 경우
         // 강제로 컬럼의 고정 상태를 none 으로 업데이트 해서 강제로 left 로 변경.
-        column.frozen = PlutoColumnFrozen.left;
+        column.frozen = PlutoColumnFrozen.start;
 
         // 500 - 206 = 394 보다 작은 컬럼 숨김 해제 가능.
         // print(stateManager.maxWidth! - column.width);

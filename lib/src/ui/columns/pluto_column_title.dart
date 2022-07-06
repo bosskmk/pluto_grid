@@ -78,11 +78,11 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
       case PlutoGridColumnMenuItem.unfreeze:
         stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.none);
         break;
-      case PlutoGridColumnMenuItem.freezeToLeft:
-        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.left);
+      case PlutoGridColumnMenuItem.freezeToStart:
+        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.start);
         break;
-      case PlutoGridColumnMenuItem.freezeToRight:
-        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.right);
+      case PlutoGridColumnMenuItem.freezeToEnd:
+        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.end);
         break;
       case PlutoGridColumnMenuItem.autoFit:
         if (!mounted) return;

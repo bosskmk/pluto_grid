@@ -47,7 +47,7 @@ void main() {
 
         await tester.tap(find.text('header1 value 3'));
 
-        stateManager!.toggleFrozenColumn(columns[1], PlutoColumnFrozen.left);
+        stateManager!.toggleFrozenColumn(columns[1], PlutoColumnFrozen.start);
       },
     );
 
@@ -139,7 +139,7 @@ void main() {
 
         await tester.tap(find.text('header3 value 5'));
 
-        stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.right);
+        stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.end);
       },
     );
 

@@ -741,7 +741,7 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.left);
+      stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.start);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
@@ -764,9 +764,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -822,9 +822,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -880,9 +880,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -938,9 +938,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -996,9 +996,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1051,9 +1051,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1104,9 +1104,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1157,9 +1157,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
