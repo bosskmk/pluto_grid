@@ -104,12 +104,7 @@ abstract class IColumnState {
   ///
   /// In case of [column.frozen.isFrozen],
   /// it is not changed if the width constraint of the frozen column is narrow.
-  void resizeColumn(
-    PlutoColumn column,
-    double offset, {
-    bool notify = true,
-    bool checkScroll = true,
-  });
+  void resizeColumn(PlutoColumn column, double offset);
 
   void autoFitColumn(BuildContext context, PlutoColumn column);
 
@@ -122,7 +117,6 @@ abstract class IColumnState {
     PlutoColumn column,
     bool hide, {
     bool notify = true,
-    bool checkScroll = true,
   });
 
   /// Hide or show the [columns] with [hide] value.
@@ -134,7 +128,6 @@ abstract class IColumnState {
     List<PlutoColumn> columns,
     bool hide, {
     bool notify = true,
-    bool checkScroll = true,
   });
 
   void sortAscending(PlutoColumn column, {bool notify = true});
@@ -532,12 +525,7 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   @override
-  void resizeColumn(
-    PlutoColumn column,
-    double offset, {
-    bool notify = true,
-    bool checkScroll = true,
-  }) {
+  void resizeColumn(PlutoColumn column, double offset) {
     if (columnsResizeMode.isNone || !column.enableDropToResize) {
       return;
     }
@@ -622,7 +610,6 @@ mixin ColumnState implements IPlutoGridState {
     PlutoColumn column,
     bool hide, {
     bool notify = true,
-    bool checkScroll = true,
   }) {
     if (column.hide == hide) {
       return;
@@ -634,7 +621,7 @@ mixin ColumnState implements IPlutoGridState {
 
     column.hide = hide;
 
-    _updateAfterHideColumn(notify: notify, checkScroll: checkScroll);
+    _updateAfterHideColumn(notify: notify);
   }
 
   @override
@@ -642,7 +629,6 @@ mixin ColumnState implements IPlutoGridState {
     List<PlutoColumn> columns,
     bool hide, {
     bool notify = true,
-    bool checkScroll = true,
   }) {
     if (columns.isEmpty) {
       return;
@@ -650,7 +636,7 @@ mixin ColumnState implements IPlutoGridState {
 
     _updateLimitedHideColumns(columns, hide);
 
-    _updateAfterHideColumn(notify: notify, checkScroll: checkScroll);
+    _updateAfterHideColumn(notify: notify);
   }
 
   @override
@@ -969,7 +955,6 @@ mixin ColumnState implements IPlutoGridState {
 
   void _updateAfterHideColumn({
     required bool notify,
-    required bool checkScroll,
   }) {
     refColumns.update();
 
@@ -985,10 +970,6 @@ mixin ColumnState implements IPlutoGridState {
 
     if (notify) {
       notifyListeners();
-    }
-
-    if (checkScroll) {
-      updateCorrectScrollOffset();
     }
   }
 

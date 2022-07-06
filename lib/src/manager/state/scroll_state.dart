@@ -183,7 +183,11 @@ mixin ScrollState implements IPlutoGridState {
   void updateCorrectScrollOffset() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (isHorizontalOverScrolled) {
-        scroll!.horizontal!.jumpTo(correctHorizontalOffset);
+        scroll!.horizontal!.animateTo(
+          correctHorizontalOffset,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 300),
+        );
       }
     });
   }
@@ -198,6 +202,8 @@ mixin ScrollState implements IPlutoGridState {
     final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
 
     scroll!.horizontal!.applyViewportDimension(bodyWidth);
+
+    updateCorrectScrollOffset();
   }
 
   /// Called to fix an error
