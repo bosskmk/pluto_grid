@@ -617,29 +617,23 @@ class MockPlutoGridStateManager extends _i1.Mock
               #moveColumn, [], {#column: column, #targetColumn: targetColumn}),
           returnValueForMissingStub: null);
   @override
-  void resizeColumn(_i3.PlutoColumn? column, double? offset,
-          {bool? notify = true, bool? checkScroll = true}) =>
-      super.noSuchMethod(
-          Invocation.method(#resizeColumn, [column, offset],
-              {#notify: notify, #checkScroll: checkScroll}),
+  void resizeColumn(_i3.PlutoColumn? column, double? offset) =>
+      super.noSuchMethod(Invocation.method(#resizeColumn, [column, offset]),
           returnValueForMissingStub: null);
   @override
   void autoFitColumn(_i4.BuildContext? context, _i3.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#autoFitColumn, [context, column]),
           returnValueForMissingStub: null);
   @override
-  void hideColumn(_i3.PlutoColumn? column, bool? hide,
-          {bool? notify = true, bool? checkScroll = true}) =>
+  void hideColumn(_i3.PlutoColumn? column, bool? hide, {bool? notify = true}) =>
       super.noSuchMethod(
-          Invocation.method(#hideColumn, [column, hide],
-              {#notify: notify, #checkScroll: checkScroll}),
+          Invocation.method(#hideColumn, [column, hide], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void hideColumns(List<_i3.PlutoColumn>? columns, bool? hide,
-          {bool? notify = true, bool? checkScroll = true}) =>
+          {bool? notify = true}) =>
       super.noSuchMethod(
-          Invocation.method(#hideColumns, [columns, hide],
-              {#notify: notify, #checkScroll: checkScroll}),
+          Invocation.method(#hideColumns, [columns, hide], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void sortAscending(_i3.PlutoColumn? column, {bool? notify = true}) =>

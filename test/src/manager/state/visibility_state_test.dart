@@ -257,7 +257,13 @@ void main() {
 
         when(rowsScroll.position).thenReturn(scrollPosition);
 
+        when(rowsScroll.hasClients).thenReturn(true);
+
+        when(rowsScroll.offset).thenReturn(0.0);
+
         when(scrollPosition.hasViewportDimension).thenReturn(true);
+
+        when(scrollPosition.maxScrollExtent).thenReturn(0.0);
 
         final columns = ColumnHelper.textColumn(
           'column',

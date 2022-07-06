@@ -182,6 +182,10 @@ mixin ScrollState implements IPlutoGridState {
   @override
   void updateCorrectScrollOffset() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (scroll?.bodyRowsHorizontal?.hasClients != true) {
+        return;
+      }
+
       if (isHorizontalOverScrolled) {
         scroll!.horizontal!.animateTo(
           correctHorizontalOffset,
