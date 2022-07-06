@@ -232,12 +232,12 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
   @override
-  _i7.AxisDirection get axisDirection =>
+  _i2.AxisDirection get axisDirection =>
       (super.noSuchMethod(Invocation.getter(#axisDirection),
-          returnValue: _i7.AxisDirection.up) as _i7.AxisDirection);
+          returnValue: _i2.AxisDirection.up) as _i2.AxisDirection);
   @override
-  _i7.Axis get axis => (super.noSuchMethod(Invocation.getter(#axis),
-      returnValue: _i7.Axis.horizontal) as _i7.Axis);
+  _i2.Axis get axis => (super.noSuchMethod(Invocation.getter(#axis),
+      returnValue: _i2.Axis.horizontal) as _i2.Axis);
   @override
   bool get outOfRange =>
       (super.noSuchMethod(Invocation.getter(#outOfRange), returnValue: false)
@@ -322,13 +322,13 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
       super.noSuchMethod(Invocation.method(#applyNewDimensions, []),
           returnValueForMissingStub: null);
   @override
-  _i6.Future<void> ensureVisible(_i7.RenderObject? object,
+  _i6.Future<void> ensureVisible(_i2.RenderObject? object,
           {double? alignment = 0.0,
           Duration? duration = Duration.zero,
           _i2.Curve? curve = _i2.Curves.ease,
           _i2.ScrollPositionAlignmentPolicy? alignmentPolicy =
               _i2.ScrollPositionAlignmentPolicy.explicit,
-          _i7.RenderObject? targetRenderObject}) =>
+          _i2.RenderObject? targetRenderObject}) =>
       (super.noSuchMethod(
           Invocation.method(#ensureVisible, [
             object
@@ -437,7 +437,7 @@ class MockScrollPosition extends _i1.Mock implements _i2.ScrollPosition {
           double? maxScrollExtent,
           double? pixels,
           double? viewportDimension,
-          _i7.AxisDirection? axisDirection}) =>
+          _i2.AxisDirection? axisDirection}) =>
       (super.noSuchMethod(
           Invocation.method(#copyWith, [], {
             #minScrollExtent: minScrollExtent,

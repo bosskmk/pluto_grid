@@ -879,6 +879,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#handleOnSelected, []),
           returnValueForMissingStub: null);
   @override
+  void forceUpdate() => super.noSuchMethod(Invocation.method(#forceUpdate, []),
+      returnValueForMissingStub: null);
+  @override
   _i3.PlutoGridCellPosition cellPositionToMove(
           _i3.PlutoGridCellPosition? cellPosition,
           _i3.PlutoMoveDirection? direction) =>
