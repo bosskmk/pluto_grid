@@ -1,3 +1,228 @@
+## [4.0.0] - 2022. 6. 7
+
+* Rendering speed improvements.  
+  Please check the performance in profile or build mode.  
+  Debug mode can be slow if there are many lines.
+* Some state management is applied as a Provider.
+* Added PlutoGridStateManager.initializeRowsAsync static method.   
+  To avoid UI freezing when starting the grid with a large number of rows.    
+  [Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
+
+## [3.1.2] - 2022. 6. 2
+
+* Fixed the date popup not opening when the value is wrong.
+
+## [3.1.1] - 2022. 5. 29
+
+* Improved row deletion speed improvement.
+
+## [3.1.0] - 2022. 5. 29
+
+* Improved column width adjustment performance.
+* Updated date, time picker popups.
+
+## [3.0.2] - 2022. 5. 25
+
+* CSV export has been separated into external packages.   
+  Install the pluto_grid_export package.
+
+## [3.0.0-1.pre] - 2022. 5. 14
+
+* Updated for flutter 3.0 version.
+* Updated group name display in column filter popup.
+* Fixed by bug due to commit 1d5554d3.
+
+## [2.10.3] - 2022. 5. 14
+
+* Fixed by bug due to commit 1d5554d3.
+
+## [2.10.2] - 2022. 5. 12
+
+* Fixed bad export CSV encoding when non-Latin1 / US-ASCII characters were present.
+
+## [2.10.1] - 2022. 5. 11
+
+* Fixed currentColumn null error.
+
+## [2.10.0] - 2022. 5. 11
+
+* Added export as csv.
+* Added persian locale.
+
+## [2.9.3] - 2022. 3. 16
+
+* Added columnContextIcon, columnResizeIcon.
+* Added backgroundColor to PlutoColumn, PlutoColumnGroup.
+
+## [2.9.2] - 2022. 1. 27
+
+* Fixed locale number format.  
+  The number type number expression according to the locale of intl is applied.
+
+## [2.9.1] - 2022. 1. 11
+
+* Fixed a bug where `listener` of `keyManager` was not called when `enterKeyAction` was `none`.
+
+## [2.9.0] - 2022. 1. 6
+
+* Added expandedColumn of columnGroup.
+* Added row color animation when dragging rows.
+* Changed the default value of enableMoveDownAfterSelecting to false.
+* Changed a minimum flutter version to 2.5.0.
+* Changed to be changed in real time when changing the column width.
+* Removed isShowFrozenColumn method of PlutoGridStateManager.
+* Removed resetKeyPressed, setKeyPressed methods of PlutoGridStateManager.
+* Added F3 key action.
+* Added ESC key action to moving previous cell in column filter widget.
+* Changed pagination logic.
+* Added done button action for mobile.
+* Fixed screen not being able to touch due to scroll range error when resizing the screen.
+* Added insert, remove columns.
+* Added allowFirstDot to PlutoColumnTypeNumber.
+
+## [2.8.0] - 2021. 12. 10
+
+* Added column group.
+* Added columnHeight, columnFilterHeight.
+* Changed the default value of enableGridBorderShadow from true to false.
+* Changed interface of toggleSortColumn, sortAscending, sortDescending, sortBySortIdx methods.
+
+## [2.7.1] - 2021. 12. 8
+
+* Fixed an error where the row height of the popup did not change when the rowHeight value was changed. 
+
+## [2.7.0] - 2021. 12. 7
+
+* Added to be able to set the left and right padding of the cell.
+* Added option to automatically enter edit state when selecting a cell.
+* Added keyboard move option with left and right arrow keys when reaching the left and right ends of text in edit state.
+* Added titleSpan property to custom text or icon in column title.
+* Removed readOnly property of PlutoColumnType and added to PlutoColumn.
+* Added checkReadOnly callback to dynamically manipulate readOnly property.
+* Added gridPopupBorderRadius property to round the corners of popups used inside the grid.
+
+## [2.6.1] - 2021. 11. 22
+
+* Fixed so that the onChanged callback is not called when text is entered while the cell is not in the edit state.
+
+## [2.6.0] - 2021. 11. 19
+
+* Added dynamically row background color.
+* Added optional border radius.
+* Added align column title text.
+* Added to receive the moved row to onRowsMoved callback when a row is moved by dragging, etc.
+* Added shortcuts. (Alt + PageUp or PageDown. Moving a page in the paging state.)
+* Modified so that onSelected callback is called with one tap in PlutoGridMode.select mode.
+* Fixed an error where arrow keys and backspace keys did not work in Desktop.
+* Fixed insert, append, prepend rows bug.
+* Renamed PlutoGridMoveUpdateEvent to PlutoGridScrollUpdateEvent.
+
+## [2.5.0] - 2021. 9. 22
+
+* flutter 2.5 compatible.
+* Added enableGridBorderShadow option to PlutoGridConfiguration.
+* Added enableColumnFilter option to Select column.
+
+## [2.4.1] - 2021. 8. 1
+
+* Fix pagination bug.
+
+## [2.4.0] - 2021. 7. 31
+
+* Added pagination. 
+* Added debounce on keyboard input in filter.
+
+## [2.3.0] - 2021. 7. 7
+
+* Added onDoubleTap, onSecondaryTap cell events.
+* Hide secondary scrollbar.
+
+## [2.2.1] - 2021. 6. 26
+
+* Added enableDropToResize option when creating a column. (enables an icon for adjusting the width of a column when there is no context menu)
+* Fix scroll bar drag behavior
+
+## [2.2.0] - 2021. 5. 29
+
+* Add callback to row checks developed by https://github.com/MrCasCode.
+
+## [2.1.0] - 2021. 5. 19
+
+* flutter 2.2.x compatible
+
+## [2.0.0] - 2021. 5. 14
+
+* Change scroll physics.
+* Fix a bug when dragging rows. 
+* Stable release.
+
+## [2.0.0-nullsafety.2] - 2021. 5. 1
+
+* Fix errors of tests on null-safety.
+* Fix focus problems on web.
+
+## [2.0.0-nullsafety.1] - 2021. 4. 15
+
+* Edit dependency.
+
+## [2.0.0-nullsafety.0] - 2021. 4. 9
+
+* Null safety version.
+* Fix CupertinoScrollBar error.(In flutter 2.1.0.xxx)
+
+## [1.2.0] - 2021. 3. 13
+
+* Add moveRowsByIndex.
+* Fix focusing bug.
+* Apply strong-mode.
+* Allow custom key in row.
+
+* Rename moveRows to moveRowsByOffset.
+* Add moveRowsByIndex.
+* Fix focus.
+
+## [1.1.1] - 2021. 1. 22
+
+* Changed the return value of FocusNode's onKey callback function from bool to KeyEventResult.
+* Add china locale.
+
+## [1.1.0] - 2021. 1. 16
+
+* Add hide columns.
+
+## [1.0.0] - 2020. 12. 30
+
+* Class name change. Just like changing PlutoConfiguration to PlutoGridConfiguration, the word Grid was added in the middle.
+  - PlutoStateManager > PlutoGridStateManager
+  - PlutoOnLoadedEvent > PlutoGridOnLoadedEvent
+  - Many other classes...
+
+## [1.0.0-pre.10] - 2020. 12. 21
+
+* Fix sorting error when null value.
+
+## [1.0.0-pre.9] - 2020. 12. 20
+
+* The method of setting the filter has changed. columnFilters in configuration changed to columnFilterConfig.
+* Different default filters can be set for each column.
+* Modified to close the popup if there is no filter to clear when clicking the clear button in the filter popup.
+* Rename DatetimeHelper to DateTimeHelper.
+
+## [1.0.0-pre.8] - 2020. 12. 16
+
+* Add filtering.
+* Rename PlutoSelectingMode.square to PlutoSelectingMode.cell.
+* Remove originalValue property from PlutoCell.
+
+## [1.0.0-pre.7] - 2020. 11. 24
+
+* Added to PlutoConfiguration to allow you to set the row height.
+
+## [1.0.0-pre.6] - 2020. 11. 23
+
+* Add Czech locale.
+* Rename the Fix column to freeze column.
+
 ## [1.0.0-pre.5] - 2020. 11. 18
 
 * Add enableEditingMode to PlutoColumn.

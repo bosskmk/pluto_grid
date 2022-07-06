@@ -4,46 +4,82 @@ class ColumnHelper {
   static List<PlutoColumn> textColumn(
     String title, {
     int count = 1,
-    double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.none,
+    int start = 0,
+    double width = PlutoGridSettings.columnWidth,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
+    bool hide = false,
+    dynamic defaultValue = '',
   }) {
-    return Iterable.generate(count)
-        .map((e) => PlutoColumn(
-              title: '$title$e',
-              field: '$title$e',
-              width: width,
-              fixed: fixed,
-              type: PlutoColumnType.text(readOnly: readOnly),
-            ))
-        .toList(growable: false);
+    return Iterable<int>.generate(count).map((e) {
+      e += start;
+      return PlutoColumn(
+        title: '$title$e',
+        field: '$title$e',
+        width: width,
+        frozen: frozen,
+        readOnly: readOnly,
+        hide: hide,
+        type: PlutoColumnType.text(defaultValue: defaultValue),
+      );
+    }).toList();
   }
 
   static List<PlutoColumn> dateColumn(
     String title, {
     int count = 1,
-    double width = PlutoDefaultSettings.columnWidth,
-    PlutoColumnFixed fixed = PlutoColumnFixed.none,
+    int start = 0,
+    double width = PlutoGridSettings.columnWidth,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
     bool readOnly = false,
-    dynamic startDate,
-    dynamic endDate,
+    bool hide = false,
+    DateTime? startDate,
+    DateTime? endDate,
     String format = 'yyyy-MM-dd',
     bool applyFormatOnInit = true,
   }) {
-    return Iterable.generate(count)
-        .map((e) => PlutoColumn(
-              title: '$title$e',
-              field: '$title$e',
-              width: width,
-              fixed: fixed,
-              type: PlutoColumnType.date(
-                readOnly: readOnly,
-                startDate: startDate,
-                endDate: endDate,
-                format: format,
-                applyFormatOnInit: applyFormatOnInit,
-              ),
-            ))
-        .toList(growable: false);
+    return Iterable<int>.generate(count).map((e) {
+      e += start;
+      return PlutoColumn(
+        title: '$title$e',
+        field: '$title$e',
+        width: width,
+        frozen: frozen,
+        readOnly: readOnly,
+        hide: hide,
+        type: PlutoColumnType.date(
+          startDate: startDate,
+          endDate: endDate,
+          format: format,
+          applyFormatOnInit: applyFormatOnInit,
+        ),
+      );
+    }).toList();
+  }
+
+  static List<PlutoColumn> timeColumn(
+    String title, {
+    int count = 1,
+    int start = 0,
+    double width = PlutoGridSettings.columnWidth,
+    PlutoColumnFrozen frozen = PlutoColumnFrozen.none,
+    bool readOnly = false,
+    bool hide = false,
+    dynamic defaultValue = '00:00',
+  }) {
+    return Iterable<int>.generate(count).map((e) {
+      e += start;
+      return PlutoColumn(
+        title: '$title$e',
+        field: '$title$e',
+        width: width,
+        frozen: frozen,
+        readOnly: readOnly,
+        hide: hide,
+        type: PlutoColumnType.time(
+          defaultValue: defaultValue,
+        ),
+      );
+    }).toList();
   }
 }

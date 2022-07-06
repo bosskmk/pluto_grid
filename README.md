@@ -1,23 +1,30 @@
-## PlutoGrid for flutter - v1.0.0-pre.5
+## PlutoGrid for flutter - v4.0.0
 
+[![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <br>
 
-> Work is in progress for the 1.0.0 deployment.
-> Currently the latest version is 0.1.21.
+`PlutoGrid` is a `DataGrid` that can be operated with the keyboard in various situations such as moving cells.  
+It is developed with priority on the web and desktop.  
+Improvements such as UI on mobile are being considered.  
+If you comment on an issue, mobile improvements can be made quickly.
 
 <br>
 
-PlutoGrid is a dataGrid that can be controlled by the keyboard on desktop and web.  
-Of course, it works well on Android and IOS.
+### Key changes in PlutoGrid 4 version
+> The key change in PlutoGrid 4 version is speed improvement.<br><br>
+By optimizing the state change, it has been improved to maintain an appropriate frame even when there is a lot of data.  
+To check this, run Flutter in profile or build mode.  
+There may still be instances where the UI freezes in certain actions.  
+I plan to improve these one by one, and if you find something like this, please let me know through the Issue.<br>  
+If you pass a large number of rows when creating a grid, the UI may freeze. Check the example below.  
+[Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
 
 <br>
 
-### [Demo Web 1.0.0-pre.5 - Preview](https://bosskmk.github.io/pluto_grid/build/preview/index.html)
-> You can play the demo before it is released.
-
-### [Demo Web 0.1.21 - Latest](https://bosskmk.github.io/pluto_grid/build/web/index.html)
+### [Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
 > You can try out various functions and usage methods right away.  
 > All features provide example code.
 
@@ -36,90 +43,45 @@ Of course, it works well on Android and IOS.
 ### [ChangeLog](https://github.com/bosskmk/pluto_grid/blob/master/CHANGELOG.md)
 > Please note the changes when changing the version of PlutoGrid you are using.
 
+<br>
+
 ### [Issue](https://github.com/bosskmk/pluto_grid/issues)
 > Report any questions or errors.
 
 <br>
 
-### Features  
-- Columns
-  - Dragging the column heading moves the column left and right.
-  - Drag the icon to the right of the column heading to adjust the width of the column.
-  - Click the icon to the right of the column title to fix the column left or right or automatically adjust the width of the column.
-  - Ascending or Descending the list by clicking on a column heading.
-  - Text, number, date, time, select list type column.
-  - (To do) Filtering.
-  - (To do) Multi sorting.
-  - (To do) Hide specific columns.
-- Selection
-  - Row mode - Select rows.
-  - Square mode - Select a square area like Excel.
-  - None mode - Not selectable.
-  - (Row mode) - Select Row by Control(Meta on MacOs) + Click.
-  - (Row, Square mode) - (Shift + arrow keys) or (shift + click) or (long tapping and move) to select.
-  - Select all rows or cells. Control(Meta on MacOs) + A.
-- Copy and Paste
-  - Control(Meta on MacOs) + C or V
-  - If there is no selected cell, it operates based on the current cell.
-  - If there are selected Rows in Row mode, it operates based on the selected state.
-  - Works even if rows get selected irregularly in Row mode.
-- Moving
-  - Move with arrow keys.
-  - Press Enter to edit the cell or move it down.
-  - Tab key to move left and right cells.
-  - Shift + (Enter, Tap) works in the opposite direction.
-  - Home(or End). Move to the first or last column.
-  - Home(or End) + Ctrl. Move to the top or bottom row.
-  - Home(or End) + Shift. as selection.
-  - Home(or End) + Shift + Ctrl. as selection.
-  - PageUp, PageDown.
-- Dual Mode
-  - Working with different grids on both sides.
-  - At the end of the grid, you can move between grids with the left and right arrow keys, or the tab key.
-- Configuration
-  - Various properties can be changed.
-  - A dark mode.
-- UI for Mobile
-  - (To do) - UI for convenient use on mobile.
-- Internationalization
-  - (To do) - Support a lot of languages.
-  
+### Packages
+
+> [PlutoGridExport](https://github.com/bosskmk/pluto_grid/tree/master/packages/pluto_grid_export)  
+> This package can export the metadata of PlutoGrid as CSV or PDF.
+
+
 <br>
-  
+
 ### Screenshots
 
-#### With fixed columns on the left and right.
-![PlutoGrid Nomal](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_1.jpg)
+#### Change the color of the rows or make the cells look the way you want them.
+![PlutoGrid Normal](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_01.png)
 
 <br>
 
-#### Popup for select list type columns.
-![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_2.jpg)
+#### Date type input can be easily selected by pop-up and keyboard.
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/3.1.0/pluto_grid_3.1.0_01.png)
 
 <br>
 
-#### Popup for select date type columns.
-![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_3.jpg)
+#### The selection type column can be easily selected using a pop-up and keyboard.
+![PlutoGrid Select Date](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_03.png)
 
 <br>
 
-#### Cell renderer.
-![PlutoGrid Cell renderer](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_4.jpg)
+#### Group columns by desired depth.
+![PlutoGrid Cell renderer](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_04.png)
 
 <br>
 
-#### Multi select. (Cells or Rows)
-![PlutoGrid Multi select](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_5.jpg)
-
-<br>
-
-#### Dual grid. (Moving between grids.)
-![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_6.jpg)
-
-<br>
-
-#### A Dark mode.
-![PlutoGrid Dual grid](https://bosskmk.github.io/images/pluto_grid/1.0.0/pluto_image_1.0.0_7.jpg)
+#### Grid can be expressed in dark mode or a combination of desired colors. Also, freeze the column, move it by dragging, or adjust the size.
+![PlutoGrid Multi select](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_05.png)
 
 <br>
 
@@ -194,27 +156,38 @@ List<PlutoRow> rows = [
 Create a grid with the data created above.
 ```dart
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PlutoGrid Demo'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(30),
-        child: PlutoGrid(
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('PlutoGrid Demo'),
+    ),
+    body: Container(
+      padding: const EdgeInsets.all(30),
+      child: PlutoGrid(
           columns: columns,
           rows: rows,
-          onChanged: (PlutoOnChangedEvent event) {
+          onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          onLoaded: (PlutoOnLoadedEvent event) {
+          onLoaded: (PlutoGridOnLoadedEvent event) {
             print(event);
           }
-        ),
       ),
-    );
-  }
+    ),
+  );
+}
 ```
+
+<br>
+
+### Flutter version compatible
+
+| Flutter         | PlutoGrid               |
+|-----------------|-------------------------|
+| 3.0.0 or higher | 3.0.0-0.pre or higher   |
+| 2.5.0 or higher | 2.5.0 or higher         |
+
+For other versions, contact the issue
 
 <br>
 

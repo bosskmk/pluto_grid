@@ -19,23 +19,21 @@ void main() {
         home: Material(
           child: Builder(
             builder: (BuildContext context) {
-              return Container(
-                child: FlatButton(
-                  onPressed: () {
-                    PlutoDualGridPopup(
-                      context: context,
-                      gridPropsA: PlutoDualGridProps(
-                        columns: gridAColumns,
-                        rows: gridARows,
-                      ),
-                      gridPropsB: PlutoDualGridProps(
-                        columns: gridBColumns,
-                        rows: gridBRows,
-                      ),
-                    );
-                  },
-                  child: const Text('open grid popup'),
-                ),
+              return TextButton(
+                onPressed: () {
+                  PlutoDualGridPopup(
+                    context: context,
+                    gridPropsA: PlutoDualGridProps(
+                      columns: gridAColumns,
+                      rows: gridARows,
+                    ),
+                    gridPropsB: PlutoDualGridProps(
+                      columns: gridBColumns,
+                      rows: gridBRows,
+                    ),
+                  );
+                },
+                child: const Text('open grid popup'),
               );
             },
           ),
@@ -44,7 +42,7 @@ void main() {
     );
 
     // when
-    await tester.tap(find.byType(FlatButton));
+    await tester.tap(find.byType(TextButton));
 
     await tester.pumpAndSettle();
 

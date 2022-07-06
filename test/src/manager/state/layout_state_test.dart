@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
+import 'layout_state_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
   group('속성 값 테스트.', () {
-    PlutoStateManager stateManager;
+    late PlutoGridStateManager stateManager;
+
+    PlutoGridEventManager eventManager;
 
     List<PlutoColumn> columns;
 
     List<PlutoRow> rows;
 
-    final makeFixedColumnByMaxWidth = (String description, double maxWidth) {
+    makeFrozenColumnByMaxWidth(String description, double maxWidth) {
       return PlutoWidgetTestHelper(
         '고정 컬럼이 있고 $description',
         (tester) async {
@@ -22,7 +29,7 @@ void main() {
             ...ColumnHelper.textColumn(
               'left',
               count: 1,
-              fixed: PlutoColumnFixed.left,
+              frozen: PlutoColumnFrozen.left,
               width: 150,
             ),
             ...ColumnHelper.textColumn(
@@ -33,84 +40,85 @@ void main() {
             ...ColumnHelper.textColumn(
               'right',
               count: 1,
-              fixed: PlutoColumnFixed.right,
+              frozen: PlutoColumnFrozen.right,
               width: 150,
             ),
           ];
 
           rows = RowHelper.count(10, columns);
 
-          stateManager = PlutoStateManager(
+          eventManager = MockPlutoGridEventManager();
+
+          stateManager = PlutoGridStateManager(
             columns: columns,
             rows: rows,
             gridFocusNode: null,
             scroll: null,
           );
 
+          stateManager.setEventManager(eventManager);
           stateManager
               .setLayout(BoxConstraints(maxWidth: maxWidth, maxHeight: 500));
           stateManager.setGridGlobalOffset(Offset.zero);
         },
       );
-    };
+    }
 
-    final hasFixedColumnAndWidthEnough = makeFixedColumnByMaxWidth(
+    final hasFrozenColumnAndWidthEnough = makeFrozenColumnByMaxWidth(
       '넓이가 충분한 경우',
       600,
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyLeftOffset 값은 왼쪽 고정 컬럼 넓이 + 1 이어야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftOffset,
-          stateManager.leftFixedColumnsWidth + 1,
+          stateManager.leftFrozenColumnsWidth + 1,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
+    hasFrozenColumnAndWidthEnough.test(
       'bodyRightOffset 값은 우측 고정 컬럼 넓이 + 1 이어야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightOffset,
-          stateManager.rightFixedColumnsWidth + 1,
+          stateManager.rightFrozenColumnsWidth + 1,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
-      'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되어야 한다.',
+    hasFrozenColumnAndWidthEnough.test(
+      'bodyLeftScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
-          stateManager.gridGlobalOffset.dx +
-              PlutoDefaultSettings.gridPadding +
-              PlutoDefaultSettings.gridBorderWidth +
-              stateManager.leftFixedColumnsWidth +
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+          stateManager.gridGlobalOffset!.dx +
+              PlutoGridSettings.gridPadding +
+              PlutoGridSettings.gridBorderWidth +
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    hasFixedColumnAndWidthEnough.test(
-      'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되어야 한다.',
+    hasFrozenColumnAndWidthEnough.test(
+      'bodyRightScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
-          (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
-              stateManager.rightFixedColumnsWidth -
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+          (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    final hasFixedColumnAndWidthNotEnough = makeFixedColumnByMaxWidth(
+    final hasFrozenColumnAndWidthNotEnough = makeFrozenColumnByMaxWidth(
       '넓이가 부족한 경우',
       450,
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyLeftOffset 값은 0 이어야 한다.',
       (tester) async {
         expect(
@@ -120,7 +128,7 @@ void main() {
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
+    hasFrozenColumnAndWidthNotEnough.test(
       'bodyRightOffset 값은 0 이어야 한다.',
       (tester) async {
         expect(
@@ -130,28 +138,26 @@ void main() {
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
-      'bodyLeftScrollOffset 값에 왼쪽 고정 컬럼 넓이가 포함 되지 않아야 한다.',
+    hasFrozenColumnAndWidthNotEnough.test(
+      'bodyLeftScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyLeftScrollOffset,
-          stateManager.gridGlobalOffset.dx +
-              PlutoDefaultSettings.gridPadding +
-              PlutoDefaultSettings.gridBorderWidth +
-              // stateManager.leftFixedColumnsWidth +
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+          stateManager.gridGlobalOffset!.dx +
+              PlutoGridSettings.gridPadding +
+              PlutoGridSettings.gridBorderWidth +
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );
 
-    hasFixedColumnAndWidthNotEnough.test(
-      'bodyRightScrollOffset 값에 우측 고정 컬럼 넓이가 포함 되지 않아야 한다.',
+    hasFrozenColumnAndWidthNotEnough.test(
+      'bodyRightScrollOffset 값이 일치해야 한다.',
       (tester) async {
         expect(
           stateManager.bodyRightScrollOffset,
-          (stateManager.gridGlobalOffset.dx + stateManager.maxWidth) -
-              // stateManager.rightFixedColumnsWidth -
-              PlutoDefaultSettings.offsetScrollingFromEdge,
+          (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
+              PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
     );

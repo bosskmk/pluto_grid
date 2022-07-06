@@ -1,13 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
-import '../../../mock/mock_pluto_scroll_controller.dart';
+import 'selecting_state_test.mocks.dart';
 
+@GenerateMocks([], customMocks: [
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+])
 void main() {
+  PlutoGridStateManager createStateManager({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    FocusNode? gridFocusNode,
+    PlutoGridScrollController? scroll,
+    BoxConstraints? layout,
+    PlutoGridConfiguration? configuration,
+  }) {
+    final stateManager = PlutoGridStateManager(
+      columns: columns,
+      rows: rows,
+      gridFocusNode: gridFocusNode,
+      scroll: scroll,
+      configuration: configuration,
+    );
+
+    stateManager.setEventManager(MockPlutoGridEventManager());
+
+    if (layout != null) {
+      stateManager.setLayout(layout);
+    }
+
+    return stateManager;
+  }
+
   group('currentSelectingPositionList', () {
     testWidgets(
       'selectingMode.Row 상태에서'
@@ -20,17 +50,15 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -54,24 +82,22 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
         final currentCell = rows[3].cells['text1'];
 
         stateManager.setCurrentCell(currentCell, 3);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 4,
           ),
@@ -110,17 +136,15 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -128,16 +152,16 @@ void main() {
       final currentSelectingText = stateManager.currentSelectingText;
 
       final transformedSelectingText =
-          ClipboardTransformation.stringToList(currentSelectingText);
+          PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(transformedSelectingText[0][0], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text2'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text2']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text2'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text2']!.value);
     });
 
     testWidgets(
@@ -154,17 +178,15 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager.toggleSelectingRow(1);
       stateManager.toggleSelectingRow(3);
@@ -173,23 +195,23 @@ void main() {
       final currentSelectingText = stateManager.currentSelectingText;
 
       final transformedSelectingText =
-          ClipboardTransformation.stringToList(currentSelectingText);
+          PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(transformedSelectingText[0][0], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text2'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text2']!.value);
 
       expect(
-          transformedSelectingText[1][0], isNot(rows[2].cells['text0'].value));
+          transformedSelectingText[1][0], isNot(rows[2].cells['text0']!.value));
       expect(
-          transformedSelectingText[1][1], isNot(rows[2].cells['text1'].value));
+          transformedSelectingText[1][1], isNot(rows[2].cells['text1']!.value));
       expect(
-          transformedSelectingText[1][2], isNot(rows[2].cells['text2'].value));
+          transformedSelectingText[1][2], isNot(rows[2].cells['text2']!.value));
 
-      expect(transformedSelectingText[1][0], rows[3].cells['text0'].value);
-      expect(transformedSelectingText[1][1], rows[3].cells['text1'].value);
-      expect(transformedSelectingText[1][2], rows[3].cells['text2'].value);
+      expect(transformedSelectingText[1][0], rows[3].cells['text0']!.value);
+      expect(transformedSelectingText[1][1], rows[3].cells['text1']!.value);
+      expect(transformedSelectingText[1][2], rows[3].cells['text2']!.value);
     });
 
     testWidgets(
@@ -208,17 +230,15 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       // when
       final currentSelectingText = stateManager.currentSelectingText;
@@ -243,19 +263,17 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
-
-      final currentCell = rows[3].cells['text2'];
+      final currentCell = rows[3].cells['text2']!;
 
       stateManager.setCurrentCell(currentCell, 3);
 
@@ -270,7 +288,7 @@ void main() {
         'WHEN'
         'selectingMode.Row'
         'currentSelectingRows.length > 0'
-        'has fixed column In a state of sufficient width'
+        'has frozen column In a state of sufficient width'
         'THEN'
         'The values of the selected rows should be returned.',
         (WidgetTester tester) async {
@@ -280,31 +298,28 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ];
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 600),
       );
 
-      // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 충분
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 600));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -312,29 +327,29 @@ void main() {
       final currentSelectingText = stateManager.currentSelectingText;
 
       final transformedSelectingText =
-          ClipboardTransformation.stringToList(currentSelectingText);
+          PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.showFixedColumn, true);
+      expect(stateManager.showFrozenColumn, true);
 
-      expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][3], rows[1].cells['text2'].value);
-      expect(transformedSelectingText[0][4], rows[1].cells['right0'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['left0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][3], rows[1].cells['text2']!.value);
+      expect(transformedSelectingText[0][4], rows[1].cells['right0']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['left0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][3], rows[2].cells['text2'].value);
-      expect(transformedSelectingText[1][4], rows[2].cells['right0'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['left0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][3], rows[2].cells['text2']!.value);
+      expect(transformedSelectingText[1][4], rows[2].cells['right0']!.value);
     });
 
     testWidgets(
         'WHEN'
         'selectingMode.Row'
         'currentSelectingRows.length > 0'
-        'has fixed column In a narrow area'
+        'has frozen column In a narrow area'
         'THEN'
         'The values of the selected rows should be returned.',
         (WidgetTester tester) async {
@@ -344,31 +359,29 @@ void main() {
           'left',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.left,
+          frozen: PlutoColumnFrozen.left,
         ),
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ...ColumnHelper.textColumn(
           'right',
           count: 1,
           width: 150,
-          fixed: PlutoColumnFixed.right,
+          frozen: PlutoColumnFrozen.right,
         ),
       ];
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 부족
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
 
-      // 최소 넓이(고정 컬럼 2개 + PlutoDefaultSettings.bodyMinWidth) 부족
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       stateManager.setCurrentSelectingRowsByRange(1, 2);
 
@@ -376,22 +389,22 @@ void main() {
       final currentSelectingText = stateManager.currentSelectingText;
 
       final transformedSelectingText =
-          ClipboardTransformation.stringToList(currentSelectingText);
+          PlutoClipboardTransformation.stringToList(currentSelectingText);
 
       // then
-      expect(stateManager.showFixedColumn, false);
+      expect(stateManager.showFrozenColumn, false);
 
-      expect(transformedSelectingText[0][0], rows[1].cells['left0'].value);
-      expect(transformedSelectingText[0][1], rows[1].cells['text0'].value);
-      expect(transformedSelectingText[0][2], rows[1].cells['text1'].value);
-      expect(transformedSelectingText[0][3], rows[1].cells['text2'].value);
-      expect(transformedSelectingText[0][4], rows[1].cells['right0'].value);
+      expect(transformedSelectingText[0][0], rows[1].cells['left0']!.value);
+      expect(transformedSelectingText[0][1], rows[1].cells['text0']!.value);
+      expect(transformedSelectingText[0][2], rows[1].cells['text1']!.value);
+      expect(transformedSelectingText[0][3], rows[1].cells['text2']!.value);
+      expect(transformedSelectingText[0][4], rows[1].cells['right0']!.value);
 
-      expect(transformedSelectingText[1][0], rows[2].cells['left0'].value);
-      expect(transformedSelectingText[1][1], rows[2].cells['text0'].value);
-      expect(transformedSelectingText[1][2], rows[2].cells['text1'].value);
-      expect(transformedSelectingText[1][3], rows[2].cells['text2'].value);
-      expect(transformedSelectingText[1][4], rows[2].cells['right0'].value);
+      expect(transformedSelectingText[1][0], rows[2].cells['left0']!.value);
+      expect(transformedSelectingText[1][1], rows[2].cells['text0']!.value);
+      expect(transformedSelectingText[1][2], rows[2].cells['text1']!.value);
+      expect(transformedSelectingText[1][3], rows[2].cells['text2']!.value);
+      expect(transformedSelectingText[1][4], rows[2].cells['right0']!.value);
     });
 
     testWidgets(
@@ -410,24 +423,22 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 300, maxWidth: 50));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.square);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
       final currentCell = rows[3].cells['text1'];
 
       stateManager.setCurrentCell(currentCell, 3);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: 2,
           rowIdx: 4,
         ),
@@ -451,17 +462,15 @@ void main() {
           ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ];
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.none);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
         expect(stateManager.isSelecting, false);
         // when
@@ -482,17 +491,15 @@ void main() {
           ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ];
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
         expect(stateManager.currentCell, null);
         expect(stateManager.isSelecting, false);
@@ -514,17 +521,15 @@ void main() {
           ...ColumnHelper.textColumn('text', count: 3, width: 150),
         ];
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
-          rows: null,
+          rows: [],
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         expect(stateManager.currentCell, null);
         expect(stateManager.isSelecting, false);
@@ -548,17 +553,15 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
 
         expect(stateManager.currentCell, isNot(null));
@@ -584,17 +587,15 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
         stateManager.setEditing(true);
 
@@ -622,21 +623,19 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
-
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         // when
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 0,
             rowIdx: 1,
           ),
@@ -644,7 +643,7 @@ void main() {
 
         expect(stateManager.currentSelectingPosition, isNot(null));
 
-        stateManager.clearCurrentSelectingPosition();
+        stateManager.clearCurrentSelecting();
 
         // then
         expect(stateManager.currentSelectingPosition, null);
@@ -663,24 +662,22 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(10, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         stateManager.toggleSelectingRow(1);
 
         expect(stateManager.currentSelectingRows.length, 1);
 
-        stateManager.clearCurrentSelectingRows();
+        stateManager.clearCurrentSelecting();
 
         // then
         expect(stateManager.currentSelectingRows.length, 0);
@@ -699,15 +696,13 @@ void main() {
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
       ];
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
-        rows: null,
+        rows: [],
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
-
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -728,15 +723,13 @@ void main() {
         ...ColumnHelper.textColumn('text', count: 3, width: 150),
       ];
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: [],
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
-
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -761,25 +754,23 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.square);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
 
       // when
       stateManager.setAllCurrentSelecting();
 
       // then
       expect(stateManager.currentCell, rows.first.cells['text0']);
-      expect(stateManager.currentSelectingPosition.rowIdx, 4);
-      expect(stateManager.currentSelectingPosition.columnIdx, 2);
+      expect(stateManager.currentSelectingPosition!.rowIdx, 4);
+      expect(stateManager.currentSelectingPosition!.columnIdx, 2);
     });
 
     testWidgets(
@@ -795,25 +786,23 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.row);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
       // when
       stateManager.setAllCurrentSelecting();
 
       // then
-      expect(stateManager.currentCell.value, rows.first.cells['text0'].value);
-      expect(stateManager.currentSelectingPosition.columnIdx, 2);
-      expect(stateManager.currentSelectingPosition.rowIdx, 4);
+      expect(stateManager.currentCell!.value, rows.first.cells['text0']!.value);
+      expect(stateManager.currentSelectingPosition!.columnIdx, 2);
+      expect(stateManager.currentSelectingPosition!.rowIdx, 4);
       expect(stateManager.currentSelectingRows.length, 5);
     });
 
@@ -830,17 +819,15 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-      stateManager.setSelectingMode(PlutoSelectingMode.none);
+      stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
       // when
       stateManager.setAllCurrentSelecting();
@@ -864,23 +851,20 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        // when
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         stateManager.setCurrentCell(rows[3].cells['text1'], 3);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             columnIdx: 1,
             rowIdx: 4,
           ),
@@ -911,18 +895,15 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        // when
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         stateManager.toggleSelectingRow(3);
 
@@ -947,18 +928,16 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.none);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -976,18 +955,16 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1006,21 +983,17 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
-        stateManager.setKeyPressed(PlutoKeyPressed(
-          shift: true,
-        ));
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+        stateManager.keyPressed.shift = true;
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1039,21 +1012,17 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
-        stateManager.setKeyPressed(PlutoKeyPressed(
-          ctrl: true,
-        ));
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+        stateManager.keyPressed.ctrl = true;
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1072,21 +1041,17 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.row);
-        stateManager.setKeyPressed(PlutoKeyPressed(
-          shift: true,
-        ));
+        stateManager.setSelectingMode(PlutoGridSelectingMode.row);
+        stateManager.keyPressed.shift = true;
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then
@@ -1106,21 +1071,17 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: null,
           scroll: null,
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
 
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
         // when
-        stateManager.setSelectingMode(PlutoSelectingMode.square);
-        stateManager.setKeyPressed(PlutoKeyPressed(
-          ctrl: true,
-        ));
+        stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
+        stateManager.keyPressed.ctrl = true;
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then
@@ -1142,27 +1103,29 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
 
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
-
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           expect(
-              stateManager.isSelectedCell(
-                  rows[i].cells[column.field], column, i),
-              false);
-        });
+            stateManager.isSelectedCell(
+              rows[i].cells[column.field]!,
+              column,
+              i,
+            ),
+            false,
+          );
+        }
       }
     });
 
@@ -1179,43 +1142,49 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
-
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setCurrentCell(stateManager.firstCell, 0);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           columnIdx: 1,
           rowIdx: 0,
         ),
       );
 
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           if (i == 0 && (column.field == 'text0' || column.field == 'text1')) {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                true);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              true,
+            );
           } else {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                false);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              false,
+            );
           }
-        });
+        }
       }
     });
 
@@ -1232,44 +1201,50 @@ void main() {
 
       List<PlutoRow> rows = RowHelper.count(5, columns);
 
-      PlutoStateManager stateManager = PlutoStateManager(
+      PlutoGridStateManager stateManager = createStateManager(
         columns: columns,
         rows: rows,
         gridFocusNode: null,
         scroll: null,
+        layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
       );
-
-      stateManager
-          .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
       stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoCellPosition(
+        cellPosition: PlutoGridCellPosition(
           rowIdx: 3,
           columnIdx: 2,
         ),
       );
 
       // when
-      expect(stateManager.selectingMode.isSquare, isTrue);
+      expect(stateManager.selectingMode.isCell, isTrue);
 
       // then
       for (var i = 0; i < rows.length; i += 1) {
-        columns.forEach((column) {
+        for (var column in columns) {
           if ((i >= 1 && i <= 3) &&
               (column.field == 'text1' || column.field == 'text2')) {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                true);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              true,
+            );
           } else {
             expect(
-                stateManager.isSelectedCell(
-                    rows[i].cells[column.field], column, i),
-                false);
+              stateManager.isSelectedCell(
+                rows[i].cells[column.field]!,
+                column,
+                i,
+              ),
+              false,
+            );
           }
-        });
+        }
       }
     });
   });
@@ -1287,12 +1262,12 @@ void main() {
 
         List<PlutoRow> rows = RowHelper.count(5, columns);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: FocusNode(),
           scroll: null,
-          configuration: PlutoConfiguration(
+          configuration: const PlutoGridConfiguration(
             enableMoveDownAfterSelecting: false,
           ),
         );
@@ -1303,22 +1278,22 @@ void main() {
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             rowIdx: 3,
             columnIdx: 2,
           ),
         );
 
         // when
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         stateManager.handleAfterSelectingRow(
-          rows[1].cells['text1'],
+          rows[1].cells['text1']!,
           'new value',
         );
 
         // then
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
       },
     );
 
@@ -1338,41 +1313,39 @@ void main() {
 
         when(vertical.offset).thenReturn(0);
 
-        PlutoStateManager stateManager = PlutoStateManager(
+        PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
           rows: rows,
           gridFocusNode: FocusNode(),
-          scroll: PlutoScrollController(
+          scroll: PlutoGridScrollController(
             vertical: vertical,
             horizontal: MockLinkedScrollControllerGroup(),
           ),
-          configuration: PlutoConfiguration(
+          configuration: const PlutoGridConfiguration(
             enableMoveDownAfterSelecting: true,
           ),
+          layout: const BoxConstraints(maxHeight: 500, maxWidth: 400),
         );
-
-        stateManager
-            .setLayout(const BoxConstraints(maxHeight: 500, maxWidth: 400));
 
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoCellPosition(
+          cellPosition: PlutoGridCellPosition(
             rowIdx: 3,
             columnIdx: 2,
           ),
         );
 
         // when
-        expect(stateManager.currentCellPosition.rowIdx, 1);
+        expect(stateManager.currentCellPosition!.rowIdx, 1);
 
         stateManager.handleAfterSelectingRow(
-          rows[1].cells['text1'],
+          rows[1].cells['text1']!,
           'new value',
         );
 
         // then
-        expect(stateManager.currentCellPosition.rowIdx, 2);
+        expect(stateManager.currentCellPosition!.rowIdx, 2);
       },
     );
   });

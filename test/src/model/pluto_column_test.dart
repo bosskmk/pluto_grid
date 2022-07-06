@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../../helper/row_helper.dart';
+
 void main() {
   group(
     'PlutoColumnTextAlign',
@@ -11,7 +13,7 @@ void main() {
         'isLeft',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.isLeft, isTrue);
@@ -22,7 +24,7 @@ void main() {
         'isRight',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.isRight, isTrue);
@@ -33,7 +35,7 @@ void main() {
         'value is TextAlign.left',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.left;
           // when
           // then
           expect(textAlign.value, TextAlign.left);
@@ -44,7 +46,7 @@ void main() {
         'value is TextAlign.right',
         () {
           // given
-          final PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
+          const PlutoColumnTextAlign textAlign = PlutoColumnTextAlign.right;
           // when
           // then
           expect(textAlign.value, TextAlign.right);
@@ -60,7 +62,7 @@ void main() {
         'isNone',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.none;
+          const PlutoColumnSort columnSort = PlutoColumnSort.none;
           // when
           // then
           expect(columnSort.isNone, isTrue);
@@ -71,7 +73,7 @@ void main() {
         'isAscending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
+          const PlutoColumnSort columnSort = PlutoColumnSort.ascending;
           // when
           // then
           expect(columnSort.isAscending, isTrue);
@@ -82,7 +84,7 @@ void main() {
         'isDescending',
         () {
           // given
-          final PlutoColumnSort columnSort = PlutoColumnSort.descending;
+          const PlutoColumnSort columnSort = PlutoColumnSort.descending;
           // when
           // then
           expect(columnSort.isDescending, isTrue);
@@ -95,7 +97,7 @@ void main() {
           test(
             'None',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.none;
+              const PlutoColumnSort columnSort = PlutoColumnSort.none;
               expect(columnSort.toShortString(), 'none');
             },
           );
@@ -103,7 +105,7 @@ void main() {
           test(
             'Ascending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.ascending;
+              const PlutoColumnSort columnSort = PlutoColumnSort.ascending;
               expect(columnSort.toShortString(), 'ascending');
             },
           );
@@ -111,7 +113,7 @@ void main() {
           test(
             'Descending',
             () {
-              final PlutoColumnSort columnSort = PlutoColumnSort.descending;
+              const PlutoColumnSort columnSort = PlutoColumnSort.descending;
               expect(columnSort.toShortString(), 'descending');
             },
           );
@@ -155,7 +157,7 @@ void main() {
       () {
         final PlutoColumnTypeText column = PlutoColumnType.text(
           defaultValue: 'default',
-        );
+        ) as PlutoColumnTypeText;
 
         expect(column.defaultValue, 'default');
       },
@@ -166,7 +168,7 @@ void main() {
       () {
         final PlutoColumnTypeNumber column = PlutoColumnType.number(
           defaultValue: 123,
-        );
+        ) as PlutoColumnTypeNumber;
 
         expect(column.defaultValue, 123);
       },
@@ -176,9 +178,9 @@ void main() {
       'select 기본 값이 설정 되어야 한다.',
       () {
         final PlutoColumnTypeSelect column = PlutoColumnType.select(
-          ['One'],
+          <String>['One'],
           defaultValue: 'One',
-        );
+        ) as PlutoColumnTypeSelect;
 
         expect(column.defaultValue, 'One');
       },
@@ -189,7 +191,7 @@ void main() {
       () {
         final PlutoColumnTypeDate column = PlutoColumnType.date(
           defaultValue: DateTime.parse('2020-01-01'),
-        );
+        ) as PlutoColumnTypeDate;
 
         expect(column.defaultValue, DateTime.parse('2020-01-01'));
       },
@@ -200,7 +202,7 @@ void main() {
       () {
         final PlutoColumnTypeTime column = PlutoColumnType.time(
           defaultValue: '20:30',
-        );
+        ) as PlutoColumnTypeTime;
 
         expect(column.defaultValue, '20:30');
       },
@@ -213,7 +215,8 @@ void main() {
       test(
         'text',
         () {
-          final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+          final PlutoColumnTypeText textColumn =
+              PlutoColumnType.text() as PlutoColumnTypeText;
           expect(textColumn.text, textColumn);
         },
       );
@@ -221,7 +224,8 @@ void main() {
       test(
         'time',
         () {
-          final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+          final PlutoColumnTypeText textColumn =
+              PlutoColumnType.text() as PlutoColumnTypeText;
           expect(() {
             textColumn.time;
           }, throwsA(isA<TypeError>()));
@@ -234,7 +238,8 @@ void main() {
           test(
             '문자인 경우 true',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.isValid('text'), isTrue);
             },
           );
@@ -242,7 +247,8 @@ void main() {
           test(
             '숫자인 경우 true',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.isValid(1234), isTrue);
             },
           );
@@ -250,7 +256,8 @@ void main() {
           test(
             '공백인 경우 true',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.isValid(''), isTrue);
             },
           );
@@ -258,7 +265,8 @@ void main() {
           test(
             'null 인 경우 false',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.isValid(null), isFalse);
             },
           );
@@ -271,7 +279,8 @@ void main() {
           test(
             '가, 나 인 경우 -1',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.compare('가', '나'), -1);
             },
           );
@@ -279,7 +288,8 @@ void main() {
           test(
             '나, 가 인 경우 1',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.compare('나', '가'), 1);
             },
           );
@@ -287,7 +297,8 @@ void main() {
           test(
             '가, 가 인 경우 0',
             () {
-              final PlutoColumnTypeText textColumn = PlutoColumnType.text();
+              final PlutoColumnTypeText textColumn =
+                  PlutoColumnType.text() as PlutoColumnTypeText;
               expect(textColumn.compare('가', '가'), 0);
             },
           );
@@ -301,7 +312,8 @@ void main() {
       test(
         '문자인 경우 false',
         () {
-          final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
+          final PlutoColumnTypeNumber numberColumn =
+              PlutoColumnType.number() as PlutoColumnTypeNumber;
           expect(numberColumn.isValid('text'), isFalse);
         },
       );
@@ -309,7 +321,8 @@ void main() {
       test(
         '123 인 경우 true',
         () {
-          final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
+          final PlutoColumnTypeNumber numberColumn =
+              PlutoColumnType.number() as PlutoColumnTypeNumber;
           expect(numberColumn.isValid(123), isTrue);
         },
       );
@@ -317,7 +330,8 @@ void main() {
       test(
         '-123 인 경우 true',
         () {
-          final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number();
+          final PlutoColumnTypeNumber numberColumn =
+              PlutoColumnType.number() as PlutoColumnTypeNumber;
           expect(numberColumn.isValid(-123), isTrue);
         },
       );
@@ -327,7 +341,7 @@ void main() {
         () {
           final PlutoColumnTypeNumber numberColumn = PlutoColumnType.number(
             negative: false,
-          );
+          ) as PlutoColumnTypeNumber;
           expect(numberColumn.isValid(-123), isFalse);
         },
       );
@@ -339,7 +353,8 @@ void main() {
         test(
           '1, 2 인 경우 -1',
           () {
-            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            final PlutoColumnTypeNumber column =
+                PlutoColumnType.number() as PlutoColumnTypeNumber;
             expect(column.compare(1, 2), -1);
           },
         );
@@ -347,7 +362,8 @@ void main() {
         test(
           '2, 1 인 경우 1',
           () {
-            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            final PlutoColumnTypeNumber column =
+                PlutoColumnType.number() as PlutoColumnTypeNumber;
             expect(column.compare(2, 1), 1);
           },
         );
@@ -355,7 +371,8 @@ void main() {
         test(
           '1, 1 인 경우 0',
           () {
-            final PlutoColumnTypeNumber column = PlutoColumnType.number();
+            final PlutoColumnTypeNumber column =
+                PlutoColumnType.number() as PlutoColumnTypeNumber;
             expect(column.compare(1, 1), 0);
           },
         );
@@ -368,11 +385,12 @@ void main() {
       test(
         'items 에 포함 되어있으면 true',
         () {
-          final PlutoColumnTypeSelect selectColumn = PlutoColumnType.select([
+          final PlutoColumnTypeSelect selectColumn =
+              PlutoColumnType.select(<String>[
             'A',
             'B',
             'C',
-          ]);
+          ]) as PlutoColumnTypeSelect;
           expect(selectColumn.isValid('A'), isTrue);
         },
       );
@@ -380,11 +398,12 @@ void main() {
       test(
         'items 에 포함 되어 있지 않으면 false',
         () {
-          final PlutoColumnTypeSelect selectColumn = PlutoColumnType.select([
+          final PlutoColumnTypeSelect selectColumn =
+              PlutoColumnType.select(<String>[
             'A',
             'B',
             'C',
-          ]);
+          ]) as PlutoColumnTypeSelect;
           expect(selectColumn.isValid('D'), isFalse);
         },
       );
@@ -396,11 +415,12 @@ void main() {
         test(
           'Two, Three 인 경우 -1',
           () {
-            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+            final PlutoColumnTypeSelect column =
+                PlutoColumnType.select(<String>[
               'One',
               'Two',
               'Three',
-            ]);
+            ]) as PlutoColumnTypeSelect;
             expect(column.compare('Two', 'Three'), -1);
           },
         );
@@ -408,11 +428,12 @@ void main() {
         test(
           'Three, Two  인 경우 1',
           () {
-            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+            final PlutoColumnTypeSelect column =
+                PlutoColumnType.select(<String>[
               'One',
               'Two',
               'Three',
-            ]);
+            ]) as PlutoColumnTypeSelect;
             expect(column.compare('Three', 'Two'), 1);
           },
         );
@@ -420,11 +441,12 @@ void main() {
         test(
           'Two, Two 인 경우 0',
           () {
-            final PlutoColumnTypeSelect column = PlutoColumnType.select([
+            final PlutoColumnTypeSelect column =
+                PlutoColumnType.select(<String>[
               'One',
               'Two',
               'Three',
-            ]);
+            ]) as PlutoColumnTypeSelect;
             expect(column.compare('Two', 'Two'), 0);
           },
         );
@@ -437,7 +459,8 @@ void main() {
       test(
         '날짜 형식이 아니면 false',
         () {
-          final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
+          final PlutoColumnTypeDate dateColumn =
+              PlutoColumnType.date() as PlutoColumnTypeDate;
           expect(dateColumn.isValid('Not a date'), isFalse);
         },
       );
@@ -445,7 +468,8 @@ void main() {
       test(
         '날짜 형식이면 true',
         () {
-          final PlutoColumnTypeDate dateColumn = PlutoColumnType.date();
+          final PlutoColumnTypeDate dateColumn =
+              PlutoColumnType.date() as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-01-01'), isTrue);
         },
       );
@@ -455,7 +479,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-01-01'), isFalse);
         },
       );
@@ -465,7 +489,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-01'), isTrue);
         },
       );
@@ -475,7 +499,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-03'), isTrue);
         },
       );
@@ -485,7 +509,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-01-01'), isTrue);
         },
       );
@@ -495,7 +519,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-01'), isTrue);
         },
       );
@@ -505,7 +529,7 @@ void main() {
         () {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             endDate: DateTime.parse('2020-02-01'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-03'), isFalse);
         },
       );
@@ -516,7 +540,7 @@ void main() {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-03'), isTrue);
         },
       );
@@ -527,7 +551,7 @@ void main() {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-01-03'), isFalse);
         },
       );
@@ -538,7 +562,7 @@ void main() {
           final PlutoColumnTypeDate dateColumn = PlutoColumnType.date(
             startDate: DateTime.parse('2020-02-01'),
             endDate: DateTime.parse('2020-02-05'),
-          );
+          ) as PlutoColumnTypeDate;
           expect(dateColumn.isValid('2020-02-06'), isFalse);
         },
       );
@@ -550,41 +574,52 @@ void main() {
         test(
           '2019-12-30, 2020-01-01 인 경우 -1',
           () {
-            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            final PlutoColumnTypeDate column =
+                PlutoColumnType.date() as PlutoColumnTypeDate;
             expect(column.compare('2019-12-30', '2020-01-01'), -1);
           },
         );
 
+        // 날짜 포멧이 적용 된 경우 컬럼의 compare 함수의 동작이 의도와 다르다.
+        // 포멧을 바꿔 compare 함수를 호출해야 한다. compare 함수는 포멧을 적당하게
+        // 변환하여 호출하고 포멧의 변경은 외부에서 호출 할 때 처리 한다.
         test(
-          '12/30/2019, 01/01/2020 인 경우 -1',
+          '12/30/2019, 01/01/2020 인 경우 1',
           () {
             final PlutoColumnTypeDate column =
-                PlutoColumnType.date(format: 'MM/dd/yyyy');
-            expect(column.compare('12/30/2019', '01/01/2020'), -1);
+                PlutoColumnType.date(format: 'MM/dd/yyyy')
+                    as PlutoColumnTypeDate;
+            expect(column.compare('12/30/2019', '01/01/2020'), 1);
           },
         );
 
         test(
           '2020-01-01, 2019-12-30  인 경우 1',
           () {
-            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            final PlutoColumnTypeDate column =
+                PlutoColumnType.date() as PlutoColumnTypeDate;
             expect(column.compare('2020-01-01', '2019-12-30'), 1);
           },
         );
 
+        // 날짜 포멧이 적용 된 경우 컬럼의 compare 함수의 동작이 의도와 다르다.
+        // 포멧을 바꿔 compare 함수를 호출해야 한다. compare 함수는 포멧을 적당하게
+        // 변환하여 호출하고 포멧의 변경은 외부에서 호출 할 때 처리 한다.
         test(
-          '01/01/2020, 12/30/2019  인 경우 1',
+          '01/01/2020, 12/30/2019  인 경우 -1',
           () {
             final PlutoColumnTypeDate column =
-                PlutoColumnType.date(format: 'MM/dd/yyyy');
-            expect(column.compare('01/01/2020', '12/30/2019'), 1);
+                PlutoColumnType.date(format: 'MM/dd/yyyy')
+                    as PlutoColumnTypeDate;
+            expect(column.compare('01/01/2020', '12/30/2019'), -1);
           },
         );
 
         test(
           '2020-01-01, 2020-01-01 인 경우 0',
           () {
-            final PlutoColumnTypeDate column = PlutoColumnType.date();
+            final PlutoColumnTypeDate column =
+                PlutoColumnType.date() as PlutoColumnTypeDate;
             expect(column.compare('2020-01-01', '2020-01-01'), 0);
           },
         );
@@ -593,7 +628,8 @@ void main() {
           '01/01/2020, 01/01/2020  인 경우 0',
           () {
             final PlutoColumnTypeDate column =
-                PlutoColumnType.date(format: 'MM/dd/yyyy');
+                PlutoColumnType.date(format: 'MM/dd/yyyy')
+                    as PlutoColumnTypeDate;
             expect(column.compare('01/01/2020', '01/01/2020'), 0);
           },
         );
@@ -608,7 +644,8 @@ void main() {
         test(
           '24:00 이면 false',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('24:00'), isFalse);
           },
         );
@@ -616,7 +653,8 @@ void main() {
         test(
           '00:60 이면 false',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('00:60'), isFalse);
           },
         );
@@ -624,7 +662,8 @@ void main() {
         test(
           '24:60 이면 false',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('24:60'), isFalse);
           },
         );
@@ -632,7 +671,8 @@ void main() {
         test(
           '00:00 이면 true',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('00:00'), isTrue);
           },
         );
@@ -640,7 +680,8 @@ void main() {
         test(
           '00:59 이면 true',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('00:59'), isTrue);
           },
         );
@@ -648,7 +689,8 @@ void main() {
         test(
           '23:00 이면 true',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('23:00'), isTrue);
           },
         );
@@ -656,7 +698,8 @@ void main() {
         test(
           '23:59 이면 true',
           () {
-            final PlutoColumnTypeTime timeColumn = PlutoColumnType.time();
+            final PlutoColumnTypeTime timeColumn =
+                PlutoColumnType.time() as PlutoColumnTypeTime;
             expect(timeColumn.isValid('23:59'), isTrue);
           },
         );
@@ -727,10 +770,102 @@ void main() {
           title: 'number column',
           field: 'number_column',
           type: PlutoColumnType.number(), // 기본 포멧 (#,###)
-          formatter: (String value) => '\$ $value',
+          formatter: (dynamic value) => '\$ $value',
         );
 
         expect(column.formattedValueForDisplay(12345), '\$ 12345');
+      },
+    );
+  });
+
+  group('checkReadOnly', () {
+    makeColumn({
+      required bool readOnly,
+      PlutoColumnCheckReadOnly? checkReadOnly,
+    }) {
+      return PlutoColumn(
+        title: 'title',
+        field: 'field',
+        type: PlutoColumnType.text(),
+        readOnly: readOnly,
+        checkReadOnly: checkReadOnly,
+      );
+    }
+
+    makeRow(PlutoColumn column) {
+      return RowHelper.count(1, [column]).first;
+    }
+
+    test('readOnly = false, checkReadOnly = 미설정 이면 false 를 반환해야 한다.', () {
+      final column = makeColumn(readOnly: false);
+
+      expect(column.readOnly, false);
+    });
+
+    test('readOnly = true, checkReadOnly = 미설정 이면 true 를 반환해야 한다.', () {
+      final column = makeColumn(readOnly: true);
+
+      expect(column.readOnly, true);
+    });
+
+    test('readOnly = false, checkReadOnly = true 이면 true 를 반환해야 한다.', () {
+      final column =
+          makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+      final row = makeRow(column);
+
+      final cell = row.cells['field'];
+
+      expect(column.checkReadOnly(row, cell), true);
+    });
+
+    test('readOnly = true, checkReadOnly = false 이면 false 를 반환해야 한다.', () {
+      final column =
+          makeColumn(readOnly: true, checkReadOnly: (_, __) => false);
+
+      final row = makeRow(column);
+
+      final cell = row.cells['field'];
+
+      expect(column.checkReadOnly(row, cell), false);
+    });
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 row 가 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        final row = makeRow(column);
+
+        final cell = row.cells['field'];
+
+        expect(column.checkReadOnly(null, cell), false);
+      },
+    );
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 cell 이 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        final row = makeRow(column);
+
+        expect(column.checkReadOnly(row, null), false);
+      },
+    );
+
+    test(
+      'readOnly = false, checkReadOnly = true 인데, '
+      'checkRow 에 row, cell 이 전달 되지 않으면 false 를 반환해야 한다.',
+      () {
+        final column =
+            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
+
+        expect(column.checkReadOnly(null, null), false);
       },
     );
   });

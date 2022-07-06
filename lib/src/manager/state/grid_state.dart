@@ -1,45 +1,44 @@
-part of '../../../pluto_grid.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IGridState {
-  GlobalKey get gridKey;
+  GlobalKey? get gridKey;
 
-  /// FocusNode to control keyboard input.
-  FocusNode get gridFocusNode;
+  PlutoGridMode? get mode;
 
-  PlutoMode get mode;
+  PlutoGridConfiguration? get configuration;
 
-  PlutoConfiguration get configuration;
+  PlutoGridKeyManager? get keyManager;
 
-  PlutoKeyManager get keyManager;
+  PlutoGridEventManager? get eventManager;
 
-  PlutoEventManager get eventManager;
+  PlutoOnChangedEventCallback? get onChanged;
 
-  /// Event callback fired when cell value changes.
-  PlutoOnChangedEventCallback get onChanged;
+  PlutoOnSelectedEventCallback? get onSelected;
 
-  /// Event callback that occurs when a row is selected
-  /// when the grid mode is selectRow.
-  PlutoOnSelectedEventCallback get onSelected;
+  PlutoOnSortedEventCallback? get onSorted;
 
-  CreateHeaderCallBack get createHeader;
+  PlutoOnRowCheckedEventCallback? get onRowChecked;
 
-  CreateFooterCallBack get createFooter;
+  PlutoOnRowDoubleTapEventCallback? get onRowDoubleTap;
 
-  bool get keepFocus;
+  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap;
 
-  bool get hasFocus;
+  PlutoOnRowsMovedEventCallback? get onRowsMoved;
+
+  CreateHeaderCallBack? get createHeader;
+
+  CreateFooterCallBack? get createFooter;
 
   PlutoGridLocaleText get localeText;
 
-  void setGridKey(Key key);
+  void setGridKey(GlobalKey key);
 
-  void setKeyManager(PlutoKeyManager keyManager);
+  void setKeyManager(PlutoGridKeyManager keyManager);
 
-  void setEventManager(PlutoEventManager eventManager);
+  void setEventManager(PlutoGridEventManager eventManager);
 
-  void setGridFocusNode(FocusNode focusNode);
-
-  void setGridMode(PlutoMode mode);
+  void setGridMode(PlutoGridMode mode);
 
   void setOnChanged(PlutoOnChangedEventCallback onChanged);
 
@@ -49,134 +48,208 @@ abstract class IGridState {
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
 
-  void setConfiguration(PlutoConfiguration configuration);
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted);
 
-  void setKeepFocus(bool flag, {bool notify = true});
+  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked);
 
-  void resetCurrentState({notify = true});
+  void setOnRowDoubleTap(PlutoOnRowDoubleTapEventCallback? onDoubleTap);
+
+  void setOnRowSecondaryTap(
+      PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
+
+  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
+
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  });
+
+  void resetCurrentState({bool notify = true});
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
 }
 
-mixin GridState implements IPlutoState {
-  GlobalKey get gridKey => _gridKey;
+mixin GridState implements IPlutoGridState {
+  @override
+  GlobalKey? get gridKey => _gridKey;
 
-  GlobalKey _gridKey;
+  GlobalKey? _gridKey;
 
-  FocusNode get gridFocusNode => _gridFocusNode;
+  @override
+  PlutoGridMode? get mode => _mode;
 
-  FocusNode _gridFocusNode;
+  PlutoGridMode? _mode;
 
-  PlutoMode get mode => _mode;
+  @override
+  PlutoGridConfiguration? get configuration => _configuration;
 
-  PlutoMode _mode;
+  PlutoGridConfiguration? _configuration;
 
-  PlutoConfiguration get configuration => _configuration;
+  PlutoGridKeyManager? _keyManager;
 
-  PlutoConfiguration _configuration;
+  @override
+  PlutoGridKeyManager? get keyManager => _keyManager;
 
-  PlutoKeyManager _keyManager;
+  PlutoGridEventManager? _eventManager;
 
-  PlutoKeyManager get keyManager => _keyManager;
+  @override
+  PlutoGridEventManager? get eventManager => _eventManager;
 
-  PlutoEventManager _eventManager;
+  @override
+  PlutoOnChangedEventCallback? get onChanged => _onChanged;
 
-  PlutoEventManager get eventManager => _eventManager;
+  PlutoOnChangedEventCallback? _onChanged;
 
-  PlutoOnChangedEventCallback get onChanged => _onChanged;
+  @override
+  PlutoOnSelectedEventCallback? get onSelected => _onSelected;
 
-  PlutoOnChangedEventCallback _onChanged;
+  PlutoOnSelectedEventCallback? _onSelected;
 
-  PlutoOnSelectedEventCallback get onSelected => _onSelected;
+  @override
+  PlutoOnSortedEventCallback? get onSorted => _onSorted;
 
-  PlutoOnSelectedEventCallback _onSelected;
+  PlutoOnSortedEventCallback? _onSorted;
 
-  CreateHeaderCallBack get createHeader => _createHeader;
+  @override
+  PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
 
-  CreateHeaderCallBack _createHeader;
+  PlutoOnRowCheckedEventCallback? _onRowChecked;
 
-  CreateFooterCallBack get createFooter => _createFooter;
+  @override
+  PlutoOnRowDoubleTapEventCallback? get onRowDoubleTap => _onRowDoubleTap;
 
-  CreateFooterCallBack _createFooter;
+  PlutoOnRowDoubleTapEventCallback? _onRowDoubleTap;
 
-  bool get keepFocus => _keepFocus;
+  @override
+  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap =>
+      _onRowSecondaryTap;
 
-  bool _keepFocus = false;
+  PlutoOnRowSecondaryTapEventCallback? _onRowSecondaryTap;
 
-  bool get hasFocus => _gridFocusNode != null && _gridFocusNode.hasFocus;
+  @override
+  PlutoOnRowsMovedEventCallback? get onRowsMoved => _onRowsMoved;
 
-  PlutoGridLocaleText get localeText => configuration.localeText;
+  PlutoOnRowsMovedEventCallback? _onRowsMoved;
 
-  void setKeyManager(PlutoKeyManager keyManager) {
+  @override
+  CreateHeaderCallBack? get createHeader => _createHeader;
+
+  CreateHeaderCallBack? _createHeader;
+
+  @override
+  CreateFooterCallBack? get createFooter => _createFooter;
+
+  CreateFooterCallBack? _createFooter;
+
+  @override
+  PlutoGridLocaleText get localeText => configuration!.localeText;
+
+  @override
+  void setKeyManager(PlutoGridKeyManager? keyManager) {
     _keyManager = keyManager;
   }
 
-  void setEventManager(PlutoEventManager eventManager) {
+  @override
+  void setEventManager(PlutoGridEventManager? eventManager) {
     _eventManager = eventManager;
   }
 
-  void setGridFocusNode(FocusNode focusNode) {
-    _gridFocusNode = focusNode;
-  }
-
-  void setGridMode(PlutoMode mode) {
+  @override
+  void setGridMode(PlutoGridMode? mode) {
     _mode = mode;
   }
 
-  void setOnChanged(PlutoOnChangedEventCallback onChanged) {
+  @override
+  void setOnChanged(PlutoOnChangedEventCallback? onChanged) {
     _onChanged = onChanged;
   }
 
-  void setOnSelected(PlutoOnSelectedEventCallback onSelected) {
+  @override
+  void setOnSelected(PlutoOnSelectedEventCallback? onSelected) {
     _onSelected = onSelected;
   }
 
-  void setCreateHeader(CreateHeaderCallBack createHeader) {
+  @override
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted) {
+    _onSorted = onSorted;
+  }
+
+  @override
+  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked) {
+    _onRowChecked = onRowChecked;
+  }
+
+  @override
+  void setOnRowDoubleTap(PlutoOnRowDoubleTapEventCallback? onRowDoubleTap) {
+    _onRowDoubleTap = onRowDoubleTap;
+  }
+
+  @override
+  void setOnRowSecondaryTap(
+      PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) {
+    _onRowSecondaryTap = onRowSecondaryTap;
+  }
+
+  @override
+  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved) {
+    _onRowsMoved = onRowsMoved;
+  }
+
+  @override
+  void setCreateHeader(CreateHeaderCallBack? createHeader) {
     _createHeader = createHeader;
   }
 
-  void setCreateFooter(CreateFooterCallBack createFooter) {
+  @override
+  void setCreateFooter(CreateFooterCallBack? createFooter) {
     _createFooter = createFooter;
   }
 
-  void setConfiguration(PlutoConfiguration configuration) {
-    _configuration = configuration ?? PlutoConfiguration();
+  @override
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  }) {
+    _configuration = configuration ?? const PlutoGridConfiguration();
+
+    if (updateLocale) {
+      _configuration!.updateLocale();
+    }
+
+    if (applyColumnFilter) {
+      _configuration!.applyColumnFilter(refColumns);
+    }
   }
 
-  void setGridKey(Key key) {
+  @override
+  void setGridKey(GlobalKey key) {
     _gridKey = key;
   }
 
-  void setKeepFocus(bool flag, {bool notify = true}) {
-    if (_keepFocus == flag) {
-      return;
-    }
-
-    _keepFocus = flag;
-
-    if (_keepFocus == true) {
-      _gridFocusNode.requestFocus();
-    }
-
-    if (notify) {
-      notifyListeners();
-    }
-  }
-
-  void resetCurrentState({notify = true}) {
+  @override
+  void resetCurrentState({bool notify = true}) {
     clearCurrentCell(notify: false);
 
-    clearCurrentSelectingPosition(notify: false);
+    clearCurrentSelecting(notify: false);
 
     if (notify) {
       notifyListeners();
     }
   }
 
+  @override
   void handleOnSelected() {
     if (_mode.isSelect == true && _onSelected != null) {
-      _onSelected(PlutoOnSelectedEvent(row: currentRow, cell: currentCell));
+      _onSelected!(
+        PlutoGridOnSelectedEvent(
+          row: currentRow,
+          rowIdx: currentRowIdx,
+          cell: currentCell,
+        ),
+      );
     }
   }
 }

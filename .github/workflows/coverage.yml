@@ -4,28 +4,25 @@ on:
   push:
     branches:
       - 'master'
+      - 'develop'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
     steps:
       # Without this, there are no files in the directory.
-      - uses: actions/checkout@v2
-
-      # getting for branch name
-      - uses: nelonoel/branch-name@v1.0.1
-
+      - uses: actions/checkout@v3
       # using flutter
-      - uses: subosito/flutter-action@v1
-      - run: flutter channel dev
-      - run: flutter upgrade
+      - uses: subosito/flutter-action@v2.4.0
+        with:
+          channel: 'stable'
       - run: dart --version
       - run: flutter --version
       - run: flutter pub get
       - run: flutter test --coverage
-
       # codecov.io
-      - uses: codecov/codecov-action@v1.0.2
+      - uses: codecov/codecov-action@v3
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
           file: ./coverage/lcov.info

@@ -1,11 +1,15 @@
-part of '../../../pluto_grid.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class ILayoutState {
+  ChangeNotifier get resizingChangeNotifier;
+
   /// Screen width
-  double get maxWidth;
+  double? get maxWidth;
 
   /// Screen height
-  double get maxHeight;
+  double? get maxHeight;
 
   /// grid header height
   double get headerHeight;
@@ -13,15 +17,21 @@ abstract class ILayoutState {
   /// grid footer height
   double get footerHeight;
 
-  double get offsetHeight;
+  double get columnRowContainerHeight;
 
-  /// Whether to apply a fixed column according to the screen size.
-  /// true : If there is a fixed column, the fixed column is exposed.
-  /// false : If there is a fixed column but the screen is narrow, it is exposed as a normal column.
-  bool get showFixedColumn;
+  double get rowContainerHeight;
 
   /// Global offset of Grid.
-  Offset get gridGlobalOffset;
+  Offset? get gridGlobalOffset;
+
+  /// Whether to apply a frozen column according to the screen size.
+  /// true : If there is a frozen column, the frozen column is exposed.
+  /// false : If there is a frozen column but the screen is narrow, it is exposed as a normal column.
+  bool get showFrozenColumn;
+
+  bool get showColumnTitle;
+
+  bool get showColumnFilter;
 
   bool get showHeader;
 
@@ -29,9 +39,9 @@ abstract class ILayoutState {
 
   bool get showLoading;
 
-  bool get hasLeftFixedColumns;
+  bool get hasLeftFrozenColumns;
 
-  bool get hasRightFixedColumns;
+  bool get hasRightFrozenColumns;
 
   double get headerBottomOffset;
 
@@ -39,7 +49,17 @@ abstract class ILayoutState {
 
   double get columnHeight;
 
+  double get columnGroupHeight;
+
+  double get columnFilterHeight;
+
+  double get columnBottomOffset;
+
   double get rowsTopOffset;
+
+  double get rowHeight;
+
+  double get rowTotalHeight;
 
   double get bodyTopOffset;
 
@@ -55,50 +75,100 @@ abstract class ILayoutState {
 
   double get bodyDownScrollOffset;
 
-  double get rightFixedLeftOffset;
+  double get leftFrozenRightOffset;
+
+  double get rightFrozenLeftOffset;
 
   double get rightBlankOffset;
 
-  double get scrollOffsetByFixedColumn;
+  double get scrollOffsetByFrozenColumn;
 
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
-  void resetShowFixedColumn({bool notify = true});
+  void setShowColumnTitle(bool flag, {bool notify = true});
 
-  void setShowLoading(bool flag);
+  void setShowColumnFilter(bool flag, {bool notify = true});
+
+  void setShowLoading(bool flag, {bool notify = true});
+
+  void resetShowFrozenColumn();
+
+  bool shouldShowFrozenColumns(double width);
+
+  bool enoughFrozenColumnsWidth(double width);
+
+  void notifyResizingListeners();
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
 }
 
-mixin LayoutState implements IPlutoState {
-  double get maxWidth => _maxWidth;
+mixin LayoutState implements IPlutoGridState {
+  @override
+  ChangeNotifier get resizingChangeNotifier => _resizingChangeNotifier;
 
-  double _maxWidth;
+  final ChangeNotifier _resizingChangeNotifier = ChangeNotifier();
 
-  double get maxHeight => _maxHeight;
+  @override
+  double? get maxWidth => _maxWidth;
 
-  double _maxHeight;
+  double? _maxWidth;
 
-  double get headerHeight =>
-      createHeader == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+  @override
+  double? get maxHeight => _maxHeight;
 
-  double get footerHeight =>
-      createFooter == null ? 0 : PlutoDefaultSettings.rowTotalHeight;
+  double? _maxHeight;
 
-  double get offsetHeight => maxHeight - headerHeight - footerHeight;
+  double? _headerHeight;
 
-  bool get showFixedColumn => _showFixedColumn;
+  double? _footerHeight;
 
-  bool _showFixedColumn;
+  set headerHeight(double value) {
+    _headerHeight = value;
+  }
 
-  Offset get gridGlobalOffset {
+  set footerHeight(double value) {
+    _footerHeight = value;
+  }
+
+  @override
+  double get headerHeight {
+    if (createHeader == null) {
+      return 0;
+    }
+
+    return _headerHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _headerHeight!;
+  }
+
+  @override
+  double get footerHeight {
+    if (createFooter == null) {
+      return 0;
+    }
+
+    return _footerHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _footerHeight!;
+  }
+
+  @override
+  double get columnRowContainerHeight =>
+      maxHeight! - headerHeight - footerHeight;
+
+  @override
+  double get rowContainerHeight => maxHeight! - rowsTopOffset - footerHeight;
+
+  @override
+  Offset? get gridGlobalOffset {
     if (gridKey == null) {
       return _gridGlobalOffset;
     }
 
-    final RenderBox gridRenderBox = gridKey.currentContext?.findRenderObject();
+    final RenderBox? gridRenderBox =
+        gridKey!.currentContext?.findRenderObject() as RenderBox?;
 
     if (gridRenderBox == null) {
       return _gridGlobalOffset;
@@ -109,138 +179,253 @@ mixin LayoutState implements IPlutoState {
     return _gridGlobalOffset;
   }
 
-  Offset _gridGlobalOffset;
+  Offset? _gridGlobalOffset;
 
-  bool get showHeader => headerHeight > 0;
+  @override
+  bool get showFrozenColumn => _showFrozenColumn == true;
 
-  bool get showFooter => footerHeight > 0;
+  bool? _showFrozenColumn;
 
+  @override
+  bool get showColumnTitle => _showColumnTitle == true;
+
+  bool? _showColumnTitle = true;
+
+  @override
+  bool get showColumnFilter => _showColumnFilter == true;
+
+  bool? _showColumnFilter;
+
+  @override
+  bool get showHeader => createHeader != null;
+
+  @override
+  bool get showFooter => createFooter != null;
+
+  @override
   bool get showLoading => _showLoading == true;
 
-  bool _showLoading;
+  bool? _showLoading;
 
-  bool get hasLeftFixedColumns => leftFixedColumnsWidth > 0;
+  @override
+  bool get hasLeftFrozenColumns =>
+      refColumns.firstWhereOrNull((e) => e.frozen.isLeft) != null;
 
-  bool get hasRightFixedColumns => rightFixedColumnsWidth > 0;
+  @override
+  bool get hasRightFrozenColumns =>
+      refColumns.firstWhereOrNull((e) => e.frozen.isRight) != null;
 
-  double get headerBottomOffset => maxHeight - headerHeight;
+  @override
+  double get headerBottomOffset => maxHeight! - headerHeight;
 
+  @override
   double get footerTopOffset =>
-      maxHeight - footerHeight - PlutoDefaultSettings.totalShadowLineWidth;
+      maxHeight! - footerHeight - PlutoGridSettings.totalShadowLineWidth;
 
-  double get columnHeight => PlutoDefaultSettings.rowTotalHeight;
+  @override
+  double get columnHeight => showColumnTitle ? configuration!.columnHeight : 0;
 
-  double get rowsTopOffset => headerHeight + columnHeight;
+  @override
+  double get columnGroupHeight =>
+      showColumnGroups ? columnGroupDepth(columnGroups) * columnHeight : 0;
 
+  @override
+  double get columnFilterHeight =>
+      showColumnFilter ? configuration!.columnFilterHeight : 0;
+
+  @override
+  double get columnBottomOffset =>
+      maxHeight! - rowsTopOffset - PlutoGridSettings.totalShadowLineWidth;
+
+  @override
+  double get rowsTopOffset =>
+      headerHeight + columnGroupHeight + columnHeight + columnFilterHeight;
+
+  @override
+  double get rowHeight => configuration!.rowHeight;
+
+  @override
+  double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;
+
+  @override
   double get bodyTopOffset =>
-      gridGlobalOffset.dy +
+      gridGlobalOffset!.dy +
+      PlutoGridSettings.gridPadding +
       headerHeight +
-      PlutoDefaultSettings.gridBorderWidth +
-      PlutoDefaultSettings.rowTotalHeight;
+      PlutoGridSettings.gridBorderWidth +
+      columnGroupHeight +
+      columnHeight +
+      columnFilterHeight;
 
+  @override
   double get bodyLeftOffset {
-    return (showFixedColumn && leftFixedColumnsWidth > 0)
-        ? leftFixedColumnsWidth + 1
+    return (showFrozenColumn && leftFrozenColumnsWidth > 0)
+        ? leftFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
         : 0;
   }
 
+  @override
   double get bodyRightOffset {
-    return (showFixedColumn && rightFixedColumnsWidth > 0)
-        ? rightFixedColumnsWidth + 1
+    return (showFrozenColumn && rightFrozenColumnsWidth > 0)
+        ? rightFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
         : 0;
   }
 
+  @override
   double get bodyLeftScrollOffset {
-    final double leftFixedColumnWidth =
-        showFixedColumn ? leftFixedColumnsWidth : 0;
-
-    return gridGlobalOffset.dx +
-        PlutoDefaultSettings.gridPadding +
-        PlutoDefaultSettings.gridBorderWidth +
-        leftFixedColumnWidth +
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+    return gridGlobalOffset!.dx +
+        PlutoGridSettings.gridPadding +
+        PlutoGridSettings.gridBorderWidth +
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
+  @override
   double get bodyRightScrollOffset {
-    final double rightFixedColumnWidth =
-        showFixedColumn ? rightFixedColumnsWidth : 0;
-
-    return (gridGlobalOffset.dx + maxWidth) -
-        rightFixedColumnWidth -
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+    return (gridGlobalOffset!.dx + maxWidth!) -
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
+  @override
   double get bodyUpScrollOffset {
-    return bodyTopOffset + PlutoDefaultSettings.offsetScrollingFromEdge;
+    return bodyTopOffset + PlutoGridSettings.offsetScrollingFromEdge;
   }
 
+  @override
   double get bodyDownScrollOffset {
-    return gridGlobalOffset.dy +
-        offsetHeight -
-        PlutoDefaultSettings.offsetScrollingFromEdge;
+    return gridGlobalOffset!.dy +
+        maxHeight! -
+        footerHeight -
+        PlutoGridSettings.offsetScrollingFromEdge;
   }
 
-  double get rightFixedLeftOffset =>
-      maxWidth -
-      bodyRightOffset -
-      PlutoDefaultSettings.totalShadowLineWidth +
-      1;
+  @override
+  double get leftFrozenRightOffset =>
+      maxWidth! -
+      leftFrozenColumnsWidth -
+      PlutoGridSettings.totalShadowLineWidth;
 
+  @override
+  double get rightFrozenLeftOffset =>
+      maxWidth! -
+      rightFrozenColumnsWidth -
+      PlutoGridSettings.totalShadowLineWidth;
+
+  @override
   double get rightBlankOffset =>
-      rightFixedLeftOffset -
-      leftFixedColumnsWidth -
+      rightFrozenLeftOffset -
+      leftFrozenColumnsWidth -
       bodyColumnsWidth +
-      scroll.horizontal.offset;
+      scroll!.horizontal!.offset;
 
-  double get scrollOffsetByFixedColumn {
+  @override
+  double get scrollOffsetByFrozenColumn {
     double offset = 0;
 
-    if (_showFixedColumn) {
-      offset += leftFixedColumnsWidth > 0 ? 1 : 0;
-      offset += rightFixedColumnsWidth > 0 ? 1 : 0;
+    if (_showFrozenColumn!) {
+      offset +=
+          leftFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
+      offset +=
+          rightFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
     }
 
     return offset;
   }
 
+  @override
   void setLayout(BoxConstraints size) {
-    final _isShowFixedColumn = isShowFixedColumn(size.maxWidth);
-
-    final bool notify = _showFixedColumn != _isShowFixedColumn;
+    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
+    final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
+    final bool changedMaxWidth = _maxWidth != size.maxWidth;
 
     _maxWidth = size.maxWidth;
     _maxHeight = size.maxHeight;
-    _showFixedColumn = _isShowFixedColumn;
-
+    _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 
-    updateCurrentCellPosition(notify: false);
+    if (changedShowFrozenColumn || changedMaxWidth) {
+      updateVisibilityLayout();
 
-    if (notify) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
+      if (activatedColumnsAutoSize) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          notifyResizingListeners();
+        });
+      }
+    }
+
+    if (enableColumnsAutoSize && !activatedColumnsAutoSize) {
+      activateColumnsAutoSize();
     }
   }
 
-  void resetShowFixedColumn({bool notify = true}) {
-    _showFixedColumn = isShowFixedColumn(_maxWidth);
+  @override
+  void setShowColumnTitle(bool flag, {bool notify = true}) {
+    if (_showColumnTitle == flag) {
+      return;
+    }
+
+    _showColumnTitle = flag;
 
     if (notify) {
       notifyListeners();
     }
   }
 
-  void setShowLoading(bool flag) {
+  @override
+  void setShowColumnFilter(bool flag, {bool notify = true}) {
+    if (_showColumnFilter == flag) {
+      return;
+    }
+
+    _showColumnFilter = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void setShowLoading(bool flag, {bool notify = true}) {
     if (_showLoading == flag) {
       return;
     }
 
     _showLoading = flag;
 
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
+  @override
+  void resetShowFrozenColumn() {
+    _showFrozenColumn = shouldShowFrozenColumns(maxWidth!);
+  }
+
+  @override
+  bool shouldShowFrozenColumns(double width) {
+    final bool hasFrozenColumn =
+        leftFrozenColumns.isNotEmpty || rightFrozenColumns.isNotEmpty;
+
+    return hasFrozenColumn && enoughFrozenColumnsWidth(width);
+  }
+
+  @override
+  bool enoughFrozenColumnsWidth(double width) {
+    return width >
+        (leftFrozenColumnsWidth +
+            rightFrozenColumnsWidth +
+            PlutoGridSettings.bodyMinWidth +
+            PlutoGridSettings.totalShadowLineWidth);
+  }
+
+  @override
+  void notifyResizingListeners() {
+    updateVisibilityLayout(notify: true);
+
+    _resizingChangeNotifier.notifyListeners();
+  }
+
+  @override
   @visibleForTesting
   void setGridGlobalOffset(Offset offset) {
     _gridGlobalOffset = offset;
