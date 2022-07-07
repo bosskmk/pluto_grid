@@ -31,30 +31,33 @@ class _FakeFilteredList_2<E> extends _i1.Fake implements _i3.FilteredList<E> {}
 class _FakePlutoGridLocaleText_3 extends _i1.Fake
     implements _i3.PlutoGridLocaleText {}
 
-class _FakePlutoGridKeyPressed_4 extends _i1.Fake
+class _FakePlutoGridStyleConfig_4 extends _i1.Fake
+    implements _i3.PlutoGridStyleConfig {}
+
+class _FakePlutoGridKeyPressed_5 extends _i1.Fake
     implements _i3.PlutoGridKeyPressed {}
 
-class _FakeChangeNotifier_5 extends _i1.Fake implements _i4.ChangeNotifier {}
+class _FakeChangeNotifier_6 extends _i1.Fake implements _i4.ChangeNotifier {}
 
-class _FakePlutoAutoSize_6 extends _i1.Fake implements _i3.PlutoAutoSize {}
+class _FakePlutoAutoSize_7 extends _i1.Fake implements _i3.PlutoAutoSize {}
 
-class _FakePlutoResize_7<T> extends _i1.Fake implements _i3.PlutoResize<T> {}
+class _FakePlutoResize_8<T> extends _i1.Fake implements _i3.PlutoResize<T> {}
 
-class _FakePlutoGridCellPosition_8 extends _i1.Fake
+class _FakePlutoGridCellPosition_9 extends _i1.Fake
     implements _i3.PlutoGridCellPosition {}
 
-class _FakePlutoRow_9 extends _i1.Fake implements _i3.PlutoRow {}
+class _FakePlutoRow_10 extends _i1.Fake implements _i3.PlutoRow {}
 
-class _FakePlutoGridStateManager_10 extends _i1.Fake
+class _FakePlutoGridStateManager_11 extends _i1.Fake
     implements _i3.PlutoGridStateManager {}
 
-class _FakeStreamSubscription_11<T> extends _i1.Fake
+class _FakeStreamSubscription_12<T> extends _i1.Fake
     implements _i5.StreamSubscription<T> {}
 
-class _FakeScrollController_12 extends _i1.Fake
+class _FakeScrollController_13 extends _i1.Fake
     implements _i4.ScrollController {}
 
-class _FakeScrollPosition_13 extends _i1.Fake implements _i4.ScrollPosition {}
+class _FakeScrollPosition_14 extends _i1.Fake implements _i4.ScrollPosition {}
 
 /// A class which mocks [PlutoGridStateManager].
 ///
@@ -224,13 +227,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.getter(#localeText),
       returnValue: _FakePlutoGridLocaleText_3()) as _i3.PlutoGridLocaleText);
   @override
+  _i3.PlutoGridStyleConfig get style => (super.noSuchMethod(
+      Invocation.getter(#style),
+      returnValue: _FakePlutoGridStyleConfig_4()) as _i3.PlutoGridStyleConfig);
+  @override
   _i3.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
       Invocation.getter(#keyPressed),
-      returnValue: _FakePlutoGridKeyPressed_4()) as _i3.PlutoGridKeyPressed);
+      returnValue: _FakePlutoGridKeyPressed_5()) as _i3.PlutoGridKeyPressed);
   @override
   _i4.ChangeNotifier get resizingChangeNotifier =>
       (super.noSuchMethod(Invocation.getter(#resizingChangeNotifier),
-          returnValue: _FakeChangeNotifier_5()) as _i4.ChangeNotifier);
+          returnValue: _FakeChangeNotifier_6()) as _i4.ChangeNotifier);
   @override
   double get headerHeight =>
       (super.noSuchMethod(Invocation.getter(#headerHeight), returnValue: 0.0)
@@ -586,7 +593,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(
           Invocation.method(#getColumnsAutoSizeHelper, [],
               {#columns: columns, #maxWidth: maxWidth}),
-          returnValue: _FakePlutoAutoSize_6()) as _i3.PlutoAutoSize);
+          returnValue: _FakePlutoAutoSize_7()) as _i3.PlutoAutoSize);
   @override
   _i3.PlutoResize<dynamic> getColumnsResizeHelper(
           {List<_i3.PlutoColumn>? columns,
@@ -595,7 +602,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(
               Invocation.method(#getColumnsResizeHelper, [],
                   {#columns: columns, #column: column, #offset: offset}),
-              returnValue: _FakePlutoResize_7<dynamic>())
+              returnValue: _FakePlutoResize_8<dynamic>())
           as _i3.PlutoResize<dynamic>);
   @override
   void setColumnSizeConfig(_i3.PlutoGridColumnSizeConfig? config) =>
@@ -892,7 +899,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
               Invocation.method(#cellPositionToMove, [cellPosition, direction]),
-              returnValue: _FakePlutoGridCellPosition_8())
+              returnValue: _FakePlutoGridCellPosition_9())
           as _i3.PlutoGridCellPosition);
   @override
   void moveCurrentCell(_i3.PlutoMoveDirection? direction,
@@ -1008,7 +1015,7 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   _i3.PlutoRow getNewRow() =>
       (super.noSuchMethod(Invocation.method(#getNewRow, []),
-          returnValue: _FakePlutoRow_9()) as _i3.PlutoRow);
+          returnValue: _FakePlutoRow_10()) as _i3.PlutoRow);
   @override
   List<_i3.PlutoRow> getNewRows({int? count = 1}) =>
       (super.noSuchMethod(Invocation.method(#getNewRows, [], {#count: count}),
@@ -1204,7 +1211,7 @@ class MockPlutoGridEventManager extends _i1.Mock
   @override
   _i3.PlutoGridStateManager get stateManager =>
       (super.noSuchMethod(Invocation.getter(#stateManager),
-              returnValue: _FakePlutoGridStateManager_10())
+              returnValue: _FakePlutoGridStateManager_11())
           as _i3.PlutoGridStateManager);
   @override
   _i2.PublishSubject<_i3.PlutoGridEvent> get subject =>
@@ -1214,7 +1221,7 @@ class MockPlutoGridEventManager extends _i1.Mock
   @override
   _i5.StreamSubscription<dynamic> get subscription =>
       (super.noSuchMethod(Invocation.getter(#subscription),
-              returnValue: _FakeStreamSubscription_11<dynamic>())
+              returnValue: _FakeStreamSubscription_12<dynamic>())
           as _i5.StreamSubscription<dynamic>);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
@@ -1230,7 +1237,7 @@ class MockPlutoGridEventManager extends _i1.Mock
   _i5.StreamSubscription<_i3.PlutoGridEvent> listener(
           void Function(_i3.PlutoGridEvent)? onData) =>
       (super.noSuchMethod(Invocation.method(#listener, [onData]),
-              returnValue: _FakeStreamSubscription_11<_i3.PlutoGridEvent>())
+              returnValue: _FakeStreamSubscription_12<_i3.PlutoGridEvent>())
           as _i5.StreamSubscription<_i3.PlutoGridEvent>);
 }
 
@@ -1286,7 +1293,7 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   _i4.ScrollController addAndGet() =>
       (super.noSuchMethod(Invocation.method(#addAndGet, []),
-          returnValue: _FakeScrollController_12()) as _i4.ScrollController);
+          returnValue: _FakeScrollController_13()) as _i4.ScrollController);
   @override
   void addOffsetChangedListener(_i6.VoidCallback? onChanged) => super
       .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
@@ -1343,7 +1350,7 @@ class MockScrollController extends _i1.Mock implements _i4.ScrollController {
   @override
   _i4.ScrollPosition get position =>
       (super.noSuchMethod(Invocation.getter(#position),
-          returnValue: _FakeScrollPosition_13()) as _i4.ScrollPosition);
+          returnValue: _FakeScrollPosition_14()) as _i4.ScrollPosition);
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
@@ -1381,7 +1388,7 @@ class MockScrollController extends _i1.Mock implements _i4.ScrollController {
       (super.noSuchMethod(
           Invocation.method(
               #createScrollPosition, [physics, context, oldPosition]),
-          returnValue: _FakeScrollPosition_13()) as _i4.ScrollPosition);
+          returnValue: _FakeScrollPosition_14()) as _i4.ScrollPosition);
   @override
   void debugFillDescription(List<String>? description) => super.noSuchMethod(
       Invocation.method(#debugFillDescription, [description]),

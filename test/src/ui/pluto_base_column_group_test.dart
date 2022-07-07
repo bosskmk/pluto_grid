@@ -26,9 +26,11 @@ void main() {
 
     subject = PublishSubject<PlutoNotifierEvent>();
 
-    when(stateManager!.configuration).thenReturn(
-      const PlutoGridConfiguration(),
-    );
+    const configuration = const PlutoGridConfiguration();
+
+    when(stateManager!.configuration).thenReturn(configuration);
+
+    when(stateManager!.style).thenReturn(configuration.style);
 
     when(stateManager!.streamNotifier).thenAnswer((_) => subject);
 

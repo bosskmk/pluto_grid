@@ -521,6 +521,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final style = _stateManager.style;
+
     final bool showLeftFrozen =
         _stateManager.showFrozenColumn && _stateManager.hasLeftFrozenColumns;
 
@@ -565,8 +567,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   id: _StackName.leftFrozenDivider,
                   child: PlutoShadowLine(
                     axis: Axis.vertical,
-                    color: _stateManager.configuration!.gridBorderColor,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                   ),
                 ),
               ],
@@ -584,9 +586,9 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   id: _StackName.rightFrozenDivider,
                   child: PlutoShadowLine(
                     axis: Axis.vertical,
-                    color: _stateManager.configuration!.gridBorderColor,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                     reverse: true,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
                   ),
                 ),
               ],
@@ -597,8 +599,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   id: _StackName.columnRowDivider,
                   child: PlutoShadowLine(
                     axis: Axis.horizontal,
-                    color: _stateManager.configuration!.gridBorderColor,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                   ),
                 ),
 
@@ -608,8 +610,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   id: _StackName.headerDivider,
                   child: PlutoShadowLine(
                     axis: Axis.horizontal,
-                    color: _stateManager.configuration!.gridBorderColor,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                   ),
                 ),
                 LayoutId(
@@ -624,9 +626,9 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   id: _StackName.footerDivider,
                   child: PlutoShadowLine(
                     axis: Axis.horizontal,
-                    color: _stateManager.configuration!.gridBorderColor,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                     reverse: true,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
                   ),
                 ),
                 LayoutId(
@@ -640,12 +642,10 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 LayoutId(
                   id: _StackName.loading,
                   child: PlutoLoading(
-                    backgroundColor:
-                        _stateManager.configuration!.gridBackgroundColor,
-                    indicatorColor:
-                        _stateManager.configuration!.activatedBorderColor,
-                    text: _stateManager.configuration!.localeText.loadingText,
-                    textStyle: _stateManager.configuration!.cellTextStyle,
+                    backgroundColor: style.gridBackgroundColor,
+                    indicatorColor: style.activatedBorderColor,
+                    text: _stateManager.localeText.loadingText,
+                    textStyle: style.cellTextStyle,
                   ),
                 ),
             ],
@@ -948,7 +948,7 @@ class _GridContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = stateManager.configuration!;
+    final style = stateManager.style;
 
     return Focus(
       focusNode: stateManager.gridFocusNode,
@@ -959,16 +959,15 @@ class _GridContainer extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
           decoration: BoxDecoration(
-            color: configuration.gridBackgroundColor,
-            borderRadius: configuration.gridBorderRadius,
+            color: style.gridBackgroundColor,
+            borderRadius: style.gridBorderRadius,
             border: Border.all(
-              color: configuration.gridBorderColor,
+              color: style.gridBorderColor,
               width: PlutoGridSettings.gridBorderWidth,
             ),
           ),
           child: ClipRRect(
-            borderRadius:
-                configuration.gridBorderRadius.resolve(TextDirection.ltr),
+            borderRadius: style.gridBorderRadius.resolve(TextDirection.ltr),
             child: child,
           ),
         ),

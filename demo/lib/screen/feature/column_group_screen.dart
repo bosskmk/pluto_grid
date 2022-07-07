@@ -170,9 +170,7 @@ class _ColumnGroupScreenState extends State<ColumnGroupScreen> {
           stateManager = event.stateManager;
           stateManager.setShowColumnFilter(true);
         },
-        configuration: const PlutoGridConfiguration(
-          enableColumnBorder: true,
-        ),
+        configuration: const PlutoGridConfiguration(),
       ),
     );
   }

@@ -34,6 +34,7 @@ void main() {
     configuration = const PlutoGridConfiguration();
 
     when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
@@ -247,7 +248,7 @@ void main() {
 
       // then
       expect(found, findsOneWidget);
-      expect(foundWidget.icon, configuration.columnContextIcon);
+      expect(foundWidget.icon, configuration.style.columnContextIcon);
     },
   );
 
@@ -276,7 +277,7 @@ void main() {
 
       // then
       expect(found, findsOneWidget);
-      expect(foundWidget.icon, configuration.columnContextIcon);
+      expect(foundWidget.icon, configuration.style.columnContextIcon);
     },
   );
 
@@ -305,7 +306,7 @@ void main() {
 
       // then
       expect(found, findsOneWidget);
-      expect(foundWidget.icon, configuration.columnResizeIcon);
+      expect(foundWidget.icon, configuration.style.columnResizeIcon);
     },
   );
 
@@ -609,6 +610,7 @@ void main() {
     aColumnWithConfiguration(PlutoGridConfiguration configuration) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
+        when(stateManager.style).thenReturn(configuration.style);
 
         await tester.pumpWidget(
           buildApp(column: column),
@@ -617,12 +619,17 @@ void main() {
     }
 
     aColumnWithConfiguration(const PlutoGridConfiguration(
-      enableColumnBorder: true,
-      borderColor: Colors.deepOrange,
+      style: PlutoGridStyleConfig(
+        enableColumnBorderVertical: true,
+        borderColor: Colors.deepOrange,
+      ),
     )).test(
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
-        expect(stateManager.configuration!.enableColumnBorder, true);
+        expect(
+          stateManager.configuration!.style.enableColumnBorderVertical,
+          true,
+        );
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -641,12 +648,17 @@ void main() {
     );
 
     aColumnWithConfiguration(const PlutoGridConfiguration(
-      enableColumnBorder: false,
-      borderColor: Colors.deepOrange,
+      style: PlutoGridStyleConfig(
+        enableColumnBorderVertical: false,
+        borderColor: Colors.deepOrange,
+      ),
     )).test(
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
-        expect(stateManager.configuration!.enableColumnBorder, false);
+        expect(
+          stateManager.configuration!.style.enableColumnBorderVertical,
+          false,
+        );
 
         final target = find.descendant(
           of: find.byType(InkWell),

@@ -91,16 +91,6 @@ void main() {
     });
   });
 
-  group('PlutoSelectingMode', () {
-    test('toShortString', () {
-      expect(PlutoGridSelectingMode.cell.toShortString(), 'cell');
-
-      expect(PlutoGridSelectingMode.row.toShortString(), 'row');
-
-      expect(PlutoGridSelectingMode.none.toShortString(), 'none');
-    });
-  });
-
   group('initializeRows', () {
     test('전달 한 행의 sortIdx 가 설정 되어야 한다.', () {
       final List<PlutoColumn> columns = ColumnHelper.textColumn('title');

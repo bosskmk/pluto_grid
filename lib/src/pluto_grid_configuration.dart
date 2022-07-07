@@ -4,104 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoGridConfiguration {
-  /// border between columns.
-  final bool enableColumnBorder;
-
-  /// Activate the shadow that separates each area of the grid.
-  final bool enableGridBorderShadow;
-
   /// When you select a value in the pop-up grid, it moves down.
   final bool enableMoveDownAfterSelecting;
 
   /// Moves the current cell when focus reaches the left or right edge in the edit state.
   final bool enableMoveHorizontalInEditing;
-
-  /// Animation of background color transition of rows,
-  /// such as when the current row or rows are dragged.
-  final bool enableRowColorAnimation;
-
-  final Color gridBackgroundColor;
-
-  /// Grid border color. (Grid outline color, Frozen column division line color)
-  final Color gridBorderColor;
-
-  /// Activated Color. (Current or Selected row, cell)
-  final Color activatedColor;
-
-  /// Activated Border Color. (Current cell)
-  final Color activatedBorderColor;
-
-  /// Inactivated Border Color. (Current cell)
-  final Color inactivatedBorderColor;
-
-  /// Checked Color. (Checked rows)
-  final Color checkedColor;
-
-  /// Row border color. (horizontal row border, vertical column border)
-  final Color borderColor;
-
-  /// Cell color in edit state. (only current cell)
-  final Color cellColorInEditState;
-
-  /// Cell color in read-only state
-  final Color cellColorInReadOnlyState;
-
-  /// The background color of the column to be dragged.
-  /// When moving a column by dragging it.
-  final Color dragTargetColumnColor;
-
-  /// Icon color. (column menu, cell of popup type, pagination plugin)
-  final Color iconColor;
-
-  /// Disabled icon color. (pagination plugin)
-  final Color disabledIconColor;
-
-  /// BackgroundColor of Popup menu. (column menu)
-  final Color menuBackgroundColor;
-
-  /// Column - text style
-  final TextStyle columnTextStyle;
-
-  /// Cell - text style
-  final TextStyle cellTextStyle;
-
-  /// Icon that can open a pop-up menu next to the column title
-  /// when [enableContextMenu] of [PlutoColumn] is true.
-  final IconData columnContextIcon;
-
-  /// If enableContextMenu of PlutoColumn is false and enableDropToResize is true,
-  /// only the width of the column can be adjusted.
-  final IconData columnResizeIcon;
-
-  /// Icon size. (column menu, cell of popup type)
-  final double iconSize;
-
-  /// Height of a row.
-  final double rowHeight;
-
-  /// Height of column.
-  final double columnHeight;
-
-  /// Height of column filter.
-  final double columnFilterHeight;
-
-  /// Customise column title padding
-  /// If there is no titlePadding of PlutoColumn,
-  /// it is the title padding of the default column.
-  final EdgeInsets defaultColumnTitlePadding;
-
-  final EdgeInsets defaultColumnFilterPadding;
-
-  /// Customise cell padding
-  /// If there is no cellPadding of PlutoColumn,
-  /// it is the padding value of cell.
-  final EdgeInsets defaultCellPadding;
-
-  /// Grid corners can be rounded.
-  final BorderRadiusGeometry gridBorderRadius;
-
-  /// The corners of the popup-type grid used inside the grid can be rounded.
-  final BorderRadiusGeometry gridPopupBorderRadius;
 
   /// [PlutoEnterKeyAction.EditingAndMoveDown]
   /// It switches to the editing state, and moves down in the editing state.
@@ -116,109 +23,40 @@ class PlutoGridConfiguration {
   /// There is no action.
   final PlutoGridEnterKeyAction enterKeyAction;
 
-  final PlutoGridLocaleText localeText;
+  /// Set borders of [PlutoGrid] and columns, cells, and rows.
+  final PlutoGridStyleConfig style;
 
   /// Customise scrollbars for desktop usage
-  final PlutoGridScrollbarConfig scrollbarConfig;
+  final PlutoGridScrollbarConfig scrollbar;
 
   /// Customise filter of columns
-  final PlutoGridColumnFilterConfig columnFilterConfig;
+  final PlutoGridColumnFilterConfig columnFilter;
 
   /// Automatically adjust the column width or set the width change condition.
-  final PlutoGridColumnSizeConfig columnSizeConfig;
+  final PlutoGridColumnSizeConfig columnSize;
+
+  final PlutoGridLocaleText localeText;
 
   const PlutoGridConfiguration({
-    this.enableColumnBorder = false,
-    this.enableGridBorderShadow = false,
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
-    this.enableRowColorAnimation = true,
-    this.gridBackgroundColor = Colors.white,
-    this.gridBorderColor = const Color(0xFFA1A5AE),
-    this.activatedColor = const Color(0xFFDCF5FF),
-    this.activatedBorderColor = Colors.lightBlue,
-    this.inactivatedBorderColor = const Color(0xFFC4C7CC),
-    this.checkedColor = const Color(0x11757575),
-    this.borderColor = const Color(0xFFDDE2EB),
-    this.cellColorInEditState = Colors.white,
-    this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
-    this.dragTargetColumnColor = const Color(0xFFDCF5FF),
-    this.iconColor = Colors.black26,
-    this.disabledIconColor = Colors.black12,
-    this.menuBackgroundColor = Colors.white,
-    this.columnTextStyle = const TextStyle(
-      color: Colors.black,
-      decoration: TextDecoration.none,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    ),
-    this.cellTextStyle = const TextStyle(
-      color: Colors.black,
-      fontSize: 14,
-    ),
-    this.columnContextIcon = Icons.dehaze,
-    this.columnResizeIcon = Icons.code_sharp,
-    this.iconSize = 18,
-    this.rowHeight = PlutoGridSettings.rowHeight,
-    this.columnHeight = PlutoGridSettings.rowHeight,
-    this.columnFilterHeight = PlutoGridSettings.rowHeight,
-    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
-    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
-    this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.gridBorderRadius = BorderRadius.zero,
-    this.gridPopupBorderRadius = BorderRadius.zero,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
+    this.style = const PlutoGridStyleConfig(),
+    this.scrollbar = const PlutoGridScrollbarConfig(),
+    this.columnFilter = const PlutoGridColumnFilterConfig(),
+    this.columnSize = const PlutoGridColumnSizeConfig(),
     this.localeText = const PlutoGridLocaleText(),
-    this.scrollbarConfig = const PlutoGridScrollbarConfig(),
-    this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-    this.columnSizeConfig = const PlutoGridColumnSizeConfig(),
   });
 
   const PlutoGridConfiguration.dark({
-    this.enableColumnBorder = false,
-    this.enableGridBorderShadow = false,
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
-    this.enableRowColorAnimation = true,
-    this.gridBackgroundColor = const Color(0xFF111111),
-    this.gridBorderColor = const Color(0xFF666666),
-    this.activatedColor = const Color(0xFF313131),
-    this.activatedBorderColor = const Color(0xFFFFFFFF),
-    this.inactivatedBorderColor = const Color(0xFF666666),
-    this.checkedColor = const Color(0x11202020),
-    this.borderColor = const Color(0xFF222222),
-    this.cellColorInEditState = const Color(0xFF666666),
-    this.cellColorInReadOnlyState = const Color(0xFF222222),
-    this.dragTargetColumnColor = const Color(0xFF313131),
-    this.iconColor = Colors.white38,
-    this.disabledIconColor = Colors.white12,
-    this.menuBackgroundColor = const Color(0xFF414141),
-    this.columnTextStyle = const TextStyle(
-      color: Colors.white,
-      decoration: TextDecoration.none,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    ),
-    this.cellTextStyle = const TextStyle(
-      color: Colors.white,
-      fontSize: 14,
-    ),
-    this.columnContextIcon = Icons.dehaze,
-    this.columnResizeIcon = Icons.code_sharp,
-    this.iconSize = 18,
-    this.rowHeight = PlutoGridSettings.rowHeight,
-    this.columnHeight = PlutoGridSettings.rowHeight,
-    this.columnFilterHeight = PlutoGridSettings.rowHeight,
-    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
-    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
-    this.defaultCellPadding = PlutoGridSettings.cellPadding,
-    this.gridBorderRadius = BorderRadius.zero,
-    this.gridPopupBorderRadius = BorderRadius.zero,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
+    this.style = const PlutoGridStyleConfig.dark(),
+    this.scrollbar = const PlutoGridScrollbarConfig(),
+    this.columnFilter = const PlutoGridColumnFilterConfig(),
+    this.columnSize = const PlutoGridColumnSizeConfig(),
     this.localeText = const PlutoGridLocaleText(),
-    this.scrollbarConfig = const PlutoGridScrollbarConfig(),
-    this.columnFilterConfig = const PlutoGridColumnFilterConfig(),
-    this.columnSizeConfig = const PlutoGridColumnSizeConfig(),
   });
 
   void updateLocale() {
@@ -245,34 +83,249 @@ class PlutoGridConfiguration {
       var column = refColumns[i];
 
       column.setDefaultFilter(
-        columnFilterConfig.getDefaultColumnFilter(column),
+        columnFilter.getDefaultColumnFilter(column),
       );
     }
   }
 
   PlutoGridConfiguration copyWith({
-    bool? enableColumnBorder,
-    bool? enableGridBorderShadow,
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
+    PlutoGridEnterKeyAction? enterKeyAction,
+    PlutoGridStyleConfig? style,
+    PlutoGridScrollbarConfig? scrollbar,
+    PlutoGridColumnFilterConfig? columnFilter,
+    PlutoGridColumnSizeConfig? columnSize,
+    PlutoGridLocaleText? localeText,
+  }) {
+    return PlutoGridConfiguration(
+      enableMoveDownAfterSelecting:
+          enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
+      enableMoveHorizontalInEditing:
+          enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      enterKeyAction: enterKeyAction ?? this.enterKeyAction,
+      style: style ?? this.style,
+      scrollbar: scrollbar ?? this.scrollbar,
+      columnFilter: columnFilter ?? this.columnFilter,
+      columnSize: columnSize ?? this.columnSize,
+      localeText: localeText ?? this.localeText,
+    );
+  }
+}
+
+class PlutoGridStyleConfig {
+  const PlutoGridStyleConfig({
+    this.enableGridBorderShadow = false,
+    this.enableColumnBorderVertical = true,
+    this.enableColumnBorderHorizontal = true,
+    this.enableCellBorderVertical = true,
+    this.enableCellBorderHorizontal = true,
+    this.enableRowColorAnimation = false,
+    this.gridBackgroundColor = Colors.white,
+    this.activatedColor = const Color(0xFFDCF5FF),
+    this.checkedColor = const Color(0x11757575),
+    this.cellColorInEditState = Colors.white,
+    this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
+    this.dragTargetColumnColor = const Color(0xFFDCF5FF),
+    this.iconColor = Colors.black26,
+    this.disabledIconColor = Colors.black12,
+    this.menuBackgroundColor = Colors.white,
+    this.gridBorderColor = const Color(0xFFA1A5AE),
+    this.borderColor = const Color(0xFFDDE2EB),
+    this.activatedBorderColor = Colors.lightBlue,
+    this.inactivatedBorderColor = const Color(0xFFC4C7CC),
+    this.iconSize = 18,
+    this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
+    this.columnTextStyle = const TextStyle(
+      color: Colors.black,
+      decoration: TextDecoration.none,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    ),
+    this.cellTextStyle = const TextStyle(
+      color: Colors.black,
+      fontSize: 14,
+    ),
+    this.columnContextIcon = Icons.dehaze,
+    this.columnResizeIcon = Icons.code_sharp,
+    this.gridBorderRadius = BorderRadius.zero,
+    this.gridPopupBorderRadius = BorderRadius.zero,
+  });
+
+  const PlutoGridStyleConfig.dark({
+    this.enableGridBorderShadow = false,
+    this.enableColumnBorderVertical = true,
+    this.enableColumnBorderHorizontal = true,
+    this.enableCellBorderVertical = true,
+    this.enableCellBorderHorizontal = true,
+    this.enableRowColorAnimation = false,
+    this.gridBackgroundColor = const Color(0xFF111111),
+    this.activatedColor = const Color(0xFF313131),
+    this.checkedColor = const Color(0x11202020),
+    this.cellColorInEditState = const Color(0xFF666666),
+    this.cellColorInReadOnlyState = const Color(0xFF222222),
+    this.dragTargetColumnColor = const Color(0xFF313131),
+    this.iconColor = Colors.white38,
+    this.disabledIconColor = Colors.white12,
+    this.menuBackgroundColor = const Color(0xFF414141),
+    this.gridBorderColor = const Color(0xFF666666),
+    this.borderColor = const Color(0xFF222222),
+    this.activatedBorderColor = const Color(0xFFFFFFFF),
+    this.inactivatedBorderColor = const Color(0xFF666666),
+    this.iconSize = 18,
+    this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
+    this.columnTextStyle = const TextStyle(
+      color: Colors.white,
+      decoration: TextDecoration.none,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    ),
+    this.cellTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+    ),
+    this.columnContextIcon = Icons.dehaze,
+    this.columnResizeIcon = Icons.code_sharp,
+    this.gridBorderRadius = BorderRadius.zero,
+    this.gridPopupBorderRadius = BorderRadius.zero,
+  });
+
+  /// Enable borderShadow in [PlutoGrid].
+  final bool enableGridBorderShadow;
+
+  /// Enable the vertical border of [PlutoColumn] and [PlutoColumnGroup].
+  final bool enableColumnBorderVertical;
+
+  /// Enable the horizontal border of [PlutoColumn] and [PlutoColumnGroup].
+  final bool enableColumnBorderHorizontal;
+
+  /// Enable the vertical border of [PlutoCell].
+  final bool enableCellBorderVertical;
+
+  /// Enable the horizontal border of [PlutoCell].
+  final bool enableCellBorderHorizontal;
+
+  /// Animation of background color transition of rows,
+  /// such as when the current row or rows are dragged.
+  final bool enableRowColorAnimation;
+
+  final Color gridBackgroundColor;
+
+  /// Activated Color. (Current or Selected row, cell)
+  final Color activatedColor;
+
+  /// Checked Color. (Checked rows)
+  final Color checkedColor;
+
+  /// Cell color in edit state. (only current cell)
+  final Color cellColorInEditState;
+
+  /// Cell color in read-only state
+  final Color cellColorInReadOnlyState;
+
+  /// The background color of the column to be dragged.
+  /// When moving a column by dragging it.
+  final Color dragTargetColumnColor;
+
+  /// Icon color. (column menu, cell of popup type, pagination plugin)
+  final Color iconColor;
+
+  /// Disabled icon color. (pagination plugin)
+  final Color disabledIconColor;
+
+  /// BackgroundColor of Popup menu. (column menu)
+  final Color menuBackgroundColor;
+
+  /// Set the border color of [PlutoGrid].
+  final Color gridBorderColor;
+
+  /// Set the border color of the widgets inside [PlutoGrid].
+  ///
+  /// Border color is set
+  /// for [PlutoColumn], [PlutoColumnGroup], [PlutoCell], [PlutoRow], etc.
+  final Color borderColor;
+
+  /// Border color set when widgets such as [PlutoRow] and [PlutoCell]
+  /// receive focus or are currently selected.
+  final Color activatedBorderColor;
+
+  /// Border color set when widgets such as [PlutoRow] and [PlutoCell] lose focus.
+  final Color inactivatedBorderColor;
+
+  /// Icon size. (column menu, cell of popup type)
+  final double iconSize;
+
+  /// Height of a row.
+  final double rowHeight;
+
+  /// Height of column.
+  final double columnHeight;
+
+  /// Height of column filter.
+  final double columnFilterHeight;
+
+  /// Customise column title padding
+  /// If there is no titlePadding of PlutoColumn,
+  /// it is the title padding of the default column.
+  final EdgeInsets defaultColumnTitlePadding;
+
+  final EdgeInsets defaultColumnFilterPadding;
+
+  /// Customise cell padding
+  /// If there is no cellPadding of PlutoColumn,
+  /// it is the padding value of cell.
+  final EdgeInsets defaultCellPadding;
+
+  /// Column - text style
+  final TextStyle columnTextStyle;
+
+  /// Cell - text style
+  final TextStyle cellTextStyle;
+
+  /// Icon that can open a pop-up menu next to the column title
+  /// when [enableContextMenu] of [PlutoColumn] is true.
+  final IconData columnContextIcon;
+
+  /// If enableContextMenu of PlutoColumn is false and enableDropToResize is true,
+  /// only the width of the column can be adjusted.
+  final IconData columnResizeIcon;
+
+  /// Apply the border radius of [PlutoGrid].
+  final BorderRadiusGeometry gridBorderRadius;
+
+  /// Apply border radius to popup opened inside [PlutoGrid].
+  final BorderRadiusGeometry gridPopupBorderRadius;
+
+  PlutoGridStyleConfig copyWith({
+    bool? enableGridBorderShadow,
+    bool? enableColumnBorderVertical,
+    bool? enableColumnBorderHorizontal,
+    bool? enableCellBorderVertical,
+    bool? enableCellBorderHorizontal,
     bool? enableRowColorAnimation,
     Color? gridBackgroundColor,
-    Color? gridBorderColor,
     Color? activatedColor,
-    Color? activatedBorderColor,
-    Color? inactivatedBorderColor,
     Color? checkedColor,
-    Color? borderColor,
     Color? cellColorInEditState,
     Color? cellColorInReadOnlyState,
     Color? dragTargetColumnColor,
     Color? iconColor,
     Color? disabledIconColor,
     Color? menuBackgroundColor,
-    TextStyle? columnTextStyle,
-    TextStyle? cellTextStyle,
-    IconData? columnContextIcon,
-    IconData? columnResizeIcon,
+    Color? gridBorderColor,
+    Color? borderColor,
+    Color? activatedBorderColor,
+    Color? inactivatedBorderColor,
     double? iconSize,
     double? rowHeight,
     double? columnHeight,
@@ -280,32 +333,29 @@ class PlutoGridConfiguration {
     EdgeInsets? defaultColumnTitlePadding,
     EdgeInsets? defaultColumnFilterPadding,
     EdgeInsets? defaultCellPadding,
+    TextStyle? columnTextStyle,
+    TextStyle? cellTextStyle,
+    IconData? columnContextIcon,
+    IconData? columnResizeIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
-    PlutoGridEnterKeyAction? enterKeyAction,
-    PlutoGridLocaleText? localeText,
-    PlutoGridScrollbarConfig? scrollbarConfig,
-    PlutoGridColumnFilterConfig? columnFilterConfig,
-    PlutoGridColumnSizeConfig? columnSizeConfig,
   }) {
-    return PlutoGridConfiguration(
-      enableColumnBorder: enableColumnBorder ?? this.enableColumnBorder,
+    return PlutoGridStyleConfig(
       enableGridBorderShadow:
           enableGridBorderShadow ?? this.enableGridBorderShadow,
-      enableMoveDownAfterSelecting:
-          enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
-      enableMoveHorizontalInEditing:
-          enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      enableColumnBorderVertical:
+          enableColumnBorderVertical ?? this.enableColumnBorderVertical,
+      enableColumnBorderHorizontal:
+          enableColumnBorderHorizontal ?? this.enableColumnBorderHorizontal,
+      enableCellBorderVertical:
+          enableCellBorderVertical ?? this.enableCellBorderVertical,
+      enableCellBorderHorizontal:
+          enableCellBorderHorizontal ?? this.enableCellBorderHorizontal,
       enableRowColorAnimation:
           enableRowColorAnimation ?? this.enableRowColorAnimation,
       gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
-      gridBorderColor: gridBorderColor ?? this.gridBorderColor,
       activatedColor: activatedColor ?? this.activatedColor,
-      activatedBorderColor: activatedBorderColor ?? this.activatedBorderColor,
-      inactivatedBorderColor:
-          inactivatedBorderColor ?? this.inactivatedBorderColor,
       checkedColor: checkedColor ?? this.checkedColor,
-      borderColor: borderColor ?? this.borderColor,
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
       cellColorInReadOnlyState:
           cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
@@ -314,10 +364,11 @@ class PlutoGridConfiguration {
       iconColor: iconColor ?? this.iconColor,
       disabledIconColor: disabledIconColor ?? this.disabledIconColor,
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
-      columnTextStyle: columnTextStyle ?? this.columnTextStyle,
-      cellTextStyle: cellTextStyle ?? this.cellTextStyle,
-      columnContextIcon: columnContextIcon ?? this.columnContextIcon,
-      columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
+      gridBorderColor: gridBorderColor ?? this.gridBorderColor,
+      borderColor: borderColor ?? this.borderColor,
+      activatedBorderColor: activatedBorderColor ?? this.activatedBorderColor,
+      inactivatedBorderColor:
+          inactivatedBorderColor ?? this.inactivatedBorderColor,
       iconSize: iconSize ?? this.iconSize,
       rowHeight: rowHeight ?? this.rowHeight,
       columnHeight: columnHeight ?? this.columnHeight,
@@ -327,16 +378,236 @@ class PlutoGridConfiguration {
       defaultColumnFilterPadding:
           defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,
+      columnTextStyle: columnTextStyle ?? this.columnTextStyle,
+      cellTextStyle: cellTextStyle ?? this.cellTextStyle,
+      columnContextIcon: columnContextIcon ?? this.columnContextIcon,
+      columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,
-      enterKeyAction: enterKeyAction ?? this.enterKeyAction,
-      localeText: localeText ?? this.localeText,
-      scrollbarConfig: scrollbarConfig ?? this.scrollbarConfig,
-      columnFilterConfig: columnFilterConfig ?? this.columnFilterConfig,
-      columnSizeConfig: columnSizeConfig ?? this.columnSizeConfig,
     );
   }
+}
+
+/// Allows to customise scrollbars "look and feel"
+/// The general feature is making vertical scrollbar draggable and therefore more useful
+/// for desktop systems. Set [draggableScrollbar] to true to achieve this behavior. Also
+/// changing [isAlwaysShown] to true is recommended for more usability at desktops.
+class PlutoGridScrollbarConfig {
+  const PlutoGridScrollbarConfig({
+    this.draggableScrollbar = true,
+    this.isAlwaysShown = false,
+    this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
+    this.scrollbarRadiusWhileDragging =
+        CupertinoScrollbar.defaultRadiusWhileDragging,
+    this.scrollbarThickness = CupertinoScrollbar.defaultThickness,
+    this.scrollbarThicknessWhileDragging =
+        CupertinoScrollbar.defaultThicknessWhileDragging,
+  });
+
+  final bool draggableScrollbar;
+  final bool isAlwaysShown;
+  final double scrollbarThickness;
+  final double scrollbarThicknessWhileDragging;
+  final Radius scrollbarRadius;
+  final Radius scrollbarRadiusWhileDragging;
+}
+
+typedef PlutoGridColumnFilterResolver = Function<T>();
+
+typedef PlutoGridResolveDefaultColumnFilter = PlutoFilterType Function(
+  PlutoColumn column,
+  PlutoGridColumnFilterResolver resolver,
+);
+
+class PlutoGridColumnFilterConfig {
+  /// # Set the filter information of the column.
+  ///
+  /// **Return the value returned by [resolveDefaultColumnFilter] through the resolver function.**
+  /// **Prevents errors returning filter that are not in the [filters] list.**
+  ///
+  /// The value of returning from resolveDefaultColumnFilter
+  /// becomes the condition of TextField below the column or
+  /// is set as the default filter when calling the column popup.
+  ///
+  /// ```dart
+  ///
+  /// var filterConfig = PlutoColumnFilterConfig(
+  ///   filters: const [
+  ///     ...FilterHelper.defaultFilters,
+  ///     // custom filter
+  ///     ClassYouImplemented(),
+  ///   ],
+  ///   resolveDefaultColumnFilter: (column, resolver) {
+  ///     if (column.field == 'text') {
+  ///       return resolver<PlutoFilterTypeContains>();
+  ///     } else if (column.field == 'number') {
+  ///       return resolver<PlutoFilterTypeGreaterThan>();
+  ///     } else if (column.field == 'date') {
+  ///       return resolver<PlutoFilterTypeLessThan>();
+  ///     } else if (column.field == 'select') {
+  ///       return resolver<ClassYouImplemented>();
+  ///     }
+  ///
+  ///     return resolver<PlutoFilterTypeContains>();
+  ///   },
+  /// );
+  ///
+  /// class ClassYouImplemented implements PlutoFilterType {
+  ///   String get title => 'Custom contains';
+  ///
+  ///   get compare => ({
+  ///         String base,
+  ///         String search,
+  ///         PlutoColumn column,
+  ///       }) {
+  ///         var keys = search.split(',').map((e) => e.toUpperCase()).toList();
+  ///
+  ///         return keys.contains(base.toUpperCase());
+  ///       };
+  ///
+  ///   const ClassYouImplemented();
+  /// }
+  /// ```
+  const PlutoGridColumnFilterConfig({
+    List<PlutoFilterType>? filters,
+    PlutoGridResolveDefaultColumnFilter? resolveDefaultColumnFilter,
+    int? debounceMilliseconds,
+  })  : _userFilters = filters,
+        _userResolveDefaultColumnFilter = resolveDefaultColumnFilter,
+        _debounceMilliseconds = debounceMilliseconds == null
+            ? PlutoGridSettings.debounceMillisecondsForColumnFilter
+            : debounceMilliseconds < 0
+                ? 0
+                : debounceMilliseconds;
+
+  final List<PlutoFilterType>? _userFilters;
+
+  final PlutoGridResolveDefaultColumnFilter? _userResolveDefaultColumnFilter;
+
+  final int _debounceMilliseconds;
+
+  bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
+
+  List<PlutoFilterType> get filters =>
+      hasUserFilter ? _userFilters! : FilterHelper.defaultFilters;
+
+  int get debounceMilliseconds => _debounceMilliseconds;
+
+  PlutoFilterType resolver<T>() {
+    return filters.firstWhereOrNull(
+          (element) => element.runtimeType == T,
+        ) ??
+        filters.first;
+  }
+
+  PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
+    if (_userResolveDefaultColumnFilter == null) {
+      return filters.first;
+    }
+
+    var resolvedFilter = _userResolveDefaultColumnFilter!(column, resolver);
+
+    assert(filters.contains(resolvedFilter));
+
+    return resolvedFilter;
+  }
+}
+
+/// Automatically change the column width or set the mode when changing the width.
+class PlutoGridColumnSizeConfig {
+  const PlutoGridColumnSizeConfig({
+    this.autoSizeMode = PlutoAutoSizeMode.none,
+    this.resizeMode = PlutoResizeMode.normal,
+    this.restoreAutoSizeAfterHideColumn = true,
+    this.restoreAutoSizeAfterFrozenColumn = true,
+    this.restoreAutoSizeAfterMoveColumn = true,
+    this.restoreAutoSizeAfterInsertColumn = true,
+    this.restoreAutoSizeAfterRemoveColumn = true,
+  });
+
+  /// Automatically change the column width.
+  final PlutoAutoSizeMode autoSizeMode;
+
+  /// This is the condition for changing the width of the column.
+  final PlutoResizeMode resizeMode;
+
+  /// [PlutoColumn.hide] Whether to apply autoSizeMode after state change.
+  /// If false, autoSizeMode is not applied after the state change
+  /// and the state after the change is maintained.
+  final bool restoreAutoSizeAfterHideColumn;
+
+  /// [PlutoColumn.frozen] Whether to apply autoSizeMode after state change.
+  /// If false, autoSizeMode is not applied after the state change
+  /// and the state after the change is maintained.
+  final bool restoreAutoSizeAfterFrozenColumn;
+
+  /// Whether to apply autoSizeMode after [PlutoColumn] is moved.
+  /// If false, do not apply autoSizeMode after moving
+  /// and keep the state after change.
+  final bool restoreAutoSizeAfterMoveColumn;
+
+  /// Whether to apply autoSizeMode after adding [PlutoColumn].
+  /// If false, autoSizeMode is not applied after column addition
+  /// and the state after change is maintained.
+  final bool restoreAutoSizeAfterInsertColumn;
+
+  /// [PlutoColumn] Whether to apply autoSizeMode after deletion.
+  /// If false, autoSizeMode is not applied after deletion
+  /// and the state after change is maintained.
+  final bool restoreAutoSizeAfterRemoveColumn;
+
+  PlutoGridColumnSizeConfig copyWith({
+    PlutoAutoSizeMode? autoSizeMode,
+    PlutoResizeMode? resizeMode,
+    bool? restoreAutoSizeAfterHideColumn,
+    bool? restoreAutoSizeAfterFrozenColumn,
+    bool? restoreAutoSizeAfterMoveColumn,
+    bool? restoreAutoSizeAfterInsertColumn,
+    bool? restoreAutoSizeAfterRemoveColumn,
+  }) {
+    return PlutoGridColumnSizeConfig(
+      autoSizeMode: autoSizeMode ?? this.autoSizeMode,
+      resizeMode: resizeMode ?? this.resizeMode,
+      restoreAutoSizeAfterHideColumn:
+          restoreAutoSizeAfterHideColumn ?? this.restoreAutoSizeAfterHideColumn,
+      restoreAutoSizeAfterFrozenColumn: restoreAutoSizeAfterFrozenColumn ??
+          this.restoreAutoSizeAfterFrozenColumn,
+      restoreAutoSizeAfterMoveColumn:
+          restoreAutoSizeAfterMoveColumn ?? this.restoreAutoSizeAfterMoveColumn,
+      restoreAutoSizeAfterInsertColumn: restoreAutoSizeAfterInsertColumn ??
+          this.restoreAutoSizeAfterInsertColumn,
+      restoreAutoSizeAfterRemoveColumn: restoreAutoSizeAfterRemoveColumn ??
+          this.restoreAutoSizeAfterRemoveColumn,
+    );
+  }
+
+  @override
+  bool operator ==(covariant PlutoGridColumnSizeConfig other) {
+    return autoSizeMode == other.autoSizeMode &&
+        resizeMode == other.resizeMode &&
+        restoreAutoSizeAfterHideColumn ==
+            other.restoreAutoSizeAfterHideColumn &&
+        restoreAutoSizeAfterFrozenColumn ==
+            other.restoreAutoSizeAfterFrozenColumn &&
+        restoreAutoSizeAfterMoveColumn ==
+            other.restoreAutoSizeAfterMoveColumn &&
+        restoreAutoSizeAfterInsertColumn ==
+            other.restoreAutoSizeAfterInsertColumn &&
+        restoreAutoSizeAfterRemoveColumn ==
+            other.restoreAutoSizeAfterRemoveColumn;
+  }
+
+  @override
+  int get hashCode => hashValues(
+        autoSizeMode,
+        resizeMode,
+        restoreAutoSizeAfterHideColumn,
+        restoreAutoSizeAfterFrozenColumn,
+        restoreAutoSizeAfterMoveColumn,
+        restoreAutoSizeAfterInsertColumn,
+        restoreAutoSizeAfterRemoveColumn,
+      );
 }
 
 class PlutoGridLocaleText {
@@ -761,10 +1032,8 @@ enum PlutoGridEnterKeyAction {
   toggleEditing,
 
   /// Pressing the Enter key does nothing.
-  none,
-}
+  none;
 
-extension PlutoGridEnterKeyActionExtension on PlutoGridEnterKeyAction {
   bool get isEditingAndMoveDown =>
       this == PlutoGridEnterKeyAction.editingAndMoveDown;
 
@@ -774,225 +1043,4 @@ extension PlutoGridEnterKeyActionExtension on PlutoGridEnterKeyAction {
   bool get isToggleEditing => this == PlutoGridEnterKeyAction.toggleEditing;
 
   bool get isNone => this == PlutoGridEnterKeyAction.none;
-}
-
-/// Allows to customise scrollbars "look and feel"
-/// The general feature is making vertical scrollbar draggable and therefore more useful
-/// for desktop systems. Set [draggableScrollbar] to true to achieve this behavior. Also
-/// changing [isAlwaysShown] to true is recommended for more usability at desktops.
-class PlutoGridScrollbarConfig {
-  const PlutoGridScrollbarConfig({
-    this.draggableScrollbar = true,
-    this.isAlwaysShown = false,
-    this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
-    this.scrollbarRadiusWhileDragging =
-        CupertinoScrollbar.defaultRadiusWhileDragging,
-    this.scrollbarThickness = CupertinoScrollbar.defaultThickness,
-    this.scrollbarThicknessWhileDragging =
-        CupertinoScrollbar.defaultThicknessWhileDragging,
-  });
-
-  final bool draggableScrollbar;
-  final bool isAlwaysShown;
-  final double scrollbarThickness;
-  final double scrollbarThicknessWhileDragging;
-  final Radius scrollbarRadius;
-  final Radius scrollbarRadiusWhileDragging;
-}
-
-typedef PlutoGridColumnFilterResolver = Function<T>();
-
-typedef PlutoGridResolveDefaultColumnFilter = PlutoFilterType Function(
-  PlutoColumn column,
-  PlutoGridColumnFilterResolver resolver,
-);
-
-class PlutoGridColumnFilterConfig {
-  /// # Set the filter information of the column.
-  ///
-  /// **Return the value returned by [resolveDefaultColumnFilter] through the resolver function.**
-  /// **Prevents errors returning filter that are not in the [filters] list.**
-  ///
-  /// The value of returning from resolveDefaultColumnFilter
-  /// becomes the condition of TextField below the column or
-  /// is set as the default filter when calling the column popup.
-  ///
-  /// ```dart
-  ///
-  /// var filterConfig = PlutoColumnFilterConfig(
-  ///   filters: const [
-  ///     ...FilterHelper.defaultFilters,
-  ///     // custom filter
-  ///     ClassYouImplemented(),
-  ///   ],
-  ///   resolveDefaultColumnFilter: (column, resolver) {
-  ///     if (column.field == 'text') {
-  ///       return resolver<PlutoFilterTypeContains>();
-  ///     } else if (column.field == 'number') {
-  ///       return resolver<PlutoFilterTypeGreaterThan>();
-  ///     } else if (column.field == 'date') {
-  ///       return resolver<PlutoFilterTypeLessThan>();
-  ///     } else if (column.field == 'select') {
-  ///       return resolver<ClassYouImplemented>();
-  ///     }
-  ///
-  ///     return resolver<PlutoFilterTypeContains>();
-  ///   },
-  /// );
-  ///
-  /// class ClassYouImplemented implements PlutoFilterType {
-  ///   String get title => 'Custom contains';
-  ///
-  ///   get compare => ({
-  ///         String base,
-  ///         String search,
-  ///         PlutoColumn column,
-  ///       }) {
-  ///         var keys = search.split(',').map((e) => e.toUpperCase()).toList();
-  ///
-  ///         return keys.contains(base.toUpperCase());
-  ///       };
-  ///
-  ///   const ClassYouImplemented();
-  /// }
-  /// ```
-  const PlutoGridColumnFilterConfig({
-    List<PlutoFilterType>? filters,
-    PlutoGridResolveDefaultColumnFilter? resolveDefaultColumnFilter,
-    int? debounceMilliseconds,
-  })  : _userFilters = filters,
-        _userResolveDefaultColumnFilter = resolveDefaultColumnFilter,
-        _debounceMilliseconds = debounceMilliseconds == null
-            ? PlutoGridSettings.debounceMillisecondsForColumnFilter
-            : debounceMilliseconds < 0
-                ? 0
-                : debounceMilliseconds;
-
-  final List<PlutoFilterType>? _userFilters;
-
-  final PlutoGridResolveDefaultColumnFilter? _userResolveDefaultColumnFilter;
-
-  final int _debounceMilliseconds;
-
-  bool get hasUserFilter => _userFilters != null && _userFilters!.isNotEmpty;
-
-  List<PlutoFilterType> get filters =>
-      hasUserFilter ? _userFilters! : FilterHelper.defaultFilters;
-
-  int get debounceMilliseconds => _debounceMilliseconds;
-
-  PlutoFilterType resolver<T>() {
-    return filters.firstWhereOrNull(
-          (element) => element.runtimeType == T,
-        ) ??
-        filters.first;
-  }
-
-  PlutoFilterType getDefaultColumnFilter(PlutoColumn column) {
-    if (_userResolveDefaultColumnFilter == null) {
-      return filters.first;
-    }
-
-    var resolvedFilter = _userResolveDefaultColumnFilter!(column, resolver);
-
-    assert(filters.contains(resolvedFilter));
-
-    return resolvedFilter;
-  }
-}
-
-/// Automatically change the column width or set the mode when changing the width.
-class PlutoGridColumnSizeConfig {
-  const PlutoGridColumnSizeConfig({
-    this.autoSizeMode = PlutoAutoSizeMode.none,
-    this.resizeMode = PlutoResizeMode.normal,
-    this.restoreAutoSizeAfterHideColumn = true,
-    this.restoreAutoSizeAfterFrozenColumn = true,
-    this.restoreAutoSizeAfterMoveColumn = true,
-    this.restoreAutoSizeAfterInsertColumn = true,
-    this.restoreAutoSizeAfterRemoveColumn = true,
-  });
-
-  /// Automatically change the column width.
-  final PlutoAutoSizeMode autoSizeMode;
-
-  /// This is the condition for changing the width of the column.
-  final PlutoResizeMode resizeMode;
-
-  /// [PlutoColumn.hide] Whether to apply autoSizeMode after state change.
-  /// If false, autoSizeMode is not applied after the state change
-  /// and the state after the change is maintained.
-  final bool restoreAutoSizeAfterHideColumn;
-
-  /// [PlutoColumn.frozen] Whether to apply autoSizeMode after state change.
-  /// If false, autoSizeMode is not applied after the state change
-  /// and the state after the change is maintained.
-  final bool restoreAutoSizeAfterFrozenColumn;
-
-  /// Whether to apply autoSizeMode after [PlutoColumn] is moved.
-  /// If false, do not apply autoSizeMode after moving
-  /// and keep the state after change.
-  final bool restoreAutoSizeAfterMoveColumn;
-
-  /// Whether to apply autoSizeMode after adding [PlutoColumn].
-  /// If false, autoSizeMode is not applied after column addition
-  /// and the state after change is maintained.
-  final bool restoreAutoSizeAfterInsertColumn;
-
-  /// [PlutoColumn] Whether to apply autoSizeMode after deletion.
-  /// If false, autoSizeMode is not applied after deletion
-  /// and the state after change is maintained.
-  final bool restoreAutoSizeAfterRemoveColumn;
-
-  PlutoGridColumnSizeConfig copyWith({
-    PlutoAutoSizeMode? autoSizeMode,
-    PlutoResizeMode? resizeMode,
-    bool? restoreAutoSizeAfterHideColumn,
-    bool? restoreAutoSizeAfterFrozenColumn,
-    bool? restoreAutoSizeAfterMoveColumn,
-    bool? restoreAutoSizeAfterInsertColumn,
-    bool? restoreAutoSizeAfterRemoveColumn,
-  }) {
-    return PlutoGridColumnSizeConfig(
-      autoSizeMode: autoSizeMode ?? this.autoSizeMode,
-      resizeMode: resizeMode ?? this.resizeMode,
-      restoreAutoSizeAfterHideColumn:
-          restoreAutoSizeAfterHideColumn ?? this.restoreAutoSizeAfterHideColumn,
-      restoreAutoSizeAfterFrozenColumn: restoreAutoSizeAfterFrozenColumn ??
-          this.restoreAutoSizeAfterFrozenColumn,
-      restoreAutoSizeAfterMoveColumn:
-          restoreAutoSizeAfterMoveColumn ?? this.restoreAutoSizeAfterMoveColumn,
-      restoreAutoSizeAfterInsertColumn: restoreAutoSizeAfterInsertColumn ??
-          this.restoreAutoSizeAfterInsertColumn,
-      restoreAutoSizeAfterRemoveColumn: restoreAutoSizeAfterRemoveColumn ??
-          this.restoreAutoSizeAfterRemoveColumn,
-    );
-  }
-
-  @override
-  bool operator ==(covariant PlutoGridColumnSizeConfig other) {
-    return autoSizeMode == other.autoSizeMode &&
-        resizeMode == other.resizeMode &&
-        restoreAutoSizeAfterHideColumn ==
-            other.restoreAutoSizeAfterHideColumn &&
-        restoreAutoSizeAfterFrozenColumn ==
-            other.restoreAutoSizeAfterFrozenColumn &&
-        restoreAutoSizeAfterMoveColumn ==
-            other.restoreAutoSizeAfterMoveColumn &&
-        restoreAutoSizeAfterInsertColumn ==
-            other.restoreAutoSizeAfterInsertColumn &&
-        restoreAutoSizeAfterRemoveColumn ==
-            other.restoreAutoSizeAfterRemoveColumn;
-  }
-
-  @override
-  int get hashCode => hashValues(
-        autoSizeMode,
-        resizeMode,
-        restoreAutoSizeAfterHideColumn,
-        restoreAutoSizeAfterFrozenColumn,
-        restoreAutoSizeAfterMoveColumn,
-        restoreAutoSizeAfterInsertColumn,
-        restoreAutoSizeAfterRemoveColumn,
-      );
 }

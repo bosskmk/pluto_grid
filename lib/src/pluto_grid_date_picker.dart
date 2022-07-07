@@ -91,21 +91,26 @@ class PlutoGridDatePicker {
       height: popupHeight,
       createHeader: _createHeader,
       configuration: configuration.copyWith(
-        gridBorderRadius: configuration.gridPopupBorderRadius,
-        defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-        defaultCellPadding: const EdgeInsets.symmetric(horizontal: 3),
-        rowHeight: configuration.rowHeight,
-        enableRowColorAnimation: false,
-        enableColumnBorder: false,
-        columnSizeConfig: const PlutoGridColumnSizeConfig(
+        style: configuration.style.copyWith(
+          enableColumnBorderVertical: false,
+          enableColumnBorderHorizontal: false,
+          enableCellBorderVertical: false,
+          enableCellBorderHorizontal: false,
+          enableRowColorAnimation: false,
+          activatedColor: configuration.style.gridBackgroundColor,
+          gridBorderColor: configuration.style.gridBackgroundColor,
+          borderColor: configuration.style.gridBackgroundColor,
+          activatedBorderColor: configuration.style.gridBackgroundColor,
+          inactivatedBorderColor: configuration.style.gridBackgroundColor,
+          rowHeight: configuration.style.rowHeight,
+          defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+          defaultCellPadding: const EdgeInsets.symmetric(horizontal: 3),
+          gridBorderRadius: configuration.style.gridPopupBorderRadius,
+        ),
+        columnSize: const PlutoGridColumnSizeConfig(
           autoSizeMode: PlutoAutoSizeMode.none,
           resizeMode: PlutoResizeMode.none,
         ),
-        borderColor: configuration.gridBackgroundColor,
-        activatedBorderColor: configuration.gridBackgroundColor,
-        activatedColor: configuration.gridBackgroundColor,
-        gridBorderColor: configuration.gridBackgroundColor,
-        inactivatedBorderColor: configuration.gridBackgroundColor,
       ),
     );
   }
@@ -303,15 +308,15 @@ class PlutoGridDatePicker {
 
     final cellColor = isCurrentCell
         ? isValidDate
-            ? configuration.activatedBorderColor
-            : configuration.cellColorInReadOnlyState
-        : configuration.gridBackgroundColor;
+            ? configuration.style.activatedBorderColor
+            : configuration.style.cellColorInReadOnlyState
+        : configuration.style.gridBackgroundColor;
 
     final textColor = isCurrentCell
-        ? configuration.gridBackgroundColor
+        ? configuration.style.gridBackgroundColor
         : isValidDate
-            ? configuration.cellTextStyle.color
-            : configuration.cellColorInReadOnlyState;
+            ? configuration.style.cellTextStyle.color
+            : configuration.style.cellColorInReadOnlyState;
 
     return Container(
       padding: const EdgeInsets.all(5),
@@ -462,7 +467,8 @@ abstract class _DateCellHeaderStateWithChange
 }
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
-  Color? get textColor => stateManager.configuration!.columnTextStyle.color;
+  Color? get textColor =>
+      stateManager.configuration!.style.columnTextStyle.color;
 
   @override
   Widget build(BuildContext context) {
@@ -478,20 +484,20 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
           children: [
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: stateManager.configuration!.iconSize,
+              iconSize: stateManager.configuration!.style.iconSize,
               onPressed: () => widget.changeMonth(-12),
               icon: Icon(
                 Icons.navigate_before,
-                color: stateManager.configuration!.iconColor,
+                color: stateManager.configuration!.style.iconColor,
               ),
             ),
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: stateManager.configuration!.iconSize,
+              iconSize: stateManager.configuration!.style.iconSize,
               onPressed: () => widget.changeMonth(12),
               icon: Icon(
                 Icons.navigate_next,
-                color: stateManager.configuration!.iconColor,
+                color: stateManager.configuration!.style.iconColor,
               ),
             ),
             const SizedBox(width: 10),
@@ -501,9 +507,10 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               ),
               style: TextStyle(
                 color: textColor,
-                fontSize: stateManager.configuration!.columnTextStyle.fontSize,
-                fontWeight:
-                    stateManager.configuration!.columnTextStyle.fontWeight,
+                fontSize:
+                    stateManager.configuration!.style.columnTextStyle.fontSize,
+                fontWeight: stateManager
+                    .configuration!.style.columnTextStyle.fontWeight,
               ),
               textAlign: TextAlign.center,
             ),
@@ -512,11 +519,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: stateManager.configuration!.iconSize,
+                iconSize: stateManager.configuration!.style.iconSize,
                 onPressed: () => widget.changeMonth(-1),
                 icon: Icon(
                   Icons.navigate_next,
-                  color: stateManager.configuration!.iconColor,
+                  color: stateManager.configuration!.style.iconColor,
                 ),
               ),
             ),
@@ -524,11 +531,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: stateManager.configuration!.iconSize,
+                iconSize: stateManager.configuration!.style.iconSize,
                 onPressed: () => widget.changeMonth(1),
                 icon: Icon(
                   Icons.navigate_before,
-                  color: stateManager.configuration!.iconColor,
+                  color: stateManager.configuration!.style.iconColor,
                 ),
               ),
             ),

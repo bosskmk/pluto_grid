@@ -134,7 +134,14 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               // defaultCellPadding: 15,
               // defaultColumnTitlePadding: 15,
               // iconSize: 15,
-              enableColumnBorder: true,
+              style: PlutoGridStyleConfig(
+                enableColumnBorderVertical: true,
+                enableColumnBorderHorizontal: true,
+                enableCellBorderVertical: true,
+                enableCellBorderHorizontal: true,
+                gridBorderRadius: BorderRadius.circular(10),
+                gridPopupBorderRadius: BorderRadius.circular(7),
+              ),
               // enableGridBorderShadow: true,
               enableMoveHorizontalInEditing: true,
               // enableRowColorAnimation: false,
@@ -150,15 +157,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               // checkedColor: const Color(0x876FB0FF),
               enterKeyAction: PlutoGridEnterKeyAction.toggleEditing,
               enableMoveDownAfterSelecting: false,
-              gridBorderRadius: BorderRadius.circular(10),
-              gridPopupBorderRadius: BorderRadius.circular(7),
-              scrollbarConfig: const PlutoGridScrollbarConfig(
+              scrollbar: const PlutoGridScrollbarConfig(
                 isAlwaysShown: false,
                 scrollbarThickness: 8,
                 scrollbarThicknessWhileDragging: 10,
               ),
               // localeText: const PlutoGridLocaleText.korean(),
-              columnFilterConfig: PlutoGridColumnFilterConfig(
+              columnFilter: PlutoGridColumnFilterConfig(
                 filters: const [
                   ...FilterHelper.defaultFilters,
                   ClassYouImplemented(),

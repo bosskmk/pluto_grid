@@ -119,7 +119,7 @@ class PlutoBaseCell extends StatelessWidget
         row: row,
         column: column,
         cellPadding: column.cellPadding ??
-            stateManager.configuration!.defaultCellPadding,
+            stateManager.configuration!.style.defaultCellPadding,
         stateManager: stateManager,
         child: _BuildCell(
           stateManager: stateManager,
@@ -177,7 +177,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   void updateState() {
-    final configuration = stateManager.configuration!;
+    final style = stateManager.style;
 
     final isCurrentCell = stateManager.isCurrentCell(widget.cell);
 
@@ -193,14 +193,14 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           widget.column,
           widget.rowIdx,
         ),
-        enableColumnBorder: configuration.enableColumnBorder,
-        borderColor: configuration.borderColor,
-        activatedBorderColor: configuration.activatedBorderColor,
-        activatedColor: configuration.activatedColor,
-        inactivatedBorderColor: configuration.inactivatedBorderColor,
-        gridBackgroundColor: configuration.gridBackgroundColor,
-        cellColorInEditState: configuration.cellColorInEditState,
-        cellColorInReadOnlyState: configuration.cellColorInReadOnlyState,
+        enableCellVerticalBorder: style.enableCellBorderVertical,
+        borderColor: style.borderColor,
+        activatedBorderColor: style.activatedBorderColor,
+        activatedColor: style.activatedColor,
+        inactivatedBorderColor: style.inactivatedBorderColor,
+        gridBackgroundColor: style.gridBackgroundColor,
+        cellColorInEditState: style.cellColorInEditState,
+        cellColorInReadOnlyState: style.cellColorInReadOnlyState,
         selectingMode: stateManager.selectingMode,
       ),
     );
@@ -233,7 +233,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required bool isEditing,
     required bool isCurrentCell,
     required bool isSelectedCell,
-    required bool enableColumnBorder,
+    required bool enableCellVerticalBorder,
     required Color borderColor,
     required Color activatedBorderColor,
     required Color activatedColor,
@@ -269,7 +269,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         ),
       );
     } else {
-      return enableColumnBorder
+      return enableCellVerticalBorder
           ? BoxDecoration(
               border: BorderDirectional(
                 end: BorderSide(
@@ -389,25 +389,5 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
       row: widget.row,
       stateManager: stateManager,
     );
-  }
-}
-
-enum CellEditingStatus {
-  init,
-  changed,
-  updated,
-}
-
-extension CellEditingStatusExtension on CellEditingStatus? {
-  bool get isNotChanged {
-    return CellEditingStatus.changed != this;
-  }
-
-  bool get isChanged {
-    return CellEditingStatus.changed == this;
-  }
-
-  bool get isUpdated {
-    return CellEditingStatus.updated == this;
   }
 }

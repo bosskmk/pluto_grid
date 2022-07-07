@@ -90,64 +90,6 @@ void main() {
           expect(columnSort.isDescending, isTrue);
         },
       );
-
-      group(
-        'toShortString',
-        () {
-          test(
-            'None',
-            () {
-              const PlutoColumnSort columnSort = PlutoColumnSort.none;
-              expect(columnSort.toShortString(), 'none');
-            },
-          );
-
-          test(
-            'Ascending',
-            () {
-              const PlutoColumnSort columnSort = PlutoColumnSort.ascending;
-              expect(columnSort.toShortString(), 'ascending');
-            },
-          );
-
-          test(
-            'Descending',
-            () {
-              const PlutoColumnSort columnSort = PlutoColumnSort.descending;
-              expect(columnSort.toShortString(), 'descending');
-            },
-          );
-        },
-      );
-
-      group(
-        'fromString',
-        () {
-          test(
-            'None',
-            () {
-              expect(PlutoColumnSort.none.fromString('none'),
-                  PlutoColumnSort.none);
-            },
-          );
-
-          test(
-            'Ascending',
-            () {
-              expect(PlutoColumnSort.none.fromString('ascending'),
-                  PlutoColumnSort.ascending);
-            },
-          );
-
-          test(
-            'Descending',
-            () {
-              expect(PlutoColumnSort.none.fromString('descending'),
-                  PlutoColumnSort.descending);
-            },
-          );
-        },
-      );
     },
   );
 

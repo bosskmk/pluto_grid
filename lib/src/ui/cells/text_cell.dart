@@ -37,7 +37,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
   late final FocusNode cellFocus;
 
-  late CellEditingStatus _cellEditingStatus;
+  late _CellEditingStatus _cellEditingStatus;
 
   @override
   TextInputType get keyboardType => TextInputType.text;
@@ -59,7 +59,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     _initialCellValue = widget.cell.value;
 
-    _cellEditingStatus = CellEditingStatus.init;
+    _cellEditingStatus = _CellEditingStatus.init;
 
     _textController.addListener(() {
       _handleOnChanged(_textController.text.toString());
@@ -153,16 +153,16 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         TextPosition(offset: _textController.text.length),
       );
 
-      _cellEditingStatus = CellEditingStatus.updated;
+      _cellEditingStatus = _CellEditingStatus.updated;
     }
   }
 
   void _handleOnChanged(String value) {
     _cellEditingStatus = widget.cell.value.toString() != value.toString()
-        ? CellEditingStatus.changed
+        ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
-            ? CellEditingStatus.init
-            : CellEditingStatus.updated;
+            ? _CellEditingStatus.init
+            : _CellEditingStatus.updated;
   }
 
   void _handleOnComplete() {
@@ -245,7 +245,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       onEditingComplete: _handleOnComplete,
       onSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
-      style: widget.stateManager.configuration!.cellTextStyle,
+      style: widget.stateManager.configuration!.style.cellTextStyle,
       decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
@@ -258,5 +258,23 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       textAlignVertical: TextAlignVertical.center,
       textAlign: widget.column.textAlign.value,
     );
+  }
+}
+
+enum _CellEditingStatus {
+  init,
+  changed,
+  updated;
+
+  bool get isNotChanged {
+    return _CellEditingStatus.changed != this;
+  }
+
+  bool get isChanged {
+    return _CellEditingStatus.changed == this;
+  }
+
+  bool get isUpdated {
+    return _CellEditingStatus.updated == this;
   }
 }

@@ -40,7 +40,9 @@ void main() {
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);

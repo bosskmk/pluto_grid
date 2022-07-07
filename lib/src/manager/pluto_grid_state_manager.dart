@@ -134,7 +134,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   }
 
   static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.none.items;
+      PlutoGridSelectingMode.values;
 
   /// It handles the necessary settings when [rows] are first set or added to the [PlutoGrid].
   ///
@@ -387,10 +387,8 @@ enum PlutoGridSelectingMode {
   none,
 
   /// using only internal
-  horizontal,
-}
+  horizontal;
 
-extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
   bool get isCell => this == PlutoGridSelectingMode.cell;
 
   bool get isRow => this == PlutoGridSelectingMode.row;
@@ -399,18 +397,6 @@ extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
 
   /// using only internal
   bool get isHorizontal => this == PlutoGridSelectingMode.horizontal;
-
-  List<PlutoGridSelectingMode> get items {
-    return [
-      PlutoGridSelectingMode.cell,
-      PlutoGridSelectingMode.row,
-      PlutoGridSelectingMode.none,
-    ];
-  }
-
-  String toShortString() {
-    return toString().split('.').last;
-  }
 }
 
 abstract class _Apply {

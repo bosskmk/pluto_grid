@@ -38,7 +38,7 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
   final RenderBox overlay =
       Overlay.of(context)!.context.findRenderObject() as RenderBox;
 
-  final Color textColor = stateManager.configuration!.cellTextStyle.color!;
+  final Color textColor = stateManager.style.cellTextStyle.color!;
 
   final Color disableTextColor = textColor.withOpacity(0.5);
 
@@ -46,7 +46,8 @@ Future<PlutoGridColumnMenuItem?>? showColumnMenu({
     stateManager.maxWidth! - column.width,
   );
 
-  final Color backgroundColor = stateManager.configuration!.menuBackgroundColor;
+  final Color backgroundColor =
+      stateManager.configuration!.style.menuBackgroundColor;
 
   final localeText = stateManager.localeText;
 

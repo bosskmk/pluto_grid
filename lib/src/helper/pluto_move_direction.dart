@@ -2,10 +2,8 @@ enum PlutoMoveDirection {
   left,
   right,
   up,
-  down,
-}
+  down;
 
-extension PlutoMoveDirectionExtension on PlutoMoveDirection {
   bool get horizontal {
     switch (this) {
       case PlutoMoveDirection.left:

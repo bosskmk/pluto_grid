@@ -362,7 +362,7 @@ class _HeaderState extends State<_Header> {
                   return DropdownMenuItem<PlutoGridSelectingMode>(
                     value: item,
                     child: Text(
-                      item.toShortString(),
+                      item.name,
                       style: TextStyle(color: color),
                     ),
                   );
