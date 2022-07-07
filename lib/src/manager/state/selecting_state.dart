@@ -313,8 +313,8 @@ mixin SelectingState implements IPlutoGridState {
 
     int? columnIdx;
 
-    double currentWidth = 0.0;
-    currentWidth += isLTR ? gridGlobalOffset!.dx : 0;
+    final directionalOffset = toDirectionalOffset(offset);
+    double currentWidth = isLTR ? gridGlobalOffset!.dx : 0.0;
 
     final columnIndexes = columnIndexesByShowFrozen;
 
@@ -330,7 +330,7 @@ mixin SelectingState implements IPlutoGridState {
           column.frozen.isEnd && showFrozenColumn ? savedRightBlankOffset : 0;
 
       if (currentWidth + rightFrozenColumnOffset >
-          offset.dx + savedHorizontalScrollOffset) {
+          directionalOffset.dx + savedHorizontalScrollOffset) {
         columnIdx = i;
         break;
       }

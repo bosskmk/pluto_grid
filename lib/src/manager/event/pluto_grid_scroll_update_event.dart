@@ -39,9 +39,13 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
           duration: const Duration(milliseconds: 10),
         );
 
+  late final Offset _directionalOffset;
+
   @override
   void handler(PlutoGridStateManager stateManager) {
     bool scrolled = false;
+
+    _directionalOffset = _getDirectionalOffset(stateManager);
 
     if (scrollDirection.isHorizontal) {
       scrolled |= _scrollHorizontal(stateManager);
@@ -74,13 +78,21 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
     }
   }
 
+  Offset _getDirectionalOffset(PlutoGridStateManager stateManager) {
+    return stateManager.toDirectionalOffset(offset) +
+        stateManager.directionalScrollEdgeOffset;
+  }
+
   bool _scrollHorizontal(PlutoGridStateManager stateManager) {
-    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.left)) {
+    if (stateManager.needMovingScroll(
+      _directionalOffset,
+      PlutoMoveDirection.left,
+    )) {
       _scroll(stateManager, PlutoMoveDirection.left);
 
       return true;
     } else if (stateManager.needMovingScroll(
-      offset,
+      _directionalOffset,
       PlutoMoveDirection.right,
     )) {
       _scroll(stateManager, PlutoMoveDirection.right);
@@ -92,12 +104,15 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
   }
 
   bool _scrollVertical(PlutoGridStateManager stateManager) {
-    if (stateManager.needMovingScroll(offset, PlutoMoveDirection.up)) {
+    if (stateManager.needMovingScroll(
+      _directionalOffset,
+      PlutoMoveDirection.up,
+    )) {
       _scroll(stateManager, PlutoMoveDirection.up);
 
       return true;
     } else if (stateManager.needMovingScroll(
-      offset,
+      _directionalOffset,
       PlutoMoveDirection.down,
     )) {
       _scroll(stateManager, PlutoMoveDirection.down);

@@ -35,6 +35,8 @@ void main() {
     verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
     streamNotifier = PublishSubject<PlutoNotifierEvent>();
+    when(stateManager.isRTL).thenReturn(false);
+    when(stateManager.textDirection).thenReturn(TextDirection.ltr);
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());

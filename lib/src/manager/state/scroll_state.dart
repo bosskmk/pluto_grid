@@ -9,7 +9,11 @@ abstract class IScrollState {
 
   double get correctHorizontalOffset;
 
+  Offset get directionalScrollEdgeOffset;
+
   void setScroll(PlutoGridScrollController scroll);
+
+  Offset toDirectionalOffset(Offset offset);
 
   /// [direction] Scroll direction
   /// [offset] Scroll position
@@ -57,8 +61,25 @@ mixin ScrollState implements IPlutoGridState {
   }
 
   @override
+  Offset get directionalScrollEdgeOffset => isLTR
+      ? Offset.zero
+      : const Offset(PlutoGridSettings.offsetScrollingFromEdge * 2, 0);
+
+  @override
   void setScroll(PlutoGridScrollController? scroll) {
     _scroll = scroll;
+  }
+
+  @override
+  Offset toDirectionalOffset(Offset offset) {
+    if (isLTR) {
+      return offset;
+    }
+
+    return Offset(
+      (maxWidth! + gridGlobalOffset!.dx) - offset.dx,
+      offset.dy,
+    );
   }
 
   @override

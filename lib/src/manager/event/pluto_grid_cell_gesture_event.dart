@@ -73,24 +73,11 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   void _onLongPressMoveUpdate(PlutoGridStateManager stateManager) {
     _setCurrentCell(stateManager, cell, rowIdx);
 
-    final directionalOffsetDx = stateManager.isLTR
-        ? offset.dx
-        : (stateManager.maxWidth! + stateManager.gridGlobalOffset!.dx) -
-            offset.dx;
+    stateManager.setCurrentSelectingPositionWithOffset(offset);
 
-    final directionalScrollOffsetDx =
-        stateManager.isLTR ? 0 : PlutoGridSettings.offsetScrollingFromEdge * 2;
-
-    stateManager.setCurrentSelectingPositionWithOffset(
-      Offset(directionalOffsetDx, offset.dy),
+    stateManager.eventManager!.addEvent(
+      PlutoGridScrollUpdateEvent(offset: offset),
     );
-
-    stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
-      offset: Offset(
-        directionalOffsetDx + directionalScrollOffsetDx,
-        offset.dy,
-      ),
-    ));
   }
 
   void _onLongPressEnd(PlutoGridStateManager stateManager) {
