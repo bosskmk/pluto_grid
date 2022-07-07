@@ -5,8 +5,108 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../helper/column_helper.dart';
 import '../helper/row_helper.dart';
+import '../helper/test_helper_util.dart';
 
 void main() {
+  const columnWidth = PlutoGridSettings.columnWidth;
+
+  testWidgets(
+    'Directionality 가 rtl 인 경우 rtl 상태가 적용 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      late final PlutoGridStateManager stateManager;
+      final columns = ColumnHelper.textColumn('header');
+      final rows = RowHelper.count(3, columns);
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (e) => stateManager = e.stateManager,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(stateManager.isLTR, false);
+      expect(stateManager.isRTL, true);
+    },
+  );
+
+  testWidgets(
+    'Directionality 가 rtl 인 경우 컬럼의 frozen 에 따라 방향에 맞게 위치해야 한다.',
+    (WidgetTester tester) async {
+      // given
+      await TestHelperUtil.changeWidth(
+        tester: tester,
+        width: 1400,
+        height: 600,
+      );
+      final columns = ColumnHelper.textColumn('header', count: 6);
+      final rows = RowHelper.count(3, columns);
+
+      columns[0].frozen = PlutoColumnFrozen.start;
+      columns[1].frozen = PlutoColumnFrozen.end;
+      columns[2].frozen = PlutoColumnFrozen.start;
+      columns[3].frozen = PlutoColumnFrozen.end;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final firstStartColumn = find.text('header0');
+      final secondStartColumn = find.text('header2');
+      final firstBodyColumn = find.text('header4');
+      final secondBodyColumn = find.text('header5');
+      final firstEndColumn = find.text('header1');
+      final secondEndColumn = find.text('header3');
+
+      final firstStartColumnDx = tester.getTopRight(firstStartColumn).dx;
+      final secondStartColumnDx = tester.getTopRight(secondStartColumn).dx;
+      final firstBodyColumnDx = tester.getTopRight(firstBodyColumn).dx;
+      final secondBodyColumnDx = tester.getTopRight(secondBodyColumn).dx;
+      // frozen.end 컬럼은 전체 넓이로 인해 중앙 빈공간이 있어 좌측에서 위치 확인
+      final firstEndColumnDx = tester.getTopLeft(firstEndColumn).dx;
+      final secondEndColumnDx = tester.getTopLeft(secondEndColumn).dx;
+
+      double expectOffset = columnWidth;
+      expect(firstStartColumnDx - secondStartColumnDx, expectOffset);
+
+      expectOffset = columnWidth + PlutoGridSettings.gridBorderWidth;
+      expect(secondStartColumnDx - firstBodyColumnDx, expectOffset);
+
+      expectOffset = columnWidth;
+      expect(firstBodyColumnDx - secondBodyColumnDx, expectOffset);
+
+      // end 컬럼은 중앙 컬럼보다 좌측에 위치해야 한다.
+      expect(firstEndColumnDx, lessThan(secondBodyColumnDx - columnWidth));
+
+      expectOffset = columnWidth;
+      expect(firstEndColumnDx - secondEndColumnDx, expectOffset);
+    },
+  );
+
   testWidgets('createFooter 를 설정 한 경우 footer 가 출력 되어야 한다.',
       (WidgetTester tester) async {
     // given

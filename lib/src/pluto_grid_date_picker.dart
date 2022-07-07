@@ -43,6 +43,8 @@ class PlutoGridDatePicker {
     open();
   }
 
+  static double dateCellWidth = 45.0;
+
   late final PlutoGridStateManager datePickerStateManager;
 
   late final StreamSubscription keyboardStream;
@@ -343,7 +345,7 @@ class PlutoGridDatePicker {
         field: e[1],
         readOnly: true,
         type: PlutoColumnType.text(),
-        width: 45,
+        width: dateCellWidth,
         enableColumnDrag: false,
         enableSorting: false,
         enableContextMenu: false,

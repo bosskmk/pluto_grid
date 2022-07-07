@@ -14,6 +14,8 @@ final now = DateTime.now();
 final mockListener = MockOnChangeListener();
 
 void main() {
+  late PlutoGridStateManager stateManager;
+
   buildPopup({
     required String format,
     required String headerFormat,
@@ -24,6 +26,7 @@ void main() {
     PlutoOnSelectedEventCallback? onSelected,
     double? itemHeight,
     PlutoGridConfiguration? configuration,
+    TextDirection textDirection = TextDirection.ltr,
   }) {
     final dateFormat = intl.DateFormat(format);
 
@@ -33,28 +36,31 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: Builder(
-              builder: (BuildContext context) {
-                return TextButton(
-                  onPressed: () {
-                    PlutoGridDatePicker(
-                      context: context,
-                      dateFormat: dateFormat,
-                      headerDateFormat: headerDateFormat,
-                      initDate: initDate,
-                      startDate: startDate,
-                      endDate: endDate,
-                      onLoaded: onLoaded,
-                      onSelected: onSelected,
-                      itemHeight:
-                          itemHeight ?? PlutoGridSettings.rowTotalHeight,
-                      configuration:
-                          configuration ?? const PlutoGridConfiguration(),
-                    );
-                  },
-                  child: const Text('open date picker'),
-                );
-              },
+            child: Directionality(
+              textDirection: textDirection,
+              child: Builder(
+                builder: (BuildContext context) {
+                  return TextButton(
+                    onPressed: () {
+                      PlutoGridDatePicker(
+                        context: context,
+                        dateFormat: dateFormat,
+                        headerDateFormat: headerDateFormat,
+                        initDate: initDate,
+                        startDate: startDate,
+                        endDate: endDate,
+                        onLoaded: onLoaded,
+                        onSelected: onSelected,
+                        itemHeight:
+                            itemHeight ?? PlutoGridSettings.rowTotalHeight,
+                        configuration:
+                            configuration ?? const PlutoGridConfiguration(),
+                      );
+                    },
+                    child: const Text('open date picker'),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -65,6 +71,85 @@ void main() {
       await tester.pumpAndSettle();
     });
   }
+
+  buildPopup(
+    format: 'yyyy-MM-dd',
+    headerFormat: 'yyyy-MM',
+    onLoaded: (event) => stateManager = event.stateManager,
+  ).test(
+    'Directionality 가 기본값 ltr 이어야 한다.',
+    (tester) async {
+      expect(stateManager.isLTR, true);
+      expect(stateManager.isRTL, false);
+    },
+  );
+
+  buildPopup(
+    format: 'yyyy-MM-dd',
+    headerFormat: 'yyyy-MM',
+    onLoaded: (event) => stateManager = event.stateManager,
+    textDirection: TextDirection.rtl,
+  ).test(
+    'Directionality.rtl 인 경우 적용 되어야 한다.',
+    (tester) async {
+      expect(stateManager.isLTR, false);
+      expect(stateManager.isRTL, true);
+    },
+  );
+
+  buildPopup(
+    format: 'yyyy-MM-dd',
+    headerFormat: 'yyyy-MM',
+    initDate: DateTime(2022, 7, 27),
+    textDirection: TextDirection.rtl,
+  ).test(
+    'Directionality.rtl 인 경우 날짜 셀의 위치가 LTR 반대로 적용 되어야 한다.',
+    (tester) async {
+      final day26 = find.ancestor(
+        of: find.text('26'),
+        matching: find.byType(PlutoBaseCell),
+      );
+      final day27 = find.ancestor(
+        of: find.text('27'),
+        matching: find.byType(PlutoBaseCell),
+      );
+      final day28 = find.ancestor(
+        of: find.text('28'),
+        matching: find.byType(PlutoBaseCell),
+      );
+
+      final day26Dx = tester.getTopRight(day26).dx;
+      final day27Dx = tester.getTopRight(day27).dx;
+      final day28Dx = tester.getTopRight(day28).dx;
+
+      // 가장 앞쪽(우측)에 있는 26일 위치에서 다음 좌측에 있는 27일 위치를 빼면 셀 넓이.
+      expect(day26Dx - day27Dx, PlutoGridDatePicker.dateCellWidth);
+      expect(day27Dx - day28Dx, PlutoGridDatePicker.dateCellWidth);
+    },
+  );
+
+  buildPopup(
+    format: 'yyyy-MM-dd',
+    headerFormat: 'yyyy-MM',
+    onLoaded: (event) => stateManager = event.stateManager,
+  ).test(
+    'DatePicker 는 autoSizeMode, resizeMode 가 적용되지 않아야 한다.',
+    (tester) async {
+      expect(stateManager.enableColumnsAutoSize, false);
+
+      expect(stateManager.activatedColumnsAutoSize, false);
+
+      expect(
+        stateManager.columnSizeConfig.autoSizeMode,
+        PlutoAutoSizeMode.none,
+      );
+
+      expect(
+        stateManager.columnSizeConfig.resizeMode,
+        PlutoResizeMode.none,
+      );
+    },
+  );
 
   buildPopup(
     format: 'yyyy-MM-dd',

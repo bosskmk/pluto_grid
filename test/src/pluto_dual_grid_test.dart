@@ -59,6 +59,92 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Directionality 가 LTR 인 경우 그리드 A 가 좌측, 그리드 B 가 우측에 위치해야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final gridAColumns = ColumnHelper.textColumn('headerA');
+      final gridARows = RowHelper.count(3, gridAColumns);
+
+      final gridBColumns = ColumnHelper.textColumn('headerB');
+      final gridBRows = RowHelper.count(3, gridBColumns);
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: PlutoDualGrid(
+                gridPropsA: PlutoDualGridProps(
+                  columns: gridAColumns,
+                  rows: gridARows,
+                ),
+                gridPropsB: PlutoDualGridProps(
+                  columns: gridBColumns,
+                  rows: gridBRows,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      final gridAFirstColumn = find.text('headerA0');
+      final gridBFirstColumn = find.text('headerB0');
+
+      final gridAFistDx = tester.getTopRight(gridAFirstColumn).dx;
+      final gridBFistDx = tester.getTopRight(gridBFirstColumn).dx;
+
+      expect(gridAFistDx, lessThan(gridBFistDx));
+    },
+  );
+
+  testWidgets(
+    'Directionality 가 RTL 인 경우 그리드 A 가 우측, 그리드 B 가 좌측에 위치해야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final gridAColumns = ColumnHelper.textColumn('headerA');
+      final gridARows = RowHelper.count(3, gridAColumns);
+
+      final gridBColumns = ColumnHelper.textColumn('headerB');
+      final gridBRows = RowHelper.count(3, gridBColumns);
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: PlutoDualGrid(
+                gridPropsA: PlutoDualGridProps(
+                  columns: gridAColumns,
+                  rows: gridARows,
+                ),
+                gridPropsB: PlutoDualGridProps(
+                  columns: gridBColumns,
+                  rows: gridBRows,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      final gridAFirstColumn = find.text('headerA0');
+      final gridBFirstColumn = find.text('headerB0');
+
+      final gridAFistDx = tester.getTopRight(gridAFirstColumn).dx;
+      final gridBFistDx = tester.getTopRight(gridBFirstColumn).dx;
+
+      expect(gridAFistDx, greaterThan(gridBFistDx));
+    },
+  );
+
   group('divider 테스트', () {
     GlobalKey gridAKey = GlobalKey();
     GlobalKey gridBKey = GlobalKey();
@@ -66,6 +152,7 @@ void main() {
     dualGrid(
       PlutoDualGridDivider divider, {
       PlutoDualGridDisplay? display,
+      TextDirection textDirection = TextDirection.ltr,
     }) {
       return PlutoWidgetTestHelper('그리드 생성.', (tester) async {
         final gridAColumns = ColumnHelper.textColumn('headerA', count: 3);
@@ -77,19 +164,22 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoDualGrid(
-                gridPropsA: PlutoDualGridProps(
-                  columns: gridAColumns,
-                  rows: gridARows,
-                  key: gridAKey,
+              child: Directionality(
+                textDirection: textDirection,
+                child: PlutoDualGrid(
+                  gridPropsA: PlutoDualGridProps(
+                    columns: gridAColumns,
+                    rows: gridARows,
+                    key: gridAKey,
+                  ),
+                  gridPropsB: PlutoDualGridProps(
+                    columns: gridBColumns,
+                    rows: gridBRows,
+                    key: gridBKey,
+                  ),
+                  divider: divider,
+                  display: display,
                 ),
-                gridPropsB: PlutoDualGridProps(
-                  columns: gridBColumns,
-                  rows: gridBRows,
-                  key: gridBKey,
-                ),
-                divider: divider,
-                display: display,
               ),
             ),
           ),
@@ -193,8 +283,8 @@ void main() {
     );
 
     dualGrid(const PlutoDualGridDivider()).test(
-      'Divider 를 우측으로 100 드래그 하는 경우,'
-      ' 좌측 그리드의 위치가 100 늘어나고, '
+      'Divider 를 우측으로 100 드래그 하는 경우, '
+      '좌측 그리드의 위치가 100 늘어나고, '
       '우측 그리드의 위치가 100 줄어들어야 한다.',
       (tester) async {
         final findDivider = find.byType(PlutoDualGridDividerWidget);
@@ -217,9 +307,37 @@ void main() {
       },
     );
 
+    dualGrid(
+      const PlutoDualGridDivider(),
+      textDirection: TextDirection.rtl,
+    ).test(
+      'RTL 인 경우 Divider 를 우측으로 100 드래그 하는 경우, '
+      'GridB 의 위치가 100 늘어나고, '
+      'GridA 의 위치가 100 줄어들어야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final findGridA = find.byKey(gridAKey);
+        final findGridB = find.byKey(gridBKey);
+
+        final firstAWidth = tester.getSize(findGridA).width;
+        final firstBWidth = tester.getSize(findGridB).width;
+
+        await tester.drag(findDivider, const Offset(100, 0));
+
+        await tester.pump();
+
+        final movedAWidth = tester.getSize(findGridA).width;
+        final movedBWidth = tester.getSize(findGridB).width;
+
+        expect(movedAWidth, firstAWidth - 100);
+        expect(movedBWidth, firstBWidth + 100);
+      },
+    );
+
     dualGrid(const PlutoDualGridDivider()).test(
-      'Divider 를 좌측으로 100 드래그 하는 경우,'
-      ' 좌측 그리드의 위치가 100 즐어들고, '
+      'Divider 를 좌측으로 100 드래그 하는 경우, '
+      '좌측 그리드의 위치가 100 즐어들고, '
       '우측 그리드의 위치가 100 늘어나야 한다.',
       (tester) async {
         final findDivider = find.byType(PlutoDualGridDividerWidget);
@@ -241,6 +359,34 @@ void main() {
         expect(movedBWidth, firstBWidth + 100);
       },
     );
+
+    dualGrid(
+      const PlutoDualGridDivider(),
+      textDirection: TextDirection.rtl,
+    ).test(
+      'RTL 인 경우 Divider 를 좌측으로 100 드래그 하는 경우, '
+      'gridB 의 위치가 100 즐어들고, '
+      'gridA 의 위치가 100 늘어나야 한다.',
+      (tester) async {
+        final findDivider = find.byType(PlutoDualGridDividerWidget);
+
+        final findGridA = find.byKey(gridAKey);
+        final findGridB = find.byKey(gridBKey);
+
+        final firstAWidth = tester.getSize(findGridA).width;
+        final firstBWidth = tester.getSize(findGridB).width;
+
+        await tester.drag(findDivider, const Offset(-100, 0));
+
+        await tester.pump();
+
+        final movedAWidth = tester.getSize(findGridA).width;
+        final movedBWidth = tester.getSize(findGridB).width;
+
+        expect(movedAWidth, firstAWidth + 100);
+        expect(movedBWidth, firstBWidth - 100);
+      },
+    );
   });
 
   group(
@@ -250,41 +396,44 @@ void main() {
       PlutoGridStateManager? stateManagerB;
 
       group('왼쪽 그리드의', () {
-        final leftGridCellSelected =
-            PlutoWidgetTestHelper('첫번째 셀이 선택 된 상태에서', (tester) async {
-          final gridAColumns = ColumnHelper.textColumn('headerA', count: 3);
-          final gridARows = RowHelper.count(3, gridAColumns);
+        buildLeftGridCellSelected({
+          TextDirection textDirection = TextDirection.ltr,
+        }) {
+          return PlutoWidgetTestHelper('첫번째 셀이 선택 된 상태에서', (tester) async {
+            final gridAColumns = ColumnHelper.textColumn('headerA', count: 3);
+            final gridARows = RowHelper.count(3, gridAColumns);
 
-          final gridBColumns = ColumnHelper.textColumn('headerB', count: 3);
-          final gridBRows = RowHelper.count(3, gridBColumns);
+            final gridBColumns = ColumnHelper.textColumn('headerB', count: 3);
+            final gridBRows = RowHelper.count(3, gridBColumns);
 
-          await tester.pumpWidget(
-            MaterialApp(
-              home: Material(
-                child: PlutoDualGrid(
-                  gridPropsA: PlutoDualGridProps(
-                    columns: gridAColumns,
-                    rows: gridARows,
-                    onLoaded: (PlutoGridOnLoadedEvent event) =>
-                        stateManagerA = event.stateManager,
-                  ),
-                  gridPropsB: PlutoDualGridProps(
-                    columns: gridBColumns,
-                    rows: gridBRows,
-                    onLoaded: (PlutoGridOnLoadedEvent event) =>
-                        stateManagerB = event.stateManager,
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Material(
+                  child: PlutoDualGrid(
+                    gridPropsA: PlutoDualGridProps(
+                      columns: gridAColumns,
+                      rows: gridARows,
+                      onLoaded: (PlutoGridOnLoadedEvent event) =>
+                          stateManagerA = event.stateManager,
+                    ),
+                    gridPropsB: PlutoDualGridProps(
+                      columns: gridBColumns,
+                      rows: gridBRows,
+                      onLoaded: (PlutoGridOnLoadedEvent event) =>
+                          stateManagerB = event.stateManager,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
 
-          await tester.pump();
+            await tester.pump();
 
-          await tester.tap(find.text('headerA0 value 0'));
-        });
+            await tester.tap(find.text('headerA0 value 0'));
+          });
+        }
 
-        leftGridCellSelected.test(
+        buildLeftGridCellSelected().test(
           '우측 끝으로 이동 후 한번 더 우측 방향키를 입력하면,'
           '포커스가 우측 그리드로 바뀌어야 한다.'
           '그리고 한번 더 우측 방향키를 입력하면,'
@@ -313,7 +462,7 @@ void main() {
           },
         );
 
-        leftGridCellSelected.test(
+        buildLeftGridCellSelected().test(
           '우측 끝으로 이동 후 탭 키를 입력하면'
           '포커스가 우측 그리드로 바뀌어야 한다.'
           '그리고 탭 키를 입력하면'
@@ -338,7 +487,7 @@ void main() {
           },
         );
 
-        leftGridCellSelected.test(
+        buildLeftGridCellSelected().test(
           '우측 끝으로 이동 후 탭 키를 입력하면'
           '포커스가 우측 그리드로 바뀌어야 한다.'
           '그리고 쉬프트 + 탭 키를 입력하면'
