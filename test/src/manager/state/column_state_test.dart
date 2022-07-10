@@ -552,6 +552,35 @@ void main() {
     expect(currentColumnField, selectColumnField);
   });
 
+  group('getSortedColumn', () {
+    test('Sort 컬럼이 없는 경우 null 을 리턴해야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 3);
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      expect(stateManager.getSortedColumn, null);
+    });
+
+    test('Sort 컬럼이 있는 경우 sort 된 컬럼을 리턴해야 한다.', () {
+      final columns = ColumnHelper.textColumn('title', count: 3);
+      columns[1].sort = PlutoColumnSort.ascending;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: [],
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      expect(stateManager.getSortedColumn!.key, columns[1].key);
+    });
+  });
+
   group('columnIndexesByShowFrozen', () {
     testWidgets(
         '고정 컬럼이 없는 상태에서 '
@@ -1655,6 +1684,91 @@ void main() {
     );
   });
 
+  group('autoFitColumn', () {
+    testWidgets('가장 넓은 셀이 컬럼 최소 넓이보다 작은 경우 최소 넓이로 변경 되어야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('title');
+
+      final rows = RowHelper.count(3, columns);
+      rows[0].cells['title0']!.value = 'a';
+      rows[1].cells['title0']!.value = 'ab';
+      rows[2].cells['title0']!.value = 'abc';
+
+      late final BuildContext context;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Builder(
+              builder: (builderContext) {
+                context = builderContext;
+                return Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: PlutoBaseColumn(
+                    stateManager: stateManager,
+                    column: columns.first,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      stateManager.autoFitColumn(context, columns.first);
+
+      expect(columns.first.width, columns.first.minWidth);
+    });
+
+    testWidgets('가장 넓은 셀이 컬럼 최소 넓이보다 큰 경우 최소 넓이 이상으로 변경 되어야 한다.',
+        (tester) async {
+      final columns = ColumnHelper.textColumn('title');
+
+      final rows = RowHelper.count(3, columns);
+      rows[0].cells['title0']!.value = 'a';
+      rows[1].cells['title0']!.value = 'ab';
+      rows[2].cells['title0']!.value = 'abc abc abc';
+
+      late final BuildContext context;
+
+      PlutoGridStateManager stateManager = getStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: null,
+        scroll: scroll,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Builder(
+              builder: (builderContext) {
+                context = builderContext;
+                return Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: PlutoBaseColumn(
+                    stateManager: stateManager,
+                    column: columns.first,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      stateManager.autoFitColumn(context, columns.first);
+
+      expect(columns.first.width, greaterThan(columns.first.minWidth));
+    });
+  });
+
   group('hideColumn', () {
     testWidgets('flag 를 true 로 호출 한 경우 컬럼의 hide 가 true 로 변경 되어야 한다.',
         (WidgetTester tester) async {
@@ -1715,6 +1829,46 @@ void main() {
       // then
       expect(stateManager.columns.first.hide, isFalse);
     });
+
+    testWidgets(
+      '고정 컬럼인 hide 가 true 인 컬럼을 flag 를 false 로 호출 할 때, '
+      '고정 컬럼 제약 넓이가 좁은 경우 컬럼의 고정 상태가 풀려야 한다.',
+      (WidgetTester tester) async {
+        // given
+        var columns = [
+          PlutoColumn(
+            title: '',
+            field: '',
+            width: 700,
+            type: PlutoColumnType.text(),
+            hide: true,
+          ),
+          PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+          PlutoColumn(title: '', field: '', type: PlutoColumnType.text()),
+        ];
+
+        PlutoGridStateManager stateManager = getStateManager(
+          columns: columns,
+          rows: [],
+          gridFocusNode: null,
+          scroll: scroll,
+        );
+
+        stateManager.setLayout(const BoxConstraints(maxWidth: 800));
+
+        stateManager.columns.first.frozen = PlutoColumnFrozen.start;
+
+        // when
+        expect(stateManager.refColumns.originalList.first.hide, isTrue);
+
+        stateManager.hideColumn(columns.first, false);
+
+        // then
+        expect(stateManager.columns.first.hide, isFalse);
+
+        expect(stateManager.columns.first.frozen, PlutoColumnFrozen.none);
+      },
+    );
 
     testWidgets('flag 를 true 로 호출 한 경우 notifyListeners 가 호출 되어야 한다.',
         (WidgetTester tester) async {
