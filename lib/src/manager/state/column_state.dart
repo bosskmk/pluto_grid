@@ -746,6 +746,8 @@ mixin ColumnState implements IPlutoGridState {
           gridBorderRadius:
               configuration?.style.gridPopupBorderRadius ?? BorderRadius.zero,
           enableRowColorAnimation: false,
+          oddRowColor: PlutoOptional(null),
+          evenRowColor: PlutoOptional(null),
         ),
       ),
       columns: columns,

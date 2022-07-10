@@ -200,6 +200,16 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   BoxDecoration _decoration = const BoxDecoration();
 
+  Color get _oddRowColor =>
+      stateManager.configuration!.style.oddRowColor == null
+          ? stateManager.configuration!.style.rowColor
+          : stateManager.configuration!.style.oddRowColor!;
+
+  Color get _evenRowColor =>
+      stateManager.configuration!.style.evenRowColor == null
+          ? stateManager.configuration!.style.rowColor
+          : stateManager.configuration!.style.evenRowColor!;
+
   @override
   void initState() {
     super.initState();
@@ -219,7 +229,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   Color _getDefaultRowColor() {
     if (stateManager.rowColorCallback == null) {
-      return stateManager.configuration!.style.gridBackgroundColor;
+      return widget.rowIdx % 2 == 0 ? _oddRowColor : _evenRowColor;
     }
 
     return stateManager.rowColorCallback!(

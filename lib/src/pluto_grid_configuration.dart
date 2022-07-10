@@ -122,6 +122,9 @@ class PlutoGridStyleConfig {
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
     this.gridBackgroundColor = Colors.white,
+    this.rowColor = Colors.white,
+    this.oddRowColor,
+    this.evenRowColor,
     this.activatedColor = const Color(0xFFDCF5FF),
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
@@ -165,6 +168,9 @@ class PlutoGridStyleConfig {
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
     this.gridBackgroundColor = const Color(0xFF111111),
+    this.rowColor = const Color(0xFF111111),
+    this.oddRowColor,
+    this.evenRowColor,
     this.activatedColor = const Color(0xFF313131),
     this.checkedColor = const Color(0x11202020),
     this.cellColorInEditState = const Color(0xFF666666),
@@ -220,6 +226,23 @@ class PlutoGridStyleConfig {
   final bool enableRowColorAnimation;
 
   final Color gridBackgroundColor;
+
+  /// Default row background color
+  ///
+  /// If [PlutoGrid.rowColorCallback] is set, rowColorCallback takes precedence.
+  final Color rowColor;
+
+  /// Background color for odd rows
+  ///
+  /// The first row, which is number 0, is treated as an odd row.
+  /// If [PlutoGrid.rowColorCallback] is set, rowColorCallback takes precedence.
+  final Color? oddRowColor;
+
+  /// Background color for even rows
+  ///
+  /// The row with number 1 is treated as an even row.
+  /// If [PlutoGrid.rowColorCallback] is set, rowColorCallback takes precedence.
+  final Color? evenRowColor;
 
   /// Activated Color. (Current or Selected row, cell)
   final Color activatedColor;
@@ -314,6 +337,9 @@ class PlutoGridStyleConfig {
     bool? enableCellBorderHorizontal,
     bool? enableRowColorAnimation,
     Color? gridBackgroundColor,
+    Color? rowColor,
+    PlutoOptional<Color?>? oddRowColor,
+    PlutoOptional<Color?>? evenRowColor,
     Color? activatedColor,
     Color? checkedColor,
     Color? cellColorInEditState,
@@ -354,6 +380,10 @@ class PlutoGridStyleConfig {
       enableRowColorAnimation:
           enableRowColorAnimation ?? this.enableRowColorAnimation,
       gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
+      rowColor: rowColor ?? this.rowColor,
+      oddRowColor: oddRowColor == null ? this.oddRowColor : oddRowColor.value,
+      evenRowColor:
+          evenRowColor == null ? this.evenRowColor : evenRowColor.value,
       activatedColor: activatedColor ?? this.activatedColor,
       checkedColor: checkedColor ?? this.checkedColor,
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,

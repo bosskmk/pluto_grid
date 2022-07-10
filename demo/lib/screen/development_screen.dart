@@ -139,6 +139,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 enableColumnBorderHorizontal: true,
                 enableCellBorderVertical: true,
                 enableCellBorderHorizontal: true,
+                // oddRowColor: Colors.amber,
+                evenRowColor: const Color(0xFFF6F6F6),
                 gridBorderRadius: BorderRadius.circular(10),
                 gridPopupBorderRadius: BorderRadius.circular(7),
               ),

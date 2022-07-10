@@ -99,6 +99,8 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       createFooter: createFooter,
       configuration: widget.stateManager.configuration?.copyWith(
         style: widget.stateManager.configuration?.style.copyWith(
+          oddRowColor: PlutoOptional(null),
+          evenRowColor: PlutoOptional(null),
           gridBorderRadius:
               widget.stateManager.configuration?.style.gridPopupBorderRadius ??
                   BorderRadius.zero,

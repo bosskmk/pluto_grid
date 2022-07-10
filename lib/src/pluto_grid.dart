@@ -1148,6 +1148,12 @@ class PlutoRowColorContext {
   });
 }
 
+class PlutoOptional<T> {
+  PlutoOptional(this.value);
+
+  final T? value;
+}
+
 enum PlutoGridMode {
   /// {@macro pluto_grid_mode_normal}
   normal,
