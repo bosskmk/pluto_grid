@@ -2,8 +2,8 @@
 // in pluto_grid/test/src/ui/columns/pluto_column_filter_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
-import 'dart:ui' as _i5;
+import 'dart:async' as _i5;
+import 'dart:ui' as _i6;
 
 import 'package:flutter/material.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
@@ -31,12 +31,13 @@ class _FakeFilteredList_2<E> extends _i1.Fake implements _i3.FilteredList<E> {}
 class _FakePlutoGridLocaleText_3 extends _i1.Fake
     implements _i3.PlutoGridLocaleText {}
 
-class _FakePlutoGridKeyPressed_4 extends _i1.Fake
+class _FakePlutoGridStyleConfig_4 extends _i1.Fake
+    implements _i3.PlutoGridStyleConfig {}
+
+class _FakePlutoGridKeyPressed_5 extends _i1.Fake
     implements _i3.PlutoGridKeyPressed {}
 
-class _FakeChangeNotifier_5 extends _i1.Fake implements _i4.ChangeNotifier {}
-
-class _FakeOffset_6 extends _i1.Fake implements _i5.Offset {}
+class _FakeChangeNotifier_6 extends _i1.Fake implements _i4.ChangeNotifier {}
 
 class _FakePlutoAutoSize_7 extends _i1.Fake implements _i3.PlutoAutoSize {}
 
@@ -51,7 +52,7 @@ class _FakePlutoGridStateManager_11 extends _i1.Fake
     implements _i3.PlutoGridStateManager {}
 
 class _FakeStreamSubscription_12<T> extends _i1.Fake
-    implements _i6.StreamSubscription<T> {}
+    implements _i5.StreamSubscription<T> {}
 
 /// A class which mocks [PlutoGridStateManager].
 ///
@@ -221,13 +222,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.getter(#localeText),
       returnValue: _FakePlutoGridLocaleText_3()) as _i3.PlutoGridLocaleText);
   @override
+  _i3.PlutoGridStyleConfig get style => (super.noSuchMethod(
+      Invocation.getter(#style),
+      returnValue: _FakePlutoGridStyleConfig_4()) as _i3.PlutoGridStyleConfig);
+  @override
   _i3.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
       Invocation.getter(#keyPressed),
-      returnValue: _FakePlutoGridKeyPressed_4()) as _i3.PlutoGridKeyPressed);
+      returnValue: _FakePlutoGridKeyPressed_5()) as _i3.PlutoGridKeyPressed);
   @override
   _i4.ChangeNotifier get resizingChangeNotifier =>
       (super.noSuchMethod(Invocation.getter(#resizingChangeNotifier),
-          returnValue: _FakeChangeNotifier_5()) as _i4.ChangeNotifier);
+          returnValue: _FakeChangeNotifier_6()) as _i4.ChangeNotifier);
   @override
   double get headerHeight =>
       (super.noSuchMethod(Invocation.getter(#headerHeight), returnValue: 0.0)
@@ -357,9 +362,9 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#scrollOffsetByFrozenColumn),
           returnValue: 0.0) as double);
   @override
-  _i5.TextDirection get textDirection =>
+  _i6.TextDirection get textDirection =>
       (super.noSuchMethod(Invocation.getter(#textDirection),
-          returnValue: _i5.TextDirection.rtl) as _i5.TextDirection);
+          returnValue: _i6.TextDirection.rtl) as _i6.TextDirection);
   @override
   bool get isLTR =>
       (super.noSuchMethod(Invocation.getter(#isLTR), returnValue: false)
@@ -419,10 +424,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#correctHorizontalOffset),
           returnValue: 0.0) as double);
   @override
-  _i5.Offset get directionalScrollEdgeOffset =>
-      (super.noSuchMethod(Invocation.getter(#directionalScrollEdgeOffset),
-          returnValue: _FakeOffset_6()) as _i5.Offset);
-  @override
   bool get isSelecting =>
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
           as bool);
@@ -468,11 +469,11 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
           returnValueForMissingStub: null);
   @override
-  void addListener(_i5.VoidCallback? listener) =>
+  void addListener(_i6.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i5.VoidCallback? listener) =>
+  void removeListener(_i6.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -983,11 +984,11 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#notifyResizingListeners, []),
           returnValueForMissingStub: null);
   @override
-  void setTextDirection(_i5.TextDirection? textDirection) =>
+  void setTextDirection(_i6.TextDirection? textDirection) =>
       super.noSuchMethod(Invocation.method(#setTextDirection, [textDirection]),
           returnValueForMissingStub: null);
   @override
-  void setGridGlobalOffset(_i5.Offset? offset) =>
+  void setGridGlobalOffset(_i6.Offset? offset) =>
       super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
@@ -1088,10 +1089,6 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setScroll, [scroll]),
           returnValueForMissingStub: null);
   @override
-  _i5.Offset toDirectionalOffset(_i5.Offset? offset) =>
-      (super.noSuchMethod(Invocation.method(#toDirectionalOffset, [offset]),
-          returnValue: _FakeOffset_6()) as _i5.Offset);
-  @override
   void scrollByDirection(_i3.PlutoMoveDirection? direction, double? offset) =>
       super.noSuchMethod(
           Invocation.method(#scrollByDirection, [direction, offset]),
@@ -1113,7 +1110,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#moveScrollByColumn, [direction, columnIdx]),
           returnValueForMissingStub: null);
   @override
-  bool needMovingScroll(_i5.Offset? offset, _i3.PlutoMoveDirection? move) =>
+  bool needMovingScroll(_i6.Offset? offset, _i3.PlutoMoveDirection? move) =>
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
@@ -1157,7 +1154,7 @@ class MockPlutoGridStateManager extends _i1.Mock
               {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void setCurrentSelectingPositionWithOffset(_i5.Offset? offset) =>
+  void setCurrentSelectingPositionWithOffset(_i6.Offset? offset) =>
       super.noSuchMethod(
           Invocation.method(#setCurrentSelectingPositionWithOffset, [offset]),
           returnValueForMissingStub: null);
@@ -1217,10 +1214,10 @@ class MockPlutoGridEventManager extends _i1.Mock
               returnValue: _FakePublishSubject_0<_i3.PlutoGridEvent>())
           as _i2.PublishSubject<_i3.PlutoGridEvent>);
   @override
-  _i6.StreamSubscription<dynamic> get subscription =>
+  _i5.StreamSubscription<dynamic> get subscription =>
       (super.noSuchMethod(Invocation.getter(#subscription),
               returnValue: _FakeStreamSubscription_12<dynamic>())
-          as _i6.StreamSubscription<dynamic>);
+          as _i5.StreamSubscription<dynamic>);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);
@@ -1232,27 +1229,27 @@ class MockPlutoGridEventManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#addEvent, [event]),
           returnValueForMissingStub: null);
   @override
-  _i6.StreamSubscription<_i3.PlutoGridEvent> listener(
+  _i5.StreamSubscription<_i3.PlutoGridEvent> listener(
           void Function(_i3.PlutoGridEvent)? onData) =>
       (super.noSuchMethod(Invocation.method(#listener, [onData]),
               returnValue: _FakeStreamSubscription_12<_i3.PlutoGridEvent>())
-          as _i6.StreamSubscription<_i3.PlutoGridEvent>);
+          as _i5.StreamSubscription<_i3.PlutoGridEvent>);
 }
 
 /// A class which mocks [StreamSubscription].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStreamSubscription<T> extends _i1.Mock
-    implements _i6.StreamSubscription<T> {
+    implements _i5.StreamSubscription<T> {
   @override
   bool get isPaused =>
       (super.noSuchMethod(Invocation.getter(#isPaused), returnValue: false)
           as bool);
   @override
-  _i6.Future<void> cancel() =>
+  _i5.Future<void> cancel() =>
       (super.noSuchMethod(Invocation.method(#cancel, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
   void onData(void Function(T)? handleData) =>
       super.noSuchMethod(Invocation.method(#onData, [handleData]),
@@ -1266,14 +1263,14 @@ class MockStreamSubscription<T> extends _i1.Mock
       super.noSuchMethod(Invocation.method(#onDone, [handleDone]),
           returnValueForMissingStub: null);
   @override
-  void pause([_i6.Future<void>? resumeSignal]) =>
+  void pause([_i5.Future<void>? resumeSignal]) =>
       super.noSuchMethod(Invocation.method(#pause, [resumeSignal]),
           returnValueForMissingStub: null);
   @override
   void resume() => super.noSuchMethod(Invocation.method(#resume, []),
       returnValueForMissingStub: null);
   @override
-  _i6.Future<E> asFuture<E>([E? futureValue]) =>
+  _i5.Future<E> asFuture<E>([E? futureValue]) =>
       (super.noSuchMethod(Invocation.method(#asFuture, [futureValue]),
-          returnValue: Future<E>.value(null)) as _i6.Future<E>);
+          returnValue: Future<E>.value(null)) as _i5.Future<E>);
 }

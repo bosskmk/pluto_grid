@@ -65,7 +65,7 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
           setConfig: setColumnSizeConfig,
         ),
         configuration: const PlutoGridConfiguration(
-          columnSizeConfig: PlutoGridColumnSizeConfig(
+          columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.none,
             resizeMode: PlutoResizeMode.normal,
           ),

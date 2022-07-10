@@ -156,12 +156,12 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
       child: IconButton(
         icon: PlutoGridColumnIcon(
           sort: _sort,
-          color: stateManager.configuration!.iconColor,
+          color: stateManager.configuration!.style.iconColor,
           icon: widget.column.enableContextMenu
-              ? stateManager.configuration!.columnContextIcon
-              : stateManager.configuration!.columnResizeIcon,
+              ? stateManager.configuration!.style.columnContextIcon
+              : stateManager.configuration!.style.columnResizeIcon,
         ),
-        iconSize: stateManager.configuration!.iconSize,
+        iconSize: stateManager.configuration!.style.iconSize,
         mouseCursor: contextMenuCursor,
         onPressed: null,
       ),
@@ -279,11 +279,12 @@ class _BuildDraggableWidget extends StatelessWidget {
             alignment: column.titleTextAlign.alignmentValue,
             width: PlutoGridSettings.minColumnWidth,
             height: stateManager.columnHeight,
-            backgroundColor: stateManager.configuration!.gridBackgroundColor,
-            borderColor: stateManager.configuration!.gridBorderColor,
+            backgroundColor:
+                stateManager.configuration!.style.gridBackgroundColor,
+            borderColor: stateManager.configuration!.style.gridBorderColor,
             child: Text(
               column.title,
-              style: stateManager.configuration!.columnTextStyle.copyWith(
+              style: stateManager.configuration!.style.columnTextStyle.copyWith(
                 fontSize: 12,
               ),
               overflow: TextOverflow.ellipsis,
@@ -341,7 +342,7 @@ class _BuildColumnWidget extends StatelessWidget {
 
   EdgeInsets get padding =>
       column.titlePadding ??
-      stateManager.configuration!.defaultColumnTitlePadding;
+      stateManager.configuration!.style.defaultColumnTitlePadding;
 
   bool get showSizedBoxForIcon =>
       column.isShowRightIcon &&
@@ -366,8 +367,7 @@ class _BuildColumnWidget extends StatelessWidget {
       builder: (dragContext, candidate, rejected) {
         final bool noDragTarget = candidate.isEmpty;
 
-        final PlutoGridConfiguration configuration =
-            stateManager.configuration!;
+        final style = stateManager.style;
 
         return Container(
           width: column.width,
@@ -376,13 +376,10 @@ class _BuildColumnWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: noDragTarget
                 ? column.backgroundColor
-                : configuration.dragTargetColumnColor,
+                : style.dragTargetColumnColor,
             border: BorderDirectional(
-              end: configuration.enableColumnBorder
-                  ? BorderSide(
-                      color: configuration.borderColor,
-                      width: 1.0,
-                    )
+              end: style.enableColumnBorderVertical
+                  ? BorderSide(color: style.borderColor, width: 1.0)
                   : BorderSide.none,
             ),
           ),
@@ -402,8 +399,7 @@ class _BuildColumnWidget extends StatelessWidget {
                     height: height,
                   ),
                 ),
-                if (showSizedBoxForIcon)
-                  SizedBox(width: configuration.iconSize),
+                if (showSizedBoxForIcon) SizedBox(width: style.iconSize),
               ],
             ),
           ),
@@ -482,9 +478,9 @@ class _CheckboxAllSelectionWidgetState
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,
-      unselectedColor: stateManager.configuration!.iconColor,
-      activeColor: stateManager.configuration!.activatedBorderColor,
-      checkColor: stateManager.configuration!.activatedColor,
+      unselectedColor: stateManager.configuration!.style.iconColor,
+      activeColor: stateManager.configuration!.style.activatedBorderColor,
+      checkColor: stateManager.configuration!.style.activatedColor,
     );
   }
 }
@@ -546,8 +542,8 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
             child: IconButton(
               icon: Icon(
                 Icons.filter_alt_outlined,
-                color: stateManager.configuration!.iconColor,
-                size: stateManager.configuration!.iconSize,
+                color: stateManager.configuration!.style.iconColor,
+                size: stateManager.configuration!.style.iconSize,
               ),
               onPressed: _handleOnPressedFilter,
               constraints: BoxConstraints(
@@ -565,7 +561,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
         text: _title,
         children: _children,
       ),
-      style: stateManager.configuration!.columnTextStyle,
+      style: stateManager.configuration!.style.columnTextStyle,
       overflow: TextOverflow.ellipsis,
       softWrap: false,
       maxLines: 1,

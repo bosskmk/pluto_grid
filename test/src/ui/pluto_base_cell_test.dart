@@ -20,24 +20,28 @@ void main() {
   PublishSubject<PlutoNotifierEvent> streamNotifier;
 
   setUp(() {
+    const configuration = PlutoGridConfiguration();
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
     streamNotifier = PublishSubject<PlutoNotifierEvent>();
     when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowHeight).thenReturn(
-      stateManager.configuration!.rowHeight,
+      stateManager.configuration!.style.rowHeight,
     );
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.gridFocusNode).thenReturn(FocusNode());
@@ -622,6 +626,7 @@ void main() {
         when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
         when(stateManager.isSelectedCell(any, any, any))
             .thenReturn(isSelectedCell);
+        when(stateManager.style).thenReturn(configuration.style);
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isEditing).thenReturn(true);
 
@@ -659,8 +664,10 @@ void main() {
 
     aCellWithConfiguration(
       const PlutoGridConfiguration(
-        enableColumnBorder: false,
-        borderColor: Colors.deepOrange,
+        style: PlutoGridStyleConfig(
+          enableCellBorderVertical: false,
+          borderColor: Colors.deepOrange,
+        ),
       ),
       readOnly: true,
     ).test(
@@ -679,14 +686,19 @@ void main() {
 
         final Color? color = decoration.color;
 
-        expect(color, stateManager.configuration!.cellColorInReadOnlyState);
+        expect(
+          color,
+          stateManager.configuration!.style.cellColorInReadOnlyState,
+        );
       },
     );
 
     aCellWithConfiguration(
       const PlutoGridConfiguration(
-        enableColumnBorder: true,
-        borderColor: Colors.deepOrange,
+        style: PlutoGridStyleConfig(
+          enableCellBorderVertical: true,
+          borderColor: Colors.deepOrange,
+        ),
       ),
       isCurrentCell: false,
       isSelectedCell: false,
@@ -706,14 +718,19 @@ void main() {
 
         final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.end.color, stateManager.configuration!.borderColor);
+        expect(
+          border.end.color,
+          stateManager.configuration!.style.borderColor,
+        );
       },
     );
 
     aCellWithConfiguration(
       const PlutoGridConfiguration(
-        enableColumnBorder: false,
-        borderColor: Colors.deepOrange,
+        style: PlutoGridStyleConfig(
+          enableCellBorderVertical: false,
+          borderColor: Colors.deepOrange,
+        ),
       ),
       isCurrentCell: false,
       isSelectedCell: false,
@@ -731,7 +748,8 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border? border = decoration.border as Border?;
+        final BorderDirectional? border =
+            decoration.border as BorderDirectional?;
 
         expect(border, isNull);
       },

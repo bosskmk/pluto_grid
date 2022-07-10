@@ -876,7 +876,7 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
         configuration: const PlutoGridConfiguration(
-          columnSizeConfig: PlutoGridColumnSizeConfig(
+          columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
             restoreAutoSizeAfterFrozenColumn: false,
           ),
@@ -1017,7 +1017,7 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
         configuration: const PlutoGridConfiguration(
-          columnSizeConfig: PlutoGridColumnSizeConfig(
+          columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
             restoreAutoSizeAfterInsertColumn: false,
           ),
@@ -1297,7 +1297,7 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
         configuration: const PlutoGridConfiguration(
-          columnSizeConfig: PlutoGridColumnSizeConfig(
+          columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
             restoreAutoSizeAfterRemoveColumn: false,
           ),
@@ -1509,7 +1509,7 @@ void main() {
         gridFocusNode: null,
         scroll: scroll,
         configuration: const PlutoGridConfiguration(
-          columnSizeConfig: PlutoGridColumnSizeConfig(
+          columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
             restoreAutoSizeAfterMoveColumn: false,
           ),
@@ -1543,7 +1543,7 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
           configuration: const PlutoGridConfiguration(
-            columnSizeConfig: PlutoGridColumnSizeConfig(
+            columnSize: PlutoGridColumnSizeConfig(
               resizeMode: PlutoResizeMode.none,
             ),
           ));
@@ -1575,7 +1575,7 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
           configuration: const PlutoGridConfiguration(
-            columnSizeConfig: PlutoGridColumnSizeConfig(
+            columnSize: PlutoGridColumnSizeConfig(
               resizeMode: PlutoResizeMode.normal,
             ),
           ));
@@ -1605,7 +1605,7 @@ void main() {
           gridFocusNode: null,
           scroll: scroll,
           configuration: const PlutoGridConfiguration(
-            columnSizeConfig: PlutoGridColumnSizeConfig(
+            columnSize: PlutoGridColumnSizeConfig(
               resizeMode: PlutoResizeMode.normal,
             ),
           ));
@@ -1639,7 +1639,7 @@ void main() {
             gridFocusNode: null,
             scroll: scroll,
             configuration: const PlutoGridConfiguration(
-              columnSizeConfig: PlutoGridColumnSizeConfig(
+              columnSize: PlutoGridColumnSizeConfig(
                 resizeMode: PlutoResizeMode.pushAndPull,
               ),
             ));

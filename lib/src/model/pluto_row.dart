@@ -55,10 +55,8 @@ class PlutoRow {
 enum PlutoRowState {
   none,
   added,
-  updated,
-}
+  updated;
 
-extension PlutoRowStateExtension on PlutoRowState {
   bool get isNone => this == PlutoRowState.none;
 
   bool get isAdded => this == PlutoRowState.added;

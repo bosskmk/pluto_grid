@@ -56,9 +56,9 @@ class PlutoGridPopup {
             context: context,
             builder: (BuildContext ctx) {
               return Dialog(
-                shape: configuration?.gridBorderRadius != null
+                shape: configuration?.style.gridBorderRadius != null
                     ? RoundedRectangleBorder(
-                        borderRadius: configuration!.gridBorderRadius,
+                        borderRadius: configuration!.style.gridBorderRadius,
                       )
                     : null,
                 child: LayoutBuilder(

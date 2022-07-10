@@ -98,7 +98,7 @@ class _ColumnGroupTitle extends StatelessWidget {
 
   EdgeInsets get _padding =>
       columnGroup.group.titlePadding ??
-      stateManager.configuration!.defaultColumnTitlePadding;
+      stateManager.configuration!.style.defaultColumnTitlePadding;
 
   String? get _title =>
       columnGroup.group.titleSpan == null ? columnGroup.group.title : null;
@@ -113,22 +113,26 @@ class _ColumnGroupTitle extends StatelessWidget {
         ? (depth - childrenDepth) * stateManager.columnHeight
         : depth * stateManager.columnHeight;
 
+    final style = stateManager.style;
+
     return Container(
       height: groupTitleHeight,
       padding: _padding,
       decoration: BoxDecoration(
         color: columnGroup.group.backgroundColor,
         border: BorderDirectional(
-          end: stateManager.configuration!.enableColumnBorder
+          end: style.enableColumnBorderVertical
               ? BorderSide(
-                  color: stateManager.configuration!.borderColor,
+                  color: style.borderColor,
                   width: 1.0,
                 )
               : BorderSide.none,
-          bottom: BorderSide(
-            color: stateManager.configuration!.borderColor,
-            width: 1.0,
-          ),
+          bottom: style.enableColumnBorderHorizontal
+              ? BorderSide(
+                  color: style.borderColor,
+                  width: 1.0,
+                )
+              : BorderSide.none,
         ),
       ),
       child: Center(
@@ -137,7 +141,7 @@ class _ColumnGroupTitle extends StatelessWidget {
             text: _title,
             children: _children,
           ),
-          style: stateManager.configuration!.columnTextStyle,
+          style: style.columnTextStyle,
           overflow: TextOverflow.ellipsis,
           softWrap: false,
           maxLines: 1,

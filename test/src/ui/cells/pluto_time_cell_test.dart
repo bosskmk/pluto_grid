@@ -19,13 +19,15 @@ void main() {
   late MockPlutoGridStateManager stateManager;
 
   setUp(() {
+    const configuration = PlutoGridConfiguration();
     stateManager = MockPlutoGridStateManager();
-    when(stateManager.configuration).thenReturn(
-      const PlutoGridConfiguration(),
-    );
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
@@ -173,10 +175,14 @@ void main() {
       late Color inactivatedTextColor;
 
       setUp(() {
-        activatedCellColor = stateManager.configuration!.activatedBorderColor;
-        activatedTextColor = stateManager.configuration!.gridBackgroundColor;
-        inactivatedCellColor = stateManager.configuration!.gridBackgroundColor;
-        inactivatedTextColor = stateManager.configuration!.cellTextStyle.color!;
+        activatedCellColor =
+            stateManager.configuration!.style.activatedBorderColor;
+        activatedTextColor =
+            stateManager.configuration!.style.gridBackgroundColor;
+        inactivatedCellColor =
+            stateManager.configuration!.style.gridBackgroundColor;
+        inactivatedTextColor =
+            stateManager.configuration!.style.cellTextStyle.color!;
       });
 
       tapCell.test(

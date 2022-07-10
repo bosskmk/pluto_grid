@@ -88,9 +88,9 @@ class PlutoDualGridPopup {
   }
 
   List<BorderRadius>? _splitBorderRadius() {
-    final left = gridPropsA.configuration.gridBorderRadius;
+    final left = gridPropsA.configuration.style.gridBorderRadius;
 
-    final right = gridPropsB.configuration.gridBorderRadius;
+    final right = gridPropsB.configuration.style.gridBorderRadius;
 
     return [
       BorderRadius.only(
@@ -128,7 +128,9 @@ class PlutoDualGridPopup {
 
     return gridProps.copyWith(
       configuration: gridProps.configuration.copyWith(
-        gridBorderRadius: borderRadius,
+        style: gridProps.configuration.style.copyWith(
+          gridBorderRadius: borderRadius,
+        ),
       ),
     );
   }

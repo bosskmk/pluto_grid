@@ -98,7 +98,7 @@ class _ColumnFilteringScreenState extends State<ColumnFilteringScreen> {
           ///
           /// Return the value returned by resolveDefaultColumnFilter through the resolver function.
           /// Prevents errors returning filters that are not in the filters list.
-          columnFilterConfig: PlutoGridColumnFilterConfig(
+          columnFilter: PlutoGridColumnFilterConfig(
             filters: const [
               ...FilterHelper.defaultFilters,
               // custom filter

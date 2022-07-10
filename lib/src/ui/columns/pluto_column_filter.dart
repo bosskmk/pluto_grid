@@ -48,24 +48,24 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
   InputBorder get _border => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.borderColor, width: 0.0),
+            color: stateManager.configuration!.style.borderColor, width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   InputBorder get _enabledBorder => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.activatedBorderColor,
+            color: stateManager.configuration!.style.activatedBorderColor,
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   Color get _textFieldColor => _enabled
-      ? stateManager.configuration!.cellColorInEditState
-      : stateManager.configuration!.cellColorInReadOnlyState;
+      ? stateManager.configuration!.style.cellColorInEditState
+      : stateManager.configuration!.style.cellColorInReadOnlyState;
 
   EdgeInsets get _padding =>
       widget.column.filterPadding ??
-      stateManager.configuration!.defaultColumnFilterPadding;
+      stateManager.configuration!.style.defaultColumnFilterPadding;
 
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
@@ -215,7 +215,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
         filterType: widget.column.defaultFilter,
         filterValue: changed,
         debounceMilliseconds:
-            stateManager.configuration!.columnFilterConfig.debounceMilliseconds,
+            stateManager.configuration!.columnFilter.debounceMilliseconds,
       ),
     );
   }
@@ -226,20 +226,16 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = stateManager.configuration!;
+    final style = stateManager.style;
 
     return Container(
       height: stateManager.columnFilterHeight,
       padding: _padding,
       decoration: BoxDecoration(
         border: BorderDirectional(
-          top: BorderSide(
-            color: configuration.borderColor,
-          ),
-          end: configuration.enableColumnBorder
-              ? BorderSide(
-                  color: configuration.borderColor,
-                )
+          top: BorderSide(color: style.borderColor),
+          end: style.enableColumnBorderVertical
+              ? BorderSide(color: style.borderColor)
               : BorderSide.none,
         ),
       ),
@@ -248,7 +244,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
           focusNode: _focusNode,
           controller: _controller,
           enabled: _enabled,
-          style: configuration.cellTextStyle,
+          style: style.cellTextStyle,
           onTap: _handleOnTap,
           onChanged: _handleOnChanged,
           onEditingComplete: _handleOnEditingComplete,

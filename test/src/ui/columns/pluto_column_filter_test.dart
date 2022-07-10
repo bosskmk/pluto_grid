@@ -27,16 +27,18 @@ void main() {
     streamSubscription = MockStreamSubscription();
     subject = PublishSubject<PlutoNotifierEvent>();
 
+    const configuration = PlutoGridConfiguration();
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.columnFilterHeight,
+      stateManager.configuration!.style.columnFilterHeight,
     );
 
     when(eventManager!.listener(any)).thenReturn(streamSubscription);

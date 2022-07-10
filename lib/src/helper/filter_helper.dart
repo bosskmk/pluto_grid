@@ -409,7 +409,7 @@ class FilterPopupState {
       PlutoColumn(
         title: configuration.localeText.filterType,
         field: FilterHelper.filterFieldType,
-        type: PlutoColumnType.select(configuration.columnFilterConfig.filters),
+        type: PlutoColumnType.select(configuration.columnFilter.filters),
         enableFilterMenuItem: false,
         applyFormatterInEditing: true,
         formatter: (dynamic value) {
@@ -466,20 +466,20 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.add),
-            color: configuration!.iconColor,
-            iconSize: configuration!.iconSize,
+            color: configuration!.style.iconColor,
+            iconSize: configuration!.style.iconSize,
             onPressed: handleAddButton,
           ),
           IconButton(
             icon: const Icon(Icons.remove),
-            color: configuration!.iconColor,
-            iconSize: configuration!.iconSize,
+            color: configuration!.style.iconColor,
+            iconSize: configuration!.style.iconSize,
             onPressed: handleRemoveButton,
           ),
           IconButton(
             icon: const Icon(Icons.clear_sharp),
             color: Colors.red,
-            iconSize: configuration!.iconSize,
+            iconSize: configuration!.style.iconSize,
             onPressed: handleClearButton,
           ),
         ],

@@ -302,10 +302,8 @@ enum PlutoColumnTextAlign {
   left,
   center,
   right,
-  end,
-}
+  end;
 
-extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
     switch (this) {
       case PlutoColumnTextAlign.start:
@@ -350,10 +348,8 @@ extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
 enum PlutoColumnFrozen {
   none,
   start,
-  end,
-}
+  end;
 
-extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
   bool get isNone {
     return this == PlutoColumnFrozen.none;
   }
@@ -374,10 +370,8 @@ extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
 enum PlutoColumnSort {
   none,
   ascending,
-  descending,
-}
+  descending;
 
-extension PlutoColumnSortExtension on PlutoColumnSort {
   bool get isNone {
     return this == PlutoColumnSort.none;
   }
@@ -388,19 +382,5 @@ extension PlutoColumnSortExtension on PlutoColumnSort {
 
   bool get isDescending {
     return this == PlutoColumnSort.descending;
-  }
-
-  String toShortString() {
-    return toString().split('.').last;
-  }
-
-  PlutoColumnSort fromString(String value) {
-    if (value == PlutoColumnSort.ascending.toShortString()) {
-      return PlutoColumnSort.ascending;
-    } else if (value == PlutoColumnSort.descending.toShortString()) {
-      return PlutoColumnSort.descending;
-    } else {
-      return PlutoColumnSort.none;
-    }
   }
 }

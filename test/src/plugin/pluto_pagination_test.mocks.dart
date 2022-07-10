@@ -30,12 +30,13 @@ class _FakeFilteredList_2<E> extends _i1.Fake implements _i3.FilteredList<E> {}
 class _FakePlutoGridLocaleText_3 extends _i1.Fake
     implements _i3.PlutoGridLocaleText {}
 
-class _FakePlutoGridKeyPressed_4 extends _i1.Fake
+class _FakePlutoGridStyleConfig_4 extends _i1.Fake
+    implements _i3.PlutoGridStyleConfig {}
+
+class _FakePlutoGridKeyPressed_5 extends _i1.Fake
     implements _i3.PlutoGridKeyPressed {}
 
-class _FakeChangeNotifier_5 extends _i1.Fake implements _i4.ChangeNotifier {}
-
-class _FakeOffset_6 extends _i1.Fake implements _i5.Offset {}
+class _FakeChangeNotifier_6 extends _i1.Fake implements _i4.ChangeNotifier {}
 
 class _FakePlutoAutoSize_7 extends _i1.Fake implements _i3.PlutoAutoSize {}
 
@@ -214,13 +215,17 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.getter(#localeText),
       returnValue: _FakePlutoGridLocaleText_3()) as _i3.PlutoGridLocaleText);
   @override
+  _i3.PlutoGridStyleConfig get style => (super.noSuchMethod(
+      Invocation.getter(#style),
+      returnValue: _FakePlutoGridStyleConfig_4()) as _i3.PlutoGridStyleConfig);
+  @override
   _i3.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
       Invocation.getter(#keyPressed),
-      returnValue: _FakePlutoGridKeyPressed_4()) as _i3.PlutoGridKeyPressed);
+      returnValue: _FakePlutoGridKeyPressed_5()) as _i3.PlutoGridKeyPressed);
   @override
   _i4.ChangeNotifier get resizingChangeNotifier =>
       (super.noSuchMethod(Invocation.getter(#resizingChangeNotifier),
-          returnValue: _FakeChangeNotifier_5()) as _i4.ChangeNotifier);
+          returnValue: _FakeChangeNotifier_6()) as _i4.ChangeNotifier);
   @override
   double get headerHeight =>
       (super.noSuchMethod(Invocation.getter(#headerHeight), returnValue: 0.0)
@@ -411,10 +416,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   double get correctHorizontalOffset =>
       (super.noSuchMethod(Invocation.getter(#correctHorizontalOffset),
           returnValue: 0.0) as double);
-  @override
-  _i5.Offset get directionalScrollEdgeOffset =>
-      (super.noSuchMethod(Invocation.getter(#directionalScrollEdgeOffset),
-          returnValue: _FakeOffset_6()) as _i5.Offset);
   @override
   bool get isSelecting =>
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
@@ -1080,10 +1081,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   void setScroll(_i3.PlutoGridScrollController? scroll) =>
       super.noSuchMethod(Invocation.method(#setScroll, [scroll]),
           returnValueForMissingStub: null);
-  @override
-  _i5.Offset toDirectionalOffset(_i5.Offset? offset) =>
-      (super.noSuchMethod(Invocation.method(#toDirectionalOffset, [offset]),
-          returnValue: _FakeOffset_6()) as _i5.Offset);
   @override
   void scrollByDirection(_i3.PlutoMoveDirection? direction, double? offset) =>
       super.noSuchMethod(

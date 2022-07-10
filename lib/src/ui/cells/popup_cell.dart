@@ -98,13 +98,15 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       createHeader: createHeader,
       createFooter: createFooter,
       configuration: widget.stateManager.configuration?.copyWith(
-        gridBorderRadius:
-            widget.stateManager.configuration?.gridPopupBorderRadius ??
-                BorderRadius.zero,
-        defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-        defaultCellPadding: PlutoGridSettings.cellPadding,
-        rowHeight: widget.stateManager.configuration!.rowHeight,
-        enableRowColorAnimation: false,
+        style: widget.stateManager.configuration?.style.copyWith(
+          gridBorderRadius:
+              widget.stateManager.configuration?.style.gridPopupBorderRadius ??
+                  BorderRadius.zero,
+          defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+          defaultCellPadding: PlutoGridSettings.cellPadding,
+          rowHeight: widget.stateManager.configuration!.style.rowHeight,
+          enableRowColorAnimation: false,
+        ),
       ),
     );
   }
@@ -214,7 +216,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       readOnly: true,
       textInputAction: TextInputAction.none,
       onTap: openPopup,
-      style: widget.stateManager.configuration!.cellTextStyle,
+      style: widget.stateManager.configuration!.style.cellTextStyle,
       decoration: InputDecoration(
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
@@ -222,8 +224,8 @@ mixin PopupCellState<T extends PopupCell> on State<T>
         contentPadding: EdgeInsets.zero,
         suffixIcon: IconButton(
           icon: icon!,
-          color: widget.stateManager.configuration!.iconColor,
-          iconSize: widget.stateManager.configuration!.iconSize,
+          color: widget.stateManager.configuration!.style.iconColor,
+          iconSize: widget.stateManager.configuration!.style.iconSize,
           onPressed: openPopup,
         ),
       ),

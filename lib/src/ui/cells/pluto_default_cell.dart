@@ -90,8 +90,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
-              size: stateManager.configuration!.iconSize,
-              color: stateManager.configuration!.iconColor,
+              size: stateManager.configuration!.style.iconSize,
+              color: stateManager.configuration!.style.iconColor,
             ),
           ),
         if (widget.column.enableRowChecked)
@@ -197,20 +197,20 @@ class _RowDragIconWidget extends StatelessWidget {
         feedback: FractionalTranslation(
           translation: Offset(translationX, -0.5),
           child: Material(
-            child: Directionality(
-              textDirection: stateManager.textDirection,
-              child: PlutoShadowContainer(
-                width: column.width,
-                height: stateManager.rowHeight,
-                backgroundColor:
-                    stateManager.configuration!.gridBackgroundColor,
-                borderColor: stateManager.configuration!.activatedBorderColor,
-                child: Row(
-                  children: [
-                    dragIcon,
-                    Expanded(child: feedbackWidget),
-                  ],
-                ),
+            child: PlutoShadowContainer(
+              width: column.width,
+              height: stateManager.rowHeight,
+              backgroundColor:
+                  stateManager.configuration!.style.gridBackgroundColor,
+              borderColor:
+                  stateManager.configuration!.style.activatedBorderColor,
+              child: Row(
+                children: [
+                  dragIcon,
+                  Expanded(
+                    child: feedbackWidget,
+                  ),
+                ],
               ),
             ),
           ),
@@ -292,9 +292,9 @@ class _CheckboxSelectionWidgetState
       value: _checked,
       handleOnChanged: _handleOnChanged,
       scale: 0.86,
-      unselectedColor: stateManager.configuration!.iconColor,
-      activeColor: stateManager.configuration!.activatedBorderColor,
-      checkColor: stateManager.configuration!.activatedColor,
+      unselectedColor: stateManager.configuration!.style.iconColor,
+      activeColor: stateManager.configuration!.style.activatedBorderColor,
+      checkColor: stateManager.configuration!.style.activatedColor,
     );
   }
 }
@@ -333,7 +333,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
 
     return Text(
       column.formattedValueForDisplay(cell.value),
-      style: stateManager.configuration!.cellTextStyle.copyWith(
+      style: stateManager.configuration!.style.cellTextStyle.copyWith(
         decoration: TextDecoration.none,
         fontWeight: FontWeight.normal,
       ),

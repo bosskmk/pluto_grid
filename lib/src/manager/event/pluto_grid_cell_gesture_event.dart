@@ -166,10 +166,8 @@ enum PlutoGridGestureType {
   onLongPressMoveUpdate,
   onLongPressEnd,
   onDoubleTap,
-  onSecondaryTap,
-}
+  onSecondaryTap;
 
-extension PlutoGridGestureTypeExtension on PlutoGridGestureType? {
   bool get isOnTapUp => this == PlutoGridGestureType.onTapUp;
 
   bool get isOnLongPressStart => this == PlutoGridGestureType.onLongPressStart;

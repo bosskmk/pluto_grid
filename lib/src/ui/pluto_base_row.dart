@@ -80,7 +80,7 @@ class PlutoBaseRow extends StatelessWidget {
       rowIdx: rowIdx,
       row: row,
       enableRowColorAnimation:
-          stateManager.configuration!.enableRowColorAnimation,
+          stateManager.configuration!.style.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
       child: visibilityLayout
           ? PlutoVisibilityLayout(
@@ -219,7 +219,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   Color _getDefaultRowColor() {
     if (stateManager.rowColorCallback == null) {
-      return stateManager.configuration!.gridBackgroundColor;
+      return stateManager.configuration!.style.gridBackgroundColor;
     }
 
     return stateManager.rowColorCallback!(
@@ -241,7 +241,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     Color color = _getDefaultRowColor();
 
     if (isDragTarget) {
-      color = stateManager.configuration!.cellColorInReadOnlyState;
+      color = stateManager.configuration!.style.cellColorInReadOnlyState;
     } else {
       final bool checkCurrentRow = !stateManager.selectingMode.isRow &&
           isFocusedCurrentRow &&
@@ -251,12 +251,13 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
           stateManager.isSelectedRow(widget.row.key);
 
       if (checkCurrentRow || checkSelectedRow) {
-        color = stateManager.configuration!.activatedColor;
+        color = stateManager.configuration!.style.activatedColor;
       }
     }
 
     return isCheckedRow
-        ? Color.alphaBlend(stateManager.configuration!.checkedColor, color)
+        ? Color.alphaBlend(
+            stateManager.configuration!.style.checkedColor, color)
         : color;
   }
 
@@ -302,15 +303,20 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
         top: isTopDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: stateManager.configuration!.activatedBorderColor,
+                color: stateManager.configuration!.style.activatedBorderColor,
               )
             : BorderSide.none,
-        bottom: BorderSide(
-          width: PlutoGridSettings.rowBorderWidth,
-          color: isBottomDragTarget
-              ? stateManager.configuration!.activatedBorderColor
-              : stateManager.configuration!.borderColor,
-        ),
+        bottom: isBottomDragTarget
+            ? BorderSide(
+                width: PlutoGridSettings.rowBorderWidth,
+                color: stateManager.configuration!.style.activatedBorderColor,
+              )
+            : stateManager.configuration!.style.enableCellBorderHorizontal
+                ? BorderSide(
+                    width: PlutoGridSettings.rowBorderWidth,
+                    color: stateManager.configuration!.style.borderColor,
+                  )
+                : BorderSide.none,
       ),
     );
   }
