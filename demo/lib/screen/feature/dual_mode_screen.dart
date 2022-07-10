@@ -163,6 +163,10 @@ class _DualModeScreenState extends State<DualModeScreen> {
             print('Grid A : $event');
           },
           configuration: const PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              enableColumnBorderVertical: false,
+              enableCellBorderVertical: false,
+            ),
             columnSize: PlutoGridColumnSizeConfig(
               autoSizeMode: PlutoAutoSizeMode.scale,
               resizeMode: PlutoResizeMode.pushAndPull,
@@ -185,6 +189,10 @@ class _DualModeScreenState extends State<DualModeScreen> {
             print('Grid B : $event');
           },
           configuration: const PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              enableColumnBorderVertical: false,
+              enableCellBorderVertical: false,
+            ),
             columnSize: PlutoGridColumnSizeConfig(
               autoSizeMode: PlutoAutoSizeMode.scale,
               resizeMode: PlutoResizeMode.pushAndPull,

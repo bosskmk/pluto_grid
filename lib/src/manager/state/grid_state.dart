@@ -26,6 +26,8 @@ abstract class IGridState {
 
   PlutoOnRowsMovedEventCallback? get onRowsMoved;
 
+  PlutoColumnMenuDelegate get columnMenuDelegate;
+
   CreateHeaderCallBack? get createHeader;
 
   CreateFooterCallBack? get createFooter;
@@ -43,6 +45,8 @@ abstract class IGridState {
   void setGridMode(PlutoGridMode mode);
 
   void setOnChanged(PlutoOnChangedEventCallback onChanged);
+
+  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate);
 
   void setCreateHeader(CreateHeaderCallBack createHeader);
 
@@ -138,6 +142,12 @@ mixin GridState implements IPlutoGridState {
   PlutoOnRowsMovedEventCallback? _onRowsMoved;
 
   @override
+  PlutoColumnMenuDelegate get columnMenuDelegate => _columnMenuDelegate;
+
+  PlutoColumnMenuDelegate _columnMenuDelegate =
+      const PlutoDefaultColumnMenuDelegate();
+
+  @override
   CreateHeaderCallBack? get createHeader => _createHeader;
 
   CreateHeaderCallBack? _createHeader;
@@ -202,6 +212,15 @@ mixin GridState implements IPlutoGridState {
   @override
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved) {
     _onRowsMoved = onRowsMoved;
+  }
+
+  @override
+  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate) {
+    if (columnMenuDelegate == null) {
+      return;
+    }
+
+    _columnMenuDelegate = columnMenuDelegate;
   }
 
   @override

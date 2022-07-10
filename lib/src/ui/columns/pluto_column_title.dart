@@ -67,48 +67,22 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    final PlutoGridColumnMenuItem? selectedMenu = await showColumnMenu(
+    final selected = await showColumnMenu(
       context: context,
       position: position,
-      stateManager: stateManager,
-      column: widget.column,
+      items: stateManager.columnMenuDelegate.buildMenuItems(
+        stateManager: stateManager,
+        column: widget.column,
+      ),
     );
 
-    switch (selectedMenu) {
-      case PlutoGridColumnMenuItem.unfreeze:
-        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.none);
-        break;
-      case PlutoGridColumnMenuItem.freezeToStart:
-        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.start);
-        break;
-      case PlutoGridColumnMenuItem.freezeToEnd:
-        stateManager.toggleFrozenColumn(widget.column, PlutoColumnFrozen.end);
-        break;
-      case PlutoGridColumnMenuItem.autoFit:
-        if (!mounted) return;
-        stateManager.autoFitColumn(context, widget.column);
-        stateManager.notifyResizingListeners();
-        break;
-      case PlutoGridColumnMenuItem.hideColumn:
-        stateManager.hideColumn(widget.column, true);
-        break;
-      case PlutoGridColumnMenuItem.setColumns:
-        if (!mounted) return;
-        stateManager.showSetColumnsPopup(context);
-        break;
-      case PlutoGridColumnMenuItem.setFilter:
-        if (!mounted) return;
-        stateManager.showFilterPopup(
-          context,
-          calledColumn: widget.column,
-        );
-        break;
-      case PlutoGridColumnMenuItem.resetFilter:
-        stateManager.setFilter(null);
-        break;
-      default:
-        break;
-    }
+    stateManager.columnMenuDelegate.onSelected(
+      context: context,
+      stateManager: stateManager,
+      column: widget.column,
+      mounted: mounted,
+      selected: selected,
+    );
   }
 
   void _handleOnPointDown(PointerDownEvent event) {

@@ -12,6 +12,7 @@ import 'screen/feature/column_filtering_screen.dart';
 import 'screen/feature/column_freezing_screen.dart';
 import 'screen/feature/column_group_screen.dart';
 import 'screen/feature/column_hiding_screen.dart';
+import 'screen/feature/column_menu_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
 import 'screen/feature/column_sorting_screen.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
             const ColumnFreezingScreen(),
         ColumnGroupScreen.routeName: (context) => const ColumnGroupScreen(),
         ColumnHidingScreen.routeName: (context) => const ColumnHidingScreen(),
+        ColumnMenuScreen.routeName: (context) => const ColumnMenuScreen(),
         ColumnMovingScreen.routeName: (context) => const ColumnMovingScreen(),
         ColumnResizingScreen.routeName: (context) =>
             const ColumnResizingScreen(),
