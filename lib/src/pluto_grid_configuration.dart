@@ -726,9 +726,9 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.china({
     // Column menu
-    this.unfreezeColumn = '解冻',
-    this.freezeColumnToStart = '冻结至左侧', // need to change translation
-    this.freezeColumnToEnd = '冻结至右侧', // need to change translation
+    this.unfreezeColumn = '解冻列',
+    this.freezeColumnToStart = '冻结列至起点',
+    this.freezeColumnToEnd = '冻结列至终点',
     this.autoFitColumn = '自动列宽',
     this.hideColumn = '隐藏列',
     this.setColumns = '设置列',
