@@ -97,40 +97,50 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     return (widget as PlutoVisibilityLayout).children.reversed;
   }
 
-  double get visibleLeft => scrollController.offset;
+  double get _visibleFirst => scrollController.offset;
 
-  double get visibleRight {
-    try {
-      return visibleLeft + scrollController.position.viewportDimension;
-    } catch (e) {
-      return visibleLeft + initialViewportDimension;
-    }
+  double get _visibleLast => _visibleFirst + _contentSize;
+
+  double get _contentSize {
+    return scrollController.position.hasViewportDimension == true
+        ? scrollController.position.viewportDimension
+        : initialViewportDimension;
   }
 
-  double _lastMaxScroll = 0;
+  double get _maxScrollExtent {
+    return _maxSize - _contentSize;
+  }
 
-  double _lastVisibleStartX1 = 0;
+  double get _maxSize => _widgetChildren.isNotEmpty
+      ? (_widgetChildren.last.layoutChild.startPosition +
+          _widgetChildren.last.layoutChild.width)
+      : 0;
 
-  double _lastVisibleStartX2 = 0;
+  double _previousMaxScroll = 0;
 
-  double _lastVisibleEndX1 = 0;
+  double _previousVisibleFirstX1 = 0;
 
-  double _lastVisibleEndX2 = 0;
+  double _previousVisibleFirstX2 = 0;
+
+  double _previousVisibleLastX1 = 0;
+
+  double _previousVisibleLastX2 = 0;
 
   bool _firstVisible = true;
 
   void scrollListener() {
-    final bool sameBoundScroll = _lastVisibleStartX1 <= visibleLeft &&
-        visibleLeft <= _lastVisibleStartX2 &&
-        _lastVisibleEndX1 <= visibleRight &&
-        visibleRight <= _lastVisibleEndX2;
+    final bool sameBoundScroll = _previousVisibleFirstX1 <= _visibleFirst &&
+        _visibleFirst <= _previousVisibleFirstX2 &&
+        _previousVisibleLastX1 <= _visibleLast &&
+        _visibleLast <= _previousVisibleLastX2;
 
-    if (sameBoundScroll &&
-        _lastMaxScroll == scrollController.position.maxScrollExtent) {
+    final bool sameMaxScrollExtent = _previousMaxScroll == _maxScrollExtent;
+
+    if (sameBoundScroll && sameMaxScrollExtent) {
       return;
     }
 
-    _lastMaxScroll = scrollController.position.maxScrollExtent;
+    _previousMaxScroll = _maxScrollExtent;
 
     markNeedsBuild();
   }
@@ -140,8 +150,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     required PlutoVisibilityLayoutChild layoutChild,
   }) {
     return layoutChild.keepAlive ||
-        (startOffset <= visibleRight &&
-            startOffset + layoutChild.width >= visibleLeft);
+        (startOffset <= _visibleLast &&
+            startOffset + layoutChild.width >= _visibleFirst);
   }
 
   void updateLastVisible({
@@ -149,13 +159,13 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     required double width,
   }) {
     if (_firstVisible) {
-      _lastVisibleStartX1 = startOffset;
-      _lastVisibleStartX2 = startOffset + width;
+      _previousVisibleFirstX1 = startOffset;
+      _previousVisibleFirstX2 = startOffset + width;
       _firstVisible = false;
     }
 
-    _lastVisibleEndX1 = startOffset;
-    _lastVisibleEndX2 = startOffset + width;
+    _previousVisibleLastX1 = startOffset;
+    _previousVisibleLastX2 = startOffset + width;
   }
 
   Element? findChildByLayoutId(Object layoutId) {

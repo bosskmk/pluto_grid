@@ -102,11 +102,14 @@ class _TestDelegate extends MultiChildLayoutDelegate {
 
 @GenerateMocks([], customMocks: [
   MockSpec<ScrollController>(returnNullOnMissingStub: true),
+  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MultiChildLayoutDelegate delegate;
 
   late MockScrollController scrollController;
+
+  late MockScrollPosition scrollPosition;
 
   PlutoVisibilityLayoutChild createChildren() {
     return _TestLayoutChild();
@@ -137,13 +140,20 @@ void main() {
 
   setUp(() {
     scrollController = MockScrollController();
+    scrollPosition = MockScrollPosition();
     when(scrollController.offset).thenReturn(0);
+    when(scrollController.position).thenReturn(scrollPosition);
+    when(scrollPosition.hasViewportDimension).thenReturn(true);
   });
 
   group('horizontal', () {
     testWidgets(
       'scrollController.addListener 가 호출 되어야 한다.',
       (tester) async {
+        when(scrollPosition.viewportDimension).thenReturn(
+          tester.binding.window.physicalSize.width,
+        );
+
         final children = <PlutoVisibilityLayoutId>[
           PlutoVisibilityLayoutId(id: 'id', child: createChildren()),
         ];
@@ -160,6 +170,10 @@ void main() {
     testWidgets(
       '위젯이 사라지면 scrollController.removeListener 가 호출 되어야 한다.',
       (tester) async {
+        when(scrollPosition.viewportDimension).thenReturn(
+          tester.binding.window.physicalSize.width,
+        );
+
         final children = <PlutoVisibilityLayoutId>[
           PlutoVisibilityLayoutId(id: 'id', child: createChildren()),
         ];
@@ -183,6 +197,10 @@ void main() {
     testWidgets(
       '_TestLayoutChild 가 노출 되어야 한다.',
       (tester) async {
+        when(scrollPosition.viewportDimension).thenReturn(
+          tester.binding.window.physicalSize.width,
+        );
+
         final children = <PlutoVisibilityLayoutId>[
           PlutoVisibilityLayoutId(id: 'id', child: createChildren()),
         ];
@@ -209,6 +227,10 @@ void main() {
     testWidgets(
       '_TestLayoutChild 3개, 순서대로 노출 되어야 한다.',
       (tester) async {
+        when(scrollPosition.viewportDimension).thenReturn(
+          tester.binding.window.physicalSize.width,
+        );
+
         final children = <PlutoVisibilityLayoutId>[
           PlutoVisibilityLayoutId(id: 'id1', child: createChildren()),
           PlutoVisibilityLayoutId(id: 'id2', child: createChildren()),
