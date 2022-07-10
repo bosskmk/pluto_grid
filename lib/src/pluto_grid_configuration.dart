@@ -807,8 +807,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.russian({
     // Column menu
     this.unfreezeColumn = 'Открепить',
-    this.freezeColumnToStart = 'Закрепить слева', // need to change translation
-    this.freezeColumnToEnd = 'Закрепить справа', // need to change translation
+    this.freezeColumnToStart = 'Закрепить в начале',
+    this.freezeColumnToEnd = 'Закрепить в конце',
     this.autoFitColumn = 'Автоматический размер',
     this.hideColumn = 'Скрыть колонку',
     this.setColumns = 'Выбрать колонки',
