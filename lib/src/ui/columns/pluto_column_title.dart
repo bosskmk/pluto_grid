@@ -70,6 +70,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     final selected = await showColumnMenu(
       context: context,
       position: position,
+      backgroundColor: stateManager.style.menuBackgroundColor,
       items: stateManager.columnMenuDelegate.buildMenuItems(
         stateManager: stateManager,
         column: widget.column,
