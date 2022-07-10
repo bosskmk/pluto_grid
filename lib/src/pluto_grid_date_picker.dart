@@ -97,6 +97,8 @@ class PlutoGridDatePicker {
           enableCellBorderVertical: false,
           enableCellBorderHorizontal: false,
           enableRowColorAnimation: false,
+          oddRowColor: PlutoOptional(null),
+          evenRowColor: PlutoOptional(null),
           activatedColor: configuration.style.gridBackgroundColor,
           gridBorderColor: configuration.style.gridBackgroundColor,
           borderColor: configuration.style.gridBackgroundColor,
