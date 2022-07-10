@@ -1,3 +1,58 @@
+## [4.0.1] - 2022. 6. 21
+
+* Fixed visibleFraction error when moving from tab view to another tab.
+
+## [4.0.0] - 2022. 6. 7
+
+* Rendering speed improvements.  
+  Please check the performance in profile or build mode.  
+  Debug mode can be slow if there are many lines.
+* Some state management is applied as a Provider.
+* Added PlutoGridStateManager.initializeRowsAsync static method.   
+  To avoid UI freezing when starting the grid with a large number of rows.    
+  [Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
+
+## [3.1.2] - 2022. 6. 2
+
+* Fixed the date popup not opening when the value is wrong.
+
+## [3.1.1] - 2022. 5. 29
+
+* Improved row deletion speed improvement.
+
+## [3.1.0] - 2022. 5. 29
+
+* Improved column width adjustment performance.
+* Updated date, time picker popups.
+
+## [3.0.2] - 2022. 5. 25
+
+* CSV export has been separated into external packages.   
+  Install the pluto_grid_export package.
+
+## [3.0.0-1.pre] - 2022. 5. 14
+
+* Updated for flutter 3.0 version.
+* Updated group name display in column filter popup.
+* Fixed by bug due to commit 1d5554d3.
+
+## [2.10.3] - 2022. 5. 14
+
+* Fixed by bug due to commit 1d5554d3.
+
+## [2.10.2] - 2022. 5. 12
+
+* Fixed bad export CSV encoding when non-Latin1 / US-ASCII characters were present.
+
+## [2.10.1] - 2022. 5. 11
+
+* Fixed currentColumn null error.
+
+## [2.10.0] - 2022. 5. 11
+
+* Added export as csv.
+* Added persian locale.
+
 ## [2.9.3] - 2022. 3. 16
 
 * Added columnContextIcon, columnResizeIcon.

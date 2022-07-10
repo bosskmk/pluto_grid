@@ -38,6 +38,8 @@ mixin ColumnGroupState implements IPlutoGridState {
     }
 
     _refColumnGroups = setColumnGroups;
+
+    _setGroupToColumn();
   }
 
   FilteredList<PlutoColumnGroup>? _refColumnGroups;
@@ -91,7 +93,7 @@ mixin ColumnGroupState implements IPlutoGridState {
       return;
     }
 
-    final columnFields = columns.map((e) => e.field).toList(growable: false);
+    final Set<String> columnFields = Set.from(columns.map((e) => e.field));
 
     refColumnGroups!.removeWhereFromOriginal((group) {
       return _emptyGroupAfterRemoveColumns(
@@ -107,7 +109,7 @@ mixin ColumnGroupState implements IPlutoGridState {
 
   bool _emptyGroupAfterRemoveColumns({
     required PlutoColumnGroup columnGroup,
-    required List<String> columnFields,
+    required Set<String> columnFields,
   }) {
     if (columnGroup.hasFields) {
       columnGroup.fields!.removeWhere((field) => columnFields.contains(field));
@@ -122,5 +124,18 @@ mixin ColumnGroupState implements IPlutoGridState {
 
     return (columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
         (columnGroup.hasChildren && columnGroup.children!.isEmpty);
+  }
+
+  void _setGroupToColumn() {
+    if (hasColumnGroups == false) {
+      return;
+    }
+
+    for (final column in refColumns) {
+      column.group = PlutoColumnGroupHelper.getParentGroupIfExistsFromList(
+        field: column.field,
+        columnGroupList: refColumnGroups!,
+      );
+    }
   }
 }

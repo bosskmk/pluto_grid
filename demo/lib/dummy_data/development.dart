@@ -1,3 +1,4 @@
+import 'package:demo/dummy_data/words_multilingual.dart';
 import 'package:faker/faker.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -46,10 +47,22 @@ class DummyData {
     rows = rowsByColumns(length: rowLength, columns: columns);
   }
 
-  static List<PlutoRow> rowsByColumns(
-      {required int length, List<PlutoColumn>? columns}) {
-    return List<int>.generate(length, (index) => ++index).map((rowIndex) {
-      return rowByColumns(columns!);
+  static List<PlutoColumn> textColumns(int count) {
+    return List<int>.generate(count, (index) => index).map((i) {
+      return PlutoColumn(
+        title: faker.food.cuisine(),
+        field: i.toString(),
+        type: PlutoColumnType.text(),
+      );
+    }).toList();
+  }
+
+  static List<PlutoRow> rowsByColumns({
+    required int length,
+    required List<PlutoColumn> columns,
+  }) {
+    return List<int>.generate(length, (index) => index).map((_) {
+      return rowByColumns(columns);
     }).toList();
   }
 
@@ -58,25 +71,29 @@ class DummyData {
 
     for (var column in columns) {
       cells[column.field] = PlutoCell(
-        value: (PlutoColumn element) {
-          if (element.type.isNumber) {
-            return faker.randomGenerator.decimal(scale: 1000000000);
-          } else if (element.type.isSelect) {
-            return (element.type.select!.items.toList()..shuffle()).first;
-          } else if (element.type.isDate) {
-            return DateTime.now()
-                .add(Duration(
-                    days: faker.randomGenerator.integer(365, min: -365)))
-                .toString();
-          } else if (element.type.isTime) {
-            return '00:00';
-          } else {
-            return faker.food.restaurant();
-          }
-        }(column),
+        value: valueByColumnType(column),
       );
     }
 
     return PlutoRow(cells: cells);
+  }
+
+  static dynamic valueByColumnType(PlutoColumn column) {
+    if (column.type.isNumber) {
+      return faker.randomGenerator.decimal(scale: 1000000000);
+    } else if (column.type.isSelect) {
+      return (column.type.select!.items.toList()..shuffle()).first;
+    } else if (column.type.isDate) {
+      return DateTime.now()
+          .add(Duration(days: faker.randomGenerator.integer(365, min: -365)))
+          .toString();
+    } else if (column.type.isTime) {
+      final hour = faker.randomGenerator.integer(12).toString().padLeft(2, '0');
+      final minute =
+          faker.randomGenerator.integer(60).toString().padLeft(2, '0');
+      return '$hour:$minute';
+    } else {
+      return faker.randomGenerator.element(multilingualWords);
+    }
   }
 }

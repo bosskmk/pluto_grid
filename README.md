@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v2.9.3
+## PlutoGrid for flutter - v4.0.1
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -10,6 +10,17 @@
 It is developed with priority on the web and desktop.  
 Improvements such as UI on mobile are being considered.  
 If you comment on an issue, mobile improvements can be made quickly.
+
+<br>
+
+### Key changes in PlutoGrid 4 version
+> The key change in PlutoGrid 4 version is speed improvement.<br><br>
+By optimizing the state change, it has been improved to maintain an appropriate frame even when there is a lot of data.  
+To check this, run Flutter in profile or build mode.  
+There may still be instances where the UI freezes in certain actions.  
+I plan to improve these one by one, and if you find something like this, please let me know through the Issue.<br>  
+If you pass a large number of rows when creating a grid, the UI may freeze. Check the example below.  
+[Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
 
 <br>
 
@@ -39,6 +50,14 @@ If you comment on an issue, mobile improvements can be made quickly.
 
 <br>
 
+### Packages
+
+> [PlutoGridExport](https://github.com/bosskmk/pluto_grid/tree/master/packages/pluto_grid_export)  
+> This package can export the metadata of PlutoGrid as CSV or PDF.
+
+
+<br>
+
 ### Screenshots
 
 #### Change the color of the rows or make the cells look the way you want them.
@@ -47,7 +66,7 @@ If you comment on an issue, mobile improvements can be made quickly.
 <br>
 
 #### Date type input can be easily selected by pop-up and keyboard.
-![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/2.8.0/pluto_grid_2.8.0_02.png)
+![PlutoGrid Select Popup](https://bosskmk.github.io/images/pluto_grid/3.1.0/pluto_grid_3.1.0_01.png)
 
 <br>
 
@@ -163,9 +182,10 @@ Widget build(BuildContext context) {
 
 ### Flutter version compatible
 
-| Flutter         | PlutoGrid       |
-|-----------------|-----------------|
-| 2.5.0 or higher | 2.5.0 or higher |
+| Flutter         | PlutoGrid               |
+|-----------------|-------------------------|
+| 3.0.0 or higher | 3.0.0-0.pre or higher   |
+| 2.5.0 or higher | 2.5.0 or higher         |
 
 For other versions, contact the issue
 

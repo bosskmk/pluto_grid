@@ -212,7 +212,7 @@ mixin CellState implements IPlutoGridState {
     setEditing(autoEditing, notify: false);
 
     if (notify) {
-      notifyListeners();
+      notifyStreamListeners(PlutoSetCurrentCellStreamNotifierEvent());
     }
   }
 
@@ -281,24 +281,33 @@ mixin CellState implements IPlutoGridState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.type.isSelect &&
-        column.type.select!.items.contains(newValue) != true) {
-      newValue = oldValue;
-    } else if (column.type.isDate) {
+    if (column!.type.isSelect) {
+      return column.type.select!.items.contains(newValue) == true
+          ? newValue
+          : oldValue;
+    }
+
+    if (column.type.isDate) {
       try {
         final parseNewValue =
             column.type.date!.dateFormat.parseStrict(newValue.toString());
 
-        newValue = column.type.date!.dateFormat.format(parseNewValue);
+        return PlutoDateTimeHelper.isValidRange(
+          date: parseNewValue,
+          start: column.type.date!.startDate,
+          end: column.type.date!.endDate,
+        )
+            ? column.type.date!.dateFormat.format(parseNewValue)
+            : oldValue;
       } catch (e) {
-        newValue = oldValue;
+        return oldValue;
       }
-    } else if (column.type.isTime) {
-      final time = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
+    }
 
-      if (!time.hasMatch(newValue.toString())) {
-        newValue = oldValue;
-      }
+    if (column.type.isTime) {
+      final time = RegExp(r'^([0-1]?\d|2[0-3]):[0-5]\d$');
+
+      return time.hasMatch(newValue.toString()) ? newValue : oldValue;
     }
 
     return newValue;

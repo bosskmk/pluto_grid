@@ -240,6 +240,7 @@ class PlutoGridKeyManager {
     if (stateManager.mode.isSelect) {
       stateManager.onSelected!(PlutoGridOnSelectedEvent(
         row: stateManager.currentRow,
+        rowIdx: stateManager.currentRowIdx,
         cell: stateManager.currentCell,
       ));
       return;
@@ -293,6 +294,7 @@ class PlutoGridKeyManager {
         (stateManager.mode.isPopup && !stateManager.isEditing)) {
       stateManager.onSelected!(PlutoGridOnSelectedEvent(
         row: null,
+        rowIdx: null,
         cell: null,
       ));
       return;
@@ -374,7 +376,7 @@ class PlutoGridKeyManager {
         return;
       }
 
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         if (stateManager.textEditingController != null) {
           stateManager.textEditingController!.text = keyEvent.event.character!;
         }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../helper/column_helper.dart';
@@ -88,34 +87,6 @@ void main() {
     expect(found, findsOneWidget);
   });
 
-  testWidgets('showLoading 을 설정 한 경우 PlutoLoadingWidget 이 출력 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final columns = ColumnHelper.textColumn('header');
-    final rows = RowHelper.count(3, columns);
-
-    // when
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoGrid(
-            columns: columns,
-            rows: rows,
-            onLoaded: (event) {
-              event.stateManager.setShowLoading(true);
-            },
-          ),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    // then
-    final loading = find.byType(PlutoLoading);
-    expect(loading, findsOneWidget);
-  });
-
   testWidgets('cell 값이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
     final columns = ColumnHelper.textColumn('header');
@@ -132,6 +103,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // then
     final cell1 = find.text('header0 value 0');
@@ -206,6 +179,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
@@ -287,6 +262,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // when
     // first cell of first column
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
@@ -296,13 +273,13 @@ void main() {
         find.descendant(of: firstCell, matching: find.byType(GestureDetector)));
 
     Offset selectedCellOffset =
-        tester.getCenter(find.byKey(rows[7].cells['header5']!.key));
+        tester.getCenter(find.byKey(rows[7].cells['header3']!.key));
 
     stateManager!.setCurrentSelectingPositionWithOffset(selectedCellOffset);
 
     // then
     expect(stateManager!.currentSelectingPosition!.rowIdx, 7);
-    expect(stateManager!.currentSelectingPosition!.columnIdx, 5);
+    expect(stateManager!.currentSelectingPosition!.columnIdx, 3);
   });
 
   testWidgets(
@@ -330,6 +307,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // when
     // first cell of first column
@@ -771,333 +750,6 @@ void main() {
       expect(columns[8].title, 'body8');
       expect(columns[9].title, 'body9');
     });
-
-    group('Date column', () {
-      testWidgets(
-          '날짜 선택 팝업에서 위로 한칸 이동 시 '
-          '일주일 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
-        // given
-        List<PlutoColumn> columns = [
-          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
-        ];
-
-        List<PlutoRow> rows = RowHelper.count(10, columns);
-
-        PlutoGridStateManager? stateManager;
-
-        // when
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
-            ),
-          ),
-        );
-
-        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
-
-        // 셀 선택
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        expect(stateManager!.isEditing, false);
-
-        // 수정 상태로 변경
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        // 수정 상태 확인
-        expect(stateManager!.isEditing, true);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 날짜 입력 팝업 호출
-        await tester.tap(
-            find.descendant(of: firstCell, matching: find.byType(TextField)));
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 현재 선택 된 날짜
-        final DateTime currentDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        // 선택 된 날짜의 day 렌더링
-        Finder popupCell = find.text(DateFormat('d').format(currentDate));
-        expect(popupCell, findsOneWidget);
-
-        // 팝업에서 한칸 위로 이동
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 일주일 전 날짜 선택
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        final DateTime selectedDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        expect(currentDate.add(const Duration(days: -7)), selectedDate);
-      });
-
-      testWidgets(
-          '날짜 선택 팝업에서 위로 여섯칸 이동 시 '
-          '6주 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
-        // given
-        List<PlutoColumn> columns = [
-          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
-        ];
-
-        List<PlutoRow> rows = RowHelper.count(10, columns);
-
-        PlutoGridStateManager? stateManager;
-
-        // when
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
-            ),
-          ),
-        );
-
-        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
-
-        // 셀 선택
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        expect(stateManager!.isEditing, false);
-
-        // 수정 상태로 변경
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        // 수정 상태 확인
-        expect(stateManager!.isEditing, true);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 날짜 입력 팝업 호출
-        await tester.tap(
-            find.descendant(of: firstCell, matching: find.byType(TextField)));
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 현재 선택 된 날짜
-        final DateTime currentDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        // 선택 된 날짜의 day 렌더링
-        Finder popupCell = find.text(DateFormat('d').format(currentDate));
-        expect(popupCell, findsOneWidget);
-
-        // 팝업에서 여섯 칸 위로 이동
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 일주일 전 날짜 선택
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        final DateTime selectedDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        expect(currentDate.add(const Duration(days: -(7 * 6))), selectedDate);
-      });
-
-      testWidgets(
-          '날짜 선택 팝업에서 위로 10 칸 이동 시 '
-          '10주 이전 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
-        // given
-        List<PlutoColumn> columns = [
-          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
-        ];
-
-        List<PlutoRow> rows = RowHelper.count(10, columns);
-
-        PlutoGridStateManager? stateManager;
-
-        // when
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
-            ),
-          ),
-        );
-
-        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
-
-        // 셀 선택
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        expect(stateManager!.isEditing, false);
-
-        // 수정 상태로 변경
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        // 수정 상태 확인
-        expect(stateManager!.isEditing, true);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 날짜 입력 팝업 호출
-        await tester.tap(
-            find.descendant(of: firstCell, matching: find.byType(TextField)));
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 현재 선택 된 날짜
-        final DateTime currentDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        // 선택 된 날짜의 day 렌더링
-        Finder popupCell = find.text(DateFormat('d').format(currentDate));
-        expect(popupCell, findsOneWidget);
-
-        // 팝업에서 10 칸 위로 이동
-        for (var i = 0; i < 10; i += 1) {
-          await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-        }
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 일주일 전 날짜 선택
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        final DateTime selectedDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        expect(currentDate.add(const Duration(days: -(7 * 10))), selectedDate);
-      });
-
-      testWidgets(
-          '날짜 선택 팝업에서 아래로 10 칸 이동 시 '
-          '10주 이후 날짜가 선택 되어야 한다.', (WidgetTester tester) async {
-        // given
-        List<PlutoColumn> columns = [
-          ...ColumnHelper.dateColumn('date', count: 10, width: 100),
-        ];
-
-        List<PlutoRow> rows = RowHelper.count(10, columns);
-
-        PlutoGridStateManager? stateManager;
-
-        // when
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoGrid(
-                columns: columns,
-                rows: rows,
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  stateManager = event.stateManager;
-                },
-              ),
-            ),
-          ),
-        );
-
-        Finder firstCell = find.byKey(rows.first.cells['date0']!.key);
-
-        // 셀 선택
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        expect(stateManager!.isEditing, false);
-
-        // 수정 상태로 변경
-        await tester.tap(find.descendant(
-            of: firstCell, matching: find.byType(GestureDetector)));
-
-        // 수정 상태 확인
-        expect(stateManager!.isEditing, true);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 날짜 입력 팝업 호출
-        await tester.tap(
-            find.descendant(of: firstCell, matching: find.byType(TextField)));
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 현재 선택 된 날짜
-        final DateTime currentDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        // 선택 된 날짜의 day 렌더링
-        Finder popupCell = find.text(DateFormat('d').format(currentDate));
-        expect(popupCell, findsOneWidget);
-
-        // 팝업에서 10 칸 아래로 이동
-        for (var i = 0; i < 10; i += 1) {
-          await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
-        }
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 일주일 전 날짜 선택
-        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        // 엔터키 입력 후 자동으로 아래 이동, 다시 원래 셀인 위로 이동.
-        await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
-
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-
-        final DateTime selectedDate =
-            DateTime.parse(stateManager!.currentCell!.value.toString());
-
-        expect(currentDate.add(const Duration(days: 7 * 10)), selectedDate);
-      });
-    });
   });
 
   testWidgets('editing 상태에서 shift + 우측 방향키 입력 시 셀이 선택 되지 않아야 한다.',
@@ -1126,6 +778,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1183,6 +837,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1238,6 +894,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1295,6 +953,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1351,6 +1011,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1401,6 +1063,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1453,6 +1117,8 @@ void main() {
       ),
     );
 
+    await tester.pump();
+
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
 
@@ -1503,6 +1169,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pump();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');

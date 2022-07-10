@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -63,6 +64,8 @@ void main() {
         columns = ColumnHelper.textColumn('header', count: 3);
         rows = RowHelper.count(10, columns);
 
+        when(stateManager!.columns).thenReturn(columns);
+
         final row = rows[rowIdx];
 
         if (checked) {
@@ -73,11 +76,13 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoBaseRow(
-                stateManager: stateManager!,
-                rowIdx: rowIdx,
-                row: row,
-                columns: columns,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager!,
+                child: PlutoBaseRow(
+                  rowIdx: rowIdx,
+                  row: row,
+                  columns: columns,
+                ),
               ),
             ),
           ),

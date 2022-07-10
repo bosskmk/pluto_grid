@@ -43,17 +43,17 @@ mixin FilteringRowState implements IPlutoGridState {
       row.setState(PlutoRowState.none);
     }
 
-    var _filter = filter;
+    var savedFilter = filter;
 
     if (filter == null) {
       setFilterRows([]);
     } else {
-      _filter = (PlutoRow row) {
+      savedFilter = (PlutoRow row) {
         return !row.state.isNone || filter(row);
       };
     }
 
-    refRows.setFilter(_filter);
+    refRows.setFilter(savedFilter);
 
     resetCurrentState(notify: false);
 
@@ -115,7 +115,7 @@ mixin FilteringRowState implements IPlutoGridState {
       return;
     }
 
-    final columnFields = columns.map((e) => e.field).toList(growable: false);
+    final Set<String> columnFields = Set.from(columns.map((e) => e.field));
 
     filterRows.removeWhere(
       (filterRow) {
@@ -139,7 +139,7 @@ mixin FilteringRowState implements IPlutoGridState {
     var rows = shouldProvideDefaultFilterRow
         ? [
             FilterHelper.createFilterRow(
-              columnField: calledColumn!.enableFilterMenuItem
+              columnField: calledColumn.enableFilterMenuItem
                   ? calledColumn.field
                   : FilterHelper.filterFieldAllColumns,
               filterType: calledColumn.defaultFilter,

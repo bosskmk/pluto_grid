@@ -4,6 +4,8 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/test_helper_util.dart';
@@ -18,13 +20,16 @@ void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
   late MockLinkedScrollControllerGroup horizontalScroll;
+  late PublishSubject<PlutoStreamNotifierEvent> subject;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
     horizontalScroll = MockLinkedScrollControllerGroup();
+    subject = PublishSubject<PlutoStreamNotifierEvent>();
 
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
@@ -38,6 +43,26 @@ void main() {
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
 
+  tearDown(() {
+    subject.close();
+  });
+
+  MaterialApp buildApp({
+    required PlutoColumn column,
+  }) {
+    return MaterialApp(
+      home: Material(
+        child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+          value: stateManager,
+          child: PlutoColumnTitle(
+            stateManager: stateManager,
+            column: column,
+          ),
+        ),
+      ),
+    );
+  }
+
   testWidgets('컬럼 타이틀이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
     final PlutoColumn column = PlutoColumn(
@@ -48,14 +73,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -72,14 +90,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -99,14 +110,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     await tester.tap(find.byType(InkWell));
@@ -128,14 +132,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     Finder inkWell = find.byType(InkWell);
@@ -159,14 +156,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -188,14 +178,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -218,14 +201,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -244,14 +220,7 @@ void main() {
 
     // when
     await tester.pumpWidget(
-      MaterialApp(
-        home: Material(
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
-        ),
-      ),
+      buildApp(column: column),
     );
 
     // then
@@ -271,14 +240,7 @@ void main() {
 
       return PlutoWidgetTestHelper('build column.', (tester) async {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoColumnTitle(
-                stateManager: stateManager,
-                column: column,
-              ),
-            ),
-          ),
+          buildApp(column: column),
         );
       });
     }
@@ -323,14 +285,7 @@ void main() {
           .thenReturn(FilteredList(initialList: [column]));
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoColumnTitle(
-              stateManager: stateManager,
-              column: column,
-            ),
-          ),
-        ),
+        buildApp(column: column),
       );
 
       final columnIcon = find.byType(PlutoGridColumnIcon);
@@ -395,14 +350,7 @@ void main() {
           .thenReturn(FilteredList(initialList: [column]));
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoColumnTitle(
-              stateManager: stateManager,
-              column: column,
-            ),
-          ),
-        ),
+        buildApp(column: column),
       );
 
       final columnIcon = find.byType(PlutoGridColumnIcon);
@@ -454,14 +402,7 @@ void main() {
           .thenReturn(FilteredList(initialList: [column]));
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoColumnTitle(
-              stateManager: stateManager,
-              column: column,
-            ),
-          ),
-        ),
+        buildApp(column: column),
       );
 
       final columnIcon = find.byType(PlutoGridColumnIcon);
@@ -510,14 +451,7 @@ void main() {
 
     final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoColumnTitle(
-              stateManager: stateManager,
-              column: column,
-            ),
-          ),
-        ),
+        buildApp(column: column),
       );
     });
 
@@ -547,14 +481,7 @@ void main() {
     dragAColumn(Offset offset) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoColumnTitle(
-                stateManager: stateManager,
-                column: column,
-              ),
-            ),
-          ),
+          buildApp(column: column),
         );
 
         final columnIcon = find.byType(PlutoGridColumnIcon);
@@ -574,6 +501,7 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(greaterThanOrEqualTo(30)),
+          notify: false,
           checkScroll: false,
         ));
       },
@@ -587,6 +515,7 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(lessThanOrEqualTo(-30)),
+          notify: false,
           checkScroll: false,
         ));
       },
@@ -606,14 +535,7 @@ void main() {
         when(stateManager.configuration).thenReturn(configuration);
 
         await tester.pumpWidget(
-          MaterialApp(
-            home: Material(
-              child: PlutoColumnTitle(
-                stateManager: stateManager,
-                column: column,
-              ),
-            ),
-          ),
+          buildApp(column: column),
         );
       });
     }

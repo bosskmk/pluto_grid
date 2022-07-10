@@ -12,8 +12,7 @@ class PlutoRightFrozenColumns extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PlutoRightFrozenColumnsState createState() =>
-      _PlutoRightFrozenColumnsState();
+  PlutoRightFrozenColumnsState createState() => PlutoRightFrozenColumnsState();
 }
 
 abstract class _PlutoRightFrozenColumnsStateWithChange
@@ -26,10 +25,14 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
 
   int? _itemCount;
 
-  double? _width;
+  @override
+  bool allowStream(event) {
+    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
+        event is PlutoVisibilityColumnStreamNotifierEvent);
+  }
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _showColumnGroups = update<bool?>(
         _showColumnGroups,
@@ -50,11 +53,6 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
       }
 
       _itemCount = update<int?>(_itemCount, _getItemCount());
-
-      _width = update<double?>(
-        _width,
-        widget.stateManager.rightFrozenColumnsWidth,
-      );
     });
   }
 
@@ -63,31 +61,33 @@ abstract class _PlutoRightFrozenColumnsStateWithChange
   }
 }
 
-class _PlutoRightFrozenColumnsState
+class PlutoRightFrozenColumnsState
     extends _PlutoRightFrozenColumnsStateWithChange {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _width,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: _itemCount,
-        itemBuilder: (ctx, i) {
-          return _showColumnGroups == true
-              ? PlutoBaseColumnGroup(
-                  stateManager: widget.stateManager,
-                  columnGroup: _columnGroups![i],
-                  depth: widget.stateManager.columnGroupDepth(
-                    widget.stateManager.refColumnGroups!,
-                  ),
-                )
-              : PlutoBaseColumn(
-                  stateManager: widget.stateManager,
-                  column: _columns![i],
-                );
-        },
-      ),
-    );
+    return CustomMultiChildLayout(
+        delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+        children: _showColumnGroups == true
+            ? _columnGroups!
+                .map((PlutoColumnGroupPair e) => LayoutId(
+                      id: e.key,
+                      child: PlutoBaseColumnGroup(
+                        stateManager: widget.stateManager,
+                        columnGroup: e,
+                        depth: widget.stateManager.columnGroupDepth(
+                          widget.stateManager.refColumnGroups!,
+                        ),
+                      ),
+                    ))
+                .toList()
+            : _columns!
+                .map((e) => LayoutId(
+                      id: e.field,
+                      child: PlutoBaseColumn(
+                        stateManager: widget.stateManager,
+                        column: e,
+                      ),
+                    ))
+                .toList());
   }
 }

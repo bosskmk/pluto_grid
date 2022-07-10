@@ -25,10 +25,10 @@ class PlutoSelectCell extends StatefulWidget implements PopupCell {
   }) : super(key: key);
 
   @override
-  _PlutoSelectCellState createState() => _PlutoSelectCellState();
+  PlutoSelectCellState createState() => PlutoSelectCellState();
 }
 
-class _PlutoSelectCellState extends State<PlutoSelectCell>
+class PlutoSelectCellState extends State<PlutoSelectCell>
     with PopupCellState<PlutoSelectCell> {
   @override
   List<PlutoColumn> popupColumns = [];

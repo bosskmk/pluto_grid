@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// [PlutoGridPopup] calls [PlutoGrid] in the form of a popup.
 class PlutoGridPopup {
   final BuildContext context;
   final List<PlutoColumn> columns;

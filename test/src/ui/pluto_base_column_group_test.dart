@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -14,19 +16,28 @@ import 'pluto_base_column_group_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
+  late PublishSubject<PlutoStreamNotifierEvent> subject;
+
   const columnHeight = PlutoGridSettings.rowHeight;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+
+    subject = PublishSubject<PlutoStreamNotifierEvent>();
+
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
+
+    when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+
     when(stateManager!.columnGroupDepth(any)).thenAnswer((realInvocation) {
       return PlutoColumnGroupHelper.maxDepth(
         columnGroupList:
             realInvocation.positionalArguments[0] as List<PlutoColumnGroup>,
       );
     });
+
     when(
       stateManager!.separateLinkedGroup(
         columnGroupList: anyNamed('columnGroupList'),
@@ -45,6 +56,10 @@ void main() {
     );
   });
 
+  tearDown(() {
+    subject.close();
+  });
+
   buildWidget({
     required PlutoColumnGroupPair columnGroup,
     required int depth,
@@ -55,15 +70,21 @@ void main() {
       when(stateManager!.columnHeight).thenReturn(columnHeight);
       when(stateManager!.showColumnFilter).thenReturn(showColumnFilter);
       when(stateManager!.isFilteredColumn(any)).thenReturn(isFilteredColumn);
+      when(stateManager!.columnFilterHeight).thenReturn(columnHeight);
 
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: FittedBox(
-              child: PlutoBaseColumnGroup(
-                stateManager: stateManager!,
-                columnGroup: columnGroup,
-                depth: depth,
+            child: SizedBox(
+              width: 1920,
+              height: 1080,
+              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
+                value: stateManager!,
+                child: PlutoBaseColumnGroup(
+                  stateManager: stateManager!,
+                  columnGroup: columnGroup,
+                  depth: depth,
+                ),
               ),
             ),
           ),

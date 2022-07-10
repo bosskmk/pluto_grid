@@ -17,7 +17,7 @@ class PlutoColumnFilter extends PlutoStatefulWidget {
   }) : super(key: ValueKey('column_filter_${column.key}'));
 
   @override
-  _PlutoColumnFilterState createState() => _PlutoColumnFilterState();
+  PlutoColumnFilterState createState() => PlutoColumnFilterState();
 }
 
 abstract class _PlutoColumnFilterStateWithChange
@@ -73,7 +73,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   @override
-  void onChange() {
+  void onChange(event) {
     resetState((update) {
       _filterRows = update<List<PlutoRow?>?>(
         _filterRows,
@@ -192,7 +192,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 }
 
-class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
+class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
   InputBorder get _border => OutlineInputBorder(
         borderSide: BorderSide(
             color: widget.stateManager.configuration!.borderColor, width: 0.0),
@@ -239,7 +239,6 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
     final configuration = widget.stateManager.configuration!;
 
     return Container(
-      width: widget.column.width,
       height: widget.stateManager.columnFilterHeight,
       padding: EdgeInsets.symmetric(horizontal: _padding),
       decoration: BoxDecoration(
@@ -254,30 +253,25 @@ class _PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
               : BorderSide.none,
         ),
       ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Stack(
-          children: [
-            TextField(
-              focusNode: _focusNode,
-              controller: _controller,
-              enabled: _enabled,
-              style: configuration.cellTextStyle,
-              onTap: _handleOnTap,
-              onChanged: _handleOnChanged,
-              onEditingComplete: _handleOnEditingComplete,
-              decoration: InputDecoration(
-                hintText: _enabled! ? widget.column.defaultFilter.title : '',
-                isDense: true,
-                filled: true,
-                fillColor: _textFieldColor,
-                border: _border,
-                enabledBorder: _border,
-                focusedBorder: _enabledBorder,
-                contentPadding: const EdgeInsets.symmetric(vertical: 5),
-              ),
-            ),
-          ],
+      child: Center(
+        child: TextField(
+          focusNode: _focusNode,
+          controller: _controller,
+          enabled: _enabled,
+          style: configuration.cellTextStyle,
+          onTap: _handleOnTap,
+          onChanged: _handleOnChanged,
+          onEditingComplete: _handleOnEditingComplete,
+          decoration: InputDecoration(
+            hintText: _enabled! ? widget.column.defaultFilter.title : '',
+            isDense: true,
+            filled: true,
+            fillColor: _textFieldColor,
+            border: _border,
+            enabledBorder: _border,
+            focusedBorder: _enabledBorder,
+            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+          ),
         ),
       ),
     );

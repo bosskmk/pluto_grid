@@ -216,8 +216,7 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     return refColumns
-        .where((element) => element.field == currentColumnField)
-        .first;
+        .firstWhereOrNull((element) => element.field == currentColumnField);
   }
 
   @override
@@ -337,7 +336,11 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    refColumns.removeWhereFromOriginal((column) => columns.contains(column));
+    final removeKeys = Set.from(columns.map((e) => e.key));
+
+    refColumns.removeWhereFromOriginal(
+      (column) => removeKeys.contains(column.key),
+    );
 
     _removeCellsInRows(columns);
 
@@ -560,6 +563,7 @@ mixin ColumnState implements IPlutoGridState {
         type: PlutoColumnType.text(),
         enableRowChecked: true,
         enableEditingMode: false,
+        enableDropToResize: true,
         enableContextMenu: false,
         enableColumnDrag: false,
       ),
@@ -630,7 +634,7 @@ mixin ColumnState implements IPlutoGridState {
     return (PlutoColumn column) {
       return PlutoRow(
         cells: {
-          'title': PlutoCell(value: column.title),
+          'title': PlutoCell(value: column.titleWithGroup),
           columnField: PlutoCell(value: column.field),
         },
         checked: !column.hide,

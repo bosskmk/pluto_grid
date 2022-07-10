@@ -65,8 +65,8 @@ class PlutoContributorTile extends StatelessWidget {
                     children: [
                       if (onTapLink != null)
                         TextButton(
-                          child: Text(linkTitle ?? 'Link'),
                           onPressed: onTapLink,
+                          child: Text(linkTitle ?? 'Link'),
                         ),
                     ],
                   ),

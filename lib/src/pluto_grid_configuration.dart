@@ -390,7 +390,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hour',
     this.minute = 'Minute',
     // Common
-    this.loadingText = 'Loading...',
+    this.loadingText = 'Loading',
   });
 
   const PlutoGridLocaleText.china({
@@ -430,7 +430,7 @@ class PlutoGridLocaleText {
     this.hour = '时',
     this.minute = '分',
     // Common
-    this.loadingText = '加载中...',
+    this.loadingText = '加载中',
   });
 
   const PlutoGridLocaleText.korean({
@@ -470,7 +470,7 @@ class PlutoGridLocaleText {
     this.hour = '시',
     this.minute = '분',
     // Common
-    this.loadingText = '로딩중...',
+    this.loadingText = '로딩중',
   });
 
   const PlutoGridLocaleText.russian({
@@ -510,7 +510,7 @@ class PlutoGridLocaleText {
     this.hour = 'Часы',
     this.minute = 'Минуты',
     // Common
-    this.loadingText = 'Загрузка...',
+    this.loadingText = 'Загрузка',
   });
 
   const PlutoGridLocaleText.czech({
@@ -550,7 +550,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hodina',
     this.minute = 'Minuta',
     // Common
-    this.loadingText = 'Načítání...',
+    this.loadingText = 'Načítání',
   });
 
   const PlutoGridLocaleText.brazilianPortuguese({
@@ -590,7 +590,7 @@ class PlutoGridLocaleText {
     this.hour = 'Hora',
     this.minute = 'Minuto',
     // Common
-    this.loadingText = 'Carregando...',
+    this.loadingText = 'Carregando',
   });
 
   const PlutoGridLocaleText.spanish({
@@ -630,7 +630,47 @@ class PlutoGridLocaleText {
     this.hour = 'Hora',
     this.minute = 'Minuto',
     // Common
-    this.loadingText = 'Cargando...',
+    this.loadingText = 'Cargando',
+  });
+
+  const PlutoGridLocaleText.persian({
+    // Column menu
+    this.unfreezeColumn = 'جدا کردن',
+    this.freezeColumnToLeft = 'چسباندن به چپ',
+    this.freezeColumnToRight = 'چسباندن به راست',
+    this.autoFitColumn = 'عرض خودکار',
+    this.hideColumn = 'مخفی کردن ستون',
+    this.setColumns = 'تنظیم ستون ها',
+    this.setFilter = 'اعمال فیلتر',
+    this.resetFilter = 'ریست فیلتر',
+    // SetColumns popup
+    this.setColumnsTitle = 'عنوان ستون',
+    // Filter popup
+    this.filterColumn = 'ستون',
+    this.filterType = 'نوع',
+    this.filterValue = 'مقدار',
+    this.filterAllColumns = 'تمام ستون ها',
+    this.filterContains = 'شامل',
+    this.filterEquals = 'برابر',
+    this.filterStartsWith = 'شروع با',
+    this.filterEndsWith = 'خاتمه با',
+    this.filterGreaterThan = 'بزرگتر از',
+    this.filterGreaterThanOrEqualTo = 'بزرگتر مساوی از',
+    this.filterLessThan = 'کمتر از',
+    this.filterLessThanOrEqualTo = 'کمتر مساوی از',
+    // Date popup
+    this.sunday = 'ی',
+    this.monday = 'د',
+    this.tuesday = 'س',
+    this.wednesday = 'چ',
+    this.thursday = 'پ',
+    this.friday = 'ج',
+    this.saturday = 'ش',
+    // Time column popup
+    this.hour = 'ساعت',
+    this.minute = 'دقیقه',
+    // Common
+    this.loadingText = 'در حال بارگیری',
   });
 }
 

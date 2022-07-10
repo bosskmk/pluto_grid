@@ -10,6 +10,7 @@ import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
 import 'feature/add_and_remove_column_row_screen.dart';
+import 'feature/add_rows_asynchronously.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
@@ -24,6 +25,7 @@ import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
 import 'feature/dual_mode_screen.dart';
 import 'feature/editing_state_screen.dart';
+import 'feature/export_screen.dart';
 import 'feature/grid_as_popup_screen.dart';
 import 'feature/listing_mode_screen.dart';
 import 'feature/moving_screen.dart';
@@ -272,6 +274,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DateTypeColumnScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Time type column',
@@ -279,6 +282,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, TimeTypeColumnScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Selection type column',
@@ -331,6 +335,17 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowWithCheckboxScreen.routeName);
             },
+          ),
+          PlutoListTile(
+            title: 'Add rows asynchronously',
+            description: 'Adds or sets rows asynchronously.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(
+                context,
+                AddRowsAsynchronouslyScreen.routeName,
+              );
+            },
+            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Cell selection',
@@ -403,6 +418,14 @@ class PlutoFeatures extends StatelessWidget {
               Navigator.pushNamed(context, ListingModeScreen.routeName);
             },
           ),
+          PlutoListTile(
+            title: 'Export',
+            description: 'Exporting grid data as CSV.',
+            trailing: newIcon,
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ExportScreen.routeName);
+            },
+          ),
           PlutoListTile.dark(
             title: 'Dark mode',
             description: 'Change the entire theme of the grid to Dark.',
@@ -473,6 +496,27 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/henry2man');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'hos3ein',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/hos3ein');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Hu-Wentao',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/Hu-Wentao');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Majed DH',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/MajedDH');
             },
           ),
           PlutoContributorTile.invisible(

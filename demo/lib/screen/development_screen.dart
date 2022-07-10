@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 import '../dummy_data/development.dart';
 import 'empty_screen.dart';
@@ -98,6 +102,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         enableContextMenu: false,
         textAlign: PlutoColumnTextAlign.right,
         titleTextAlign: PlutoColumnTextAlign.right,
+        frozen: PlutoColumnFrozen.right,
         type: PlutoColumnType.select(
           <String>['red', 'blue', 'green'],
           enableColumnFilter: true,
@@ -129,7 +134,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         textAlign: PlutoColumnTextAlign.left,
         titleTextAlign: PlutoColumnTextAlign.center,
         enableAutoEditing: true,
-        type: PlutoColumnType.date(),
+        type: PlutoColumnType.date(
+            // headerFormat: 'yyyy 년 MM 월',
+            // startDate: DateTime(2022, 01, 09),
+            // endDate: DateTime(2022, 08, 10),
+            ),
       ),
       PlutoColumn(
         title: 'column4',
@@ -191,7 +200,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         title: 'Group A',
         children: [
           PlutoColumnGroup(title: 'SubA', fields: ['column2']),
-          PlutoColumnGroup(title: 'SubB', fields: ['column3']),
+          PlutoColumnGroup(
+            title: 'SubB',
+            fields: ['column3'],
+            expandedColumn: true,
+          ),
         ],
       ),
       PlutoColumnGroup(
@@ -254,6 +267,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           //   print(e.row?.cells['column1']?.value);
           // },
           createHeader: (PlutoGridStateManager stateManager) {
+            // stateManager.headerHeight = 200;
             return _Header(
               stateManager: stateManager,
               columns: columns,
@@ -349,7 +363,7 @@ class _HeaderState extends State<_Header> {
   void initState() {
     super.initState();
 
-    widget.stateManager.setSelectingMode(gridSelectingMode);
+    widget.stateManager.setSelectingMode(gridSelectingMode, notify: false);
   }
 
   PlutoGridSelectingMode gridSelectingMode = PlutoGridSelectingMode.row;
@@ -360,6 +374,12 @@ class _HeaderState extends State<_Header> {
         : DummyData.rowsByColumns(length: count, columns: widget.columns);
 
     widget.stateManager.prependRows(rows);
+  }
+
+  void handleRemoveCurrentColumnButton() {
+    if (widget.stateManager.currentColumn != null) {
+      widget.stateManager.removeColumns([widget.stateManager.currentColumn!]);
+    }
   }
 
   void handleRemoveCurrentRowButton() {
@@ -373,6 +393,13 @@ class _HeaderState extends State<_Header> {
   void handleToggleColumnFilter() {
     widget.stateManager
         .setShowColumnFilter(!widget.stateManager.showColumnFilter);
+  }
+
+  void handleExport() async {
+    String title = "pluto_grid_export";
+    var exported = const Utf8Encoder().convert(
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
+    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void setGridSelectingMode(PlutoGridSelectingMode? mode) {
@@ -423,13 +450,19 @@ class _HeaderState extends State<_Header> {
               onPressed: () => handleAddRowButton(count: 100000),
             ),
             ElevatedButton(
-              child: const Text('Remove Current Row'),
-              onPressed: handleRemoveCurrentRowButton,
+              onPressed: handleRemoveCurrentColumnButton,
+              child: const Text('Remove Current Column'),
             ),
             ElevatedButton(
-              child: const Text('Remove Selected Rows'),
-              onPressed: handleRemoveSelectedRowsButton,
+              onPressed: handleRemoveCurrentRowButton,
+              child: const Text('Remove Current Row'),
             ),
+            ElevatedButton(
+              onPressed: handleRemoveSelectedRowsButton,
+              child: const Text('Remove Selected Rows'),
+            ),
+            ElevatedButton(
+                onPressed: handleExport, child: const Text("Export to CSV")),
             DropdownButtonHideUnderline(
               child: DropdownButton(
                 value: gridSelectingMode,
@@ -452,8 +485,8 @@ class _HeaderState extends State<_Header> {
               ),
             ),
             ElevatedButton(
-              child: const Text('Toggle filter'),
               onPressed: handleToggleColumnFilter,
+              child: const Text('Toggle filter'),
             ),
             ElevatedButton(
               child: const Text('Toggle group'),

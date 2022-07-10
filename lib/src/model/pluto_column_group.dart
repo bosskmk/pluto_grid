@@ -46,16 +46,23 @@ class PlutoColumnGroup {
     this.titleTextAlign = PlutoColumnTextAlign.center,
     this.expandedColumn = false,
     this.backgroundColor,
+    Key? key,
   })  : assert(fields == null
             ? (children != null && children.isNotEmpty)
             : fields.isNotEmpty && children == null),
         assert(expandedColumn == true
             ? fields?.length == 1 && children == null
             : true),
-        _key = UniqueKey() {
+        _key = key ?? UniqueKey() {
     hasFields = fields != null;
 
     hasChildren = !hasFields;
+
+    if (hasChildren) {
+      for (final child in children!) {
+        child.parent = this;
+      }
+    }
   }
 
   Key get key => _key;
@@ -65,6 +72,18 @@ class PlutoColumnGroup {
   late final bool hasFields;
 
   late final bool hasChildren;
+
+  PlutoColumnGroup? parent;
+
+  Iterable<PlutoColumnGroup> get parents sync* {
+    var cursor = parent;
+
+    while (cursor != null) {
+      yield cursor;
+
+      cursor = cursor.parent;
+    }
+  }
 }
 
 class PlutoColumnGroupPair {
@@ -74,7 +93,11 @@ class PlutoColumnGroupPair {
   PlutoColumnGroupPair({
     required this.group,
     required this.columns,
-  }) : _key = ObjectKey({group.key: columns});
+  }) :
+        // a unique reproducible key
+        _key = ValueKey(group.key.toString() +
+            columns.fold("",
+                (previousValue, element) => "$previousValue-${element.field}"));
 
   Key get key => _key;
 

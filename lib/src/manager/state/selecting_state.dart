@@ -320,8 +320,8 @@ mixin SelectingState implements IPlutoGridState {
 
     final columnIndexes = columnIndexesByShowFrozen;
 
-    final _rightBlankOffset = rightBlankOffset;
-    final _horizontalScrollOffset = scroll!.horizontal!.offset;
+    final savedRightBlankOffset = rightBlankOffset;
+    final savedHorizontalScrollOffset = scroll!.horizontal!.offset;
 
     for (var i = 0; i < columnIndexes.length; i += 1) {
       final column = refColumns[columnIndexes[i]];
@@ -329,10 +329,10 @@ mixin SelectingState implements IPlutoGridState {
       currentWidth += column.width;
 
       final rightFrozenColumnOffset =
-          column.frozen.isRight && showFrozenColumn ? _rightBlankOffset : 0;
+          column.frozen.isRight && showFrozenColumn ? savedRightBlankOffset : 0;
 
       if (currentWidth + rightFrozenColumnOffset >
-          offset.dx + _horizontalScrollOffset) {
+          offset.dx + savedHorizontalScrollOffset) {
         columnIdx = i;
         break;
       }
@@ -357,15 +357,15 @@ mixin SelectingState implements IPlutoGridState {
       return;
     }
 
-    final _from = min(from!, to!);
+    final maxFrom = min(from!, to!);
 
-    final _to = max(from, to) + 1;
+    final maxTo = max(from, to) + 1;
 
-    if (_from < 0 || _to > refRows.length) {
+    if (maxFrom < 0 || maxTo > refRows.length) {
       return;
     }
 
-    _currentSelectingRows = refRows.getRange(_from, _to).toList();
+    _currentSelectingRows = refRows.getRange(maxFrom, maxTo).toList();
 
     if (notify) {
       notifyListeners();
@@ -391,8 +391,7 @@ mixin SelectingState implements IPlutoGridState {
 
     final PlutoRow row = refRows[rowIdx];
 
-    final keys =
-        _currentSelectingRows.map((e) => e.key).toList(growable: false);
+    final keys = Set.from(_currentSelectingRows.map((e) => e.key));
 
     if (keys.contains(row.key)) {
       _currentSelectingRows.removeWhere((element) => element.key == row.key);
