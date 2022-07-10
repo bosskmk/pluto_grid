@@ -63,6 +63,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createHeader,
     this.createFooter,
     this.rowColorCallback,
+    this.columnMenuDelegate,
     this.configuration,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
@@ -204,6 +205,12 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// }
   /// ```
   final PlutoRowColorCallback? rowColorCallback;
+
+  /// Column menu can be customized.
+  ///
+  /// See the demo example link below.
+  /// https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_menu_screen.dart
+  final PlutoColumnMenuDelegate? columnMenuDelegate;
 
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
   final PlutoGridConfiguration? configuration;
@@ -426,6 +433,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
       onRowsMovedEventCallback: widget.onRowsMoved,
       onRowColorCallback: widget.rowColorCallback,
+      columnMenuDelegate: widget.columnMenuDelegate,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
