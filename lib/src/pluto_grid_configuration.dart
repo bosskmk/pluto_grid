@@ -887,9 +887,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.brazilianPortuguese({
     // Column menu
     this.unfreezeColumn = 'Descongelar',
-    this.freezeColumnToStart =
-        'Congelar à esquerda', // need to change translation
-    this.freezeColumnToEnd = 'Congelar à direita', // need to change translation
+    this.freezeColumnToStart = 'Congelar ao início',
+    this.freezeColumnToEnd = 'Congelar ao final',
     this.autoFitColumn = 'Auto Ajustar',
     this.hideColumn = 'Esconder coluna',
     this.setColumns = 'Definir coluneas',
@@ -928,10 +927,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.spanish({
     // Column menu
     this.unfreezeColumn = 'Descongelar',
-    this.freezeColumnToStart =
-        'Congelar a la izquierda', // need to change translation
-    this.freezeColumnToEnd =
-        'Congelar a la derecha', // need to change translation
+    this.freezeColumnToStart = 'Inmovilizar al principio',
+    this.freezeColumnToEnd = 'Inmovilizar al final',
     this.autoFitColumn = 'Autoajuste',
     this.hideColumn = 'Ocultar columna',
     this.setColumns = 'Eligir columnas',
