@@ -26,7 +26,7 @@ void main() {
 
     subject = PublishSubject<PlutoNotifierEvent>();
 
-    const configuration = const PlutoGridConfiguration();
+    const configuration = PlutoGridConfiguration();
 
     when(stateManager!.configuration).thenReturn(configuration);
 
