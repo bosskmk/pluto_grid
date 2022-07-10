@@ -852,8 +852,8 @@ class PlutoGridLocaleText {
     this.autoFitColumn = 'Autom. přizpůsobit',
     this.hideColumn = 'Hide column',
     this.setColumns = 'Set columns',
-    this.setFilter = 'SetFilter',
-    this.resetFilter = 'ResetFilter',
+    this.setFilter = 'Set filter',
+    this.resetFilter = 'Reset filter',
     // SetColumns popup
     this.setColumnsTitle = 'Column title',
     // Filter popup
@@ -1007,8 +1007,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.arabic({
     // Column menu
     this.unfreezeColumn = 'إلغاء التجميد',
-    this.freezeColumnToStart = 'تجميد إلى اليسار', // need to change translation
-    this.freezeColumnToEnd = 'تجميد إلى اليمين', // need to change translation
+    this.freezeColumnToStart = 'تجميد إلى البداية',
+    this.freezeColumnToEnd = 'تجميد إلى النهاية',
     this.autoFitColumn = 'تعبئة تلقائية',
     this.hideColumn = 'إخفاء العمود',
     this.setColumns = 'إدراج أعمدة',
@@ -1041,7 +1041,7 @@ class PlutoGridLocaleText {
     this.hour = 'ساعة',
     this.minute = 'دقيقي',
     // Common
-    this.loadingText = 'جاري التحميل...',
+    this.loadingText = 'جاري التحميل',
   });
 }
 
