@@ -185,6 +185,8 @@ class _RowDragIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translationX = stateManager.isRTL ? -0.92 : -0.08;
+
     return Listener(
       onPointerDown: _handleOnPointerDown,
       onPointerMove: _handleOnPointerMove,
@@ -193,20 +195,22 @@ class _RowDragIconWidget extends StatelessWidget {
         data: row,
         dragAnchorStrategy: pointerDragAnchorStrategy,
         feedback: FractionalTranslation(
-          translation: const Offset(-0.08, -0.5),
+          translation: Offset(translationX, -0.5),
           child: Material(
-            child: PlutoShadowContainer(
-              width: column.width,
-              height: stateManager.rowHeight,
-              backgroundColor: stateManager.configuration!.gridBackgroundColor,
-              borderColor: stateManager.configuration!.activatedBorderColor,
-              child: Row(
-                children: [
-                  dragIcon,
-                  Expanded(
-                    child: feedbackWidget,
-                  ),
-                ],
+            child: Directionality(
+              textDirection: stateManager.textDirection,
+              child: PlutoShadowContainer(
+                width: column.width,
+                height: stateManager.rowHeight,
+                backgroundColor:
+                    stateManager.configuration!.gridBackgroundColor,
+                borderColor: stateManager.configuration!.activatedBorderColor,
+                child: Row(
+                  children: [
+                    dragIcon,
+                    Expanded(child: feedbackWidget),
+                  ],
+                ),
               ),
             ),
           ),

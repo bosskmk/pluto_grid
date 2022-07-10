@@ -43,6 +43,7 @@ void main() {
     scrollPosition = MockScrollPosition();
 
     when(stateManager.scroll).thenReturn(scrollController);
+    when(stateManager.directionalScrollEdgeOffset).thenReturn(Offset.zero);
     when(stateManager.maxWidth).thenReturn(800);
     when(verticalController.offset).thenReturn(0);
     when(horizontalController.offset).thenReturn(0);
@@ -55,9 +56,11 @@ void main() {
     test(
       'offset 이 null 이 아니면 needMovingScroll 이 호출 되어야 한다.',
       () {
+        const offset = Offset(0, 0);
         when(stateManager.needMovingScroll(any, any)).thenReturn(false);
+        when(stateManager.toDirectionalOffset(any)).thenReturn(offset);
 
-        var event = eventBuilder(offset: const Offset(0, 0));
+        var event = eventBuilder(offset: offset);
         event.handler(stateManager);
 
         verify(stateManager.needMovingScroll(any, any)).called(4);
@@ -72,6 +75,7 @@ void main() {
         const scrollOffset = 10.0;
 
         when(horizontalController.offset).thenReturn(scrollOffset);
+        when(stateManager.toDirectionalOffset(any)).thenReturn(offset);
 
         when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(true);
@@ -102,6 +106,7 @@ void main() {
 
         when(horizontalController.offset).thenReturn(scrollOffset);
         when(scrollPosition.maxScrollExtent).thenReturn(100);
+        when(stateManager.toDirectionalOffset(any)).thenReturn(offset);
 
         when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
@@ -131,6 +136,7 @@ void main() {
         const scrollOffset = 10.0;
 
         when(verticalController.offset).thenReturn(scrollOffset);
+        when(stateManager.toDirectionalOffset(any)).thenReturn(offset);
 
         when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
@@ -161,6 +167,7 @@ void main() {
 
         when(verticalController.offset).thenReturn(scrollOffset);
         when(scrollPosition.maxScrollExtent).thenReturn(200);
+        when(stateManager.toDirectionalOffset(any)).thenReturn(offset);
 
         when(stateManager.needMovingScroll(offset, PlutoMoveDirection.left))
             .thenReturn(false);
