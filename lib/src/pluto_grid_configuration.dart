@@ -726,9 +726,9 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText.china({
     // Column menu
-    this.unfreezeColumn = '解冻',
-    this.freezeColumnToStart = '冻结至左侧', // need to change translation
-    this.freezeColumnToEnd = '冻结至右侧', // need to change translation
+    this.unfreezeColumn = '解冻列',
+    this.freezeColumnToStart = '冻结列至起点',
+    this.freezeColumnToEnd = '冻结列至终点',
     this.autoFitColumn = '自动列宽',
     this.hideColumn = '隐藏列',
     this.setColumns = '设置列',
@@ -807,28 +807,28 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.russian({
     // Column menu
     this.unfreezeColumn = 'Открепить',
-    this.freezeColumnToStart = 'Закрепить слева', // need to change translation
-    this.freezeColumnToEnd = 'Закрепить справа', // need to change translation
+    this.freezeColumnToStart = 'Закрепить в начале',
+    this.freezeColumnToEnd = 'Закрепить в конце',
     this.autoFitColumn = 'Автоматический размер',
-    this.hideColumn = 'Hide column',
-    this.setColumns = 'Set columns',
-    this.setFilter = 'SetFilter',
-    this.resetFilter = 'ResetFilter',
+    this.hideColumn = 'Скрыть колонку',
+    this.setColumns = 'Выбрать колонки',
+    this.setFilter = 'Установить фильтр',
+    this.resetFilter = 'Сбросить фильтр',
     // SetColumns popup
     this.setColumnsTitle = 'Column title',
     // Filter popup
-    this.filterColumn = 'Column',
-    this.filterType = 'Type',
-    this.filterValue = 'Value',
-    this.filterAllColumns = 'All columns',
-    this.filterContains = 'Contains',
-    this.filterEquals = 'Equals',
-    this.filterStartsWith = 'Starts with',
-    this.filterEndsWith = 'Ends with',
-    this.filterGreaterThan = 'Greater than',
-    this.filterGreaterThanOrEqualTo = 'Greater than or equal to',
-    this.filterLessThan = 'Less than',
-    this.filterLessThanOrEqualTo = 'Less than or equal to',
+    this.filterColumn = 'Колонка',
+    this.filterType = 'Тип',
+    this.filterValue = 'Значение',
+    this.filterAllColumns = 'Все колонки',
+    this.filterContains = 'Содержит',
+    this.filterEquals = 'Равно',
+    this.filterStartsWith = 'Начинается с',
+    this.filterEndsWith = 'Заканчивается на',
+    this.filterGreaterThan = 'Больше чем',
+    this.filterGreaterThanOrEqualTo = 'Больше или равно',
+    this.filterLessThan = 'Меньше чем',
+    this.filterLessThanOrEqualTo = 'Меньше или равно',
     // Date popup
     this.sunday = 'Вск',
     this.monday = 'Пн',
@@ -852,8 +852,8 @@ class PlutoGridLocaleText {
     this.autoFitColumn = 'Autom. přizpůsobit',
     this.hideColumn = 'Hide column',
     this.setColumns = 'Set columns',
-    this.setFilter = 'SetFilter',
-    this.resetFilter = 'ResetFilter',
+    this.setFilter = 'Set filter',
+    this.resetFilter = 'Reset filter',
     // SetColumns popup
     this.setColumnsTitle = 'Column title',
     // Filter popup
@@ -887,12 +887,11 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.brazilianPortuguese({
     // Column menu
     this.unfreezeColumn = 'Descongelar',
-    this.freezeColumnToStart =
-        'Congelar à esquerda', // need to change translation
-    this.freezeColumnToEnd = 'Congelar à direita', // need to change translation
+    this.freezeColumnToStart = 'Congelar ao início',
+    this.freezeColumnToEnd = 'Congelar ao final',
     this.autoFitColumn = 'Auto Ajustar',
     this.hideColumn = 'Esconder coluna',
-    this.setColumns = 'Definir coluneas',
+    this.setColumns = 'Definir colunas',
     this.setFilter = 'Definir fitros',
     this.resetFilter = 'Limpar filtros',
     // SetColumns popup
@@ -904,8 +903,8 @@ class PlutoGridLocaleText {
     this.filterAllColumns = 'Todas as colunas',
     this.filterContains = 'Contenha',
     this.filterEquals = 'Igual',
-    this.filterStartsWith = 'Iniciar com',
-    this.filterEndsWith = 'Terminar com',
+    this.filterStartsWith = 'Inicia com',
+    this.filterEndsWith = 'Termina com',
     this.filterGreaterThan = 'Maior que',
     this.filterGreaterThanOrEqualTo = 'Maior ou igual que',
     this.filterLessThan = 'Menor que',
@@ -928,10 +927,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.spanish({
     // Column menu
     this.unfreezeColumn = 'Descongelar',
-    this.freezeColumnToStart =
-        'Congelar a la izquierda', // need to change translation
-    this.freezeColumnToEnd =
-        'Congelar a la derecha', // need to change translation
+    this.freezeColumnToStart = 'Inmovilizar al principio',
+    this.freezeColumnToEnd = 'Inmovilizar al final',
     this.autoFitColumn = 'Autoajuste',
     this.hideColumn = 'Ocultar columna',
     this.setColumns = 'Eligir columnas',
@@ -946,8 +943,8 @@ class PlutoGridLocaleText {
     this.filterAllColumns = 'Todas las columnas',
     this.filterContains = 'Contenga',
     this.filterEquals = 'Igual',
-    this.filterStartsWith = 'Empezar con',
-    this.filterEndsWith = 'Terminar con',
+    this.filterStartsWith = 'Empieza con',
+    this.filterEndsWith = 'Termina con',
     this.filterGreaterThan = 'Más grande que',
     this.filterGreaterThanOrEqualTo = 'Más grande o igual que',
     this.filterLessThan = 'Más pequeño que',
@@ -1010,8 +1007,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.arabic({
     // Column menu
     this.unfreezeColumn = 'إلغاء التجميد',
-    this.freezeColumnToStart = 'تجميد إلى اليسار', // need to change translation
-    this.freezeColumnToEnd = 'تجميد إلى اليمين', // need to change translation
+    this.freezeColumnToStart = 'تجميد إلى البداية',
+    this.freezeColumnToEnd = 'تجميد إلى النهاية',
     this.autoFitColumn = 'تعبئة تلقائية',
     this.hideColumn = 'إخفاء العمود',
     this.setColumns = 'إدراج أعمدة',
@@ -1044,7 +1041,7 @@ class PlutoGridLocaleText {
     this.hour = 'ساعة',
     this.minute = 'دقيقي',
     // Common
-    this.loadingText = 'جاري التحميل...',
+    this.loadingText = 'جاري التحميل',
   });
 }
 
