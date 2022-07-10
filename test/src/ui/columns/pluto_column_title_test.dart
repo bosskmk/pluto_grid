@@ -34,6 +34,9 @@ void main() {
     configuration = const PlutoGridConfiguration();
 
     when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.columnMenuDelegate).thenReturn(
+      const PlutoDefaultColumnMenuDelegate(),
+    );
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
