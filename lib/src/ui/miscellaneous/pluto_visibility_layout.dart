@@ -134,7 +134,8 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
         _previousVisibleLastX1 <= _visibleLast &&
         _visibleLast <= _previousVisibleLastX2;
 
-    final bool sameMaxScrollExtent = _previousMaxScroll == _maxScrollExtent;
+    final bool sameMaxScrollExtent = _previousMaxScroll == _maxScrollExtent &&
+        scrollController.position.maxScrollExtent == _maxScrollExtent;
 
     if (sameBoundScroll && sameMaxScrollExtent) {
       return;
