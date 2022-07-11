@@ -70,7 +70,7 @@ class _ColumnHidingScreenState extends State<ColumnHidingScreen> {
   void handleToggleColumnA() {
     PlutoColumn firstColumn = stateManager.refColumns.originalList.first;
 
-    stateManager.hideColumn(firstColumn.key, !firstColumn.hide);
+    stateManager.hideColumn(firstColumn, !firstColumn.hide);
   }
 
   void handleShowPopup(BuildContext context) {

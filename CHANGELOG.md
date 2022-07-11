@@ -1,3 +1,60 @@
+## [5.0.0] - 2022. 7. 11
+
+* Added middle divider for `PlutoDualGrid`, `PlutoDualPopup` widget.  
+  By adding a divider in the center of the two grids, the position can be changed by dragging and dropping.  
+  https://weblaze.dev/pluto_grid/build/web/#feature/dual-mode
+* Add to `PlutoGridEventManager` stream to receive column sort changes.  
+  Add `PlutoGrid.onSorted` callback.
+* Added an option to disable column width adjustment while displaying the column right menu.
+  - Activate both `PlutoColumn.enableContextMenu` and `PlutoColumn.enableDropToResize`
+    Tap the column menu to display the context menu. Drag left or right to adjust the column width.
+  - Activate only `PlutoColumn.enableContextMenu`
+    You cannot adjust the column width by dragging the column menu.
+  - Only enable `PlutoColumn.enableDropToResize`
+    You cannot call the context menu by tapping the column menu.
+* Hide all column headings.  
+  `PlutoGridStateManager.setShowColumnTitle`  
+  https://weblaze.dev/pluto_grid/build/web/#development  
+  In the link above, you can hide or show the entire column area by clicking the toggle column title button in the top show menu.
+* When the parent widget of `PlutoGrid` is scrolled, in the previous 4.0.0 logic,   
+  the error that the row area disappears when the column is out of the screen area has been fixed.
+* Improve text selection when edit TextCell by @DmitrySboychakov
+* Improve padding for table cells and column titles by @DmitrySboychakov
+* Display a scroll bar when moving the horizontal axis with the keyboard.
+* Changing the way columns are moved by dragging them.  
+  Previously, it was changed immediately in the onDragUpdate state.
+  Changed in onDragEnd state in the changed version. Change the background color of the column to be moved instead.
+  (`PlutoGridStateManager.dragTargetColumnColor`)
+* Modified to pass `PlutoColumn` instead of passing `PlutoColumn.key` when calling `hideColumn`.
+* Add `PlutoGridStateManager.hideColumns(List<PlutoColumn> columns, bool hide)`
+* Changes due to the constraint of a frozen column.
+  - The width of the frozen column cannot be expanded beyond the limit width.
+  - When changing a non-frozen column to a frozen column, it cannot be changed if the constraint width is insufficient.
+  - If a column with a hidden frozen column state is unhidden in a narrow constraint width, the column frozen state is forcibly changed to `PlutoColumnFrozen.none`.
+  - If the entire grid width is narrowed to less than the constraint width while   
+    there is a frozen column, the frozen column is permanently changed to `PlutoColumnFrozen.none`, and it does not return to the frozen column again even if the grid width is increased.
+* Change the logic to move by dragging rows.  
+  Previous behavior: rows are moved while dragging.  
+  Changed behavior: It does not move while dragging, but moves only when you mouse-up or tap-up.
+* Changed logic for scrolling when dragging rows, column or selecting rows or cells.  
+  `Previous version`: Scrolling continues only when the pointer is moved continuously so that the move event of the mouse (tab) continues to occur  
+  `Changed version`: If the move event of the mouse (tab) occurs only once, the scroll event continues in the scroll direction. The scroll animation continues to the end of the scroll direction even if the move event is not triggered by continuously moving the pointer.  
+  The scroll animation stops when the pointer enters a grid that does not require scrolling or when a MouseUp(PointerUp) event is fired.
+* Expand Columns to cover the parent Container Width.
+* Support RTL.  
+  Changed left and right of `PlutoColumn.frozen` to start and end.  
+  `PlutoColumn.textAlign` default value changed from left to start.  
+  `PlutoColumn.titleTextAlign` default value changed from left to start.  
+  https://weblaze.dev/pluto_grid/build/web/#feature/rtl
+* Change `PlutoGridConfiguration`.  
+  Settings such as color, size, icon, border, and text style have been moved to `PlutoGridConfiguration.style`.
+* Even/Odd Color.  
+  Add `PlutoGridConfiguration.style.oddRowColor`, `PlutoGridConfiguration.style.evenRowColor`.
+* Set default row color.  
+  Add `PlutoGridConfiguration.style.rowColor`.
+* Customize column menu.  
+  https://weblaze.dev/pluto_grid/build/web/#feature/column-menu
+
 ## [4.0.1] - 2022. 6. 21
 
 * Fixed visibleFraction error when moving from tab view to another tab.

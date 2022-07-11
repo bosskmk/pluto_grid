@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
@@ -14,19 +14,37 @@ import 'pluto_default_cell_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
+  late MockPlutoGridScrollController scroll;
+  late MockLinkedScrollControllerGroup horizontalScroll;
+  late MockScrollController horizontalScrollController;
+  late MockScrollController verticalScrollController;
   MockPlutoGridEventManager? eventManager;
+  PublishSubject<PlutoNotifierEvent> streamNotifier;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    scroll = MockPlutoGridScrollController();
+    horizontalScroll = MockLinkedScrollControllerGroup();
+    horizontalScrollController = MockScrollController();
+    verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
+    streamNotifier = PublishSubject<PlutoNotifierEvent>();
+    when(stateManager.isRTL).thenReturn(false);
+    when(stateManager.textDirection).thenReturn(TextDirection.ltr);
     when(stateManager.eventManager).thenReturn(eventManager);
+    when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
     when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
@@ -34,6 +52,13 @@ void main() {
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.rowHeight).thenReturn(0);
     when(stateManager.currentSelectingRows).thenReturn([]);
+    when(stateManager.scroll).thenReturn(scroll);
+    when(scroll.maxScrollHorizontal).thenReturn(0);
+    when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(scroll.bodyRowsVertical).thenReturn(verticalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0);
+    when(verticalScrollController.offset).thenReturn(0);
     when(stateManager.isCurrentCell(any)).thenReturn(false);
   });
 
@@ -56,14 +81,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-              value: stateManager,
-              child: PlutoDefaultCell(
-                cell: cell,
-                column: column,
-                row: row,
-                rowIdx: 0,
-              ),
+            child: PlutoDefaultCell(
+              cell: cell,
+              column: column,
+              row: row,
+              rowIdx: 0,
+              stateManager: stateManager,
             ),
           ),
         ),
@@ -116,14 +139,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager,
-                child: PlutoDefaultCell(
-                  cell: cell,
-                  column: column,
-                  row: row,
-                  rowIdx: 0,
-                ),
+              child: PlutoDefaultCell(
+                cell: cell,
+                column: column,
+                row: row,
+                rowIdx: 0,
+                stateManager: stateManager,
               ),
             ),
           ),
@@ -181,14 +202,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager,
-                child: PlutoDefaultCell(
-                  cell: cell,
-                  column: column,
-                  row: row,
-                  rowIdx: 0,
-                ),
+              child: PlutoDefaultCell(
+                cell: cell,
+                column: column,
+                row: row,
+                rowIdx: 0,
+                stateManager: stateManager,
               ),
             ),
           ),
@@ -292,14 +311,12 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager,
-                child: PlutoDefaultCell(
-                  cell: cell,
-                  column: column,
-                  row: row!,
-                  rowIdx: 0,
-                ),
+              child: PlutoDefaultCell(
+                cell: cell,
+                column: column,
+                row: row!,
+                rowIdx: 0,
+                stateManager: stateManager,
               ),
             ),
           ),

@@ -50,6 +50,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
         title: 'Username',
         field: 'username',
         type: PlutoColumnType.text(),
+        enableRowChecked: true,
       ),
       PlutoColumn(
         title: 'Point',
@@ -73,6 +74,7 @@ class _DualModeScreenState extends State<DualModeScreen> {
         title: 'Activity',
         field: 'activity',
         type: PlutoColumnType.text(),
+        enableRowChecked: true,
       ),
       PlutoColumn(
         title: 'Date',
@@ -154,6 +156,22 @@ class _DualModeScreenState extends State<DualModeScreen> {
             gridAStateManager = event.stateManager;
             event.stateManager.addListener(gridAHandler);
           },
+          onSorted: (PlutoGridOnSortedEvent event) {
+            print('Grid A : $event');
+          },
+          onRowChecked: (PlutoGridOnRowCheckedEvent event) {
+            print('Grid A : $event');
+          },
+          configuration: const PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              enableColumnBorderVertical: false,
+              enableCellBorderVertical: false,
+            ),
+            columnSize: PlutoGridColumnSizeConfig(
+              autoSizeMode: PlutoAutoSizeMode.scale,
+              resizeMode: PlutoResizeMode.pushAndPull,
+            ),
+          ),
         ),
         gridPropsB: PlutoDualGridProps(
           columns: gridBColumns,
@@ -164,9 +182,24 @@ class _DualModeScreenState extends State<DualModeScreen> {
           onLoaded: (PlutoGridOnLoadedEvent event) {
             gridBStateManager = event.stateManager;
           },
-          configuration: const PlutoGridConfiguration(),
+          onSorted: (PlutoGridOnSortedEvent event) {
+            print('Grid B : $event');
+          },
+          onRowChecked: (PlutoGridOnRowCheckedEvent event) {
+            print('Grid B : $event');
+          },
+          configuration: const PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              enableColumnBorderVertical: false,
+              enableCellBorderVertical: false,
+            ),
+            columnSize: PlutoGridColumnSizeConfig(
+              autoSizeMode: PlutoAutoSizeMode.scale,
+              resizeMode: PlutoResizeMode.pushAndPull,
+            ),
+          ),
         ),
-        display: const PlutoDualGridDisplayRatio(ratio: 0.5),
+        display: PlutoDualGridDisplayRatio(ratio: 0.5),
       ),
     );
   }

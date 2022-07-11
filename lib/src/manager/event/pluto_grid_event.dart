@@ -2,14 +2,15 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 enum PlutoGridEventType {
   normal,
-  throttle,
-  debounce,
-}
+  throttleTrailing,
+  throttleLeading,
+  debounce;
 
-extension PlutoGridEventTypeExtension on PlutoGridEventType {
   bool get isNormal => this == PlutoGridEventType.normal;
 
-  bool get isThrottle => this == PlutoGridEventType.throttle;
+  bool get isThrottleTrailing => this == PlutoGridEventType.throttleTrailing;
+
+  bool get isThrottleLeading => this == PlutoGridEventType.throttleLeading;
 
   bool get isDebounce => this == PlutoGridEventType.debounce;
 }
@@ -27,5 +28,5 @@ abstract class PlutoGridEvent {
 
   final Duration? duration;
 
-  void handler(PlutoGridStateManager? stateManager);
+  void handler(PlutoGridStateManager stateManager);
 }

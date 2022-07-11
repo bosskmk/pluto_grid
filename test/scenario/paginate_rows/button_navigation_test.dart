@@ -74,9 +74,10 @@ void main() {
 
         pageButtons = find.byType(TextButton);
 
-        defaultButtonColor = stateManager!.configuration!.iconColor;
+        defaultButtonColor = stateManager!.configuration!.style.iconColor;
 
-        activateButtonColor = stateManager!.configuration!.activatedBorderColor;
+        activateButtonColor =
+            stateManager!.configuration!.style.activatedBorderColor;
       },
     );
 

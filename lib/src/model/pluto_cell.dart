@@ -9,12 +9,10 @@ class PlutoCell {
   })  : _key = UniqueKey(),
         _value = value;
 
-  /// cell key
   final Key _key;
 
   Key get key => _key;
 
-  /// cell value
   dynamic _value;
 
   dynamic get value => _value;
@@ -43,7 +41,6 @@ class PlutoCell {
     return _valueForSorting;
   }
 
-  /// cell column
   PlutoColumn get column => _column;
 
   late PlutoColumn _column;
@@ -53,7 +50,6 @@ class PlutoCell {
     _valueForSorting = _getValueForSorting();
   }
 
-  /// cell row
   PlutoRow get row => _row;
 
   late PlutoRow _row;

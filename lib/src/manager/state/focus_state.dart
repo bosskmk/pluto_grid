@@ -79,7 +79,7 @@ mixin FocusState implements IPlutoGridState {
 
     bool found = false;
 
-    for (var i = 0; i < length - 1; i += 1) {
+    for (int i = 0; i < length - 1; i += 1) {
       var current = refColumns[columnIndexes[i]];
 
       if (!found && current.key == column.key) {

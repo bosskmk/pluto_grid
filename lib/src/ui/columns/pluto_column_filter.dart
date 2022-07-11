@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoColumnFilter extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -20,33 +19,56 @@ class PlutoColumnFilter extends PlutoStatefulWidget {
   PlutoColumnFilterState createState() => PlutoColumnFilterState();
 }
 
-abstract class _PlutoColumnFilterStateWithChange
-    extends PlutoStateWithChange<PlutoColumnFilter> {
-  FocusNode? _focusNode;
+class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
+  List<PlutoRow> _filterRows = [];
 
-  TextEditingController? _controller;
+  String _text = '';
 
-  List<PlutoRow?>? _filterRows;
+  bool _enabled = false;
 
-  String? _text;
+  late final StreamSubscription _event;
 
-  bool? _enabled;
+  late final FocusNode _focusNode;
 
-  late StreamSubscription _event;
+  late final TextEditingController _controller;
 
   String get _filterValue {
-    return _filterRows!.isEmpty
+    return _filterRows.isEmpty
         ? ''
-        : _filterRows!.first!.cells[FilterHelper.filterFieldValue]!.value
+        : _filterRows.first.cells[FilterHelper.filterFieldValue]!.value
             .toString();
   }
 
   bool get _hasCompositeFilter {
-    return _filterRows!.length > 1 ||
-        widget.stateManager
+    return _filterRows.length > 1 ||
+        stateManager
             .filterRowsByField(FilterHelper.filterFieldAllColumns)
             .isNotEmpty;
   }
+
+  InputBorder get _border => OutlineInputBorder(
+        borderSide: BorderSide(
+            color: stateManager.configuration!.style.borderColor, width: 0.0),
+        borderRadius: BorderRadius.zero,
+      );
+
+  InputBorder get _enabledBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+            color: stateManager.configuration!.style.activatedBorderColor,
+            width: 0.0),
+        borderRadius: BorderRadius.zero,
+      );
+
+  Color get _textFieldColor => _enabled
+      ? stateManager.configuration!.style.cellColorInEditState
+      : stateManager.configuration!.style.cellColorInReadOnlyState;
+
+  EdgeInsets get _padding =>
+      widget.column.filterPadding ??
+      stateManager.configuration!.style.defaultColumnFilterPadding;
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
 
   @override
   initState() {
@@ -58,60 +80,60 @@ abstract class _PlutoColumnFilterStateWithChange
 
     _controller = TextEditingController(text: _filterValue);
 
-    _event = widget.stateManager.eventManager!.listener(_handleFocusFromRows);
+    _event = stateManager.eventManager!.listener(_handleFocusFromRows);
+
+    updateState();
   }
 
   @override
   dispose() {
     _event.cancel();
 
-    _controller!.dispose();
+    _controller.dispose();
 
-    _focusNode!.dispose();
+    _focusNode.dispose();
 
     super.dispose();
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _filterRows = update<List<PlutoRow?>?>(
-        _filterRows,
-        widget.stateManager.filterRowsByField(widget.column.field),
-        compare: listEquals,
-      );
+  void updateState() {
+    _filterRows = update<List<PlutoRow>>(
+      _filterRows,
+      stateManager.filterRowsByField(widget.column.field),
+      compare: listEquals,
+    );
 
-      if (_focusNode?.hasPrimaryFocus != true) {
-        _text = update<String?>(_text, _filterValue);
+    if (_focusNode.hasPrimaryFocus != true) {
+      _text = update<String>(_text, _filterValue);
 
-        if (changed) {
-          _controller?.text = _text!;
-        }
+      if (changed) {
+        _controller.text = _text;
       }
+    }
 
-      _enabled = update<bool?>(
-        _enabled,
-        widget.column.enableFilterMenuItem && !_hasCompositeFilter,
-      );
-    });
+    _enabled = update<bool>(
+      _enabled,
+      widget.column.enableFilterMenuItem && !_hasCompositeFilter,
+    );
   }
 
   void _moveDown({required bool focusToPreviousCell}) {
-    _focusNode?.unfocus();
+    _focusNode.unfocus();
 
-    if (!focusToPreviousCell || widget.stateManager.currentCell == null) {
-      widget.stateManager.setCurrentCell(
-        widget.stateManager.refRows.first.cells[widget.column.field],
+    if (!focusToPreviousCell || stateManager.currentCell == null) {
+      stateManager.setCurrentCell(
+        stateManager.refRows.first.cells[widget.column.field],
         0,
         notify: false,
       );
 
-      widget.stateManager.scrollByDirection(PlutoMoveDirection.down, 0);
+      stateManager.scrollByDirection(PlutoMoveDirection.down, 0);
     }
 
-    widget.stateManager.setKeepFocus(true, notify: false);
+    stateManager.setKeepFocus(true, notify: false);
 
-    widget.stateManager.notifyListeners();
+    stateManager.notifyListeners();
   }
 
   KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
@@ -126,28 +148,19 @@ abstract class _PlutoColumnFilterStateWithChange
 
     final handleMoveDown =
         (keyManager.isDown || keyManager.isEnter || keyManager.isEsc) &&
-            widget.stateManager.refRows.isNotEmpty;
+            stateManager.refRows.isNotEmpty;
 
     final handleMoveHorizontal = keyManager.isTab ||
-        (_controller!.text.isEmpty && keyManager.isHorizontal);
+        (_controller.text.isEmpty && keyManager.isHorizontal);
 
     final skip = !(handleMoveDown || handleMoveHorizontal || keyManager.isF3);
 
     if (skip) {
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 : 삭제
       if (keyManager.isUp) {
         return KeyEventResult.handled;
       }
 
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 :
-      /// ```dart
-      /// return KeyEventResult.skipRemainingHandlers;
-      /// ```
-      return widget.stateManager.keyManager!.eventResult.skip(
+      return stateManager.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );
     }
@@ -155,13 +168,13 @@ abstract class _PlutoColumnFilterStateWithChange
     if (handleMoveDown) {
       _moveDown(focusToPreviousCell: keyManager.isEsc);
     } else if (handleMoveHorizontal) {
-      widget.stateManager.nextFocusOfColumnFilter(
+      stateManager.nextFocusOfColumnFilter(
         widget.column,
         reversed: keyManager.isLeft || keyManager.isShiftPressed,
       );
     } else if (keyManager.isF3) {
-      widget.stateManager.showFilterPopup(
-        _focusNode!.context!,
+      stateManager.showFilterPopup(
+        _focusNode.context!,
         calledColumn: widget.column,
       );
     }
@@ -170,7 +183,7 @@ abstract class _PlutoColumnFilterStateWithChange
   }
 
   void _handleFocusFromRows(PlutoGridEvent plutoEvent) {
-    if (!_enabled!) {
+    if (!_enabled) {
       return;
     }
 
@@ -178,54 +191,31 @@ abstract class _PlutoColumnFilterStateWithChange
         plutoEvent.direction.isUp) {
       var isCurrentColumn = widget
               .stateManager
-              .refColumns[widget.stateManager.columnIndexesByShowFrozen[
+              .refColumns[stateManager.columnIndexesByShowFrozen[
                   plutoEvent.cellPosition.columnIdx!]]
               .key ==
           widget.column.key;
 
       if (isCurrentColumn) {
-        widget.stateManager.clearCurrentCell(notify: false);
-        widget.stateManager.setKeepFocus(false);
-        _focusNode!.requestFocus();
+        stateManager.clearCurrentCell(notify: false);
+        stateManager.setKeepFocus(false);
+        _focusNode.requestFocus();
       }
     }
   }
-}
-
-class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
-  InputBorder get _border => OutlineInputBorder(
-        borderSide: BorderSide(
-            color: widget.stateManager.configuration!.borderColor, width: 0.0),
-        borderRadius: BorderRadius.zero,
-      );
-
-  InputBorder get _enabledBorder => OutlineInputBorder(
-        borderSide: BorderSide(
-            color: widget.stateManager.configuration!.activatedBorderColor,
-            width: 0.0),
-        borderRadius: BorderRadius.zero,
-      );
-
-  Color get _textFieldColor => _enabled!
-      ? widget.stateManager.configuration!.cellColorInEditState
-      : widget.stateManager.configuration!.cellColorInReadOnlyState;
-
-  double get _padding =>
-      widget.column.titlePadding ??
-      widget.stateManager.configuration!.defaultColumnTitlePadding;
 
   void _handleOnTap() {
-    widget.stateManager.setKeepFocus(false);
+    stateManager.setKeepFocus(false);
   }
 
   void _handleOnChanged(String changed) {
-    widget.stateManager.eventManager!.addEvent(
+    stateManager.eventManager!.addEvent(
       PlutoGridChangeColumnFilterEvent(
         column: widget.column,
         filterType: widget.column.defaultFilter,
         filterValue: changed,
-        debounceMilliseconds: widget.stateManager.configuration!
-            .columnFilterConfig.debounceMilliseconds,
+        debounceMilliseconds:
+            stateManager.configuration!.columnFilter.debounceMilliseconds,
       ),
     );
   }
@@ -236,20 +226,16 @@ class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = widget.stateManager.configuration!;
+    final style = stateManager.style;
 
     return Container(
-      height: widget.stateManager.columnFilterHeight,
-      padding: EdgeInsets.symmetric(horizontal: _padding),
+      height: stateManager.columnFilterHeight,
+      padding: _padding,
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: configuration.borderColor,
-          ),
-          right: configuration.enableColumnBorder
-              ? BorderSide(
-                  color: configuration.borderColor,
-                )
+        border: BorderDirectional(
+          top: BorderSide(color: style.borderColor),
+          end: style.enableColumnBorderVertical
+              ? BorderSide(color: style.borderColor)
               : BorderSide.none,
         ),
       ),
@@ -258,19 +244,18 @@ class PlutoColumnFilterState extends _PlutoColumnFilterStateWithChange {
           focusNode: _focusNode,
           controller: _controller,
           enabled: _enabled,
-          style: configuration.cellTextStyle,
+          style: style.cellTextStyle,
           onTap: _handleOnTap,
           onChanged: _handleOnChanged,
           onEditingComplete: _handleOnEditingComplete,
           decoration: InputDecoration(
-            hintText: _enabled! ? widget.column.defaultFilter.title : '',
-            isDense: true,
+            hintText: _enabled ? widget.column.defaultFilter.title : '',
             filled: true,
             fillColor: _textFieldColor,
             border: _border,
             enabledBorder: _border,
             focusedBorder: _enabledBorder,
-            contentPadding: const EdgeInsets.symmetric(vertical: 5),
+            contentPadding: const EdgeInsets.all(5),
           ),
         ),
       ),

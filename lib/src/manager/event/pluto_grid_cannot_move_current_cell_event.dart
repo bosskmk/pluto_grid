@@ -14,5 +14,5 @@ class PlutoGridCannotMoveCurrentCellEvent extends PlutoGridEvent {
   }) : super();
 
   @override
-  void handler(PlutoGridStateManager? stateManager) {}
+  void handler(PlutoGridStateManager stateManager) {}
 }

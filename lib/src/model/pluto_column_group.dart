@@ -8,7 +8,7 @@ class PlutoColumnGroup {
 
   final List<PlutoColumnGroup>? children;
 
-  final double? titlePadding;
+  final EdgeInsets? titlePadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
   final PlutoColumnTextAlign titleTextAlign;
@@ -102,4 +102,16 @@ class PlutoColumnGroupPair {
   Key get key => _key;
 
   final Key _key;
+
+  double get width {
+    double sumWidth = 0;
+
+    for (final column in columns) {
+      sumWidth += column.width;
+    }
+
+    return sumWidth;
+  }
+
+  double get startPosition => columns.first.startPosition;
 }

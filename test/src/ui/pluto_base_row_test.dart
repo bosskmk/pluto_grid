@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
@@ -14,23 +14,29 @@ import 'pluto_base_row_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
 ])
 void main() {
-  MockPlutoGridStateManager? stateManager;
+  late MockPlutoGridStateManager stateManager;
+  PublishSubject<PlutoNotifierEvent> streamNotifier;
   List<PlutoColumn> columns;
   List<PlutoRow> rows;
+  final resizingNotifier = ChangeNotifier();
 
   setUp(() {
+    const configuration = PlutoGridConfiguration();
     stateManager = MockPlutoGridStateManager();
-    when(stateManager!.configuration).thenReturn(
-      const PlutoGridConfiguration(),
-    );
-    when(stateManager!.localeText).thenReturn(const PlutoGridLocaleText());
-    when(stateManager!.rowHeight).thenReturn(45);
-    when(stateManager!.isSelecting).thenReturn(true);
-    when(stateManager!.hasCurrentSelectingPosition).thenReturn(true);
-    when(stateManager!.isEditing).thenReturn(true);
-    when(stateManager!.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
-    when(stateManager!.hasFocus).thenReturn(true);
-    when(stateManager!.canRowDrag).thenReturn(true);
+    streamNotifier = PublishSubject<PlutoNotifierEvent>();
+    when(stateManager.streamNotifier).thenAnswer((_) => streamNotifier);
+    when(stateManager.resizingChangeNotifier).thenReturn(resizingNotifier);
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
+    when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
+    when(stateManager.rowHeight).thenReturn(45);
+    when(stateManager.isSelecting).thenReturn(true);
+    when(stateManager.hasCurrentSelectingPosition).thenReturn(true);
+    when(stateManager.isEditing).thenReturn(true);
+    when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
+    when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.canRowDrag).thenReturn(true);
+    when(stateManager.showFrozenColumn).thenReturn(false);
   });
 
   buildRowWidget({
@@ -48,23 +54,23 @@ void main() {
     return PlutoWidgetTestHelper(
       'build row widget.',
       (tester) async {
-        when(stateManager!.isDraggingRow).thenReturn(isDraggingRow);
-        when(stateManager!.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
-        when(stateManager!.isRowIdxTopDragTarget(any))
+        when(stateManager.isDraggingRow).thenReturn(isDraggingRow);
+        when(stateManager.isRowIdxDragTarget(any)).thenReturn(isDragTarget);
+        when(stateManager.isRowIdxTopDragTarget(any))
             .thenReturn(isTopDragTarget);
-        when(stateManager!.isRowIdxBottomDragTarget(any))
+        when(stateManager.isRowIdxBottomDragTarget(any))
             .thenReturn(isBottomDragTarget);
-        when(stateManager!.dragRows).thenReturn(dragRows);
-        when(stateManager!.isSelectedRow(any)).thenReturn(isSelectedRow);
-        when(stateManager!.isCurrentCell(any)).thenReturn(isCurrentCell);
-        when(stateManager!.isSelectedCell(any, any, any))
+        when(stateManager.dragRows).thenReturn(dragRows);
+        when(stateManager.isSelectedRow(any)).thenReturn(isSelectedRow);
+        when(stateManager.isCurrentCell(any)).thenReturn(isCurrentCell);
+        when(stateManager.isSelectedCell(any, any, any))
             .thenReturn(isSelectedCell);
 
         // given
         columns = ColumnHelper.textColumn('header', count: 3);
         rows = RowHelper.count(10, columns);
 
-        when(stateManager!.columns).thenReturn(columns);
+        when(stateManager.columns).thenReturn(columns);
 
         final row = rows[rowIdx];
 
@@ -76,13 +82,11 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-                value: stateManager!,
-                child: PlutoBaseRow(
-                  rowIdx: rowIdx,
-                  row: row,
-                  columns: columns,
-                ),
+              child: PlutoBaseRow(
+                rowIdx: rowIdx,
+                row: row,
+                columns: columns,
+                stateManager: stateManager,
               ),
             ),
           ),

@@ -17,7 +17,7 @@ import 'pluto_column_filter_test.mocks.dart';
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
-  late PublishSubject<PlutoStreamNotifierEvent> subject;
+  late PublishSubject<PlutoNotifierEvent> subject;
   MockPlutoGridEventManager? eventManager;
   MockStreamSubscription<PlutoGridEvent> streamSubscription;
 
@@ -25,18 +25,20 @@ void main() {
     stateManager = MockPlutoGridStateManager();
     eventManager = MockPlutoGridEventManager();
     streamSubscription = MockStreamSubscription();
-    subject = PublishSubject<PlutoStreamNotifierEvent>();
+    subject = PublishSubject<PlutoNotifierEvent>();
 
+    const configuration = PlutoGridConfiguration();
     when(stateManager.eventManager).thenReturn(eventManager);
-    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.columnFilterHeight,
+      stateManager.configuration!.style.columnFilterHeight,
     );
 
     when(eventManager!.listener(any)).thenReturn(streamSubscription);

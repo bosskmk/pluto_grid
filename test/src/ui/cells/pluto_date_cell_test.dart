@@ -22,16 +22,18 @@ void main() {
     );
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.rowHeight).thenReturn(
-      stateManager.configuration!.rowHeight,
+      stateManager.configuration!.style.rowHeight,
     );
     when(stateManager.headerHeight).thenReturn(
-      stateManager.configuration!.columnHeight,
+      stateManager.configuration!.style.columnHeight,
     );
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);

@@ -6,8 +6,11 @@ import 'package:pluto_grid/src/helper/platform_helper.dart';
 
 abstract class TextCell extends StatefulWidget {
   final PlutoGridStateManager stateManager;
+
   final PlutoCell cell;
+
   final PlutoColumn column;
+
   final PlutoRow row;
 
   const TextCell({
@@ -26,15 +29,15 @@ abstract class TextFieldProps {
 }
 
 mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
+  dynamic _initialCellValue;
+
   final _textController = TextEditingController();
 
   final PlutoDebounceByHashCode _debounce = PlutoDebounceByHashCode();
 
-  CellEditingStatus? _cellEditingStatus;
+  late final FocusNode cellFocus;
 
-  dynamic _initialCellValue;
-
-  FocusNode? cellFocus;
+  late _CellEditingStatus _cellEditingStatus;
 
   @override
   TextInputType get keyboardType => TextInputType.text;
@@ -43,12 +46,33 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   List<TextInputFormatter>? get inputFormatters => [];
 
   @override
+  void initState() {
+    super.initState();
+
+    cellFocus = FocusNode(onKey: _handleOnKey);
+
+    widget.stateManager.textEditingController = _textController;
+
+    _textController.text = widget.column.formattedValueForDisplayInEditing(
+      widget.cell.value,
+    );
+
+    _initialCellValue = widget.cell.value;
+
+    _cellEditingStatus = _CellEditingStatus.init;
+
+    _textController.addListener(() {
+      _handleOnChanged(_textController.text.toString());
+    });
+  }
+
+  @override
   void dispose() {
     _debounce.dispose();
 
     _textController.dispose();
 
-    cellFocus!.dispose();
+    cellFocus.dispose();
 
     /**
      * Saves the changed value when moving a cell while text is being input.
@@ -65,27 +89,6 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     widget.stateManager.textEditingController = null;
 
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    cellFocus = FocusNode(onKey: _handleOnKey);
-
-    widget.stateManager.textEditingController = _textController;
-
-    _textController.text = widget.column.formattedValueForDisplayInEditing(
-      widget.cell.value,
-    );
-
-    _initialCellValue = widget.cell.value;
-
-    _cellEditingStatus = CellEditingStatus.init;
-
-    _textController.addListener(() {
-      _handleOnChanged(_textController.text.toString());
-    });
   }
 
   void _restoreText() {
@@ -150,16 +153,16 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         TextPosition(offset: _textController.text.length),
       );
 
-      _cellEditingStatus = CellEditingStatus.updated;
+      _cellEditingStatus = _CellEditingStatus.updated;
     }
   }
 
   void _handleOnChanged(String value) {
     _cellEditingStatus = widget.cell.value.toString() != value.toString()
-        ? CellEditingStatus.changed
+        ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
-            ? CellEditingStatus.init
-            : CellEditingStatus.updated;
+            ? _CellEditingStatus.init
+            : _CellEditingStatus.updated;
   }
 
   void _handleOnComplete() {
@@ -194,12 +197,6 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     // 이동 및 엔터키, 수정불가 셀의 좌우 이동을 제외한 문자열 입력 등의 키 입력은 텍스트 필드로 전파 한다.
     if (skip) {
-      /// 2021-11-19
-      /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-      /// 이슈 해결 후 :
-      /// ```dart
-      /// return KeyEventResult.skipRemainingHandlers;
-      /// ```
       return widget.stateManager.keyManager!.eventResult.skip(
         KeyEventResult.ignored,
       );
@@ -237,7 +234,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
-      cellFocus!.requestFocus();
+      cellFocus.requestFocus();
     }
 
     return TextField(
@@ -248,16 +245,36 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       onEditingComplete: _handleOnComplete,
       onSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
-      style: widget.stateManager.configuration!.cellTextStyle,
+      style: widget.stateManager.configuration!.style.cellTextStyle,
       decoration: const InputDecoration(
-        border: InputBorder.none,
-        contentPadding: EdgeInsets.all(0),
-        isDense: true,
+        border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: EdgeInsets.zero,
       ),
       maxLines: 1,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
+      textAlignVertical: TextAlignVertical.center,
       textAlign: widget.column.textAlign.value,
     );
+  }
+}
+
+enum _CellEditingStatus {
+  init,
+  changed,
+  updated;
+
+  bool get isNotChanged {
+    return _CellEditingStatus.changed != this;
+  }
+
+  bool get isChanged {
+    return _CellEditingStatus.changed == this;
+  }
+
+  bool get isUpdated {
+    return _CellEditingStatus.updated == this;
   }
 }

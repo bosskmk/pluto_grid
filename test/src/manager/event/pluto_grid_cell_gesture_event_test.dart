@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -10,10 +11,18 @@ import 'pluto_grid_cell_gesture_event_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
+  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
-  MockPlutoGridStateManager? stateManager;
-  MockPlutoGridEventManager? eventManager;
+  late MockPlutoGridStateManager stateManager;
+  late MockPlutoGridScrollController scroll;
+  late MockLinkedScrollControllerGroup horizontalScroll;
+  late MockScrollController horizontalScrollController;
+  late MockLinkedScrollControllerGroup verticalScroll;
+  late MockScrollController verticalScrollController;
+  late MockPlutoGridEventManager eventManager;
 
   eventBuilder({
     required PlutoGridGestureType gestureType,
@@ -37,8 +46,22 @@ void main() {
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
+    scroll = MockPlutoGridScrollController();
+    horizontalScroll = MockLinkedScrollControllerGroup();
+    horizontalScrollController = MockScrollController();
+    verticalScroll = MockLinkedScrollControllerGroup();
+    verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
-    when(stateManager!.eventManager).thenReturn(eventManager);
+
+    when(stateManager.eventManager).thenReturn(eventManager);
+    when(stateManager.scroll).thenReturn(scroll);
+    when(stateManager.isLTR).thenReturn(true);
+    when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(scroll.vertical).thenReturn(verticalScroll);
+    when(scroll.bodyRowsVertical).thenReturn(verticalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0.0);
+    when(verticalScrollController.offset).thenReturn(0.0);
   });
 
   group('onTapUp', () {
@@ -51,8 +74,8 @@ void main() {
       'isCurrentCell 가 true 인 경우 return 되어야 한다.',
       () {
         // given
-        when(stateManager!.hasFocus).thenReturn(false);
-        when(stateManager!.isCurrentCell(any)).thenReturn(true);
+        when(stateManager.hasFocus).thenReturn(false);
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
         clearInteractions(stateManager);
 
         // when
@@ -60,10 +83,10 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setKeepFocus(true)).called(1);
+        verify(stateManager.setKeepFocus(true)).called(1);
         // return 이후 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setEditing(any));
-        verifyNever(stateManager!.setCurrentCell(any, any));
+        verifyNever(stateManager.setEditing(any));
+        verifyNever(stateManager.setCurrentCell(any, any));
       },
     );
 
@@ -79,11 +102,11 @@ void main() {
       'setCurrentCell 이 호출 되어야 한다.',
       () {
         // given
-        when(stateManager!.hasFocus).thenReturn(false);
-        when(stateManager!.isCurrentCell(any)).thenReturn(false);
-        when(stateManager!.isSelectingInteraction()).thenReturn(false);
-        when(stateManager!.mode).thenReturn(PlutoGridMode.normal);
-        when(stateManager!.isEditing).thenReturn(true);
+        when(stateManager.hasFocus).thenReturn(false);
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.isSelectingInteraction()).thenReturn(false);
+        when(stateManager.mode).thenReturn(PlutoGridMode.normal);
+        when(stateManager.isEditing).thenReturn(true);
         clearInteractions(stateManager);
 
         final cell = PlutoCell(value: 'value');
@@ -98,10 +121,10 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setKeepFocus(true)).called(1);
-        verify(stateManager!.setCurrentCell(cell, rowIdx)).called(1);
+        verify(stateManager.setKeepFocus(true)).called(1);
+        verify(stateManager.setCurrentCell(cell, rowIdx)).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setEditing(any));
+        verifyNever(stateManager.setEditing(any));
       },
     );
 
@@ -116,11 +139,11 @@ void main() {
       'setEditing(true) 가 호출 되어야 한다.',
       () {
         // given
-        when(stateManager!.hasFocus).thenReturn(true);
-        when(stateManager!.isCurrentCell(any)).thenReturn(true);
-        when(stateManager!.isSelectingInteraction()).thenReturn(false);
-        when(stateManager!.mode).thenReturn(PlutoGridMode.normal);
-        when(stateManager!.isEditing).thenReturn(false);
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
+        when(stateManager.isSelectingInteraction()).thenReturn(false);
+        when(stateManager.mode).thenReturn(PlutoGridMode.normal);
+        when(stateManager.isEditing).thenReturn(false);
         clearInteractions(stateManager);
 
         final cell = PlutoCell(value: 'value');
@@ -135,10 +158,10 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setEditing(true)).called(1);
+        verify(stateManager.setEditing(true)).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setKeepFocus(true));
-        verifyNever(stateManager!.setCurrentCell(any, any));
+        verifyNever(stateManager.setKeepFocus(true));
+        verifyNever(stateManager.setCurrentCell(any, any));
       },
     );
 
@@ -156,11 +179,11 @@ void main() {
         const columnIdx = 1;
         const rowIdx = 1;
 
-        when(stateManager!.hasFocus).thenReturn(true);
-        when(stateManager!.isSelectingInteraction()).thenReturn(true);
-        when(stateManager!.keyPressed)
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isSelectingInteraction()).thenReturn(true);
+        when(stateManager.keyPressed)
             .thenReturn(PlutoGridKeyPressed(shift: true));
-        when(stateManager!.columnIndex(column)).thenReturn(columnIdx);
+        when(stateManager.columnIndex(column)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
         // when
@@ -174,15 +197,15 @@ void main() {
 
         // then
         verify(
-          stateManager!.setCurrentSelectingPosition(
+          stateManager.setCurrentSelectingPosition(
               cellPosition: PlutoGridCellPosition(
             columnIdx: columnIdx,
             rowIdx: rowIdx,
           )),
         ).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setKeepFocus(true));
-        verifyNever(stateManager!.toggleSelectingRow(any));
+        verifyNever(stateManager.setKeepFocus(true));
+        verifyNever(stateManager.toggleSelectingRow(any));
       },
     );
 
@@ -198,9 +221,9 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.hasFocus).thenReturn(true);
-        when(stateManager!.isSelectingInteraction()).thenReturn(true);
-        when(stateManager!.keyPressed)
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isSelectingInteraction()).thenReturn(true);
+        when(stateManager.keyPressed)
             .thenReturn(PlutoGridKeyPressed(ctrl: true));
         clearInteractions(stateManager);
 
@@ -214,11 +237,11 @@ void main() {
 
         // then
         verify(
-          stateManager!.toggleSelectingRow(rowIdx),
+          stateManager.toggleSelectingRow(rowIdx),
         ).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setKeepFocus(true));
-        verifyNever(stateManager!.setCurrentSelectingPosition(
+        verifyNever(stateManager.setKeepFocus(true));
+        verifyNever(stateManager.setCurrentSelectingPosition(
           cellPosition: anyNamed('cellPosition'),
         ));
       },
@@ -237,10 +260,10 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.hasFocus).thenReturn(true);
-        when(stateManager!.isSelectingInteraction()).thenReturn(false);
-        when(stateManager!.mode).thenReturn(PlutoGridMode.select);
-        when(stateManager!.isCurrentCell(any)).thenReturn(true);
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isSelectingInteraction()).thenReturn(false);
+        when(stateManager.mode).thenReturn(PlutoGridMode.select);
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
         clearInteractions(stateManager);
 
         // when
@@ -252,9 +275,9 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.handleOnSelected()).called(1);
+        verify(stateManager.handleOnSelected()).called(1);
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.setCurrentCell(any, any));
+        verifyNever(stateManager.setCurrentCell(any, any));
       },
     );
 
@@ -271,10 +294,10 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.hasFocus).thenReturn(true);
-        when(stateManager!.isSelectingInteraction()).thenReturn(false);
-        when(stateManager!.mode).thenReturn(PlutoGridMode.select);
-        when(stateManager!.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.hasFocus).thenReturn(true);
+        when(stateManager.isSelectingInteraction()).thenReturn(false);
+        when(stateManager.mode).thenReturn(PlutoGridMode.select);
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
         clearInteractions(stateManager);
 
         // when
@@ -286,9 +309,9 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setCurrentCell(cell, rowIdx));
+        verify(stateManager.setCurrentCell(cell, rowIdx));
         // 호출 되지 않아야 할 메소드
-        verifyNever(stateManager!.handleOnSelected());
+        verifyNever(stateManager.handleOnSelected());
       },
     );
   });
@@ -304,8 +327,8 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.isCurrentCell(any)).thenReturn(false);
-        when(stateManager!.selectingMode).thenReturn(
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.selectingMode).thenReturn(
           PlutoGridSelectingMode.cell,
         );
         clearInteractions(stateManager);
@@ -319,9 +342,9 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.isCurrentCell(cell));
-        verify(stateManager!.setCurrentCell(cell, rowIdx, notify: false));
-        verify(stateManager!.setSelecting(true));
+        verify(stateManager.isCurrentCell(cell));
+        verify(stateManager.setCurrentCell(cell, rowIdx, notify: false));
+        verify(stateManager.setSelecting(true));
       },
     );
 
@@ -335,8 +358,8 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.isCurrentCell(any)).thenReturn(true);
-        when(stateManager!.selectingMode).thenReturn(
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
+        when(stateManager.selectingMode).thenReturn(
           PlutoGridSelectingMode.cell,
         );
         clearInteractions(stateManager);
@@ -350,7 +373,7 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verifyNever(stateManager!.setCurrentCell(cell, rowIdx, notify: false));
+        verifyNever(stateManager.setCurrentCell(cell, rowIdx, notify: false));
       },
     );
 
@@ -365,9 +388,8 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.isCurrentCell(any)).thenReturn(false);
-        when(stateManager!.selectingMode)
-            .thenReturn(PlutoGridSelectingMode.row);
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
         clearInteractions(stateManager);
 
         // when
@@ -379,7 +401,7 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.toggleSelectingRow(rowIdx));
+        verify(stateManager.toggleSelectingRow(rowIdx));
       },
     );
   });
@@ -393,9 +415,8 @@ void main() {
         final cell = PlutoCell(value: 'value');
         const rowIdx = 1;
 
-        when(stateManager!.isCurrentCell(any)).thenReturn(false);
-        when(stateManager!.selectingMode)
-            .thenReturn(PlutoGridSelectingMode.row);
+        when(stateManager.isCurrentCell(any)).thenReturn(false);
+        when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.row);
         clearInteractions(stateManager);
 
         // when
@@ -408,8 +429,8 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setCurrentSelectingPositionWithOffset(offset));
-        verify(eventManager!.addEvent(argThat(
+        verify(stateManager.setCurrentSelectingPositionWithOffset(offset));
+        verify(eventManager.addEvent(argThat(
             PlutoObjectMatcher<PlutoGridScrollUpdateEvent>(rule: (event) {
           return event.offset == offset;
         }))));
@@ -426,7 +447,7 @@ void main() {
         const rowIdx = 1;
 
         // when
-        when(stateManager!.isCurrentCell(any)).thenReturn(true);
+        when(stateManager.isCurrentCell(any)).thenReturn(true);
 
         var event = eventBuilder(
           gestureType: PlutoGridGestureType.onLongPressEnd,
@@ -436,7 +457,7 @@ void main() {
         event.handler(stateManager);
 
         // then
-        verify(stateManager!.setSelecting(false));
+        verify(stateManager.setSelecting(false));
       },
     );
   });

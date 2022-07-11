@@ -4,85 +4,104 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoBodyColumns extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoBodyColumns(
     this.stateManager, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoBodyColumnsState createState() => PlutoBodyColumnsState();
 }
 
-abstract class _PlutoBodyColumnsStateWithChange
-    extends PlutoStateWithChange<PlutoBodyColumns> {
-  bool? _showColumnGroups;
+class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
+  List<PlutoColumn> _columns = [];
 
-  List<PlutoColumn>? _columns;
+  List<PlutoColumnGroupPair> _columnGroups = [];
 
-  List<PlutoColumnGroupPair>? _columnGroups;
+  bool _showColumnGroups = false;
 
-  int? _itemCount;
+  int _itemCount = 0;
 
-  @override
-  bool allowStream(event) {
-    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
-        event is PlutoVisibilityColumnStreamNotifierEvent);
-  }
+  late final ScrollController _scroll;
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _showColumnGroups = update<bool?>(
-        _showColumnGroups,
-        widget.stateManager.showColumnGroups,
-      );
-
-      _columns = update<List<PlutoColumn>?>(
-        _columns,
-        _getColumns(),
-        compare: listEquals,
-      );
-
-      if (changed && _showColumnGroups == true) {
-        _columnGroups = widget.stateManager.separateLinkedGroup(
-          columnGroupList: widget.stateManager.refColumnGroups!,
-          columns: _columns!,
-        );
-      }
-
-      _itemCount = update<int?>(_itemCount, _getItemCount());
-    });
-  }
-
-  List<PlutoColumn> _getColumns() {
-    return widget.stateManager.showFrozenColumn
-        ? widget.stateManager.bodyColumns
-        : widget.stateManager.columns;
-  }
-
-  int _getItemCount() {
-    return _showColumnGroups == true ? _columnGroups!.length : _columns!.length;
-  }
-}
-
-class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
-  ScrollController? _scroll;
-
-  @override
-  void dispose() {
-    _scroll!.dispose();
-
-    super.dispose();
-  }
+  PlutoGridStateManager get stateManager => widget.stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    _scroll = widget.stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll!.horizontal!.addAndGet();
+
+    updateState();
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void updateState() {
+    _showColumnGroups = update<bool>(
+      _showColumnGroups,
+      stateManager.showColumnGroups,
+    );
+
+    _columns = update<List<PlutoColumn>>(
+      _columns,
+      _getColumns(),
+      compare: listEquals,
+    );
+
+    if (changed && _showColumnGroups == true) {
+      _columnGroups = stateManager.separateLinkedGroup(
+        columnGroupList: stateManager.refColumnGroups!,
+        columns: _columns,
+      );
+    }
+
+    _itemCount = update<int>(_itemCount, _getItemCount());
+  }
+
+  List<PlutoColumn> _getColumns() {
+    final columns = stateManager.showFrozenColumn
+        ? stateManager.bodyColumns
+        : stateManager.columns;
+    return stateManager.isLTR
+        ? columns
+        : columns.reversed.toList(growable: false);
+  }
+
+  int _getItemCount() {
+    return _showColumnGroups == true ? _columnGroups.length : _columns.length;
+  }
+
+  PlutoVisibilityLayoutId _buildColumnGroup(PlutoColumnGroupPair e) {
+    return PlutoVisibilityLayoutId(
+      id: e.key,
+      child: PlutoBaseColumnGroup(
+        stateManager: stateManager,
+        columnGroup: e,
+        depth: stateManager.columnGroupDepth(
+          stateManager.refColumnGroups!,
+        ),
+      ),
+    );
+  }
+
+  PlutoVisibilityLayoutId _buildColumn(e) {
+    return PlutoVisibilityLayoutId(
+      id: e.field,
+      child: PlutoBaseColumn(
+        stateManager: stateManager,
+        column: e,
+      ),
+    );
   }
 
   @override
@@ -91,84 +110,102 @@ class PlutoBodyColumnsState extends _PlutoBodyColumnsStateWithChange {
       controller: _scroll,
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
-      child: CustomMultiChildLayout(
-          delegate: MainColumnLayoutDelegate(widget.stateManager, _columns!),
+      child: PlutoVisibilityLayout(
+          delegate: MainColumnLayoutDelegate(
+            stateManager: stateManager,
+            columns: _columns,
+            columnGroups: _columnGroups,
+            frozen: PlutoColumnFrozen.none,
+          ),
+          scrollController: _scroll,
+          initialViewportDimension: MediaQuery.of(context).size.width,
+          textDirection: stateManager.textDirection,
           children: _showColumnGroups == true
-              ? _columnGroups!
-                  .map((PlutoColumnGroupPair e) => LayoutId(
-                        id: e.key,
-                        child: PlutoBaseColumnGroup(
-                          stateManager: widget.stateManager,
-                          columnGroup: e,
-                          depth: widget.stateManager.columnGroupDepth(
-                            widget.stateManager.refColumnGroups!,
-                          ),
-                        ),
-                      ))
-                  .toList()
-              : _columns!
-                  .map((e) => LayoutId(
-                        id: e.field,
-                        child: PlutoBaseColumn(
-                          stateManager: widget.stateManager,
-                          column: e,
-                        ),
-                      ))
-                  .toList()),
+              ? _columnGroups.map(_buildColumnGroup).toList()
+              : _columns.map(_buildColumn).toList()),
     );
   }
 }
 
 class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumn> columns;
+  final List<PlutoColumn> columns;
 
-  MainColumnLayoutDelegate(this.stateManager, this.columns)
-      : super(relayout: stateManager.resizingChangeNotifier);
+  final List<PlutoColumnGroupPair> columnGroups;
+
+  final PlutoColumnFrozen frozen;
+
+  MainColumnLayoutDelegate({
+    required this.stateManager,
+    required this.columns,
+    required this.columnGroups,
+    required this.frozen,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
 
   @override
   Size getSize(BoxConstraints constraints) {
     totalColumnsHeight = 0;
+
     if (stateManager.showColumnGroups) {
       totalColumnsHeight =
           stateManager.columnGroupHeight + stateManager.columnHeight;
     } else {
       totalColumnsHeight = stateManager.columnHeight;
     }
+
     totalColumnsHeight += stateManager.columnFilterHeight;
+
     return Size(
-        columns.fold(
-            0, (previousValue, element) => previousValue += element.width),
-        totalColumnsHeight);
+      columns.fold(
+        0,
+        (previousValue, element) => previousValue += element.width,
+      ),
+      totalColumnsHeight,
+    );
   }
 
   @override
   void performLayout(Size size) {
     if (stateManager.showColumnGroups) {
-      var separateLinkedGroup = stateManager.separateLinkedGroup(
-          columnGroupList: stateManager.columnGroups, columns: columns);
       double dx = 0;
-      for (PlutoColumnGroupPair pair in separateLinkedGroup) {
-        if (!hasChild(pair.key)) continue;
+
+      for (PlutoColumnGroupPair pair in columnGroups) {
         final double width = pair.columns.fold<double>(
-            0, (previousValue, element) => previousValue + element.width);
-        var boxConstraints =
-            BoxConstraints.tight(Size(width, totalColumnsHeight));
-        layoutChild(pair.key, boxConstraints);
-        positionChild(pair.key, Offset(dx, 0));
+          0,
+          (previousValue, element) => previousValue + element.width,
+        );
+
+        if (hasChild(pair.key)) {
+          var boxConstraints = BoxConstraints.tight(
+            Size(width, totalColumnsHeight),
+          );
+
+          layoutChild(pair.key, boxConstraints);
+
+          positionChild(pair.key, Offset(dx, 0));
+        }
+
         dx += width;
       }
     } else {
       double dx = 0;
+
       for (PlutoColumn col in columns) {
         var width = col.width;
-        var boxConstraints =
-            BoxConstraints.tight(Size(width, totalColumnsHeight));
-        layoutChild(col.field, boxConstraints);
-        positionChild(col.field, Offset(dx, 0));
+
+        if (hasChild(col.field)) {
+          var boxConstraints = BoxConstraints.tight(
+            Size(width, totalColumnsHeight),
+          );
+
+          layoutChild(col.field, boxConstraints);
+
+          positionChild(col.field, Offset(dx, 0));
+        }
+
         dx += width;
       }
     }

@@ -12,12 +12,11 @@ abstract class IGridState {
 
   PlutoGridEventManager? get eventManager;
 
-  /// Event callback fired when cell value changes.
   PlutoOnChangedEventCallback? get onChanged;
 
-  /// Event callback that occurs when a row is selected
-  /// when the grid mode is selectRow.
   PlutoOnSelectedEventCallback? get onSelected;
+
+  PlutoOnSortedEventCallback? get onSorted;
 
   PlutoOnRowCheckedEventCallback? get onRowChecked;
 
@@ -27,11 +26,15 @@ abstract class IGridState {
 
   PlutoOnRowsMovedEventCallback? get onRowsMoved;
 
+  PlutoColumnMenuDelegate get columnMenuDelegate;
+
   CreateHeaderCallBack? get createHeader;
 
   CreateFooterCallBack? get createFooter;
 
   PlutoGridLocaleText get localeText;
+
+  PlutoGridStyleConfig get style;
 
   void setGridKey(GlobalKey key);
 
@@ -43,11 +46,15 @@ abstract class IGridState {
 
   void setOnChanged(PlutoOnChangedEventCallback onChanged);
 
+  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate);
+
   void setCreateHeader(CreateHeaderCallBack createHeader);
 
   void setCreateFooter(CreateFooterCallBack createFooter);
 
   void setOnSelected(PlutoOnSelectedEventCallback onSelected);
+
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted);
 
   void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked);
 
@@ -58,12 +65,18 @@ abstract class IGridState {
 
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
 
-  void setConfiguration(PlutoGridConfiguration configuration);
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  });
 
   void resetCurrentState({bool notify = true});
 
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
+
+  void forceUpdate();
 }
 
 mixin GridState implements IPlutoGridState {
@@ -103,6 +116,11 @@ mixin GridState implements IPlutoGridState {
   PlutoOnSelectedEventCallback? _onSelected;
 
   @override
+  PlutoOnSortedEventCallback? get onSorted => _onSorted;
+
+  PlutoOnSortedEventCallback? _onSorted;
+
+  @override
   PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
 
   PlutoOnRowCheckedEventCallback? _onRowChecked;
@@ -124,6 +142,12 @@ mixin GridState implements IPlutoGridState {
   PlutoOnRowsMovedEventCallback? _onRowsMoved;
 
   @override
+  PlutoColumnMenuDelegate get columnMenuDelegate => _columnMenuDelegate;
+
+  PlutoColumnMenuDelegate _columnMenuDelegate =
+      const PlutoDefaultColumnMenuDelegate();
+
+  @override
   CreateHeaderCallBack? get createHeader => _createHeader;
 
   CreateHeaderCallBack? _createHeader;
@@ -135,6 +159,9 @@ mixin GridState implements IPlutoGridState {
 
   @override
   PlutoGridLocaleText get localeText => configuration!.localeText;
+
+  @override
+  PlutoGridStyleConfig get style => configuration!.style;
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {
@@ -162,6 +189,11 @@ mixin GridState implements IPlutoGridState {
   }
 
   @override
+  void setOnSorted(PlutoOnSortedEventCallback? onSorted) {
+    _onSorted = onSorted;
+  }
+
+  @override
   void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked) {
     _onRowChecked = onRowChecked;
   }
@@ -183,6 +215,15 @@ mixin GridState implements IPlutoGridState {
   }
 
   @override
+  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate) {
+    if (columnMenuDelegate == null) {
+      return;
+    }
+
+    _columnMenuDelegate = columnMenuDelegate;
+  }
+
+  @override
   void setCreateHeader(CreateHeaderCallBack? createHeader) {
     _createHeader = createHeader;
   }
@@ -193,12 +234,20 @@ mixin GridState implements IPlutoGridState {
   }
 
   @override
-  void setConfiguration(PlutoGridConfiguration? configuration) {
+  void setConfiguration(
+    PlutoGridConfiguration? configuration, {
+    bool updateLocale = true,
+    bool applyColumnFilter = true,
+  }) {
     _configuration = configuration ?? const PlutoGridConfiguration();
 
-    _configuration!.updateLocale();
+    if (updateLocale) {
+      _configuration!.updateLocale();
+    }
 
-    _configuration!.applyColumnFilter(refColumns);
+    if (applyColumnFilter) {
+      _configuration!.applyColumnFilter(refColumns);
+    }
   }
 
   @override
@@ -228,5 +277,17 @@ mixin GridState implements IPlutoGridState {
         ),
       );
     }
+  }
+
+  @override
+  void forceUpdate() {
+    if (gridKey?.currentContext == null) {
+      return;
+    }
+
+    gridKey!.currentContext!
+        .findAncestorStateOfType<PlutoGridState>()!
+        // ignore: invalid_use_of_protected_member
+        .setState(() {});
   }
 }

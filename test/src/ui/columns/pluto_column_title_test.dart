@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
@@ -15,30 +13,50 @@ import 'pluto_column_title_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<ScrollController>(returnNullOnMissingStub: true),
 ])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
   late MockLinkedScrollControllerGroup horizontalScroll;
-  late PublishSubject<PlutoStreamNotifierEvent> subject;
+  late MockScrollController horizontalScrollController;
+  late PublishSubject<PlutoNotifierEvent> subject;
+  late PlutoGridEventManager eventManager;
+  late PlutoGridConfiguration configuration;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
     horizontalScroll = MockLinkedScrollControllerGroup();
-    subject = PublishSubject<PlutoStreamNotifierEvent>();
+    horizontalScrollController = MockScrollController();
+    subject = PublishSubject<PlutoNotifierEvent>();
+    eventManager = PlutoGridEventManager(stateManager: stateManager);
+    configuration = const PlutoGridConfiguration();
 
-    when(stateManager.configuration).thenReturn(const PlutoGridConfiguration());
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.columnMenuDelegate).thenReturn(
+      const PlutoDefaultColumnMenuDelegate(),
+    );
+    when(stateManager.style).thenReturn(configuration.style);
+    when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.streamNotifier).thenAnswer((_) => subject);
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.hasCheckedRow).thenReturn(false);
     when(stateManager.hasUnCheckedRow).thenReturn(false);
     when(stateManager.hasFilter).thenReturn(false);
     when(stateManager.columnHeight).thenReturn(45);
-    when(stateManager.isInvalidHorizontalScroll).thenReturn(false);
+    when(stateManager.isHorizontalOverScrolled).thenReturn(false);
+    when(stateManager.correctHorizontalOffset).thenReturn(0);
     when(stateManager.scroll).thenReturn(scroll);
+    when(stateManager.maxWidth).thenReturn(1000);
+    when(stateManager.textDirection).thenReturn(TextDirection.ltr);
+    when(stateManager.isRTL).thenReturn(false);
+    when(stateManager.isLTR).thenReturn(true);
+    when(stateManager.enoughFrozenColumnsWidth(any)).thenReturn(true);
     when(scroll.maxScrollHorizontal).thenReturn(0);
     when(scroll.horizontal).thenReturn(horizontalScroll);
+    when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
+    when(horizontalScrollController.offset).thenReturn(0);
     when(horizontalScroll.offset).thenReturn(0);
     when(stateManager.isFilteredColumn(any)).thenReturn(false);
   });
@@ -52,12 +70,9 @@ void main() {
   }) {
     return MaterialApp(
       home: Material(
-        child: ChangeNotifierProvider<PlutoGridStateManager>.value(
-          value: stateManager,
-          child: PlutoColumnTitle(
-            stateManager: stateManager,
-            column: column,
-          ),
+        child: PlutoColumnTitle(
+          stateManager: stateManager,
+          column: column,
         ),
       ),
     );
@@ -189,45 +204,114 @@ void main() {
     expect(draggable, findsOneWidget);
   });
 
-  testWidgets('enableContextMenu 이 false 면 ColumnIcon 이 출력 되지 않아야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoColumn column = PlutoColumn(
-      title: 'column title',
-      field: 'column_field_name',
-      type: PlutoColumnType.text(),
-      enableContextMenu: false,
-    );
+  testWidgets(
+    'enableContextMenu 이 false, enableDropToResize 가 false 면 '
+    'ColumnIcon 이 출력 되지 않아야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: false,
+        enableDropToResize: false,
+      );
 
-    // when
-    await tester.pumpWidget(
-      buildApp(column: column),
-    );
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
 
-    // then
-    expect(find.byType(PlutoGridColumnIcon), findsNothing);
-  });
+      // then
+      expect(find.byType(PlutoGridColumnIcon), findsNothing);
+    },
+  );
 
-  testWidgets('enableContextMenu 이 true 면 ColumnIcon 이 출력 되어야 한다.',
-      (WidgetTester tester) async {
-    // given
-    final PlutoColumn column = PlutoColumn(
-      title: 'header',
-      field: 'header',
-      type: PlutoColumnType.text(),
-      enableContextMenu: true,
-    );
+  testWidgets(
+    'enableContextMenu 이 true, enableDropToResize 가 true 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: true,
+        enableDropToResize: true,
+      );
 
-    // when
-    await tester.pumpWidget(
-      buildApp(column: column),
-    );
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
 
-    // then
-    final headerIcon = find.byType(PlutoGridColumnIcon);
+      final found = find.byType(PlutoGridColumnIcon);
 
-    expect(headerIcon, findsOneWidget);
-  });
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.style.columnContextIcon);
+    },
+  );
+
+  testWidgets(
+    'enableContextMenu 이 true, enableDropToResize 가 false 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: true,
+        enableDropToResize: false,
+      );
+
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
+
+      // then
+      final found = find.byType(PlutoGridColumnIcon);
+
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.style.columnContextIcon);
+    },
+  );
+
+  testWidgets(
+    'enableContextMenu 이 false, enableDropToResize 가 true 면 '
+    'ColumnIcon 이 출력 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        enableContextMenu: false,
+        enableDropToResize: true,
+      );
+
+      // when
+      await tester.pumpWidget(
+        buildApp(column: column),
+      );
+
+      // then
+      final found = find.byType(PlutoGridColumnIcon);
+
+      final foundWidget = found.evaluate().first.widget as PlutoGridColumnIcon;
+
+      // then
+      expect(found, findsOneWidget);
+      expect(foundWidget.icon, configuration.style.columnResizeIcon);
+    },
+  );
 
   group('enableRowChecked', () {
     buildColumn(bool enable) {
@@ -296,28 +380,28 @@ void main() {
     });
 
     tapColumn.test('기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('Freeze to left'), findsOneWidget);
-      expect(find.text('Freeze to right'), findsOneWidget);
+      expect(find.text('Freeze to start'), findsOneWidget);
+      expect(find.text('Freeze to end'), findsOneWidget);
       expect(find.text('Auto fit'), findsOneWidget);
     });
 
-    tapColumn.test('Freeze to left 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
+    tapColumn.test('Freeze to start 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('Freeze to left'));
+      await tester.tap(find.text('Freeze to start'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
-        PlutoColumnFrozen.left,
+        column,
+        PlutoColumnFrozen.start,
       )).called(1);
     });
 
-    tapColumn.test('Freeze to right 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
+    tapColumn.test('Freeze to end 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('Freeze to right'));
+      await tester.tap(find.text('Freeze to end'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
-        PlutoColumnFrozen.right,
+        column,
+        PlutoColumnFrozen.end,
       )).called(1);
     });
 
@@ -342,7 +426,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.left,
+      frozen: PlutoColumnFrozen.start,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -362,8 +446,8 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('Freeze to left'), findsNothing);
-      expect(find.text('Freeze to right'), findsNothing);
+      expect(find.text('Freeze to start'), findsNothing);
+      expect(find.text('Freeze to end'), findsNothing);
       expect(find.text('Auto fit'), findsOneWidget);
     });
 
@@ -372,7 +456,7 @@ void main() {
       await tester.tap(find.text('Unfreeze'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.none,
       )).called(1);
     });
@@ -394,7 +478,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     final tapColumn = PlutoWidgetTestHelper('Tap column.', (tester) async {
@@ -414,8 +498,8 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('Freeze to left'), findsNothing);
-      expect(find.text('Freeze to right'), findsNothing);
+      expect(find.text('Freeze to start'), findsNothing);
+      expect(find.text('Freeze to end'), findsNothing);
       expect(find.text('Auto fit'), findsOneWidget);
     });
 
@@ -424,7 +508,7 @@ void main() {
       await tester.tap(find.text('Unfreeze'));
 
       verify(stateManager.toggleFrozenColumn(
-        column.key,
+        column,
         PlutoColumnFrozen.none,
       )).called(1);
     });
@@ -446,7 +530,7 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     final aColumn = PlutoWidgetTestHelper('a column.', (tester) async {
@@ -501,8 +585,6 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(greaterThanOrEqualTo(30)),
-          notify: false,
-          checkScroll: false,
         ));
       },
     );
@@ -515,8 +597,6 @@ void main() {
         verify(stateManager.resizeColumn(
           column,
           argThat(lessThanOrEqualTo(-30)),
-          notify: false,
-          checkScroll: false,
         ));
       },
     );
@@ -527,12 +607,13 @@ void main() {
       title: 'column title',
       field: 'column_field_name',
       type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.right,
+      frozen: PlutoColumnFrozen.end,
     );
 
     aColumnWithConfiguration(PlutoGridConfiguration configuration) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
+        when(stateManager.style).thenReturn(configuration.style);
 
         await tester.pumpWidget(
           buildApp(column: column),
@@ -541,12 +622,17 @@ void main() {
     }
 
     aColumnWithConfiguration(const PlutoGridConfiguration(
-      enableColumnBorder: true,
-      borderColor: Colors.deepOrange,
+      style: PlutoGridStyleConfig(
+        enableColumnBorderVertical: true,
+        borderColor: Colors.deepOrange,
+      ),
     )).test(
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
-        expect(stateManager.configuration!.enableColumnBorder, true);
+        expect(
+          stateManager.configuration!.style.enableColumnBorderVertical,
+          true,
+        );
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -557,20 +643,25 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right.width, 1.0);
-        expect(border.right.color, Colors.deepOrange);
+        expect(border.end.width, 1.0);
+        expect(border.end.color, Colors.deepOrange);
       },
     );
 
     aColumnWithConfiguration(const PlutoGridConfiguration(
-      enableColumnBorder: false,
-      borderColor: Colors.deepOrange,
+      style: PlutoGridStyleConfig(
+        enableColumnBorderVertical: false,
+        borderColor: Colors.deepOrange,
+      ),
     )).test(
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
-        expect(stateManager.configuration!.enableColumnBorder, false);
+        expect(
+          stateManager.configuration!.style.enableColumnBorderVertical,
+          false,
+        );
 
         final target = find.descendant(
           of: find.byType(InkWell),
@@ -581,9 +672,9 @@ void main() {
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
-        final Border border = decoration.border as Border;
+        final BorderDirectional border = decoration.border as BorderDirectional;
 
-        expect(border.right, BorderSide.none);
+        expect(border.end, BorderSide.none);
       },
     );
   });

@@ -5,8 +5,108 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../helper/column_helper.dart';
 import '../helper/row_helper.dart';
+import '../helper/test_helper_util.dart';
 
 void main() {
+  const columnWidth = PlutoGridSettings.columnWidth;
+
+  testWidgets(
+    'Directionality 가 rtl 인 경우 rtl 상태가 적용 되어야 한다.',
+    (WidgetTester tester) async {
+      // given
+      late final PlutoGridStateManager stateManager;
+      final columns = ColumnHelper.textColumn('header');
+      final rows = RowHelper.count(3, columns);
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+                onLoaded: (e) => stateManager = e.stateManager,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(stateManager.isLTR, false);
+      expect(stateManager.isRTL, true);
+    },
+  );
+
+  testWidgets(
+    'Directionality 가 rtl 인 경우 컬럼의 frozen 에 따라 방향에 맞게 위치해야 한다.',
+    (WidgetTester tester) async {
+      // given
+      await TestHelperUtil.changeWidth(
+        tester: tester,
+        width: 1400,
+        height: 600,
+      );
+      final columns = ColumnHelper.textColumn('header', count: 6);
+      final rows = RowHelper.count(3, columns);
+
+      columns[0].frozen = PlutoColumnFrozen.start;
+      columns[1].frozen = PlutoColumnFrozen.end;
+      columns[2].frozen = PlutoColumnFrozen.start;
+      columns[3].frozen = PlutoColumnFrozen.end;
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: PlutoGrid(
+                columns: columns,
+                rows: rows,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final firstStartColumn = find.text('header0');
+      final secondStartColumn = find.text('header2');
+      final firstBodyColumn = find.text('header4');
+      final secondBodyColumn = find.text('header5');
+      final firstEndColumn = find.text('header1');
+      final secondEndColumn = find.text('header3');
+
+      final firstStartColumnDx = tester.getTopRight(firstStartColumn).dx;
+      final secondStartColumnDx = tester.getTopRight(secondStartColumn).dx;
+      final firstBodyColumnDx = tester.getTopRight(firstBodyColumn).dx;
+      final secondBodyColumnDx = tester.getTopRight(secondBodyColumn).dx;
+      // frozen.end 컬럼은 전체 넓이로 인해 중앙 빈공간이 있어 좌측에서 위치 확인
+      final firstEndColumnDx = tester.getTopLeft(firstEndColumn).dx;
+      final secondEndColumnDx = tester.getTopLeft(secondEndColumn).dx;
+
+      double expectOffset = columnWidth;
+      expect(firstStartColumnDx - secondStartColumnDx, expectOffset);
+
+      expectOffset = columnWidth + PlutoGridSettings.gridBorderWidth;
+      expect(secondStartColumnDx - firstBodyColumnDx, expectOffset);
+
+      expectOffset = columnWidth;
+      expect(firstBodyColumnDx - secondBodyColumnDx, expectOffset);
+
+      // end 컬럼은 중앙 컬럼보다 좌측에 위치해야 한다.
+      expect(firstEndColumnDx, lessThan(secondBodyColumnDx - columnWidth));
+
+      expectOffset = columnWidth;
+      expect(firstEndColumnDx - secondEndColumnDx, expectOffset);
+    },
+  );
+
   testWidgets('createFooter 를 설정 한 경우 footer 가 출력 되어야 한다.',
       (WidgetTester tester) async {
     // given
@@ -27,6 +127,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     // then
     final footer = find.text('Footer widget.');
@@ -55,6 +157,8 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     // then
     final found = find.byType(PlutoPagination);
     expect(found, findsOneWidget);
@@ -82,6 +186,8 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     // then
     final found = find.byType(PlutoPagination);
     expect(found, findsOneWidget);
@@ -104,7 +210,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // then
     final cell1 = find.text('header0 value 0');
@@ -133,6 +239,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     Finder headerInkWell = find.descendant(
         of: find.byKey(columns.first.key), matching: find.byType(InkWell));
@@ -180,7 +288,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     Finder firstCell = find.byKey(rows.first.cells['header0']!.key);
 
@@ -262,7 +370,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -308,7 +416,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -369,6 +477,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 0);
       expect(stateManager!.rows[1].cells['header']!.value, 12);
@@ -418,6 +528,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 'not a number');
       expect(stateManager!.rows[1].cells['header']!.value, 12);
@@ -464,6 +576,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 1234567);
@@ -512,6 +626,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].cells['header']!.value, 12345);
       expect(stateManager!.rows[1].cells['header']!.value, 0);
@@ -554,6 +670,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].sortIdx, 0);
       expect(stateManager!.rows[1].sortIdx, 1);
@@ -595,6 +713,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // then
       expect(stateManager!.rows[0].sortIdx, 5);
       expect(stateManager!.rows[1].sortIdx, 6);
@@ -632,6 +752,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // when
       stateManager!.moveColumn(column: columns[0], targetColumn: columns[2]);
 
@@ -668,6 +790,8 @@ void main() {
         ),
       );
 
+      await tester.pumpAndSettle();
+
       // when
       stateManager!.moveColumn(column: columns[9], targetColumn: columns[0]);
 
@@ -684,11 +808,8 @@ void main() {
       expect(columns[9].title, 'body8');
     });
 
-    testWidgets(
-        '넓이가 충분하지 않고 '
-        '고정 컬럼이 없는 상태에서 '
-        '3번 컬럼을 고정 왼쪽 토글 하고 '
-        '5번 컬럼을 0번 컬럼으로 이동.', (WidgetTester tester) async {
+    testWidgets('넓이가 충분하지 않은 상태에서 고정 컬럼으로 설정하면 설정 되지 않아야 한다.',
+        (WidgetTester tester) async {
       // given
       List<PlutoColumn> columns = [
         ...ColumnHelper.textColumn('body', count: 10, width: 100),
@@ -720,31 +841,18 @@ void main() {
           .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
 
       // when
-      stateManager!.toggleFrozenColumn(columns[3].key, PlutoColumnFrozen.left);
+      stateManager!.toggleFrozenColumn(columns[3], PlutoColumnFrozen.start);
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      stateManager!
-          .setLayout(const BoxConstraints(maxWidth: 50, maxHeight: 300));
-
-      stateManager!.moveColumn(column: columns[5], targetColumn: columns[0]);
-      //
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      // 3번 컬럼을 토글하면 컬럼 위치는 바뀌지 않고 고정 컬럼으로 상태만 바뀜.
-      // 그리고 5번 컬럼을 이동 시키면 넓이가 충분하지 않은 상태에서
-      // 왼쪽 끝에는 0번 컬럼이 위치하게 되고, 5번 컬럼이 0번 컬럼 앞으로 이동.
-      // 0번 컬럼이 고정 컬럼이 아니어서 5번도 고정 컬럼이 아니게 됨.
 
       // then
-      expect(columns[0].title, 'body5');
-      expect(columns[0].frozen, PlutoColumnFrozen.none);
-      expect(columns[1].title, 'body0');
-      expect(columns[2].title, 'body1');
-      expect(columns[3].title, 'body2');
-      expect(columns[4].title, 'body3');
-      expect(columns[4].frozen, PlutoColumnFrozen.left);
-      expect(columns[5].title, 'body4');
+      expect(columns[0].title, 'body0');
+      expect(columns[1].title, 'body1');
+      expect(columns[2].title, 'body2');
+      expect(columns[3].title, 'body3');
+      expect(columns[3].frozen, PlutoColumnFrozen.none);
+      expect(columns[4].title, 'body4');
+      expect(columns[5].title, 'body5');
       expect(columns[6].title, 'body6');
       expect(columns[7].title, 'body7');
       expect(columns[8].title, 'body8');
@@ -756,9 +864,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -779,7 +887,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -814,9 +922,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -837,7 +945,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -872,9 +980,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -895,7 +1003,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -930,9 +1038,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -953,7 +1061,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -988,9 +1096,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1011,7 +1119,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1028,6 +1136,8 @@ void main() {
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
     await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
+    await tester.pumpAndSettle();
+
     expect(stateManager!.currentCell!.value, 'headerB1 value 1');
     // editing 상태가 아니면 shift + 방향키 입력 시 셀이 선택 되어야 한다.
     expect(stateManager!.currentSelectingPosition!.columnIdx, 3);
@@ -1041,9 +1151,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1064,7 +1174,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1094,9 +1204,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1117,7 +1227,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');
@@ -1147,9 +1257,9 @@ void main() {
       (WidgetTester tester) async {
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -1170,7 +1280,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // 1 번 컬럼의 1번 행의 셀 선택
     Finder currentCell = find.text('headerB1 value 1');

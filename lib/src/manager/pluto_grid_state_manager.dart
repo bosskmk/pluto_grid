@@ -3,11 +3,11 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_group_state.dart';
+import 'state/column_sizing_state.dart';
 import 'state/column_state.dart';
 import 'state/dragging_row_state.dart';
 import 'state/editing_state.dart';
@@ -20,12 +20,14 @@ import 'state/pagination_row_state.dart';
 import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
+import 'state/visibility_layout_state.dart';
 
 abstract class IPlutoGridState
     implements
         PlutoChangeNotifier,
         ICellState,
         IColumnGroupState,
+        IColumnSizingState,
         IColumnState,
         IDraggingRowState,
         IEditingState,
@@ -37,12 +39,14 @@ abstract class IPlutoGridState
         IPaginationRowState,
         IRowState,
         IScrollState,
-        ISelectingState {}
+        ISelectingState,
+        IVisibilityLayoutState {}
 
 class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     with
         CellState,
         ColumnGroupState,
+        ColumnSizingState,
         ColumnState,
         DraggingRowState,
         EditingState,
@@ -54,7 +58,8 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         PaginationRowState,
         RowState,
         ScrollState,
-        SelectingState {}
+        SelectingState,
+        VisibilityLayoutState {}
 
 /// It manages the state of the [PlutoGrid] and contains methods used by the grid.
 ///
@@ -98,11 +103,13 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     PlutoGridMode? mode,
     PlutoOnChangedEventCallback? onChangedEventCallback,
     PlutoOnSelectedEventCallback? onSelectedEventCallback,
+    PlutoOnSortedEventCallback? onSortedEventCallback,
     PlutoOnRowCheckedEventCallback? onRowCheckedEventCallback,
     PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
     PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
     PlutoOnRowsMovedEventCallback? onRowsMovedEventCallback,
     PlutoRowColorCallback? onRowColorCallback,
+    PlutoColumnMenuDelegate? columnMenuDelegate,
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
     PlutoGridConfiguration? configuration,
@@ -115,11 +122,13 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     setGridMode(mode);
     setOnChanged(onChangedEventCallback);
     setOnSelected(onSelectedEventCallback);
+    setOnSorted(onSortedEventCallback);
     setOnRowChecked(onRowCheckedEventCallback);
     setOnRowDoubleTap(onRowDoubleTapEventCallback);
     setOnRowSecondaryTap(onRowSecondaryTapEventCallback);
     setOnRowsMoved(onRowsMovedEventCallback);
     setRowColorCallback(onRowColorCallback);
+    setColumnMenuDelegate(columnMenuDelegate);
     setCreateHeader(createHeader);
     setCreateFooter(createFooter);
     setConfiguration(configuration);
@@ -127,7 +136,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   }
 
   static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.none.items;
+      PlutoGridSelectingMode.values;
 
   /// It handles the necessary settings when [rows] are first set or added to the [PlutoGrid].
   ///
@@ -194,6 +203,17 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   /// [chunkSize] determines the number of lists processed at one time when setting rows.
   ///
   /// [duration] determines the processing interval when setting rows.
+  ///
+  /// If pagination is set, [PlutoGridStateManager.setPage] must be called
+  /// after Future is completed before Rows appear on the screen.
+  ///
+  /// ```dart
+  /// PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows).then((initializedRows) {
+  ///   stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+  ///   stateManager.setPage(1, notify: false);
+  ///   stateManager.notifyListeners();
+  /// });
+  /// ```
   ///
   /// {@macro initialize_rows_sync_or_async}
   static Future<List<PlutoRow>> initializeRowsAsync(
@@ -369,10 +389,8 @@ enum PlutoGridSelectingMode {
   none,
 
   /// using only internal
-  horizontal,
-}
+  horizontal;
 
-extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
   bool get isCell => this == PlutoGridSelectingMode.cell;
 
   bool get isRow => this == PlutoGridSelectingMode.row;
@@ -381,18 +399,6 @@ extension PlutoGridSelectingModeExtension on PlutoGridSelectingMode {
 
   /// using only internal
   bool get isHorizontal => this == PlutoGridSelectingMode.horizontal;
-
-  List<PlutoGridSelectingMode> get items {
-    return [
-      PlutoGridSelectingMode.cell,
-      PlutoGridSelectingMode.row,
-      PlutoGridSelectingMode.none,
-    ];
-  }
-
-  String toShortString() {
-    return toString().split('.').last;
-  }
 }
 
 abstract class _Apply {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -37,24 +39,38 @@ class PlutoGridKeyEventResult {
 class PlutoGridKeyManager {
   PlutoGridStateManager stateManager;
 
-  /// 2021-11-19
-  /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-  /// 이슈 해결 후 : 삭제
   PlutoGridKeyEventResult eventResult = PlutoGridKeyEventResult();
 
   PlutoGridKeyManager({
     required this.stateManager,
   });
 
-  PublishSubject<PlutoKeyManagerEvent> subject =
+  final PublishSubject<PlutoKeyManagerEvent> _subject =
       PublishSubject<PlutoKeyManagerEvent>();
 
+  PublishSubject<PlutoKeyManagerEvent> get subject => _subject;
+
+  late final StreamSubscription _subscription;
+
+  StreamSubscription get subscription => _subscription;
+
   void dispose() {
-    subject.close();
+    _subscription.cancel();
+
+    _subject.close();
   }
 
   void init() {
-    subject.stream.listen(_handler);
+    final normalStream = _subject.stream.where((event) => !event.needsThrottle);
+
+    final movingStream =
+        _subject.stream.where((event) => event.needsThrottle).transform(
+              ThrottleStreamTransformer(
+                (_) => TimerStream(_, const Duration(milliseconds: 1)),
+              ),
+            );
+
+    _subscription = MergeStream([normalStream, movingStream]).listen(_handler);
   }
 
   void _handler(PlutoKeyManagerEvent keyEvent) {

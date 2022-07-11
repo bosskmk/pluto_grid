@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
 
-class PlutoBaseCell extends StatelessWidget {
+class PlutoBaseCell extends StatelessWidget
+    implements PlutoVisibilityLayoutChild {
   final PlutoCell cell;
 
   final PlutoColumn column;
@@ -11,82 +11,98 @@ class PlutoBaseCell extends StatelessWidget {
 
   final PlutoRow row;
 
+  final PlutoGridStateManager stateManager;
+
   const PlutoBaseCell({
+    Key? key,
     required this.cell,
     required this.column,
     required this.rowIdx,
     required this.row,
-    Key? key,
+    required this.stateManager,
   }) : super(key: key);
 
   @override
+  double get width => column.width;
+
+  @override
+  double get startPosition => column.startPosition;
+
+  @override
+  bool get keepAlive => stateManager.currentCell == cell;
+
+  void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
+    stateManager.eventManager!.addEvent(
+      PlutoGridCellGestureEvent(
+        gestureType: gestureType,
+        offset: offset,
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+      ),
+    );
+  }
+
+  void _handleOnTapUp(TapUpDetails details) {
+    _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
+  }
+
+  void _handleOnLongPressStart(LongPressStartDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+      PlutoGridGestureType.onLongPressStart,
+      details.globalPosition,
+    );
+  }
+
+  void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+      PlutoGridGestureType.onLongPressMoveUpdate,
+      details.globalPosition,
+    );
+  }
+
+  void _handleOnLongPressEnd(LongPressEndDetails details) {
+    if (stateManager.selectingMode.isNone) {
+      return;
+    }
+
+    _addGestureEvent(
+      PlutoGridGestureType.onLongPressEnd,
+      details.globalPosition,
+    );
+  }
+
+  void _handleOnDoubleTap() {
+    _addGestureEvent(PlutoGridGestureType.onDoubleTap, Offset.zero);
+  }
+
+  void _handleOnSecondaryTap(TapDownDetails details) {
+    _addGestureEvent(
+      PlutoGridGestureType.onSecondaryTap,
+      details.globalPosition,
+    );
+  }
+
+  void Function()? _onDoubleTapOrNull() {
+    return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
+  }
+
+  void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
+    return stateManager.onRowSecondaryTap == null
+        ? null
+        : _handleOnSecondaryTap;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final stateManager = context.read<PlutoGridStateManager>();
-
-    void _addGestureEvent(PlutoGridGestureType gestureType, Offset offset) {
-      stateManager.eventManager!.addEvent(
-        PlutoGridCellGestureEvent(
-          gestureType: gestureType,
-          offset: offset,
-          cell: cell,
-          column: column,
-          rowIdx: rowIdx,
-        ),
-      );
-    }
-
-    void _handleOnTapUp(TapUpDetails details) {
-      _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
-    }
-
-    void _handleOnLongPressStart(LongPressStartDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-        PlutoGridGestureType.onLongPressStart,
-        details.globalPosition,
-      );
-    }
-
-    void _handleOnLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-          PlutoGridGestureType.onLongPressMoveUpdate, details.globalPosition);
-    }
-
-    void _handleOnLongPressEnd(LongPressEndDetails details) {
-      if (stateManager.selectingMode.isNone) {
-        return;
-      }
-
-      _addGestureEvent(
-          PlutoGridGestureType.onLongPressEnd, details.globalPosition);
-    }
-
-    void _handleOnDoubleTap() {
-      _addGestureEvent(PlutoGridGestureType.onDoubleTap, Offset.zero);
-    }
-
-    void _handleOnSecondaryTap(TapDownDetails details) {
-      _addGestureEvent(
-          PlutoGridGestureType.onSecondaryTap, details.globalPosition);
-    }
-
-    void Function()? _onDoubleTapOrNull() {
-      return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
-    }
-
-    void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
-      return stateManager.onRowSecondaryTap == null
-          ? null
-          : _handleOnSecondaryTap;
-    }
-
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       // Essential gestures.
@@ -103,7 +119,8 @@ class PlutoBaseCell extends StatelessWidget {
         row: row,
         column: column,
         cellPadding: column.cellPadding ??
-            stateManager.configuration!.defaultCellPadding,
+            stateManager.configuration!.style.defaultCellPadding,
+        stateManager: stateManager,
         child: _BuildCell(
           stateManager: stateManager,
           rowIdx: rowIdx,
@@ -116,12 +133,19 @@ class PlutoBaseCell extends StatelessWidget {
   }
 }
 
-class _CellContainer extends StatelessWidget {
+class _CellContainer extends PlutoStatefulWidget {
   final PlutoCell cell;
+
   final PlutoRow row;
+
   final int rowIdx;
+
   final PlutoColumn column;
-  final double cellPadding;
+
+  final EdgeInsets cellPadding;
+
+  final PlutoGridStateManager stateManager;
+
   final Widget child;
 
   const _CellContainer({
@@ -130,8 +154,57 @@ class _CellContainer extends StatelessWidget {
     required this.rowIdx,
     required this.column,
     required this.cellPadding,
+    required this.stateManager,
     required this.child,
   });
+
+  @override
+  State<_CellContainer> createState() => _CellContainerState();
+}
+
+class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
+  BoxDecoration _decoration = const BoxDecoration();
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    final style = stateManager.style;
+
+    final isCurrentCell = stateManager.isCurrentCell(widget.cell);
+
+    _decoration = update(
+      _decoration,
+      _boxDecoration(
+        hasFocus: stateManager.hasFocus,
+        readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
+        isEditing: stateManager.isEditing,
+        isCurrentCell: isCurrentCell,
+        isSelectedCell: stateManager.isSelectedCell(
+          widget.cell,
+          widget.column,
+          widget.rowIdx,
+        ),
+        enableCellVerticalBorder: style.enableCellBorderVertical,
+        borderColor: style.borderColor,
+        activatedBorderColor: style.activatedBorderColor,
+        activatedColor: style.activatedColor,
+        inactivatedBorderColor: style.inactivatedBorderColor,
+        gridBackgroundColor: style.gridBackgroundColor,
+        cellColorInEditState: style.cellColorInEditState,
+        cellColorInReadOnlyState: style.cellColorInReadOnlyState,
+        selectingMode: stateManager.selectingMode,
+      ),
+    );
+  }
 
   Color? _currentCellColor({
     required bool readOnly,
@@ -160,7 +233,7 @@ class _CellContainer extends StatelessWidget {
     required bool isEditing,
     required bool isCurrentCell,
     required bool isSelectedCell,
-    required bool enableColumnBorder,
+    required bool enableCellVerticalBorder,
     required Color borderColor,
     required Color activatedBorderColor,
     required Color activatedColor,
@@ -196,10 +269,10 @@ class _CellContainer extends StatelessWidget {
         ),
       );
     } else {
-      return enableColumnBorder
+      return enableCellVerticalBorder
           ? BoxDecoration(
-              border: Border(
-                right: BorderSide(
+              border: BorderDirectional(
+                end: BorderSide(
                   color: borderColor,
                   width: 1.0,
                 ),
@@ -211,56 +284,25 @@ class _CellContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProxyProvider<PlutoGridStateManager, BoxDecoration>(
-      update: (_, stateManager, __) {
-        final configuration = stateManager.configuration!;
-
-        final isCurrentCell = stateManager.isCurrentCell(cell);
-
-        return _boxDecoration(
-          hasFocus: stateManager.hasFocus,
-          readOnly: column.checkReadOnly(row, cell),
-          isEditing: stateManager.isEditing,
-          isCurrentCell: isCurrentCell,
-          isSelectedCell: stateManager.isSelectedCell(
-            cell,
-            column,
-            rowIdx,
-          ),
-          enableColumnBorder: configuration.enableColumnBorder,
-          borderColor: configuration.borderColor,
-          activatedBorderColor: configuration.activatedBorderColor,
-          activatedColor: configuration.activatedColor,
-          inactivatedBorderColor: configuration.inactivatedBorderColor,
-          gridBackgroundColor: configuration.gridBackgroundColor,
-          cellColorInEditState: configuration.cellColorInEditState,
-          cellColorInReadOnlyState: configuration.cellColorInReadOnlyState,
-          selectingMode: stateManager.selectingMode,
-        );
-      },
-      child: Consumer<BoxDecoration>(
-        builder: (_, decoration, child) {
-          return Container(
-            decoration: decoration,
-            padding: EdgeInsets.symmetric(
-              horizontal: cellPadding,
-            ),
-            clipBehavior: Clip.hardEdge,
-            alignment: Alignment.centerLeft,
-            child: child,
-          );
-        },
-        child: child,
-      ),
+    return Container(
+      decoration: _decoration,
+      padding: widget.cellPadding,
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.centerLeft,
+      child: widget.child,
     );
   }
 }
 
-class _BuildCell extends StatelessWidget {
+class _BuildCell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
+
   final int rowIdx;
+
   final PlutoRow row;
+
   final PlutoColumn column;
+
   final PlutoCell cell;
 
   const _BuildCell({
@@ -273,75 +315,79 @@ class _BuildCell extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final bool showTypedCell = context.select<PlutoGridStateManager, bool>(
-      (value) => value.isEditing && value.isCurrentCell(cell),
-    );
+  State<_BuildCell> createState() => _BuildCellState();
+}
 
-    if (showTypedCell && column.enableEditingMode == true) {
-      if (column.type.isSelect) {
+class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
+  bool _showTypedCell = false;
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updateState();
+  }
+
+  @override
+  void updateState() {
+    super.updateState();
+
+    _showTypedCell = update<bool>(
+      _showTypedCell,
+      stateManager.isEditing && stateManager.isCurrentCell(widget.cell),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_showTypedCell && widget.column.enableEditingMode == true) {
+      if (widget.column.type.isSelect) {
         return PlutoSelectCell(
           stateManager: stateManager,
-          cell: cell,
-          column: column,
-          row: row,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
         );
-      } else if (column.type.isNumber) {
+      } else if (widget.column.type.isNumber) {
         return PlutoNumberCell(
           stateManager: stateManager,
-          cell: cell,
-          column: column,
-          row: row,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
         );
-      } else if (column.type.isDate) {
+      } else if (widget.column.type.isDate) {
         return PlutoDateCell(
           stateManager: stateManager,
-          cell: cell,
-          column: column,
-          row: row,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
         );
-      } else if (column.type.isTime) {
+      } else if (widget.column.type.isTime) {
         return PlutoTimeCell(
           stateManager: stateManager,
-          cell: cell,
-          column: column,
-          row: row,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
         );
-      } else if (column.type.isText) {
+      } else if (widget.column.type.isText) {
         return PlutoTextCell(
           stateManager: stateManager,
-          cell: cell,
-          column: column,
-          row: row,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
         );
       }
     }
 
     return PlutoDefaultCell(
-      cell: cell,
-      column: column,
-      rowIdx: rowIdx,
-      row: row,
+      cell: widget.cell,
+      column: widget.column,
+      rowIdx: widget.rowIdx,
+      row: widget.row,
+      stateManager: stateManager,
     );
-  }
-}
-
-enum CellEditingStatus {
-  init,
-  changed,
-  updated,
-}
-
-extension CellEditingStatusExtension on CellEditingStatus? {
-  bool get isNotChanged {
-    return CellEditingStatus.changed != this;
-  }
-
-  bool get isChanged {
-    return CellEditingStatus.changed == this;
-  }
-
-  bool get isUpdated {
-    return CellEditingStatus.updated == this;
   }
 }

@@ -35,6 +35,17 @@ class PlutoListTile extends StatelessWidget {
         _fontColor = Colors.white70,
         super(key: key);
 
+  const PlutoListTile.amber({
+    Key? key,
+    required this.title,
+    this.description,
+    this.onTapPreview,
+    this.onTapLiveDemo,
+    this.trailing,
+  })  : _color = Colors.amber,
+        _fontColor = Colors.black87,
+        super(key: key);
+
   final Color _color;
   final Color _fontColor;
 

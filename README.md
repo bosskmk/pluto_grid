@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v4.0.1
+## PlutoGrid for flutter - v5.0.0
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -13,17 +13,6 @@ If you comment on an issue, mobile improvements can be made quickly.
 
 <br>
 
-### Key changes in PlutoGrid 4 version
-> The key change in PlutoGrid 4 version is speed improvement.<br><br>
-By optimizing the state change, it has been improved to maintain an appropriate frame even when there is a lot of data.  
-To check this, run Flutter in profile or build mode.  
-There may still be instances where the UI freezes in certain actions.  
-I plan to improve these one by one, and if you find something like this, please let me know through the Issue.<br>  
-If you pass a large number of rows when creating a grid, the UI may freeze. Check the example below.  
-[Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
-
-<br>
-
 ### [Demo Web](https://bosskmk.github.io/pluto_grid/build/web/index.html)
 > You can try out various functions and usage methods right away.  
 > All features provide example code.
@@ -35,7 +24,7 @@ If you pass a large number of rows when creating a grid, the UI may freeze. Chec
 
 <br>
 
-### [Documentation](https://github.com/bosskmk/pluto_grid/wiki)
+### [Documentation](https://pluto.weblaze.dev/series/pluto-grid)
 > The documentation has more details.
 
 <br>

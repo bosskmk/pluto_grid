@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -13,6 +12,7 @@ import 'keyboard_state_test.mocks.dart';
 @GenerateMocks([], customMocks: [
   MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
   MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
+  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
 ])
 void main() {
   late List<PlutoColumn> columns;
@@ -20,6 +20,8 @@ void main() {
   late List<PlutoRow> rows;
 
   PlutoGridScrollController scrollController;
+
+  PlutoGridEventManager eventManager;
 
   LinkedScrollControllerGroup horizontal;
 
@@ -36,6 +38,8 @@ void main() {
     rows = RowHelper.count(10, columns);
 
     scrollController = MockPlutoGridScrollController();
+
+    eventManager = MockPlutoGridEventManager();
 
     horizontal = MockLinkedScrollControllerGroup();
 
@@ -58,6 +62,7 @@ void main() {
       scroll: scrollController,
     );
 
+    stateManager.setEventManager(eventManager);
     stateManager.setLayout(const BoxConstraints(maxWidth: 500, maxHeight: 500));
   });
 

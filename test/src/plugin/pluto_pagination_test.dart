@@ -15,15 +15,17 @@ import '../plugin/pluto_pagination_test.mocks.dart';
 void main() {
   MockPlutoGridStateManager? stateManager;
 
-  late PublishSubject<PlutoStreamNotifierEvent> subject;
+  late PublishSubject<PlutoNotifierEvent> subject;
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
-    subject = PublishSubject<PlutoStreamNotifierEvent>();
+    subject = PublishSubject<PlutoNotifierEvent>();
 
     when(stateManager!.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
+
+    when(stateManager!.footerHeight).thenReturn(45);
 
     when(stateManager!.streamNotifier).thenAnswer((_) => subject);
   });

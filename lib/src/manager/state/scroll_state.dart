@@ -5,9 +5,15 @@ abstract class IScrollState {
   /// Controller to control the scrolling of the grid.
   PlutoGridScrollController? get scroll;
 
-  bool get isInvalidHorizontalScroll;
+  bool get isHorizontalOverScrolled;
+
+  double get correctHorizontalOffset;
+
+  Offset get directionalScrollEdgeOffset;
 
   void setScroll(PlutoGridScrollController scroll);
+
+  Offset toDirectionalOffset(Offset offset);
 
   /// [direction] Scroll direction
   /// [offset] Scroll position
@@ -27,7 +33,9 @@ abstract class IScrollState {
 
   bool needMovingScroll(Offset offset, PlutoMoveDirection move);
 
-  void updateCorrectScroll();
+  void updateCorrectScrollOffset();
+
+  void updateScrollViewport();
 
   void resetScrollToZero();
 }
@@ -39,12 +47,39 @@ mixin ScrollState implements IPlutoGridState {
   PlutoGridScrollController? _scroll;
 
   @override
-  bool get isInvalidHorizontalScroll =>
-      scroll!.maxScrollHorizontal < scroll!.bodyRowsHorizontal!.offset;
+  bool get isHorizontalOverScrolled =>
+      scroll!.bodyRowsHorizontal!.offset > scroll!.maxScrollHorizontal ||
+      scroll!.bodyRowsHorizontal!.offset < 0;
+
+  @override
+  double get correctHorizontalOffset {
+    if (isHorizontalOverScrolled) {
+      return scroll!.horizontalOffset < 0 ? 0 : scroll!.maxScrollHorizontal;
+    }
+
+    return scroll!.horizontalOffset;
+  }
+
+  @override
+  Offset get directionalScrollEdgeOffset => isLTR
+      ? Offset.zero
+      : const Offset(PlutoGridSettings.offsetScrollingFromEdge * 2, 0);
 
   @override
   void setScroll(PlutoGridScrollController? scroll) {
     _scroll = scroll;
+  }
+
+  @override
+  Offset toDirectionalOffset(Offset offset) {
+    if (isLTR) {
+      return offset;
+    }
+
+    return Offset(
+      (maxWidth! + gridGlobalOffset!.dx) - offset.dx,
+      offset.dy,
+    );
   }
 
   @override
@@ -114,11 +149,7 @@ mixin ScrollState implements IPlutoGridState {
       return;
     }
 
-    // 이동할 스크롤 포지션 계산을 위해 이동 할 컬럼까지의 넓이 합계를 구한다.
-    double offsetToMove = showFrozenColumn == true
-        ? bodyColumnsWidthAtColumnIdx(
-            columnIdx + direction.offset - leftFrozenColumnIndexes.length)
-        : columnsWidthAtColumnIdx(columnIdx + direction.offset);
+    double offsetToMove = columnToMove.startPosition;
 
     final double? screenOffset = showFrozenColumn == true
         ? maxWidth! - leftFrozenColumnsWidth - rightFrozenColumnsWidth
@@ -170,16 +201,34 @@ mixin ScrollState implements IPlutoGridState {
   }
 
   @override
-  void updateCorrectScroll() {
+  void updateCorrectScrollOffset() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (isInvalidHorizontalScroll) {
+      if (scroll?.bodyRowsHorizontal?.hasClients != true) {
+        return;
+      }
+
+      if (isHorizontalOverScrolled) {
         scroll!.horizontal!.animateTo(
-          scroll!.maxScrollHorizontal,
+          correctHorizontalOffset,
           curve: Curves.ease,
           duration: const Duration(milliseconds: 300),
         );
       }
     });
+  }
+
+  @override
+  void updateScrollViewport() {
+    if (maxWidth == null ||
+        scroll?.bodyRowsHorizontal?.position.hasViewportDimension != true) {
+      return;
+    }
+
+    final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
+
+    scroll!.horizontal!.applyViewportDimension(bodyWidth);
+
+    updateCorrectScrollOffset();
   }
 
   /// Called to fix an error
