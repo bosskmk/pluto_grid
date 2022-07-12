@@ -2,7 +2,7 @@
 name: Bug report
 about: Please use this template if you find a bug in PlutoGrid.
 title: "[Bug] "
-labels: ''
+labels: bug
 assignees: ''
 
 ---

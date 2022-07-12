@@ -3,7 +3,7 @@ name: Help request
 about: If you have any questions or need help when using PlutoGrid, please fill out
   this template.
 title: "[Help] "
-labels: ''
+labels: question
 assignees: ''
 
 ---

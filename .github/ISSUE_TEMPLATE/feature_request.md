@@ -3,7 +3,7 @@ name: Feature request
 about: Please select this template if you would like to request to add new features
   to PlutoGrid.
 title: "[Feature] "
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
