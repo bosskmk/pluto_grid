@@ -1,3 +1,7 @@
+## [1.0.3] - 2022. 7. 12
+
+* Bump PlutoGrid.
+
 ## [1.0.2] - 2022. 6. 8
 
 * Export of required classes.
