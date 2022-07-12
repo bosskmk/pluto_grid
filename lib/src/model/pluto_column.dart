@@ -6,6 +6,12 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
+/// It dynamically determines whether the cells of the column are in the edit state.
+///
+/// Once the [readOnly] value is set,
+/// whether the cell is editable cannot be changed during runtime,
+/// but if this callback is implemented,
+/// it can be determined whether the cell can be edited or not according to the state of the cell.
 typedef PlutoColumnCheckReadOnly = bool Function(
   PlutoRow row,
   PlutoCell cell,
@@ -20,18 +26,22 @@ class PlutoColumn {
   String field;
 
   /// Set the column type.
+  ///
+  /// Text, number, select, date, time, etc.
+  /// ex) PlutoColumnType.text(), PlutoColumnType.number() ...
   PlutoColumnType type;
 
   bool readOnly;
 
-  /// Set the width of the column.
   double width;
 
   double minWidth;
 
   /// Customisable title padding.
   /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
-  double? titlePadding;
+  EdgeInsets? titlePadding;
+
+  EdgeInsets? filterPadding;
 
   /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
   ///
@@ -52,7 +62,7 @@ class PlutoColumn {
 
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
-  double? cellPadding;
+  EdgeInsets? cellPadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
@@ -92,10 +102,24 @@ class PlutoColumn {
   bool enableSorting;
 
   /// Displays the right icon of the column title.
+  ///
+  /// The [PlutoGridConfiguration.columnContextIcon] icon appears.
+  /// Tap this icon to bring up the context menu.
+  ///
+  /// If [enableDropToResize] is also activated,
+  /// you can adjust the column width by dragging this icon.
   bool enableContextMenu;
 
   /// Display the right icon for drop to resize the column
-  /// Valid only when [enableContextMenu] is disabled.
+  ///
+  /// The [PlutoGridConfiguration.columnResizeIcon] icon appears.
+  /// By dragging this icon to the left or right, the width of the column can be adjusted.
+  /// Can't narrow down to less than [minWidth].
+  /// Also, if [frozen] is set,
+  /// it can be expanded only within the limit of the width of the frozen column.
+  ///
+  /// If [enableContextMenu] is enabled, the contextMenu icon appears.
+  /// In this case, dragging the context menu icon adjusts the column width.
   bool enableDropToResize;
 
   /// Displays filter-related menus in the column context menu.
@@ -127,10 +151,11 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
+    this.filterPadding,
     this.titleSpan,
     this.cellPadding,
-    this.textAlign = PlutoColumnTextAlign.left,
-    this.titleTextAlign = PlutoColumnTextAlign.left,
+    this.textAlign = PlutoColumnTextAlign.start,
+    this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
     this.formatter,
@@ -142,7 +167,7 @@ class PlutoColumn {
     this.enableRowChecked = false,
     this.enableSorting = true,
     this.enableContextMenu = true,
-    this.enableDropToResize = false,
+    this.enableDropToResize = true,
     this.enableFilterMenuItem = true,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,
@@ -152,7 +177,6 @@ class PlutoColumn {
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 
-  /// Column key
   final Key _key;
 
   final PlutoColumnCheckReadOnly? _checkReadOnly;
@@ -175,7 +199,7 @@ class PlutoColumn {
       _defaultFilter ?? const PlutoFilterTypeContains();
 
   bool get isShowRightIcon =>
-      enableContextMenu || !sort.isNone || enableRowDrag;
+      enableContextMenu || enableDropToResize || !sort.isNone;
 
   PlutoColumnGroup? group;
 
@@ -199,7 +223,13 @@ class PlutoColumn {
     return titleList.reversed.join(' ');
   }
 
-  bool visible = false;
+  /// [startPosition] is the position value for the position of the column from the left.
+  ///
+  /// Updated when the [PlutoGridStateManager.updateVisibilityLayout] method is called.
+  ///
+  /// [startPosition] is used to determine the position to scroll left and right when moving the keyboard
+  /// or whether the columns in the center area are displayed in the screen area.
+  double startPosition = 0;
 
   bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
     if (!hasCheckReadOnly || row == null || cell == null) {
@@ -268,66 +298,80 @@ class PlutoColumnRendererContext {
 }
 
 enum PlutoColumnTextAlign {
+  start,
   left,
   center,
   right,
-}
+  end;
 
-extension PlutoColumnTextAlignExtension on PlutoColumnTextAlign {
   TextAlign get value {
-    return this == PlutoColumnTextAlign.left
-        ? TextAlign.left
-        : this == PlutoColumnTextAlign.right
-            ? TextAlign.right
-            : TextAlign.center;
+    switch (this) {
+      case PlutoColumnTextAlign.start:
+        return TextAlign.start;
+      case PlutoColumnTextAlign.left:
+        return TextAlign.left;
+      case PlutoColumnTextAlign.center:
+        return TextAlign.center;
+      case PlutoColumnTextAlign.right:
+        return TextAlign.right;
+      case PlutoColumnTextAlign.end:
+        return TextAlign.end;
+    }
   }
 
   AlignmentGeometry get alignmentValue {
-    return this == PlutoColumnTextAlign.left
-        ? Alignment.centerLeft
-        : this == PlutoColumnTextAlign.right
-            ? Alignment.centerRight
-            : Alignment.center;
+    switch (this) {
+      case PlutoColumnTextAlign.start:
+        return AlignmentDirectional.centerStart;
+      case PlutoColumnTextAlign.left:
+        return Alignment.centerLeft;
+      case PlutoColumnTextAlign.center:
+        return Alignment.center;
+      case PlutoColumnTextAlign.right:
+        return Alignment.centerRight;
+      case PlutoColumnTextAlign.end:
+        return AlignmentDirectional.centerEnd;
+    }
   }
+
+  bool get isStart => this == PlutoColumnTextAlign.start;
 
   bool get isLeft => this == PlutoColumnTextAlign.left;
 
+  bool get isCenter => this == PlutoColumnTextAlign.center;
+
   bool get isRight => this == PlutoColumnTextAlign.right;
 
-  bool get isCenter => this == PlutoColumnTextAlign.center;
+  bool get isEnd => this == PlutoColumnTextAlign.end;
 }
 
 enum PlutoColumnFrozen {
   none,
-  left,
-  right,
-}
+  start,
+  end;
 
-extension PlutoColumnFrozenExtension on PlutoColumnFrozen {
   bool get isNone {
     return this == PlutoColumnFrozen.none;
   }
 
-  bool get isLeft {
-    return this == PlutoColumnFrozen.left;
+  bool get isStart {
+    return this == PlutoColumnFrozen.start;
   }
 
-  bool get isRight {
-    return this == PlutoColumnFrozen.right;
+  bool get isEnd {
+    return this == PlutoColumnFrozen.end;
   }
 
   bool get isFrozen {
-    return this == PlutoColumnFrozen.left || this == PlutoColumnFrozen.right;
+    return this == PlutoColumnFrozen.start || this == PlutoColumnFrozen.end;
   }
 }
 
 enum PlutoColumnSort {
   none,
   ascending,
-  descending,
-}
+  descending;
 
-extension PlutoColumnSortExtension on PlutoColumnSort {
   bool get isNone {
     return this == PlutoColumnSort.none;
   }
@@ -338,19 +382,5 @@ extension PlutoColumnSortExtension on PlutoColumnSort {
 
   bool get isDescending {
     return this == PlutoColumnSort.descending;
-  }
-
-  String toShortString() {
-    return toString().split('.').last;
-  }
-
-  PlutoColumnSort fromString(String value) {
-    if (value == PlutoColumnSort.ascending.toShortString()) {
-      return PlutoColumnSort.ascending;
-    } else if (value == PlutoColumnSort.descending.toShortString()) {
-      return PlutoColumnSort.descending;
-    } else {
-      return PlutoColumnSort.none;
-    }
   }
 }

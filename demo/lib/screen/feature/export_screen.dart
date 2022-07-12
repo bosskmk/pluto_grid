@@ -1,6 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -134,7 +135,11 @@ class _ExportScreenState extends State<ExportScreen> {
       title: 'Export / download as PDF or CSV',
       topTitle: 'Export / download as PDF or CSV',
       topContents: const [
-        Text('You can export grid contents as PDF or CSV'),
+        Text(
+            'You can export grid contents as PDF or CSV with pluto_grid_export package from pub.dev.'),
+        Text("The example doesn't actually download the file."),
+        Text(
+            'The file download part is implemented directly for each platform or is possible through a package such as FileSaver.'),
       ],
       topButtons: [
         PlutoExampleButton(
@@ -219,7 +224,7 @@ class _HeaderState extends State<_Header> {
     String title = "pluto_grid_export";
     var exported = const Utf8Encoder().convert(
         pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
-    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+    // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVCompatibleWithExcel() async {
@@ -231,7 +236,7 @@ class _HeaderState extends State<_Header> {
         // This allows open the file in Excel with proper character interpretation
         // See https://stackoverflow.com/a/155176
         '\u{FEFF}$exportCSV');
-    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+    // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVFakeExcel() async {
@@ -243,7 +248,7 @@ class _HeaderState extends State<_Header> {
         // This allows open the file in Excel with proper character interpretation
         // See https://stackoverflow.com/a/155176
         '\u{FEFF}$exportCSV');
-    await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
+    // await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
   }
 
   // void _exportGridAsTSV() async {
@@ -262,7 +267,7 @@ class _HeaderState extends State<_Header> {
       widget.stateManager,
       fieldDelimiter: ";",
     ));
-    await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+    // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   @override

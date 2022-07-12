@@ -87,6 +87,9 @@ class _GridAsPopupScreenState extends State<GridAsPopupScreen> {
       onSelected: (PlutoGridOnSelectedEvent event) {
         controller.text = event.row!.cells[selectFieldName]!.value.toString();
       },
+      onSorted: (PlutoGridOnSortedEvent event) {
+        print(event);
+      },
     );
   }
 

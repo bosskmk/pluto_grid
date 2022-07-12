@@ -3,65 +3,65 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRightFrozenRows extends PlutoStatefulWidget {
-  @override
   final PlutoGridStateManager stateManager;
 
   const PlutoRightFrozenRows(
     this.stateManager, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoRightFrozenRowsState createState() => PlutoRightFrozenRowsState();
 }
 
-abstract class _PlutoRightFrozenRowsStateWithState
+class PlutoRightFrozenRowsState
     extends PlutoStateWithChange<PlutoRightFrozenRows> {
-  List<PlutoColumn>? _columns;
+  List<PlutoColumn> _columns = [];
 
-  List<PlutoRow?>? _rows;
+  List<PlutoRow> _rows = [];
 
-  @override
-  bool allowStream(event) {
-    return !(event is PlutoSetCurrentCellStreamNotifierEvent ||
-        event is PlutoVisibilityColumnStreamNotifierEvent);
-  }
+  late final ScrollController _scroll;
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _columns = update<List<PlutoColumn>?>(
-        _columns,
-        widget.stateManager.rightFrozenColumns,
-        compare: listEquals,
-      );
-
-      _rows = [
-        ...update<List<PlutoRow?>?>(
-          _rows,
-          widget.stateManager.refRows,
-          compare: listEquals,
-        )!
-      ];
-    });
-  }
-}
-
-class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
-  ScrollController? _scroll;
-
-  @override
-  void dispose() {
-    _scroll!.dispose();
-
-    super.dispose();
-  }
+  PlutoGridStateManager get stateManager => widget.stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    _scroll = widget.stateManager.scroll!.vertical!.addAndGet();
+    _scroll = stateManager.scroll!.vertical!.addAndGet();
+
+    updateState();
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void updateState() {
+    _columns = update<List<PlutoColumn>>(
+      _columns,
+      _getColumns(),
+      compare: listEquals,
+    );
+
+    _rows = [
+      ...update<List<PlutoRow>>(
+        _rows,
+        stateManager.refRows,
+        compare: listEquals,
+      )
+    ];
+  }
+
+  List<PlutoColumn> _getColumns() {
+    return stateManager.isLTR
+        ? stateManager.rightFrozenColumns
+        : stateManager.rightFrozenColumns.reversed.toList(growable: false);
   }
 
   @override
@@ -70,14 +70,15 @@ class PlutoRightFrozenRowsState extends _PlutoRightFrozenRowsStateWithState {
       controller: _scroll,
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
-      itemCount: _rows!.length,
-      itemExtent: widget.stateManager.rowTotalHeight,
+      itemCount: _rows.length,
+      itemExtent: stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
-          key: ValueKey('right_frozen_row_${_rows![i]!.key}'),
+          key: ValueKey('right_frozen_row_${_rows[i].key}'),
           rowIdx: i,
-          row: _rows![i]!,
-          columns: _columns!,
+          row: _rows[i],
+          columns: _columns,
+          stateManager: stateManager,
         );
       },
     );

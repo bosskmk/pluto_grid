@@ -230,7 +230,7 @@ mixin EditingState implements IPlutoGridState {
 
     List<int> rowIdxList = [];
 
-    for (var i = 0; i < refRows.length; i += 1) {
+    for (int i = 0; i < refRows.length; i += 1) {
       final currentRowKey = refRows[i].key;
 
       if (selectingRowKeys.contains(currentRowKey)) {
@@ -261,7 +261,7 @@ mixin EditingState implements IPlutoGridState {
 
     int textRowIdx = 0;
 
-    for (var i = 0; i < rowIdxList.length; i += 1) {
+    for (int i = 0; i < rowIdxList.length; i += 1) {
       final rowIdx = rowIdxList[i];
 
       int textColumnIdx = 0;
@@ -274,7 +274,7 @@ mixin EditingState implements IPlutoGridState {
         textRowIdx = 0;
       }
 
-      for (var columnIdx = columnStartIdx!;
+      for (int columnIdx = columnStartIdx!;
           columnIdx <= columnEndIdx!;
           columnIdx += 1) {
         if (columnIdx > columnIndexes.length - 1) {

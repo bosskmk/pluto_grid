@@ -9,6 +9,7 @@ import '../widget/pluto_grid_title.dart';
 import '../widget/pluto_list_tile.dart';
 import '../widget/pluto_section.dart';
 import '../widget/pluto_text_color_animation.dart';
+import 'development_screen.dart';
 import 'feature/add_and_remove_column_row_screen.dart';
 import 'feature/add_rows_asynchronously.dart';
 import 'feature/cell_renderer_screen.dart';
@@ -17,6 +18,7 @@ import 'feature/column_filtering_screen.dart';
 import 'feature/column_freezing_screen.dart';
 import 'feature/column_group_screen.dart';
 import 'feature/column_hiding_screen.dart';
+import 'feature/column_menu_screen.dart';
 import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
 import 'feature/column_sorting_screen.dart';
@@ -35,6 +37,7 @@ import 'feature/row_moving_screen.dart';
 import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
 import 'feature/row_with_checkbox_screen.dart';
+import 'feature/rtl_screen.dart';
 import 'feature/selection_type_column_screen.dart';
 import 'feature/text_type_column_screen.dart';
 import 'feature/time_type_column_screen.dart';
@@ -222,7 +225,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnGroupScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Column resizing',
@@ -231,6 +233,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnResizingScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Column sorting',
@@ -255,6 +258,14 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Column menu',
+            description: 'Customize the menu on the right side of the column.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnMenuScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Text type column',
             description: 'A column to enter a character value.',
             onTapLiveDemo: () {
@@ -274,7 +285,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DateTypeColumnScreen.routeName);
             },
-            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Time type column',
@@ -282,7 +292,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, TimeTypeColumnScreen.routeName);
             },
-            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Selection type column',
@@ -304,7 +313,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowColorScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Row selection',
@@ -327,7 +335,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowPaginationScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Row with checkbox',
@@ -345,7 +352,6 @@ class PlutoFeatures extends StatelessWidget {
                 AddRowsAsynchronouslyScreen.routeName,
               );
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Cell selection',
@@ -387,13 +393,20 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'RTL - TextDirection.',
+            description: 'Activate Right-To-Left which is a TextDirection.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RTLScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Add and Remove Columns, Rows',
             description: 'You can add or delete columns, rows.',
             onTapLiveDemo: () {
               Navigator.pushNamed(
                   context, AddAndRemoveColumnRowScreen.routeName);
             },
-            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Dual mode',
@@ -402,6 +415,7 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DualModeScreen.routeName);
             },
+            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Grid as Popup',
@@ -421,7 +435,6 @@ class PlutoFeatures extends StatelessWidget {
           PlutoListTile(
             title: 'Export',
             description: 'Exporting grid data as CSV.',
-            trailing: newIcon,
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ExportScreen.routeName);
             },
@@ -431,6 +444,14 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Change the entire theme of the grid to Dark.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DarkModeScreen.routeName);
+            },
+          ),
+          PlutoListTile.amber(
+            title: 'Development',
+            description:
+                'This screen is used during development, and various functions can be tested.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, DevelopmentScreen.routeName);
             },
           ),
         ],
@@ -517,6 +538,20 @@ class PlutoContributors extends StatelessWidget {
             linkTitle: 'Github',
             onTapLink: () {
               launchUrl('https://github.com/MajedDH');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Dmitry Sboychakov',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/DmitrySboychakov');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Ivan Daniluk',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/divan');
             },
           ),
           PlutoContributorTile.invisible(

@@ -19,13 +19,15 @@ void main() {
   late MockPlutoGridStateManager stateManager;
 
   setUp(() {
+    const configuration = PlutoGridConfiguration();
     stateManager = MockPlutoGridStateManager();
-    when(stateManager.configuration).thenReturn(
-      const PlutoGridConfiguration(),
-    );
+    when(stateManager.configuration).thenReturn(configuration);
+    when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
-      RowHelper.resolveRowTotalHeight(stateManager.configuration!.rowHeight),
+      RowHelper.resolveRowTotalHeight(
+        stateManager.configuration!.style.rowHeight,
+      ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
@@ -121,7 +123,9 @@ void main() {
 
     tapCell.test('12:28 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '12:28')).called(1);
@@ -129,8 +133,11 @@ void main() {
 
     tapCell.test('12:33 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '12:33')).called(1);
@@ -145,11 +152,17 @@ void main() {
 
     tapCell.test('15:28 분 선택.', (tester) async {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pumpAndSettle();
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
       verify(stateManager.handleAfterSelectingRow(cell, '15:28')).called(1);
@@ -162,10 +175,14 @@ void main() {
       late Color inactivatedTextColor;
 
       setUp(() {
-        activatedCellColor = stateManager.configuration!.activatedBorderColor;
-        activatedTextColor = stateManager.configuration!.gridBackgroundColor;
-        inactivatedCellColor = stateManager.configuration!.gridBackgroundColor;
-        inactivatedTextColor = stateManager.configuration!.cellTextStyle.color!;
+        activatedCellColor =
+            stateManager.configuration!.style.activatedBorderColor;
+        activatedTextColor =
+            stateManager.configuration!.style.gridBackgroundColor;
+        inactivatedCellColor =
+            stateManager.configuration!.style.gridBackgroundColor;
+        inactivatedTextColor =
+            stateManager.configuration!.style.cellTextStyle.color!;
       });
 
       tapCell.test(
@@ -273,6 +290,7 @@ void main() {
         '30의 color 가 비활성, 11의 color 가 활성이 되어야 한다.(11:30)',
         (tester) async {
           await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+          await tester.pumpAndSettle();
           await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
           await tester.pumpAndSettle();
 

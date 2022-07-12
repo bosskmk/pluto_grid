@@ -46,6 +46,7 @@ class PlutoDateTimeHelper {
     }
   }
 
+  /// Returns whether [date] is in the range [start] and [end].
   static bool isValidRange({
     required DateTime date,
     required DateTime? start,
@@ -62,6 +63,8 @@ class PlutoDateTimeHelper {
     return true;
   }
 
+  /// Returns whether [date] is in the range
+  /// of the first day of [start.month] and the last day of [end.month].
   static bool isValidRangeInMonth({
     required DateTime date,
     required DateTime? start,

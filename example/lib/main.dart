@@ -130,9 +130,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          configuration: const PlutoGridConfiguration(
-            enableColumnBorder: true,
-          ),
+          configuration: const PlutoGridConfiguration(),
         ),
       ),
     );

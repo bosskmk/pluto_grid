@@ -3,8 +3,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class PopupCell extends StatefulWidget {
   final PlutoGridStateManager stateManager;
+
   final PlutoCell cell;
+
   final PlutoColumn column;
+
   final PlutoRow row;
 
   const PopupCell({
@@ -26,10 +29,6 @@ abstract class GridPopupProps {
 
 mixin PopupCellState<T extends PopupCell> on State<T>
     implements GridPopupProps {
-  late final TextEditingController textController;
-
-  late final FocusNode textFocus;
-
   bool isOpenedPopup = false;
 
   /// If a column field name is specified,
@@ -51,16 +50,9 @@ mixin PopupCellState<T extends PopupCell> on State<T>
   /// Implement a callback function that takes [PlutoGridStateManager] as a parameter.
   CreateFooterCallBack? createFooter;
 
-  @override
-  void dispose() {
-    widget.stateManager.keyPressed.reset();
+  late final TextEditingController textController;
 
-    textController.dispose();
-
-    textFocus.dispose();
-
-    super.dispose();
-  }
+  late final FocusNode textFocus;
 
   @override
   void initState() {
@@ -71,6 +63,17 @@ mixin PopupCellState<T extends PopupCell> on State<T>
           widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
     textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+  }
+
+  @override
+  void dispose() {
+    widget.stateManager.keyPressed.reset();
+
+    textController.dispose();
+
+    textFocus.dispose();
+
+    super.dispose();
   }
 
   void openPopup() {
@@ -95,44 +98,19 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       createHeader: createHeader,
       createFooter: createFooter,
       configuration: widget.stateManager.configuration?.copyWith(
-        gridBorderRadius:
-            widget.stateManager.configuration?.gridPopupBorderRadius ??
-                BorderRadius.zero,
-        defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-        defaultCellPadding: PlutoGridSettings.cellPadding,
-        rowHeight: widget.stateManager.configuration!.rowHeight,
-        enableRowColorAnimation: false,
+        style: widget.stateManager.configuration?.style.copyWith(
+          oddRowColor: PlutoOptional(null),
+          evenRowColor: PlutoOptional(null),
+          gridBorderRadius:
+              widget.stateManager.configuration?.style.gridPopupBorderRadius ??
+                  BorderRadius.zero,
+          defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+          defaultCellPadding: PlutoGridSettings.cellPadding,
+          rowHeight: widget.stateManager.configuration!.style.rowHeight,
+          enableRowColorAnimation: false,
+        ),
       ),
     );
-  }
-
-  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, RawKeyEvent event) {
-    var keyManager = PlutoKeyManagerEvent(
-      focusNode: node,
-      event: event,
-    );
-
-    if (keyManager.isKeyUpEvent) {
-      return KeyEventResult.handled;
-    }
-
-    if (keyManager.isF2 || keyManager.isCharacter) {
-      if (isOpenedPopup != true) {
-        openPopup();
-        return KeyEventResult.handled;
-      }
-    }
-
-    // 엔터키는 그리드 포커스 핸들러로 전파 한다.
-    if (keyManager.isEnter) {
-      return KeyEventResult.ignored;
-    }
-
-    // KeyManager 로 이벤트 처리를 위임 한다.
-    widget.stateManager.keyManager!.subject.add(keyManager);
-
-    // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
-    return KeyEventResult.handled;
   }
 
   void onLoaded(PlutoGridOnLoadedEvent event) {
@@ -199,42 +177,63 @@ mixin PopupCellState<T extends PopupCell> on State<T>
     }
   }
 
+  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, RawKeyEvent event) {
+    var keyManager = PlutoKeyManagerEvent(
+      focusNode: node,
+      event: event,
+    );
+
+    if (keyManager.isKeyUpEvent) {
+      return KeyEventResult.handled;
+    }
+
+    if (keyManager.isF2 || keyManager.isCharacter) {
+      if (isOpenedPopup != true) {
+        openPopup();
+        return KeyEventResult.handled;
+      }
+    }
+
+    // 엔터키는 그리드 포커스 핸들러로 전파 한다.
+    if (keyManager.isEnter) {
+      return KeyEventResult.ignored;
+    }
+
+    // KeyManager 로 이벤트 처리를 위임 한다.
+    widget.stateManager.keyManager!.subject.add(keyManager);
+
+    // 모든 이벤트를 처리 하고 이벤트 전파를 중단한다.
+    return KeyEventResult.handled;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.stateManager.keepFocus) {
       textFocus.requestFocus();
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        TextField(
-          controller: textController,
-          focusNode: textFocus,
-          readOnly: true,
-          textInputAction: TextInputAction.none,
-          onTap: openPopup,
-          style: widget.stateManager.configuration!.cellTextStyle,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.all(0),
-            isDense: true,
-          ),
-          maxLines: 1,
-          textAlign: widget.column.textAlign.value,
+    return TextField(
+      focusNode: textFocus,
+      controller: textController,
+      readOnly: true,
+      textInputAction: TextInputAction.none,
+      onTap: openPopup,
+      style: widget.stateManager.configuration!.style.cellTextStyle,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(
+          borderSide: BorderSide.none,
         ),
-        Positioned(
-          top: -14,
-          right: !widget.column.textAlign.isRight ? -10 : null,
-          left: widget.column.textAlign.isRight ? -10 : null,
-          child: IconButton(
-            icon: icon!,
-            color: widget.stateManager.configuration!.iconColor,
-            iconSize: widget.stateManager.configuration!.iconSize,
-            onPressed: openPopup,
-          ),
+        contentPadding: EdgeInsets.zero,
+        suffixIcon: IconButton(
+          icon: icon!,
+          color: widget.stateManager.configuration!.style.iconColor,
+          iconSize: widget.stateManager.configuration!.style.iconSize,
+          onPressed: openPopup,
         ),
-      ],
+      ),
+      maxLines: 1,
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: widget.column.textAlign.value,
     );
   }
 }

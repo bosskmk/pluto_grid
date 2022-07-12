@@ -60,22 +60,31 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
 
     final localeText = widget.stateManager.localeText;
 
+    final style = widget.stateManager.style;
+
     final configuration = widget.stateManager.configuration!.copyWith(
-      gridBorderRadius:
-          widget.stateManager.configuration?.gridPopupBorderRadius ??
-              BorderRadius.zero,
-      defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
-      defaultCellPadding: 3,
-      rowHeight: widget.stateManager.configuration!.rowHeight,
-      enableRowColorAnimation: false,
-      enableColumnBorder: false,
-      borderColor: widget.stateManager.configuration!.gridBackgroundColor,
-      activatedBorderColor:
-          widget.stateManager.configuration!.gridBackgroundColor,
-      activatedColor: widget.stateManager.configuration!.gridBackgroundColor,
-      gridBorderColor: widget.stateManager.configuration!.gridBackgroundColor,
-      inactivatedBorderColor:
-          widget.stateManager.configuration!.gridBackgroundColor,
+      style: style.copyWith(
+        enableColumnBorderVertical: false,
+        enableColumnBorderHorizontal: false,
+        enableCellBorderVertical: false,
+        enableCellBorderHorizontal: false,
+        enableRowColorAnimation: false,
+        oddRowColor: PlutoOptional(null),
+        evenRowColor: PlutoOptional(null),
+        activatedColor: style.gridBackgroundColor,
+        gridBorderColor: style.gridBackgroundColor,
+        borderColor: style.gridBackgroundColor,
+        activatedBorderColor: style.gridBackgroundColor,
+        inactivatedBorderColor: style.gridBackgroundColor,
+        rowHeight: style.rowHeight,
+        defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
+        defaultCellPadding: const EdgeInsets.symmetric(horizontal: 3),
+        gridBorderRadius: style.gridPopupBorderRadius,
+      ),
+      columnSize: const PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.none,
+        resizeMode: PlutoResizeMode.none,
+      ),
     );
 
     PlutoDualGridPopup(
@@ -104,6 +113,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
             enableSorting: false,
             enableColumnDrag: false,
             enableContextMenu: false,
+            enableDropToResize: false,
             textAlign: PlutoColumnTextAlign.center,
             titleTextAlign: PlutoColumnTextAlign.center,
             width: 134,
@@ -118,16 +128,21 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+          final stateManager = event.stateManager;
+          final rows = stateManager.refRows;
+          final length = rows.length;
 
-          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['hour']!.value ==
-                cellHour) {
-              event.stateManager.setCurrentCell(
-                  event.stateManager.refRows[i].cells['hour'], i);
+          stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
-              event.stateManager.moveScrollByRow(
-                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+          for (var i = 0; i < length; i += 1) {
+            if (rows[i].cells['hour']!.value == cellHour) {
+              stateManager.setCurrentCell(rows[i].cells['hour'], i);
+
+              stateManager.moveScrollByRow(
+                PlutoMoveDirection.up,
+                i + 1 + offsetOfScrollRowIdx,
+              );
+
               return;
             }
           }
@@ -144,6 +159,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
             enableSorting: false,
             enableColumnDrag: false,
             enableContextMenu: false,
+            enableDropToResize: false,
             textAlign: PlutoColumnTextAlign.center,
             titleTextAlign: PlutoColumnTextAlign.center,
             width: 134,
@@ -158,16 +174,21 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
                 }))
             .toList(growable: false),
         onLoaded: (PlutoGridOnLoadedEvent event) {
-          event.stateManager.setSelectingMode(PlutoGridSelectingMode.none);
+          final stateManager = event.stateManager;
+          final rows = stateManager.refRows;
+          final length = rows.length;
 
-          for (var i = 0; i < event.stateManager.refRows.length; i += 1) {
-            if (event.stateManager.refRows[i].cells['minute']!.value ==
-                cellMinute) {
-              event.stateManager.setCurrentCell(
-                  event.stateManager.refRows[i].cells['minute'], i);
+          stateManager.setSelectingMode(PlutoGridSelectingMode.none);
 
-              event.stateManager.moveScrollByRow(
-                  PlutoMoveDirection.up, i + 1 + offsetOfScrollRowIdx);
+          for (var i = 0; i < length; i += 1) {
+            if (rows[i].cells['minute']!.value == cellMinute) {
+              stateManager.setCurrentCell(rows[i].cells['minute'], i);
+
+              stateManager.moveScrollByRow(
+                PlutoMoveDirection.up,
+                i + 1 + offsetOfScrollRowIdx,
+              );
+
               return;
             }
           }
@@ -177,6 +198,9 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
       mode: PlutoGridMode.select,
       width: 276,
       height: 300,
+      divider: const PlutoDualGridDivider(
+        show: false,
+      ),
     );
   }
 
@@ -186,12 +210,12 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
     final isCurrentCell = renderContext.stateManager.isCurrentCell(cell);
 
     final cellColor = isCurrentCell && renderContext.stateManager.hasFocus
-        ? widget.stateManager.configuration!.activatedBorderColor
-        : widget.stateManager.configuration!.gridBackgroundColor;
+        ? widget.stateManager.style.activatedBorderColor
+        : widget.stateManager.style.gridBackgroundColor;
 
     final textColor = isCurrentCell && renderContext.stateManager.hasFocus
-        ? widget.stateManager.configuration!.gridBackgroundColor
-        : widget.stateManager.configuration!.cellTextStyle.color;
+        ? widget.stateManager.style.gridBackgroundColor
+        : widget.stateManager.style.cellTextStyle.color;
 
     return Container(
       padding: const EdgeInsets.all(5),
@@ -202,8 +226,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
             ? null
             : !renderContext.stateManager.hasFocus
                 ? Border.all(
-                    color:
-                        widget.stateManager.configuration!.activatedBorderColor,
+                    color: widget.stateManager.style.activatedBorderColor,
                     width: 1,
                   )
                 : null,

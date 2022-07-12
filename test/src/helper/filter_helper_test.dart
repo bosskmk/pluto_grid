@@ -760,18 +760,15 @@ void main() {
         var columnType = filterColumn.type as PlutoColumnTypeSelect;
 
         // configuration 의 필터 수 만큼 생성 되어야 한다. (기본 8개)
-        expect(configuration.columnFilterConfig.filters.length, 8);
-        expect(columnType.items.length,
-            configuration.columnFilterConfig.filters.length);
+        expect(configuration.columnFilter.filters.length, 8);
+        expect(
+            columnType.items.length, configuration.columnFilter.filters.length);
 
         // formatter (filter 가 값으로 써 formatter 에서 title 을 반환한다.)
-        for (var i = 0;
-            i < configuration.columnFilterConfig.filters.length;
-            i += 1) {
+        for (var i = 0; i < configuration.columnFilter.filters.length; i += 1) {
           expect(
-            filterColumn
-                .formatter!(configuration.columnFilterConfig.filters[i]),
-            configuration.columnFilterConfig.filters[i].title,
+            filterColumn.formatter!(configuration.columnFilter.filters[i]),
+            configuration.columnFilter.filters[i].title,
           );
         }
       });

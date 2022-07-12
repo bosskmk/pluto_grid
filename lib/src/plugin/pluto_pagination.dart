@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoPagination extends PlutoStatefulWidget {
-  const PlutoPagination(this.stateManager, {Key? key}) : super(key: key);
+  const PlutoPagination(
+    this.stateManager, {
+    super.key,
+  });
 
-  @override
   final PlutoGridStateManager stateManager;
 
   @override
@@ -15,34 +17,37 @@ class PlutoPagination extends PlutoStatefulWidget {
 
 abstract class _PlutoPaginationStateWithChange
     extends PlutoStateWithChange<PlutoPagination> {
-  int page = 1;
+  late int page;
 
-  int totalPage = 1;
+  late int totalPage;
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
 
   @override
   void initState() {
     super.initState();
 
-    page = widget.stateManager.page;
+    page = stateManager.page;
 
-    totalPage = widget.stateManager.totalPage;
+    totalPage = stateManager.totalPage;
 
-    widget.stateManager.setPage(page, notify: false);
+    stateManager.setPage(page, notify: false);
+
+    updateState();
   }
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      page = update<int>(
-        page,
-        widget.stateManager.page,
-      );
+  void updateState() {
+    page = update<int>(
+      page,
+      stateManager.page,
+    );
 
-      totalPage = update<int>(
-        totalPage,
-        widget.stateManager.totalPage,
-      );
-    });
+    totalPage = update<int>(
+      totalPage,
+      stateManager.totalPage,
+    );
   }
 }
 
@@ -129,7 +134,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   }
 
   void _movePage(int page) {
-    widget.stateManager.setPage(page);
+    stateManager.setPage(page);
   }
 
   ButtonStyle _getNumberButtonStyle(bool isCurrentIndex) {
@@ -145,10 +150,10 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   TextStyle _getNumberTextStyle(bool isCurrentIndex) {
     return TextStyle(
       fontSize:
-          isCurrentIndex ? widget.stateManager.configuration!.iconSize : null,
+          isCurrentIndex ? stateManager.configuration!.style.iconSize : null,
       color: isCurrentIndex
-          ? widget.stateManager.configuration!.activatedBorderColor
-          : widget.stateManager.configuration!.iconColor,
+          ? stateManager.configuration!.style.activatedBorderColor
+          : stateManager.configuration!.style.iconColor,
     );
   }
 
@@ -159,7 +164,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
     return TextButton(
       onPressed: () {
-        widget.stateManager.setPage(pageFromIndex);
+        stateManager.setPage(pageFromIndex);
       },
       style: _getNumberButtonStyle(isCurrentIndex),
       child: Text(
@@ -172,69 +177,66 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (layoutContext, size) {
+      builder: (_, size) {
         _maxWidth = size.maxWidth;
-        final Color iconColor = widget.stateManager.configuration!.iconColor;
+
+        final Color iconColor = stateManager.configuration!.style.iconColor;
+
         final Color disabledIconColor =
-            widget.stateManager.configuration!.disabledIconColor;
-        // can't center using center, it'll take all max width and max height
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: _isFirstPage ? null : _firstPage,
-                      icon: const Icon(Icons.first_page),
-                      color: iconColor,
-                      disabledColor: disabledIconColor,
-                      splashRadius: _iconSplashRadius,
-                      mouseCursor: _isFirstPage
-                          ? SystemMouseCursors.basic
-                          : SystemMouseCursors.click,
-                    ),
-                    IconButton(
-                      onPressed: _isFirstPage ? null : _beforePage,
-                      icon: const Icon(Icons.navigate_before),
-                      color: iconColor,
-                      disabledColor: disabledIconColor,
-                      splashRadius: _iconSplashRadius,
-                      mouseCursor: _isFirstPage
-                          ? SystemMouseCursors.basic
-                          : SystemMouseCursors.click,
-                    ),
-                    ..._pageNumbers.map(_makeNumberButton).toList(),
-                    IconButton(
-                      onPressed: _isLastPage ? null : _nextPage,
-                      icon: const Icon(Icons.navigate_next),
-                      color: iconColor,
-                      disabledColor: disabledIconColor,
-                      splashRadius: _iconSplashRadius,
-                      mouseCursor: _isLastPage
-                          ? SystemMouseCursors.basic
-                          : SystemMouseCursors.click,
-                    ),
-                    IconButton(
-                      onPressed: _isLastPage ? null : _lastPage,
-                      icon: const Icon(Icons.last_page),
-                      color: iconColor,
-                      disabledColor: disabledIconColor,
-                      splashRadius: _iconSplashRadius,
-                      mouseCursor: _isLastPage
-                          ? SystemMouseCursors.basic
-                          : SystemMouseCursors.click,
-                    ),
-                  ],
+            stateManager.configuration!.style.disabledIconColor;
+
+        return Container(
+          width: _maxWidth,
+          height: stateManager.footerHeight,
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: _isFirstPage ? null : _firstPage,
+                  icon: const Icon(Icons.first_page),
+                  color: iconColor,
+                  disabledColor: disabledIconColor,
+                  splashRadius: _iconSplashRadius,
+                  mouseCursor: _isFirstPage
+                      ? SystemMouseCursors.basic
+                      : SystemMouseCursors.click,
                 ),
-              ),
-            )
-          ],
+                IconButton(
+                  onPressed: _isFirstPage ? null : _beforePage,
+                  icon: const Icon(Icons.navigate_before),
+                  color: iconColor,
+                  disabledColor: disabledIconColor,
+                  splashRadius: _iconSplashRadius,
+                  mouseCursor: _isFirstPage
+                      ? SystemMouseCursors.basic
+                      : SystemMouseCursors.click,
+                ),
+                ..._pageNumbers.map(_makeNumberButton).toList(),
+                IconButton(
+                  onPressed: _isLastPage ? null : _nextPage,
+                  icon: const Icon(Icons.navigate_next),
+                  color: iconColor,
+                  disabledColor: disabledIconColor,
+                  splashRadius: _iconSplashRadius,
+                  mouseCursor: _isLastPage
+                      ? SystemMouseCursors.basic
+                      : SystemMouseCursors.click,
+                ),
+                IconButton(
+                  onPressed: _isLastPage ? null : _lastPage,
+                  icon: const Icon(Icons.last_page),
+                  color: iconColor,
+                  disabledColor: disabledIconColor,
+                  splashRadius: _iconSplashRadius,
+                  mouseCursor: _isLastPage
+                      ? SystemMouseCursors.basic
+                      : SystemMouseCursors.click,
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

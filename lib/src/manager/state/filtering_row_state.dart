@@ -39,7 +39,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true}) {
-    for (var row in refRows.originalList) {
+    for (final row in refRows.originalList) {
       row.setState(PlutoRowState.none);
     }
 
@@ -151,9 +151,12 @@ mixin FilteringRowState implements IPlutoGridState {
       FilterPopupState(
         context: context,
         configuration: configuration!.copyWith(
-          enableRowColorAnimation: false,
-          gridBorderRadius:
-              configuration?.gridPopupBorderRadius ?? BorderRadius.zero,
+          style: configuration!.style.copyWith(
+            gridBorderRadius: configuration!.style.gridPopupBorderRadius,
+            enableRowColorAnimation: false,
+            oddRowColor: PlutoOptional(null),
+            evenRowColor: PlutoOptional(null),
+          ),
         ),
         handleAddNewFilter: (filterState) {
           filterState!.appendRows([FilterHelper.createFilterRow()]);

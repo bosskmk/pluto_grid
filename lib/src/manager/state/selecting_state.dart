@@ -120,8 +120,8 @@ mixin SelectingState implements IPlutoGridState {
 
     List<PlutoGridSelectingCellPosition> positions = [];
 
-    for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
-      for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
+    for (int i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      for (int j = columnStartIdx; j <= columnEndIdx; j += 1) {
         final String field = refColumns[columnIndexes[j]].field;
 
         positions.add(PlutoGridSelectingCellPosition(
@@ -313,26 +313,24 @@ mixin SelectingState implements IPlutoGridState {
 
     int? columnIdx;
 
-    double currentWidth = 0.0;
-    currentWidth += gridGlobalOffset!.dx;
-    currentWidth += PlutoGridSettings.gridPadding;
-    currentWidth += PlutoGridSettings.gridBorderWidth;
+    final directionalOffset = toDirectionalOffset(offset);
+    double currentWidth = isLTR ? gridGlobalOffset!.dx : 0.0;
 
     final columnIndexes = columnIndexesByShowFrozen;
 
     final savedRightBlankOffset = rightBlankOffset;
     final savedHorizontalScrollOffset = scroll!.horizontal!.offset;
 
-    for (var i = 0; i < columnIndexes.length; i += 1) {
+    for (int i = 0; i < columnIndexes.length; i += 1) {
       final column = refColumns[columnIndexes[i]];
 
       currentWidth += column.width;
 
       final rightFrozenColumnOffset =
-          column.frozen.isRight && showFrozenColumn ? savedRightBlankOffset : 0;
+          column.frozen.isEnd && showFrozenColumn ? savedRightBlankOffset : 0;
 
       if (currentWidth + rightFrozenColumnOffset >
-          offset.dx + savedHorizontalScrollOffset) {
+          directionalOffset.dx + savedHorizontalScrollOffset) {
         columnIdx = i;
         break;
       }
@@ -539,10 +537,10 @@ mixin SelectingState implements IPlutoGridState {
 
     List<String> rowText = [];
 
-    for (var row in _currentSelectingRows) {
+    for (final row in _currentSelectingRows) {
       List<String> columnText = [];
 
-      for (var i = 0; i < columnIndexes.length; i += 1) {
+      for (int i = 0; i < columnIndexes.length; i += 1) {
         final String field = refColumns[columnIndexes[i]].field;
 
         columnText.add(row.cells[field]!.value.toString());
@@ -571,10 +569,10 @@ mixin SelectingState implements IPlutoGridState {
     int rowEndIdx =
         max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
 
-    for (var i = rowStartIdx; i <= rowEndIdx; i += 1) {
+    for (int i = rowStartIdx; i <= rowEndIdx; i += 1) {
       List<String> columnText = [];
 
-      for (var j = columnStartIdx; j <= columnEndIdx; j += 1) {
+      for (int j = columnStartIdx; j <= columnEndIdx; j += 1) {
         final String field = refColumns[columnIndexes[j]].field;
 
         columnText.add(refRows[i].cells[field]!.value.toString());

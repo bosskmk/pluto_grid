@@ -31,11 +31,11 @@ class PlutoNumberCell extends StatefulWidget implements TextCell {
 
 class PlutoNumberCellState extends State<PlutoNumberCell>
     with TextCellState<PlutoNumberCell> {
-  int? decimalRange;
+  late final int decimalRange;
 
-  bool? activatedNegative;
+  late final bool activatedNegative;
 
-  bool? allowFirstDot;
+  late final bool allowFirstDot;
 
   @override
   TextInputType get keyboardType => TextInputType.number;
@@ -44,8 +44,8 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
   List<TextInputFormatter>? get inputFormatters => [
         DecimalTextInputFormatter(
           decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative!,
-          allowFirstDot: allowFirstDot!,
+          activatedNegativeValues: activatedNegative,
+          allowFirstDot: allowFirstDot,
         ),
       ];
 

@@ -44,7 +44,9 @@ void main() {
                   );
                 },
                 configuration: PlutoGridConfiguration(
-                  rowHeight: rowHeight,
+                  style: PlutoGridStyleConfig(
+                    rowHeight: rowHeight,
+                  ),
                 ),
               ),
             ),

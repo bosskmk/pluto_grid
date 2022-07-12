@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
-class PlutoBaseColumn extends PlutoStatefulWidget {
-  @override
+class PlutoBaseColumn extends PlutoStatefulWidget
+    implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -18,76 +17,65 @@ class PlutoBaseColumn extends PlutoStatefulWidget {
 
   @override
   PlutoBaseColumnState createState() => PlutoBaseColumnState();
-}
-
-abstract class _PlutoBaseColumnStateWithChange
-    extends PlutoStateWithChange<PlutoBaseColumn> {
-  bool? _showColumnFilter;
 
   @override
-  void onChange(event) {
-    resetState((update) {
-      _showColumnFilter = update<bool?>(
-        _showColumnFilter,
-        widget.stateManager.showColumnFilter,
-      );
-    });
-  }
+  double get width => column.width;
+
+  @override
+  double get startPosition => column.startPosition;
+
+  @override
+  bool get keepAlive => false;
 }
 
-class PlutoBaseColumnState extends _PlutoBaseColumnStateWithChange {
+class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
+  bool _showColumnFilter = false;
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
   @override
   void initState() {
     super.initState();
 
-    VisibilityDetectorController.instance.updateInterval = Duration.zero;
+    updateState();
+  }
 
-    _showColumnFilter = widget.stateManager.showColumnFilter;
+  @override
+  void updateState() {
+    _showColumnFilter = update<bool>(
+      _showColumnFilter,
+      stateManager.showColumnFilter,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: widget.column.key,
-      onVisibilityChanged: (info) {
-        final bool visible = info.visibleFraction * 100 > 0;
-
-        if (visible != widget.column.visible) {
-          widget.column.visible = visible;
-
-          widget.stateManager.notifyStreamListeners(
-            PlutoVisibilityColumnStreamNotifierEvent(),
-          );
-        }
-      },
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: _showColumnFilter ? stateManager.columnFilterHeight : 0,
+          child: PlutoColumnTitle(
+            stateManager: stateManager,
+            column: widget.column,
+            height: widget.columnTitleHeight ?? stateManager.columnHeight,
+          ),
+        ),
+        if (_showColumnFilter)
           Positioned(
-            top: 0,
-            left: 0,
+            bottom: 0,
             right: 0,
-            bottom:
-                _showColumnFilter! ? widget.stateManager.columnFilterHeight : 0,
-            child: PlutoColumnTitle(
-              stateManager: widget.stateManager,
+            left: 0,
+            child: PlutoColumnFilter(
+              stateManager: stateManager,
               column: widget.column,
-              height:
-                  widget.columnTitleHeight ?? widget.stateManager.columnHeight,
             ),
           ),
-          if (_showColumnFilter!)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: PlutoColumnFilter(
-                stateManager: widget.stateManager,
-                column: widget.column,
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 }

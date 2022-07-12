@@ -15,6 +15,7 @@ final _isDesktopApp = !kIsWeb && (_isWindows || _isMacOS || _isLinux);
 final _isMobile = _isMobileWeb || _isMobileApp;
 final _isDesktop = _isDesktopWeb || _isDesktopApp;
 
+/// This is a helper class for implementing code that only runs on a specific platform.
 class PlatformHelper {
   static const bool isWeb = kIsWeb;
 

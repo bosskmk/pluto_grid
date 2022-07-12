@@ -5,8 +5,9 @@
 import 'dart:async' as _i7;
 import 'dart:ui' as _i5;
 
+import 'package:flutter/gestures.dart' as _i6;
 import 'package:flutter/material.dart' as _i4;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart' as _i6;
+import 'package:flutter/rendering.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_grid/pluto_grid.dart' as _i3;
 import 'package:rxdart/rxdart.dart' as _i2;
@@ -24,23 +25,54 @@ import 'package:rxdart/rxdart.dart' as _i2;
 class _FakePublishSubject_0<T> extends _i1.Fake
     implements _i2.PublishSubject<T> {}
 
-class _FakeFilteredList_1<E> extends _i1.Fake implements _i3.FilteredList<E> {}
+class _FakePlutoGridColumnSizeConfig_1 extends _i1.Fake
+    implements _i3.PlutoGridColumnSizeConfig {}
 
-class _FakePlutoGridLocaleText_2 extends _i1.Fake
+class _FakeFilteredList_2<E> extends _i1.Fake implements _i3.FilteredList<E> {}
+
+class _FakePlutoColumnMenuDelegate_3<T> extends _i1.Fake
+    implements _i3.PlutoColumnMenuDelegate<T> {}
+
+class _FakePlutoGridLocaleText_4 extends _i1.Fake
     implements _i3.PlutoGridLocaleText {}
 
-class _FakePlutoGridKeyPressed_3 extends _i1.Fake
+class _FakePlutoGridStyleConfig_5 extends _i1.Fake
+    implements _i3.PlutoGridStyleConfig {}
+
+class _FakePlutoGridKeyPressed_6 extends _i1.Fake
     implements _i3.PlutoGridKeyPressed {}
 
-class _FakeChangeNotifier_4 extends _i1.Fake implements _i4.ChangeNotifier {}
+class _FakeChangeNotifier_7 extends _i1.Fake implements _i4.ChangeNotifier {}
 
-class _FakePlutoGridCellPosition_5 extends _i1.Fake
+class _FakeOffset_8 extends _i1.Fake implements _i5.Offset {}
+
+class _FakePlutoAutoSize_9 extends _i1.Fake implements _i3.PlutoAutoSize {}
+
+class _FakePlutoResize_10<T> extends _i1.Fake implements _i3.PlutoResize<T> {}
+
+class _FakePlutoGridCellPosition_11 extends _i1.Fake
     implements _i3.PlutoGridCellPosition {}
 
-class _FakePlutoRow_6 extends _i1.Fake implements _i3.PlutoRow {}
+class _FakePlutoRow_12 extends _i1.Fake implements _i3.PlutoRow {}
 
-class _FakeScrollController_7 extends _i1.Fake implements _i4.ScrollController {
-}
+class _FakeScrollController_13 extends _i1.Fake
+    implements _i4.ScrollController {}
+
+class _FakeScrollPosition_14 extends _i1.Fake implements _i4.ScrollPosition {}
+
+class _FakeScrollPhysics_15 extends _i1.Fake implements _i4.ScrollPhysics {}
+
+class _FakeScrollContext_16 extends _i1.Fake implements _i4.ScrollContext {}
+
+class _FakeValueNotifier_17<T> extends _i1.Fake
+    implements _i4.ValueNotifier<T> {}
+
+class _FakeScrollHoldController_18 extends _i1.Fake
+    implements _i4.ScrollHoldController {}
+
+class _FakeDrag_19 extends _i1.Fake implements _i6.Drag {}
+
+class _FakeScrollMetrics_20 extends _i1.Fake implements _i4.ScrollMetrics {}
 
 /// A class which mocks [PlutoGridStateManager].
 ///
@@ -48,11 +80,10 @@ class _FakeScrollController_7 extends _i1.Fake implements _i4.ScrollController {
 class MockPlutoGridStateManager extends _i1.Mock
     implements _i3.PlutoGridStateManager {
   @override
-  _i2.PublishSubject<_i3.PlutoStreamNotifierEvent> get streamNotifier =>
+  _i2.PublishSubject<_i3.PlutoNotifierEvent> get streamNotifier =>
       (super.noSuchMethod(Invocation.getter(#streamNotifier),
-              returnValue:
-                  _FakePublishSubject_0<_i3.PlutoStreamNotifierEvent>())
-          as _i2.PublishSubject<_i3.PlutoStreamNotifierEvent>);
+              returnValue: _FakePublishSubject_0<_i3.PlutoNotifierEvent>())
+          as _i2.PublishSubject<_i3.PlutoNotifierEvent>);
   @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
@@ -75,9 +106,30 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#showColumnGroups),
           returnValue: false) as bool);
   @override
+  _i3.PlutoGridColumnSizeConfig get columnSizeConfig =>
+      (super.noSuchMethod(Invocation.getter(#columnSizeConfig),
+              returnValue: _FakePlutoGridColumnSizeConfig_1())
+          as _i3.PlutoGridColumnSizeConfig);
+  @override
+  _i3.PlutoAutoSizeMode get columnsAutoSizeMode =>
+      (super.noSuchMethod(Invocation.getter(#columnsAutoSizeMode),
+          returnValue: _i3.PlutoAutoSizeMode.none) as _i3.PlutoAutoSizeMode);
+  @override
+  _i3.PlutoResizeMode get columnsResizeMode =>
+      (super.noSuchMethod(Invocation.getter(#columnsResizeMode),
+          returnValue: _i3.PlutoResizeMode.none) as _i3.PlutoResizeMode);
+  @override
+  bool get enableColumnsAutoSize =>
+      (super.noSuchMethod(Invocation.getter(#enableColumnsAutoSize),
+          returnValue: false) as bool);
+  @override
+  bool get activatedColumnsAutoSize =>
+      (super.noSuchMethod(Invocation.getter(#activatedColumnsAutoSize),
+          returnValue: false) as bool);
+  @override
   _i3.FilteredList<_i3.PlutoColumn> get refColumns =>
       (super.noSuchMethod(Invocation.getter(#refColumns),
-              returnValue: _FakeFilteredList_1<_i3.PlutoColumn>())
+              returnValue: _FakeFilteredList_2<_i3.PlutoColumn>())
           as _i3.FilteredList<_i3.PlutoColumn>);
   @override
   set refColumns(_i3.FilteredList<_i3.PlutoColumn>? setColumns) =>
@@ -186,17 +238,26 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#hasFocus), returnValue: false)
           as bool);
   @override
+  _i3.PlutoColumnMenuDelegate<dynamic> get columnMenuDelegate =>
+      (super.noSuchMethod(Invocation.getter(#columnMenuDelegate),
+              returnValue: _FakePlutoColumnMenuDelegate_3<dynamic>())
+          as _i3.PlutoColumnMenuDelegate<dynamic>);
+  @override
   _i3.PlutoGridLocaleText get localeText => (super.noSuchMethod(
       Invocation.getter(#localeText),
-      returnValue: _FakePlutoGridLocaleText_2()) as _i3.PlutoGridLocaleText);
+      returnValue: _FakePlutoGridLocaleText_4()) as _i3.PlutoGridLocaleText);
+  @override
+  _i3.PlutoGridStyleConfig get style => (super.noSuchMethod(
+      Invocation.getter(#style),
+      returnValue: _FakePlutoGridStyleConfig_5()) as _i3.PlutoGridStyleConfig);
   @override
   _i3.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
       Invocation.getter(#keyPressed),
-      returnValue: _FakePlutoGridKeyPressed_3()) as _i3.PlutoGridKeyPressed);
+      returnValue: _FakePlutoGridKeyPressed_6()) as _i3.PlutoGridKeyPressed);
   @override
   _i4.ChangeNotifier get resizingChangeNotifier =>
       (super.noSuchMethod(Invocation.getter(#resizingChangeNotifier),
-          returnValue: _FakeChangeNotifier_4()) as _i4.ChangeNotifier);
+          returnValue: _FakeChangeNotifier_7()) as _i4.ChangeNotifier);
   @override
   double get headerHeight =>
       (super.noSuchMethod(Invocation.getter(#headerHeight), returnValue: 0.0)
@@ -217,6 +278,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   bool get showFrozenColumn =>
       (super.noSuchMethod(Invocation.getter(#showFrozenColumn),
           returnValue: false) as bool);
+  @override
+  bool get showColumnTitle => (super
+          .noSuchMethod(Invocation.getter(#showColumnTitle), returnValue: false)
+      as bool);
   @override
   bool get showColumnFilter =>
       (super.noSuchMethod(Invocation.getter(#showColumnFilter),
@@ -322,6 +387,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#scrollOffsetByFrozenColumn),
           returnValue: 0.0) as double);
   @override
+  _i5.TextDirection get textDirection =>
+      (super.noSuchMethod(Invocation.getter(#textDirection),
+          returnValue: _i5.TextDirection.rtl) as _i5.TextDirection);
+  @override
+  bool get isLTR =>
+      (super.noSuchMethod(Invocation.getter(#isLTR), returnValue: false)
+          as bool);
+  @override
+  bool get isRTL =>
+      (super.noSuchMethod(Invocation.getter(#isRTL), returnValue: false)
+          as bool);
+  @override
   int get page =>
       (super.noSuchMethod(Invocation.getter(#page), returnValue: 0) as int);
   @override
@@ -338,7 +415,7 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   _i3.FilteredList<_i3.PlutoRow> get refRows =>
       (super.noSuchMethod(Invocation.getter(#refRows),
-              returnValue: _FakeFilteredList_1<_i3.PlutoRow>())
+              returnValue: _FakeFilteredList_2<_i3.PlutoRow>())
           as _i3.FilteredList<_i3.PlutoRow>);
   @override
   set refRows(_i3.FilteredList<_i3.PlutoRow>? setRows) =>
@@ -364,9 +441,17 @@ class MockPlutoGridStateManager extends _i1.Mock
           .noSuchMethod(Invocation.getter(#hasUnCheckedRow), returnValue: false)
       as bool);
   @override
-  bool get isInvalidHorizontalScroll =>
-      (super.noSuchMethod(Invocation.getter(#isInvalidHorizontalScroll),
+  bool get isHorizontalOverScrolled =>
+      (super.noSuchMethod(Invocation.getter(#isHorizontalOverScrolled),
           returnValue: false) as bool);
+  @override
+  double get correctHorizontalOffset =>
+      (super.noSuchMethod(Invocation.getter(#correctHorizontalOffset),
+          returnValue: 0.0) as double);
+  @override
+  _i5.Offset get directionalScrollEdgeOffset =>
+      (super.noSuchMethod(Invocation.getter(#directionalScrollEdgeOffset),
+          returnValue: _FakeOffset_8()) as _i5.Offset);
   @override
   bool get isSelecting =>
       (super.noSuchMethod(Invocation.getter(#isSelecting), returnValue: false)
@@ -412,9 +497,6 @@ class MockPlutoGridStateManager extends _i1.Mock
   void notifyListenersOnPostFrame() =>
       super.noSuchMethod(Invocation.method(#notifyListenersOnPostFrame, []),
           returnValueForMissingStub: null);
-  @override
-  dynamic notifyStreamListeners(_i3.PlutoStreamNotifierEvent? event) =>
-      super.noSuchMethod(Invocation.method(#notifyStreamListeners, [event]));
   @override
   void addListener(_i5.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
@@ -522,22 +604,44 @@ class MockPlutoGridStateManager extends _i1.Mock
               #removeColumnsInColumnGroup, [columns], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void toggleFrozenColumn(_i4.Key? columnKey, _i3.PlutoColumnFrozen? frozen) =>
+  void activateColumnsAutoSize() =>
+      super.noSuchMethod(Invocation.method(#activateColumnsAutoSize, []),
+          returnValueForMissingStub: null);
+  @override
+  void deactivateColumnsAutoSize() =>
+      super.noSuchMethod(Invocation.method(#deactivateColumnsAutoSize, []),
+          returnValueForMissingStub: null);
+  @override
+  _i3.PlutoAutoSize getColumnsAutoSizeHelper(
+          {Iterable<_i3.PlutoColumn>? columns, double? maxWidth}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getColumnsAutoSizeHelper, [],
+              {#columns: columns, #maxWidth: maxWidth}),
+          returnValue: _FakePlutoAutoSize_9()) as _i3.PlutoAutoSize);
+  @override
+  _i3.PlutoResize<dynamic> getColumnsResizeHelper(
+          {List<_i3.PlutoColumn>? columns,
+          _i3.PlutoColumn? column,
+          double? offset}) =>
+      (super.noSuchMethod(
+              Invocation.method(#getColumnsResizeHelper, [],
+                  {#columns: columns, #column: column, #offset: offset}),
+              returnValue: _FakePlutoResize_10<dynamic>())
+          as _i3.PlutoResize<dynamic>);
+  @override
+  void setColumnSizeConfig(_i3.PlutoGridColumnSizeConfig? config) =>
+      super.noSuchMethod(Invocation.method(#setColumnSizeConfig, [config]),
+          returnValueForMissingStub: null);
+  @override
+  void toggleFrozenColumn(
+          _i3.PlutoColumn? column, _i3.PlutoColumnFrozen? frozen) =>
       super.noSuchMethod(
-          Invocation.method(#toggleFrozenColumn, [columnKey, frozen]),
+          Invocation.method(#toggleFrozenColumn, [column, frozen]),
           returnValueForMissingStub: null);
   @override
   void toggleSortColumn(_i3.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#toggleSortColumn, [column]),
           returnValueForMissingStub: null);
-  @override
-  double columnsWidthAtColumnIdx(int? columnIdx) => (super.noSuchMethod(
-      Invocation.method(#columnsWidthAtColumnIdx, [columnIdx]),
-      returnValue: 0.0) as double);
-  @override
-  double bodyColumnsWidthAtColumnIdx(int? columnIdx) => (super.noSuchMethod(
-      Invocation.method(#bodyColumnsWidthAtColumnIdx, [columnIdx]),
-      returnValue: 0.0) as double);
   @override
   int? columnIndex(_i3.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#columnIndex, [column])) as int?);
@@ -556,22 +660,23 @@ class MockPlutoGridStateManager extends _i1.Mock
               #moveColumn, [], {#column: column, #targetColumn: targetColumn}),
           returnValueForMissingStub: null);
   @override
-  void resizeColumn(_i3.PlutoColumn? column, double? offset,
-          {bool? notify = true, bool? checkScroll = true}) =>
-      super.noSuchMethod(
-          Invocation.method(#resizeColumn, [column, offset],
-              {#notify: notify, #checkScroll: checkScroll}),
+  void resizeColumn(_i3.PlutoColumn? column, double? offset) =>
+      super.noSuchMethod(Invocation.method(#resizeColumn, [column, offset]),
           returnValueForMissingStub: null);
   @override
   void autoFitColumn(_i4.BuildContext? context, _i3.PlutoColumn? column) =>
       super.noSuchMethod(Invocation.method(#autoFitColumn, [context, column]),
           returnValueForMissingStub: null);
   @override
-  void hideColumn(_i4.Key? columnKey, bool? flag,
-          {bool? notify = true, bool? checkScroll = true}) =>
+  void hideColumn(_i3.PlutoColumn? column, bool? hide, {bool? notify = true}) =>
       super.noSuchMethod(
-          Invocation.method(#hideColumn, [columnKey, flag],
-              {#notify: notify, #checkScroll: checkScroll}),
+          Invocation.method(#hideColumn, [column, hide], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  void hideColumns(List<_i3.PlutoColumn>? columns, bool? hide,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#hideColumns, [columns, hide], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void sortAscending(_i3.PlutoColumn? column, {bool? notify = true}) =>
@@ -592,6 +697,30 @@ class MockPlutoGridStateManager extends _i1.Mock
   void showSetColumnsPopup(_i4.BuildContext? context) =>
       super.noSuchMethod(Invocation.method(#showSetColumnsPopup, [context]),
           returnValueForMissingStub: null);
+  @override
+  bool limitResizeColumn(_i3.PlutoColumn? column, double? offset) => (super
+      .noSuchMethod(Invocation.method(#limitResizeColumn, [column, offset]),
+          returnValue: false) as bool);
+  @override
+  bool limitMoveColumn(
+          {_i3.PlutoColumn? column, _i3.PlutoColumn? targetColumn}) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitMoveColumn, [],
+              {#column: column, #targetColumn: targetColumn}),
+          returnValue: false) as bool);
+  @override
+  bool limitToggleFrozenColumn(
+          _i3.PlutoColumn? column, _i3.PlutoColumnFrozen? frozen) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitToggleFrozenColumn, [column, frozen]),
+          returnValue: false) as bool);
+  @override
+  bool limitHideColumn(_i3.PlutoColumn? column, bool? hide,
+          {double? accumulateWidth = 0.0}) =>
+      (super.noSuchMethod(
+          Invocation.method(#limitHideColumn, [column, hide],
+              {#accumulateWidth: accumulateWidth}),
+          returnValue: false) as bool);
   @override
   void setIsDraggingRow(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
@@ -731,6 +860,12 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setOnChanged, [onChanged]),
           returnValueForMissingStub: null);
   @override
+  void setColumnMenuDelegate(
+          _i3.PlutoColumnMenuDelegate<dynamic>? columnMenuDelegate) =>
+      super.noSuchMethod(
+          Invocation.method(#setColumnMenuDelegate, [columnMenuDelegate]),
+          returnValueForMissingStub: null);
+  @override
   void setCreateHeader(_i3.CreateHeaderCallBack? createHeader) =>
       super.noSuchMethod(Invocation.method(#setCreateHeader, [createHeader]),
           returnValueForMissingStub: null);
@@ -741,6 +876,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void setOnSelected(_i3.PlutoOnSelectedEventCallback? onSelected) =>
       super.noSuchMethod(Invocation.method(#setOnSelected, [onSelected]),
+          returnValueForMissingStub: null);
+  @override
+  void setOnSorted(_i3.PlutoOnSortedEventCallback? onSorted) =>
+      super.noSuchMethod(Invocation.method(#setOnSorted, [onSorted]),
           returnValueForMissingStub: null);
   @override
   void setOnRowChecked(_i3.PlutoOnRowCheckedEventCallback? onRowChecked) =>
@@ -763,8 +902,15 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setOnRowsMoved, [onRowsMoved]),
           returnValueForMissingStub: null);
   @override
-  void setConfiguration(_i3.PlutoGridConfiguration? configuration) =>
-      super.noSuchMethod(Invocation.method(#setConfiguration, [configuration]),
+  void setConfiguration(_i3.PlutoGridConfiguration? configuration,
+          {bool? updateLocale = true, bool? applyColumnFilter = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setConfiguration, [
+            configuration
+          ], {
+            #updateLocale: updateLocale,
+            #applyColumnFilter: applyColumnFilter
+          }),
           returnValueForMissingStub: null);
   @override
   void resetCurrentState({bool? notify = true}) => super.noSuchMethod(
@@ -775,12 +921,15 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#handleOnSelected, []),
           returnValueForMissingStub: null);
   @override
+  void forceUpdate() => super.noSuchMethod(Invocation.method(#forceUpdate, []),
+      returnValueForMissingStub: null);
+  @override
   _i3.PlutoGridCellPosition cellPositionToMove(
           _i3.PlutoGridCellPosition? cellPosition,
           _i3.PlutoMoveDirection? direction) =>
       (super.noSuchMethod(
               Invocation.method(#cellPositionToMove, [cellPosition, direction]),
-              returnValue: _FakePlutoGridCellPosition_5())
+              returnValue: _FakePlutoGridCellPosition_11())
           as _i3.PlutoGridCellPosition);
   @override
   void moveCurrentCell(_i3.PlutoMoveDirection? direction,
@@ -840,9 +989,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setLayout, [size]),
           returnValueForMissingStub: null);
   @override
-  void resetShowFrozenColumn({bool? notify = true}) => super.noSuchMethod(
-      Invocation.method(#resetShowFrozenColumn, [], {#notify: notify}),
-      returnValueForMissingStub: null);
+  void setShowColumnTitle(bool? flag, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setShowColumnTitle, [flag], {#notify: notify}),
+          returnValueForMissingStub: null);
   @override
   void setShowColumnFilter(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
@@ -853,12 +1003,28 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setShowLoading, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setGridGlobalOffset(_i5.Offset? offset) =>
-      super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
+  void resetShowFrozenColumn() =>
+      super.noSuchMethod(Invocation.method(#resetShowFrozenColumn, []),
           returnValueForMissingStub: null);
+  @override
+  bool shouldShowFrozenColumns(double? width) =>
+      (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
+          returnValue: false) as bool);
+  @override
+  bool enoughFrozenColumnsWidth(double? width) =>
+      (super.noSuchMethod(Invocation.method(#enoughFrozenColumnsWidth, [width]),
+          returnValue: false) as bool);
   @override
   void notifyResizingListeners() =>
       super.noSuchMethod(Invocation.method(#notifyResizingListeners, []),
+          returnValueForMissingStub: null);
+  @override
+  void setTextDirection(_i5.TextDirection? textDirection) =>
+      super.noSuchMethod(Invocation.method(#setTextDirection, [textDirection]),
+          returnValueForMissingStub: null);
+  @override
+  void setGridGlobalOffset(_i5.Offset? offset) =>
+      super.noSuchMethod(Invocation.method(#setGridGlobalOffset, [offset]),
           returnValueForMissingStub: null);
   @override
   void setPageSize(int? pageSize, {bool? notify = true}) => super.noSuchMethod(
@@ -879,7 +1045,7 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   _i3.PlutoRow getNewRow() =>
       (super.noSuchMethod(Invocation.method(#getNewRow, []),
-          returnValue: _FakePlutoRow_6()) as _i3.PlutoRow);
+          returnValue: _FakePlutoRow_12()) as _i3.PlutoRow);
   @override
   List<_i3.PlutoRow> getNewRows({int? count = 1}) =>
       (super.noSuchMethod(Invocation.method(#getNewRows, [], {#count: count}),
@@ -897,8 +1063,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.method(#setRowChecked, [row, flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void insertRows(int? rowIdx, List<_i3.PlutoRow>? rows) =>
-      super.noSuchMethod(Invocation.method(#insertRows, [rowIdx, rows]),
+  void insertRows(int? rowIdx, List<_i3.PlutoRow>? rows,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#insertRows, [rowIdx, rows], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void prependNewRows({int? count = 1}) => super.noSuchMethod(
@@ -924,6 +1092,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   void removeRows(List<_i3.PlutoRow>? rows, {bool? notify = true}) => super
       .noSuchMethod(Invocation.method(#removeRows, [rows], {#notify: notify}),
           returnValueForMissingStub: null);
+  @override
+  void removeAllRows({bool? notify = true}) => super.noSuchMethod(
+      Invocation.method(#removeAllRows, [], {#notify: notify}),
+      returnValueForMissingStub: null);
   @override
   void moveRowsByOffset(List<_i3.PlutoRow>? rows, double? offset,
           {bool? notify = true}) =>
@@ -952,6 +1124,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#setScroll, [scroll]),
           returnValueForMissingStub: null);
   @override
+  _i5.Offset toDirectionalOffset(_i5.Offset? offset) =>
+      (super.noSuchMethod(Invocation.method(#toDirectionalOffset, [offset]),
+          returnValue: _FakeOffset_8()) as _i5.Offset);
+  @override
   void scrollByDirection(_i3.PlutoMoveDirection? direction, double? offset) =>
       super.noSuchMethod(
           Invocation.method(#scrollByDirection, [direction, offset]),
@@ -977,8 +1153,12 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#needMovingScroll, [offset, move]),
           returnValue: false) as bool);
   @override
-  void updateCorrectScroll() =>
-      super.noSuchMethod(Invocation.method(#updateCorrectScroll, []),
+  void updateCorrectScrollOffset() =>
+      super.noSuchMethod(Invocation.method(#updateCorrectScrollOffset, []),
+          returnValueForMissingStub: null);
+  @override
+  void updateScrollViewport() =>
+      super.noSuchMethod(Invocation.method(#updateScrollViewport, []),
           returnValueForMissingStub: null);
   @override
   void resetScrollToZero() =>
@@ -1052,16 +1232,16 @@ class MockPlutoGridStateManager extends _i1.Mock
       .noSuchMethod(Invocation.method(#handleAfterSelectingRow, [cell, value]),
           returnValueForMissingStub: null);
   @override
-  bool shouldShowFrozenColumns(double? width) =>
-      (super.noSuchMethod(Invocation.method(#shouldShowFrozenColumns, [width]),
-          returnValue: false) as bool);
+  void updateVisibilityLayout({bool? notify = false}) => super.noSuchMethod(
+      Invocation.method(#updateVisibilityLayout, [], {#notify: notify}),
+      returnValueForMissingStub: null);
 }
 
 /// A class which mocks [LinkedScrollControllerGroup].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinkedScrollControllerGroup extends _i1.Mock
-    implements _i6.LinkedScrollControllerGroup {
+    implements _i3.LinkedScrollControllerGroup {
   @override
   double get offset =>
       (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
@@ -1069,7 +1249,7 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   _i4.ScrollController addAndGet() =>
       (super.noSuchMethod(Invocation.method(#addAndGet, []),
-          returnValue: _FakeScrollController_7()) as _i4.ScrollController);
+          returnValue: _FakeScrollController_13()) as _i4.ScrollController);
   @override
   void addOffsetChangedListener(_i5.VoidCallback? onChanged) => super
       .noSuchMethod(Invocation.method(#addOffsetChangedListener, [onChanged]),
@@ -1093,4 +1273,374 @@ class MockLinkedScrollControllerGroup extends _i1.Mock
   @override
   void resetScroll() => super.noSuchMethod(Invocation.method(#resetScroll, []),
       returnValueForMissingStub: null);
+  @override
+  void applyViewportDimension(double? value) =>
+      super.noSuchMethod(Invocation.method(#applyViewportDimension, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [ScrollController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScrollController extends _i1.Mock implements _i4.ScrollController {
+  @override
+  bool get keepScrollOffset =>
+      (super.noSuchMethod(Invocation.getter(#keepScrollOffset),
+          returnValue: false) as bool);
+  @override
+  double get initialScrollOffset =>
+      (super.noSuchMethod(Invocation.getter(#initialScrollOffset),
+          returnValue: 0.0) as double);
+  @override
+  Iterable<_i4.ScrollPosition> get positions =>
+      (super.noSuchMethod(Invocation.getter(#positions),
+          returnValue: <_i4.ScrollPosition>[]) as Iterable<_i4.ScrollPosition>);
+  @override
+  bool get hasClients =>
+      (super.noSuchMethod(Invocation.getter(#hasClients), returnValue: false)
+          as bool);
+  @override
+  _i4.ScrollPosition get position =>
+      (super.noSuchMethod(Invocation.getter(#position),
+          returnValue: _FakeScrollPosition_14()) as _i4.ScrollPosition);
+  @override
+  double get offset =>
+      (super.noSuchMethod(Invocation.getter(#offset), returnValue: 0.0)
+          as double);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  _i7.Future<void> animateTo(double? offset,
+          {Duration? duration, _i4.Curve? curve}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #animateTo, [offset], {#duration: duration, #curve: curve}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  void jumpTo(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpTo, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void attach(_i4.ScrollPosition? position) =>
+      super.noSuchMethod(Invocation.method(#attach, [position]),
+          returnValueForMissingStub: null);
+  @override
+  void detach(_i4.ScrollPosition? position) =>
+      super.noSuchMethod(Invocation.method(#detach, [position]),
+          returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  _i4.ScrollPosition createScrollPosition(_i4.ScrollPhysics? physics,
+          _i4.ScrollContext? context, _i4.ScrollPosition? oldPosition) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #createScrollPosition, [physics, context, oldPosition]),
+          returnValue: _FakeScrollPosition_14()) as _i4.ScrollPosition);
+  @override
+  void debugFillDescription(List<String>? description) => super.noSuchMethod(
+      Invocation.method(#debugFillDescription, [description]),
+      returnValueForMissingStub: null);
+  @override
+  void addListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [ScrollPosition].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScrollPosition extends _i1.Mock implements _i4.ScrollPosition {
+  @override
+  _i4.ScrollPhysics get physics =>
+      (super.noSuchMethod(Invocation.getter(#physics),
+          returnValue: _FakeScrollPhysics_15()) as _i4.ScrollPhysics);
+  @override
+  _i4.ScrollContext get context =>
+      (super.noSuchMethod(Invocation.getter(#context),
+          returnValue: _FakeScrollContext_16()) as _i4.ScrollContext);
+  @override
+  bool get keepScrollOffset =>
+      (super.noSuchMethod(Invocation.getter(#keepScrollOffset),
+          returnValue: false) as bool);
+  @override
+  _i4.ValueNotifier<bool> get isScrollingNotifier => (super.noSuchMethod(
+      Invocation.getter(#isScrollingNotifier),
+      returnValue: _FakeValueNotifier_17<bool>()) as _i4.ValueNotifier<bool>);
+  @override
+  double get minScrollExtent =>
+      (super.noSuchMethod(Invocation.getter(#minScrollExtent), returnValue: 0.0)
+          as double);
+  @override
+  double get maxScrollExtent =>
+      (super.noSuchMethod(Invocation.getter(#maxScrollExtent), returnValue: 0.0)
+          as double);
+  @override
+  bool get hasContentDimensions =>
+      (super.noSuchMethod(Invocation.getter(#hasContentDimensions),
+          returnValue: false) as bool);
+  @override
+  double get pixels =>
+      (super.noSuchMethod(Invocation.getter(#pixels), returnValue: 0.0)
+          as double);
+  @override
+  bool get hasPixels =>
+      (super.noSuchMethod(Invocation.getter(#hasPixels), returnValue: false)
+          as bool);
+  @override
+  double get viewportDimension => (super
+          .noSuchMethod(Invocation.getter(#viewportDimension), returnValue: 0.0)
+      as double);
+  @override
+  bool get hasViewportDimension =>
+      (super.noSuchMethod(Invocation.getter(#hasViewportDimension),
+          returnValue: false) as bool);
+  @override
+  bool get haveDimensions => (super
+          .noSuchMethod(Invocation.getter(#haveDimensions), returnValue: false)
+      as bool);
+  @override
+  bool get allowImplicitScrolling =>
+      (super.noSuchMethod(Invocation.getter(#allowImplicitScrolling),
+          returnValue: false) as bool);
+  @override
+  _i8.ScrollDirection get userScrollDirection =>
+      (super.noSuchMethod(Invocation.getter(#userScrollDirection),
+          returnValue: _i8.ScrollDirection.idle) as _i8.ScrollDirection);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  _i4.AxisDirection get axisDirection =>
+      (super.noSuchMethod(Invocation.getter(#axisDirection),
+          returnValue: _i4.AxisDirection.up) as _i4.AxisDirection);
+  @override
+  _i4.Axis get axis => (super.noSuchMethod(Invocation.getter(#axis),
+      returnValue: _i4.Axis.horizontal) as _i4.Axis);
+  @override
+  bool get outOfRange =>
+      (super.noSuchMethod(Invocation.getter(#outOfRange), returnValue: false)
+          as bool);
+  @override
+  bool get atEdge =>
+      (super.noSuchMethod(Invocation.getter(#atEdge), returnValue: false)
+          as bool);
+  @override
+  double get extentBefore =>
+      (super.noSuchMethod(Invocation.getter(#extentBefore), returnValue: 0.0)
+          as double);
+  @override
+  double get extentInside =>
+      (super.noSuchMethod(Invocation.getter(#extentInside), returnValue: 0.0)
+          as double);
+  @override
+  double get extentAfter =>
+      (super.noSuchMethod(Invocation.getter(#extentAfter), returnValue: 0.0)
+          as double);
+  @override
+  void absorb(_i4.ScrollPosition? other) =>
+      super.noSuchMethod(Invocation.method(#absorb, [other]),
+          returnValueForMissingStub: null);
+  @override
+  double setPixels(double? newPixels) =>
+      (super.noSuchMethod(Invocation.method(#setPixels, [newPixels]),
+          returnValue: 0.0) as double);
+  @override
+  void correctPixels(double? value) =>
+      super.noSuchMethod(Invocation.method(#correctPixels, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void correctBy(double? correction) =>
+      super.noSuchMethod(Invocation.method(#correctBy, [correction]),
+          returnValueForMissingStub: null);
+  @override
+  void forcePixels(double? value) =>
+      super.noSuchMethod(Invocation.method(#forcePixels, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void saveScrollOffset() =>
+      super.noSuchMethod(Invocation.method(#saveScrollOffset, []),
+          returnValueForMissingStub: null);
+  @override
+  void restoreScrollOffset() =>
+      super.noSuchMethod(Invocation.method(#restoreScrollOffset, []),
+          returnValueForMissingStub: null);
+  @override
+  void restoreOffset(double? offset, {bool? initialRestore = false}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #restoreOffset, [offset], {#initialRestore: initialRestore}),
+          returnValueForMissingStub: null);
+  @override
+  void saveOffset() => super.noSuchMethod(Invocation.method(#saveOffset, []),
+      returnValueForMissingStub: null);
+  @override
+  double applyBoundaryConditions(double? value) =>
+      (super.noSuchMethod(Invocation.method(#applyBoundaryConditions, [value]),
+          returnValue: 0.0) as double);
+  @override
+  bool applyViewportDimension(double? viewportDimension) => (super.noSuchMethod(
+      Invocation.method(#applyViewportDimension, [viewportDimension]),
+      returnValue: false) as bool);
+  @override
+  bool applyContentDimensions(
+          double? minScrollExtent, double? maxScrollExtent) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #applyContentDimensions, [minScrollExtent, maxScrollExtent]),
+          returnValue: false) as bool);
+  @override
+  bool correctForNewDimensions(
+          _i4.ScrollMetrics? oldPosition, _i4.ScrollMetrics? newPosition) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #correctForNewDimensions, [oldPosition, newPosition]),
+          returnValue: false) as bool);
+  @override
+  void applyNewDimensions() =>
+      super.noSuchMethod(Invocation.method(#applyNewDimensions, []),
+          returnValueForMissingStub: null);
+  @override
+  _i7.Future<void> ensureVisible(_i4.RenderObject? object,
+          {double? alignment = 0.0,
+          Duration? duration = Duration.zero,
+          _i4.Curve? curve = _i4.Curves.ease,
+          _i4.ScrollPositionAlignmentPolicy? alignmentPolicy =
+              _i4.ScrollPositionAlignmentPolicy.explicit,
+          _i4.RenderObject? targetRenderObject}) =>
+      (super.noSuchMethod(
+          Invocation.method(#ensureVisible, [
+            object
+          ], {
+            #alignment: alignment,
+            #duration: duration,
+            #curve: curve,
+            #alignmentPolicy: alignmentPolicy,
+            #targetRenderObject: targetRenderObject
+          }),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  _i7.Future<void> animateTo(double? to,
+          {Duration? duration, _i4.Curve? curve}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #animateTo, [to], {#duration: duration, #curve: curve}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  void jumpTo(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpTo, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void pointerScroll(double? delta) =>
+      super.noSuchMethod(Invocation.method(#pointerScroll, [delta]),
+          returnValueForMissingStub: null);
+  @override
+  _i7.Future<void> moveTo(double? to,
+          {Duration? duration, _i4.Curve? curve, bool? clamp = true}) =>
+      (super.noSuchMethod(
+          Invocation.method(#moveTo, [to],
+              {#duration: duration, #curve: curve, #clamp: clamp}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+  @override
+  void jumpToWithoutSettling(double? value) =>
+      super.noSuchMethod(Invocation.method(#jumpToWithoutSettling, [value]),
+          returnValueForMissingStub: null);
+  @override
+  _i4.ScrollHoldController hold(_i5.VoidCallback? holdCancelCallback) =>
+      (super.noSuchMethod(Invocation.method(#hold, [holdCancelCallback]),
+              returnValue: _FakeScrollHoldController_18())
+          as _i4.ScrollHoldController);
+  @override
+  _i6.Drag drag(_i4.DragStartDetails? details,
+          _i5.VoidCallback? dragCancelCallback) =>
+      (super.noSuchMethod(
+          Invocation.method(#drag, [details, dragCancelCallback]),
+          returnValue: _FakeDrag_19()) as _i6.Drag);
+  @override
+  void beginActivity(_i4.ScrollActivity? newActivity) =>
+      super.noSuchMethod(Invocation.method(#beginActivity, [newActivity]),
+          returnValueForMissingStub: null);
+  @override
+  void didStartScroll() =>
+      super.noSuchMethod(Invocation.method(#didStartScroll, []),
+          returnValueForMissingStub: null);
+  @override
+  void didUpdateScrollPositionBy(double? delta) =>
+      super.noSuchMethod(Invocation.method(#didUpdateScrollPositionBy, [delta]),
+          returnValueForMissingStub: null);
+  @override
+  void didEndScroll() =>
+      super.noSuchMethod(Invocation.method(#didEndScroll, []),
+          returnValueForMissingStub: null);
+  @override
+  void didOverscrollBy(double? value) =>
+      super.noSuchMethod(Invocation.method(#didOverscrollBy, [value]),
+          returnValueForMissingStub: null);
+  @override
+  void didUpdateScrollDirection(_i8.ScrollDirection? direction) => super
+      .noSuchMethod(Invocation.method(#didUpdateScrollDirection, [direction]),
+          returnValueForMissingStub: null);
+  @override
+  void didUpdateScrollMetrics() =>
+      super.noSuchMethod(Invocation.method(#didUpdateScrollMetrics, []),
+          returnValueForMissingStub: null);
+  @override
+  bool recommendDeferredLoading(_i4.BuildContext? context) => (super
+      .noSuchMethod(Invocation.method(#recommendDeferredLoading, [context]),
+          returnValue: false) as bool);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+  @override
+  void debugFillDescription(List<String>? description) => super.noSuchMethod(
+      Invocation.method(#debugFillDescription, [description]),
+      returnValueForMissingStub: null);
+  @override
+  void addListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i5.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  _i4.ScrollMetrics copyWith(
+          {double? minScrollExtent,
+          double? maxScrollExtent,
+          double? pixels,
+          double? viewportDimension,
+          _i4.AxisDirection? axisDirection}) =>
+      (super.noSuchMethod(
+          Invocation.method(#copyWith, [], {
+            #minScrollExtent: minScrollExtent,
+            #maxScrollExtent: maxScrollExtent,
+            #pixels: pixels,
+            #viewportDimension: viewportDimension,
+            #axisDirection: axisDirection
+          }),
+          returnValue: _FakeScrollMetrics_20()) as _i4.ScrollMetrics);
 }

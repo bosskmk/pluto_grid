@@ -5,16 +5,23 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/row_helper.dart';
+import '../../helper/test_helper_util.dart';
 
 void main() {
   testWidgets(
       '0,4번 컬림이 고정 된 상태에서'
       '2번 컬럼 고정 후 방향키 이동시 정상적으로 이동 되어야 한다.', (WidgetTester tester) async {
+    await TestHelperUtil.changeWidth(
+      tester: tester,
+      width: 1000,
+      height: 500,
+    );
+
     // given
     final columns = [
-      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.left).first,
+      ColumnHelper.textColumn('headerL', frozen: PlutoColumnFrozen.start).first,
       ...ColumnHelper.textColumn('headerB', count: 3),
-      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.right).first,
+      ColumnHelper.textColumn('headerR', frozen: PlutoColumnFrozen.end).first,
     ];
     final rows = RowHelper.count(10, columns);
 
@@ -34,11 +41,10 @@ void main() {
         ),
       ),
     );
-
-    await tester.pump();
-
     // 세번 째 컬럼 왼쪽 고정
-    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.left);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.start);
+
+    await tester.pumpAndSettle();
 
     // 첫번 째 컬럼의 첫번 째 셀
     Finder firstCell = find.byKey(rows.first.cells['headerL0']!.key);
@@ -50,34 +56,43 @@ void main() {
     // 첫번 째 셀 값 확인
     expect(stateManager!.currentCell!.value, 'headerL0 value 0');
 
+    await tester.pumpAndSettle();
+
     // 셀 우측 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
 
     // 왼쪽 고정 시킨 두번 째 컬럼(headerB1)의 첫번 째 셀 값 확인
     expect(stateManager!.currentCell!.value, 'headerB1 value 0');
 
     // 셀 우측 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
 
     // 왼쪽 고정 컬럼 두개 다음에 Body 의 첫번 째 컬럼의 값 확인
     expect(stateManager!.currentCell!.value, 'headerB0 value 0');
 
     // 셀 다시 왼쪽 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pumpAndSettle();
 
     // 고정 컬럼 두번 째 셀 값 확인
     expect(stateManager!.currentCell!.value, 'headerB1 value 0');
 
     // 셀 우측 끝으로 이동해서 우측 고정 된 셀 값 확인
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
 
     // 우측 끝 고정 컬럼 값 확인
     expect(stateManager!.currentCell!.value, 'headerR0 value 0');
 
     // 셀 다시 왼쪽 이동
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pumpAndSettle();
 
     // 우측 고정 컬럼 바로 전 컬럼인 Body 의 마지막 컬럼 셀 값 확인
     expect(stateManager!.currentCell!.value, 'headerB2 value 0');
@@ -109,7 +124,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // when
     // first cell of first column
@@ -126,7 +141,7 @@ void main() {
     expect(stateManager!.showFrozenColumn, false);
 
     // Freeze the 3rd column
-    stateManager!.toggleFrozenColumn(columns[2].key, PlutoColumnFrozen.right);
+    stateManager!.toggleFrozenColumn(columns[2], PlutoColumnFrozen.end);
 
     // Await re-build by toggleFrozenColumn
     await tester.pumpAndSettle(const Duration(seconds: 1));
@@ -134,24 +149,35 @@ void main() {
     // Check showFrozenColumn after freezing column.
     expect(stateManager!.showFrozenColumn, true);
 
-    // Move current cell position to 3rd column (0 -> 1 -> 2)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(stateManager!.currentColumn!.title, 'header0');
 
-    // Check currentColumn
-    expect(stateManager!.currentColumn!.title, isNot('header2'));
-    expect(stateManager!.currentColumn!.title, 'header3');
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(stateManager!.currentColumn!.title, 'header1');
 
-    // Move current cell position to 10rd column (2 -> 9)
+    // Move current cell position to 10rd column (1 -> 9)
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
 
-    // Check currentColumn
+    expect(stateManager!.currentColumn!.title, 'header9');
+
+    // Right frozen column
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
     expect(stateManager!.currentColumn!.title, 'header2');
   });
 }

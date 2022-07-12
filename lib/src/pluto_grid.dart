@@ -3,9 +3,40 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:provider/provider.dart';
+
+typedef PlutoOnLoadedEventCallback = void Function(
+    PlutoGridOnLoadedEvent event);
+
+typedef PlutoOnChangedEventCallback = void Function(
+    PlutoGridOnChangedEvent event);
+
+typedef PlutoOnSelectedEventCallback = void Function(
+    PlutoGridOnSelectedEvent event);
+
+typedef PlutoOnSortedEventCallback = void Function(
+    PlutoGridOnSortedEvent event);
+
+typedef PlutoOnRowCheckedEventCallback = void Function(
+    PlutoGridOnRowCheckedEvent event);
+
+typedef PlutoOnRowDoubleTapEventCallback = void Function(
+    PlutoGridOnRowDoubleTapEvent event);
+
+typedef PlutoOnRowSecondaryTapEventCallback = void Function(
+    PlutoGridOnRowSecondaryTapEvent event);
+
+typedef PlutoOnRowsMovedEventCallback = void Function(
+    PlutoGridOnRowsMovedEvent event);
+
+typedef CreateHeaderCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
+
+typedef CreateFooterCallBack = Widget Function(
+    PlutoGridStateManager stateManager);
+
+typedef PlutoRowColorCallback = Color Function(
+    PlutoRowColorContext rowColorContext);
 
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
@@ -15,7 +46,7 @@ import 'package:provider/provider.dart';
 /// Pop-ups such as date selection, time selection,
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
-class PlutoGrid extends StatefulWidget {
+class PlutoGrid extends PlutoStatefulWidget {
   const PlutoGrid({
     Key? key,
     required this.columns,
@@ -24,6 +55,7 @@ class PlutoGrid extends StatefulWidget {
     this.onLoaded,
     this.onChanged,
     this.onSelected,
+    this.onSorted,
     this.onRowChecked,
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
@@ -31,6 +63,7 @@ class PlutoGrid extends StatefulWidget {
     this.createHeader,
     this.createFooter,
     this.rowColorCallback,
+    this.columnMenuDelegate,
     this.configuration,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
@@ -78,9 +111,17 @@ class PlutoGrid extends StatefulWidget {
   /// [columnGroups] can be expressed in UI by grouping columns.
   final List<PlutoColumnGroup>? columnGroups;
 
-  /// When the constructor of [PlutoGrid] works, the callback is answered.
+  /// [PlutoGrid] completes setting and passes [PlutoGridStateManager] to [event].
   ///
-  /// [onLoaded] can be used to receive [PlutoGridStateManager].
+  /// When the [PlutoGrid] starts,
+  /// the desired setting can be made through [PlutoGridStateManager].
+  ///
+  /// ex) Change the selection mode to cell selection.
+  /// ```dart
+  /// onLoaded: (PlutoGridOnLoadedEvent event) {
+  ///   event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
+  /// },
+  /// ```
   final PlutoOnLoadedEventCallback? onLoaded;
 
   /// [onChanged] is called when the cell value changes.
@@ -101,6 +142,9 @@ class PlutoGrid extends StatefulWidget {
   /// This will require a double tap if no row is selected.
   /// In [PlutoGridMode.selectWithOneTap], the [onLoaded] callback works when the unselected row is tapped once.
   final PlutoOnSelectedEventCallback? onSelected;
+
+  /// [onSorted] is a callback that is called when column sorting is changed.
+  final PlutoOnSortedEventCallback? onSorted;
 
   /// [onRowChecked] can receive the check status change of the checkbox
   /// when [PlutoColumn.enableRowChecked] is enabled.
@@ -152,32 +196,62 @@ class PlutoGrid extends StatefulWidget {
   /// [rowColorCallback] can change the row background color dynamically according to the state.
   ///
   /// Implement a callback that returns a [Color] by referring to the value passed as a callback argument.
+  /// An exception should be handled when a column is deleted.
   /// ```dart
-  /// rowColorCallback: (rowColorContext) {
-  ///   if (rowColorContext.row.cells.entries.elementAt(4).value.value ==
-  ///       'One') {
-  ///     return Colors.blueAccent;
-  ///   } else if (rowColorContext.row.cells.entries
-  ///           .elementAt(4)
-  ///           .value
-  ///           .value ==
-  ///       'Two') {
-  ///     return Colors.cyanAccent;
-  ///   }
-  ///   return Colors.deepOrange;
-  /// },
+  /// rowColorCallback = (PlutoRowColorContext rowColorContext) {
+  ///   return rowColorContext.row.cells['column2']?.value == 'green'
+  ///       ? const Color(0xFFE2F6DF)
+  ///       : Colors.white;
+  /// }
   /// ```
   final PlutoRowColorCallback? rowColorCallback;
+
+  /// Column menu can be customized.
+  ///
+  /// See the demo example link below.
+  /// https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_menu_screen.dart
+  final PlutoColumnMenuDelegate? columnMenuDelegate;
 
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
   final PlutoGridConfiguration? configuration;
 
-  /// [PlutoGridMode.normal]
-  /// Normal grid with cell editing.
+  /// Execution mode of [PlutoGrid].
   ///
-  /// [PlutoGridMode.select]
-  /// Editing is not possible, and if you press enter or tap on the list,
-  /// you can receive the selected row and cell from the onSelected callback.
+  /// [PlutoGridMode.normal]
+  /// {@template pluto_grid_mode_normal}
+  /// Basic mode with most functions not limited, such as editing and selection.
+  /// {@endtemplate}
+  ///
+  /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
+  /// {@template pluto_grid_mode_select}
+  /// Mode for selecting one list from a specific list.
+  /// Tap a row or press Enter to select the current row.
+  ///
+  /// [select]
+  /// Call the [PlutoGrid.onSelected] callback when the selected row is tapped.
+  /// To select an unselected row, select the row and then tap once more.
+  /// [selectWithOneTap]
+  /// Same as [select], but calls [PlutoGrid.onSelected] with one tap.
+  ///
+  /// This mode is non-editable, but programmatically possible.
+  /// ```dart
+  /// stateManager.changeCellValue(
+  ///   stateManager.currentRow!.cells['column_1']!,
+  ///   value,
+  ///   force: true,
+  /// );
+  /// ```
+  /// {@endtemplate}
+  ///
+  /// [PlutoGridMode.popup]
+  /// {@template pluto_grid_mode_popup}
+  /// This is a mode for popup type.
+  /// It is used when calling a popup for filtering or column setting
+  /// inside [PlutoGrid], and it is not a mode for users.
+  ///
+  /// If the user wants to run [PlutoGrid] as a popup,
+  /// use [PlutoGridPopup] or [PlutoGridDualGridPopup].
+  /// {@endtemplate}
   final PlutoGridMode? mode;
 
   /// [setDefaultLocale] sets locale when [Intl] package is used in [PlutoGrid].
@@ -193,7 +267,6 @@ class PlutoGrid extends StatefulWidget {
   /// initializeDateFormatting();
   /// ```
   /// {@endtemplate}
-  /// ```
   static setDefaultLocale(String locale) {
     Intl.defaultLocale = locale;
   }
@@ -210,7 +283,31 @@ class PlutoGrid extends StatefulWidget {
   PlutoGridState createState() => PlutoGridState();
 }
 
-class PlutoGridState extends State<PlutoGrid> {
+class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
+  bool _showColumnTitle = false;
+
+  bool _showColumnFilter = false;
+
+  bool _showColumnGroups = false;
+
+  bool _showFrozenColumn = false;
+
+  bool _showLoading = false;
+
+  bool _hasLeftFrozenColumns = false;
+
+  bool _hasRightFrozenColumns = false;
+
+  double _bodyLeftOffset = 0.0;
+
+  double _bodyRightOffset = 0.0;
+
+  double _rightFrozenLeftOffset = 0.0;
+
+  Widget? _header;
+
+  Widget? _footer;
+
   final FocusNode _gridFocusNode = FocusNode();
 
   final LinkedScrollControllerGroup _verticalScroll =
@@ -227,45 +324,11 @@ class PlutoGridState extends State<PlutoGrid> {
 
   late final PlutoGridEventManager _eventManager;
 
-  bool? _showFrozenColumn;
-
-  bool? _hasLeftFrozenColumns;
-
-  double? _bodyLeftOffset;
-
-  double? _bodyRightOffset;
-
-  bool? _hasRightFrozenColumns;
-
-  double? _rightFrozenLeftOffset;
-
-  bool? _showColumnGroups;
-
-  bool? _showColumnFilter;
-
-  bool? _showLoading;
-
-  Widget? _header;
-
-  Widget? _footer;
-
   @override
-  void dispose() {
-    for (var dispose in _disposeList) {
-      dispose();
-    }
-
-    super.dispose();
-  }
+  PlutoGridStateManager get stateManager => _stateManager;
 
   @override
   void initState() {
-    super.initState();
-
-    _disposeList.add(() {
-      _gridFocusNode.dispose();
-    });
-
     _initStateManager();
 
     _initKeyManager();
@@ -277,6 +340,78 @@ class PlutoGridState extends State<PlutoGrid> {
     _initSelectMode();
 
     _initHeaderFooter();
+
+    _disposeList.add(() {
+      _gridFocusNode.dispose();
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      updateState();
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (var dispose in _disposeList) {
+      dispose();
+    }
+
+    super.dispose();
+  }
+
+  @override
+  void updateState() {
+    _showColumnTitle = update<bool>(
+      _showColumnTitle,
+      stateManager.showColumnTitle,
+    );
+
+    _showColumnFilter = update<bool>(
+      _showColumnFilter,
+      stateManager.showColumnFilter,
+    );
+
+    _showColumnGroups = update<bool>(
+      _showColumnGroups,
+      stateManager.showColumnGroups,
+    );
+
+    _showFrozenColumn = update<bool>(
+      _showFrozenColumn,
+      stateManager.showFrozenColumn,
+    );
+
+    _showLoading = update<bool>(
+      _showLoading,
+      stateManager.showLoading,
+    );
+
+    _hasLeftFrozenColumns = update<bool>(
+      _hasLeftFrozenColumns,
+      stateManager.hasLeftFrozenColumns,
+    );
+
+    _hasRightFrozenColumns = update<bool>(
+      _hasRightFrozenColumns,
+      stateManager.hasRightFrozenColumns,
+    );
+
+    _bodyLeftOffset = update<double>(
+      _bodyLeftOffset,
+      stateManager.bodyLeftOffset,
+    );
+
+    _bodyRightOffset = update<double>(
+      _bodyRightOffset,
+      stateManager.bodyRightOffset,
+    );
+
+    _rightFrozenLeftOffset = update<double>(
+      _rightFrozenLeftOffset,
+      stateManager.rightFrozenLeftOffset,
+    );
   }
 
   void _initStateManager() {
@@ -292,21 +427,20 @@ class PlutoGridState extends State<PlutoGrid> {
       mode: widget.mode,
       onChangedEventCallback: widget.onChanged,
       onSelectedEventCallback: widget.onSelected,
+      onSortedEventCallback: widget.onSorted,
       onRowCheckedEventCallback: widget.onRowChecked,
       onRowDoubleTapEventCallback: widget.onRowDoubleTap,
       onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
       onRowsMovedEventCallback: widget.onRowsMoved,
       onRowColorCallback: widget.rowColorCallback,
+      columnMenuDelegate: widget.columnMenuDelegate,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       configuration: widget.configuration,
     );
 
-    _stateManager.addListener(_changeStateListener);
-
     // Dispose
     _disposeList.add(() {
-      _stateManager.removeListener(_changeStateListener);
       _stateManager.dispose();
     });
   }
@@ -382,33 +516,7 @@ class PlutoGridState extends State<PlutoGrid> {
     }
   }
 
-  void _changeStateListener() {
-    if (_showFrozenColumn != _stateManager.showFrozenColumn ||
-        _hasLeftFrozenColumns != _stateManager.hasLeftFrozenColumns ||
-        _bodyLeftOffset != _stateManager.bodyLeftOffset ||
-        _bodyRightOffset != _stateManager.bodyRightOffset ||
-        _hasRightFrozenColumns != _stateManager.hasRightFrozenColumns ||
-        _rightFrozenLeftOffset != _stateManager.rightFrozenLeftOffset ||
-        _showColumnGroups != _stateManager.showColumnGroups ||
-        _showColumnFilter != _stateManager.showColumnFilter ||
-        _showLoading != _stateManager.showLoading) {
-      // it has been layout
-      if (_stateManager.maxWidth != null) {
-        setState(_resetState);
-      }
-    }
-  }
-
   KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
-    /// 2021-11-19
-    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-    /// 이슈 해결 후 :
-    /// ```dart
-    /// keyManager!.subject.add(PlutoKeyManagerEvent(
-    ///   focusNode: focusNode,
-    ///   event: event,
-    /// ));
-    /// ```
     if (_keyManager.eventResult.isSkip == false) {
       _keyManager.subject.add(PlutoKeyManagerEvent(
         focusNode: focusNode,
@@ -416,152 +524,139 @@ class PlutoGridState extends State<PlutoGrid> {
       ));
     }
 
-    /// 2021-11-19
-    /// KeyEventResult.skipRemainingHandlers 동작 오류로 인한 임시 코드
-    /// 이슈 해결 후 :
-    /// ```dart
-    /// return KeyEventResult.handled;
-    /// ```
     return _keyManager.eventResult.consume(KeyEventResult.handled);
-  }
-
-  void _resetState() {
-    _showFrozenColumn = _stateManager.showFrozenColumn;
-
-    _hasLeftFrozenColumns = _stateManager.hasLeftFrozenColumns;
-
-    _hasRightFrozenColumns = _stateManager.hasRightFrozenColumns;
-
-    _showColumnGroups = _stateManager.showColumnGroups;
-
-    _showColumnFilter = _stateManager.showColumnFilter;
-
-    _showLoading = _stateManager.showLoading;
-
-    // it may be called before layout
-    if (_stateManager.maxWidth != null) {
-      _bodyLeftOffset = _stateManager.bodyLeftOffset;
-
-      _bodyRightOffset = _stateManager.bodyRightOffset;
-
-      _rightFrozenLeftOffset = _stateManager.rightFrozenLeftOffset;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _stateManager,
-      child: FocusScope(
-        onFocusChange: _stateManager.setKeepFocus,
-        onKey: _handleGridFocusOnKey,
-        child: SafeArea(
-          child: _GridContainer(
-            stateManager: _stateManager,
-            child: CustomMultiChildLayout(
-              key: _stateManager.gridKey,
-              delegate: PlutoGridLayoutDelegate(_stateManager),
-              children: [
+    final style = _stateManager.style;
+
+    final bool showLeftFrozen =
+        _stateManager.showFrozenColumn && _stateManager.hasLeftFrozenColumns;
+
+    final bool showRightFrozen =
+        _stateManager.showFrozenColumn && _stateManager.hasRightFrozenColumns;
+
+    final bool showColumnRowDivider =
+        _stateManager.showColumnTitle || _stateManager.showColumnFilter;
+
+    _stateManager.setTextDirection(Directionality.of(context));
+
+    return FocusScope(
+      onFocusChange: _stateManager.setKeepFocus,
+      onKey: _handleGridFocusOnKey,
+      child: SafeArea(
+        child: _GridContainer(
+          stateManager: _stateManager,
+          child: CustomMultiChildLayout(
+            key: _stateManager.gridKey,
+            delegate: PlutoGridLayoutDelegate(_stateManager),
+            children: [
+              /// Body columns and rows.
+              LayoutId(
+                id: _StackName.bodyRows,
+                child: PlutoBodyRows(_stateManager),
+              ),
+              LayoutId(
+                id: _StackName.bodyColumns,
+                child: PlutoBodyColumns(_stateManager),
+              ),
+
+              /// Left columns and rows.
+              if (showLeftFrozen) ...[
                 LayoutId(
-                    id: _StackName.bodyColumns,
-                    child: PlutoBodyColumns(_stateManager)),
+                  id: _StackName.leftFrozenColumns,
+                  child: PlutoLeftFrozenColumns(_stateManager),
+                ),
                 LayoutId(
-                    id: _StackName.bodyRows,
-                    child: PlutoBodyRows(_stateManager)),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasLeftFrozenColumns)
-                  LayoutId(
-                      id: _StackName.leftFrozenColumns,
-                      child: PlutoLeftFrozenColumns(_stateManager)),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasLeftFrozenColumns)
-                  LayoutId(
-                      id: _StackName.leftFrozenRows,
-                      child: PlutoLeftFrozenRows(_stateManager)),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasRightFrozenColumns)
-                  LayoutId(
-                      id: _StackName.rightFrozenColumns,
-                      child: PlutoRightFrozenColumns(_stateManager)),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasRightFrozenColumns)
-                  LayoutId(
-                      id: _StackName.rightFrozenRows,
-                      child: PlutoRightFrozenRows(_stateManager)),
+                    id: _StackName.leftFrozenRows,
+                    child: PlutoLeftFrozenRows(_stateManager)),
+                LayoutId(
+                  id: _StackName.leftFrozenDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.vertical,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
+                  ),
+                ),
+              ],
+
+              /// Right columns and rows.
+              if (showRightFrozen) ...[
+                LayoutId(
+                  id: _StackName.rightFrozenColumns,
+                  child: PlutoRightFrozenColumns(_stateManager),
+                ),
+                LayoutId(
+                    id: _StackName.rightFrozenRows,
+                    child: PlutoRightFrozenRows(_stateManager)),
+                LayoutId(
+                  id: _StackName.rightFrozenDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.vertical,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
+                    reverse: true,
+                  ),
+                ),
+              ],
+
+              /// Column and row divider.
+              if (showColumnRowDivider)
                 LayoutId(
                   id: _StackName.columnRowDivider,
                   child: PlutoShadowLine(
                     axis: Axis.horizontal,
-                    color: _stateManager.configuration!.gridBorderColor,
-                    shadow: _stateManager.configuration!.enableGridBorderShadow,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                   ),
                 ),
-                if (_stateManager.showHeader)
-                  LayoutId(
-                    id: _StackName.headerDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: _stateManager.configuration!.gridBorderColor,
-                      shadow:
-                          _stateManager.configuration!.enableGridBorderShadow,
-                    ),
+
+              /// Header and divider.
+              if (_stateManager.showHeader) ...[
+                LayoutId(
+                  id: _StackName.headerDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.horizontal,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
                   ),
-                if (_stateManager.showFooter)
-                  LayoutId(
-                    id: _StackName.footerDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: _stateManager.configuration!.gridBorderColor,
-                      reverse: true,
-                      shadow:
-                          _stateManager.configuration!.enableGridBorderShadow,
-                    ),
-                  ),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasLeftFrozenColumns)
-                  LayoutId(
-                      id: _StackName.leftFrozenDivider,
-                      child: PlutoShadowLine(
-                        axis: Axis.vertical,
-                        color: _stateManager.configuration!.gridBorderColor,
-                        shadow:
-                            _stateManager.configuration!.enableGridBorderShadow,
-                      )),
-                if (_stateManager.showFrozenColumn &&
-                    _stateManager.hasRightFrozenColumns)
-                  LayoutId(
-                      id: _StackName.rightFrozenDivider,
-                      child: PlutoShadowLine(
-                        axis: Axis.vertical,
-                        color: _stateManager.configuration!.gridBorderColor,
-                        reverse: true,
-                        shadow:
-                            _stateManager.configuration!.enableGridBorderShadow,
-                      )),
-                if (_stateManager.showHeader)
-                  LayoutId(
-                    id: _StackName.header,
-                    child: _header!,
-                  ),
-                if (_stateManager.showFooter)
-                  LayoutId(
-                    id: _StackName.footer,
-                    child: _footer!,
-                  ),
-                if (_stateManager.showLoading)
-                  LayoutId(
-                    id: _StackName.loading,
-                    child: PlutoLoading(
-                      backgroundColor:
-                          _stateManager.configuration!.gridBackgroundColor,
-                      indicatorColor:
-                          _stateManager.configuration!.activatedBorderColor,
-                      text: _stateManager.configuration!.localeText.loadingText,
-                      textStyle: _stateManager.configuration!.cellTextStyle,
-                    ),
-                  ),
+                ),
+                LayoutId(
+                  id: _StackName.header,
+                  child: _header!,
+                ),
               ],
-            ),
+
+              /// Footer and divider.
+              if (_stateManager.showFooter) ...[
+                LayoutId(
+                  id: _StackName.footerDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.horizontal,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
+                    reverse: true,
+                  ),
+                ),
+                LayoutId(
+                  id: _StackName.footer,
+                  child: _footer!,
+                ),
+              ],
+
+              /// Loading screen.
+              if (_stateManager.showLoading)
+                LayoutId(
+                  id: _StackName.loading,
+                  child: PlutoLoading(
+                    backgroundColor: style.gridBackgroundColor,
+                    indicatorColor: style.activatedBorderColor,
+                    text: _stateManager.localeText.loadingText,
+                    textStyle: style.cellTextStyle,
+                  ),
+                ),
+            ],
           ),
         ),
       ),
@@ -584,6 +679,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     _stateManager.setLayout(BoxConstraints.tight(size));
 
+    bool isLTR = _stateManager.isLTR;
     double bodyRowsTopOffset = 0;
     double bodyRowsBottomOffset = 0;
     double columnsTopOffset = 0;
@@ -652,12 +748,18 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(size),
       );
 
+      final double posX = isLTR ? 0 : size.width - s.width;
+
       positionChild(
         _StackName.leftFrozenColumns,
-        Offset(0, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyLeftOffset = s.width;
+      if (isLTR) {
+        bodyLeftOffset = s.width;
+      } else {
+        bodyRightOffset = s.width;
+      }
     }
 
     if (hasChild(_StackName.leftFrozenDivider)) {
@@ -671,12 +773,20 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
+      final double posX = isLTR
+          ? bodyLeftOffset
+          : size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth;
+
       positionChild(
         _StackName.leftFrozenDivider,
-        Offset(bodyLeftOffset, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyLeftOffset += s.width;
+      if (isLTR) {
+        bodyLeftOffset += s.width;
+      } else {
+        bodyRightOffset += s.width;
+      }
     }
 
     if (hasChild(_StackName.rightFrozenColumns)) {
@@ -685,15 +795,19 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(size),
       );
 
+      final double posX =
+          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+
       positionChild(
         _StackName.rightFrozenColumns,
-        Offset(
-          size.width - s.width + PlutoGridSettings.gridBorderWidth,
-          columnsTopOffset,
-        ),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyRightOffset = s.width;
+      if (isLTR) {
+        bodyRightOffset = s.width;
+      } else {
+        bodyLeftOffset = s.width;
+      }
     }
 
     if (hasChild(_StackName.rightFrozenDivider)) {
@@ -707,31 +821,36 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
+      final double posX = isLTR
+          ? size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth
+          : bodyLeftOffset;
+
       positionChild(
         _StackName.rightFrozenDivider,
-        Offset(
-          size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth,
-          columnsTopOffset,
-        ),
+        Offset(posX, columnsTopOffset),
       );
 
-      bodyRightOffset += s.width;
+      if (isLTR) {
+        bodyRightOffset += s.width;
+      } else {
+        bodyLeftOffset += s.width;
+      }
     }
 
     if (hasChild(_StackName.bodyColumns)) {
       var s = layoutChild(
         _StackName.bodyColumns,
         BoxConstraints.loose(
-          Size(
-            size.width - bodyLeftOffset - bodyRightOffset,
-            size.height,
-          ),
+          Size(size.width - bodyLeftOffset - bodyRightOffset, size.height),
         ),
       );
 
+      final double posX =
+          isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+
       positionChild(
         _StackName.bodyColumns,
-        Offset(bodyLeftOffset, columnsTopOffset),
+        Offset(posX, columnsTopOffset),
       );
 
       bodyRowsTopOffset += s.height;
@@ -742,10 +861,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       var s = layoutChild(
         _StackName.columnRowDivider,
         BoxConstraints.tight(
-          Size(
-            size.width,
-            PlutoGridSettings.gridBorderWidth,
-          ),
+          Size(size.width, PlutoGridSettings.gridBorderWidth),
         ),
       );
 
@@ -755,42 +871,45 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       bodyRowsTopOffset += s.height;
+    } else {
+      bodyRowsTopOffset += PlutoGridSettings.gridBorderWidth;
     }
 
     if (hasChild(_StackName.leftFrozenRows)) {
+      final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
+      final double posX = isLTR
+          ? 0
+          : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
+
       layoutChild(
         _StackName.leftFrozenRows,
         BoxConstraints.loose(
-          Size(
-            bodyLeftOffset,
-            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
-          ),
+          Size(offset, size.height - bodyRowsTopOffset - bodyRowsBottomOffset),
         ),
       );
 
       positionChild(
         _StackName.leftFrozenRows,
-        Offset(0, bodyRowsTopOffset),
+        Offset(posX, bodyRowsTopOffset),
       );
     }
 
     if (hasChild(_StackName.rightFrozenRows)) {
+      final double offset = isLTR ? bodyRightOffset : bodyLeftOffset;
+      final double posX = isLTR
+          ? size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth
+          : 0;
+
       layoutChild(
         _StackName.rightFrozenRows,
         BoxConstraints.loose(
-          Size(
-            bodyRightOffset,
-            size.height - bodyRowsTopOffset - bodyRowsBottomOffset,
-          ),
+          Size(offset, size.height - bodyRowsTopOffset - bodyRowsBottomOffset),
         ),
       );
 
       positionChild(
         _StackName.rightFrozenRows,
-        Offset(
-          size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth,
-          bodyRowsTopOffset,
-        ),
+        Offset(posX, bodyRowsTopOffset),
       );
     }
 
@@ -837,7 +956,7 @@ class _GridContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = stateManager.configuration!;
+    final style = stateManager.style;
 
     return Focus(
       focusNode: stateManager.gridFocusNode,
@@ -848,16 +967,15 @@ class _GridContainer extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
           decoration: BoxDecoration(
-            color: configuration.gridBackgroundColor,
-            borderRadius: configuration.gridBorderRadius,
+            color: style.gridBackgroundColor,
+            borderRadius: style.gridBorderRadius,
             border: Border.all(
-              color: configuration.gridBorderColor,
+              color: style.gridBorderColor,
               width: PlutoGridSettings.gridBorderWidth,
             ),
           ),
           child: ClipRRect(
-            borderRadius:
-                configuration.gridBorderRadius.resolve(TextDirection.ltr),
+            borderRadius: style.gridBorderRadius.resolve(TextDirection.ltr),
             child: child,
           ),
         ),
@@ -874,9 +992,18 @@ class PlutoGridOnLoadedEvent {
   });
 }
 
-/// Caution
+/// Event called when the value of [PlutoCell] is changed.
 ///
-/// [columnIdx] and [rowIdx] are values in the currently displayed state.
+/// Notice.
+/// [columnIdx], [rowIdx] are the values in the current screen state.
+/// Values in their current state, not actual data values
+/// with filtering, sorting, or pagination applied.
+/// This value is from
+/// [PlutoGridStateManager.columns] and [PlutoGridStateManager.rows].
+///
+/// All data is in
+/// [PlutoGridStateManager.refColumns.originalList]
+/// [PlutoGridStateManager.refRows.originalList]
 class PlutoGridOnChangedEvent {
   final int? columnIdx;
   final PlutoColumn? column;
@@ -916,6 +1043,22 @@ class PlutoGridOnSelectedEvent {
   });
 }
 
+class PlutoGridOnSortedEvent {
+  final PlutoColumn column;
+
+  final PlutoColumnSort oldSort;
+
+  PlutoGridOnSortedEvent({
+    required this.column,
+    required this.oldSort,
+  });
+
+  @override
+  String toString() {
+    return '[PlutoGridOnSortedEvent] ${column.title} (changed: ${column.sort}, old: $oldSort)';
+  }
+}
+
 abstract class PlutoGridOnRowCheckedEvent {
   bool get isAll => runtimeType == PlutoGridOnRowCheckedAllEvent;
 
@@ -930,6 +1073,13 @@ abstract class PlutoGridOnRowCheckedEvent {
     this.rowIdx,
     this.isChecked,
   });
+
+  @override
+  String toString() {
+    String checkMessage = isAll ? 'All rows ' : 'RowIdx $rowIdx ';
+    checkMessage += isChecked == true ? 'checked' : 'unchecked';
+    return '[PlutoGridOnRowCheckedEvent] $checkMessage';
+  }
 }
 
 class PlutoGridOnRowDoubleTapEvent {
@@ -1006,10 +1156,23 @@ class PlutoRowColorContext {
   });
 }
 
+class PlutoOptional<T> {
+  PlutoOptional(this.value);
+
+  final T? value;
+}
+
 enum PlutoGridMode {
+  /// {@macro pluto_grid_mode_normal}
   normal,
+
+  /// {@macro pluto_grid_mode_select}
   select,
+
+  /// {@macro pluto_grid_mode_select}
   selectWithOneTap,
+
+  /// {@macro pluto_grid_mode_popup}
   popup,
 }
 
@@ -1022,23 +1185,6 @@ extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isSelectModeWithOneTap => this == PlutoGridMode.selectWithOneTap;
 
   bool get isPopup => this == PlutoGridMode.popup;
-}
-
-enum _StackName {
-  header,
-  headerDivider,
-  leftFrozenColumns,
-  leftFrozenRows,
-  leftFrozenDivider,
-  bodyColumns,
-  bodyRows,
-  rightFrozenColumns,
-  rightFrozenRows,
-  rightFrozenDivider,
-  columnRowDivider,
-  footer,
-  footerDivider,
-  loading,
 }
 
 class PlutoGridSettings {
@@ -1078,10 +1224,13 @@ class PlutoGridSettings {
   static const double rowTotalHeight = rowHeight + rowBorderWidth;
 
   /// Cell - padding
-  static const double cellPadding = 10;
+  static const EdgeInsets cellPadding = EdgeInsets.symmetric(horizontal: 10);
 
   /// Column title - padding
-  static const double columnTitlePadding = 10;
+  static const EdgeInsets columnTitlePadding =
+      EdgeInsets.symmetric(horizontal: 10);
+
+  static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
 
   /// Cell - fontSize
   static const double cellFontSize = 14;
@@ -1095,32 +1244,19 @@ class PlutoGridSettings {
   static const int debounceMillisecondsForColumnFilter = 300;
 }
 
-typedef PlutoOnLoadedEventCallback = void Function(
-    PlutoGridOnLoadedEvent event);
-
-typedef PlutoOnChangedEventCallback = void Function(
-    PlutoGridOnChangedEvent event);
-
-typedef PlutoOnSelectedEventCallback = void Function(
-    PlutoGridOnSelectedEvent event);
-
-typedef PlutoOnRowCheckedEventCallback = void Function(
-    PlutoGridOnRowCheckedEvent event);
-
-typedef PlutoOnRowDoubleTapEventCallback = void Function(
-    PlutoGridOnRowDoubleTapEvent event);
-
-typedef PlutoOnRowSecondaryTapEventCallback = void Function(
-    PlutoGridOnRowSecondaryTapEvent event);
-
-typedef PlutoOnRowsMovedEventCallback = void Function(
-    PlutoGridOnRowsMovedEvent event);
-
-typedef CreateHeaderCallBack = Widget Function(
-    PlutoGridStateManager stateManager);
-
-typedef CreateFooterCallBack = Widget Function(
-    PlutoGridStateManager stateManager);
-
-typedef PlutoRowColorCallback = Color Function(
-    PlutoRowColorContext rowColorContext);
+enum _StackName {
+  header,
+  headerDivider,
+  leftFrozenColumns,
+  leftFrozenRows,
+  leftFrozenDivider,
+  bodyColumns,
+  bodyRows,
+  rightFrozenColumns,
+  rightFrozenRows,
+  rightFrozenDivider,
+  columnRowDivider,
+  footer,
+  footerDivider,
+  loading,
+}

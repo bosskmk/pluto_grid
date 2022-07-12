@@ -48,6 +48,13 @@ class _PlutoTextColorAnimationState extends State<PlutoTextColorAnimation>
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Text(
       widget.text!,

@@ -12,6 +12,7 @@ import 'screen/feature/column_filtering_screen.dart';
 import 'screen/feature/column_freezing_screen.dart';
 import 'screen/feature/column_group_screen.dart';
 import 'screen/feature/column_hiding_screen.dart';
+import 'screen/feature/column_menu_screen.dart';
 import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
 import 'screen/feature/column_sorting_screen.dart';
@@ -30,6 +31,7 @@ import 'screen/feature/row_moving_screen.dart';
 import 'screen/feature/row_pagination_screen.dart';
 import 'screen/feature/row_selection_screen.dart';
 import 'screen/feature/row_with_checkbox_screen.dart';
+import 'screen/feature/rtl_screen.dart';
 import 'screen/feature/selection_type_column_screen.dart';
 import 'screen/feature/text_type_column_screen.dart';
 import 'screen/feature/time_type_column_screen.dart';
@@ -56,12 +58,14 @@ class MyApp extends StatelessWidget {
             const AddRowsAsynchronouslyScreen(),
         CellRendererScreen.routeName: (context) => const CellRendererScreen(),
         CellSelectionScreen.routeName: (context) => const CellSelectionScreen(),
+        RTLScreen.routeName: (context) => const RTLScreen(),
         ColumnFilteringScreen.routeName: (context) =>
             const ColumnFilteringScreen(),
         ColumnFreezingScreen.routeName: (context) =>
             const ColumnFreezingScreen(),
         ColumnGroupScreen.routeName: (context) => const ColumnGroupScreen(),
         ColumnHidingScreen.routeName: (context) => const ColumnHidingScreen(),
+        ColumnMenuScreen.routeName: (context) => const ColumnMenuScreen(),
         ColumnMovingScreen.routeName: (context) => const ColumnMovingScreen(),
         ColumnResizingScreen.routeName: (context) =>
             const ColumnResizingScreen(),
