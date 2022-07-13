@@ -1,3 +1,7 @@
+## [5.0.1] - 2022. 7. 13
+
+* Fix a problem that left or right scrolling was a bit out of sync with TextDirection.rtl.
+
 ## [5.0.0] - 2022. 7. 11
 
 * Added middle divider for `PlutoDualGrid`, `PlutoDualPopup` widget.  
