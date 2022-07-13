@@ -61,9 +61,8 @@ mixin ScrollState implements IPlutoGridState {
   }
 
   @override
-  Offset get directionalScrollEdgeOffset => isLTR
-      ? Offset.zero
-      : const Offset(PlutoGridSettings.offsetScrollingFromEdge * 2, 0);
+  Offset get directionalScrollEdgeOffset =>
+      isLTR ? Offset.zero : Offset(gridGlobalOffset!.dx, 0);
 
   @override
   void setScroll(PlutoGridScrollController? scroll) {

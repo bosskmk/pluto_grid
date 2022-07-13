@@ -12,7 +12,7 @@ void main() {
 
     late List<PlutoRow> rows;
 
-    PlutoGridStateManager? stateManager;
+    late PlutoGridStateManager stateManager;
 
     final withTenColumns = PlutoWidgetTestHelper(
       '10개의 컬럼을 생성',
@@ -46,9 +46,9 @@ void main() {
 
         expect(column, findsOneWidget);
 
-        stateManager!.hideColumn(columns[1], true);
+        stateManager.hideColumn(columns[1], true);
 
-        await tester.pumpAndSettle(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
         expect(column, findsNothing);
       },
@@ -57,16 +57,159 @@ void main() {
     withTenColumns.test(
       'showSetColumnsPopup 을 호출 하면 컬럼 설정 팝업이 호출 되어야 한다.',
       (tester) async {
-        stateManager!
-            .showSetColumnsPopup(stateManager!.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
 
-        await tester.pumpAndSettle(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
         var columnTitleOfPopup = find.text(
-          stateManager!.configuration!.localeText.setColumnsTitle,
+          stateManager.configuration!.localeText.setColumnsTitle,
         );
 
         expect(columnTitleOfPopup, findsOneWidget);
+      },
+    );
+
+    withTenColumns.test(
+      '컬럼 설정 팝업에서 전체 체크 박스를 탭하면 전체 컬럼이 숨겨져야 한다.',
+      (tester) async {
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+
+        await tester.pumpAndSettle();
+
+        final allCheckbox = find.descendant(
+          of: find.byType(PlutoBaseColumn),
+          matching: find.byType(PlutoScaledCheckbox),
+        );
+
+        await tester.tap(allCheckbox, warnIfMissed: false);
+
+        await tester.pump();
+
+        expect(stateManager.refColumns.length, 0);
+      },
+    );
+
+    withTenColumns.test(
+      '컬럼 설정 팝업에서 header0 컬럼의 체크 박스를 탭하면 header0 컬럼이 숨겨져야 한다.',
+      (tester) async {
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+
+        await tester.pumpAndSettle();
+
+        final columnTitleOfPopup = find.text(
+          stateManager.configuration!.localeText.setColumnsTitle,
+        );
+
+        final firstColumnCell = find
+            .descendant(
+              of: find.ancestor(
+                of: columnTitleOfPopup,
+                matching: find.byType(PlutoGrid),
+              ),
+              matching: find.byType(PlutoBaseCell),
+            )
+            .first;
+
+        final firstColumnTitle =
+            (firstColumnCell.evaluate().first.widget as PlutoBaseCell)
+                .cell
+                .value;
+
+        final headerCheckbox0 = find.descendant(
+          of: firstColumnCell,
+          matching: find.byType(PlutoScaledCheckbox),
+        );
+
+        await tester.tap(headerCheckbox0, warnIfMissed: false);
+
+        await tester.pump();
+
+        expect(stateManager.refColumns.length, 9);
+
+        expect(
+          stateManager.refColumns
+              .where((e) => e.title == firstColumnTitle)
+              .length,
+          0,
+        );
+      },
+    );
+
+    withTenColumns.test(
+      'header0 컬럼이 숨겨진 상태에서 header0 의 체크 박스를 탭하면 header0 컬럼이 나타나야 한다.',
+      (tester) async {
+        stateManager.hideColumn(stateManager.refColumns.first, true);
+
+        await tester.pumpAndSettle();
+
+        expect(stateManager.refColumns.length, 9);
+
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+
+        await tester.pumpAndSettle();
+
+        final columnTitleOfPopup = find.text(
+          stateManager.configuration!.localeText.setColumnsTitle,
+        );
+
+        final firstColumnCell = find
+            .descendant(
+              of: find.ancestor(
+                of: columnTitleOfPopup,
+                matching: find.byType(PlutoGrid),
+              ),
+              matching: find.byType(PlutoBaseCell),
+            )
+            .first;
+
+        final firstColumnTitle =
+            (firstColumnCell.evaluate().first.widget as PlutoBaseCell)
+                .cell
+                .value;
+
+        final headerCheckbox0 = find.descendant(
+          of: firstColumnCell,
+          matching: find.byType(PlutoScaledCheckbox),
+        );
+
+        await tester.tap(headerCheckbox0, warnIfMissed: false);
+
+        await tester.pump();
+
+        expect(stateManager.refColumns.length, 10);
+
+        expect(
+          stateManager.refColumns
+              .where((e) => e.title == firstColumnTitle)
+              .length,
+          1,
+        );
+      },
+    );
+
+    withTenColumns.test(
+      '모든 컬럼을 숨긴 상태에서 컬럼 설정 팝업의 전체 체크 박스를 탭하면 전체 컬럼이 나타나야 한다.',
+      (tester) async {
+        stateManager.hideColumns(stateManager.refColumns, true);
+
+        await tester.pumpAndSettle();
+
+        expect(stateManager.refColumns.length, 0);
+
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+
+        await tester.pumpAndSettle();
+
+        final allCheckbox = find.descendant(
+          of: find.byType(PlutoBaseColumn),
+          matching: find.byType(PlutoScaledCheckbox),
+        );
+
+        await tester.tap(allCheckbox, warnIfMissed: false);
+
+        await tester.pump();
+
+        expect(stateManager.refColumns.length, 10);
       },
     );
   });
@@ -101,7 +244,7 @@ void main() {
           ),
         );
 
-        await tester.pumpAndSettle(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
         stateManager!.hideColumn(columns[0], true, notify: false);
         stateManager!.hideColumn(columns[5], true);

@@ -1306,6 +1306,56 @@ void main() {
     expect(stateManager!.currentCellPosition!.rowIdx, 1);
   });
 
+  testWidgets('showLoading 을 호출 하면 Loading 위젯이 나타나야 한다.', (tester) async {
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+
+    late final PlutoGridStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
+          ),
+        ),
+      ),
+    );
+
+    stateManager.setShowLoading(true);
+
+    await tester.pump();
+
+    expect(find.byType(PlutoLoading), findsOneWidget);
+  });
+
+  testWidgets('showLoading 을 호출 하지 않으면 Loading 위젯이 나타나지 않아야 한다.',
+      (tester) async {
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byType(PlutoLoading), findsNothing);
+  });
+
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
