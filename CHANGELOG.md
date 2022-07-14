@@ -1,3 +1,7 @@
+## [5.0.2] - 2022. 7. 15
+
+* Fix menu position.
+
 ## [5.0.1] - 2022. 7. 13
 
 * Fix a problem that left or right scrolling was a bit out of sync with TextDirection.rtl.
