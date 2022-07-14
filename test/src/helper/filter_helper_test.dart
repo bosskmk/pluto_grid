@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -779,5 +780,103 @@ void main() {
         expect(filterColumn.type, isA<PlutoColumnTypeText>());
       });
     });
+  });
+
+  group('PlutoGridFilterPopupHeader', () {
+    testWidgets(
+      'add 버튼을 탭하면 handleAddNewFilter 콜백이 호출 되어야 한다.',
+      (tester) async {
+        final stateManager = MockPlutoGridStateManager();
+        const configuration = PlutoGridConfiguration();
+        final mockListener = MockOnChangeListener();
+
+        await tester.pumpWidget(MaterialApp(
+          home: Material(
+            child: PlutoGridFilterPopupHeader(
+              stateManager: stateManager,
+              configuration: configuration,
+              handleAddNewFilter: mockListener.onChangeOneParamListener,
+            ),
+          ),
+        ));
+
+        final button = find.byType(IconButton).first;
+
+        await tester.tap(button);
+
+        expect(
+          ((button.evaluate().first.widget as IconButton).icon as Icon).icon,
+          Icons.add,
+        );
+
+        verify(mockListener.onChangeOneParamListener(any)).called(1);
+      },
+    );
+
+    testWidgets(
+      'currentSelectingRows 이 empty 인 상태에서 remove 아이콘을 탭하면 removeCurrentRow 가 호출 되어야 한다.',
+      (tester) async {
+        final stateManager = MockPlutoGridStateManager();
+        const configuration = PlutoGridConfiguration();
+        final mockListener = MockOnChangeListener();
+
+        when(stateManager.currentSelectingRows).thenReturn([]);
+
+        await tester.pumpWidget(MaterialApp(
+          home: Material(
+            child: PlutoGridFilterPopupHeader(
+              stateManager: stateManager,
+              configuration: configuration,
+              handleAddNewFilter: mockListener.onChangeOneParamListener,
+            ),
+          ),
+        ));
+
+        final button = find.byType(IconButton).at(1);
+
+        await tester.tap(button);
+
+        expect(
+          ((button.evaluate().first.widget as IconButton).icon as Icon).icon,
+          Icons.remove,
+        );
+
+        verify(stateManager.removeCurrentRow()).called(1);
+      },
+    );
+
+    testWidgets(
+      'currentSelectingRows 이 empty 가 아닌 상태에서 remove 아이콘을 탭하면 removeRows 가 호출 되어야 한다.',
+      (tester) async {
+        final stateManager = MockPlutoGridStateManager();
+        const configuration = PlutoGridConfiguration();
+        final mockListener = MockOnChangeListener();
+
+        final dummyRow = PlutoRow(cells: {'test': PlutoCell(value: '')});
+
+        when(stateManager.currentSelectingRows).thenReturn([dummyRow]);
+
+        await tester.pumpWidget(MaterialApp(
+          home: Material(
+            child: PlutoGridFilterPopupHeader(
+              stateManager: stateManager,
+              configuration: configuration,
+              handleAddNewFilter: mockListener.onChangeOneParamListener,
+            ),
+          ),
+        ));
+
+        final button = find.byType(IconButton).at(1);
+
+        await tester.tap(button);
+
+        expect(
+          ((button.evaluate().first.widget as IconButton).icon as Icon).icon,
+          Icons.remove,
+        );
+
+        verify(stateManager.removeRows([dummyRow])).called(1);
+      },
+    );
   });
 }
