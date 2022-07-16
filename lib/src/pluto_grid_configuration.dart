@@ -850,7 +850,7 @@ class PlutoGridLocaleText {
     this.freezeColumnToStart = 'Ukotvit na začátek',
     this.freezeColumnToEnd = 'Ukotvit na konec',
     this.autoFitColumn = 'Autom. přizpůsobit',
-    this.hideColumn = 'Skrýt sloupce',
+    this.hideColumn = 'Skrýt sloupec',
     this.setColumns = 'Upravit sloupce',
     this.setFilter = 'Nastavit filtr',
     this.resetFilter = 'Resetovat filtr',
