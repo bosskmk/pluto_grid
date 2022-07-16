@@ -20,7 +20,9 @@ class PlutoGridPopup {
   final PlutoOnSortedEventCallback? onSorted;
 
   final PlutoOnRowCheckedEventCallback? onRowChecked;
-
+  final PlutoOnRowsMovedEventCallback? onRowsMoved;
+  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
   final double? width;
 
   final double? height;
@@ -41,6 +43,9 @@ class PlutoGridPopup {
     this.onSelected,
     this.onSorted,
     this.onRowChecked,
+    this.onRowsMoved,
+    this.onRowDoubleTap,
+    this.onRowSecondaryTap,
     this.width,
     this.height,
     this.createHeader,
@@ -80,6 +85,9 @@ class PlutoGridPopup {
                           },
                           onSorted: onSorted,
                           onRowChecked: onRowChecked,
+                          onRowsMoved: onRowsMoved,
+                          onRowDoubleTap: onRowDoubleTap,
+                          onRowSecondaryTap: onRowSecondaryTap,
                           createHeader: createHeader,
                           createFooter: createFooter,
                           configuration: configuration,
