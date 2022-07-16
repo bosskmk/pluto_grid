@@ -1,3 +1,7 @@
+## [5.0.3] - 2022. 7. 16
+
+* Update czech locale.
+
 ## [5.0.2] - 2022. 7. 15
 
 * Fix menu position.

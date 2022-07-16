@@ -98,40 +98,19 @@ mixin SelectingState implements IPlutoGridState {
 
   @override
   List<PlutoGridSelectingCellPosition> get currentSelectingPositionList {
-    if (!_selectingMode.isCell ||
-        currentCellPosition == null ||
-        currentSelectingPosition == null) {
+    if (currentCellPosition == null || currentSelectingPosition == null) {
       return [];
     }
 
-    final columnIndexes = columnIndexesByShowFrozen;
-
-    int columnStartIdx = min(
-        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
-
-    int columnEndIdx = max(
-        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
-
-    int rowStartIdx =
-        min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
-
-    int rowEndIdx =
-        max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
-
-    List<PlutoGridSelectingCellPosition> positions = [];
-
-    for (int i = rowStartIdx; i <= rowEndIdx; i += 1) {
-      for (int j = columnStartIdx; j <= columnEndIdx; j += 1) {
-        final String field = refColumns[columnIndexes[j]].field;
-
-        positions.add(PlutoGridSelectingCellPosition(
-          rowIdx: i,
-          field: field,
-        ));
-      }
+    switch (_selectingMode) {
+      case PlutoGridSelectingMode.cell:
+        return _selectingCells();
+      case PlutoGridSelectingMode.horizontal:
+        return _selectingCellsHorizontally();
+      case PlutoGridSelectingMode.row:
+      case PlutoGridSelectingMode.none:
+        return [];
     }
-
-    return positions;
   }
 
   @override
@@ -530,6 +509,86 @@ mixin SelectingState implements IPlutoGridState {
     setKeepFocus(true, notify: false);
 
     notifyListeners();
+  }
+
+  List<PlutoGridSelectingCellPosition> _selectingCells() {
+    final List<PlutoGridSelectingCellPosition> positions = [];
+
+    final columnIndexes = columnIndexesByShowFrozen;
+
+    int columnStartIdx = min(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
+
+    int columnEndIdx = max(
+        currentCellPosition!.columnIdx!, currentSelectingPosition!.columnIdx!);
+
+    int rowStartIdx =
+        min(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+
+    int rowEndIdx =
+        max(currentCellPosition!.rowIdx!, currentSelectingPosition!.rowIdx!);
+
+    for (int i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      for (int j = columnStartIdx; j <= columnEndIdx; j += 1) {
+        final String field = refColumns[columnIndexes[j]].field;
+
+        positions.add(PlutoGridSelectingCellPosition(
+          rowIdx: i,
+          field: field,
+        ));
+      }
+    }
+
+    return positions;
+  }
+
+  List<PlutoGridSelectingCellPosition> _selectingCellsHorizontally() {
+    final List<PlutoGridSelectingCellPosition> positions = [];
+
+    final columnIndexes = columnIndexesByShowFrozen;
+
+    final bool firstCurrent = currentCellPosition!.rowIdx! <
+            currentSelectingPosition!.rowIdx! ||
+        (currentCellPosition!.rowIdx! == currentSelectingPosition!.rowIdx! &&
+            currentCellPosition!.columnIdx! <=
+                currentSelectingPosition!.columnIdx!);
+
+    PlutoGridCellPosition startCell =
+        firstCurrent ? currentCellPosition! : currentSelectingPosition!;
+
+    PlutoGridCellPosition endCell =
+        !firstCurrent ? currentCellPosition! : currentSelectingPosition!;
+
+    int columnStartIdx = startCell.columnIdx!;
+
+    int columnEndIdx = endCell.columnIdx!;
+
+    int rowStartIdx = startCell.rowIdx!;
+
+    int rowEndIdx = endCell.rowIdx!;
+
+    final length = columnIndexes.length;
+
+    for (int i = rowStartIdx; i <= rowEndIdx; i += 1) {
+      for (int j = 0; j < length; j += 1) {
+        if (i == rowStartIdx && j < columnStartIdx) {
+          continue;
+        }
+
+        final String field = refColumns[columnIndexes[j]].field;
+
+        positions.add(PlutoGridSelectingCellPosition(
+          rowIdx: i,
+          field: field,
+        ));
+
+        if (i == rowEndIdx && j == columnEndIdx) {
+          break;
+        }
+      }
+    }
+
+    return positions;
   }
 
   String _selectingTextFromSelectingRows() {
