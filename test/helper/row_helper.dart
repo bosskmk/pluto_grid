@@ -10,31 +10,31 @@ class RowHelper {
     bool checked = false,
     int start = 0,
   }) {
-    return Iterable<int>.generate(count)
-        .map((rowIdx) => PlutoRow(
-              sortIdx: rowIdx,
-              cells: Map.fromIterable(
-                columns!,
-                key: (dynamic column) => column.field.toString(),
-                value: (dynamic column) {
-                  rowIdx += start;
+    return Iterable<int>.generate(count).map((rowIdx) {
+      rowIdx += start;
 
-                  if ((column as PlutoColumn).type.isText) {
-                    return cellOfTextColumn(column, rowIdx);
-                  } else if (column.type.isDate) {
-                    return cellOfDateColumn(column, rowIdx);
-                  } else if (column.type.isTime) {
-                    return cellOfTimeColumn(column, rowIdx);
-                  } else if (column.type.isSelect) {
-                    return cellOfTimeColumn(column, rowIdx);
-                  }
+      return PlutoRow(
+        sortIdx: rowIdx,
+        cells: Map.fromIterable(
+          columns!,
+          key: (dynamic column) => column.field.toString(),
+          value: (dynamic column) {
+            if ((column as PlutoColumn).type.isText) {
+              return cellOfTextColumn(column, rowIdx);
+            } else if (column.type.isDate) {
+              return cellOfDateColumn(column, rowIdx);
+            } else if (column.type.isTime) {
+              return cellOfTimeColumn(column, rowIdx);
+            } else if (column.type.isSelect) {
+              return cellOfTimeColumn(column, rowIdx);
+            }
 
-                  throw Exception('Column is not implemented.');
-                },
-              ),
-              checked: checked,
-            ))
-        .toList();
+            throw Exception('Column is not implemented.');
+          },
+        ),
+        checked: checked,
+      );
+    }).toList();
   }
 
   static PlutoCell cellOfTextColumn(PlutoColumn column, int rowIdx) {
