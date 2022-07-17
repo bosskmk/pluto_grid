@@ -439,6 +439,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
       onRowsMovedEventCallback: widget.onRowsMoved,
       onRowColorCallback: widget.rowColorCallback,
+      onColWidthChangeEventCallback: widget.onColWidthChanged,
       columnMenuDelegate: widget.columnMenuDelegate,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,

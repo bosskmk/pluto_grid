@@ -67,6 +67,9 @@ abstract class IGridState {
 
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
 
+  void setOnColWidthChanged(
+      PlutoOnColWidthChangeEventCallback? onColWidthChanged);
+
   void setConfiguration(
     PlutoGridConfiguration? configuration, {
     bool updateLocale = true,
@@ -219,6 +222,12 @@ mixin GridState implements IPlutoGridState {
   @override
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved) {
     _onRowsMoved = onRowsMoved;
+  }
+
+  @override
+  void setOnColWidthChanged(
+      PlutoOnColWidthChangeEventCallback? onColWidthChanged) {
+    _onColWidthChanged = onColWidthChanged;
   }
 
   @override
