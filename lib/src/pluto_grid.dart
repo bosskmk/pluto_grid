@@ -38,6 +38,9 @@ typedef CreateFooterCallBack = Widget Function(
 typedef PlutoRowColorCallback = Color Function(
     PlutoRowColorContext rowColorContext);
 
+typedef PlutoOnColWidthChangeEventCallback = void Function(
+    PlutoOnColWidthChangeEvent event);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -60,6 +63,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColWidthChanged,
     this.createHeader,
     this.createFooter,
     this.rowColorCallback,
@@ -158,6 +162,8 @@ class PlutoGrid extends PlutoStatefulWidget {
 
   /// [onRowsMoved] is called after the row is dragged and moved if [PlutoColumn.enableRowDrag] is enabled.
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
+  final PlutoOnColWidthChangeEventCallback? onColWidthChanged;
 
   /// [createHeader] is a user-definable area located above the upper column area of [PlutoGrid].
   ///
@@ -1130,6 +1136,12 @@ class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
   PlutoGridOnRowCheckedAllEvent({
     bool? isChecked,
   }) : super(row: null, rowIdx: null, isChecked: isChecked);
+}
+
+class PlutoOnColWidthChangeEvent {
+  final PlutoColumn column;
+
+  PlutoOnColWidthChangeEvent({required this.column});
 }
 
 class PlutoScrollBehavior extends MaterialScrollBehavior {

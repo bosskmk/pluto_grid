@@ -558,6 +558,7 @@ mixin ColumnState implements IPlutoGridState {
       PlutoMoveDirection.right,
       correctHorizontalOffset,
     );
+    _fireOnColWidthChange(column);
   }
 
   @override
@@ -881,6 +882,11 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     onSorted!(PlutoGridOnSortedEvent(column: column, oldSort: oldSort));
+  }
+
+  /// [PlutoGrid.onColWidthChanged] Called when a callback is registered.
+  void _fireOnColWidthChange(PlutoColumn column) {
+    onColWidthChanged?.call(PlutoOnColWidthChangeEvent(column: column));
   }
 
   /// Add [PlutoCell] to the whole [PlutoRow.cells].
