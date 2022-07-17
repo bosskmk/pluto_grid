@@ -25,7 +25,7 @@ class PlutoBaseColumn extends PlutoStatefulWidget
   double get startPosition => column.startPosition;
 
   @override
-  bool get keepAlive => false;
+  bool get keepAlive => true;
 }
 
 class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {

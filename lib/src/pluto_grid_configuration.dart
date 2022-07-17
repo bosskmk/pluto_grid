@@ -140,8 +140,10 @@ class PlutoGridStyleConfig {
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFooterHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
     this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.columnTextStyle = const TextStyle(
@@ -186,8 +188,10 @@ class PlutoGridStyleConfig {
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFooterHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
     this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.columnTextStyle = const TextStyle(
@@ -294,6 +298,9 @@ class PlutoGridStyleConfig {
   /// Height of column.
   final double columnHeight;
 
+  /// Height of column.
+  final double columnFooterHeight;
+
   /// Height of column filter.
   final double columnFilterHeight;
 
@@ -301,6 +308,8 @@ class PlutoGridStyleConfig {
   /// If there is no titlePadding of PlutoColumn,
   /// it is the title padding of the default column.
   final EdgeInsets defaultColumnTitlePadding;
+
+  final EdgeInsets defaultColumnFooterPadding;
 
   final EdgeInsets defaultColumnFilterPadding;
 
@@ -355,8 +364,10 @@ class PlutoGridStyleConfig {
     double? iconSize,
     double? rowHeight,
     double? columnHeight,
+    double? columnFooterHeight,
     double? columnFilterHeight,
     EdgeInsets? defaultColumnTitlePadding,
+    EdgeInsets? defaultColumnFooterPadding,
     EdgeInsets? defaultColumnFilterPadding,
     EdgeInsets? defaultCellPadding,
     TextStyle? columnTextStyle,
@@ -402,9 +413,12 @@ class PlutoGridStyleConfig {
       iconSize: iconSize ?? this.iconSize,
       rowHeight: rowHeight ?? this.rowHeight,
       columnHeight: columnHeight ?? this.columnHeight,
+      columnFooterHeight: columnFooterHeight ?? this.columnFooterHeight,
       columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
+      defaultColumnFooterPadding:
+      defaultColumnFooterPadding ?? this.defaultColumnFooterPadding,
       defaultColumnFilterPadding:
           defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,

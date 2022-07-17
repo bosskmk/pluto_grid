@@ -26,7 +26,7 @@ class PlutoBaseColumnGroup extends StatelessWidget
   double get startPosition => columnGroup.startPosition;
 
   @override
-  bool get keepAlive => false;
+  bool get keepAlive => true;
 
   @override
   Widget build(BuildContext context) {
