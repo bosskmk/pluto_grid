@@ -68,6 +68,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
+  /// {@template pluto_grid_property_columns}
   /// The [PlutoColumn] column is delivered as a list and can be added or deleted after grid creation.
   ///
   /// Columns can be added or deleted
@@ -76,8 +77,10 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// Each [PlutoColumn.field] value in [List] must be unique.
   /// [PlutoColumn.field] must be provided to match the map key in [PlutoRow.cells].
   /// should also be provided to match in [PlutoColumnGroup.fields] as well.
+  /// {@endtemplate}
   final List<PlutoColumn> columns;
 
+  /// {@template pluto_grid_property_rows}
   /// [rows] contains a call to the [PlutoGridStateManager.initializeRows] method
   /// that handles necessary settings when creating a grid or when a new row is added.
   ///
@@ -106,11 +109,15 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///   stateManager.setShowLoading(false);
   /// });
   /// ```
+  /// {@endtemplate}
   final List<PlutoRow> rows;
 
+  /// {@template pluto_grid_property_columnGroups}
   /// [columnGroups] can be expressed in UI by grouping columns.
+  /// {@endtemplate}
   final List<PlutoColumnGroup>? columnGroups;
 
+  /// {@template pluto_grid_property_onLoaded}
   /// [PlutoGrid] completes setting and passes [PlutoGridStateManager] to [event].
   ///
   /// When the [PlutoGrid] starts,
@@ -122,8 +129,10 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///   event.stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
   /// },
   /// ```
+  /// {@endtemplate}
   final PlutoOnLoadedEventCallback? onLoaded;
 
+  /// {@template pluto_grid_property_onChanged}
   /// [onChanged] is called when the cell value changes.
   ///
   /// When changing the cell value directly programmatically
@@ -131,8 +140,10 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// When changing the value by calling [callOnChangedEvent]
   /// as false as the parameter of [PlutoGridStateManager.changeCellValue]
   /// The [onChanged] callback is not called.
+  /// {@endtemplate}
   final PlutoOnChangedEventCallback? onChanged;
 
+  /// {@template pluto_grid_property_onSelected}
   /// [onSelected] can receive a response only if [PlutoGrid.mode] is set to [PlutoGridMode.select] .
   ///
   /// When a row is tapped or the Enter key is pressed, the row information can be returned.
@@ -141,24 +152,36 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// when the current selected row is tapped or the Enter key is pressed.
   /// This will require a double tap if no row is selected.
   /// In [PlutoGridMode.selectWithOneTap], the [onLoaded] callback works when the unselected row is tapped once.
+  /// {@endtemplate}
   final PlutoOnSelectedEventCallback? onSelected;
 
+  /// {@template pluto_grid_property_onSorted}
   /// [onSorted] is a callback that is called when column sorting is changed.
+  /// {@endtemplate}
   final PlutoOnSortedEventCallback? onSorted;
 
+  /// {@template pluto_grid_property_onRowChecked}
   /// [onRowChecked] can receive the check status change of the checkbox
   /// when [PlutoColumn.enableRowChecked] is enabled.
+  /// {@endtemplate}
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
+  /// {@template pluto_grid_property_onRowDoubleTap}
   /// [onRowDoubleTap] is called when a row is tapped twice in a row.
+  /// {@endtemplate}
   final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
 
+  /// {@template pluto_grid_property_onRowSecondaryTap}
   /// [onRowSecondaryTap] is called when a mouse right-click event occurs.
+  /// {@endtemplate}
   final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
 
+  /// {@template pluto_grid_property_onRowsMoved}
   /// [onRowsMoved] is called after the row is dragged and moved if [PlutoColumn.enableRowDrag] is enabled.
+  /// {@endtemplate}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@template pluto_grid_property_createHeader}
   /// [createHeader] is a user-definable area located above the upper column area of [PlutoGrid].
   ///
   /// Just pass a callback that returns [Widget] .
@@ -178,8 +201,10 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// The listener callback registered with [PlutoGridStateManager.addListener]
   /// must remove the listener callback with [PlutoGridStateManager.removeListener]
   /// when the widget returned by the callback is dispose.
+  /// {@endtemplate}
   final CreateHeaderCallBack? createHeader;
 
+  /// {@template pluto_grid_property_createFooter}
   /// [createFooter] is equivalent to [createHeader].
   /// However, it is located at the bottom of the grid.
   ///
@@ -191,8 +216,10 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///   return PlutoPagination(stateManager);
   /// },
   /// ```
+  /// {@endtemplate}
   final CreateFooterCallBack? createFooter;
 
+  /// {@template pluto_grid_property_rowColorCallback}
   /// [rowColorCallback] can change the row background color dynamically according to the state.
   ///
   /// Implement a callback that returns a [Color] by referring to the value passed as a callback argument.
@@ -204,15 +231,20 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///       : Colors.white;
   /// }
   /// ```
+  /// {@endtemplate}
   final PlutoRowColorCallback? rowColorCallback;
 
+  /// {@template pluto_grid_property_columnMenuDelegate}
   /// Column menu can be customized.
   ///
   /// See the demo example link below.
   /// https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_menu_screen.dart
+  /// {@endtemplate}
   final PlutoColumnMenuDelegate? columnMenuDelegate;
 
+  /// {@template pluto_grid_property_configuration}
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
+  /// {@endtemplate}
   final PlutoGridConfiguration? configuration;
 
   /// Execution mode of [PlutoGrid].

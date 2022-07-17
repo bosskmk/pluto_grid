@@ -366,11 +366,9 @@ mixin LayoutState implements IPlutoGridState {
     if (changedShowFrozenColumn || changedMaxWidth) {
       updateVisibilityLayout();
 
-      if (activatedColumnsAutoSize) {
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          notifyResizingListeners();
-        });
-      }
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        notifyResizingListeners();
+      });
     }
 
     if (enableColumnsAutoSize && !activatedColumnsAutoSize) {

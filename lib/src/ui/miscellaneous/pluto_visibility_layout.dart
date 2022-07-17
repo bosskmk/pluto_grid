@@ -407,10 +407,10 @@ class PlutoVisibilityLayoutId extends LayoutId {
     Key? key,
     required super.id,
     required PlutoVisibilityLayoutChild child,
-  }) : super(key: key, child: RepaintBoundary(child: child));
+  }) : super(key: key, child: child);
 
   PlutoVisibilityLayoutChild get layoutChild =>
-      (child as RepaintBoundary).child as PlutoVisibilityLayoutChild;
+      child as PlutoVisibilityLayoutChild;
 }
 
 abstract class PlutoVisibilityLayoutChild implements Widget {

@@ -1,3 +1,9 @@
+## [5.0.4] - 2022. 7. 18
+
+* Add properties to PlutoGridPopup, PlutoDualGrid. (properties used in PlutoGrid)
+* Fix a bug where some columns and cells were not displayed when changing the screen size.
+* Remove RepaintBoundary from Column and Cell widgets.
+
 ## [5.0.3] - 2022. 7. 16
 
 * Update czech locale.

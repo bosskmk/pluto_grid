@@ -86,7 +86,32 @@ class PlutoColumn {
 
   Color? backgroundColor;
 
-  /// Rendering for cell widget.
+  /// Customize the widget in the default cell.
+  ///
+  /// ```dart
+  /// renderer: (rendererContext) {
+  ///  Color textColor = Colors.black;
+  ///
+  ///  if (rendererContext.cell.value == 'red') {
+  ///    textColor = Colors.red;
+  ///  } else if (rendererContext.cell.value == 'blue') {
+  ///    textColor = Colors.blue;
+  ///  } else if (rendererContext.cell.value == 'green') {
+  ///    textColor = Colors.green;
+  ///  }
+  ///
+  ///  return Text(
+  ///    rendererContext.cell.value.toString(),
+  ///    style: TextStyle(
+  ///      color: textColor,
+  ///      fontWeight: FontWeight.bold,
+  ///    ),
+  ///  );
+  /// },
+  /// ```
+  ///
+  /// Consider wrapping a RepaintBoundary widget
+  /// if you are defining custom cells with high paint cost.
   PlutoColumnRenderer? renderer;
 
   /// Change the position of the column by dragging the column title.
