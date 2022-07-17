@@ -106,7 +106,6 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
           columns: props.columns,
           rows: props.rows,
           columnGroups: props.columnGroups,
-          mode: mode,
           onLoaded: (PlutoGridOnLoadedEvent onLoadedEvent) {
             if (isGridA!) {
               _stateManagerA = onLoadedEvent.stateManager;
@@ -159,9 +158,15 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
           },
           onSorted: props.onSorted,
           onRowChecked: props.onRowChecked,
+          onRowDoubleTap: props.onRowDoubleTap,
+          onRowSecondaryTap: props.onRowSecondaryTap,
+          onRowsMoved: props.onRowsMoved,
           createHeader: props.createHeader,
           createFooter: props.createFooter,
+          rowColorCallback: props.rowColorCallback,
+          columnMenuDelegate: props.columnMenuDelegate,
           configuration: props.configuration,
+          mode: mode,
           key: props.key,
         ),
       ),
@@ -487,11 +492,23 @@ class PlutoDualGridProps {
 
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
+  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
+
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
+
+  final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
   final CreateHeaderCallBack? createHeader;
 
   final CreateFooterCallBack? createFooter;
 
+  final PlutoRowColorCallback? rowColorCallback;
+
+  final PlutoColumnMenuDelegate? columnMenuDelegate;
+
   final PlutoGridConfiguration configuration;
+
+  final PlutoGridMode? mode;
 
   const PlutoDualGridProps({
     required this.columns,
@@ -501,9 +518,15 @@ class PlutoDualGridProps {
     this.onChanged,
     this.onSorted,
     this.onRowChecked,
+    this.onRowDoubleTap,
+    this.onRowSecondaryTap,
+    this.onRowsMoved,
     this.createHeader,
     this.createFooter,
+    this.rowColorCallback,
+    this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
+    this.mode,
     this.key,
   });
 
@@ -512,27 +535,50 @@ class PlutoDualGridProps {
   PlutoDualGridProps copyWith({
     List<PlutoColumn>? columns,
     List<PlutoRow>? rows,
-    List<PlutoColumnGroup>? columnGroups,
-    PlutoOnLoadedEventCallback? onLoaded,
-    PlutoOnChangedEventCallback? onChanged,
-    PlutoOnSortedEventCallback? onSorted,
-    PlutoOnRowCheckedEventCallback? onRowChecked,
-    CreateHeaderCallBack? createHeader,
-    CreateFooterCallBack? createFooter,
+    PlutoOptional<List<PlutoColumnGroup>?>? columnGroups,
+    PlutoOptional<PlutoOnLoadedEventCallback?>? onLoaded,
+    PlutoOptional<PlutoOnChangedEventCallback?>? onChanged,
+    PlutoOptional<PlutoOnSortedEventCallback?>? onSorted,
+    PlutoOptional<PlutoOnRowCheckedEventCallback?>? onRowChecked,
+    PlutoOptional<PlutoOnRowDoubleTapEventCallback?>? onRowDoubleTap,
+    PlutoOptional<PlutoOnRowSecondaryTapEventCallback?>? onRowSecondaryTap,
+    PlutoOptional<PlutoOnRowsMovedEventCallback?>? onRowsMoved,
+    PlutoOptional<CreateHeaderCallBack?>? createHeader,
+    PlutoOptional<CreateFooterCallBack?>? createFooter,
+    PlutoOptional<PlutoRowColorCallback?>? rowColorCallback,
+    PlutoOptional<PlutoColumnMenuDelegate?>? columnMenuDelegate,
     PlutoGridConfiguration? configuration,
+    PlutoOptional<PlutoGridMode?>? mode,
     Key? key,
   }) {
     return PlutoDualGridProps(
       columns: columns ?? this.columns,
       rows: rows ?? this.rows,
-      columnGroups: columnGroups ?? this.columnGroups,
-      onLoaded: onLoaded ?? this.onLoaded,
-      onChanged: onChanged ?? this.onChanged,
-      onSorted: onSorted ?? this.onSorted,
-      onRowChecked: onRowChecked ?? this.onRowChecked,
-      createHeader: createHeader ?? this.createHeader,
-      createFooter: createFooter ?? this.createFooter,
+      columnGroups:
+          columnGroups == null ? this.columnGroups : columnGroups.value,
+      onLoaded: onLoaded == null ? this.onLoaded : onLoaded.value,
+      onChanged: onChanged == null ? this.onChanged : onChanged.value,
+      onSorted: onSorted == null ? this.onSorted : onSorted.value,
+      onRowChecked:
+          onRowChecked == null ? this.onRowChecked : onRowChecked.value,
+      onRowDoubleTap:
+          onRowDoubleTap == null ? this.onRowDoubleTap : onRowDoubleTap.value,
+      onRowSecondaryTap: onRowSecondaryTap == null
+          ? this.onRowSecondaryTap
+          : onRowSecondaryTap.value,
+      onRowsMoved: onRowsMoved == null ? this.onRowsMoved : onRowsMoved.value,
+      createHeader:
+          createHeader == null ? this.createHeader : createHeader.value,
+      createFooter:
+          createFooter == null ? this.createFooter : createFooter.value,
+      rowColorCallback: rowColorCallback == null
+          ? this.rowColorCallback
+          : rowColorCallback.value,
+      columnMenuDelegate: columnMenuDelegate == null
+          ? this.columnMenuDelegate
+          : columnMenuDelegate.value,
       configuration: configuration ?? this.configuration,
+      mode: mode == null ? this.mode : mode.value,
       key: key ?? this.key,
     );
   }
