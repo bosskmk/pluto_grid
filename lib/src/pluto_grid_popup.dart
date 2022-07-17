@@ -9,7 +9,7 @@ class PlutoGridPopup {
 
   final List<PlutoRow> rows;
 
-  final PlutoGridMode? mode;
+  final List<PlutoColumnGroup>? columnGroups;
 
   final PlutoOnLoadedEventCallback? onLoaded;
 
@@ -21,31 +21,49 @@ class PlutoGridPopup {
 
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
-  final double? width;
+  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
 
-  final double? height;
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
+
+  final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
   final CreateHeaderCallBack? createHeader;
 
   final CreateFooterCallBack? createFooter;
 
+  final PlutoRowColorCallback? rowColorCallback;
+
+  final PlutoColumnMenuDelegate? columnMenuDelegate;
+
   final PlutoGridConfiguration? configuration;
+
+  final PlutoGridMode? mode;
+
+  final double? width;
+
+  final double? height;
 
   PlutoGridPopup({
     required this.context,
     required this.columns,
     required this.rows,
-    this.mode,
+    this.columnGroups,
     this.onLoaded,
     this.onChanged,
     this.onSelected,
     this.onSorted,
     this.onRowChecked,
-    this.width,
-    this.height,
+    this.onRowDoubleTap,
+    this.onRowSecondaryTap,
+    this.onRowsMoved,
     this.createHeader,
     this.createFooter,
+    this.rowColorCallback,
+    this.columnMenuDelegate,
     this.configuration,
+    this.mode,
+    this.width,
+    this.height,
   }) {
     open();
   }
@@ -72,7 +90,7 @@ class PlutoGridPopup {
                         child: PlutoGrid(
                           columns: columns,
                           rows: rows,
-                          mode: mode,
+                          columnGroups: columnGroups,
                           onLoaded: onLoaded,
                           onChanged: onChanged,
                           onSelected: (PlutoGridOnSelectedEvent event) {
@@ -80,9 +98,15 @@ class PlutoGridPopup {
                           },
                           onSorted: onSorted,
                           onRowChecked: onRowChecked,
+                          onRowDoubleTap: onRowDoubleTap,
+                          onRowSecondaryTap: onRowSecondaryTap,
+                          onRowsMoved: onRowsMoved,
                           createHeader: createHeader,
                           createFooter: createFooter,
+                          rowColorCallback: rowColorCallback,
+                          columnMenuDelegate: columnMenuDelegate,
                           configuration: configuration,
+                          mode: mode,
                         ),
                       ),
                     );
