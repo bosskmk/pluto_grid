@@ -5,38 +5,64 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoGridPopup {
   final BuildContext context;
 
+  /// {@macro pluto_grid_property_columns}
   final List<PlutoColumn> columns;
 
+  /// {@macro pluto_grid_property_rows}
   final List<PlutoRow> rows;
 
+  /// {@macro pluto_grid_property_columnGroups}
   final List<PlutoColumnGroup>? columnGroups;
 
+  /// {@macro pluto_grid_property_onLoaded}
   final PlutoOnLoadedEventCallback? onLoaded;
 
+  /// {@macro pluto_grid_property_onChanged}
   final PlutoOnChangedEventCallback? onChanged;
 
+  /// {@macro pluto_grid_property_onSelected}
   final PlutoOnSelectedEventCallback? onSelected;
 
+  /// {@macro pluto_grid_property_onSorted}
   final PlutoOnSortedEventCallback? onSorted;
 
+  /// {@macro pluto_grid_property_onRowChecked}
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
+  /// {@macro pluto_grid_property_onRowDoubleTap}
   final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
 
+  /// {@macro pluto_grid_property_onRowSecondaryTap}
   final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
 
+  /// {@macro pluto_grid_property_onRowsMoved}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@macro pluto_grid_property_createHeader}
   final CreateHeaderCallBack? createHeader;
 
+  /// {@macro pluto_grid_property_createFooter}
   final CreateFooterCallBack? createFooter;
 
+  /// {@macro pluto_grid_property_rowColorCallback}
   final PlutoRowColorCallback? rowColorCallback;
 
+  /// {@macro pluto_grid_property_columnMenuDelegate}
   final PlutoColumnMenuDelegate? columnMenuDelegate;
 
+  /// {@macro pluto_grid_property_configuration}
   final PlutoGridConfiguration? configuration;
 
+  /// Execution mode of [PlutoGrid].
+  ///
+  /// [PlutoGridMode.normal]
+  /// {@macro pluto_grid_mode_normal}
+  ///
+  /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
+  /// {@macro pluto_grid_mode_select}
+  ///
+  /// [PlutoGridMode.popup]
+  /// {@macro pluto_grid_mode_popup}
   final PlutoGridMode? mode;
 
   final double? width;

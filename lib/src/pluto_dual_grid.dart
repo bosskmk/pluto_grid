@@ -4,13 +4,19 @@ import 'package:pluto_grid/pluto_grid.dart';
 typedef PlutoDualOnSelectedEventCallback = void Function(
     PlutoDualOnSelectedEvent event);
 
+/// In [PlutoDualGrid], set the separation widget between the two grids.
 class PlutoDualGridDivider {
+  /// If [show] is set to true, a separator widget appears between the grids,
+  /// and you can change the width of two grids by dragging them.
   final bool show;
 
+  /// Set the background color.
   final Color backgroundColor;
 
+  /// Set the icon color in the center of the separator widget.
   final Color indicatorColor;
 
+  /// Set the background color when dragging the separator widget.
   final Color draggingColor;
 
   const PlutoDualGridDivider({
@@ -478,37 +484,64 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 }
 
 class PlutoDualGridProps {
+  /// {@macro pluto_grid_property_columns}
   final List<PlutoColumn> columns;
 
+  /// {@macro pluto_grid_property_rows}
   final List<PlutoRow> rows;
 
+  /// {@macro pluto_grid_property_columnGroups}
   final List<PlutoColumnGroup>? columnGroups;
 
+  /// {@macro pluto_grid_property_onLoaded}
   final PlutoOnLoadedEventCallback? onLoaded;
 
+  /// {@macro pluto_grid_property_onChanged}
   final PlutoOnChangedEventCallback? onChanged;
 
+  /// {@macro pluto_grid_property_onSorted}
   final PlutoOnSortedEventCallback? onSorted;
 
+  /// {@macro pluto_grid_property_onRowChecked}
   final PlutoOnRowCheckedEventCallback? onRowChecked;
 
+  /// {@macro pluto_grid_property_onRowDoubleTap}
   final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
 
+  /// {@macro pluto_grid_property_onRowSecondaryTap}
   final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
 
+  /// {@macro pluto_grid_property_onRowsMoved}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@macro pluto_grid_property_createHeader}
   final CreateHeaderCallBack? createHeader;
 
+  /// {@macro pluto_grid_property_createFooter}
   final CreateFooterCallBack? createFooter;
 
+  /// {@macro pluto_grid_property_rowColorCallback}
   final PlutoRowColorCallback? rowColorCallback;
 
+  /// {@macro pluto_grid_property_columnMenuDelegate}
   final PlutoColumnMenuDelegate? columnMenuDelegate;
 
+  /// {@macro pluto_grid_property_configuration}
   final PlutoGridConfiguration configuration;
 
+  /// Execution mode of [PlutoGrid].
+  ///
+  /// [PlutoGridMode.normal]
+  /// {@macro pluto_grid_mode_normal}
+  ///
+  /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
+  /// {@macro pluto_grid_mode_select}
+  ///
+  /// [PlutoGridMode.popup]
+  /// {@macro pluto_grid_mode_popup}
   final PlutoGridMode? mode;
+
+  final Key? key;
 
   const PlutoDualGridProps({
     required this.columns,
@@ -529,8 +562,6 @@ class PlutoDualGridProps {
     this.mode,
     this.key,
   });
-
-  final Key? key;
 
   PlutoDualGridProps copyWith({
     List<PlutoColumn>? columns,
