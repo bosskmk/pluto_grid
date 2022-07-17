@@ -31,6 +31,8 @@ abstract class ILayoutState {
 
   bool get showColumnTitle;
 
+  bool get showColumnFooter;
+
   bool get showColumnFilter;
 
   bool get showHeader;
@@ -48,6 +50,8 @@ abstract class ILayoutState {
   double get footerTopOffset;
 
   double get columnHeight;
+
+  double get columnFooterHeight;
 
   double get columnGroupHeight;
 
@@ -93,6 +97,8 @@ abstract class ILayoutState {
   void setLayout(BoxConstraints size);
 
   void setShowColumnTitle(bool flag, {bool notify = true});
+
+  void setShowColumnFooter(bool flag, {bool notify = true});
 
   void setShowColumnFilter(bool flag, {bool notify = true});
 
@@ -200,6 +206,11 @@ mixin LayoutState implements IPlutoGridState {
   bool? _showColumnTitle = true;
 
   @override
+  bool get showColumnFooter => _showColumnFooter == true;
+
+  bool? _showColumnFooter = false;
+
+  @override
   bool get showColumnFilter => _showColumnFilter == true;
 
   bool? _showColumnFilter;
@@ -233,6 +244,10 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get columnHeight =>
       showColumnTitle ? configuration!.style.columnHeight : 0;
+
+  @override
+  double get columnFooterHeight =>
+      showColumnFooter ? configuration!.style.columnFooterHeight : 0;
 
   @override
   double get columnGroupHeight =>
@@ -383,6 +398,19 @@ mixin LayoutState implements IPlutoGridState {
     }
 
     _showColumnTitle = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void setShowColumnFooter(bool flag, {bool notify = true}) {
+    if (_showColumnFooter == flag) {
+      return;
+    }
+
+    _showColumnFooter = flag;
 
     if (notify) {
       notifyListeners();

@@ -6,6 +6,8 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
+typedef PlutoColumnFooterRenderer = Widget Function(BuildContext context);
+
 /// It dynamically determines whether the cells of the column are in the edit state.
 ///
 /// Once the [readOnly] value is set,
@@ -40,6 +42,8 @@ class PlutoColumn {
   /// Customisable title padding.
   /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
   EdgeInsets? titlePadding;
+
+  EdgeInsets? footerPadding;
 
   EdgeInsets? filterPadding;
 
@@ -114,6 +118,9 @@ class PlutoColumn {
   /// if you are defining custom cells with high paint cost.
   PlutoColumnRenderer? renderer;
 
+  /// Rendering for cell widget.
+  PlutoColumnFooterRenderer? footerRenderer;
+
   /// Change the position of the column by dragging the column title.
   bool enableColumnDrag;
 
@@ -176,6 +183,7 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
+    this.footerPadding,
     this.filterPadding,
     this.titleSpan,
     this.cellPadding,
@@ -187,6 +195,7 @@ class PlutoColumn {
     this.applyFormatterInEditing = false,
     this.backgroundColor,
     this.renderer,
+    this.footerRenderer,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,

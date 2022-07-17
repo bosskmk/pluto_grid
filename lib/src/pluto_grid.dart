@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/pluto_body_column_footers.dart';
+import 'package:pluto_grid/src/ui/pluto_left_frozen_column_footers.dart';
+import 'package:pluto_grid/src/ui/pluto_right_frozen_column_footers.dart';
 
 typedef PlutoOnLoadedEventCallback = void Function(
     PlutoGridOnLoadedEvent event);
@@ -572,6 +575,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     final bool showColumnRowDivider =
         _stateManager.showColumnTitle || _stateManager.showColumnFilter;
 
+    final bool showColumnFooter = _stateManager.showColumnFooter;
+
     _stateManager.setTextDirection(Directionality.of(context));
 
     return FocusScope(
@@ -594,6 +599,24 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 child: PlutoBodyColumns(_stateManager),
               ),
 
+              if (showColumnFooter) ...[
+                LayoutId(
+                  id: _StackName.columnFooterDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.horizontal,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
+                  ),
+                ),
+
+                LayoutId(
+                  id: _StackName.bodyColumnFooters,
+                  child: PlutoBodyColumnsFooters(stateManager),
+                ),
+
+                /// Column and it's footer divider.
+              ],
+
               /// Left columns and rows.
               if (showLeftFrozen) ...[
                 LayoutId(
@@ -603,6 +626,10 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 LayoutId(
                     id: _StackName.leftFrozenRows,
                     child: PlutoLeftFrozenRows(_stateManager)),
+                LayoutId(
+                  id: _StackName.leftFrozenColumnFooters,
+                  child: PlutoLeftFrozenColumnFooters(stateManager),
+                ),
                 LayoutId(
                   id: _StackName.leftFrozenDivider,
                   child: PlutoShadowLine(
@@ -622,6 +649,10 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 LayoutId(
                     id: _StackName.rightFrozenRows,
                     child: PlutoRightFrozenRows(_stateManager)),
+                LayoutId(
+                  id: _StackName.rightFrozenColumnFooters,
+                  child: PlutoRightFrozenColumnFooters(stateManager),
+                ),
                 LayoutId(
                   id: _StackName.rightFrozenDivider,
                   child: PlutoShadowLine(
@@ -888,6 +919,37 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       bodyRowsTopOffset += s.height;
     }
 
+    if (hasChild(_StackName.bodyColumnFooters)) {
+      var s = layoutChild(
+        _StackName.bodyColumnFooters,
+        BoxConstraints.loose(
+          Size(size.width - bodyLeftOffset - bodyRightOffset, size.height),
+        ),
+      );
+
+      final double posX =
+          isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+      positionChild(
+        _StackName.bodyColumnFooters,
+        Offset(posX, size.height - s.height),
+      );
+
+      bodyRowsBottomOffset += s.height;
+    }
+    if (hasChild(_StackName.columnFooterDivider)) {
+      var s = layoutChild(
+        _StackName.columnFooterDivider,
+        BoxConstraints.tight(
+          Size(size.width, PlutoGridSettings.gridBorderWidth),
+        ),
+      );
+
+      positionChild(
+        _StackName.columnFooterDivider,
+        Offset(0, size.height - bodyRowsBottomOffset - s.height),
+      );
+    }
+
     // layout rows
     if (hasChild(_StackName.columnRowDivider)) {
       var s = layoutChild(
@@ -925,6 +987,24 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         Offset(posX, bodyRowsTopOffset),
       );
     }
+    if (hasChild(_StackName.leftFrozenColumnFooters)) {
+      final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
+      final double posX = isLTR
+          ? 0
+          : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
+
+      layoutChild(
+        _StackName.leftFrozenColumnFooters,
+        BoxConstraints.loose(
+          Size(offset, size.height - bodyRowsBottomOffset),
+        ),
+      );
+
+      positionChild(
+        _StackName.leftFrozenColumnFooters,
+        Offset(posX, size.height - bodyRowsBottomOffset),
+      );
+    }
 
     if (hasChild(_StackName.rightFrozenRows)) {
       final double offset = isLTR ? bodyRightOffset : bodyLeftOffset;
@@ -942,6 +1022,21 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       positionChild(
         _StackName.rightFrozenRows,
         Offset(posX, bodyRowsTopOffset),
+      );
+    }
+    if (hasChild(_StackName.rightFrozenColumnFooters)) {
+      final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
+      var s = layoutChild(
+        _StackName.rightFrozenColumnFooters,
+        BoxConstraints.loose(Size(offset, size.height)),
+      );
+
+      final double posX =
+          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+
+      positionChild(
+        _StackName.rightFrozenColumnFooters,
+        Offset(posX, size.height - bodyRowsBottomOffset),
       );
     }
 
@@ -1262,6 +1357,9 @@ class PlutoGridSettings {
   static const EdgeInsets columnTitlePadding =
       EdgeInsets.symmetric(horizontal: 10);
 
+  /// Column Footer - padding
+  static const EdgeInsets columnFooterPadding = EdgeInsets.all(5);
+
   static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
 
   /// Cell - fontSize
@@ -1280,14 +1378,18 @@ enum _StackName {
   header,
   headerDivider,
   leftFrozenColumns,
+  leftFrozenColumnFooters,
   leftFrozenRows,
   leftFrozenDivider,
   bodyColumns,
+  bodyColumnFooters,
   bodyRows,
   rightFrozenColumns,
+  rightFrozenColumnFooters,
   rightFrozenRows,
   rightFrozenDivider,
   columnRowDivider,
+  columnFooterDivider,
   footer,
   footerDivider,
   loading,
