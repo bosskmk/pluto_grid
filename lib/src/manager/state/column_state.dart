@@ -522,6 +522,8 @@ mixin ColumnState implements IPlutoGridState {
     updateVisibilityLayout();
 
     notifyListeners();
+
+    _fireOnColMoved(index, targetIndex, column);
   }
 
   @override
@@ -887,6 +889,15 @@ mixin ColumnState implements IPlutoGridState {
   /// [PlutoGrid.onColWidthChanged] Called when a callback is registered.
   void _fireOnColWidthChange(PlutoColumn column) {
     onColWidthChanged?.call(PlutoOnColWidthChangeEvent(column: column));
+  }
+
+  /// [PlutoGrid.onColMoved] Called when a callback is registered.
+  void _fireOnColMoved(int originIdx, int targetIdx, PlutoColumn column) {
+    onColMoved?.call(PlutoGridOnColMovedEvent(
+      originIdx: originIdx,
+      targetIdx: targetIdx,
+      column: column,
+    ));
   }
 
   /// Add [PlutoCell] to the whole [PlutoRow.cells].

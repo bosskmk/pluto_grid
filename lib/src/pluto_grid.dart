@@ -41,6 +41,9 @@ typedef PlutoRowColorCallback = Color Function(
 typedef PlutoOnColWidthChangeEventCallback = void Function(
     PlutoOnColWidthChangeEvent event);
 
+typedef PlutoOnColMovedEventCallback = void Function(
+    PlutoGridOnColMovedEvent event);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -63,6 +66,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColMoved,
     this.onColWidthChanged,
     this.createHeader,
     this.createFooter,
@@ -164,6 +168,8 @@ class PlutoGrid extends PlutoStatefulWidget {
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
   final PlutoOnColWidthChangeEventCallback? onColWidthChanged;
+
+  final PlutoOnColMovedEventCallback? onColMoved;
 
   /// [createHeader] is a user-definable area located above the upper column area of [PlutoGrid].
   ///
@@ -440,6 +446,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowsMovedEventCallback: widget.onRowsMoved,
       onRowColorCallback: widget.rowColorCallback,
       onColWidthChangeEventCallback: widget.onColWidthChanged,
+      onColMovedEventCallback: widget.onColMoved,
       columnMenuDelegate: widget.columnMenuDelegate,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
@@ -1123,6 +1130,22 @@ class PlutoGridOnRowsMovedEvent {
     required this.idx,
     required this.rows,
   });
+}
+
+class PlutoGridOnColMovedEvent {
+  final int originIdx;
+  final int targetIdx;
+  final PlutoColumn column;
+
+  const PlutoGridOnColMovedEvent({
+    required this.originIdx,
+    required this.targetIdx,
+    required this.column,
+  });
+
+  @override
+  String toString() =>
+      'PlutoGridOnColMovedEvent{originIdx: $originIdx, targetIdx: $targetIdx, column: $column}';
 }
 
 class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {

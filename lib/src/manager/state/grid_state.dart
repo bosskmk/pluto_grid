@@ -28,6 +28,8 @@ abstract class IGridState {
 
   PlutoOnColWidthChangeEventCallback? get onColWidthChanged;
 
+  PlutoOnColMovedEventCallback? get onColMoved;
+
   PlutoColumnMenuDelegate get columnMenuDelegate;
 
   CreateHeaderCallBack? get createHeader;
@@ -66,6 +68,8 @@ abstract class IGridState {
       PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
 
   void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
+
+  void setOnColMoved(PlutoOnColMovedEventCallback? onColMoved);
 
   void setOnColWidthChanged(
       PlutoOnColWidthChangeEventCallback? onColWidthChanged);
@@ -151,6 +155,10 @@ mixin GridState implements IPlutoGridState {
       _onColWidthChanged;
   PlutoOnColWidthChangeEventCallback? _onColWidthChanged;
 
+  PlutoOnColMovedEventCallback? get onColMoved => _onColMoved;
+
+  PlutoOnColMovedEventCallback? _onColMoved;
+
   @override
   PlutoColumnMenuDelegate get columnMenuDelegate => _columnMenuDelegate;
 
@@ -228,6 +236,11 @@ mixin GridState implements IPlutoGridState {
   void setOnColWidthChanged(
       PlutoOnColWidthChangeEventCallback? onColWidthChanged) {
     _onColWidthChanged = onColWidthChanged;
+  }
+
+  @override
+  void setOnColMoved(PlutoOnColMovedEventCallback? onColMoved) {
+    _onColMoved = onColMoved;
   }
 
   @override

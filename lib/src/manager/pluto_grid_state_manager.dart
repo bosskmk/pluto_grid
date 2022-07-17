@@ -108,6 +108,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
     PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
     PlutoOnRowsMovedEventCallback? onRowsMovedEventCallback,
+    PlutoOnColMovedEventCallback? onColMovedEventCallback,
     PlutoRowColorCallback? onRowColorCallback,
     PlutoOnColWidthChangeEventCallback? onColWidthChangeEventCallback,
     PlutoColumnMenuDelegate? columnMenuDelegate,
@@ -128,6 +129,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     setOnRowDoubleTap(onRowDoubleTapEventCallback);
     setOnRowSecondaryTap(onRowSecondaryTapEventCallback);
     setOnRowsMoved(onRowsMovedEventCallback);
+    setOnColMoved(onColMovedEventCallback);
     setOnColWidthChanged(onColWidthChangeEventCallback);
     setRowColorCallback(onRowColorCallback);
     setColumnMenuDelegate(columnMenuDelegate);
