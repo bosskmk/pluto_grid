@@ -110,7 +110,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 row: _rows[i],
                 columns: _columns,
                 stateManager: stateManager,
-                visibilityLayout: true,
+                visibilityLayout: PlutoGrid.visibility,
               );
             },
           ),

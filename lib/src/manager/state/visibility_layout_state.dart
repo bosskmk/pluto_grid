@@ -16,9 +16,11 @@ abstract class IVisibilityLayoutState {
 }
 
 mixin VisibilityLayoutState implements IPlutoGridState {
+  bool get _needsUpdate => PlutoGrid.visibility || activatedColumnsAutoSize;
+
   @override
   void updateVisibilityLayout({bool notify = false}) {
-    if (refColumns.isEmpty) {
+    if (refColumns.isEmpty || !_needsUpdate) {
       return;
     }
 

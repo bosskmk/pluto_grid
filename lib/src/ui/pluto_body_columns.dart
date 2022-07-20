@@ -106,23 +106,33 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
 
   @override
   Widget build(BuildContext context) {
+    final delegate = MainColumnLayoutDelegate(
+      stateManager: stateManager,
+      columns: _columns,
+      columnGroups: _columnGroups,
+      frozen: PlutoColumnFrozen.none,
+    );
+
+    final children = _showColumnGroups == true
+        ? _columnGroups.map(_buildColumnGroup).toList()
+        : _columns.map(_buildColumn).toList();
+
     return SingleChildScrollView(
       controller: _scroll,
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
-      child: PlutoVisibilityLayout(
-          delegate: MainColumnLayoutDelegate(
-            stateManager: stateManager,
-            columns: _columns,
-            columnGroups: _columnGroups,
-            frozen: PlutoColumnFrozen.none,
-          ),
-          scrollController: _scroll,
-          initialViewportDimension: MediaQuery.of(context).size.width,
-          textDirection: stateManager.textDirection,
-          children: _showColumnGroups == true
-              ? _columnGroups.map(_buildColumnGroup).toList()
-              : _columns.map(_buildColumn).toList()),
+      child: PlutoGrid.visibility
+          ? PlutoVisibilityLayout(
+              delegate: delegate,
+              scrollController: _scroll,
+              initialViewportDimension: MediaQuery.of(context).size.width,
+              textDirection: stateManager.textDirection,
+              children: children,
+            )
+          : CustomMultiChildLayout(
+              delegate: delegate,
+              children: children,
+            ),
     );
   }
 }

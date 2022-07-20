@@ -286,6 +286,9 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@endtemplate}
   final PlutoGridMode? mode;
 
+  /// Builds only visible columns and cells.
+  static bool visibility = true;
+
   /// [setDefaultLocale] sets locale when [Intl] package is used in [PlutoGrid].
   ///
   /// {@template intl_default_locale}
