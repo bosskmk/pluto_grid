@@ -93,9 +93,15 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = true;
+    _isPointMoving =
+        (_columnRightPosition - event.position).distanceSquared > 0.5;
+
+    if (!_isPointMoving) {
+      return;
+    }
 
     final moveOffset = event.position.dx - _columnRightPosition.dx;
+
     final bool isLTR = stateManager.isLTR;
 
     stateManager.resizeColumn(widget.column, isLTR ? moveOffset : -moveOffset);
