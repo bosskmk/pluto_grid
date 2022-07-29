@@ -213,7 +213,7 @@ class PlutoColumnTypeNumber
     required this.format,
     required this.applyFormatOnInit,
     required this.allowFirstDot,
-  })  : numberFormat = intl.NumberFormat(format),
+  })  : numberFormat = intl.NumberFormat(format, "tr"),
         decimalPoint = getDecimalPoint(format);
 
   @override
