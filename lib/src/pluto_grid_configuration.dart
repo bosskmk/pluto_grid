@@ -967,8 +967,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.persian({
     // Column menu
     this.unfreezeColumn = 'جدا کردن',
-    this.freezeColumnToStart = 'چسباندن به چپ', // need to change translation
-    this.freezeColumnToEnd = 'چسباندن به راست', // need to change translation
+    this.freezeColumnToStart = 'چسباندن به ابتدا',
+    this.freezeColumnToEnd = 'چسباندن به انتها',
     this.autoFitColumn = 'عرض خودکار',
     this.hideColumn = 'مخفی کردن ستون',
     this.setColumns = 'تنظیم ستون ها',
