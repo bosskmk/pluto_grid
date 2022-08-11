@@ -526,8 +526,11 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null && widget.rows.isNotEmpty) {
-        _stateManager.setCurrentCell(
-            widget.rows.first.cells.entries.first.value, 0);
+        final firstVisible = widget.columns.indexWhere((element) => !element.hide);
+        if (firstVisible != -1) {
+          _stateManager
+            .setCurrentCell(widget.rows.first.cells.entries.first.value, firstVisible);
+        }
       }
 
       _stateManager.gridFocusNode!.requestFocus();
