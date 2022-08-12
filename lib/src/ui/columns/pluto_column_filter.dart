@@ -58,6 +58,13 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
+  
+  InputBorder get _disabledBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+            color: stateManager.configuration!.style.inactivatedBorderColor,
+            width: 0.0),
+        borderRadius: BorderRadius.zero,
+      );
 
   Color get _textFieldColor => _enabled
       ? stateManager.configuration!.style.cellColorInEditState
@@ -254,6 +261,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
             fillColor: _textFieldColor,
             border: _border,
             enabledBorder: _border,
+            disabledBorder: _disabledBorder,
             focusedBorder: _enabledBorder,
             contentPadding: const EdgeInsets.all(5),
           ),
