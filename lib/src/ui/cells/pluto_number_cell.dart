@@ -38,16 +38,10 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
   late final bool allowFirstDot;
 
   @override
-  TextInputType get keyboardType => TextInputType.number;
+  late final TextInputType keyboardType;
 
   @override
-  List<TextInputFormatter>? get inputFormatters => [
-        DecimalTextInputFormatter(
-          decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative,
-          allowFirstDot: allowFirstDot,
-        ),
-      ];
+  late final List<TextInputFormatter>? inputFormatters;
 
   @override
   void initState() {
@@ -58,6 +52,19 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
     activatedNegative = widget.column.type.number!.negative;
 
     allowFirstDot = widget.column.type.number!.allowFirstDot;
+
+    inputFormatters = [
+      DecimalTextInputFormatter(
+        decimalRange: decimalRange,
+        activatedNegativeValues: activatedNegative,
+        allowFirstDot: allowFirstDot,
+      ),
+    ];
+
+    keyboardType = TextInputType.numberWithOptions(
+      decimal: decimalRange > 0,
+      signed: activatedNegative,
+    );
   }
 }
 
