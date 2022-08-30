@@ -128,7 +128,7 @@ class PlutoGridStyleConfig {
     this.activatedColor = const Color(0xFFDCF5FF),
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
-    this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
+    this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
     this.dragTargetColumnColor = const Color(0xFFDCF5FF),
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
