@@ -58,7 +58,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
-  
+
   InputBorder get _disabledBorder => OutlineInputBorder(
         borderSide: BorderSide(
             color: stateManager.configuration!.style.inactivatedBorderColor,
