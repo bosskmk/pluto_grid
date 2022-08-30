@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
@@ -527,12 +528,13 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null && widget.rows.isNotEmpty) {
         final firstVisible =
-            widget.columns.indexWhere((element) => !element.hide);
-        if (firstVisible != -1) {
+            widget.columns.firstWhereOrNull((element) => !element.hide);
+
+        if (firstVisible != null) {
           _stateManager.setCurrentCell(
-              widget
-                  .rows.first.cells[widget.columns[firstVisible].field],
-              0);
+            widget.rows.first.cells[firstVisible.field],
+            0,
+          );
         }
       }
 
