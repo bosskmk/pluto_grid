@@ -93,9 +93,15 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving = true;
+    _isPointMoving =
+        (_columnRightPosition - event.position).distanceSquared > 0.5;
+
+    if (!_isPointMoving) {
+      return;
+    }
 
     final moveOffset = event.position.dx - _columnRightPosition.dx;
+
     final bool isLTR = stateManager.isLTR;
 
     stateManager.resizeColumn(widget.column, isLTR ? moveOffset : -moveOffset);
@@ -115,6 +121,8 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
   @override
   Widget build(BuildContext context) {
+    final style = stateManager.configuration!.style;
+
     final columnWidget = _BuildSortableWidget(
       stateManager: stateManager,
       column: widget.column,
@@ -131,12 +139,14 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
       child: IconButton(
         icon: PlutoGridColumnIcon(
           sort: _sort,
-          color: stateManager.configuration!.style.iconColor,
+          color: style.iconColor,
           icon: widget.column.enableContextMenu
-              ? stateManager.configuration!.style.columnContextIcon
-              : stateManager.configuration!.style.columnResizeIcon,
+              ? style.columnContextIcon
+              : style.columnResizeIcon,
+          ascendingIcon: style.columnAscendingIcon,
+          descendingIcon: style.columnDescendingIcon,
         ),
-        iconSize: stateManager.configuration!.style.iconSize,
+        iconSize: style.iconSize,
         mouseCursor: contextMenuCursor,
         onPressed: null,
       ),
@@ -180,10 +190,16 @@ class PlutoGridColumnIcon extends StatelessWidget {
 
   final IconData icon;
 
+  final Icon? ascendingIcon;
+
+  final Icon? descendingIcon;
+
   const PlutoGridColumnIcon({
     this.sort,
     this.color = Colors.black26,
     this.icon = Icons.dehaze,
+    this.ascendingIcon,
+    this.descendingIcon,
     Key? key,
   }) : super(key: key);
 
@@ -191,18 +207,22 @@ class PlutoGridColumnIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (sort) {
       case PlutoColumnSort.ascending:
-        return Transform.rotate(
-          angle: 90 * pi / 90,
-          child: const Icon(
-            Icons.sort,
-            color: Colors.green,
-          ),
-        );
+        return ascendingIcon == null
+            ? Transform.rotate(
+                angle: 90 * pi / 90,
+                child: const Icon(
+                  Icons.sort,
+                  color: Colors.green,
+                ),
+              )
+            : ascendingIcon!;
       case PlutoColumnSort.descending:
-        return const Icon(
-          Icons.sort,
-          color: Colors.red,
-        );
+        return descendingIcon == null
+            ? const Icon(
+                Icons.sort,
+                color: Colors.red,
+              )
+            : descendingIcon!;
       default:
         return Icon(
           icon,

@@ -128,7 +128,7 @@ class PlutoGridStyleConfig {
     this.activatedColor = const Color(0xFFDCF5FF),
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
-    this.cellColorInReadOnlyState = const Color(0xFFC4C7CC),
+    this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
     this.dragTargetColumnColor = const Color(0xFFDCF5FF),
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
@@ -156,6 +156,8 @@ class PlutoGridStyleConfig {
     ),
     this.columnContextIcon = Icons.dehaze,
     this.columnResizeIcon = Icons.code_sharp,
+    this.columnAscendingIcon,
+    this.columnDescendingIcon,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -202,6 +204,8 @@ class PlutoGridStyleConfig {
     ),
     this.columnContextIcon = Icons.dehaze,
     this.columnResizeIcon = Icons.code_sharp,
+    this.columnAscendingIcon,
+    this.columnDescendingIcon,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -323,6 +327,16 @@ class PlutoGridStyleConfig {
   /// only the width of the column can be adjusted.
   final IconData columnResizeIcon;
 
+  /// Ascending icon when sorting a column.
+  ///
+  /// If no value is specified, the default icon is set.
+  final Icon? columnAscendingIcon;
+
+  /// Descending icon when sorting a column.
+  ///
+  /// If no value is specified, the default icon is set.
+  final Icon? columnDescendingIcon;
+
   /// Apply the border radius of [PlutoGrid].
   final BorderRadiusGeometry gridBorderRadius;
 
@@ -363,6 +377,8 @@ class PlutoGridStyleConfig {
     TextStyle? cellTextStyle,
     IconData? columnContextIcon,
     IconData? columnResizeIcon,
+    PlutoOptional<Icon?>? columnAscendingIcon,
+    PlutoOptional<Icon?>? columnDescendingIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
   }) {
@@ -412,6 +428,12 @@ class PlutoGridStyleConfig {
       cellTextStyle: cellTextStyle ?? this.cellTextStyle,
       columnContextIcon: columnContextIcon ?? this.columnContextIcon,
       columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
+      columnAscendingIcon: columnAscendingIcon == null
+          ? this.columnAscendingIcon
+          : columnAscendingIcon.value,
+      columnDescendingIcon: columnDescendingIcon == null
+          ? this.columnDescendingIcon
+          : columnDescendingIcon.value,
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,
@@ -967,8 +989,8 @@ class PlutoGridLocaleText {
   const PlutoGridLocaleText.persian({
     // Column menu
     this.unfreezeColumn = 'جدا کردن',
-    this.freezeColumnToStart = 'چسباندن به چپ', // need to change translation
-    this.freezeColumnToEnd = 'چسباندن به راست', // need to change translation
+    this.freezeColumnToStart = 'چسباندن به ابتدا',
+    this.freezeColumnToEnd = 'چسباندن به انتها',
     this.autoFitColumn = 'عرض خودکار',
     this.hideColumn = 'مخفی کردن ستون',
     this.setColumns = 'تنظیم ستون ها',
