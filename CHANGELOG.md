@@ -1,3 +1,11 @@
+## [5.0.5] - 2022. 8. 30
+
+* Add columnAscendingIcon, columnDescendingIcon.
+* Modify column menu tap position.
+* Update Persian locale.
+* Fix bug on select mode.
+* Add disabledBorder to PlutoColumnFilter.
+
 ## [5.0.4] - 2022. 7. 18
 
 * Add properties to PlutoGridPopup, PlutoDualGrid. (properties used in PlutoGrid)
