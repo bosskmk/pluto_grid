@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -11,70 +12,106 @@ import 'pluto_number_cell_test.mocks.dart';
   MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
 ])
 void main() {
-  late PlutoGridStateManager stateManager;
+  group('PlutoNumberCell', () {
+    late PlutoGridStateManager stateManager;
 
-  buildWidget({
-    dynamic number = 0,
-    bool negative = true,
-    String format = '#,###',
-    bool applyFormatOnInit = true,
-    bool allowFirstDot = false,
-  }) {
-    return PlutoWidgetTestHelper('build number cell.', (tester) async {
-      stateManager = MockPlutoGridStateManager();
+    buildWidget({
+      dynamic number = 0,
+      bool negative = true,
+      String format = '#,###',
+      bool applyFormatOnInit = true,
+      bool allowFirstDot = false,
+      String locale = 'en_US',
+    }) {
+      return PlutoWidgetTestHelper('build number cell.', (tester) async {
+        Intl.defaultLocale = locale;
 
-      when(stateManager.configuration).thenReturn(
-        const PlutoGridConfiguration(),
-      );
+        stateManager = MockPlutoGridStateManager();
 
-      when(stateManager.keepFocus).thenReturn(true);
+        when(stateManager.configuration).thenReturn(
+          const PlutoGridConfiguration(),
+        );
 
-      final PlutoColumn column = PlutoColumn(
-        title: 'column title',
-        field: 'column_field_name',
-        type: PlutoColumnType.number(
-          negative: negative,
-          format: format,
-          applyFormatOnInit: applyFormatOnInit,
-          allowFirstDot: allowFirstDot,
-        ),
-      );
+        when(stateManager.keepFocus).thenReturn(true);
 
-      final PlutoCell cell = PlutoCell(value: number);
+        when(stateManager.keyManager).thenReturn(PlutoGridKeyManager(
+          stateManager: stateManager,
+        ));
 
-      final PlutoRow row = PlutoRow(
-        cells: {
-          'column_field_name': cell,
-        },
-      );
+        final PlutoColumn column = PlutoColumn(
+          title: 'column title',
+          field: 'column_field_name',
+          type: PlutoColumnType.number(
+            negative: negative,
+            format: format,
+            applyFormatOnInit: applyFormatOnInit,
+            allowFirstDot: allowFirstDot,
+          ),
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Material(
-            child: PlutoNumberCell(
-              stateManager: stateManager,
-              cell: cell,
-              column: column,
-              row: row,
+        final PlutoCell cell = PlutoCell(value: number);
+
+        final PlutoRow row = PlutoRow(
+          cells: {
+            'column_field_name': cell,
+          },
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: PlutoNumberCell(
+                stateManager: stateManager,
+                cell: cell,
+                column: column,
+                row: row,
+              ),
             ),
           ),
-        ),
-      );
-    });
-  }
+        );
+      });
+    }
 
-  buildWidget(
-    number: 0,
-    negative: true,
-    format: '#,###',
-    applyFormatOnInit: true,
-    allowFirstDot: false,
-  ).test(
-    '기본값 0 이 출력 되어야 한다.',
-    (tester) async {
-      expect(find.text('0'), findsOneWidget);
-    },
-  );
+    buildWidget(
+      number: 0,
+      negative: true,
+      format: '#,###',
+      applyFormatOnInit: true,
+      allowFirstDot: false,
+    ).test(
+      '기본값 0 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('0'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      number: 1234.02,
+      negative: true,
+      format: '#,###',
+      applyFormatOnInit: true,
+      allowFirstDot: false,
+    ).test(
+      'locale 이 기본값인 경우 1234.02 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('1234.02'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      number: 1234.02,
+      negative: true,
+      format: '#,###.##',
+      applyFormatOnInit: true,
+      allowFirstDot: false,
+      locale: 'da_DK',
+    ).test(
+      'locale 이 컴마를 사용하는 덴마크인 경우 1234,02 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('1234,02'), findsOneWidget);
+      },
+    );
+  });
 
   group('DecimalTextInputFormatter', () {
     updatedValue({
@@ -83,6 +120,7 @@ void main() {
       required int decimalRange,
       required bool activatedNegativeValues,
       required bool allowFirstDot,
+      String decimalSeparator = '.',
     }) {
       final oldText = TextEditingValue(text: oldValue);
 
@@ -92,11 +130,62 @@ void main() {
         decimalRange: decimalRange,
         activatedNegativeValues: activatedNegativeValues,
         allowFirstDot: allowFirstDot,
-        decimalSeparator: '.',
+        decimalSeparator: decimalSeparator,
       );
 
       return formatter.formatEditUpdate(oldText, newText).text;
     }
+
+    test(
+      'decimalRange 가 2, decimalSeparator 가 컴마인 경우 123.01 을 입력하면 0 이 리턴 되어야 한다.',
+      () {
+        expect(
+          updatedValue(
+            oldValue: '0',
+            newValue: '123.01',
+            decimalRange: 2,
+            activatedNegativeValues: true,
+            allowFirstDot: false,
+            decimalSeparator: ',',
+          ),
+          '0',
+        );
+      },
+    );
+
+    test(
+      'decimalRange 가 2, decimalSeparator 가 컴마인 경우 123,01 을 입력하면 123,01 이 리턴 되어야 한다.',
+      () {
+        expect(
+          updatedValue(
+            oldValue: '0',
+            newValue: '123,01',
+            decimalRange: 2,
+            activatedNegativeValues: true,
+            allowFirstDot: false,
+            decimalSeparator: ',',
+          ),
+          '123,01',
+        );
+      },
+    );
+
+    test(
+      'decimalRange 가 0, decimalSeparator 가 컴마인 경우 123,01 을 입력하면 123 이 리턴 되어야 한다.',
+      () {
+        expect(
+          updatedValue(
+            oldValue: '123',
+            newValue: '123,01',
+            decimalRange: 0,
+            activatedNegativeValues: true,
+            allowFirstDot: false,
+            decimalSeparator: ',',
+          ),
+          '123',
+        );
+      },
+    );
 
     test(
       'decimalRange 가 2 인 상태에서 0.12 을 입력하면 0.12 가 리턴 되어야 한다.',
