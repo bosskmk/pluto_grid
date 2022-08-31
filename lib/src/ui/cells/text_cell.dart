@@ -145,7 +145,9 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     );
 
     if (notify) {
-      _initialCellValue = widget.cell.value;
+      _initialCellValue = widget.column.formattedValueForDisplayInEditing(
+        widget.cell.value,
+      );
 
       _textController.text = _initialCellValue.toString();
 

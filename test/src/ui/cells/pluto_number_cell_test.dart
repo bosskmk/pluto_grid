@@ -92,6 +92,7 @@ void main() {
         decimalRange: decimalRange,
         activatedNegativeValues: activatedNegativeValues,
         allowFirstDot: allowFirstDot,
+        decimalSeparator: '.',
       );
 
       return formatter.formatEditUpdate(oldText, newText).text;

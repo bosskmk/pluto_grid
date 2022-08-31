@@ -289,6 +289,12 @@ class PlutoColumn {
   }
 
   String formattedValueForDisplayInEditing(dynamic value) {
+    if (type.isNumber) {
+      return value
+          .toString()
+          .replaceAll('.', type.number!.numberFormat.symbols.DECIMAL_SEP);
+    }
+
     if (formatter != null) {
       final bool allowFormatting =
           readOnly || type.isSelect || type.isTime || type.isDate;
