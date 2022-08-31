@@ -184,7 +184,7 @@ class _HeaderState extends State<_Header> {
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.autoSizeMode.isNone
+                backgroundColor: columnSizeConfig.autoSizeMode.isNone
                     ? Colors.blue
                     : Colors.grey,
               ),
@@ -193,7 +193,7 @@ class _HeaderState extends State<_Header> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.autoSizeMode.isEqual
+                backgroundColor: columnSizeConfig.autoSizeMode.isEqual
                     ? Colors.blue
                     : Colors.grey,
               ),
@@ -202,7 +202,7 @@ class _HeaderState extends State<_Header> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.autoSizeMode.isScale
+                backgroundColor: columnSizeConfig.autoSizeMode.isScale
                     ? Colors.blue
                     : Colors.grey,
               ),
@@ -211,7 +211,7 @@ class _HeaderState extends State<_Header> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.resizeMode.isNone
+                backgroundColor: columnSizeConfig.resizeMode.isNone
                     ? Colors.blue
                     : Colors.grey,
               ),
@@ -220,7 +220,7 @@ class _HeaderState extends State<_Header> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.resizeMode.isNormal
+                backgroundColor: columnSizeConfig.resizeMode.isNormal
                     ? Colors.blue
                     : Colors.grey,
               ),
@@ -229,7 +229,7 @@ class _HeaderState extends State<_Header> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: columnSizeConfig.resizeMode.isPushAndPull
+                backgroundColor: columnSizeConfig.resizeMode.isPushAndPull
                     ? Colors.blue
                     : Colors.grey,
               ),
