@@ -139,8 +139,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   ButtonStyle _getNumberButtonStyle(bool isCurrentIndex) {
     return TextButton.styleFrom(
-      primary: Colors.transparent,
-      onSurface: Colors.transparent,
+      disabledForegroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 10),
       backgroundColor: Colors.transparent,

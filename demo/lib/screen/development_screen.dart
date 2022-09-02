@@ -143,6 +143,14 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 evenRowColor: const Color(0xFFF6F6F6),
                 gridBorderRadius: BorderRadius.circular(10),
                 gridPopupBorderRadius: BorderRadius.circular(7),
+                // columnAscendingIcon: const Icon(
+                //   Icons.arrow_upward,
+                //   color: Colors.cyan,
+                // ),
+                // columnDescendingIcon: const Icon(
+                //   Icons.arrow_downward,
+                //   color: Colors.pink,
+                // ),
               ),
               // enableGridBorderShadow: true,
               enableMoveHorizontalInEditing: true,

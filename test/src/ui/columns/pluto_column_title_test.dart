@@ -603,20 +603,24 @@ void main() {
   });
 
   group('configuration', () {
-    final PlutoColumn column = PlutoColumn(
-      title: 'column title',
-      field: 'column_field_name',
-      type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.end,
-    );
-
-    aColumnWithConfiguration(PlutoGridConfiguration configuration) {
+    aColumnWithConfiguration(
+      PlutoGridConfiguration configuration, {
+      PlutoColumn? column,
+    }) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
         when(stateManager.style).thenReturn(configuration.style);
 
         await tester.pumpWidget(
-          buildApp(column: column),
+          buildApp(
+            column: column ??
+                PlutoColumn(
+                  title: 'column title',
+                  field: 'column_field_name',
+                  type: PlutoColumnType.text(),
+                  frozen: PlutoColumnFrozen.end,
+                ),
+          ),
         );
       });
     }
@@ -675,6 +679,66 @@ void main() {
         final BorderDirectional border = decoration.border as BorderDirectional;
 
         expect(border.end, BorderSide.none);
+      },
+    );
+
+    aColumnWithConfiguration(
+      const PlutoGridConfiguration(
+        style: PlutoGridStyleConfig(
+          columnAscendingIcon: Icon(
+            Icons.arrow_upward,
+            color: Colors.cyan,
+          ),
+        ),
+      ),
+      column: PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        sort: PlutoColumnSort.ascending,
+      ),
+    ).test(
+      'If columnAscendingIcon is set, the set icon should appear.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(PlutoColumnTitle),
+          matching: find.byType(Icon),
+        );
+
+        final icon = target.evaluate().first.widget as Icon;
+
+        expect(icon.icon, Icons.arrow_upward);
+        expect(icon.color, Colors.cyan);
+      },
+    );
+
+    aColumnWithConfiguration(
+      const PlutoGridConfiguration(
+        style: PlutoGridStyleConfig(
+          columnDescendingIcon: Icon(
+            Icons.arrow_downward,
+            color: Colors.pink,
+          ),
+        ),
+      ),
+      column: PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        sort: PlutoColumnSort.descending,
+      ),
+    ).test(
+      'If columnDescendingIcon is set, the set icon should appear.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(PlutoColumnTitle),
+          matching: find.byType(Icon),
+        );
+
+        final icon = target.evaluate().first.widget as Icon;
+
+        expect(icon.icon, Icons.arrow_downward);
+        expect(icon.color, Colors.pink);
       },
     );
   });
