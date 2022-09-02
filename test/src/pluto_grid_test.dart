@@ -1356,6 +1356,34 @@ void main() {
     expect(find.byType(PlutoLoading), findsNothing);
   });
 
+  testWidgets('select 모드에서 첫번째 숨김 컬럼이 있는 경우 두번째 컬럼이 현재 컬럼으로 첫 셀이 선택 되어야 한다.',
+      (tester) async {
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+    late final PlutoGridStateManager stateManager;
+
+    columns.first.hide = true;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            mode: PlutoGridMode.select,
+            onLoaded: (e) => stateManager = e.stateManager,
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(stateManager.currentColumn!.title, 'column1');
+    expect(stateManager.currentCell!.value, 'column1 value 0');
+  });
+
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
