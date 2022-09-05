@@ -37,27 +37,41 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
 
   late final bool allowFirstDot;
 
-  @override
-  TextInputType get keyboardType => TextInputType.number;
+  late final String decimalSeparator;
 
   @override
-  List<TextInputFormatter>? get inputFormatters => [
-        DecimalTextInputFormatter(
-          decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative,
-          allowFirstDot: allowFirstDot,
-        ),
-      ];
+  late final TextInputType keyboardType;
+
+  @override
+  late final List<TextInputFormatter>? inputFormatters;
 
   @override
   void initState() {
     super.initState();
 
-    decimalRange = widget.column.type.number!.decimalPoint;
+    final numberColumn = widget.column.type.number!;
 
-    activatedNegative = widget.column.type.number!.negative;
+    decimalRange = numberColumn.decimalPoint;
 
-    allowFirstDot = widget.column.type.number!.allowFirstDot;
+    activatedNegative = numberColumn.negative;
+
+    allowFirstDot = numberColumn.allowFirstDot;
+
+    decimalSeparator = numberColumn.numberFormat.symbols.DECIMAL_SEP;
+
+    inputFormatters = [
+      DecimalTextInputFormatter(
+        decimalRange: decimalRange,
+        activatedNegativeValues: activatedNegative,
+        allowFirstDot: allowFirstDot,
+        decimalSeparator: decimalSeparator,
+      ),
+    ];
+
+    keyboardType = TextInputType.numberWithOptions(
+      decimal: decimalRange > 0,
+      signed: activatedNegative,
+    );
   }
 }
 
@@ -67,15 +81,16 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     int? decimalRange,
     required bool activatedNegativeValues,
     required bool allowFirstDot,
+    required String decimalSeparator,
   }) : assert(decimalRange == null || decimalRange >= 0,
             'DecimalTextInputFormatter declaration error') {
     String dp = (decimalRange != null && decimalRange > 0)
-        ? '([.][0-9]{0,$decimalRange}){0,1}'
+        ? '([$decimalSeparator][0-9]{0,$decimalRange}){0,1}'
         : '';
     String num = '[0-9]*$dp';
 
     if (activatedNegativeValues) {
-      final firstSymbols = allowFirstDot ? '[-.]' : '[-]';
+      final firstSymbols = allowFirstDot ? '[-$decimalSeparator]' : '[-]';
 
       _exp = RegExp(
         '^(((($firstSymbols){0,1})|(($firstSymbols){0,1}[0-9]$num))){0,1}\$',

@@ -253,7 +253,10 @@ class PlutoColumnTypeNumber
 
   @override
   String applyFormat(dynamic value) {
-    num number = num.tryParse(value.toString()) ?? 0;
+    num number = num.tryParse(value
+            .toString()
+            .replaceAll(numberFormat.symbols.DECIMAL_SEP, '.')) ??
+        0;
 
     if (negative == false && number < 0) {
       number = 0;

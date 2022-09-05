@@ -772,9 +772,9 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
     _lastAxisDirection =
         vertical ? _lastVerticalAxisDirection : _lastHorizontalAxisDirection;
 
-    bool _needPaint(ScrollMetrics? metrics) =>
+    bool needPaint(ScrollMetrics? metrics) =>
         metrics != null && metrics.maxScrollExtent > metrics.minScrollExtent;
-    if (!_needPaint(oldMetrics) && !_needPaint(metrics)) return;
+    if (!needPaint(oldMetrics) && !needPaint(metrics)) return;
 
     notifyListeners();
   }

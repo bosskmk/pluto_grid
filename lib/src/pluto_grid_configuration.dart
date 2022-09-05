@@ -651,7 +651,7 @@ class PlutoGridColumnSizeConfig {
   }
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
         autoSizeMode,
         resizeMode,
         restoreAutoSizeAfterHideColumn,
