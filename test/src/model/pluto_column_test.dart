@@ -250,6 +250,26 @@ void main() {
   );
 
   group('PlutoColumnTypeNumber', () {
+    group('locale', () {
+      test('numberFormat 에 기본 로케일이 설정 되어야 한다.', () {
+        final PlutoColumnTypeNumber numberColumn =
+            PlutoColumnType.number() as PlutoColumnTypeNumber;
+        expect(numberColumn.numberFormat.locale, 'en_US');
+      });
+
+      test('numberFormat 에 denmark 로케일이 설정 되어야 한다.', () {
+        final PlutoColumnTypeNumber numberColumn =
+            PlutoColumnType.number(locale: 'da_DK') as PlutoColumnTypeNumber;
+        expect(numberColumn.numberFormat.locale, 'da');
+      });
+
+      test('numberFormat 에 korea 로케일이 설정 되어야 한다.', () {
+        final PlutoColumnTypeNumber numberColumn =
+            PlutoColumnType.number(locale: 'ko_KR') as PlutoColumnTypeNumber;
+        expect(numberColumn.numberFormat.locale, 'ko');
+      });
+    });
+
     group('isValid', () {
       test(
         '문자인 경우 false',
