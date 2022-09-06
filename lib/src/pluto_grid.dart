@@ -1236,7 +1236,7 @@ class PlutoGridSettings {
   static const double columnWidth = 200.0;
 
   /// Column width
-  static const double minColumnWidth = 80.0;
+  static const double minColumnWidth = 55.0;
 
   /// Frozen column division line (ShadowLine) size
   static const double shadowLineSize = 3.0;
