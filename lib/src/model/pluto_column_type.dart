@@ -24,13 +24,16 @@ abstract class PlutoColumnType {
   ///
   /// [allowFirstDot] When accepting negative numbers, a dot is allowed at the beginning.
   /// This option is required on devices where the .- symbol works with one button.
+  ///
+  /// [locale] Specifies the numeric locale of the column.
+  /// If not specified, the default locale is used.
   factory PlutoColumnType.number({
     dynamic defaultValue = 0,
     bool negative = true,
     String format = '#,###',
     bool applyFormatOnInit = true,
     bool allowFirstDot = false,
-    String locale = "en_US",
+    String? locale,
   }) {
     return PlutoColumnTypeNumber(
       defaultValue: defaultValue,
@@ -203,14 +206,13 @@ class PlutoColumnTypeNumber
 
   @override
   String format;
-          
-  @override
-  String locale;
 
   @override
   bool applyFormatOnInit;
 
   bool allowFirstDot;
+
+  String? locale;
 
   PlutoColumnTypeNumber({
     this.defaultValue,
