@@ -1,6 +1,7 @@
 ## [5.0.6] - 2022. 9. 5
 
 * Add support for countries that use comma as Decimal separator.
+* Breaking change - Only avaliable for flutter 3.3, otherwise it'll show this error on console: "Error: No named parameter with the name 'disabledForegroundColor'"
 
 ## [5.0.5] - 2022. 8. 30
 
