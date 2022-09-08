@@ -49,6 +49,14 @@ class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
           format: '#,###.###',
         ),
       ),
+      PlutoColumn(
+        title: '3 decimal places with denmark locale',
+        field: 'three_decimal_with_denmark_locale',
+        type: PlutoColumnType.number(
+          format: '#,###.###',
+          locale: 'da_DK',
+        ),
+      ),
     ]);
 
     rows.addAll([
@@ -58,6 +66,7 @@ class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
           'negative_false': PlutoCell(value: 12345),
           'two_decimal': PlutoCell(value: 12345.12),
           'three_decimal': PlutoCell(value: 12345.123),
+          'three_decimal_with_denmark_locale': PlutoCell(value: 12345678.123),
         },
       ),
       PlutoRow(
@@ -66,6 +75,7 @@ class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
           'negative_false': PlutoCell(value: 12345),
           'two_decimal': PlutoCell(value: 12345.12),
           'three_decimal': PlutoCell(value: 12345.123),
+          'three_decimal_with_denmark_locale': PlutoCell(value: 12345678.123),
         },
       ),
       PlutoRow(
@@ -74,6 +84,7 @@ class _NumberTypeColumnScreenState extends State<NumberTypeColumnScreen> {
           'negative_false': PlutoCell(value: 12345),
           'two_decimal': PlutoCell(value: 12345.12),
           'three_decimal': PlutoCell(value: 12345.123),
+          'three_decimal_with_denmark_locale': PlutoCell(value: 12345678.123),
         },
       ),
     ]);

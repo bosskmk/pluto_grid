@@ -1,3 +1,7 @@
+## [5.0.6] - 2022. 9. 5
+
+* Add support for countries that use comma as Decimal separator.
+
 ## [5.0.5] - 2022. 8. 30
 
 * Add columnAscendingIcon, columnDescendingIcon.
