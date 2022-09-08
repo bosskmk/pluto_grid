@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoBaseColumnFooter extends PlutoStatefulWidget
+class PlutoBaseColumnFooter extends StatelessWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;
 
@@ -13,9 +13,6 @@ class PlutoBaseColumnFooter extends PlutoStatefulWidget
   }) : super(key: column.key);
 
   @override
-  PlutoBaseColumnFooterState createState() => PlutoBaseColumnFooterState();
-
-  @override
   double get width => column.width;
 
   @override
@@ -23,40 +20,26 @@ class PlutoBaseColumnFooter extends PlutoStatefulWidget
 
   @override
   bool get keepAlive => false;
-}
-
-class PlutoBaseColumnFooterState
-    extends PlutoStateWithChange<PlutoBaseColumnFooter> {
-  @override
-  PlutoGridStateManager get stateManager => widget.stateManager;
-
-  @override
-  void initState() {
-    super.initState();
-    updateState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    var renderer = widget.column.footerRenderer;
+    var renderer = column.footerRenderer;
     return Container(
-      padding: widget.column.footerPadding ??
-          widget.stateManager.style.defaultColumnFooterPadding,
+      padding:
+          column.footerPadding ?? stateManager.style.defaultColumnFooterPadding,
       decoration: BoxDecoration(
-        color: widget.column.backgroundColor,
+        color: column.backgroundColor,
         border: BorderDirectional(
-            end: widget.stateManager.style.enableColumnBorderVertical
-                ? BorderSide(
-                    color: widget.stateManager.style.borderColor, width: 1.0)
+            end: stateManager.style.enableColumnBorderVertical
+                ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
                 : BorderSide.none,
-            bottom: widget.stateManager.style.enableColumnBorderVertical
-                ? BorderSide(
-                    color: widget.stateManager.style.borderColor, width: 1.0)
+            bottom: stateManager.style.enableColumnBorderVertical
+                ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
                 : BorderSide.none),
       ),
       child: renderer != null
           ? renderer(PlutoColumnFooterRendererContext(
-              column: widget.column,
+              column: column,
               stateManager: stateManager,
             ))
           : const SizedBox(),
