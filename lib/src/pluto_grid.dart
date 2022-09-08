@@ -607,23 +607,12 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 child: PlutoBodyColumns(_stateManager),
               ),
 
-              if (showColumnFooter) ...[
-                LayoutId(
-                  id: _StackName.columnFooterDivider,
-                  child: PlutoShadowLine(
-                    axis: Axis.horizontal,
-                    color: style.gridBorderColor,
-                    shadow: style.enableGridBorderShadow,
-                  ),
-                ),
-
+              /// Body columns footer.
+              if (showColumnFooter)
                 LayoutId(
                   id: _StackName.bodyColumnFooters,
                   child: PlutoBodyColumnsFooters(stateManager),
                 ),
-
-                /// Column and it's footer divider.
-              ],
 
               /// Left columns and rows.
               if (showLeftFrozen) ...[
@@ -635,10 +624,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     id: _StackName.leftFrozenRows,
                     child: PlutoLeftFrozenRows(_stateManager)),
                 LayoutId(
-                  id: _StackName.leftFrozenColumnFooters,
-                  child: PlutoLeftFrozenColumnFooters(stateManager),
-                ),
-                LayoutId(
                   id: _StackName.leftFrozenDivider,
                   child: PlutoShadowLine(
                     axis: Axis.vertical,
@@ -646,6 +631,11 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     shadow: style.enableGridBorderShadow,
                   ),
                 ),
+                if (showColumnFooter)
+                  LayoutId(
+                    id: _StackName.leftFrozenColumnFooters,
+                    child: PlutoLeftFrozenColumnFooters(stateManager),
+                  ),
               ],
 
               /// Right columns and rows.
@@ -658,10 +648,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     id: _StackName.rightFrozenRows,
                     child: PlutoRightFrozenRows(_stateManager)),
                 LayoutId(
-                  id: _StackName.rightFrozenColumnFooters,
-                  child: PlutoRightFrozenColumnFooters(stateManager),
-                ),
-                LayoutId(
                   id: _StackName.rightFrozenDivider,
                   child: PlutoShadowLine(
                     axis: Axis.vertical,
@@ -670,6 +656,11 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     reverse: true,
                   ),
                 ),
+                if (showColumnFooter)
+                  LayoutId(
+                    id: _StackName.rightFrozenColumnFooters,
+                    child: PlutoRightFrozenColumnFooters(stateManager),
+                  ),
               ],
 
               /// Column and row divider.
@@ -698,6 +689,17 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   child: _header!,
                 ),
               ],
+
+              /// Column footer divider.
+              if (showColumnFooter)
+                LayoutId(
+                  id: _StackName.columnFooterDivider,
+                  child: PlutoShadowLine(
+                    axis: Axis.horizontal,
+                    color: style.gridBorderColor,
+                    shadow: style.enableGridBorderShadow,
+                  ),
+                ),
 
               /// Footer and divider.
               if (_stateManager.showFooter) ...[
@@ -939,11 +941,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
           isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
       positionChild(
         _StackName.bodyColumnFooters,
-        Offset(posX, size.height - s.height),
+        Offset(posX, size.height - bodyRowsBottomOffset - s.height),
       );
 
       bodyRowsBottomOffset += s.height;
     }
+
     if (hasChild(_StackName.columnFooterDivider)) {
       var s = layoutChild(
         _StackName.columnFooterDivider,
@@ -995,6 +998,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         Offset(posX, bodyRowsTopOffset),
       );
     }
+
     if (hasChild(_StackName.leftFrozenColumnFooters)) {
       final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
       final double posX = isLTR
@@ -1032,8 +1036,9 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         Offset(posX, bodyRowsTopOffset),
       );
     }
+
     if (hasChild(_StackName.rightFrozenColumnFooters)) {
-      final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
+      final double offset = isLTR ? bodyRightOffset : bodyLeftOffset;
       var s = layoutChild(
         _StackName.rightFrozenColumnFooters,
         BoxConstraints.loose(Size(offset, size.height)),

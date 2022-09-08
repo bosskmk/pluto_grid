@@ -55,7 +55,7 @@ class PlutoLeftFrozenColumnFootersState
   }
 
   Widget _buildColumn(e) {
-    return PlutoVisibilityLayoutId(
+    return LayoutId(
       id: e.field,
       child: PlutoBaseColumnFooter(
         stateManager: stateManager,

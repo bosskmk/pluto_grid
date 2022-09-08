@@ -319,6 +319,7 @@ mixin LayoutState implements IPlutoGridState {
     return gridGlobalOffset!.dy +
         maxHeight! -
         footerHeight -
+        columnFooterHeight -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 

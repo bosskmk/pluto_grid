@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -24,7 +22,7 @@ class PlutoBaseColumnFooter extends PlutoStatefulWidget
   double get startPosition => column.startPosition;
 
   @override
-  bool get keepAlive => true;
+  bool get keepAlive => false;
 }
 
 class PlutoBaseColumnFooterState
@@ -56,7 +54,12 @@ class PlutoBaseColumnFooterState
                     color: widget.stateManager.style.borderColor, width: 1.0)
                 : BorderSide.none),
       ),
-      child: renderer != null ? renderer(context) : const SizedBox(),
+      child: renderer != null
+          ? renderer(PlutoColumnFooterRendererContext(
+              column: widget.column,
+              stateManager: stateManager,
+            ))
+          : const SizedBox(),
     );
   }
 }

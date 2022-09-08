@@ -68,7 +68,7 @@ class PlutoLeftFrozenColumnsState
   }
 
   Widget _buildColumnGroup(PlutoColumnGroupPair e) {
-    return PlutoVisibilityLayoutId(
+    return LayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
         stateManager: stateManager,
@@ -81,7 +81,7 @@ class PlutoLeftFrozenColumnsState
   }
 
   Widget _buildColumn(e) {
-    return PlutoVisibilityLayoutId(
+    return LayoutId(
       id: e.field,
       child: PlutoBaseColumn(
         stateManager: stateManager,

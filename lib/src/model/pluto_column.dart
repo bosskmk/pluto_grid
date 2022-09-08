@@ -6,7 +6,8 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
-typedef PlutoColumnFooterRenderer = Widget Function(BuildContext context);
+typedef PlutoColumnFooterRenderer = Widget Function(
+    PlutoColumnFooterRendererContext context);
 
 /// It dynamically determines whether the cells of the column are in the edit state.
 ///
@@ -333,6 +334,17 @@ class PlutoColumnRendererContext {
     required this.rowIdx,
     required this.row,
     required this.cell,
+    required this.stateManager,
+  });
+}
+
+class PlutoColumnFooterRendererContext {
+  final PlutoColumn column;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoColumnFooterRendererContext({
+    required this.column,
     required this.stateManager,
   });
 }
