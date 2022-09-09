@@ -18,9 +18,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: '10.001')}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.sum(column: column), 0);
+      expect(PlutoAggregateHelper.sum(rows: rows, column: column), 0);
     });
 
     test('[양수] condition 이 없이 sum 을 호출 한 경우 전체 합계 값이 리턴 되어야 한다.', () {
@@ -38,9 +36,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 50)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.sum(column: column), 150);
+      expect(PlutoAggregateHelper.sum(rows: rows, column: column), 150);
     });
 
     test('[음수] condition 이 없이 sum 을 호출 한 경우 전체 합계 값이 리턴 되어야 한다.', () {
@@ -58,9 +54,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: -50)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.sum(column: column), -150);
+      expect(PlutoAggregateHelper.sum(rows: rows, column: column), -150);
     });
 
     test('[소수] condition 이 없이 sum 을 호출 한 경우 전체 합계 값이 리턴 되어야 한다.', () {
@@ -78,9 +72,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.001)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.sum(column: column), 50.005);
+      expect(PlutoAggregateHelper.sum(rows: rows, column: column), 50.005);
     });
 
     test('condition 이 있는 경우 조건에 맞는 아이템의 합계 값이 리턴 되어야 한다.', () {
@@ -98,14 +90,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.001)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value == 10.001;
-      }
-
       expect(
-        aggregateHelper.sum(column: column, condition: condition),
+        PlutoAggregateHelper.sum(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value == 10.001,
+        ),
         30.003,
       );
     });
@@ -125,14 +115,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.001)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value == 10.003;
-      }
-
       expect(
-        aggregateHelper.sum(column: column, condition: condition),
+        PlutoAggregateHelper.sum(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value == 10.003,
+        ),
         0,
       );
     });
@@ -154,9 +142,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 50)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.average(column: column), 30);
+      expect(PlutoAggregateHelper.average(rows: rows, column: column), 30);
     });
 
     test('[음수] condition 이 없이 average 을 호출 한 경우 전체 합계 값이 리턴 되어야 한다.', () {
@@ -174,9 +160,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: -50)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.average(column: column), -30);
+      expect(PlutoAggregateHelper.average(rows: rows, column: column), -30);
     });
 
     test('[소수] condition 이 없이 average 을 호출 한 경우 전체 합계 값이 리턴 되어야 한다.', () {
@@ -194,9 +178,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.average(column: column), 10.003);
+      expect(PlutoAggregateHelper.average(rows: rows, column: column), 10.003);
     });
   });
 
@@ -216,9 +198,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 105)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.min(column: column), 101);
+      expect(PlutoAggregateHelper.min(rows: rows, column: column), 101);
     });
 
     test('[음수] condition 이 없이 min 을 호출 한 경우 최소 값이 리턴 되어야 한다.', () {
@@ -236,9 +216,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: -105)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.min(column: column), -105);
+      expect(PlutoAggregateHelper.min(rows: rows, column: column), -105);
     });
 
     test('[소수] condition 이 없이 min 을 호출 한 경우 최소 값이 리턴 되어야 한다.', () {
@@ -256,9 +234,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.min(column: column), 10.001);
+      expect(PlutoAggregateHelper.min(rows: rows, column: column), 10.001);
     });
 
     test('condition 이 있는 경우 조건에 맞는 아이템이 있다면 조건내에서 최소값이 리턴 되어야 한다.', () {
@@ -276,14 +252,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value >= 10.003;
-      }
-
       expect(
-        aggregateHelper.min(column: column, condition: condition),
+        PlutoAggregateHelper.min(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value >= 10.003,
+        ),
         10.003,
       );
     });
@@ -303,14 +277,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.001)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value == 10.003;
-      }
-
       expect(
-        aggregateHelper.min(column: column, condition: condition),
+        PlutoAggregateHelper.min(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value == 10.003,
+        ),
         null,
       );
     });
@@ -332,14 +304,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value >= 10.003;
-      }
-
       expect(
-        aggregateHelper.max(column: column, condition: condition),
+        PlutoAggregateHelper.max(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value >= 10.003,
+        ),
         10.005,
       );
     });
@@ -359,14 +329,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value >= 10.006;
-      }
-
       expect(
-        aggregateHelper.max(column: column, condition: condition),
+        PlutoAggregateHelper.max(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value >= 10.006,
+        ),
         null,
       );
     });
@@ -388,9 +356,7 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      expect(aggregateHelper.count(column: column), 5);
+      expect(PlutoAggregateHelper.count(rows: rows, column: column), 5);
     });
 
     test('condition 이 있는 경우 조건에 맞는 아이템이 있다면 조건에 맞는 아이템 개수가 리턴 되어야 한다.', () {
@@ -408,14 +374,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value >= 10.003;
-      }
-
       expect(
-        aggregateHelper.count(column: column, condition: condition),
+        PlutoAggregateHelper.count(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value >= 10.003,
+        ),
         3,
       );
     });
@@ -435,14 +399,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 10.005)}),
       ];
 
-      final aggregateHelper = PlutoAggregateHelper(rows: rows);
-
-      bool condition(PlutoRow row) {
-        return row.cells['column']!.value >= 10.006;
-      }
-
       expect(
-        aggregateHelper.count(column: column, condition: condition),
+        PlutoAggregateHelper.count(
+          rows: rows,
+          column: column,
+          filter: (PlutoCell cell) => cell.value >= 10.006,
+        ),
         0,
       );
     });

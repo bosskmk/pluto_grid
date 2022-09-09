@@ -133,7 +133,8 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     setCreateFooter(createFooter);
     setConfiguration(configuration);
     setShowColumnFooter(
-        columns.any((element) => element.footerRenderer != null));
+      columns.any((element) => element.footerRenderer != null),
+    );
     setGridKey(GlobalKey());
   }
 

@@ -9,6 +9,7 @@ import 'screen/feature/add_rows_asynchronously.dart';
 import 'screen/feature/cell_renderer_screen.dart';
 import 'screen/feature/cell_selection_screen.dart';
 import 'screen/feature/column_filtering_screen.dart';
+import 'screen/feature/column_footer_screen.dart';
 import 'screen/feature/column_freezing_screen.dart';
 import 'screen/feature/column_group_screen.dart';
 import 'screen/feature/column_hiding_screen.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         RTLScreen.routeName: (context) => const RTLScreen(),
         ColumnFilteringScreen.routeName: (context) =>
             const ColumnFilteringScreen(),
+        ColumnFooterScreen.routeName: (context) => const ColumnFooterScreen(),
         ColumnFreezingScreen.routeName: (context) =>
             const ColumnFreezingScreen(),
         ColumnGroupScreen.routeName: (context) => const ColumnGroupScreen(),

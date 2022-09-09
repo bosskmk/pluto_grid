@@ -138,12 +138,18 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _footerHeight;
 
+  double? _columnFooterHeight;
+
   set headerHeight(double value) {
     _headerHeight = value;
   }
 
   set footerHeight(double value) {
     _footerHeight = value;
+  }
+
+  set columnFooterHeight(double value) {
+    _columnFooterHeight = value;
   }
 
   @override
@@ -166,6 +172,17 @@ mixin LayoutState implements IPlutoGridState {
     return _footerHeight == null
         ? PlutoGridSettings.rowTotalHeight
         : _footerHeight!;
+  }
+
+  @override
+  double get columnFooterHeight {
+    if (!showColumnFooter) {
+      return 0;
+    }
+
+    return _columnFooterHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _columnFooterHeight!;
   }
 
   @override
@@ -244,10 +261,6 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get columnHeight =>
       showColumnTitle ? configuration!.style.columnHeight : 0;
-
-  @override
-  double get columnFooterHeight =>
-      showColumnFooter ? configuration!.style.columnFooterHeight : 0;
 
   @override
   double get columnGroupHeight =>

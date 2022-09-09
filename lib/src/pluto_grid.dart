@@ -762,8 +762,10 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     // first layout header and footer and see what remains for the scrolling part
     if (hasChild(_StackName.header)) {
       // maximum 40% of the height
-      var s = layoutChild(_StackName.header,
-          BoxConstraints.loose(Size(size.width, size.height / 100 * 40)));
+      var s = layoutChild(
+        _StackName.header,
+        BoxConstraints.loose(Size(size.width, size.height / 100 * 40)),
+      );
 
       _stateManager.headerHeight = s.height;
 
@@ -788,7 +790,10 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild(_StackName.footer)) {
       // maximum 40% of the height
-      var s = layoutChild(_StackName.footer, BoxConstraints.loose(size));
+      var s = layoutChild(
+        _StackName.footer,
+        BoxConstraints.loose(Size(size.width, size.height / 100 * 40)),
+      );
 
       _stateManager.footerHeight = s.height;
 
@@ -937,8 +942,11 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
       );
 
+      _stateManager.columnFooterHeight = s.height;
+
       final double posX =
           isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+
       positionChild(
         _StackName.bodyColumnFooters,
         Offset(posX, size.height - bodyRowsBottomOffset - s.height),
@@ -1371,7 +1379,8 @@ class PlutoGridSettings {
       EdgeInsets.symmetric(horizontal: 10);
 
   /// Column Footer - padding
-  static const EdgeInsets columnFooterPadding = EdgeInsets.all(5);
+  static const EdgeInsets columnFooterPadding =
+      EdgeInsets.symmetric(horizontal: 10);
 
   static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
 

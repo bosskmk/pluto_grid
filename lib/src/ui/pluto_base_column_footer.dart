@@ -23,26 +23,28 @@ class PlutoBaseColumnFooter extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    var renderer = column.footerRenderer;
-    return Container(
-      padding:
-          column.footerPadding ?? stateManager.style.defaultColumnFooterPadding,
+    final renderer = column.footerRenderer;
+
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: column.backgroundColor,
         border: BorderDirectional(
-            end: stateManager.style.enableColumnBorderVertical
-                ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
-                : BorderSide.none,
-            bottom: stateManager.style.enableColumnBorderVertical
-                ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
-                : BorderSide.none),
+          end: stateManager.style.enableColumnBorderVertical
+              ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
+              : BorderSide.none,
+          bottom: stateManager.style.enableColumnBorderVertical
+              ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
+              : BorderSide.none,
+        ),
       ),
-      child: renderer != null
-          ? renderer(PlutoColumnFooterRendererContext(
-              column: column,
-              stateManager: stateManager,
-            ))
-          : const SizedBox(),
+      child: renderer == null
+          ? const SizedBox()
+          : renderer(
+              PlutoColumnFooterRendererContext(
+                column: column,
+                stateManager: stateManager,
+              ),
+            ),
     );
   }
 }

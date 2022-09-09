@@ -140,7 +140,6 @@ class PlutoGridStyleConfig {
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
-    this.columnFooterHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
@@ -190,7 +189,6 @@ class PlutoGridStyleConfig {
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
-    this.columnFooterHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
     this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
@@ -302,9 +300,6 @@ class PlutoGridStyleConfig {
   /// Height of column.
   final double columnHeight;
 
-  /// Height of column.
-  final double columnFooterHeight;
-
   /// Height of column filter.
   final double columnFilterHeight;
 
@@ -378,7 +373,6 @@ class PlutoGridStyleConfig {
     double? iconSize,
     double? rowHeight,
     double? columnHeight,
-    double? columnFooterHeight,
     double? columnFilterHeight,
     EdgeInsets? defaultColumnTitlePadding,
     EdgeInsets? defaultColumnFooterPadding,
@@ -429,12 +423,11 @@ class PlutoGridStyleConfig {
       iconSize: iconSize ?? this.iconSize,
       rowHeight: rowHeight ?? this.rowHeight,
       columnHeight: columnHeight ?? this.columnHeight,
-      columnFooterHeight: columnFooterHeight ?? this.columnFooterHeight,
       columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
       defaultColumnFooterPadding:
-      defaultColumnFooterPadding ?? this.defaultColumnFooterPadding,
+          defaultColumnFooterPadding ?? this.defaultColumnFooterPadding,
       defaultColumnFilterPadding:
           defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,

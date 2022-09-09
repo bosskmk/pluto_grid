@@ -287,7 +287,6 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     return Container(
       decoration: _decoration,
       padding: widget.cellPadding,
-      alignment: Alignment.centerLeft,
       child: widget.child,
     );
   }

@@ -1,32 +1,26 @@
-import 'package:collection/collection.dart' show IterableNumberExtension;
+import 'package:collection/collection.dart'
+    show IterableNumberExtension, IterableExtension;
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoAggregateCondition = bool Function(PlutoRow);
-
 class PlutoAggregateHelper {
-  PlutoAggregateHelper({
-    required this.rows,
-  });
-
-  final List<PlutoRow> rows;
-
-  num sum({
+  static num sum({
+    required List<PlutoRow> rows,
     required PlutoColumn column,
-    PlutoAggregateCondition? condition,
+    PlutoAggregateFilter? filter,
   }) {
     num sum = 0;
 
-    if (!column.type.isNumber) {
+    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
       return sum;
     }
-
-    final bool hasCondition = condition != null;
 
     final numberColumn = column.type.number!;
 
     sum = rows.fold(0, (p, e) {
-      if (!hasCondition || condition(e)) {
-        return p += e.cells[column.field]!.value!;
+      final cell = e.cells[column.field]!;
+
+      if (filter == null || filter(cell)) {
+        return p += cell.value!;
       }
       return p;
     });
@@ -34,44 +28,45 @@ class PlutoAggregateHelper {
     return numberColumn.toNumber(numberColumn.applyFormat(sum));
   }
 
-  num average({
+  static num average({
+    required List<PlutoRow> rows,
     required PlutoColumn column,
-    PlutoAggregateCondition? condition,
+    PlutoAggregateFilter? filter,
   }) {
     num sum = 0;
 
-    if (!column.type.isNumber) {
+    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
       return sum;
     }
-
-    final bool hasCondition = condition != null;
-
-    final numberColumn = column.type.number!;
 
     int itemCount = 0;
 
     sum = rows.fold(0, (p, e) {
-      if (!hasCondition || condition(e)) {
+      final cell = e.cells[column.field]!;
+
+      if (filter == null || filter(cell)) {
         ++itemCount;
-        return p += e.cells[column.field]!.value!;
+        return p += cell.value!;
       }
+
       return p;
     });
 
-    return numberColumn.toNumber(numberColumn.applyFormat(sum / itemCount));
+    return sum / itemCount;
   }
 
-  num? min({
+  static num? min({
+    required List<PlutoRow> rows,
     required PlutoColumn column,
-    PlutoAggregateCondition? condition,
+    PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber) {
+    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
-    final bool hasCondition = condition != null;
-
-    final foundItems = hasCondition ? rows.where(condition) : rows;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
     final Iterable<num> mapValues =
         foundItems.map((e) => e.cells[column.field]!.value);
@@ -79,17 +74,18 @@ class PlutoAggregateHelper {
     return mapValues.minOrNull;
   }
 
-  num? max({
+  static num? max({
+    required List<PlutoRow> rows,
     required PlutoColumn column,
-    PlutoAggregateCondition? condition,
+    PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber) {
+    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
-    final bool hasCondition = condition != null;
-
-    final foundItems = hasCondition ? rows.where(condition) : rows;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
     final Iterable<num> mapValues =
         foundItems.map((e) => e.cells[column.field]!.value);
@@ -97,14 +93,26 @@ class PlutoAggregateHelper {
     return mapValues.maxOrNull;
   }
 
-  int count({
+  static int count({
+    required List<PlutoRow> rows,
     required PlutoColumn column,
-    PlutoAggregateCondition? condition,
+    PlutoAggregateFilter? filter,
   }) {
-    final bool hasCondition = condition != null;
+    if (!_hasColumnField(rows: rows, column: column)) {
+      return 0;
+    }
 
-    final foundItems = hasCondition ? rows.where(condition) : rows;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
     return foundItems.length;
+  }
+
+  static bool _hasColumnField({
+    required List<PlutoRow> rows,
+    required PlutoColumn column,
+  }) {
+    return rows.firstOrNull?.cells.containsKey(column.field) == true;
   }
 }
