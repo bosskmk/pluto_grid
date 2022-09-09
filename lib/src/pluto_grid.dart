@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/ui/pluto_body_column_footers.dart';
-import 'package:pluto_grid/src/ui/pluto_left_frozen_column_footers.dart';
-import 'package:pluto_grid/src/ui/pluto_right_frozen_column_footers.dart';
+
+import 'ui/ui.dart';
 
 typedef PlutoOnLoadedEventCallback = void Function(
     PlutoGridOnLoadedEvent event);
@@ -611,7 +610,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
               if (showColumnFooter)
                 LayoutId(
                   id: _StackName.bodyColumnFooters,
-                  child: PlutoBodyColumnsFooters(stateManager),
+                  child: PlutoBodyColumnsFooter(stateManager),
                 ),
 
               /// Left columns and rows.
@@ -634,7 +633,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 if (showColumnFooter)
                   LayoutId(
                     id: _StackName.leftFrozenColumnFooters,
-                    child: PlutoLeftFrozenColumnFooters(stateManager),
+                    child: PlutoLeftFrozenColumnsFooter(stateManager),
                   ),
               ],
 
@@ -659,7 +658,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 if (showColumnFooter)
                   LayoutId(
                     id: _StackName.rightFrozenColumnFooters,
-                    child: PlutoRightFrozenColumnFooters(stateManager),
+                    child: PlutoRightFrozenColumnsFooter(stateManager),
                   ),
               ],
 

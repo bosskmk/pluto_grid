@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseColumn extends PlutoStatefulWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;

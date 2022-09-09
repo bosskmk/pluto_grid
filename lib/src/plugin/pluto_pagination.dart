@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../ui/ui.dart';
+
 class PlutoPagination extends PlutoStatefulWidget {
   const PlutoPagination(
     this.stateManager, {

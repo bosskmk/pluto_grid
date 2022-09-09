@@ -1,24 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/ui/pluto_base_column_footer.dart';
-import 'package:pluto_grid/src/ui/pluto_body_column_footers.dart';
 
-class PlutoLeftFrozenColumnFooters extends PlutoStatefulWidget {
+import 'ui.dart';
+
+class PlutoRightFrozenColumnsFooter extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  const PlutoLeftFrozenColumnFooters(
+  const PlutoRightFrozenColumnsFooter(
     this.stateManager, {
     super.key,
   });
 
   @override
-  PlutoLeftFrozenColumnFootersState createState() =>
-      PlutoLeftFrozenColumnFootersState();
+  PlutoRightFrozenColumnsFooterState createState() =>
+      PlutoRightFrozenColumnsFooterState();
 }
 
-class PlutoLeftFrozenColumnFootersState
-    extends PlutoStateWithChange<PlutoLeftFrozenColumnFooters> {
+class PlutoRightFrozenColumnsFooterState
+    extends PlutoStateWithChange<PlutoRightFrozenColumnsFooter> {
   List<PlutoColumn> _columns = [];
 
   int _itemCount = 0;
@@ -46,8 +46,8 @@ class PlutoLeftFrozenColumnFootersState
 
   List<PlutoColumn> _getColumns() {
     return stateManager.isLTR
-        ? stateManager.leftFrozenColumns
-        : stateManager.leftFrozenColumns.reversed.toList(growable: false);
+        ? stateManager.rightFrozenColumns
+        : stateManager.rightFrozenColumns.reversed.toList(growable: false);
   }
 
   int _getItemCount() {

@@ -2,22 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/ui/pluto_base_column_footer.dart';
 
-class PlutoBodyColumnsFooters extends PlutoStatefulWidget {
+import 'ui.dart';
+
+class PlutoBodyColumnsFooter extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  const PlutoBodyColumnsFooters(
+  const PlutoBodyColumnsFooter(
     this.stateManager, {
     super.key,
   });
 
   @override
-  PlutoBodyColumnsFootersState createState() => PlutoBodyColumnsFootersState();
+  PlutoBodyColumnsFooterState createState() => PlutoBodyColumnsFooterState();
 }
 
-class PlutoBodyColumnsFootersState
-    extends PlutoStateWithChange<PlutoBodyColumnsFooters> {
+class PlutoBodyColumnsFooterState
+    extends PlutoStateWithChange<PlutoBodyColumnsFooter> {
   List<PlutoColumn> _columns = [];
 
   int _itemCount = 0;
@@ -105,7 +106,6 @@ class ColumnFooterLayoutDelegate extends MultiChildLayoutDelegate {
     required this.stateManager,
     required this.columns,
   }) : super(relayout: stateManager.resizingChangeNotifier);
-
 
   @override
   Size getSize(BoxConstraints constraints) {
