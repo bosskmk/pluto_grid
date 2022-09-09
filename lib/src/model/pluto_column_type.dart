@@ -451,6 +451,7 @@ class PlutoColumnTypeTime implements PlutoColumnType {
     return v;
   }
 }
+
 //TODO implement functions
 class PlutoColumnTypeCurrency
     implements
@@ -471,7 +472,7 @@ class PlutoColumnTypeCurrency
   PlutoColumnTypeCurrency({
     this.defaultValue,
     required this.locale,
-  })  : currencyFormat = intl.NumberFormat.simpleCurrency(locale: locale);
+  }) : currencyFormat = intl.NumberFormat.simpleCurrency(locale: locale);
 
   @override
   late final intl.NumberFormat currencyFormat;
@@ -493,6 +494,13 @@ class PlutoColumnTypeCurrency
 
   @override
   dynamic makeCompareValue(dynamic v) {
+    if (v.runtimeType == String) {
+      try {
+        return currencyFormat.parse(v);
+      } catch (_) {
+        return 0;
+      }
+    }
     return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
   }
 
