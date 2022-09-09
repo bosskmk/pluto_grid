@@ -117,7 +117,20 @@ class PlutoColumn {
   /// if you are defining custom cells with high paint cost.
   PlutoColumnRenderer? renderer;
 
-  /// Rendering for cell widget.
+  /// A callback that returns a widget
+  /// for expressing aggregate values at the bottom.
+  ///
+  /// ```dart
+  /// footerRenderer: (rendererContext) {
+  ///   return PlutoAggregateColumnFooter(
+  ///     rendererContext: rendererContext,
+  ///     type: PlutoAggregateColumnType.count,
+  ///     format: 'Checked : #,###.###',
+  ///     filter: (cell) => cell.row.checked == true,
+  ///     alignment: Alignment.center,
+  ///   );
+  /// },
+  /// ```
   PlutoColumnFooterRenderer? footerRenderer;
 
   /// Change the position of the column by dragging the column title.
