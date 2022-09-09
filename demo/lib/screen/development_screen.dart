@@ -58,6 +58,24 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     });
     columns[0].enableRowDrag = true;
     columns[0].enableRowChecked = true;
+    columns[0].footerRenderer = (c) {
+      return PlutoAggregateColumnFooter(
+        rendererContext: c,
+        type: PlutoAggregateColumnType.count,
+        format: 'CheckedCount : #,###',
+        alignment: Alignment.center,
+        filter: (cell) => cell.row.checked == true,
+      );
+    };
+    columns[1].footerRenderer = (c) {
+      return PlutoAggregateColumnFooter(
+        rendererContext: c,
+        type: PlutoAggregateColumnType.sum,
+        format: 'CheckedSum : #,###',
+        alignment: Alignment.center,
+        filter: (cell) => cell.row.checked == true,
+      );
+    };
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -312,6 +330,11 @@ class _HeaderState extends State<_Header> {
         .setShowColumnFilter(!widget.stateManager.showColumnFilter);
   }
 
+  void handleToggleColumnFooter() {
+    widget.stateManager
+        .setShowColumnFooter(!widget.stateManager.showColumnFooter);
+  }
+
   void handleSelectingMode(Object? mode) {
     setState(() {
       gridSelectingMode = mode as PlutoGridSelectingMode;
@@ -545,6 +568,10 @@ class _HeaderState extends State<_Header> {
             PlutoMenuItem(
               title: 'Toggle column filter',
               onTap: handleToggleColumnFilter,
+            ),
+            PlutoMenuItem(
+              title: 'Toggle column footer',
+              onTap: handleToggleColumnFooter,
             ),
           ],
         ),

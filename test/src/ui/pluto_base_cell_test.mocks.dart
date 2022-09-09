@@ -268,6 +268,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           .noSuchMethod(Invocation.getter(#showColumnTitle), returnValue: false)
       as bool);
   @override
+  bool get showColumnFooter =>
+      (super.noSuchMethod(Invocation.getter(#showColumnFooter),
+          returnValue: false) as bool);
+  @override
   bool get showColumnFilter =>
       (super.noSuchMethod(Invocation.getter(#showColumnFilter),
           returnValue: false) as bool);
@@ -303,6 +307,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   double get columnHeight =>
       (super.noSuchMethod(Invocation.getter(#columnHeight), returnValue: 0.0)
           as double);
+  @override
+  double get columnFooterHeight =>
+      (super.noSuchMethod(Invocation.getter(#columnFooterHeight),
+          returnValue: 0.0) as double);
   @override
   double get columnGroupHeight => (super
           .noSuchMethod(Invocation.getter(#columnGroupHeight), returnValue: 0.0)
@@ -470,6 +478,10 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   set footerHeight(double? value) =>
       super.noSuchMethod(Invocation.setter(#footerHeight, value),
+          returnValueForMissingStub: null);
+  @override
+  set columnFooterHeight(double? value) =>
+      super.noSuchMethod(Invocation.setter(#columnFooterHeight, value),
           returnValueForMissingStub: null);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
@@ -977,6 +989,11 @@ class MockPlutoGridStateManager extends _i1.Mock
   void setShowColumnTitle(bool? flag, {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(#setShowColumnTitle, [flag], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  void setShowColumnFooter(bool? flag, {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setShowColumnFooter, [flag], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void setShowColumnFilter(bool? flag, {bool? notify = true}) =>

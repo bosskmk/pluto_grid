@@ -31,6 +31,8 @@ abstract class ILayoutState {
 
   bool get showColumnTitle;
 
+  bool get showColumnFooter;
+
   bool get showColumnFilter;
 
   bool get showHeader;
@@ -48,6 +50,8 @@ abstract class ILayoutState {
   double get footerTopOffset;
 
   double get columnHeight;
+
+  double get columnFooterHeight;
 
   double get columnGroupHeight;
 
@@ -94,6 +98,8 @@ abstract class ILayoutState {
 
   void setShowColumnTitle(bool flag, {bool notify = true});
 
+  void setShowColumnFooter(bool flag, {bool notify = true});
+
   void setShowColumnFilter(bool flag, {bool notify = true});
 
   void setShowLoading(bool flag, {bool notify = true});
@@ -132,12 +138,18 @@ mixin LayoutState implements IPlutoGridState {
 
   double? _footerHeight;
 
+  double? _columnFooterHeight;
+
   set headerHeight(double value) {
     _headerHeight = value;
   }
 
   set footerHeight(double value) {
     _footerHeight = value;
+  }
+
+  set columnFooterHeight(double value) {
+    _columnFooterHeight = value;
   }
 
   @override
@@ -160,6 +172,17 @@ mixin LayoutState implements IPlutoGridState {
     return _footerHeight == null
         ? PlutoGridSettings.rowTotalHeight
         : _footerHeight!;
+  }
+
+  @override
+  double get columnFooterHeight {
+    if (!showColumnFooter) {
+      return 0;
+    }
+
+    return _columnFooterHeight == null
+        ? PlutoGridSettings.rowTotalHeight
+        : _columnFooterHeight!;
   }
 
   @override
@@ -198,6 +221,11 @@ mixin LayoutState implements IPlutoGridState {
   bool get showColumnTitle => _showColumnTitle == true;
 
   bool? _showColumnTitle = true;
+
+  @override
+  bool get showColumnFooter => _showColumnFooter == true;
+
+  bool? _showColumnFooter = false;
 
   @override
   bool get showColumnFilter => _showColumnFilter == true;
@@ -304,6 +332,7 @@ mixin LayoutState implements IPlutoGridState {
     return gridGlobalOffset!.dy +
         maxHeight! -
         footerHeight -
+        columnFooterHeight -
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 
@@ -383,6 +412,19 @@ mixin LayoutState implements IPlutoGridState {
     }
 
     _showColumnTitle = flag;
+
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void setShowColumnFooter(bool flag, {bool notify = true}) {
+    if (_showColumnFooter == flag) {
+      return;
+    }
+
+    _showColumnFooter = flag;
 
     if (notify) {
       notifyListeners();
