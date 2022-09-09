@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseCell extends StatelessWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoCell cell;
@@ -287,8 +289,6 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     return Container(
       decoration: _decoration,
       padding: widget.cellPadding,
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.centerLeft,
       child: widget.child,
     );
   }

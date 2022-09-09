@@ -1,6 +1,14 @@
+## [5.1.0] - 2022. 9. 10
+
+* Add Column footer.  
+  https://weblaze.dev/pluto_grid/build/web/#feature/column-footer
+* Add to be able to set locale for numeric type PlutoColumn.
+
 ## [5.0.6] - 2022. 9. 5
 
 * Add support for countries that use comma as Decimal separator.
+* Breaking change - Only available for flutter 3.3,   
+  otherwise it'll show this error on console: "Error: No named parameter with the name 'disabledForegroundColor'"
 
 ## [5.0.5] - 2022. 8. 30
 

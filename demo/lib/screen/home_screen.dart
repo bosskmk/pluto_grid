@@ -15,6 +15,7 @@ import 'feature/add_rows_asynchronously.dart';
 import 'feature/cell_renderer_screen.dart';
 import 'feature/cell_selection_screen.dart';
 import 'feature/column_filtering_screen.dart';
+import 'feature/column_footer_screen.dart';
 import 'feature/column_freezing_screen.dart';
 import 'feature/column_group_screen.dart';
 import 'feature/column_hiding_screen.dart';
@@ -262,6 +263,15 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Customize the menu on the right side of the column.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnMenuScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
+            title: 'Column footer',
+            description:
+                'Display each column fixed at the bottom. (For outputting data sum, average, etc.)',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, ColumnFooterScreen.routeName);
             },
             trailing: newIcon,
           ),

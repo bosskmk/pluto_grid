@@ -27,6 +27,8 @@ class RowHelper {
               return cellOfTimeColumn(column, rowIdx);
             } else if (column.type.isSelect) {
               return cellOfTimeColumn(column, rowIdx);
+            } else if (column.type.isNumber) {
+              return cellOfNumberColumn(column, rowIdx);
             }
 
             throw Exception('Column is not implemented.');
@@ -58,6 +60,10 @@ class RowHelper {
   static PlutoCell cellOfSelectColumn(PlutoColumn column, int rowIdx) {
     return PlutoCell(
         value: (column.type.select!.items.toList()..shuffle()).first);
+  }
+
+  static PlutoCell cellOfNumberColumn(PlutoColumn column, int rowIdx) {
+    return PlutoCell(value: Random().nextInt(10000));
   }
 
   static double resolveRowTotalHeight(double rowHeight) {
