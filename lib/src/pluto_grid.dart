@@ -323,6 +323,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
   bool _showColumnFilter = false;
 
+  bool _showColumnFooter = false;
+
   bool _showColumnGroups = false;
 
   bool _showFrozenColumn = false;
@@ -406,6 +408,11 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     _showColumnFilter = update<bool>(
       _showColumnFilter,
       stateManager.showColumnFilter,
+    );
+
+    _showColumnFooter = update<bool>(
+      _showColumnFooter,
+      stateManager.showColumnFooter,
     );
 
     _showColumnGroups = update<bool>(
