@@ -96,6 +96,20 @@ abstract class PlutoColumnType {
     );
   }
 
+  /// Set to currency column.
+  ///
+  /// [locale] Specifies the numeric locale of the column.
+  /// If not specified, the default locale is used.
+  factory PlutoColumnType.currency({
+    dynamic defaultValue = 0,
+    String? locale,
+  }) {
+    return PlutoColumnTypeCurrency(
+      defaultValue: defaultValue,
+      locale: locale,
+    );
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -113,6 +127,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
   bool get isDate => this is PlutoColumnTypeDate;
 
   bool get isTime => this is PlutoColumnTypeTime;
+
+  bool get isCurrency => this is PlutoColumnTypeCurrency;
 
   PlutoColumnTypeText? get text {
     return this is PlutoColumnTypeText
@@ -141,6 +157,12 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
   PlutoColumnTypeTime? get time {
     return this is PlutoColumnTypeTime
         ? this as PlutoColumnTypeTime?
+        : throw TypeError();
+  }
+
+  PlutoColumnTypeCurrency? get money {
+    return this is PlutoColumnTypeCurrency
+        ? this as PlutoColumnTypeCurrency?
         : throw TypeError();
   }
 
@@ -429,6 +451,77 @@ class PlutoColumnTypeTime implements PlutoColumnType {
     return v;
   }
 }
+//TODO implement functions
+class PlutoColumnTypeCurrency
+    implements
+        PlutoColumnType,
+        _PlutoColumnTypeHasFormat,
+        _PlutoColumnTypeHasCurrencyFormat {
+  @override
+  dynamic defaultValue;
+
+  @override
+  bool applyFormatOnInit = true;
+
+  @override
+  String format = '';
+
+  String? locale;
+
+  PlutoColumnTypeCurrency({
+    this.defaultValue,
+    required this.locale,
+  })  : currencyFormat = intl.NumberFormat.simpleCurrency(locale: locale);
+
+  @override
+  late final intl.NumberFormat currencyFormat;
+
+  @override
+  bool isValid(dynamic value) {
+    if (!_isNumeric(value)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return compareWithNull(
+        a, b, () => num.parse(a.toString()).compareTo(num.parse(b.toString())));
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
+  }
+
+  @override
+  String applyFormat(dynamic value) {
+    num number = num.tryParse(value
+            .toString()
+            .replaceAll(currencyFormat.symbols.DECIMAL_SEP, '.')) ??
+        0;
+
+    return currencyFormat.format(number);
+  }
+
+  /// Convert [String] converted to [applyFormat] to [number].
+  dynamic toNumber(String formatted) {
+    return num.tryParse(formatted
+            .toString()
+            .replaceAll(currencyFormat.symbols.GROUP_SEP, '')
+            .replaceAll(currencyFormat.symbols.DECIMAL_SEP, '.')) ??
+        0;
+  }
+
+  bool _isNumeric(dynamic s) {
+    if (s == null) {
+      return false;
+    }
+    return num.tryParse(s.toString()) != null;
+  }
+}
 
 abstract class _PlutoColumnTypeHasFormat {
   late String format;
@@ -448,4 +541,8 @@ abstract class _PlutoColumnTypeHasDateFormat {
   late String headerFormat;
 
   late final intl.DateFormat headerDateFormat;
+}
+
+abstract class _PlutoColumnTypeHasCurrencyFormat {
+  late final intl.NumberFormat currencyFormat;
 }
