@@ -142,7 +142,6 @@ class PlutoGridStyleConfig {
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
-    this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
     this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.columnTextStyle = const TextStyle(
@@ -191,7 +190,6 @@ class PlutoGridStyleConfig {
     this.columnHeight = PlutoGridSettings.rowHeight,
     this.columnFilterHeight = PlutoGridSettings.rowHeight,
     this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
-    this.defaultColumnFooterPadding = PlutoGridSettings.columnFooterPadding,
     this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
     this.defaultCellPadding = PlutoGridSettings.cellPadding,
     this.columnTextStyle = const TextStyle(
@@ -308,8 +306,6 @@ class PlutoGridStyleConfig {
   /// it is the title padding of the default column.
   final EdgeInsets defaultColumnTitlePadding;
 
-  final EdgeInsets defaultColumnFooterPadding;
-
   final EdgeInsets defaultColumnFilterPadding;
 
   /// Customise cell padding
@@ -375,7 +371,6 @@ class PlutoGridStyleConfig {
     double? columnHeight,
     double? columnFilterHeight,
     EdgeInsets? defaultColumnTitlePadding,
-    EdgeInsets? defaultColumnFooterPadding,
     EdgeInsets? defaultColumnFilterPadding,
     EdgeInsets? defaultCellPadding,
     TextStyle? columnTextStyle,
@@ -426,8 +421,6 @@ class PlutoGridStyleConfig {
       columnFilterHeight: columnFilterHeight ?? this.columnFilterHeight,
       defaultColumnTitlePadding:
           defaultColumnTitlePadding ?? this.defaultColumnTitlePadding,
-      defaultColumnFooterPadding:
-          defaultColumnFooterPadding ?? this.defaultColumnFooterPadding,
       defaultColumnFilterPadding:
           defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
       defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,

@@ -29,6 +29,8 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
 
   final AlignmentGeometry? alignment;
 
+  final EdgeInsets? padding;
+
   const PlutoAggregateColumnFooter({
     required this.rendererContext,
     required this.type,
@@ -37,6 +39,7 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
     this.locale,
     this.titleSpanBuilder,
     this.alignment,
+    this.padding,
     super.key,
   });
 
@@ -118,8 +121,7 @@ class PlutoAggregateColumnFooterState
         hasTitleSpan ? widget.titleSpanBuilder!(formattedValue) : null;
 
     return Container(
-      padding:
-          column.footerPadding ?? stateManager.style.defaultColumnFooterPadding,
+      padding: widget.padding ?? PlutoGridSettings.columnTitlePadding,
       alignment: widget.alignment ?? AlignmentDirectional.centerStart,
       child: Text.rich(
         TextSpan(

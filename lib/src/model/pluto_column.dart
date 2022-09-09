@@ -44,8 +44,6 @@ class PlutoColumn {
   /// It takes precedence over defaultColumnTitlePadding in PlutoGridConfiguration.
   EdgeInsets? titlePadding;
 
-  EdgeInsets? footerPadding;
-
   EdgeInsets? filterPadding;
 
   /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
@@ -184,7 +182,6 @@ class PlutoColumn {
     this.width = PlutoGridSettings.columnWidth,
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
-    this.footerPadding,
     this.filterPadding,
     this.titleSpan,
     this.cellPadding,
