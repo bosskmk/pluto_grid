@@ -379,6 +379,13 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
           column: widget.column,
           row: widget.row,
         );
+      } else if (widget.column.type.isCurrency) {
+        return PlutoCurrencyCell(
+          stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
       }
     }
 

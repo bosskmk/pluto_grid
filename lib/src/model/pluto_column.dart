@@ -295,6 +295,8 @@ class PlutoColumn {
   String formattedValueForType(dynamic value) {
     if (type.isNumber) {
       return type.number!.applyFormat(value);
+    } else if (type.isCurrency) {
+      type.money.applyFormat(value);
     }
 
     return value.toString();
@@ -313,6 +315,8 @@ class PlutoColumn {
       return value
           .toString()
           .replaceAll('.', type.number!.numberFormat.symbols.DECIMAL_SEP);
+    } else if (type.isCurrency) {
+      return type.money!.currencyFormat.parse(value).toString();
     }
 
     if (formatter != null) {

@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'decimal_imput_formatter.dart';
 import 'text_cell.dart';
 
-class PlutoNumberCell extends StatefulWidget implements TextCell {
+class PlutoCurrencyCell extends StatefulWidget implements TextCell {
   @override
   final PlutoGridStateManager stateManager;
 
@@ -18,7 +18,7 @@ class PlutoNumberCell extends StatefulWidget implements TextCell {
   @override
   final PlutoRow row;
 
-  const PlutoNumberCell({
+  const PlutoCurrencyCell({
     required this.stateManager,
     required this.cell,
     required this.column,
@@ -27,11 +27,11 @@ class PlutoNumberCell extends StatefulWidget implements TextCell {
   }) : super(key: key);
 
   @override
-  PlutoNumberCellState createState() => PlutoNumberCellState();
+  PlutoCurrencyCellState createState() => PlutoCurrencyCellState();
 }
 
-class PlutoNumberCellState extends State<PlutoNumberCell>
-    with TextCellState<PlutoNumberCell> {
+class PlutoCurrencyCellState extends State<PlutoCurrencyCell>
+    with TextCellState<PlutoCurrencyCell> {
   late final int decimalRange;
 
   late final bool activatedNegative;
@@ -50,15 +50,15 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
   void initState() {
     super.initState();
 
-    final numberColumn = widget.column.type.number!;
+    final numberColumn = widget.column.type.money!;
 
-    decimalRange = numberColumn.decimalPoint;
+    decimalRange = 2;
 
-    activatedNegative = numberColumn.negative;
+    activatedNegative = true;
 
-    allowFirstDot = numberColumn.allowFirstDot;
+    allowFirstDot = true;
 
-    decimalSeparator = numberColumn.numberFormat.symbols.DECIMAL_SEP;
+    decimalSeparator = numberColumn.currencyFormat.symbols.DECIMAL_SEP;
 
     inputFormatters = [
       DecimalTextInputFormatter(
@@ -70,7 +70,7 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
     ];
 
     keyboardType = TextInputType.numberWithOptions(
-      decimal: decimalRange > 0,
+      decimal: true,
       signed: activatedNegative,
     );
   }
