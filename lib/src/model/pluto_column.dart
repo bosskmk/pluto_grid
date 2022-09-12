@@ -296,7 +296,7 @@ class PlutoColumn {
     if (type.isNumber) {
       return type.number!.applyFormat(value);
     } else if (type.isCurrency) {
-      type.money.applyFormat(value);
+      type.currency.applyFormat(value);
     }
 
     return value.toString();
@@ -316,7 +316,7 @@ class PlutoColumn {
           .toString()
           .replaceAll('.', type.number!.numberFormat.symbols.DECIMAL_SEP);
     } else if (type.isCurrency) {
-      return type.money!.currencyFormat.parse(value).toString();
+      return type.currency!.currencyFormat.parse(value).toString();
     }
 
     if (formatter != null) {

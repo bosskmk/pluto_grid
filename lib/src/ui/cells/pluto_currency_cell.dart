@@ -50,7 +50,7 @@ class PlutoCurrencyCellState extends State<PlutoCurrencyCell>
   void initState() {
     super.initState();
 
-    final numberColumn = widget.column.type.money!;
+    final numberColumn = widget.column.type.currency!;
 
     decimalRange = 2;
 

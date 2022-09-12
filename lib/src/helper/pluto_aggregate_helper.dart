@@ -10,22 +10,28 @@ class PlutoAggregateHelper {
   }) {
     num sum = 0;
 
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
-      return sum;
+    if (column.type.isNumber || _hasColumnField(rows: rows, column: column)) {
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
+
+        if (filter == null || filter(cell)) {
+          return p += cell.value!;
+        }
+        return p;
+      });
+    } else if (column.type.isCurrency) {
+      final currencyFormat = column.type.currency!.currencyFormat;
+
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
+
+        if (filter == null || filter(cell)) {
+          return p += currencyFormat.parse(cell.value!);
+        }
+        return p;
+      });
     }
-
-    final numberColumn = column.type.number!;
-
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
-
-      if (filter == null || filter(cell)) {
-        return p += cell.value!;
-      }
-      return p;
-    });
-
-    return numberColumn.toNumber(numberColumn.applyFormat(sum));
+    return sum;
   }
 
   static num average({
@@ -34,25 +40,36 @@ class PlutoAggregateHelper {
     PlutoAggregateFilter? filter,
   }) {
     num sum = 0;
-
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
-      return sum;
-    }
-
     int itemCount = 0;
 
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
+    if (column.type.isNumber || _hasColumnField(rows: rows, column: column)) {
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
 
-      if (filter == null || filter(cell)) {
-        ++itemCount;
-        return p += cell.value!;
-      }
+        if (filter == null || filter(cell)) {
+          ++itemCount;
+          return p += cell.value!;
+        }
+        return p;
+      });
 
-      return p;
-    });
+      return sum / itemCount;
+    } else if (column.type.isCurrency) {
+      final currencyFormat = column.type.currency!.currencyFormat;
 
-    return sum / itemCount;
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
+
+        if (filter == null || filter(cell)) {
+          ++itemCount;
+          return p += currencyFormat.parse(cell.value!);
+        }
+        return p;
+      });
+
+      return sum / itemCount;
+    }
+    return sum;
   }
 
   static num? min({
@@ -60,7 +77,8 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (!(column.type.isNumber || column.type.isCurrency) ||
+        !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
@@ -68,8 +86,13 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    late Iterable<num> mapValues;
+    if (column.type.isCurrency) {
+      final currencyFormat = column.type.currency!.currencyFormat;
+      mapValues = foundItems.map((e) => currencyFormat.parse(e.cells[column.field]!.value));
+    } else {
+      mapValues = foundItems.map((e) => e.cells[column.field]!.value);
+    }
 
     return mapValues.minOrNull;
   }
@@ -79,7 +102,7 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (!(column.type.isNumber || column.type.isCurrency) || !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
@@ -87,8 +110,13 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    late Iterable<num> mapValues;
+    if (column.type.isCurrency) {
+      final currencyFormat = column.type.currency!.currencyFormat;
+      mapValues = foundItems.map((e) => currencyFormat.parse(e.cells[column.field]!.value));
+    } else {
+      mapValues = foundItems.map((e) => e.cells[column.field]!.value);
+    }
 
     return mapValues.maxOrNull;
   }

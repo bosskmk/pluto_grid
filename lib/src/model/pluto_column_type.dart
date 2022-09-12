@@ -160,7 +160,7 @@ extension PlutoColumnTypeExtension on PlutoColumnType? {
         : throw TypeError();
   }
 
-  PlutoColumnTypeCurrency? get money {
+  PlutoColumnTypeCurrency? get currency {
     return this is PlutoColumnTypeCurrency
         ? this as PlutoColumnTypeCurrency?
         : throw TypeError();
@@ -452,7 +452,6 @@ class PlutoColumnTypeTime implements PlutoColumnType {
   }
 }
 
-//TODO implement functions
 class PlutoColumnTypeCurrency
     implements
         PlutoColumnType,
