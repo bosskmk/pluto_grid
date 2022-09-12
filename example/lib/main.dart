@@ -70,24 +70,25 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       title: 'salary',
       field: 'salary',
       type: PlutoColumnType.currency(),
-      // footerRenderer: (rendererContext) {
-      //   return PlutoAggregateColumnFooter(
-      //     rendererContext: rendererContext,
-      //     type: PlutoAggregateColumnType.sum,
-      //     format: '#,###',
-      //     alignment: Alignment.center,
-      //     titleSpanBuilder: (text) {
-      //       return [
-      //         const TextSpan(
-      //           text: 'Sum',
-      //           style: TextStyle(color: Colors.red),
-      //         ),
-      //         const TextSpan(text: ' : '),
-      //         TextSpan(text: text),
-      //       ];
-      //     },
-      //   );
-      // },
+      footerRenderer: (rendererContext) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: rendererContext,
+          formatAsCurrency: true,
+          type: PlutoAggregateColumnType.sum,
+          format: '#,###',
+          alignment: Alignment.center,
+          titleSpanBuilder: (text) {
+            return [
+              const TextSpan(
+                text: 'Sum',
+                style: TextStyle(color: Colors.red),
+              ),
+              const TextSpan(text: ' : '),
+              TextSpan(text: text),
+            ];
+          },
+        );
+      },
     ),
   ];
 

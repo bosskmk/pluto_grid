@@ -10,16 +10,7 @@ class PlutoAggregateHelper {
   }) {
     num sum = 0;
 
-    if (column.type.isNumber || _hasColumnField(rows: rows, column: column)) {
-      sum = rows.fold(0, (p, e) {
-        final cell = e.cells[column.field]!;
-
-        if (filter == null || filter(cell)) {
-          return p += cell.value!;
-        }
-        return p;
-      });
-    } else if (column.type.isCurrency) {
+    if (column.type.isCurrency) {
       final currencyFormat = column.type.currency!.currencyFormat;
 
       sum = rows.fold(0, (p, e) {
@@ -27,6 +18,16 @@ class PlutoAggregateHelper {
 
         if (filter == null || filter(cell)) {
           return p += currencyFormat.parse(cell.value!);
+        }
+        return p;
+      });
+    } else if (column.type.isNumber ||
+        _hasColumnField(rows: rows, column: column)) {
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
+
+        if (filter == null || filter(cell)) {
+          return p += cell.value!;
         }
         return p;
       });
@@ -41,20 +42,7 @@ class PlutoAggregateHelper {
   }) {
     num sum = 0;
     int itemCount = 0;
-
-    if (column.type.isNumber || _hasColumnField(rows: rows, column: column)) {
-      sum = rows.fold(0, (p, e) {
-        final cell = e.cells[column.field]!;
-
-        if (filter == null || filter(cell)) {
-          ++itemCount;
-          return p += cell.value!;
-        }
-        return p;
-      });
-
-      return sum / itemCount;
-    } else if (column.type.isCurrency) {
+    if (column.type.isCurrency) {
       final currencyFormat = column.type.currency!.currencyFormat;
 
       sum = rows.fold(0, (p, e) {
@@ -63,6 +51,19 @@ class PlutoAggregateHelper {
         if (filter == null || filter(cell)) {
           ++itemCount;
           return p += currencyFormat.parse(cell.value!);
+        }
+        return p;
+      });
+
+      return sum / itemCount;
+    } else if (column.type.isNumber ||
+        _hasColumnField(rows: rows, column: column)) {
+      sum = rows.fold(0, (p, e) {
+        final cell = e.cells[column.field]!;
+
+        if (filter == null || filter(cell)) {
+          ++itemCount;
+          return p += cell.value!;
         }
         return p;
       });
@@ -89,7 +90,8 @@ class PlutoAggregateHelper {
     late Iterable<num> mapValues;
     if (column.type.isCurrency) {
       final currencyFormat = column.type.currency!.currencyFormat;
-      mapValues = foundItems.map((e) => currencyFormat.parse(e.cells[column.field]!.value));
+      mapValues = foundItems
+          .map((e) => currencyFormat.parse(e.cells[column.field]!.value));
     } else {
       mapValues = foundItems.map((e) => e.cells[column.field]!.value);
     }
@@ -102,7 +104,8 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    if (!(column.type.isNumber || column.type.isCurrency) || !_hasColumnField(rows: rows, column: column)) {
+    if (!(column.type.isNumber || column.type.isCurrency) ||
+        !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
@@ -113,7 +116,8 @@ class PlutoAggregateHelper {
     late Iterable<num> mapValues;
     if (column.type.isCurrency) {
       final currencyFormat = column.type.currency!.currencyFormat;
-      mapValues = foundItems.map((e) => currencyFormat.parse(e.cells[column.field]!.value));
+      mapValues = foundItems
+          .map((e) => currencyFormat.parse(e.cells[column.field]!.value));
     } else {
       mapValues = foundItems.map((e) => e.cells[column.field]!.value);
     }
