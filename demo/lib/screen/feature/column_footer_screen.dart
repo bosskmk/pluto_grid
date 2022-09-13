@@ -74,8 +74,14 @@ class _ColumnFooterScreenState extends State<ColumnFooterScreen> {
           return PlutoAggregateColumnFooter(
             rendererContext: rendererContext,
             type: PlutoAggregateColumnType.average,
-            format: 'Average : #,###.###',
+            format: '#,###.###',
             alignment: Alignment.center,
+            titleSpanBuilder: (text) {
+              return [
+                const TextSpan(text: 'Average : '),
+                TextSpan(text: text),
+              ];
+            },
           );
         },
       ),
@@ -88,8 +94,14 @@ class _ColumnFooterScreenState extends State<ColumnFooterScreen> {
           return PlutoAggregateColumnFooter(
             rendererContext: rendererContext,
             type: PlutoAggregateColumnType.min,
-            format: 'Min : #,###',
+            format: '#,###',
             alignment: Alignment.center,
+            titleSpanBuilder: (text) {
+              return [
+                const TextSpan(text: 'Min : '),
+                TextSpan(text: text),
+              ];
+            },
           );
         },
       ),
@@ -102,8 +114,14 @@ class _ColumnFooterScreenState extends State<ColumnFooterScreen> {
           return PlutoAggregateColumnFooter(
             rendererContext: rendererContext,
             type: PlutoAggregateColumnType.max,
-            format: 'Max : #,###',
+            format: '#,###',
             alignment: Alignment.center,
+            titleSpanBuilder: (text) {
+              return [
+                const TextSpan(text: 'Max : '),
+                TextSpan(text: text),
+              ];
+            },
           );
         },
       ),
