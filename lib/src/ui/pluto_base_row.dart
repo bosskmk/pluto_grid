@@ -367,9 +367,6 @@ class _AnimatedOrNormalContainer extends StatelessWidget {
             decoration: decoration,
             child: child,
           )
-        : Container(
-            decoration: decoration,
-            child: child,
-          );
+        : DecoratedBox(decoration: decoration, child: child);
   }
 }
