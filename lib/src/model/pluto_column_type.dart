@@ -275,11 +275,7 @@ class PlutoColumnTypeNumber
 
   /// Convert [String] converted to [applyFormat] to [number].
   dynamic toNumber(String formatted) {
-    return num.tryParse(formatted
-            .toString()
-            .replaceAll(numberFormat.symbols.GROUP_SEP, '')
-            .replaceAll(numberFormat.symbols.DECIMAL_SEP, '.')) ??
-        0;
+    return numberFormat.parse(formatted);
   }
 
   bool _isNumeric(dynamic s) {
