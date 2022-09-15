@@ -26,7 +26,7 @@ class DummyData {
           if (i == 0) {
             return PlutoColumnType.number();
           } else if (i == 1) {
-            return PlutoColumnType.number();
+            return PlutoColumnType.currency();
           } else if (i == 2) {
             return PlutoColumnType.text();
           } else if (i == 3) {

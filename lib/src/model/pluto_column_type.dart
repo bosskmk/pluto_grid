@@ -528,7 +528,7 @@ mixin PlutoColumnTypeWithNumberFormat {
     return _compareWithNull(
       a,
       b,
-      () => num.parse(a.toString()).compareTo(num.parse(b.toString())),
+      () => toNumber(a.toString()).compareTo(toNumber(b.toString())),
     );
   }
 
