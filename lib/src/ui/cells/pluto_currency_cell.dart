@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'decimal_imput_formatter.dart';
+import 'decimal_input_formatter.dart';
 import 'text_cell.dart';
 
 class PlutoCurrencyCell extends StatefulWidget implements TextCell {
@@ -50,15 +50,15 @@ class PlutoCurrencyCellState extends State<PlutoCurrencyCell>
   void initState() {
     super.initState();
 
-    final numberColumn = widget.column.type.currency!;
+    final currencyColumn = widget.column.type.currency;
 
-    decimalRange = 2;
+    decimalRange = currencyColumn.decimalPoint;
 
-    activatedNegative = true;
+    activatedNegative = currencyColumn.negative;
 
-    allowFirstDot = true;
+    allowFirstDot = currencyColumn.allowFirstDot;
 
-    decimalSeparator = numberColumn.currencyFormat.symbols.DECIMAL_SEP;
+    decimalSeparator = currencyColumn.numberFormat.symbols.DECIMAL_SEP;
 
     inputFormatters = [
       DecimalTextInputFormatter(
@@ -70,7 +70,7 @@ class PlutoCurrencyCellState extends State<PlutoCurrencyCell>
     ];
 
     keyboardType = TextInputType.numberWithOptions(
-      decimal: true,
+      decimal: decimalRange > 0,
       signed: activatedNegative,
     );
   }

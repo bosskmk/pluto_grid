@@ -567,6 +567,11 @@ class MockPlutoGridStateManager extends _i1.Mock
           }),
           returnValue: false) as bool);
   @override
+  dynamic filteredCellValue(
+          {_i3.PlutoColumn? column, dynamic newValue, dynamic oldValue}) =>
+      super.noSuchMethod(Invocation.method(#filteredCellValue, [],
+          {#column: column, #newValue: newValue, #oldValue: oldValue}));
+  @override
   bool isCurrentCell(_i3.PlutoCell? cell) =>
       (super.noSuchMethod(Invocation.method(#isCurrentCell, [cell]),
           returnValue: false) as bool);

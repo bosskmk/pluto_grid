@@ -151,7 +151,7 @@ class PlutoAggregateColumnFooterState
     super.initState();
 
     _numberFormat = widget.formatAsCurrency
-        ? NumberFormat.simpleCurrency(locale: widget.locale) 
+        ? NumberFormat.simpleCurrency(locale: widget.locale)
         : NumberFormat(widget.format, widget.locale);
 
     _setAggregator();

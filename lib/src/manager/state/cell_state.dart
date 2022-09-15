@@ -34,29 +34,33 @@ abstract class ICellState {
 
   /// Whether it is possible to move in the [direction] from [cellPosition].
   bool canMoveCell(
-      PlutoGridCellPosition cellPosition, PlutoMoveDirection direction);
+    PlutoGridCellPosition cellPosition,
+    PlutoMoveDirection direction,
+  );
 
   bool canNotMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction);
+    PlutoGridCellPosition? cellPosition,
+    PlutoMoveDirection direction,
+  );
 
   /// Whether the cell is in a mutable state
   bool canChangeCellValue({
-    PlutoColumn? column,
-    PlutoRow? row,
+    required PlutoColumn column,
+    required PlutoRow row,
     dynamic newValue,
     dynamic oldValue,
   });
 
   bool canNotChangeCellValue({
-    PlutoColumn? column,
-    PlutoRow? row,
+    required PlutoColumn column,
+    required PlutoRow row,
     dynamic newValue,
     dynamic oldValue,
   });
 
   /// Filter on cell value change
   dynamic filteredCellValue({
-    PlutoColumn? column,
+    required PlutoColumn column,
     dynamic newValue,
     dynamic oldValue,
   });
@@ -240,12 +244,12 @@ mixin CellState implements IPlutoGridState {
 
   @override
   bool canChangeCellValue({
-    PlutoColumn? column,
-    PlutoRow? row,
+    required PlutoColumn column,
+    required PlutoRow row,
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.checkReadOnly(row, row?.cells[column.field]) ||
+    if (column.checkReadOnly(row, row.cells[column.field]!) ||
         column.enableEditingMode != true) {
       return false;
     }
@@ -263,8 +267,8 @@ mixin CellState implements IPlutoGridState {
 
   @override
   bool canNotChangeCellValue({
-    PlutoColumn? column,
-    PlutoRow? row,
+    required PlutoColumn column,
+    required PlutoRow row,
     dynamic newValue,
     dynamic oldValue,
   }) {
@@ -278,12 +282,12 @@ mixin CellState implements IPlutoGridState {
 
   @override
   dynamic filteredCellValue({
-    PlutoColumn? column,
+    required PlutoColumn column,
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (column!.type.isSelect) {
-      return column.type.select!.items.contains(newValue) == true
+    if (column.type.isSelect) {
+      return column.type.select.items.contains(newValue) == true
           ? newValue
           : oldValue;
     }
@@ -291,14 +295,14 @@ mixin CellState implements IPlutoGridState {
     if (column.type.isDate) {
       try {
         final parseNewValue =
-            column.type.date!.dateFormat.parseStrict(newValue.toString());
+            column.type.date.dateFormat.parseStrict(newValue.toString());
 
         return PlutoDateTimeHelper.isValidRange(
           date: parseNewValue,
-          start: column.type.date!.startDate,
-          end: column.type.date!.endDate,
+          start: column.type.date.startDate,
+          end: column.type.date.endDate,
         )
-            ? column.type.date!.dateFormat.format(parseNewValue)
+            ? column.type.date.dateFormat.format(parseNewValue)
             : oldValue;
       } catch (e) {
         return oldValue;

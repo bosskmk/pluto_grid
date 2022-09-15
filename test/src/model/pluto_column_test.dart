@@ -778,7 +778,7 @@ void main() {
 
       final cell = row.cells['field'];
 
-      expect(column.checkReadOnly(row, cell), true);
+      expect(column.checkReadOnly(row, cell!), true);
     });
 
     test('readOnly = true, checkReadOnly = false 이면 false 를 반환해야 한다.', () {
@@ -789,46 +789,7 @@ void main() {
 
       final cell = row.cells['field'];
 
-      expect(column.checkReadOnly(row, cell), false);
+      expect(column.checkReadOnly(row, cell!), false);
     });
-
-    test(
-      'readOnly = false, checkReadOnly = true 인데, '
-      'checkRow 에 row 가 전달 되지 않으면 false 를 반환해야 한다.',
-      () {
-        final column =
-            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
-
-        final row = makeRow(column);
-
-        final cell = row.cells['field'];
-
-        expect(column.checkReadOnly(null, cell), false);
-      },
-    );
-
-    test(
-      'readOnly = false, checkReadOnly = true 인데, '
-      'checkRow 에 cell 이 전달 되지 않으면 false 를 반환해야 한다.',
-      () {
-        final column =
-            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
-
-        final row = makeRow(column);
-
-        expect(column.checkReadOnly(row, null), false);
-      },
-    );
-
-    test(
-      'readOnly = false, checkReadOnly = true 인데, '
-      'checkRow 에 row, cell 이 전달 되지 않으면 false 를 반환해야 한다.',
-      () {
-        final column =
-            makeColumn(readOnly: false, checkReadOnly: (_, __) => true);
-
-        expect(column.checkReadOnly(null, null), false);
-      },
-    );
   });
 }

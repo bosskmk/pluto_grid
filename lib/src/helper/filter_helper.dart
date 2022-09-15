@@ -166,20 +166,39 @@ class FilterHelper {
     required PlutoFilterType filterType,
     required String base,
     required String search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
-    return filterType.compare(
-      base: base,
-      search: search,
-      column: column,
-    );
+    bool compare = false;
+
+    if (column.type is PlutoColumnTypeWithNumberFormat) {
+      final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
+
+      compare = compare ||
+          filterType.compare(
+            base: numberColumn.applyFormat(base),
+            search: search,
+            column: column,
+          );
+
+      search = search.replaceFirst(
+        numberColumn.numberFormat.symbols.DECIMAL_SEP,
+        '.',
+      );
+    }
+
+    return compare ||
+        filterType.compare(
+          base: base,
+          search: search,
+          column: column,
+        );
   }
 
   /// Whether [search] is contains in [base].
   static bool compareContains({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
     return _compareWithRegExp(
       RegExp.escape(search!),
@@ -191,7 +210,7 @@ class FilterHelper {
   static bool compareEquals({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
@@ -204,7 +223,7 @@ class FilterHelper {
   static bool compareStartsWith({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
@@ -217,7 +236,7 @@ class FilterHelper {
   static bool compareEndsWith({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
     return _compareWithRegExp(
       // ignore: prefer_interpolation_to_compose_strings
@@ -229,33 +248,33 @@ class FilterHelper {
   static bool compareGreaterThan({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
-    return column!.type.compare(base, search) == 1;
+    return column.type.compare(base, search) == 1;
   }
 
   static bool compareGreaterThanOrEqualTo({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
-    return column!.type.compare(base, search) > -1;
+    return column.type.compare(base, search) > -1;
   }
 
   static bool compareLessThan({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
-    return column!.type.compare(base, search) == -1;
+    return column.type.compare(base, search) == -1;
   }
 
   static bool compareLessThanOrEqualTo({
     required String? base,
     required String? search,
-    required PlutoColumn? column,
+    required PlutoColumn column,
   }) {
-    return column!.type.compare(base, search) < 1;
+    return column.type.compare(base, search) < 1;
   }
 
   static bool _compareWithRegExp(
@@ -493,7 +512,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
 typedef PlutoCompareFunction = bool Function({
   required String? base,
   required String? search,
-  required PlutoColumn? column,
+  required PlutoColumn column,
 });
 
 abstract class PlutoFilterType {
