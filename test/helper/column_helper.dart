@@ -10,6 +10,7 @@ class ColumnHelper {
     bool readOnly = false,
     bool hide = false,
     dynamic defaultValue = '',
+    PlutoColumnFooterRenderer? footerRenderer,
   }) {
     return Iterable<int>.generate(count).map((e) {
       e += start;
@@ -21,6 +22,7 @@ class ColumnHelper {
         readOnly: readOnly,
         hide: hide,
         type: PlutoColumnType.text(defaultValue: defaultValue),
+        footerRenderer: footerRenderer,
       );
     }).toList();
   }
@@ -37,6 +39,7 @@ class ColumnHelper {
     DateTime? endDate,
     String format = 'yyyy-MM-dd',
     bool applyFormatOnInit = true,
+    PlutoColumnFooterRenderer? footerRenderer,
   }) {
     return Iterable<int>.generate(count).map((e) {
       e += start;
@@ -53,6 +56,7 @@ class ColumnHelper {
           format: format,
           applyFormatOnInit: applyFormatOnInit,
         ),
+        footerRenderer: footerRenderer,
       );
     }).toList();
   }
@@ -66,6 +70,7 @@ class ColumnHelper {
     bool readOnly = false,
     bool hide = false,
     dynamic defaultValue = '00:00',
+    PlutoColumnFooterRenderer? footerRenderer,
   }) {
     return Iterable<int>.generate(count).map((e) {
       e += start;
@@ -79,6 +84,7 @@ class ColumnHelper {
         type: PlutoColumnType.time(
           defaultValue: defaultValue,
         ),
+        footerRenderer: footerRenderer,
       );
     }).toList();
   }

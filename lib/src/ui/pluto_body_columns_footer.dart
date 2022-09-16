@@ -85,14 +85,15 @@ class PlutoBodyColumnsFooterState
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
       child: PlutoVisibilityLayout(
-          delegate: ColumnFooterLayoutDelegate(
-            stateManager: stateManager,
-            columns: _columns,
-          ),
-          scrollController: _scroll,
-          initialViewportDimension: MediaQuery.of(context).size.width,
-          textDirection: stateManager.textDirection,
-          children: _columns.map(_buildFooter).toList()),
+        delegate: ColumnFooterLayoutDelegate(
+          stateManager: stateManager,
+          columns: _columns,
+        ),
+        scrollController: _scroll,
+        initialViewportDimension: MediaQuery.of(context).size.width,
+        textDirection: stateManager.textDirection,
+        children: _columns.map(_buildFooter).toList(),
+      ),
     );
   }
 }
