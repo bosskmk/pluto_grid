@@ -29,17 +29,17 @@ void main() {
     );
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.rowHeight).thenReturn(
-      stateManager.configuration!.style.rowHeight,
+      stateManager.configuration.style.rowHeight,
     );
     when(stateManager.headerHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());

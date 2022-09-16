@@ -472,7 +472,7 @@ abstract class _DateCellHeaderStateWithChange
 
 class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
   Color? get textColor =>
-      stateManager.configuration!.style.columnTextStyle.color;
+      stateManager.configuration.style.columnTextStyle.color;
 
   @override
   Widget build(BuildContext context) {
@@ -488,20 +488,20 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
           children: [
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: stateManager.configuration!.style.iconSize,
+              iconSize: stateManager.configuration.style.iconSize,
               onPressed: () => widget.changeMonth(-12),
               icon: Icon(
                 Icons.navigate_before,
-                color: stateManager.configuration!.style.iconColor,
+                color: stateManager.configuration.style.iconColor,
               ),
             ),
             IconButton(
               padding: const EdgeInsets.all(0),
-              iconSize: stateManager.configuration!.style.iconSize,
+              iconSize: stateManager.configuration.style.iconSize,
               onPressed: () => widget.changeMonth(12),
               icon: Icon(
                 Icons.navigate_next,
-                color: stateManager.configuration!.style.iconColor,
+                color: stateManager.configuration.style.iconColor,
               ),
             ),
             const SizedBox(width: 10),
@@ -512,9 +512,9 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               style: TextStyle(
                 color: textColor,
                 fontSize:
-                    stateManager.configuration!.style.columnTextStyle.fontSize,
-                fontWeight: stateManager
-                    .configuration!.style.columnTextStyle.fontWeight,
+                    stateManager.configuration.style.columnTextStyle.fontSize,
+                fontWeight:
+                    stateManager.configuration.style.columnTextStyle.fontWeight,
               ),
               textAlign: TextAlign.center,
             ),
@@ -523,11 +523,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: stateManager.configuration!.style.iconSize,
+                iconSize: stateManager.configuration.style.iconSize,
                 onPressed: () => widget.changeMonth(-1),
                 icon: Icon(
                   Icons.navigate_next,
-                  color: stateManager.configuration!.style.iconColor,
+                  color: stateManager.configuration.style.iconColor,
                 ),
               ),
             ),
@@ -535,11 +535,11 @@ class _DateCellHeaderState extends _DateCellHeaderStateWithChange {
               quarterTurns: 3,
               child: IconButton(
                 padding: const EdgeInsets.all(0),
-                iconSize: stateManager.configuration!.style.iconSize,
+                iconSize: stateManager.configuration.style.iconSize,
                 onPressed: () => widget.changeMonth(1),
                 icon: Icon(
                   Icons.navigate_before,
-                  color: stateManager.configuration!.style.iconColor,
+                  color: stateManager.configuration.style.iconColor,
                 ),
               ),
             ),

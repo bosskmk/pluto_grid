@@ -121,7 +121,7 @@ class PlutoBaseCell extends StatelessWidget
         row: row,
         column: column,
         cellPadding: column.cellPadding ??
-            stateManager.configuration!.style.defaultCellPadding,
+            stateManager.configuration.style.defaultCellPadding,
         stateManager: stateManager,
         child: _BuildCell(
           stateManager: stateManager,

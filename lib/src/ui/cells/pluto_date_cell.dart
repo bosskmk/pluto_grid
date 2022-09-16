@@ -63,7 +63,7 @@ class PlutoDateCellState extends State<PlutoDateCell>
       headerDateFormat: widget.column.type.date.headerDateFormat,
       onSelected: onSelected,
       itemHeight: widget.stateManager.rowTotalHeight,
-      configuration: widget.stateManager.configuration!,
+      configuration: widget.stateManager.configuration,
     );
   }
 }

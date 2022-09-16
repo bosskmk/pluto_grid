@@ -594,7 +594,7 @@ mixin ColumnState implements IPlutoGridState {
     // todo : Apply (popup type icon, checkbox, drag indicator, renderer)
 
     EdgeInsets cellPadding =
-        column.cellPadding ?? configuration!.style.defaultCellPadding;
+        column.cellPadding ?? configuration.style.defaultCellPadding;
 
     resizeColumn(
       column,
@@ -703,7 +703,7 @@ mixin ColumnState implements IPlutoGridState {
 
     final columns = [
       PlutoColumn(
-        title: configuration!.localeText.setColumnsTitle,
+        title: configuration.localeText.setColumnsTitle,
         field: titleField,
         type: PlutoColumnType.text(),
         enableRowChecked: true,
@@ -741,10 +741,9 @@ mixin ColumnState implements IPlutoGridState {
 
     PlutoGridPopup(
       context: context,
-      configuration: configuration!.copyWith(
-        style: configuration!.style.copyWith(
-          gridBorderRadius:
-              configuration?.style.gridPopupBorderRadius ?? BorderRadius.zero,
+      configuration: configuration.copyWith(
+        style: configuration.style.copyWith(
+          gridBorderRadius: configuration.style.gridPopupBorderRadius,
           enableRowColorAnimation: false,
           oddRowColor: PlutoOptional(null),
           evenRowColor: PlutoOptional(null),

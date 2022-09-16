@@ -36,10 +36,10 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.filterRowsByField(any)).thenReturn([]);
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.style.columnFilterHeight,
+      stateManager.configuration.style.columnFilterHeight,
     );
 
     when(eventManager!.listener(any)).thenReturn(streamSubscription);

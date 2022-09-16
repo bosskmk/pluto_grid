@@ -211,7 +211,7 @@ class PlutoAggregateColumnFooterState
           text: text,
           children: children,
         ),
-        style: stateManager.configuration!.style.cellTextStyle.copyWith(
+        style: stateManager.configuration.style.cellTextStyle.copyWith(
           decoration: TextDecoration.none,
           fontWeight: FontWeight.normal,
         ),

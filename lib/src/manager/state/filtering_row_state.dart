@@ -150,9 +150,9 @@ mixin FilteringRowState implements IPlutoGridState {
     FilterHelper.filterPopup(
       FilterPopupState(
         context: context,
-        configuration: configuration!.copyWith(
-          style: configuration!.style.copyWith(
-            gridBorderRadius: configuration!.style.gridPopupBorderRadius,
+        configuration: configuration.copyWith(
+          style: configuration.style.copyWith(
+            gridBorderRadius: configuration.style.gridPopupBorderRadius,
             enableRowColorAnimation: false,
             oddRowColor: PlutoOptional(null),
             evenRowColor: PlutoOptional(null),
