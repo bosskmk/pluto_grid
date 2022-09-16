@@ -635,7 +635,7 @@ void main() {
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
         expect(
-          stateManager.configuration!.style.enableColumnBorderVertical,
+          stateManager.configuration.style.enableColumnBorderVertical,
           true,
         );
 
@@ -664,7 +664,7 @@ void main() {
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
         expect(
-          stateManager.configuration!.style.enableColumnBorderVertical,
+          stateManager.configuration.style.enableColumnBorderVertical,
           false,
         );
 

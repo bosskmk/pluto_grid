@@ -50,31 +50,31 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
   InputBorder get _border => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.style.borderColor, width: 0.0),
+            color: stateManager.configuration.style.borderColor, width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   InputBorder get _enabledBorder => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.style.activatedBorderColor,
+            color: stateManager.configuration.style.activatedBorderColor,
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   InputBorder get _disabledBorder => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.style.inactivatedBorderColor,
+            color: stateManager.configuration.style.inactivatedBorderColor,
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   Color get _textFieldColor => _enabled
-      ? stateManager.configuration!.style.cellColorInEditState
-      : stateManager.configuration!.style.cellColorInReadOnlyState;
+      ? stateManager.configuration.style.cellColorInEditState
+      : stateManager.configuration.style.cellColorInReadOnlyState;
 
   EdgeInsets get _padding =>
       widget.column.filterPadding ??
-      stateManager.configuration!.style.defaultColumnFilterPadding;
+      stateManager.configuration.style.defaultColumnFilterPadding;
 
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
@@ -224,7 +224,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
         filterType: widget.column.defaultFilter,
         filterValue: changed,
         debounceMilliseconds:
-            stateManager.configuration!.columnFilter.debounceMilliseconds,
+            stateManager.configuration.columnFilter.debounceMilliseconds,
       ),
     );
   }

@@ -31,17 +31,17 @@ void main() {
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowHeight).thenReturn(
-      stateManager.configuration!.style.rowHeight,
+      stateManager.configuration.style.rowHeight,
     );
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
@@ -689,7 +689,7 @@ void main() {
 
         expect(
           color,
-          stateManager.configuration!.style.cellColorInReadOnlyState,
+          stateManager.configuration.style.cellColorInReadOnlyState,
         );
       },
     );
@@ -721,7 +721,7 @@ void main() {
 
         expect(
           border.end.color,
-          stateManager.configuration!.style.borderColor,
+          stateManager.configuration.style.borderColor,
         );
       },
     );

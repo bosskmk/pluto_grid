@@ -448,7 +448,7 @@ class _HeaderState extends State<_Header> {
       }
 
       widget.stateManager.setConfiguration(
-        widget.stateManager.configuration!.copyWith(
+        widget.stateManager.configuration.copyWith(
           localeText: localeText,
         ),
       );

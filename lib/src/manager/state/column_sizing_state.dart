@@ -52,7 +52,7 @@ abstract class IColumnSizingState {
 
 mixin ColumnSizingState implements IPlutoGridState {
   @override
-  PlutoGridColumnSizeConfig get columnSizeConfig => configuration!.columnSize;
+  PlutoGridColumnSizeConfig get columnSizeConfig => configuration.columnSize;
 
   @override
   PlutoAutoSizeMode get columnsAutoSizeMode => columnSizeConfig.autoSizeMode;
@@ -127,7 +127,7 @@ mixin ColumnSizingState implements IPlutoGridState {
   @override
   void setColumnSizeConfig(PlutoGridColumnSizeConfig config) {
     setConfiguration(
-      configuration!.copyWith(columnSize: config),
+      configuration.copyWith(columnSize: config),
       updateLocale: false,
       applyColumnFilter: false,
     );

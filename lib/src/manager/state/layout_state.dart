@@ -260,7 +260,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   double get columnHeight =>
-      showColumnTitle ? configuration!.style.columnHeight : 0;
+      showColumnTitle ? configuration.style.columnHeight : 0;
 
   @override
   double get columnGroupHeight =>
@@ -268,7 +268,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   double get columnFilterHeight =>
-      showColumnFilter ? configuration!.style.columnFilterHeight : 0;
+      showColumnFilter ? configuration.style.columnFilterHeight : 0;
 
   @override
   double get columnBottomOffset =>
@@ -279,7 +279,7 @@ mixin LayoutState implements IPlutoGridState {
       headerHeight + columnGroupHeight + columnHeight + columnFilterHeight;
 
   @override
-  double get rowHeight => configuration!.style.rowHeight;
+  double get rowHeight => configuration.style.rowHeight;
 
   @override
   double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;

@@ -6,7 +6,7 @@ abstract class IGridState {
 
   PlutoGridMode? get mode;
 
-  PlutoGridConfiguration? get configuration;
+  PlutoGridConfiguration get configuration;
 
   PlutoGridKeyManager? get keyManager;
 
@@ -91,7 +91,7 @@ mixin GridState implements IPlutoGridState {
   PlutoGridMode? _mode;
 
   @override
-  PlutoGridConfiguration? get configuration => _configuration;
+  PlutoGridConfiguration get configuration => _configuration!;
 
   PlutoGridConfiguration? _configuration;
 
@@ -158,10 +158,10 @@ mixin GridState implements IPlutoGridState {
   CreateFooterCallBack? _createFooter;
 
   @override
-  PlutoGridLocaleText get localeText => configuration!.localeText;
+  PlutoGridLocaleText get localeText => configuration.localeText;
 
   @override
-  PlutoGridStyleConfig get style => configuration!.style;
+  PlutoGridStyleConfig get style => configuration.style;
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {

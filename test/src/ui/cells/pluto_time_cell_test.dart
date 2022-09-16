@@ -27,7 +27,7 @@ void main() {
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
@@ -177,13 +177,13 @@ void main() {
 
       setUp(() {
         activatedCellColor =
-            stateManager.configuration!.style.activatedBorderColor;
+            stateManager.configuration.style.activatedBorderColor;
         activatedTextColor =
-            stateManager.configuration!.style.gridBackgroundColor;
+            stateManager.configuration.style.gridBackgroundColor;
         inactivatedCellColor =
-            stateManager.configuration!.style.gridBackgroundColor;
+            stateManager.configuration.style.gridBackgroundColor;
         inactivatedTextColor =
-            stateManager.configuration!.style.cellTextStyle.color!;
+            stateManager.configuration.style.cellTextStyle.color!;
       });
 
       tapCell.test(

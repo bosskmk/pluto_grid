@@ -62,7 +62,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
 
     final style = widget.stateManager.style;
 
-    final configuration = widget.stateManager.configuration!.copyWith(
+    final configuration = widget.stateManager.configuration.copyWith(
       style: style.copyWith(
         enableColumnBorderVertical: false,
         enableColumnBorderHorizontal: false,
