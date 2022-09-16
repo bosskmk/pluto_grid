@@ -34,9 +34,6 @@ class PlutoBaseColumnFooter extends StatelessWidget
           end: stateManager.style.enableColumnBorderVertical
               ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
               : BorderSide.none,
-          bottom: stateManager.style.enableColumnBorderVertical
-              ? BorderSide(color: stateManager.style.borderColor, width: 1.0)
-              : BorderSide.none,
         ),
       ),
       child: renderer == null
