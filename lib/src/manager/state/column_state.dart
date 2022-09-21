@@ -645,12 +645,16 @@ mixin ColumnState implements IPlutoGridState {
 
     column.sort = PlutoColumnSort.ascending;
 
-    refRows.sort(
-      (a, b) => column.type.compare(
-        a.cells[column.field]!.valueForSorting,
-        b.cells[column.field]!.valueForSorting,
-      ),
-    );
+    compare(a, b) => column.type.compare(
+          a.cells[column.field]!.valueForSorting,
+          b.cells[column.field]!.valueForSorting,
+        );
+
+    if (hasRowGroups) {
+      sortRowGroup(column: column, compare: compare);
+    } else {
+      refRows.sort(compare);
+    }
 
     if (notify) {
       notifyListeners();
@@ -663,12 +667,16 @@ mixin ColumnState implements IPlutoGridState {
 
     column.sort = PlutoColumnSort.descending;
 
-    refRows.sort(
-      (b, a) => column.type.compare(
-        a.cells[column.field]!.valueForSorting,
-        b.cells[column.field]!.valueForSorting,
-      ),
-    );
+    compare(b, a) => column.type.compare(
+          a.cells[column.field]!.valueForSorting,
+          b.cells[column.field]!.valueForSorting,
+        );
+
+    if (hasRowGroups) {
+      sortRowGroup(column: column, compare: compare);
+    } else {
+      refRows.sort(compare);
+    }
 
     if (notify) {
       notifyListeners();
@@ -679,7 +687,7 @@ mixin ColumnState implements IPlutoGridState {
   void sortBySortIdx(PlutoColumn column, {bool notify = true}) {
     _resetColumnSort();
 
-    refRows.sort((a, b) {
+    int compare(a, b) {
       if (a.sortIdx == null || b.sortIdx == null) {
         if (a.sortIdx == null && b.sortIdx == null) {
           return 0;
@@ -689,7 +697,13 @@ mixin ColumnState implements IPlutoGridState {
       }
 
       return a.sortIdx!.compareTo(b.sortIdx!);
-    });
+    }
+
+    if (hasRowGroups) {
+      sortRowGroup(column: column, compare: compare);
+    } else {
+      refRows.sort(compare);
+    }
 
     if (notify) {
       notifyListeners();

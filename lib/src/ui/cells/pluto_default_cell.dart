@@ -41,6 +41,9 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
 
+  bool get _showExpandedRowGroup =>
+      widget.row.type.isGroup && widget.row.groupField == widget.column.field;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +74,12 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
     );
   }
 
+  void _handleToggleExpandedRowGroup() {
+    stateManager.toggleExpandedRowGroup(
+      rowGroup: widget.row as PlutoRowGroup,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cellWidget = _BuildDefaultCellWidget(
@@ -80,6 +89,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       column: widget.column,
       cell: widget.cell,
     );
+
+    final style = stateManager.configuration.style;
 
     return Row(
       children: [
@@ -92,8 +103,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
-              size: stateManager.configuration.style.iconSize,
-              color: stateManager.configuration.style.iconColor,
+              size: style.iconSize,
+              color: style.iconColor,
             ),
           ),
         if (widget.column.enableRowChecked)
@@ -106,6 +117,21 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
         Expanded(
           child: cellWidget,
         ),
+        if (_showExpandedRowGroup)
+          IconButton(
+            onPressed: _handleToggleExpandedRowGroup,
+            icon: widget.row.expanded
+                ? Icon(
+                    style.rowGroupExpandedIcon,
+                    size: style.iconSize,
+                    color: style.iconColor,
+                  )
+                : Icon(
+                    style.rowGroupCollapsedIcon,
+                    size: style.iconSize,
+                    color: style.iconColor,
+                  ),
+          ),
       ],
     );
   }
@@ -321,6 +347,14 @@ class _BuildDefaultCellWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  bool get _showText {
+    if (row.type.isNormal) {
+      return stateManager.isGroupedRowColumn(column) == false;
+    }
+
+    return row.groupField == column.field;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (column.hasRenderer) {
@@ -334,7 +368,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
     }
 
     return Text(
-      column.formattedValueForDisplay(cell.value),
+      _showText ? column.formattedValueForDisplay(cell.value) : '',
       style: stateManager.configuration.style.cellTextStyle.copyWith(
         decoration: TextDecoration.none,
         fontWeight: FontWeight.normal,

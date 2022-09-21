@@ -6,7 +6,8 @@ import 'pluto_row.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
-  })  : _key = UniqueKey(),
+    Key? key,
+  })  : _key = key ?? UniqueKey(),
         _value = value;
 
   final Key _key;

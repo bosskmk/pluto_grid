@@ -266,6 +266,13 @@ class PlutoGridKeyManager {
       return;
     }
 
+    if (stateManager.currentRow?.type.isGroup == true) {
+      stateManager.toggleExpandedRowGroup(
+        rowGroup: stateManager.currentRow as PlutoRowGroup,
+      );
+      return;
+    }
+
     if (stateManager.configuration.enterKeyAction.isToggleEditing) {
       stateManager.toggleEditing(notify: false);
     } else {

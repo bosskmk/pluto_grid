@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-class PlutoRow {
+mixin PlutoRowHasGroup {
+  PlutoRowType get type => PlutoRowType.normal;
+
+  bool get expanded;
+
+  String get groupField;
+
+  List<PlutoRow> get children;
+
+  void setExpanded(bool flag) {}
+}
+
+class PlutoRow with PlutoRowHasGroup {
   Map<String, PlutoCell> cells;
 
   /// Value to maintain the default sort order when sorting columns.
@@ -43,6 +55,18 @@ class PlutoRow {
 
   PlutoRowState _state;
 
+  @override
+  PlutoRowType get type => PlutoRowType.normal;
+
+  @override
+  bool get expanded => false;
+
+  @override
+  String get groupField => '';
+
+  @override
+  List<PlutoRow> get children => [];
+
   void setState(PlutoRowState state) {
     _state = state;
   }
@@ -62,4 +86,13 @@ enum PlutoRowState {
   bool get isAdded => this == PlutoRowState.added;
 
   bool get isUpdated => this == PlutoRowState.updated;
+}
+
+enum PlutoRowType {
+  normal,
+  group;
+
+  bool get isNormal => this == PlutoRowType.normal;
+
+  bool get isGroup => this == PlutoRowType.group;
 }

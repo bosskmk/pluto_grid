@@ -32,9 +32,21 @@ class DummyData {
           } else if (i == 3) {
             return PlutoColumnType.text();
           } else if (i == 4) {
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
+            return PlutoColumnType.select(<String>[
+              'One',
+              'Two',
+              'Three',
+              'Four',
+              'Five',
+            ]);
           } else if (i == 5) {
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
+            return PlutoColumnType.select(<String>[
+              'One',
+              'Two',
+              'Three',
+              'Four',
+              'Five',
+            ]);
           } else if (i == 6) {
             return PlutoColumnType.date();
           } else if (i == 7) {

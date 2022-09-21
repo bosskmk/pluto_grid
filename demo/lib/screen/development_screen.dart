@@ -53,11 +53,20 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
           .then((initializedRows) {
         stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-        stateManager.notifyListeners();
+        stateManager.setRowGroupByColumns([
+          stateManager.columns[4],
+          stateManager.columns[3],
+        ]);
+        stateManager.moveColumn(
+          column: columns[4],
+          targetColumn: columns[3],
+        );
+        stateManager.moveColumn(
+          column: columns[5],
+          targetColumn: columns[0],
+        );
       });
     });
-    columns[0].enableRowDrag = true;
-    columns[0].enableRowChecked = true;
     columns[0].footerRenderer = (c) {
       return PlutoAggregateColumnFooter(
         rendererContext: c,
@@ -83,6 +92,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         },
       );
     };
+    columns[4].enableRowDrag = true;
+    columns[4].enableRowChecked = true;
+    columns[4].frozen = PlutoColumnFrozen.start;
+    columns[3].frozen = PlutoColumnFrozen.start;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -118,6 +131,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             },
             onLoaded: (PlutoGridOnLoadedEvent event) {
               stateManager = event.stateManager;
+              stateManager.setShowColumnFilter(true);
             },
             onSorted: (PlutoGridOnSortedEvent event) {
               print(event);
@@ -165,7 +179,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 enableCellBorderVertical: true,
                 enableCellBorderHorizontal: true,
                 // oddRowColor: Colors.amber,
-                evenRowColor: const Color(0xFFF6F6F6),
+                // evenRowColor: const Color(0xFFF6F6F6),
                 gridBorderRadius: BorderRadius.circular(10),
                 gridPopupBorderRadius: BorderRadius.circular(7),
                 // columnAscendingIcon: const Icon(
