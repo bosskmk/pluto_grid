@@ -419,6 +419,18 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isPaginated), returnValue: false)
           as bool);
   @override
+  bool get hasRowGroups =>
+      (super.noSuchMethod(Invocation.getter(#hasRowGroups), returnValue: false)
+          as bool);
+  @override
+  Iterable<_i3.PlutoRow> get iterateAllRows =>
+      (super.noSuchMethod(Invocation.getter(#iterateAllRows),
+          returnValue: <_i3.PlutoRow>[]) as Iterable<_i3.PlutoRow>);
+  @override
+  Iterable<_i3.PlutoRow> get iterateRowsInAllGroups =>
+      (super.noSuchMethod(Invocation.getter(#iterateRowsInAllGroups),
+          returnValue: <_i3.PlutoRow>[]) as Iterable<_i3.PlutoRow>);
+  @override
   _i3.FilteredList<_i3.PlutoRow> get refRows =>
       (super.noSuchMethod(Invocation.getter(#refRows),
               returnValue: _FakeFilteredList_2<_i3.PlutoRow>())
@@ -1057,6 +1069,31 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void resetPage({bool? notify = true}) =>
       super.noSuchMethod(Invocation.method(#resetPage, [], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  bool isGroupedRowColumn(_i3.PlutoColumn? column) =>
+      (super.noSuchMethod(Invocation.method(#isGroupedRowColumn, [column]),
+          returnValue: false) as bool);
+  @override
+  void setRowGroupByColumns(List<_i3.PlutoColumn>? columns) =>
+      super.noSuchMethod(Invocation.method(#setRowGroupByColumns, [columns]),
+          returnValueForMissingStub: null);
+  @override
+  void toggleExpandedRowGroup({_i3.PlutoRowGroup? rowGroup}) =>
+      super.noSuchMethod(
+          Invocation.method(#toggleExpandedRowGroup, [], {#rowGroup: rowGroup}),
+          returnValueForMissingStub: null);
+  @override
+  void sortRowGroup(
+          {_i3.PlutoColumn? column,
+          int Function(_i3.PlutoRow, _i3.PlutoRow)? compare}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #sortRowGroup, [], {#column: column, #compare: compare}),
+          returnValueForMissingStub: null);
+  @override
+  void setRowGroupFilter(_i3.FilteredListFilter<_i3.PlutoRow>? filter) =>
+      super.noSuchMethod(Invocation.method(#setRowGroupFilter, [filter]),
           returnValueForMissingStub: null);
   @override
   int? getRowIdxByOffset(double? offset) =>
