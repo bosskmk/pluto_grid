@@ -5,6 +5,12 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IRowGroupState {
   bool get hasRowGroups;
 
+  Iterable<PlutoRow> get iterateAllRows;
+
+  Iterable<PlutoRow> get iterateRowsInAllGroups;
+
+  bool isGroupedRowColumn(PlutoColumn column);
+
   void setRowGroupByColumns(List<PlutoColumn> columns);
 
   void toggleExpandedRowGroup({
@@ -17,8 +23,6 @@ abstract class IRowGroupState {
   });
 
   void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter);
-
-  bool isGroupedRowColumn(PlutoColumn column);
 }
 
 mixin RowGroupState implements IPlutoGridState {
@@ -26,6 +30,43 @@ mixin RowGroupState implements IPlutoGridState {
   bool get hasRowGroups => _rowGroupColumns.isNotEmpty;
 
   List<PlutoColumn> _rowGroupColumns = [];
+
+  @override
+  Iterable<PlutoRow> get iterateAllRows sync* {
+    if (hasRowGroups) {
+      for (final row in iterateRowsInAllGroups) {
+        yield row;
+      }
+    } else {
+      for (final row in refRows.originalList) {
+        yield row;
+      }
+    }
+  }
+
+  @override
+  Iterable<PlutoRow> get iterateRowsInAllGroups sync* {
+    Iterable<PlutoRow> iterate(List<PlutoRow> rows) sync* {
+      for (final row in rows) {
+        yield row;
+        if (row.type.isGroup) {
+          for (final child in iterate(row.children)) {
+            yield child;
+          }
+        }
+      }
+    }
+
+    for (final row in iterate(refRows.originalList)) {
+      yield row;
+    }
+  }
+
+  @override
+  bool isGroupedRowColumn(PlutoColumn column) {
+    return _rowGroupColumns.firstWhereOrNull((c) => c.field == column.field) !=
+        null;
+  }
 
   @override
   void setRowGroupByColumns(List<PlutoColumn> columns) {
@@ -147,12 +188,6 @@ mixin RowGroupState implements IPlutoGridState {
         setFilterNull(refRows);
       }
     });
-  }
-
-  @override
-  bool isGroupedRowColumn(PlutoColumn column) {
-    return _rowGroupColumns.firstWhereOrNull((c) => c.field == column.field) !=
-        null;
   }
 
   void _ensureRowGroups(void Function() callback) {
