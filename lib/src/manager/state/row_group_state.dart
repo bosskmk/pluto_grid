@@ -12,6 +12,7 @@ import 'package:pluto_grid/pluto_grid.dart';
     Row
       - Move
       - Check
+      - Set page
  */
 
 abstract class IRowGroupState {
