@@ -899,7 +899,7 @@ mixin ColumnState implements IPlutoGridState {
   /// Add [PlutoCell] to the whole [PlutoRow.cells].
   /// Called when a new column is added.
   void _fillCellsInRows(List<PlutoColumn> columns) {
-    for (var row in iterateAllRows) {
+    for (var row in iterateRowAndGroup) {
       final List<MapEntry<String, PlutoCell>> cells = [];
 
       for (var column in columns) {
@@ -917,7 +917,7 @@ mixin ColumnState implements IPlutoGridState {
   /// Delete [PlutoCell] with matching [columns.field] from [PlutoRow.cells].
   /// When a column is deleted, the corresponding [PlutoCell] is also called to be deleted.
   void _removeCellsInRows(List<PlutoColumn> columns) {
-    for (var row in iterateAllRows) {
+    for (var row in iterateRowAndGroup) {
       for (var column in columns) {
         row.cells.remove(column.field);
       }

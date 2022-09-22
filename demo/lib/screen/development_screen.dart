@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_menu_bar/pluto_menu_bar.dart';
@@ -720,6 +721,24 @@ class _HeaderState extends State<_Header> {
             ),
           ],
         ),
+        if (!kReleaseMode)
+          PlutoMenuItem(
+            title: 'Test',
+            onTap: () {
+              for (final column in widget.stateManager.columns) {
+                column.enableRowDrag = false;
+                column.enableRowChecked = false;
+                column.frozen = PlutoColumnFrozen.none;
+              }
+              widget.stateManager.columns[6].enableRowDrag = true;
+              widget.stateManager.columns[6].enableRowChecked = true;
+              widget.stateManager.columns[6].frozen = PlutoColumnFrozen.start;
+              widget.stateManager.setRowGroupByColumns([
+                widget.stateManager.columns[6],
+              ]);
+              widget.stateManager.updateVisibilityLayout();
+            },
+          ),
       ],
     );
   }

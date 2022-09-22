@@ -39,7 +39,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true}) {
-    for (final row in iterateAllRows) {
+    for (final row in iterateRowAndGroup) {
       row.setState(PlutoRowState.none);
     }
 
