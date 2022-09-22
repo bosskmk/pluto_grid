@@ -42,7 +42,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   PlutoGridStateManager get stateManager => widget.stateManager;
 
   bool get _showExpandedRowGroup =>
-      widget.row.type.isGroup && widget.row.groupField == widget.column.field;
+      widget.row.type.isGroup &&
+      widget.row.type.group.groupField == widget.column.field;
 
   @override
   void initState() {
@@ -76,7 +77,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
   void _handleToggleExpandedRowGroup() {
     stateManager.toggleExpandedRowGroup(
-      rowGroup: widget.row as PlutoRowGroup,
+      rowGroup: widget.row,
     );
   }
 
@@ -120,7 +121,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
         if (_showExpandedRowGroup)
           IconButton(
             onPressed: _handleToggleExpandedRowGroup,
-            icon: widget.row.expanded
+            icon: widget.row.type.group.expanded
                 ? Icon(
                     style.rowGroupExpandedIcon,
                     size: style.iconSize,
@@ -352,7 +353,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
       return stateManager.isGroupedRowColumn(column) == false;
     }
 
-    return row.groupField == column.field;
+    return row.type.group.groupField == column.field;
   }
 
   @override

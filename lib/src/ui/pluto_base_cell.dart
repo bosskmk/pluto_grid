@@ -196,7 +196,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           widget.rowIdx,
         ),
         isGroupedRowCell: stateManager.hasRowGroups &&
-            widget.row.groupField == widget.column.field,
+            widget.row.type.isGroup &&
+            widget.row.type.group.groupField == widget.column.field,
         enableCellVerticalBorder: style.enableCellBorderVertical,
         borderColor: style.borderColor,
         activatedBorderColor: style.activatedBorderColor,

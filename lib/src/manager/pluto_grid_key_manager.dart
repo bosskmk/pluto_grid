@@ -268,7 +268,7 @@ class PlutoGridKeyManager {
 
     if (stateManager.currentRow?.type.isGroup == true) {
       stateManager.toggleExpandedRowGroup(
-        rowGroup: stateManager.currentRow as PlutoRowGroup,
+        rowGroup: stateManager.currentRow!,
       );
       return;
     }

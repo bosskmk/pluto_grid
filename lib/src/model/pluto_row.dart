@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-mixin PlutoRowHasGroup {
-  PlutoRowType get type => PlutoRowType.normal;
-
-  bool get expanded;
-
-  String get groupField;
-
-  List<PlutoRow> get children;
-
-  void setExpanded(bool flag) {}
-}
-
-class PlutoRow with PlutoRowHasGroup {
+class PlutoRow {
   Map<String, PlutoCell> cells;
 
   /// Value to maintain the default sort order when sorting columns.
@@ -22,12 +10,16 @@ class PlutoRow with PlutoRowHasGroup {
 
   PlutoRow({
     required this.cells,
+    PlutoRowType? type,
     this.sortIdx,
     bool checked = false,
     Key? key,
-  })  : _checked = checked,
+  })  : type = type ?? PlutoRowTypeNormal.instance,
+        _checked = checked,
         _state = PlutoRowState.none,
         _key = key ?? UniqueKey();
+
+  final PlutoRowType type;
 
   /// The state value that the checkbox is checked.
   /// If the enableRowChecked value of the [PlutoColumn] property is set to true,
@@ -38,10 +30,6 @@ class PlutoRow with PlutoRowHasGroup {
   bool? get checked => _checked;
 
   bool? _checked;
-
-  void setChecked(bool? flag) {
-    _checked = flag;
-  }
 
   /// State when a new row is added or the cell value in the row is changed.
   ///
@@ -55,25 +43,17 @@ class PlutoRow with PlutoRowHasGroup {
 
   PlutoRowState _state;
 
-  @override
-  PlutoRowType get type => PlutoRowType.normal;
+  Key get key => _key;
 
-  @override
-  bool get expanded => false;
+  final Key _key;
 
-  @override
-  String get groupField => '';
-
-  @override
-  List<PlutoRow> get children => [];
+  void setChecked(bool? flag) {
+    _checked = flag;
+  }
 
   void setState(PlutoRowState state) {
     _state = state;
   }
-
-  Key get key => _key;
-
-  final Key _key;
 }
 
 enum PlutoRowState {
@@ -86,13 +66,4 @@ enum PlutoRowState {
   bool get isAdded => this == PlutoRowState.added;
 
   bool get isUpdated => this == PlutoRowState.updated;
-}
-
-enum PlutoRowType {
-  normal,
-  group;
-
-  bool get isNormal => this == PlutoRowType.normal;
-
-  bool get isGroup => this == PlutoRowType.group;
 }
