@@ -33,18 +33,21 @@ abstract class IRowGroupState {
     bool notify = true,
   });
 
-  void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter);
-
   void toggleExpandedRowGroup({
     required PlutoRow rowGroup,
     bool notify = true,
   });
 
+  @protected
+  void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter);
+
+  @protected
   void sortRowGroup({
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
   });
 
+  @protected
   void removeRowAndGroupByKey(Iterable<Key> keys);
 }
 
@@ -127,40 +130,6 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
-  void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter) {
-    _ensureRowGroups(() {
-      if (filter == null) {
-        void setFilter(FilteredList<PlutoRow> filteredList) {
-          filteredList.setFilter(null);
-
-          if (filteredList.isEmpty || !filteredList.first.type.isGroup) {
-            return;
-          }
-
-          for (final c in filteredList) {
-            setFilter(c.type.group.children);
-          }
-        }
-
-        setFilter(refRows);
-      } else {
-        void setFilter(FilteredList<PlutoRow> filteredList) {
-          filteredList.setFilter((row) {
-            if (!row.type.isGroup) {
-              return filter(row);
-            }
-
-            setFilter(row.type.group.children);
-            return row.type.group.children.isNotEmpty;
-          });
-        }
-
-        setFilter(refRows);
-      }
-    });
-  }
-
-  @override
   void toggleExpandedRowGroup({
     required PlutoRow rowGroup,
     bool notify = true,
@@ -211,6 +180,42 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
+  @protected
+  void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter) {
+    _ensureRowGroups(() {
+      if (filter == null) {
+        void setFilter(FilteredList<PlutoRow> filteredList) {
+          filteredList.setFilter(null);
+
+          if (filteredList.isEmpty || !filteredList.first.type.isGroup) {
+            return;
+          }
+
+          for (final c in filteredList) {
+            setFilter(c.type.group.children);
+          }
+        }
+
+        setFilter(refRows);
+      } else {
+        void setFilter(FilteredList<PlutoRow> filteredList) {
+          filteredList.setFilter((row) {
+            if (!row.type.isGroup) {
+              return filter(row);
+            }
+
+            setFilter(row.type.group.children);
+            return row.type.group.children.isNotEmpty;
+          });
+        }
+
+        setFilter(refRows);
+      }
+    });
+  }
+
+  @override
+  @protected
   void sortRowGroup({
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
@@ -254,6 +259,7 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
+  @protected
   void removeRowAndGroupByKey(Iterable<Key> keys) {
     _ensureRowGroups(() {
       bool removeAll(PlutoRow row) {
