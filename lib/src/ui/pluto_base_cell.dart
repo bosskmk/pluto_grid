@@ -248,7 +248,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required Color gridBackgroundColor,
     required Color cellColorInEditState,
     required Color cellColorInReadOnlyState,
-    required Color cellColorGroupedRow,
+    required Color? cellColorGroupedRow,
     required PlutoGridSelectingMode selectingMode,
   }) {
     if (isCurrentCell) {

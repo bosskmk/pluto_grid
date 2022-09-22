@@ -129,7 +129,7 @@ class PlutoGridStyleConfig {
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
-    this.cellColorGroupedRow = const Color(0xFFF8F8F8),
+    this.cellColorGroupedRow,
     this.dragTargetColumnColor = const Color(0xFFDCF5FF),
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
@@ -180,7 +180,7 @@ class PlutoGridStyleConfig {
     this.checkedColor = const Color(0x11202020),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
-    this.cellColorGroupedRow = const Color(0xFF222222),
+    this.cellColorGroupedRow,
     this.dragTargetColumnColor = const Color(0xFF313131),
     this.iconColor = Colors.white38,
     this.disabledIconColor = Colors.white12,
@@ -267,7 +267,7 @@ class PlutoGridStyleConfig {
   final Color cellColorInReadOnlyState;
 
   /// Background color of cells grouped by column.
-  final Color cellColorGroupedRow;
+  final Color? cellColorGroupedRow;
 
   /// The background color of the column to be dragged.
   /// When moving a column by dragging it.
@@ -373,7 +373,7 @@ class PlutoGridStyleConfig {
     Color? checkedColor,
     Color? cellColorInEditState,
     Color? cellColorInReadOnlyState,
-    Color? cellColorGroupedRow,
+    PlutoOptional<Color?>? cellColorGroupedRow,
     Color? dragTargetColumnColor,
     Color? iconColor,
     Color? disabledIconColor,
@@ -423,7 +423,9 @@ class PlutoGridStyleConfig {
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
       cellColorInReadOnlyState:
           cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
-      cellColorGroupedRow: cellColorGroupedRow ?? this.cellColorGroupedRow,
+      cellColorGroupedRow: cellColorGroupedRow == null
+          ? this.cellColorGroupedRow
+          : cellColorGroupedRow.value,
       dragTargetColumnColor:
           dragTargetColumnColor ?? this.dragTargetColumnColor,
       iconColor: iconColor ?? this.iconColor,
