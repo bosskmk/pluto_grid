@@ -592,12 +592,16 @@ mixin RowState implements IPlutoGridState {
       }
     }
 
-    final originalRowIdx = page > 1 ? index + (page - 1) * pageSize : index;
-
-    if (originalRowIdx >= refRows.originalLength) {
-      refRows.addAll(rows.cast<PlutoRow>());
+    if (hasRowGroups) {
+      addRowGroup(rows);
     } else {
-      refRows.insertAll(index, rows.cast<PlutoRow>());
+      final originalRowIdx = page > 1 ? index + (page - 1) * pageSize : index;
+
+      if (originalRowIdx >= refRows.originalLength) {
+        refRows.addAll(rows.cast<PlutoRow>());
+      } else {
+        refRows.insertAll(index, rows.cast<PlutoRow>());
+      }
     }
 
     if (isPaginated) {

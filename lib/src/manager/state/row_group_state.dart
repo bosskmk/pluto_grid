@@ -10,7 +10,6 @@ import 'package:pluto_grid/pluto_grid.dart';
       - Hide
       - UnHide
     Row
-      - Add
       - Move
       - Check
  */
@@ -46,6 +45,9 @@ abstract class IRowGroupState {
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
   });
+
+  @protected
+  void addRowGroup(List<PlutoRow> rows);
 
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys);
@@ -134,6 +136,8 @@ mixin RowGroupState implements IPlutoGridState {
     required PlutoRow rowGroup,
     bool notify = true,
   }) {
+    assert(hasRowGroups);
+
     if (!rowGroup.type.isGroup) {
       return;
     }
@@ -182,6 +186,8 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   @protected
   void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter) {
+    assert(hasRowGroups);
+
     _ensureRowGroups(() {
       if (filter == null) {
         void setFilter(FilteredList<PlutoRow> filteredList) {
@@ -220,9 +226,7 @@ mixin RowGroupState implements IPlutoGridState {
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
   }) {
-    if (!hasRowGroups) {
-      return;
-    }
+    assert(hasRowGroups);
 
     _ensureRowGroups(() {
       if (refRows.isEmpty) {
@@ -261,6 +265,8 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys) {
+    assert(hasRowGroups);
+
     _ensureRowGroups(() {
       bool removeAll(PlutoRow row) {
         if (row.type.isGroup) {
@@ -273,6 +279,36 @@ mixin RowGroupState implements IPlutoGridState {
       }
 
       refRows.removeWhere(removeAll);
+    });
+  }
+
+  @override
+  @protected
+  void addRowGroup(List<PlutoRow> rows) {
+    assert(hasRowGroups);
+
+    final grouped = PlutoRowGroupHelper.toGroupByColumns(
+      columns: _rowGroupColumns,
+      rows: rows,
+    );
+
+    _ensureRowGroups(() {
+      addAll(Iterable<PlutoRow> groupedRows, FilteredList<PlutoRow> ref) {
+        for (final row in groupedRows) {
+          final found = ref.firstWhereOrNull((e) => e.key == row.key);
+          if (found == null) {
+            ref.add(row);
+          } else {
+            if (found.type.group.children.first.type.isGroup) {
+              addAll(row.type.group.children, found.type.group.children);
+            } else {
+              found.type.group.children.addAll(row.type.group.children);
+            }
+          }
+        }
+      }
+
+      addAll(grouped, refRows);
     });
   }
 
