@@ -435,7 +435,11 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    refRows.removeAt(currentRowIdx!);
+    if (hasRowGroups) {
+      removeRowAndGroupByKey([currentRow!.key]);
+    } else {
+      refRows.removeAt(currentRowIdx!);
+    }
 
     resetCurrentState(notify: false);
 
@@ -469,7 +473,11 @@ mixin RowState implements IPlutoGridState {
           .key;
     }
 
-    refRows.removeWhereFromOriginal((row) => removeKeys.contains(row.key));
+    if (hasRowGroups) {
+      removeRowAndGroupByKey(removeKeys);
+    } else {
+      refRows.removeWhereFromOriginal((row) => removeKeys.contains(row.key));
+    }
 
     updateCurrentCellPosition(notify: false);
 

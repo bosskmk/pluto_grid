@@ -11,7 +11,6 @@ import 'package:pluto_grid/pluto_grid.dart';
       - UnHide
     Row
       - Add
-      - Remove
       - Move
       - Check
  */
@@ -45,6 +44,8 @@ abstract class IRowGroupState {
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
   });
+
+  void removeRowAndGroupByKey(Iterable<Key> keys);
 }
 
 mixin RowGroupState implements IPlutoGridState {
@@ -249,6 +250,23 @@ mixin RowGroupState implements IPlutoGridState {
       for (final row in refRows) {
         sortChildren(row);
       }
+    });
+  }
+
+  @override
+  void removeRowAndGroupByKey(Iterable<Key> keys) {
+    _ensureRowGroups(() {
+      bool removeAll(PlutoRow row) {
+        if (row.type.isGroup) {
+          row.type.group.children.removeWhere(removeAll);
+          if (row.type.group.children.isEmpty) {
+            return true;
+          }
+        }
+        return keys.contains(row.key);
+      }
+
+      refRows.removeWhere(removeAll);
     });
   }
 

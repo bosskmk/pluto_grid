@@ -21,8 +21,9 @@ class PlutoAggregateHelper {
       final cell = e.cells[column.field]!;
 
       if (filter == null || filter(cell)) {
-        return p += cell.value!;
+        return p += cell.value ?? 0;
       }
+
       return p;
     });
 
@@ -48,7 +49,7 @@ class PlutoAggregateHelper {
 
       if (filter == null || filter(cell)) {
         ++itemCount;
-        return p += cell.value!;
+        return p += cell.value ?? 0;
       }
 
       return p;
