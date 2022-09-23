@@ -12,7 +12,6 @@ import 'package:pluto_grid/pluto_grid.dart';
     Row
       - Move
       - Check
-      - Set page
  */
 
 abstract class IRowGroupState {
@@ -25,6 +24,12 @@ abstract class IRowGroupState {
   Iterable<PlutoRow> get iterateRowAndGroup;
 
   Iterable<PlutoRow> get iterateRow;
+
+  bool isRootGroupedRow(PlutoRow row);
+
+  bool isNotRootGroupedRow(PlutoRow row);
+
+  bool isExpandedGroupedRow(PlutoRow row);
 
   bool isGroupedRowColumn(PlutoColumn column);
 
@@ -60,18 +65,15 @@ mixin RowGroupState implements IPlutoGridState {
 
   List<PlutoColumn> _rowGroupColumns = [];
 
+  PlutoColumn? get _rootRowGroupColumn => _rowGroupColumns.firstOrNull;
+
   @override
   Iterable<PlutoRow> get iterateRootRowGroup sync* {
     if (!hasRowGroups) {
       return;
     }
 
-    final rootField = _rowGroupColumns.first.field;
-
-    rootGroup(PlutoRow e) =>
-        e.type.isGroup && e.type.group.groupField == rootField;
-
-    for (final row in refRows.originalList.where(rootGroup)) {
+    for (final row in refRows.originalList.where(isRootGroupedRow)) {
       yield row;
     }
   }
@@ -106,6 +108,23 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
+  bool isRootGroupedRow(PlutoRow row) {
+    if (!row.type.isGroup) {
+      return false;
+    }
+
+    return row.type.group.groupField == _rootRowGroupColumn?.field;
+  }
+
+  @override
+  bool isNotRootGroupedRow(PlutoRow row) => !isRootGroupedRow(row);
+
+  @override
+  bool isExpandedGroupedRow(PlutoRow row) {
+    return row.type.isGroup && row.type.group.expanded;
+  }
+
+  @override
   bool isGroupedRowColumn(PlutoColumn column) {
     return _rowGroupColumns.firstWhereOrNull((c) => c.field == column.field) !=
         null;
@@ -126,6 +145,10 @@ mixin RowGroupState implements IPlutoGridState {
     refRows.addAll(groupedRows);
 
     _rowGroupColumns = columns;
+
+    if (isPaginated) {
+      resetPage(resetCurrentState: true, notify: false);
+    }
 
     if (notify) {
       notifyListeners();
@@ -179,6 +202,11 @@ mixin RowGroupState implements IPlutoGridState {
 
     rowGroup.type.group.setExpanded(!rowGroup.type.group.expanded);
 
+    if (isPaginated) {
+      // todo : If the current state still exists, it retains the current state.
+      resetPage(resetCurrentState: false, notify: false);
+    }
+
     if (notify) {
       notifyListeners();
     }
@@ -230,11 +258,11 @@ mixin RowGroupState implements IPlutoGridState {
     assert(hasRowGroups);
 
     _ensureRowGroups(() {
-      if (refRows.isEmpty) {
+      if (refRows.originalList.isEmpty) {
         return;
       }
 
-      if (refRows.first.type.group.groupField == column.field) {
+      if (refRows.originalList.first.type.group.groupField == column.field) {
         refRows.sort(compare);
 
         return;
@@ -244,20 +272,20 @@ mixin RowGroupState implements IPlutoGridState {
         assert(row.type.isGroup);
 
         if (row.type.group.childrenGroupField == column.field ||
-            !row.type.group.children.first.type.isGroup) {
+            !row.type.group.children.originalList.first.type.isGroup) {
           row.type.group.children.sort(compare);
 
           return;
         }
 
-        if (row.type.group.children.first.type.isGroup) {
-          for (final child in row.type.group.children) {
+        if (row.type.group.children.originalList.first.type.isGroup) {
+          for (final child in row.type.group.children.originalList) {
             sortChildren(child);
           }
         }
       }
 
-      for (final row in refRows) {
+      for (final row in refRows.originalList) {
         sortChildren(row);
       }
     });
@@ -271,15 +299,15 @@ mixin RowGroupState implements IPlutoGridState {
     _ensureRowGroups(() {
       bool removeAll(PlutoRow row) {
         if (row.type.isGroup) {
-          row.type.group.children.removeWhere(removeAll);
-          if (row.type.group.children.isEmpty) {
+          row.type.group.children.removeWhereFromOriginal(removeAll);
+          if (row.type.group.children.originalList.isEmpty) {
             return true;
           }
         }
         return keys.contains(row.key);
       }
 
-      refRows.removeWhere(removeAll);
+      refRows.removeWhereFromOriginal(removeAll);
     });
   }
 
@@ -296,11 +324,14 @@ mixin RowGroupState implements IPlutoGridState {
     _ensureRowGroups(() {
       addAll(Iterable<PlutoRow> groupedRows, FilteredList<PlutoRow> ref) {
         for (final row in groupedRows) {
-          final found = ref.firstWhereOrNull((e) => e.key == row.key);
+          final found = ref.originalList.firstWhereOrNull(
+            (e) => e.key == row.key,
+          );
+
           if (found == null) {
             ref.add(row);
           } else {
-            if (found.type.group.children.first.type.isGroup) {
+            if (found.type.group.children.originalList.first.type.isGroup) {
               addAll(row.type.group.children, found.type.group.children);
             } else {
               found.type.group.children.addAll(row.type.group.children);
@@ -316,7 +347,7 @@ mixin RowGroupState implements IPlutoGridState {
   Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
     for (final row in rows) {
       if (row.type.isGroup) {
-        for (final child in _iterateRow(row.type.group.children)) {
+        for (final child in _iterateRow(row.type.group.children.originalList)) {
           yield child;
         }
       } else {
@@ -329,7 +360,8 @@ mixin RowGroupState implements IPlutoGridState {
     for (final row in rows) {
       if (row.type.isGroup) {
         yield row;
-        for (final child in _iterateRowGroup(row.type.group.children)) {
+        for (final child
+            in _iterateRowGroup(row.type.group.children.originalList)) {
           yield child;
         }
       }
@@ -340,7 +372,8 @@ mixin RowGroupState implements IPlutoGridState {
     for (final row in rows) {
       yield row;
       if (row.type.isGroup) {
-        for (final child in _iterateRowAndGroup(row.type.group.children)) {
+        for (final child
+            in _iterateRowAndGroup(row.type.group.children.originalList)) {
           yield child;
         }
       }
@@ -358,20 +391,20 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   void _collapseAllRowGroup() {
-    final mainGroup = _rowGroupColumns.first;
-
-    isNotMainGroup(PlutoRow e) {
-      return !e.type.isGroup || e.type.group.groupField != mainGroup.field;
-    }
-
-    refRows.removeWhereFromOriginal(isNotMainGroup);
+    refRows.removeWhereFromOriginal(isNotRootGroupedRow);
   }
 
   void _restoreExpandedRowGroup() {
-    expandedGroup(PlutoRow e) => e.type.isGroup && e.type.group.expanded;
+    final Iterable<PlutoRow> expandedRows = refRows.filterOrOriginalList
+        .where(isExpandedGroupedRow)
+        .toList(growable: false);
 
-    final Iterable<PlutoRow> expandedRows =
-        refRows.where(expandedGroup).toList(growable: false);
+    bool toResetPage = false;
+
+    if (isPaginated) {
+      refRows.setFilterRange(null);
+      toResetPage = true;
+    }
 
     for (final rowGroup in expandedRows) {
       final List<PlutoRow> addRows = [];
@@ -389,9 +422,13 @@ mixin RowGroupState implements IPlutoGridState {
 
       addExpandedChildren(rowGroup);
 
-      final idx = refRows.indexOf(rowGroup);
+      final idx = refRows.filterOrOriginalList.indexOf(rowGroup);
 
       refRows.insertAll(idx + 1, addRows);
+    }
+
+    if (toResetPage) {
+      resetPage(resetCurrentState: false, notify: false);
     }
   }
 }

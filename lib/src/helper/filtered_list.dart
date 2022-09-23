@@ -14,6 +14,10 @@ abstract class AbstractFilteredList<E> implements ListBase<E> {
   /// Filtered list. Same as [originalList] if filter is null.
   List<E> get filteredList;
 
+  /// If it is filtered, return the original list if it is not a filtered list.
+  /// (list before range is applied)
+  List<E> get filterOrOriginalList;
+
   /// Whether to set a filter.
   bool get hasFilter;
 
@@ -132,6 +136,9 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   /// Returns the filtered elements.
   @override
   List<E> get filteredList => [..._filteredList];
+
+  @override
+  List<E> get filterOrOriginalList => hasFilter ? filteredList : originalList;
 
   @override
   bool get hasFilter => _filter != null;
@@ -425,7 +432,7 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   }
 
   int _toOriginalIndex(int index) {
-    if (!hasFilter && !hasRange || _effectiveList.isEmpty) {
+    if (_effectiveList.isEmpty || (!hasFilter && !hasRange)) {
       return index;
     }
 

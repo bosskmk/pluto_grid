@@ -11,9 +11,16 @@ abstract class IPaginationRowState {
 
   void setPageSize(int pageSize, {bool notify = true});
 
-  void setPage(int page, {bool notify = true});
+  void setPage(
+    int page, {
+    bool resetCurrentState = true,
+    bool notify = true,
+  });
 
-  void resetPage({bool notify = true});
+  void resetPage({
+    bool resetCurrentState = true,
+    bool notify = true,
+  });
 }
 
 mixin PaginationRowState implements IPlutoGridState {
@@ -25,8 +32,13 @@ mixin PaginationRowState implements IPlutoGridState {
 
   final FilteredListRange _range = FilteredListRange(0, defaultPageSize);
 
-  int get _length =>
-      hasFilter ? refRows.filteredList.length : refRows.originalList.length;
+  Iterable<PlutoRow> get _rowsToPaginate {
+    return hasRowGroups
+        ? refRows.filterOrOriginalList.where(isRootGroupedRow)
+        : refRows.filterOrOriginalList;
+  }
+
+  int get _length => _rowsToPaginate.length;
 
   int get _adjustPage {
     if (page > totalPage) {
@@ -62,7 +74,11 @@ mixin PaginationRowState implements IPlutoGridState {
   }
 
   @override
-  void setPage(int page, {bool notify = true}) {
+  void setPage(
+    int page, {
+    bool resetCurrentState = true,
+    bool notify = true,
+  }) {
     _page = page;
 
     int from = (page - 1) * _pageSize;
@@ -77,13 +93,36 @@ mixin PaginationRowState implements IPlutoGridState {
       to = _length;
     }
 
+    if (hasRowGroups) {
+      PlutoRow lastRow(PlutoRow row) {
+        return isExpandedGroupedRow(row)
+            ? lastRow(row.type.group.children.filterOrOriginalList.last)
+            : row;
+      }
+
+      if (_rowsToPaginate.isEmpty) {
+        from = 0;
+        to = 0;
+      } else {
+        var fromRow = _rowsToPaginate.elementAt(from);
+
+        var toRow = lastRow(_rowsToPaginate.elementAt(to - 1));
+
+        from = refRows.filterOrOriginalList.indexOf(fromRow);
+
+        to = refRows.filterOrOriginalList.indexOf(toRow) + 1;
+      }
+    }
+
     _range.setRange(from, to);
 
     refRows.setFilterRange(_range);
 
-    clearCurrentCell(notify: false);
+    if (resetCurrentState) {
+      clearCurrentCell(notify: false);
 
-    clearCurrentSelecting(notify: false);
+      clearCurrentSelecting(notify: false);
+    }
 
     if (notify) {
       notifyListeners();
@@ -91,7 +130,14 @@ mixin PaginationRowState implements IPlutoGridState {
   }
 
   @override
-  void resetPage({bool notify = true}) {
-    setPage(_adjustPage, notify: notify);
+  void resetPage({
+    bool resetCurrentState = true,
+    bool notify = true,
+  }) {
+    setPage(
+      _adjustPage,
+      resetCurrentState: resetCurrentState,
+      notify: notify,
+    );
   }
 }

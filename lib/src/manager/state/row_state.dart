@@ -605,7 +605,7 @@ mixin RowState implements IPlutoGridState {
     }
 
     if (isPaginated) {
-      setPage(page, notify: false);
+      resetPage(notify: false);
     }
   }
 

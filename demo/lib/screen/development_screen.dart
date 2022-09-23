@@ -55,17 +55,14 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
           .then((initializedRows) {
         stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
         stateManager.setRowGroupByColumns([
-          stateManager.columns[4],
           stateManager.columns[3],
+          stateManager.columns[4],
         ]);
-        stateManager.moveColumn(
-          column: columns[4],
-          targetColumn: columns[3],
-        );
         stateManager.moveColumn(
           column: columns[5],
           targetColumn: columns[0],
         );
+        stateManager.setPage(1);
       });
     });
     columns[0].footerRenderer = (c) {
@@ -93,10 +90,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         },
       );
     };
-    columns[4].enableRowDrag = true;
-    columns[4].enableRowChecked = true;
-    columns[4].frozen = PlutoColumnFrozen.start;
+    columns[3].enableRowDrag = true;
+    columns[3].enableRowChecked = true;
     columns[3].frozen = PlutoColumnFrozen.start;
+    columns[4].frozen = PlutoColumnFrozen.start;
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -162,10 +159,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 setTextDirection: setTextDirection,
               );
             },
-            // createFooter: (stateManager) {
-            //   stateManager.setPageSize(30, notify: false);
-            //   return PlutoPagination(stateManager);
-            // },
+            createFooter: (stateManager) {
+              stateManager.setPageSize(10, notify: false);
+              return PlutoPagination(stateManager);
+            },
             rowColorCallback: rowColorCallback,
             configuration: PlutoGridConfiguration(
               // columnHeight: 30.0,

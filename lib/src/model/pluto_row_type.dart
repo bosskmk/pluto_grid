@@ -61,11 +61,11 @@ class PlutoRowTypeGroup implements PlutoRowType {
   bool get expanded => _expanded;
 
   String? get childrenGroupField {
-    if (!children.first.type.isGroup) {
+    if (!children.originalList.first.type.isGroup) {
       return null;
     }
 
-    return children.first.type.group.groupField;
+    return children.originalList.first.type.group.groupField;
   }
 
   bool _expanded;
