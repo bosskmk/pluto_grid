@@ -1066,13 +1066,30 @@ class MockPlutoGridStateManager extends _i1.Mock
       Invocation.method(#setPageSize, [pageSize], {#notify: notify}),
       returnValueForMissingStub: null);
   @override
-  void setPage(int? page, {bool? notify = true}) =>
-      super.noSuchMethod(Invocation.method(#setPage, [page], {#notify: notify}),
+  void setPage(int? page,
+          {bool? resetCurrentState = true, bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#setPage, [page],
+              {#resetCurrentState: resetCurrentState, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  void resetPage({bool? notify = true}) =>
-      super.noSuchMethod(Invocation.method(#resetPage, [], {#notify: notify}),
+  void resetPage({bool? resetCurrentState = true, bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(#resetPage, [],
+              {#resetCurrentState: resetCurrentState, #notify: notify}),
           returnValueForMissingStub: null);
+  @override
+  bool isRootGroupedRow(_i3.PlutoRow? row) =>
+      (super.noSuchMethod(Invocation.method(#isRootGroupedRow, [row]),
+          returnValue: false) as bool);
+  @override
+  bool isNotRootGroupedRow(_i3.PlutoRow? row) =>
+      (super.noSuchMethod(Invocation.method(#isNotRootGroupedRow, [row]),
+          returnValue: false) as bool);
+  @override
+  bool isExpandedGroupedRow(_i3.PlutoRow? row) =>
+      (super.noSuchMethod(Invocation.method(#isExpandedGroupedRow, [row]),
+          returnValue: false) as bool);
   @override
   bool isGroupedRowColumn(_i3.PlutoColumn? column) =>
       (super.noSuchMethod(Invocation.method(#isGroupedRowColumn, [column]),
