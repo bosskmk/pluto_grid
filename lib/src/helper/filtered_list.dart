@@ -454,17 +454,11 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   int _toOriginalIndexForInsert(int index) {
     var lastIndex = _effectiveList.length - 1;
 
-    var greaterThanLast = index > lastIndex + (_range?.from ?? 0);
+    var greaterThanLast = index > lastIndex;
 
-    var originalIndex = greaterThanLast
-        ? _toOriginalIndex(lastIndex + (_range?.from ?? 0))
-        : _toOriginalIndex(index);
+    var originalIndex = _toOriginalIndex(greaterThanLast ? lastIndex : index);
 
-    if (greaterThanLast) {
-      ++originalIndex;
-    }
-
-    return originalIndex;
+    return greaterThanLast ? ++originalIndex : originalIndex;
   }
 
   void _updateFilteredList() {
