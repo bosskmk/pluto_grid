@@ -258,6 +258,10 @@ mixin CellState implements IPlutoGridState {
       return false;
     }
 
+    if (row.type.isGroup) {
+      return false;
+    }
+
     if (newValue.toString() == oldValue.toString()) {
       return false;
     }
