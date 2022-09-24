@@ -522,7 +522,7 @@ mixin RowState implements IPlutoGridState {
     int? indexToMove, {
     bool notify = true,
   }) {
-    if (indexToMove == null) {
+    if (rows.isEmpty || indexToMove == null) {
       return;
     }
 
@@ -530,9 +530,9 @@ mixin RowState implements IPlutoGridState {
       indexToMove = refRows.length - rows.length;
     }
 
-    for (final row in rows) {
-      refRows.removeFromOriginal(row);
-    }
+    final Set<Key> removeKeys = Set.from(rows.map((e) => e.key));
+
+    refRows.removeWhereFromOriginal((e) => removeKeys.contains(e.key));
 
     final originalRowIdx =
         page > 1 ? indexToMove + (page - 1) * pageSize : indexToMove;

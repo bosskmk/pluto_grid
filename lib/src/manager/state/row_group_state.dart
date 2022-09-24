@@ -59,6 +59,7 @@ abstract class IRowGroupState {
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys);
 
+  @protected
   void removeColumnsInRowGroup(
     List<PlutoColumn> columns, {
     bool notify = true,
@@ -357,6 +358,7 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
+  @protected
   void removeColumnsInRowGroup(
     List<PlutoColumn> columns, {
     bool notify = true,
