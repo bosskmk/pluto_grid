@@ -230,11 +230,12 @@ mixin RowGroupState implements IPlutoGridState {
         void setFilter(FilteredList<PlutoRow> filteredList) {
           filteredList.setFilter(null);
 
-          if (filteredList.isEmpty || !filteredList.first.type.isGroup) {
+          if (filteredList.originalList.isEmpty ||
+              !filteredList.originalList.first.type.isGroup) {
             return;
           }
 
-          for (final c in filteredList) {
+          for (final c in filteredList.originalList) {
             setFilter(c.type.group.children);
           }
         }
@@ -248,7 +249,7 @@ mixin RowGroupState implements IPlutoGridState {
             }
 
             setFilter(row.type.group.children);
-            return row.type.group.children.isNotEmpty;
+            return row.type.group.children.filterOrOriginalList.isNotEmpty;
           });
         }
 
