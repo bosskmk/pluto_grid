@@ -1143,6 +1143,13 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#removeRowAndGroupByKey, [keys]),
           returnValueForMissingStub: null);
   @override
+  void removeColumnsInRowGroup(List<_i3.PlutoColumn>? columns,
+          {bool? notify = true}) =>
+      super.noSuchMethod(
+          Invocation.method(
+              #removeColumnsInRowGroup, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
   int? getRowIdxByOffset(double? offset) =>
       (super.noSuchMethod(Invocation.method(#getRowIdxByOffset, [offset]))
           as int?);

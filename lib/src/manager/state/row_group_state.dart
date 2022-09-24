@@ -6,7 +6,6 @@ import 'package:pluto_grid/pluto_grid.dart';
   todo
     Column
       - Add
-      - Remove
       - Hide
       - UnHide
     ColumnGroup
