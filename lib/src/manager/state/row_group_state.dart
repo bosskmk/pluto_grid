@@ -211,9 +211,12 @@ mixin RowGroupState implements IPlutoGridState {
     rowGroup.type.group.setExpanded(!rowGroup.type.group.expanded);
 
     if (isPaginated) {
-      // todo : If the current state still exists, it retains the current state.
       resetPage(resetCurrentState: false, notify: false);
     }
+
+    updateCurrentCellPosition(notify: false);
+
+    clearCurrentSelecting(notify: false);
 
     if (notify) {
       notifyListeners();

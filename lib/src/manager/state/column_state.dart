@@ -385,7 +385,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateCurrentCellPosition(notify: false);
 
-    _fireOnSorted(column, oldSort);
+    _callOnSorted(column, oldSort);
 
     notifyListeners();
   }
@@ -643,7 +643,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void sortAscending(PlutoColumn column, {bool notify = true}) {
-    _resetColumnSort();
+    _updateBeforeColumnSort();
 
     column.sort = PlutoColumnSort.ascending;
 
@@ -665,7 +665,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void sortDescending(PlutoColumn column, {bool notify = true}) {
-    _resetColumnSort();
+    _updateBeforeColumnSort();
 
     column.sort = PlutoColumnSort.descending;
 
@@ -687,7 +687,7 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void sortBySortIdx(PlutoColumn column, {bool notify = true}) {
-    _resetColumnSort();
+    _updateBeforeColumnSort();
 
     int compare(a, b) {
       if (a.sortIdx == null || b.sortIdx == null) {
@@ -849,7 +849,10 @@ mixin ColumnState implements IPlutoGridState {
     return !enoughFrozenColumnsWidth(maxWidth! - offsetWidth);
   }
 
-  void _resetColumnSort() {
+  void _updateBeforeColumnSort() {
+    clearCurrentSelecting(notify: false);
+
+    // Reset column sort to none.
     for (var i = 0; i < refColumns.originalList.length; i += 1) {
       refColumns.originalList[i].sort = PlutoColumnSort.none;
     }
@@ -890,7 +893,7 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   /// [PlutoGrid.onSorted] Called when a callback is registered.
-  void _fireOnSorted(PlutoColumn column, PlutoColumnSort oldSort) {
+  void _callOnSorted(PlutoColumn column, PlutoColumnSort oldSort) {
     if (onSorted == null) {
       return;
     }
