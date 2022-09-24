@@ -136,6 +136,7 @@ mixin FilteringRowState implements IPlutoGridState {
   void showFilterPopup(
     BuildContext context, {
     PlutoColumn? calledColumn,
+    void Function()? onClosed,
   }) {
     var shouldProvideDefaultFilterRow =
         _filterRows.isEmpty && calledColumn != null;
@@ -171,6 +172,7 @@ mixin FilteringRowState implements IPlutoGridState {
         columns: columns,
         filterRows: rows,
         focusFirstFilterValue: shouldProvideDefaultFilterRow,
+        onClosed: onClosed,
       ),
     );
   }

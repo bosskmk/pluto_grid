@@ -128,8 +128,6 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   }
 
   void _moveDown({required bool focusToPreviousCell}) {
-    _focusNode.unfocus();
-
     if (!focusToPreviousCell || stateManager.currentCell == null) {
       stateManager.setCurrentCell(
         stateManager.refRows.first.cells[widget.column.field],
@@ -141,6 +139,8 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
     }
 
     stateManager.setKeepFocus(true, notify: false);
+
+    stateManager.gridFocusNode?.requestFocus();
 
     stateManager.notifyListeners();
   }
@@ -185,6 +185,10 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
       stateManager.showFilterPopup(
         _focusNode.context!,
         calledColumn: widget.column,
+        onClosed: () {
+          stateManager.setKeepFocus(true, notify: false);
+          _focusNode.requestFocus();
+        },
       );
     }
 
