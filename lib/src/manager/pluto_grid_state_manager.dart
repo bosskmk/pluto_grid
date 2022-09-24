@@ -337,6 +337,8 @@ class PlutoGridCellPosition {
     this.rowIdx,
   });
 
+  bool get hasPosition => columnIdx != null && rowIdx != null;
+
   @override
   bool operator ==(covariant PlutoGridCellPosition other) {
     return columnIdx == other.columnIdx && rowIdx == other.rowIdx;
