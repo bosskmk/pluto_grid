@@ -383,8 +383,6 @@ mixin ColumnState implements IPlutoGridState {
       sortBySortIdx(column, notify: false);
     }
 
-    updateCurrentCellPosition(notify: false);
-
     _callOnSorted(column, oldSort);
 
     notifyListeners();
@@ -850,6 +848,8 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void _updateBeforeColumnSort() {
+    clearCurrentCell(notify: false);
+
     clearCurrentSelecting(notify: false);
 
     // Reset column sort to none.
