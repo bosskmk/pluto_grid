@@ -415,7 +415,7 @@ mixin ColumnState implements IPlutoGridState {
     _updateLimitedFrozenColumns(columns);
 
     if (columnIdx >= refColumns.originalLength) {
-      refColumns.addAll(columns.cast<PlutoColumn>());
+      refColumns.addAll(columns);
     } else {
       refColumns.insertAll(columnIdx, columns);
     }

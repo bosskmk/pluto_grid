@@ -538,9 +538,9 @@ mixin RowState implements IPlutoGridState {
         page > 1 ? indexToMove + (page - 1) * pageSize : indexToMove;
 
     if (originalRowIdx >= refRows.originalLength) {
-      refRows.addAll(rows.cast<PlutoRow>());
+      refRows.addAll(rows);
     } else {
-      refRows.insertAll(indexToMove, rows.cast<PlutoRow>());
+      refRows.insertAll(indexToMove, rows);
     }
 
     int sortIdx = 0;
@@ -598,9 +598,9 @@ mixin RowState implements IPlutoGridState {
       final originalRowIdx = page > 1 ? index + (page - 1) * pageSize : index;
 
       if (originalRowIdx >= refRows.originalLength) {
-        refRows.addAll(rows.cast<PlutoRow>());
+        refRows.addAll(rows);
       } else {
-        refRows.insertAll(index, rows.cast<PlutoRow>());
+        refRows.insertAll(index, rows);
       }
     }
 
