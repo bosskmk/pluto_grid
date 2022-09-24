@@ -848,10 +848,10 @@ class MockPlutoGridStateManager extends _i1.Mock
           returnValueForMissingStub: null);
   @override
   void showFilterPopup(_i4.BuildContext? context,
-          {_i3.PlutoColumn? calledColumn}) =>
+          {_i3.PlutoColumn? calledColumn, void Function()? onClosed}) =>
       super.noSuchMethod(
-          Invocation.method(
-              #showFilterPopup, [context], {#calledColumn: calledColumn}),
+          Invocation.method(#showFilterPopup, [context],
+              {#calledColumn: calledColumn, #onClosed: onClosed}),
           returnValueForMissingStub: null);
   @override
   void setGridFocusNode(_i4.FocusNode? focusNode) =>
