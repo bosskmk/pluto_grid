@@ -449,11 +449,13 @@ mixin ColumnState implements IPlutoGridState {
       (column) => removeKeys.contains(column.key),
     );
 
-    _removeCellsInRows(columns);
-
     removeColumnsInColumnGroup(columns, notify: false);
 
     removeColumnsInFilterRows(columns, notify: false);
+
+    removeColumnsInRowGroup(columns, notify: false);
+
+    _removeCellsInRows(columns);
 
     resetShowFrozenColumn();
 

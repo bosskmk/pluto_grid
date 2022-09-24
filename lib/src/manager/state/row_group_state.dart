@@ -9,6 +9,8 @@ import 'package:pluto_grid/pluto_grid.dart';
       - Remove
       - Hide
       - UnHide
+    ColumnGroup
+      - Apply changed depth when removing column
     Row
       - Move
       - Check
@@ -57,6 +59,11 @@ abstract class IRowGroupState {
 
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys);
+
+  void removeColumnsInRowGroup(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  });
 }
 
 mixin RowGroupState implements IPlutoGridState {
@@ -135,10 +142,12 @@ mixin RowGroupState implements IPlutoGridState {
     List<PlutoColumn> columns, {
     bool notify = true,
   }) {
-    final groupedRows = PlutoRowGroupHelper.toGroupByColumns(
-      columns: columns,
-      rows: iterateRow,
-    );
+    final List<PlutoRow> groupedRows = columns.isEmpty
+        ? iterateRow.toList()
+        : PlutoRowGroupHelper.toGroupByColumns(
+            columns: columns,
+            rows: iterateRow,
+          );
 
     refRows.clearFromOriginal();
 
@@ -344,6 +353,31 @@ mixin RowGroupState implements IPlutoGridState {
     });
   }
 
+  @override
+  void removeColumnsInRowGroup(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  }) {
+    if (_rowGroupColumns.isEmpty || columns.isEmpty) {
+      return;
+    }
+
+    final Set<Key> removeKeys = Set.from(columns.map((e) => e.key));
+
+    isNotRemoved(e) => !removeKeys.contains(e.key);
+
+    final remaining = _rowGroupColumns.where(isNotRemoved);
+
+    if (remaining.length == _rowGroupColumns.length) {
+      return;
+    }
+
+    setRowGroupByColumns(
+      remaining.toList(growable: false),
+      notify: notify,
+    );
+  }
+
   Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
     for (final row in rows) {
       if (row.type.isGroup) {
@@ -434,10 +468,13 @@ mixin RowGroupState implements IPlutoGridState {
 }
 
 class PlutoRowGroupHelper {
-  static Iterable<PlutoRow> toGroupByColumns({
+  static List<PlutoRow> toGroupByColumns({
     required List<PlutoColumn> columns,
     required Iterable<PlutoRow> rows,
   }) {
+    assert(columns.isNotEmpty);
+    assert(rows.isNotEmpty);
+
     final maxDepth = columns.length;
     int sortIdx = 0;
 
