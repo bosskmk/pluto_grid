@@ -24,6 +24,7 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.isEditing).thenReturn(true);
   });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -41,6 +42,8 @@ void main() {
         'column_field_name': cell,
       },
     );
+
+    when(stateManager.currentColumn).thenReturn(column);
 
     // when
     await tester.pumpWidget(

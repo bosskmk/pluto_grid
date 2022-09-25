@@ -33,6 +33,8 @@ void main() {
           const PlutoGridConfiguration(),
         );
 
+        when(stateManager.isEditing).thenReturn(true);
+
         when(stateManager.keepFocus).thenReturn(true);
 
         when(stateManager.keyManager).thenReturn(PlutoGridKeyManager(
@@ -49,6 +51,8 @@ void main() {
             allowFirstDot: allowFirstDot,
           ),
         );
+
+        when(stateManager.currentColumn).thenReturn(column);
 
         final PlutoCell cell = PlutoCell(value: number);
 
