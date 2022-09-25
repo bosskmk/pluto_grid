@@ -1,3 +1,7 @@
+## [5.1.1] - 2022. 9. 25
+
+* Fix dispose condition of TextEditingController.
+
 ## [5.1.0] - 2022. 9. 10
 
 * Add Column footer.  
