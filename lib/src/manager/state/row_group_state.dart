@@ -306,26 +306,6 @@ mixin RowGroupState implements IPlutoGridState {
 
   @override
   @protected
-  void removeRowAndGroupByKey(Iterable<Key> keys) {
-    assert(hasRowGroups);
-
-    _ensureRowGroups(() {
-      bool removeAll(PlutoRow row) {
-        if (row.type.isGroup) {
-          row.type.group.children.removeWhereFromOriginal(removeAll);
-          if (row.type.group.children.originalList.isEmpty) {
-            return true;
-          }
-        }
-        return keys.contains(row.key);
-      }
-
-      refRows.removeWhereFromOriginal(removeAll);
-    });
-  }
-
-  @override
-  @protected
   void addRowGroup(List<PlutoRow> rows) {
     assert(hasRowGroups);
 
@@ -354,6 +334,26 @@ mixin RowGroupState implements IPlutoGridState {
       }
 
       addAll(grouped, refRows);
+    });
+  }
+
+  @override
+  @protected
+  void removeRowAndGroupByKey(Iterable<Key> keys) {
+    assert(hasRowGroups);
+
+    _ensureRowGroups(() {
+      bool removeAll(PlutoRow row) {
+        if (row.type.isGroup) {
+          row.type.group.children.removeWhereFromOriginal(removeAll);
+          if (row.type.group.children.originalList.isEmpty) {
+            return true;
+          }
+        }
+        return keys.contains(row.key);
+      }
+
+      refRows.removeWhereFromOriginal(removeAll);
     });
   }
 
@@ -503,7 +503,7 @@ class PlutoRowGroupHelper {
 
           final nextDepth = depth + 1;
 
-          final firstRow = children.first;
+          final firstRow = group.value.first;
 
           final cells = <String, PlutoCell>{};
 
@@ -527,7 +527,9 @@ class PlutoRowGroupHelper {
 
           for (var e in firstRow.cells.entries) {
             cells[e.key] = PlutoCell(
-              value: e.key == groupedColumn.field ? group.key : null,
+              value: columns.firstWhereOrNull((c) => c.field == e.key) != null
+                  ? e.value.value
+                  : null,
               key: ValueKey('${key}_${e.key}_cell'),
             )
               ..setColumn(e.value.column)

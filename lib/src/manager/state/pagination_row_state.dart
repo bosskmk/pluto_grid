@@ -5,6 +5,10 @@ abstract class IPaginationRowState {
 
   int get pageSize;
 
+  int get pageRangeFrom;
+
+  int get pageRangeTo;
+
   int get totalPage;
 
   bool get isPaginated;
@@ -57,6 +61,12 @@ mixin PaginationRowState implements IPlutoGridState {
 
   @override
   int get pageSize => _pageSize;
+
+  @override
+  int get pageRangeFrom => _range.from;
+
+  @override
+  int get pageRangeTo => _range.to;
 
   @override
   int get totalPage => (_length / _pageSize).ceil();

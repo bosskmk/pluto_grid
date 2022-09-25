@@ -530,18 +530,17 @@ mixin RowState implements IPlutoGridState {
       indexToMove = refRows.length - rows.length;
     }
 
+    if (isPaginated &&
+        page > 1 &&
+        indexToMove + pageRangeFrom > refRows.originalLength - 1) {
+      indexToMove = refRows.originalLength - 1;
+    }
+
     final Set<Key> removeKeys = Set.from(rows.map((e) => e.key));
 
     refRows.removeWhereFromOriginal((e) => removeKeys.contains(e.key));
 
-    final originalRowIdx =
-        page > 1 ? indexToMove + (page - 1) * pageSize : indexToMove;
-
-    if (originalRowIdx >= refRows.originalLength) {
-      refRows.addAll(rows);
-    } else {
-      refRows.insertAll(indexToMove, rows);
-    }
+    refRows.insertAll(indexToMove, rows);
 
     int sortIdx = 0;
 
