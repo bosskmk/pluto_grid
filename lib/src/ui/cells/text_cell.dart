@@ -87,7 +87,10 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       });
     }
 
-    widget.stateManager.textEditingController = null;
+    if (!widget.stateManager.isEditing ||
+        widget.stateManager.currentColumn?.enableEditingMode != true) {
+      widget.stateManager.textEditingController = null;
+    }
 
     super.dispose();
   }
