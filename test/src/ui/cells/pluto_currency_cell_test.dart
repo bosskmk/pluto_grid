@@ -38,6 +38,7 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.isEditing).thenReturn(true);
   });
 
   buildWidget({
@@ -60,6 +61,8 @@ void main() {
     final PlutoRow row = PlutoRow(
       cells: {'column': cell},
     );
+
+    when(stateManager.currentColumn).thenReturn(column);
 
     await tester.pumpWidget(
       MaterialApp(

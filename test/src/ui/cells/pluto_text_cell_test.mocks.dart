@@ -399,6 +399,14 @@ class MockPlutoGridStateManager extends _i1.Mock
   int get pageSize =>
       (super.noSuchMethod(Invocation.getter(#pageSize), returnValue: 0) as int);
   @override
+  int get pageRangeFrom =>
+      (super.noSuchMethod(Invocation.getter(#pageRangeFrom), returnValue: 0)
+          as int);
+  @override
+  int get pageRangeTo =>
+      (super.noSuchMethod(Invocation.getter(#pageRangeTo), returnValue: 0)
+          as int);
+  @override
   int get totalPage =>
       (super.noSuchMethod(Invocation.getter(#totalPage), returnValue: 0)
           as int);
