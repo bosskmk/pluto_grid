@@ -52,7 +52,7 @@ mixin DraggingRowState implements IPlutoGridState {
   int? _dragTargetRowIdx;
 
   @override
-  bool get canRowDrag => !hasFilter && !hasSortedColumn;
+  bool get canRowDrag => !hasFilter && !hasSortedColumn && !hasRowGroups;
 
   @override
   void setIsDraggingRow(
