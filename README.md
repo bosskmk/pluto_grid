@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v5.1.0
+## PlutoGrid for flutter - v5.1.1
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -181,18 +181,19 @@ For other versions, contact the issue
 
 <br>
 
-### Pluto series
+### Related packages
 > develop packages that make it easy to develop admin pages or CMS with Flutter.
 * [PlutoGrid](https://github.com/bosskmk/pluto_grid)
 * [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
 
 <br>
 
-### Support
+### Donate to this project
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/white_img.png)](https://www.buymeacoffee.com/manki)
 
 <br>
 
-### License
-> MIT
+### Jetbrains provides a free license
+
+[<img alt="IDE license support" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="170"/>](https://www.jetbrains.com/community/opensource/#support)
