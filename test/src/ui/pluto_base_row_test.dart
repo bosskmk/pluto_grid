@@ -99,8 +99,12 @@ void main() {
   buildRowWidget(checked: true).test(
     'row 가 checked 가 true 일 때, rowColor 에 alphaBlend 가 적용 되어야 한다.',
     (tester) async {
-      final rowContainerWidget =
-          find.byType(Container).first.evaluate().first.widget as Container;
+      final rowContainerWidget = find
+          .byType(DecoratedBox)
+          .first
+          .evaluate()
+          .first
+          .widget as DecoratedBox;
 
       final rowContainerDecoration =
           rowContainerWidget.decoration as BoxDecoration;
@@ -115,8 +119,12 @@ void main() {
   buildRowWidget(checked: false).test(
     'row 가 checked 가 false 일 때, rowColor 에 alphaBlend 가 적용 되지 않아야 한다.',
     (tester) async {
-      final rowContainerWidget =
-          find.byType(Container).first.evaluate().first.widget as Container;
+      final rowContainerWidget = find
+          .byType(DecoratedBox)
+          .first
+          .evaluate()
+          .first
+          .widget as DecoratedBox;
 
       final rowContainerDecoration =
           rowContainerWidget.decoration as BoxDecoration;
@@ -132,8 +140,12 @@ void main() {
   ).test(
     'isDragTarget, isTopDragTarget 이 true 인 경우 border top 이 설정 되어야 한다.',
     (tester) async {
-      final rowContainerWidget =
-          find.byType(Container).first.evaluate().first.widget as Container;
+      final rowContainerWidget = find
+          .byType(DecoratedBox)
+          .first
+          .evaluate()
+          .first
+          .widget as DecoratedBox;
 
       final rowContainerDecoration =
           rowContainerWidget.decoration as BoxDecoration;
@@ -151,8 +163,12 @@ void main() {
   ).test(
     'isDragTarget, isBottomDragTarget 이 true 인 경우 border bottom 이 설정 되어야 한다.',
     (tester) async {
-      final rowContainerWidget =
-          find.byType(Container).first.evaluate().first.widget as Container;
+      final rowContainerWidget = find
+          .byType(DecoratedBox)
+          .first
+          .evaluate()
+          .first
+          .widget as DecoratedBox;
 
       final rowContainerDecoration =
           rowContainerWidget.decoration as BoxDecoration;

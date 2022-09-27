@@ -67,10 +67,11 @@ class PlutoLeftFrozenColumnsFooterState
   @override
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
-        delegate: ColumnFooterLayoutDelegate(
-          stateManager: stateManager,
-          columns: _columns,
-        ),
-        children: _columns.map(_buildColumn).toList());
+      delegate: ColumnFooterLayoutDelegate(
+        stateManager: stateManager,
+        columns: _columns,
+      ),
+      children: _columns.map(_buildColumn).toList(),
+    );
   }
 }

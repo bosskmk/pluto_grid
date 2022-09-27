@@ -93,14 +93,15 @@ class PlutoRightFrozenColumnsState
   @override
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
-        delegate: MainColumnLayoutDelegate(
-          stateManager: stateManager,
-          columns: _columns,
-          columnGroups: _columnGroups,
-          frozen: PlutoColumnFrozen.end,
-        ),
-        children: _showColumnGroups == true
-            ? _columnGroups.map(_buildColumnGroup).toList()
-            : _columns.map(_buildColumn).toList());
+      delegate: MainColumnLayoutDelegate(
+        stateManager: stateManager,
+        columns: _columns,
+        columnGroups: _columnGroups,
+        frozen: PlutoColumnFrozen.end,
+      ),
+      children: _showColumnGroups == true
+          ? _columnGroups.map(_buildColumnGroup).toList()
+          : _columns.map(_buildColumn).toList(),
+    );
   }
 }

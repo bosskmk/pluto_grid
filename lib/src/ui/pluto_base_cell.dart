@@ -121,7 +121,7 @@ class PlutoBaseCell extends StatelessWidget
         row: row,
         column: column,
         cellPadding: column.cellPadding ??
-            stateManager.configuration!.style.defaultCellPadding,
+            stateManager.configuration.style.defaultCellPadding,
         stateManager: stateManager,
         child: _BuildCell(
           stateManager: stateManager,
@@ -374,6 +374,13 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
         );
       } else if (widget.column.type.isText) {
         return PlutoTextCell(
+          stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
+      } else if (widget.column.type.isCurrency) {
+        return PlutoCurrencyCell(
           stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,

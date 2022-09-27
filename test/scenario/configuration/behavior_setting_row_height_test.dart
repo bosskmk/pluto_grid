@@ -139,7 +139,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         final sundayColumn =
-            find.text(stateManager!.configuration!.localeText.sunday);
+            find.text(stateManager!.configuration.localeText.sunday);
 
         expect(
           sundayColumn,
@@ -176,7 +176,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
         final hourColumn =
-            find.text(stateManager!.configuration!.localeText.hour);
+            find.text(stateManager!.configuration.localeText.hour);
 
         expect(
           hourColumn,

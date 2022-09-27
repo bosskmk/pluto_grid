@@ -470,6 +470,7 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(readonly: true),
+          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -491,6 +492,7 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(enableEditingMode: false),
+          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -513,6 +515,7 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(readonly: false),
+          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -536,6 +539,7 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(readonly: false),
+          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -559,6 +563,7 @@ void main() {
 
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
           column: createColumn(readonly: false),
+          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'abc',
         );

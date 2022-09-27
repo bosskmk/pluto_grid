@@ -113,6 +113,9 @@ mixin KeyboardState implements IPlutoGridState {
       // Time type column can be moved left or right even in edit state
       else if (currentColumn?.type.isTime == true) {
       }
+      // Currency type column can be moved left or right even in edit state
+      else if (currentColumn?.type.isCurrency == true) {
+      }
       // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.readOnly == true) {
       }

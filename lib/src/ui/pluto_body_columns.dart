@@ -113,18 +113,19 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
       child: PlutoVisibilityLayout(
-          delegate: MainColumnLayoutDelegate(
-            stateManager: stateManager,
-            columns: _columns,
-            columnGroups: _columnGroups,
-            frozen: PlutoColumnFrozen.none,
-          ),
-          scrollController: _scroll,
-          initialViewportDimension: MediaQuery.of(context).size.width,
-          textDirection: stateManager.textDirection,
-          children: _showColumnGroups == true
-              ? _columnGroups.map(_buildColumnGroup).toList()
-              : _columns.map(_buildColumn).toList()),
+        delegate: MainColumnLayoutDelegate(
+          stateManager: stateManager,
+          columns: _columns,
+          columnGroups: _columnGroups,
+          frozen: PlutoColumnFrozen.none,
+        ),
+        scrollController: _scroll,
+        initialViewportDimension: MediaQuery.of(context).size.width,
+        textDirection: stateManager.textDirection,
+        children: _showColumnGroups == true
+            ? _columnGroups.map(_buildColumnGroup).toList()
+            : _columns.map(_buildColumn).toList(),
+      ),
     );
   }
 }

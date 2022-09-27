@@ -27,7 +27,7 @@ class RowHelper {
               return cellOfTimeColumn(column, rowIdx);
             } else if (column.type.isSelect) {
               return cellOfTimeColumn(column, rowIdx);
-            } else if (column.type.isNumber) {
+            } else if (column.type.isNumber || column.type.isCurrency) {
               return cellOfNumberColumn(column, rowIdx);
             }
 
@@ -59,7 +59,8 @@ class RowHelper {
 
   static PlutoCell cellOfSelectColumn(PlutoColumn column, int rowIdx) {
     return PlutoCell(
-        value: (column.type.select!.items.toList()..shuffle()).first);
+      value: (column.type.select.items.toList()..shuffle()).first,
+    );
   }
 
   static PlutoCell cellOfNumberColumn(PlutoColumn column, int rowIdx) {

@@ -18,6 +18,7 @@ import 'screen/feature/column_moving_screen.dart';
 import 'screen/feature/column_resizing_screen.dart';
 import 'screen/feature/column_sorting_screen.dart';
 import 'screen/feature/copy_and_paste_screen.dart';
+import 'screen/feature/currency_type_column_screen.dart';
 import 'screen/feature/dark_mode_screen.dart';
 import 'screen/feature/date_type_column_screen.dart';
 import 'screen/feature/dual_mode_screen.dart';
@@ -73,6 +74,8 @@ class MyApp extends StatelessWidget {
             const ColumnResizingScreen(),
         ColumnSortingScreen.routeName: (context) => const ColumnSortingScreen(),
         CopyAndPasteScreen.routeName: (context) => const CopyAndPasteScreen(),
+        CurrencyTypeColumnScreen.routeName: (context) =>
+            const CurrencyTypeColumnScreen(),
         DarkModeScreen.routeName: (context) => const DarkModeScreen(),
         DateTypeColumnScreen.routeName: (context) =>
             const DateTypeColumnScreen(),

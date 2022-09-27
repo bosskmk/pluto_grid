@@ -10,11 +10,12 @@ class PlutoAggregateHelper {
   }) {
     num sum = 0;
 
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (column.type is! PlutoColumnTypeWithNumberFormat ||
+        !_hasColumnField(rows: rows, column: column)) {
       return sum;
     }
 
-    final numberColumn = column.type.number!;
+    final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
 
     sum = rows.fold(0, (p, e) {
       final cell = e.cells[column.field]!;
@@ -35,7 +36,8 @@ class PlutoAggregateHelper {
   }) {
     num sum = 0;
 
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (column.type is! PlutoColumnTypeWithNumberFormat ||
+        !_hasColumnField(rows: rows, column: column)) {
       return sum;
     }
 
@@ -60,7 +62,8 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (column.type is! PlutoColumnTypeWithNumberFormat ||
+        !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 
@@ -79,7 +82,8 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    if (!column.type.isNumber || !_hasColumnField(rows: rows, column: column)) {
+    if (column.type is! PlutoColumnTypeWithNumberFormat ||
+        !_hasColumnField(rows: rows, column: column)) {
       return null;
     }
 

@@ -123,7 +123,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
 
   @override
   Widget build(BuildContext context) {
-    final style = stateManager.configuration!.style;
+    final style = stateManager.configuration.style;
 
     final columnWidget = _BuildSortableWidget(
       stateManager: stateManager,
@@ -277,11 +277,11 @@ class _BuildDraggableWidget extends StatelessWidget {
             width: PlutoGridSettings.minColumnWidth,
             height: stateManager.columnHeight,
             backgroundColor:
-                stateManager.configuration!.style.gridBackgroundColor,
-            borderColor: stateManager.configuration!.style.gridBorderColor,
+                stateManager.configuration.style.gridBackgroundColor,
+            borderColor: stateManager.configuration.style.gridBorderColor,
             child: Text(
               column.title,
-              style: stateManager.configuration!.style.columnTextStyle.copyWith(
+              style: stateManager.configuration.style.columnTextStyle.copyWith(
                 fontSize: 12,
               ),
               overflow: TextOverflow.ellipsis,
@@ -339,7 +339,7 @@ class _BuildColumnWidget extends StatelessWidget {
 
   EdgeInsets get padding =>
       column.titlePadding ??
-      stateManager.configuration!.style.defaultColumnTitlePadding;
+      stateManager.configuration.style.defaultColumnTitlePadding;
 
   bool get showSizedBoxForIcon =>
       column.isShowRightIcon &&
@@ -475,9 +475,9 @@ class _CheckboxAllSelectionWidgetState
       handleOnChanged: _handleOnChanged,
       tristate: true,
       scale: 0.86,
-      unselectedColor: stateManager.configuration!.style.iconColor,
-      activeColor: stateManager.configuration!.style.activatedBorderColor,
-      checkColor: stateManager.configuration!.style.activatedColor,
+      unselectedColor: stateManager.configuration.style.iconColor,
+      activeColor: stateManager.configuration.style.activatedBorderColor,
+      checkColor: stateManager.configuration.style.activatedColor,
     );
   }
 }
@@ -539,8 +539,8 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
             child: IconButton(
               icon: Icon(
                 Icons.filter_alt_outlined,
-                color: stateManager.configuration!.style.iconColor,
-                size: stateManager.configuration!.style.iconSize,
+                color: stateManager.configuration.style.iconColor,
+                size: stateManager.configuration.style.iconSize,
               ),
               onPressed: _handleOnPressedFilter,
               constraints: BoxConstraints(
@@ -558,7 +558,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
         text: _title,
         children: _children,
       ),
-      style: stateManager.configuration!.style.columnTextStyle,
+      style: stateManager.configuration.style.columnTextStyle,
       overflow: TextOverflow.ellipsis,
       softWrap: false,
       maxLines: 1,

@@ -26,7 +26,7 @@ void main() {
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());

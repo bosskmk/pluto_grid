@@ -342,7 +342,7 @@ void main() {
             filterType: filterType,
             base: a.toString(),
             search: b.toString(),
-            column: column,
+            column: column!,
           );
         };
       };

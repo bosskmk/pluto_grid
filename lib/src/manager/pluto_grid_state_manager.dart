@@ -456,8 +456,9 @@ class _ApplyCellForFormat implements _Apply {
   ) {
     assert(refColumns.isNotEmpty);
 
-    columnsToApply =
-        refColumns.where((element) => element.type.applyFormatOnInit!);
+    columnsToApply = refColumns.where(
+      (element) => element.type.applyFormatOnInit,
+    );
   }
 
   late Iterable<PlutoColumn> columnsToApply;
@@ -470,8 +471,9 @@ class _ApplyCellForFormat implements _Apply {
     for (var column in columnsToApply) {
       var value = column.type.applyFormat(row.cells[column.field]!.value);
 
-      if (column.type.isNumber) {
-        value = column.type.number!.toNumber(value);
+      if (column.type is PlutoColumnTypeWithNumberFormat) {
+        value =
+            (column.type as PlutoColumnTypeWithNumberFormat).toNumber(value);
       }
 
       row.cells[column.field]!.value = value;

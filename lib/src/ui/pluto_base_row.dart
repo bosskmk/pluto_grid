@@ -82,7 +82,7 @@ class PlutoBaseRow extends StatelessWidget {
       rowIdx: rowIdx,
       row: row,
       enableRowColorAnimation:
-          stateManager.configuration!.style.enableRowColorAnimation,
+          stateManager.configuration.style.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
       child: visibilityLayout
           ? PlutoVisibilityLayout(
@@ -202,15 +202,14 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   BoxDecoration _decoration = const BoxDecoration();
 
-  Color get _oddRowColor =>
-      stateManager.configuration!.style.oddRowColor == null
-          ? stateManager.configuration!.style.rowColor
-          : stateManager.configuration!.style.oddRowColor!;
+  Color get _oddRowColor => stateManager.configuration.style.oddRowColor == null
+      ? stateManager.configuration.style.rowColor
+      : stateManager.configuration.style.oddRowColor!;
 
   Color get _evenRowColor =>
-      stateManager.configuration!.style.evenRowColor == null
-          ? stateManager.configuration!.style.rowColor
-          : stateManager.configuration!.style.evenRowColor!;
+      stateManager.configuration.style.evenRowColor == null
+          ? stateManager.configuration.style.rowColor
+          : stateManager.configuration.style.evenRowColor!;
 
   @override
   void initState() {
@@ -253,7 +252,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     Color color = _getDefaultRowColor();
 
     if (isDragTarget) {
-      color = stateManager.configuration!.style.cellColorInReadOnlyState;
+      color = stateManager.configuration.style.cellColorInReadOnlyState;
     } else {
       final bool checkCurrentRow = !stateManager.selectingMode.isRow &&
           isFocusedCurrentRow &&
@@ -263,13 +262,12 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
           stateManager.isSelectedRow(widget.row.key);
 
       if (checkCurrentRow || checkSelectedRow) {
-        color = stateManager.configuration!.style.activatedColor;
+        color = stateManager.configuration.style.activatedColor;
       }
     }
 
     return isCheckedRow
-        ? Color.alphaBlend(
-            stateManager.configuration!.style.checkedColor, color)
+        ? Color.alphaBlend(stateManager.configuration.style.checkedColor, color)
         : color;
   }
 
@@ -315,18 +313,18 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
         top: isTopDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: stateManager.configuration!.style.activatedBorderColor,
+                color: stateManager.configuration.style.activatedBorderColor,
               )
             : BorderSide.none,
         bottom: isBottomDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: stateManager.configuration!.style.activatedBorderColor,
+                color: stateManager.configuration.style.activatedBorderColor,
               )
-            : stateManager.configuration!.style.enableCellBorderHorizontal
+            : stateManager.configuration.style.enableCellBorderHorizontal
                 ? BorderSide(
                     width: PlutoGridSettings.rowBorderWidth,
-                    color: stateManager.configuration!.style.borderColor,
+                    color: stateManager.configuration.style.borderColor,
                   )
                 : BorderSide.none,
       ),
@@ -367,9 +365,6 @@ class _AnimatedOrNormalContainer extends StatelessWidget {
             decoration: decoration,
             child: child,
           )
-        : Container(
-            decoration: decoration,
-            child: child,
-          );
+        : DecoratedBox(decoration: decoration, child: child);
   }
 }

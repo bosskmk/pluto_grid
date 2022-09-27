@@ -100,7 +100,7 @@ class _ColumnGroupTitle extends StatelessWidget {
 
   EdgeInsets get _padding =>
       columnGroup.group.titlePadding ??
-      stateManager.configuration!.style.defaultColumnTitlePadding;
+      stateManager.configuration.style.defaultColumnTitlePadding;
 
   String? get _title =>
       columnGroup.group.titleSpan == null ? columnGroup.group.title : null;

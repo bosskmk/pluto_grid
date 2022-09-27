@@ -276,12 +276,8 @@ class PlutoColumn {
   /// or whether the columns in the center area are displayed in the screen area.
   double startPosition = 0;
 
-  bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
-    if (!hasCheckReadOnly || row == null || cell == null) {
-      return readOnly;
-    }
-
-    return _checkReadOnly!(row, cell);
+  bool checkReadOnly(PlutoRow row, PlutoCell cell) {
+    return hasCheckReadOnly ? _checkReadOnly!(row, cell) : readOnly;
   }
 
   void setFilterFocusNode(FocusNode? node) {
@@ -293,8 +289,8 @@ class PlutoColumn {
   }
 
   String formattedValueForType(dynamic value) {
-    if (type.isNumber) {
-      return type.number!.applyFormat(value);
+    if (type is PlutoColumnTypeWithNumberFormat) {
+      return type.applyFormat(value);
     }
 
     return value.toString();
@@ -309,10 +305,14 @@ class PlutoColumn {
   }
 
   String formattedValueForDisplayInEditing(dynamic value) {
-    if (type.isNumber) {
-      return value
-          .toString()
-          .replaceAll('.', type.number!.numberFormat.symbols.DECIMAL_SEP);
+    if (type is PlutoColumnTypeWithNumberFormat) {
+      return value.toString().replaceFirst(
+            '.',
+            (type as PlutoColumnTypeWithNumberFormat)
+                .numberFormat
+                .symbols
+                .DECIMAL_SEP,
+          );
     }
 
     if (formatter != null) {

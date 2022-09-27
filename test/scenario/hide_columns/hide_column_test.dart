@@ -63,7 +63,7 @@ void main() {
         await tester.pumpAndSettle();
 
         var columnTitleOfPopup = find.text(
-          stateManager.configuration!.localeText.setColumnsTitle,
+          stateManager.configuration.localeText.setColumnsTitle,
         );
 
         expect(columnTitleOfPopup, findsOneWidget);
@@ -98,7 +98,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final columnTitleOfPopup = find.text(
-          stateManager.configuration!.localeText.setColumnsTitle,
+          stateManager.configuration.localeText.setColumnsTitle,
         );
 
         final firstColumnCell = find
@@ -150,7 +150,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final columnTitleOfPopup = find.text(
-          stateManager.configuration!.localeText.setColumnsTitle,
+          stateManager.configuration.localeText.setColumnsTitle,
         );
 
         final firstColumnCell = find

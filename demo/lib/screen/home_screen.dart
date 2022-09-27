@@ -24,6 +24,7 @@ import 'feature/column_moving_screen.dart';
 import 'feature/column_resizing_screen.dart';
 import 'feature/column_sorting_screen.dart';
 import 'feature/copy_and_paste_screen.dart';
+import 'feature/currency_type_column_screen.dart';
 import 'feature/dark_mode_screen.dart';
 import 'feature/date_type_column_screen.dart';
 import 'feature/dual_mode_screen.dart';
@@ -288,6 +289,14 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, NumberTypeColumnScreen.routeName);
             },
+          ),
+          PlutoListTile(
+            title: 'Currency type column',
+            description: 'A column to enter a number as currency value.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, CurrencyTypeColumnScreen.routeName);
+            },
+            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Date type column',

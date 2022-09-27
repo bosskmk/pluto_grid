@@ -145,7 +145,7 @@ class PlutoGridKeyManager {
     PlutoMoveDirection moveDirection;
 
     bool force = keyEvent.isHorizontal &&
-        stateManager.configuration?.enableMoveHorizontalInEditing == true;
+        stateManager.configuration.enableMoveHorizontalInEditing == true;
 
     if (keyEvent.isLeft) {
       moveDirection = PlutoMoveDirection.left;
@@ -262,11 +262,11 @@ class PlutoGridKeyManager {
       return;
     }
 
-    if (stateManager.configuration!.enterKeyAction.isNone) {
+    if (stateManager.configuration.enterKeyAction.isNone) {
       return;
     }
 
-    if (stateManager.configuration!.enterKeyAction.isToggleEditing) {
+    if (stateManager.configuration.enterKeyAction.isToggleEditing) {
       stateManager.toggleEditing(notify: false);
     } else {
       if (stateManager.isEditing == true ||
@@ -401,7 +401,7 @@ class PlutoGridKeyManager {
   }
 
   void _moveCell(PlutoKeyManagerEvent keyEvent) {
-    final enterKeyAction = stateManager.configuration!.enterKeyAction;
+    final enterKeyAction = stateManager.configuration.enterKeyAction;
 
     if (enterKeyAction.isNone) {
       return;

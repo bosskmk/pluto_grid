@@ -44,7 +44,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
   );
 
   String get cellValue =>
-      widget.cell.value ?? widget.column.type.time!.defaultValue;
+      widget.cell.value ?? widget.column.type.time.defaultValue;
 
   String get cellHour => cellValue.toString().substring(0, 2);
 
@@ -62,7 +62,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
 
     final style = widget.stateManager.style;
 
-    final configuration = widget.stateManager.configuration!.copyWith(
+    final configuration = widget.stateManager.configuration.copyWith(
       style: style.copyWith(
         enableColumnBorderVertical: false,
         enableColumnBorderHorizontal: false,

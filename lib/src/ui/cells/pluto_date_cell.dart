@@ -55,15 +55,15 @@ class PlutoDateCellState extends State<PlutoDateCell>
       context: context,
       initDate: PlutoDateTimeHelper.parseOrNullWithFormat(
         widget.cell.value,
-        widget.column.type.date!.format,
+        widget.column.type.date.format,
       ),
-      startDate: widget.column.type.date!.startDate,
-      endDate: widget.column.type.date!.endDate,
-      dateFormat: widget.column.type.date!.dateFormat,
-      headerDateFormat: widget.column.type.date!.headerDateFormat,
+      startDate: widget.column.type.date.startDate,
+      endDate: widget.column.type.date.endDate,
+      dateFormat: widget.column.type.date.dateFormat,
+      headerDateFormat: widget.column.type.date.headerDateFormat,
       onSelected: onSelected,
       itemHeight: widget.stateManager.rowTotalHeight,
-      configuration: widget.stateManager.configuration!,
+      configuration: widget.stateManager.configuration,
     );
   }
 }

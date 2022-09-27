@@ -109,6 +109,8 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
 
   final EdgeInsets? padding;
 
+  final bool formatAsCurrency;
+
   const PlutoAggregateColumnFooter({
     required this.rendererContext,
     required this.type,
@@ -118,6 +120,7 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
     this.titleSpanBuilder,
     this.alignment,
     this.padding,
+    this.formatAsCurrency = false,
     super.key,
   });
 
@@ -147,7 +150,9 @@ class PlutoAggregateColumnFooterState
   void initState() {
     super.initState();
 
-    _numberFormat = NumberFormat(widget.format, widget.locale);
+    _numberFormat = widget.formatAsCurrency
+        ? NumberFormat.simpleCurrency(locale: widget.locale)
+        : NumberFormat(widget.format, widget.locale);
 
     _setAggregator();
 
@@ -206,7 +211,7 @@ class PlutoAggregateColumnFooterState
           text: text,
           children: children,
         ),
-        style: stateManager.configuration!.style.cellTextStyle.copyWith(
+        style: stateManager.configuration.style.cellTextStyle.copyWith(
           decoration: TextDecoration.none,
           fontWeight: FontWeight.normal,
         ),

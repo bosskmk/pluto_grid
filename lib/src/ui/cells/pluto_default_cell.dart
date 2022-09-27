@@ -92,8 +92,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             feedbackWidget: cellWidget,
             dragIcon: Icon(
               Icons.drag_indicator,
-              size: stateManager.configuration!.style.iconSize,
-              color: stateManager.configuration!.style.iconColor,
+              size: stateManager.configuration.style.iconSize,
+              color: stateManager.configuration.style.iconColor,
             ),
           ),
         if (widget.column.enableRowChecked)
@@ -203,9 +203,9 @@ class _RowDragIconWidget extends StatelessWidget {
               width: column.width,
               height: stateManager.rowHeight,
               backgroundColor:
-                  stateManager.configuration!.style.gridBackgroundColor,
+                  stateManager.configuration.style.gridBackgroundColor,
               borderColor:
-                  stateManager.configuration!.style.activatedBorderColor,
+                  stateManager.configuration.style.activatedBorderColor,
               child: Row(
                 children: [
                   dragIcon,
@@ -294,9 +294,9 @@ class _CheckboxSelectionWidgetState
       value: _checked,
       handleOnChanged: _handleOnChanged,
       scale: 0.86,
-      unselectedColor: stateManager.configuration!.style.iconColor,
-      activeColor: stateManager.configuration!.style.activatedBorderColor,
-      checkColor: stateManager.configuration!.style.activatedColor,
+      unselectedColor: stateManager.configuration.style.iconColor,
+      activeColor: stateManager.configuration.style.activatedBorderColor,
+      checkColor: stateManager.configuration.style.activatedColor,
     );
   }
 }
@@ -335,7 +335,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
 
     return Text(
       column.formattedValueForDisplay(cell.value),
-      style: stateManager.configuration!.style.cellTextStyle.copyWith(
+      style: stateManager.configuration.style.cellTextStyle.copyWith(
         decoration: TextDecoration.none,
         fontWeight: FontWeight.normal,
       ),

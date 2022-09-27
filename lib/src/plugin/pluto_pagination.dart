@@ -151,10 +151,10 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   TextStyle _getNumberTextStyle(bool isCurrentIndex) {
     return TextStyle(
       fontSize:
-          isCurrentIndex ? stateManager.configuration!.style.iconSize : null,
+          isCurrentIndex ? stateManager.configuration.style.iconSize : null,
       color: isCurrentIndex
-          ? stateManager.configuration!.style.activatedBorderColor
-          : stateManager.configuration!.style.iconColor,
+          ? stateManager.configuration.style.activatedBorderColor
+          : stateManager.configuration.style.iconColor,
     );
   }
 
@@ -181,10 +181,10 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
       builder: (_, size) {
         _maxWidth = size.maxWidth;
 
-        final Color iconColor = stateManager.configuration!.style.iconColor;
+        final Color iconColor = stateManager.configuration.style.iconColor;
 
         final Color disabledIconColor =
-            stateManager.configuration!.style.disabledIconColor;
+            stateManager.configuration.style.disabledIconColor;
 
         return Container(
           width: _maxWidth,

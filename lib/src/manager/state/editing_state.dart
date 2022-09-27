@@ -161,8 +161,9 @@ mixin EditingState implements IPlutoGridState {
 
   @override
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
-    if (column.type.isNumber) {
-      return column.type.number!.toNumber(column.type.applyFormat(value));
+    if (column.type is PlutoColumnTypeWithNumberFormat) {
+      return (column.type as PlutoColumnTypeWithNumberFormat)
+          .toNumber(column.type.applyFormat(value));
     }
 
     return value;

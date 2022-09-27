@@ -448,6 +448,7 @@ void main() {
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: columns.first,
+          row: PlutoRow(cells: {columns.first.field: PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -482,6 +483,7 @@ void main() {
 
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
           column: columns.first,
+          row: PlutoRow(cells: {columns.first.field: PlutoCell(value: '')}),
           newValue: 'abc',
           oldValue: 'ABC',
         );

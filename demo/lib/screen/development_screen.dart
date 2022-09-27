@@ -71,9 +71,16 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       return PlutoAggregateColumnFooter(
         rendererContext: c,
         type: PlutoAggregateColumnType.sum,
-        format: 'CheckedSum : #,###',
+        format: '#,###',
         alignment: Alignment.center,
+        formatAsCurrency: true,
         filter: (cell) => cell.row.checked == true,
+        titleSpanBuilder: (text) {
+          return [
+            const TextSpan(text: 'CheckedSum : '),
+            TextSpan(text: text),
+          ];
+        },
       );
     };
   }
@@ -441,7 +448,7 @@ class _HeaderState extends State<_Header> {
       }
 
       widget.stateManager.setConfiguration(
-        widget.stateManager.configuration!.copyWith(
+        widget.stateManager.configuration.copyWith(
           localeText: localeText,
         ),
       );
