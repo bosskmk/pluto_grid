@@ -4,10 +4,6 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 /*
   todo
-    Column
-      - Add
-      - Hide
-      - UnHide
     ColumnGroup
       - Apply changed depth when removing column
     Row
@@ -18,7 +14,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IRowGroupState {
   bool get hasRowGroups;
 
-  Iterable<PlutoRow> get iterateRootRowGroup;
+  bool get enabledRowGroups;
+
+  PlutoRowGroupDelegate? get rowGroupDelegate;
+
+  Iterable<PlutoRow> get iterateMainRowGroup;
 
   Iterable<PlutoRow> get iterateRowGroup;
 
@@ -26,16 +26,14 @@ abstract class IRowGroupState {
 
   Iterable<PlutoRow> get iterateRow;
 
-  bool isRootGroupedRow(PlutoRow row);
+  bool isMainRow(PlutoRow row);
 
-  bool isNotRootGroupedRow(PlutoRow row);
+  bool isNotMainGroupedRow(PlutoRow row);
 
   bool isExpandedGroupedRow(PlutoRow row);
 
-  bool isGroupedRowColumn(PlutoColumn column);
-
-  void setRowGroupByColumns(
-    List<PlutoColumn> columns, {
+  void setRowGroup(
+    PlutoRowGroupDelegate? delegate, {
     bool notify = true,
   });
 
@@ -60,71 +58,65 @@ abstract class IRowGroupState {
   void removeRowAndGroupByKey(Iterable<Key> keys);
 
   @protected
-  void removeColumnsInRowGroup(
+  void removeColumnsInRowGroupByColumn(
     List<PlutoColumn> columns, {
     bool notify = true,
   });
+
+  @protected
+  void updateRowGroupByHideColumn(List<PlutoColumn> columns);
+
+  @protected
+  void updateRowGroup();
 }
 
 mixin RowGroupState implements IPlutoGridState {
   @override
-  bool get hasRowGroups => _rowGroupColumns.isNotEmpty;
-
-  List<PlutoColumn> _rowGroupColumns = [];
-
-  PlutoColumn? get _rootRowGroupColumn => _rowGroupColumns.firstOrNull;
+  bool get hasRowGroups => _rowGroupDelegate != null;
 
   @override
-  Iterable<PlutoRow> get iterateRootRowGroup sync* {
-    if (!hasRowGroups) {
-      return;
-    }
+  bool get enabledRowGroups => _rowGroupDelegate?.enabled == true;
 
-    for (final row in refRows.originalList.where(isRootGroupedRow)) {
+  bool _previousEnabledRowGroups = false;
+
+  PlutoRowGroupDelegate? _rowGroupDelegate;
+
+  @override
+  PlutoRowGroupDelegate? get rowGroupDelegate => _rowGroupDelegate;
+
+  @override
+  Iterable<PlutoRow> get iterateMainRowGroup sync* {
+    for (final row in refRows.originalList.where(isMainRow)) {
       yield row;
     }
   }
 
   @override
   Iterable<PlutoRow> get iterateRowGroup sync* {
-    if (!hasRowGroups) {
-      return;
-    }
-
-    for (final row in _iterateRowGroup(iterateRootRowGroup)) {
+    for (final row in _iterateRowGroup(iterateMainRowGroup)) {
       yield row;
     }
   }
 
   @override
   Iterable<PlutoRow> get iterateRowAndGroup sync* {
-    for (final row in hasRowGroups
-        ? _iterateRowAndGroup(iterateRootRowGroup)
-        : refRows.originalList) {
+    for (final row in _iterateRowAndGroup(iterateMainRowGroup)) {
       yield row;
     }
   }
 
   @override
   Iterable<PlutoRow> get iterateRow sync* {
-    for (final row in hasRowGroups
-        ? _iterateRow(iterateRootRowGroup)
-        : refRows.originalList) {
+    for (final row in _iterateRow(iterateMainRowGroup)) {
       yield row;
     }
   }
 
   @override
-  bool isRootGroupedRow(PlutoRow row) {
-    if (!row.type.isGroup) {
-      return false;
-    }
-
-    return row.type.group.groupField == _rootRowGroupColumn?.field;
-  }
+  bool isMainRow(PlutoRow row) => row.isMain;
 
   @override
-  bool isNotRootGroupedRow(PlutoRow row) => !isRootGroupedRow(row);
+  bool isNotMainGroupedRow(PlutoRow row) => !isMainRow(row);
 
   @override
   bool isExpandedGroupedRow(PlutoRow row) {
@@ -132,32 +124,13 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   @override
-  bool isGroupedRowColumn(PlutoColumn column) {
-    return _rowGroupColumns.firstWhereOrNull((c) => c.field == column.field) !=
-        null;
-  }
-
-  @override
-  void setRowGroupByColumns(
-    List<PlutoColumn> columns, {
+  void setRowGroup(
+    PlutoRowGroupDelegate? delegate, {
     bool notify = true,
   }) {
-    final List<PlutoRow> groupedRows = columns.isEmpty
-        ? iterateRow.toList()
-        : PlutoRowGroupHelper.toGroupByColumns(
-            columns: columns,
-            rows: iterateRow,
-          );
+    _rowGroupDelegate = delegate;
 
-    refRows.clearFromOriginal();
-
-    refRows.addAll(groupedRows);
-
-    _rowGroupColumns = columns;
-
-    if (isPaginated) {
-      resetPage(resetCurrentState: true, notify: false);
-    }
+    updateRowGroup();
 
     if (notify) {
       notifyListeners();
@@ -169,7 +142,7 @@ mixin RowGroupState implements IPlutoGridState {
     required PlutoRow rowGroup,
     bool notify = true,
   }) {
-    assert(hasRowGroups);
+    assert(enabledRowGroups);
 
     if (!rowGroup.type.isGroup) {
       return;
@@ -227,7 +200,7 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   @protected
   void setRowGroupFilter(FilteredListFilter<PlutoRow>? filter) {
-    assert(hasRowGroups);
+    assert(enabledRowGroups);
 
     _ensureRowGroups(() {
       if (filter == null) {
@@ -268,51 +241,23 @@ mixin RowGroupState implements IPlutoGridState {
     required PlutoColumn column,
     required int Function(PlutoRow, PlutoRow) compare,
   }) {
-    assert(hasRowGroups);
+    assert(enabledRowGroups);
 
     _ensureRowGroups(() {
-      if (refRows.originalList.isEmpty) {
-        return;
-      }
-
-      if (refRows.originalList.first.type.group.groupField == column.field) {
-        refRows.sort(compare);
-
-        return;
-      }
-
-      sortChildren(PlutoRow row) {
-        assert(row.type.isGroup);
-
-        if (row.type.group.childrenGroupField == column.field ||
-            !row.type.group.children.originalList.first.type.isGroup) {
-          row.type.group.children.sort(compare);
-
-          return;
-        }
-
-        if (row.type.group.children.originalList.first.type.isGroup) {
-          for (final child in row.type.group.children.originalList) {
-            sortChildren(child);
-          }
-        }
-      }
-
-      for (final row in refRows.originalList) {
-        sortChildren(row);
-      }
+      _rowGroupDelegate!.sort(column: column, rows: refRows, compare: compare);
     });
   }
 
   @override
   @protected
   void addRowGroup(List<PlutoRow> rows) {
-    assert(hasRowGroups);
+    if (rows.isEmpty) {
+      return;
+    }
 
-    final grouped = PlutoRowGroupHelper.toGroupByColumns(
-      columns: _rowGroupColumns,
-      rows: rows,
-    );
+    assert(enabledRowGroups);
+
+    final grouped = _rowGroupDelegate!.toGroup(rows: rows);
 
     _ensureRowGroups(() {
       addAll(Iterable<PlutoRow> groupedRows, FilteredList<PlutoRow> ref) {
@@ -340,7 +285,11 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys) {
-    assert(hasRowGroups);
+    if (keys.isEmpty) {
+      return;
+    }
+
+    assert(enabledRowGroups);
 
     _ensureRowGroups(() {
       bool removeAll(PlutoRow row) {
@@ -359,28 +308,80 @@ mixin RowGroupState implements IPlutoGridState {
 
   @override
   @protected
-  void removeColumnsInRowGroup(
+  void removeColumnsInRowGroupByColumn(
     List<PlutoColumn> columns, {
     bool notify = true,
   }) {
-    if (_rowGroupColumns.isEmpty || columns.isEmpty) {
+    if (columns.isEmpty || _rowGroupDelegate?.type.isByColumn != true) {
       return;
     }
+
+    final delegate = _rowGroupDelegate as PlutoRowGroupByColumnDelegate;
 
     final Set<Key> removeKeys = Set.from(columns.map((e) => e.key));
 
     isNotRemoved(e) => !removeKeys.contains(e.key);
 
-    final remaining = _rowGroupColumns.where(isNotRemoved);
+    final remaining =
+        delegate.columns.where(isNotRemoved).toList(growable: false);
 
-    if (remaining.length == _rowGroupColumns.length) {
+    if (remaining.length == delegate.columns.length) {
       return;
     }
 
-    setRowGroupByColumns(
-      remaining.toList(growable: false),
-      notify: notify,
-    );
+    delegate.columns.clear();
+
+    delegate.columns.addAll(remaining);
+
+    updateRowGroup();
+  }
+
+  @override
+  @protected
+  void updateRowGroupByHideColumn(List<PlutoColumn> columns) {
+    if (rowGroupDelegate?.type.isByColumn != true) {
+      return;
+    }
+
+    final delegate = rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+
+    final Set<Key> updateKeys = Set.from(columns.map((e) => e.key));
+
+    isUpdated(e) => updateKeys.contains(e.key);
+
+    final updated = delegate.columns.firstWhereOrNull(isUpdated) != null;
+
+    if (updated) {
+      updateRowGroup();
+    }
+  }
+
+  @override
+  @protected
+  void updateRowGroup() {
+    assert(hasRowGroups);
+
+    List<PlutoRow> rows;
+
+    final previousRows = _previousEnabledRowGroups
+        ? _iterateRow(iterateMainRowGroup)
+        : refRows.originalList;
+
+    if (enabledRowGroups == true) {
+      rows = _rowGroupDelegate!.toGroup(rows: previousRows);
+    } else {
+      rows = previousRows.toList();
+    }
+
+    _previousEnabledRowGroups = enabledRowGroups;
+
+    refRows.clearFromOriginal();
+
+    refRows.addAll(rows);
+
+    if (isPaginated) {
+      resetPage(resetCurrentState: true, notify: false);
+    }
   }
 
   Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
@@ -420,7 +421,7 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   void _ensureRowGroups(void Function() callback) {
-    assert(hasRowGroups);
+    assert(enabledRowGroups);
 
     _collapseAllRowGroup();
 
@@ -430,7 +431,7 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   void _collapseAllRowGroup() {
-    refRows.removeWhereFromOriginal(isNotRootGroupedRow);
+    refRows.removeWhereFromOriginal(isNotMainGroupedRow);
   }
 
   void _restoreExpandedRowGroup() {
@@ -469,78 +470,5 @@ mixin RowGroupState implements IPlutoGridState {
     if (toResetPage) {
       resetPage(resetCurrentState: false, notify: false);
     }
-  }
-}
-
-class PlutoRowGroupHelper {
-  static List<PlutoRow> toGroupByColumns({
-    required List<PlutoColumn> columns,
-    required Iterable<PlutoRow> rows,
-  }) {
-    assert(columns.isNotEmpty);
-    assert(rows.isNotEmpty);
-
-    final maxDepth = columns.length;
-    int sortIdx = 0;
-
-    List<PlutoRow> toGroup({
-      required Iterable<PlutoRow> children,
-      required int depth,
-      String? previousKey,
-    }) {
-      final groupedColumn = columns[depth];
-
-      return groupBy<PlutoRow, String>(children, (row) {
-        return row.cells[columns[depth].field]!.value.toString();
-      }).entries.map(
-        (group) {
-          final groupKey =
-              previousKey == null ? group.key : '${previousKey}_${group.key}';
-
-          final Key key = ValueKey(
-            '${groupedColumn.field}_${groupKey}_rowGroup',
-          );
-
-          final nextDepth = depth + 1;
-
-          final firstRow = group.value.first;
-
-          final cells = <String, PlutoCell>{};
-
-          final row = PlutoRow(
-            cells: cells,
-            key: ValueKey(key),
-            sortIdx: sortIdx++,
-            type: PlutoRowType.group(
-              groupField: groupedColumn.field,
-              children: FilteredList(
-                initialList: nextDepth < maxDepth
-                    ? toGroup(
-                        children: group.value,
-                        depth: nextDepth,
-                        previousKey: groupKey,
-                      ).toList()
-                    : group.value.toList(),
-              ),
-            ),
-          );
-
-          for (var e in firstRow.cells.entries) {
-            cells[e.key] = PlutoCell(
-              value: columns.firstWhereOrNull((c) => c.field == e.key) != null
-                  ? e.value.value
-                  : null,
-              key: ValueKey('${key}_${e.key}_cell'),
-            )
-              ..setColumn(e.value.column)
-              ..setRow(row);
-          }
-
-          return row;
-        },
-      ).toList();
-    }
-
-    return toGroup(children: rows, depth: 0);
   }
 }

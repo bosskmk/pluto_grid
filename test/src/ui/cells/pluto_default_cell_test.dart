@@ -61,7 +61,8 @@ void main() {
     when(horizontalScrollController.offset).thenReturn(0);
     when(verticalScrollController.offset).thenReturn(0);
     when(stateManager.isCurrentCell(any)).thenReturn(false);
-    when(stateManager.isGroupedRowColumn(any)).thenReturn(false);
+    when(stateManager.enabledRowGroups).thenReturn(false);
+    when(stateManager.rowGroupDelegate).thenReturn(null);
   });
 
   group('기본 셀 테스트', () {

@@ -53,7 +53,7 @@ mixin FilteringRowState implements IPlutoGridState {
       };
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       setRowGroupFilter(savedFilter);
     } else {
       refRows.setFilter(savedFilter);

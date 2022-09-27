@@ -37,8 +37,8 @@ mixin PaginationRowState implements IPlutoGridState {
   final FilteredListRange _range = FilteredListRange(0, defaultPageSize);
 
   Iterable<PlutoRow> get _rowsToPaginate {
-    return hasRowGroups
-        ? refRows.filterOrOriginalList.where(isRootGroupedRow)
+    return enabledRowGroups
+        ? refRows.filterOrOriginalList.where(isMainRow)
         : refRows.filterOrOriginalList;
   }
 
@@ -103,7 +103,7 @@ mixin PaginationRowState implements IPlutoGridState {
       to = _length;
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       PlutoRow lastRow(PlutoRow row) {
         return isExpandedGroupedRow(row)
             ? lastRow(row.type.group.children.filterOrOriginalList.last)

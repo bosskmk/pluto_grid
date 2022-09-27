@@ -54,10 +54,10 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
           .then((initializedRows) {
         stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-        stateManager.setRowGroupByColumns([
+        stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
           stateManager.columns[3],
           stateManager.columns[4],
-        ]);
+        ]));
         stateManager.moveColumn(
           column: columns[5],
           targetColumn: columns[0],
@@ -178,6 +178,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 enableCellBorderHorizontal: true,
                 // oddRowColor: Colors.amber,
                 // evenRowColor: const Color(0xFFF6F6F6),
+                cellColorGroupedRow: const Color(0x80F6F6F6),
                 gridBorderRadius: BorderRadius.circular(10),
                 gridPopupBorderRadius: BorderRadius.circular(7),
                 // columnAscendingIcon: const Icon(
@@ -722,18 +723,39 @@ class _HeaderState extends State<_Header> {
           PlutoMenuItem(
             title: 'Test',
             onTap: () {
-              for (final column in widget.stateManager.columns) {
-                column.enableRowDrag = false;
-                column.enableRowChecked = false;
-                column.frozen = PlutoColumnFrozen.none;
-              }
-              widget.stateManager.columns[6].enableRowDrag = true;
-              widget.stateManager.columns[6].enableRowChecked = true;
-              widget.stateManager.columns[6].frozen = PlutoColumnFrozen.start;
-              widget.stateManager.setRowGroupByColumns([
-                widget.stateManager.columns[6],
-              ]);
-              widget.stateManager.updateVisibilityLayout();
+              // Insert column to row group by
+              // widget.stateManager.insertColumns(0, [
+              //   PlutoColumn(
+              //     title: 'new',
+              //     field: 'new',
+              //     type: PlutoColumnType.text(),
+              //   ),
+              // ]);
+              // widget.stateManager
+              //     .setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
+              //   ...(widget.stateManager.rowGroupDelegate
+              //           as PlutoRowGroupByColumnDelegate)
+              //       .columns,
+              //   widget.stateManager.columns[0],
+              // ]));
+              // widget.stateManager.updateVisibilityLayout();
+
+              // Reset row group by columns
+              // for (final column in widget.stateManager.columns) {
+              //   column.enableRowDrag = false;
+              //   column.enableRowChecked = false;
+              //   column.frozen = PlutoColumnFrozen.none;
+              // }
+              // widget.stateManager.columns[6].enableRowDrag = true;
+              // widget.stateManager.columns[6].enableRowChecked = true;
+              // widget.stateManager.columns[6].frozen = PlutoColumnFrozen.start;
+              // widget.stateManager
+              //     .setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
+              //   widget.stateManager.columns[6],
+              //   widget.stateManager.columns[7],
+              //   widget.stateManager.columns[8],
+              // ]));
+              // widget.stateManager.updateVisibilityLayout();
             },
           ),
       ],

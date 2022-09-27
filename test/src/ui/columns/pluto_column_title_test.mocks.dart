@@ -425,8 +425,12 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#hasRowGroups), returnValue: false)
           as bool);
   @override
-  Iterable<_i3.PlutoRow> get iterateRootRowGroup =>
-      (super.noSuchMethod(Invocation.getter(#iterateRootRowGroup),
+  bool get enabledRowGroups =>
+      (super.noSuchMethod(Invocation.getter(#enabledRowGroups),
+          returnValue: false) as bool);
+  @override
+  Iterable<_i3.PlutoRow> get iterateMainRowGroup =>
+      (super.noSuchMethod(Invocation.getter(#iterateMainRowGroup),
           returnValue: <_i3.PlutoRow>[]) as Iterable<_i3.PlutoRow>);
   @override
   Iterable<_i3.PlutoRow> get iterateRowGroup =>
@@ -789,6 +793,10 @@ class MockPlutoGridStateManager extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#isRowBeingDragged, [rowKey]),
           returnValue: false) as bool);
   @override
+  bool isEditableCell(_i3.PlutoCell? cell) =>
+      (super.noSuchMethod(Invocation.method(#isEditableCell, [cell]),
+          returnValue: false) as bool);
+  @override
   void setEditing(bool? flag, {bool? notify = true}) => super.noSuchMethod(
       Invocation.method(#setEditing, [flag], {#notify: notify}),
       returnValueForMissingStub: null);
@@ -1086,27 +1094,22 @@ class MockPlutoGridStateManager extends _i1.Mock
               {#resetCurrentState: resetCurrentState, #notify: notify}),
           returnValueForMissingStub: null);
   @override
-  bool isRootGroupedRow(_i3.PlutoRow? row) =>
-      (super.noSuchMethod(Invocation.method(#isRootGroupedRow, [row]),
+  bool isMainRow(_i3.PlutoRow? row) =>
+      (super.noSuchMethod(Invocation.method(#isMainRow, [row]),
           returnValue: false) as bool);
   @override
-  bool isNotRootGroupedRow(_i3.PlutoRow? row) =>
-      (super.noSuchMethod(Invocation.method(#isNotRootGroupedRow, [row]),
+  bool isNotMainGroupedRow(_i3.PlutoRow? row) =>
+      (super.noSuchMethod(Invocation.method(#isNotMainGroupedRow, [row]),
           returnValue: false) as bool);
   @override
   bool isExpandedGroupedRow(_i3.PlutoRow? row) =>
       (super.noSuchMethod(Invocation.method(#isExpandedGroupedRow, [row]),
           returnValue: false) as bool);
   @override
-  bool isGroupedRowColumn(_i3.PlutoColumn? column) =>
-      (super.noSuchMethod(Invocation.method(#isGroupedRowColumn, [column]),
-          returnValue: false) as bool);
-  @override
-  void setRowGroupByColumns(List<_i3.PlutoColumn>? columns,
+  void setRowGroup(_i3.PlutoRowGroupDelegate? delegate,
           {bool? notify = true}) =>
       super.noSuchMethod(
-          Invocation.method(
-              #setRowGroupByColumns, [columns], {#notify: notify}),
+          Invocation.method(#setRowGroup, [delegate], {#notify: notify}),
           returnValueForMissingStub: null);
   @override
   void toggleExpandedRowGroup({_i3.PlutoRow? rowGroup, bool? notify = true}) =>
@@ -1135,11 +1138,19 @@ class MockPlutoGridStateManager extends _i1.Mock
       super.noSuchMethod(Invocation.method(#removeRowAndGroupByKey, [keys]),
           returnValueForMissingStub: null);
   @override
-  void removeColumnsInRowGroup(List<_i3.PlutoColumn>? columns,
+  void removeColumnsInRowGroupByColumn(List<_i3.PlutoColumn>? columns,
           {bool? notify = true}) =>
       super.noSuchMethod(
           Invocation.method(
-              #removeColumnsInRowGroup, [columns], {#notify: notify}),
+              #removeColumnsInRowGroupByColumn, [columns], {#notify: notify}),
+          returnValueForMissingStub: null);
+  @override
+  void updateRowGroupByHideColumn(List<_i3.PlutoColumn>? columns) => super
+      .noSuchMethod(Invocation.method(#updateRowGroupByHideColumn, [columns]),
+          returnValueForMissingStub: null);
+  @override
+  void updateRowGroup() =>
+      super.noSuchMethod(Invocation.method(#updateRowGroup, []),
           returnValueForMissingStub: null);
   @override
   int? getRowIdxByOffset(double? offset) =>

@@ -17,9 +17,35 @@ class PlutoRow {
   })  : type = type ?? PlutoRowTypeNormal.instance,
         _checked = checked,
         _state = PlutoRowState.none,
-        _key = key ?? UniqueKey();
+        _key = key ?? UniqueKey() {
+    if (type is PlutoRowTypeGroup) {
+      for (final child in type.group.children.originalList) {
+        child.setParent(this);
+      }
+    }
+  }
 
   final PlutoRowType type;
+
+  PlutoRow? _parent;
+
+  PlutoRow? get parent => _parent;
+
+  int get depth {
+    int depth = 0;
+    var current = parent;
+    while (current != null) {
+      depth += 1;
+      current = current.parent;
+    }
+    return depth;
+  }
+
+  bool get isMain => parent == null;
+
+  void setParent(PlutoRow row) {
+    _parent = row;
+  }
 
   /// The state value that the checkbox is checked.
   /// If the enableRowChecked value of the [PlutoColumn] property is set to true,

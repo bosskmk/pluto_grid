@@ -41,9 +41,13 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
 
-  bool get _showExpandedRowGroup =>
-      widget.row.type.isGroup &&
-      widget.row.type.group.groupField == widget.column.field;
+  bool get _canExpand {
+    if (!widget.row.type.isGroup || !stateManager.enabledRowGroups) {
+      return false;
+    }
+
+    return stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
+  }
 
   @override
   void initState() {
@@ -118,7 +122,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
         Expanded(
           child: cellWidget,
         ),
-        if (_showExpandedRowGroup)
+        if (_canExpand)
           IconButton(
             onPressed: _handleToggleExpandedRowGroup,
             icon: widget.row.type.group.expanded
@@ -349,11 +353,12 @@ class _BuildDefaultCellWidget extends StatelessWidget {
   }) : super(key: key);
 
   bool get _showText {
-    if (row.type.isNormal) {
-      return stateManager.isGroupedRowColumn(column) == false;
+    if (!stateManager.enabledRowGroups) {
+      return true;
     }
 
-    return row.type.group.groupField == column.field;
+    return stateManager.rowGroupDelegate!.isExpandableCell(cell) ||
+        stateManager.rowGroupDelegate!.isEditableCell(cell);
   }
 
   @override

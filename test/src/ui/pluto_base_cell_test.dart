@@ -51,8 +51,8 @@ void main() {
     when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
-    when(stateManager.hasRowGroups).thenReturn(false);
-    when(stateManager.isGroupedRowColumn(any)).thenReturn(false);
+    when(stateManager.enabledRowGroups).thenReturn(false);
+    when(stateManager.rowGroupDelegate).thenReturn(null);
   });
 
   Widget buildApp({

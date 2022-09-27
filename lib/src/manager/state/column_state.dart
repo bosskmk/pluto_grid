@@ -451,7 +451,7 @@ mixin ColumnState implements IPlutoGridState {
 
     removeColumnsInFilterRows(columns, notify: false);
 
-    removeColumnsInRowGroup(columns, notify: false);
+    removeColumnsInRowGroupByColumn(columns, notify: false);
 
     _removeCellsInRows(columns);
 
@@ -621,7 +621,7 @@ mixin ColumnState implements IPlutoGridState {
 
     column.hide = hide;
 
-    _updateAfterHideColumn(notify: notify);
+    _updateAfterHideColumn(columns: [column], notify: notify);
   }
 
   @override
@@ -636,7 +636,7 @@ mixin ColumnState implements IPlutoGridState {
 
     _updateLimitedHideColumns(columns, hide);
 
-    _updateAfterHideColumn(notify: notify);
+    _updateAfterHideColumn(columns: columns, notify: notify);
   }
 
   @override
@@ -650,7 +650,7 @@ mixin ColumnState implements IPlutoGridState {
           b.cells[column.field]!.valueForSorting,
         );
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       sortRowGroup(column: column, compare: compare);
     } else {
       refRows.sort(compare);
@@ -672,7 +672,7 @@ mixin ColumnState implements IPlutoGridState {
           b.cells[column.field]!.valueForSorting,
         );
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       sortRowGroup(column: column, compare: compare);
     } else {
       refRows.sort(compare);
@@ -699,7 +699,7 @@ mixin ColumnState implements IPlutoGridState {
       return a.sortIdx!.compareTo(b.sortIdx!);
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       sortRowGroup(column: column, compare: compare);
     } else {
       refRows.sort(compare);
@@ -976,6 +976,7 @@ mixin ColumnState implements IPlutoGridState {
   }
 
   void _updateAfterHideColumn({
+    required List<PlutoColumn> columns,
     required bool notify,
   }) {
     refColumns.update();
@@ -987,6 +988,8 @@ mixin ColumnState implements IPlutoGridState {
     if (!columnSizeConfig.restoreAutoSizeAfterHideColumn) {
       deactivateColumnsAutoSize();
     }
+
+    updateRowGroupByHideColumn(columns);
 
     updateVisibilityLayout();
 

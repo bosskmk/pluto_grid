@@ -435,7 +435,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       removeRowAndGroupByKey([currentRow!.key]);
     } else {
       refRows.removeAt(currentRowIdx!);
@@ -473,7 +473,7 @@ mixin RowState implements IPlutoGridState {
           .key;
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       removeRowAndGroupByKey(removeKeys);
     } else {
       refRows.removeWhereFromOriginal((row) => removeKeys.contains(row.key));
@@ -591,7 +591,7 @@ mixin RowState implements IPlutoGridState {
       }
     }
 
-    if (hasRowGroups) {
+    if (enabledRowGroups) {
       addRowGroup(rows);
     } else {
       final originalRowIdx = page > 1 ? index + (page - 1) * pageSize : index;

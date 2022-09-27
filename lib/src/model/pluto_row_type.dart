@@ -6,12 +6,10 @@ abstract class PlutoRowType {
   }
 
   factory PlutoRowType.group({
-    required String groupField,
     required FilteredList<PlutoRow> children,
     bool expanded = false,
   }) {
     return PlutoRowTypeGroup(
-      groupField: groupField,
       children: children,
       expanded: expanded,
     );
@@ -48,25 +46,14 @@ class PlutoRowTypeNormal implements PlutoRowType {
 
 class PlutoRowTypeGroup implements PlutoRowType {
   PlutoRowTypeGroup({
-    required this.groupField,
     required this.children,
     bool expanded = false,
   })  : assert(children.isNotEmpty),
         _expanded = expanded;
 
-  final String groupField;
-
   final FilteredList<PlutoRow> children;
 
   bool get expanded => _expanded;
-
-  String? get childrenGroupField {
-    if (!children.originalList.first.type.isGroup) {
-      return null;
-    }
-
-    return children.originalList.first.type.group.groupField;
-  }
 
   bool _expanded;
 

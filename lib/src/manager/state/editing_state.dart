@@ -12,6 +12,8 @@ abstract class IEditingState {
 
   TextEditingController? textEditingController;
 
+  bool isEditableCell(PlutoCell cell);
+
   /// Change the editing status of the current cell.
   void setEditing(
     bool flag, {
@@ -59,6 +61,19 @@ mixin EditingState implements IPlutoGridState {
   TextEditingController? textEditingController;
 
   @override
+  bool isEditableCell(PlutoCell cell) {
+    if (cell.column.enableEditingMode != true) {
+      return false;
+    }
+
+    if (enabledRowGroups) {
+      return rowGroupDelegate?.isEditableCell(cell) == true;
+    }
+
+    return true;
+  }
+
+  @override
   void setEditing(
     bool flag, {
     bool notify = true,
@@ -82,15 +97,8 @@ mixin EditingState implements IPlutoGridState {
       """,
     );
 
-    if (currentCell!.column.enableEditingMode != true) {
+    if (!isEditableCell(currentCell!)) {
       flag = false;
-    }
-
-    if (hasRowGroups) {
-      if (currentCell!.row.type.isGroup ||
-          isGroupedRowColumn(currentCell!.column)) {
-        flag = false;
-      }
     }
 
     _isEditing = flag;
