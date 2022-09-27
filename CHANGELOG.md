@@ -1,3 +1,9 @@
+## [5.1.2] - 2022. 9. 27
+
+* Change PlutoGridStateManager.configuration to not null.
+* Add Currency column.
+  https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/currency_type_column_screen.dart
+
 ## [5.1.1] - 2022. 9. 25
 
 * Fix dispose condition of TextEditingController.
