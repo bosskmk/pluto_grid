@@ -90,15 +90,7 @@ class DummyData {
   }
 
   static PlutoRow rowByColumns(List<PlutoColumn> columns) {
-    final cells = <String, PlutoCell>{};
-
-    for (var column in columns) {
-      cells[column.field] = PlutoCell(
-        value: valueByColumnType(column),
-      );
-    }
-
-    return PlutoRow(cells: cells);
+    return PlutoRow(cells: _cellsByColumn(columns));
   }
 
   static dynamic valueByColumnType(PlutoColumn column) {
@@ -157,5 +149,67 @@ class DummyData {
     });
 
     return completer.future;
+  }
+
+  static List<PlutoRow> treeRowsByColumn({
+    required List<PlutoColumn> columns,
+    int count = 100,
+    int? depth,
+  }) {
+    PlutoRowType? generateType(int currentDepth, int maxDepth) {
+      PlutoRowType? type;
+
+      if (currentDepth < maxDepth) {
+        final childRows = <PlutoRow>[];
+
+        for (final _ in List.generate(10, (index) => index)) {
+          childRows.add(
+            PlutoRow(
+              cells: _cellsByColumn(columns),
+              type: generateType(currentDepth + 1, maxDepth),
+            ),
+          );
+        }
+
+        type = PlutoRowType.group(
+          children: FilteredList(
+            initialList: childRows,
+          ),
+        );
+      }
+
+      return type;
+    }
+
+    final rows = <PlutoRow>[];
+
+    for (final _ in List.generate(count, (index) => index)) {
+      PlutoRowType? type;
+
+      final depthOrRandom = depth ?? faker.randomGenerator.integer(5, min: 0);
+
+      type = generateType(0, depthOrRandom);
+
+      rows.add(
+        PlutoRow(
+          cells: _cellsByColumn(columns),
+          type: type,
+        ),
+      );
+    }
+
+    return rows;
+  }
+
+  static Map<String, PlutoCell> _cellsByColumn(List<PlutoColumn> columns) {
+    final cells = <String, PlutoCell>{};
+
+    for (var column in columns) {
+      cells[column.field] = PlutoCell(
+        value: valueByColumnType(column),
+      );
+    }
+
+    return cells;
   }
 }

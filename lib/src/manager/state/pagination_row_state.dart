@@ -105,7 +105,8 @@ mixin PaginationRowState implements IPlutoGridState {
 
     if (enabledRowGroups) {
       PlutoRow lastRow(PlutoRow row) {
-        return isExpandedGroupedRow(row)
+        return isExpandedGroupedRow(row) &&
+                row.type.group.children.filterOrOriginalList.isNotEmpty
             ? lastRow(row.type.group.children.filterOrOriginalList.last)
             : row;
       }

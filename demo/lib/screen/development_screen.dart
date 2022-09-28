@@ -27,6 +27,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
   Color Function(PlutoRowColorContext)? rowColorCallback;
 
+  PlutoRowGroupDelegate? rowGroupDelegate;
+
   TextDirection textDirection = TextDirection.ltr;
 
   @override
@@ -94,6 +96,22 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     columns[3].enableRowChecked = true;
     columns[3].frozen = PlutoColumnFrozen.start;
     columns[4].frozen = PlutoColumnFrozen.start;
+
+    /// Test C
+    // columns.addAll(DummyData(10, 0).columns);
+    // rows.addAll(DummyData.treeRowsByColumn(
+    //   columns: columns,
+    //   count: 100,
+    //   // depth: 3,
+    // ));
+    // rowGroupDelegate = PlutoRowGroupTreeDelegate(
+    //   showExpandableIcon: (cell) =>
+    //   stateManager.columns.length > cell.row.depth &&
+    //       stateManager.columns[cell.row.depth].field ==
+    //           cell.column.field &&
+    //       cell.row.type.isGroup,
+    //   showText: (cell) => cell.row.type.isNormal,
+    // );
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {
@@ -129,7 +147,12 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
             },
             onLoaded: (PlutoGridOnLoadedEvent event) {
               stateManager = event.stateManager;
+
               stateManager.setShowColumnFilter(true);
+
+              if (rowGroupDelegate != null) {
+                stateManager.setRowGroup(rowGroupDelegate);
+              }
             },
             onSorted: (PlutoGridOnSortedEvent event) {
               print(event);
@@ -160,7 +183,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               );
             },
             createFooter: (stateManager) {
-              stateManager.setPageSize(10, notify: false);
+              stateManager.setPageSize(20, notify: false);
               return PlutoPagination(stateManager);
             },
             rowColorCallback: rowColorCallback,

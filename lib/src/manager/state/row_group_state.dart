@@ -132,6 +132,13 @@ mixin RowGroupState implements IPlutoGridState {
 
     updateRowGroup();
 
+    if (_rowGroupDelegate?.type.isTree == true) {
+      (_rowGroupDelegate as PlutoRowGroupTreeDelegate).initializeChildren(
+        columns: columns,
+        rows: refRows.originalList,
+      );
+    }
+
     if (notify) {
       notifyListeners();
     }
@@ -144,7 +151,7 @@ mixin RowGroupState implements IPlutoGridState {
   }) {
     assert(enabledRowGroups);
 
-    if (!rowGroup.type.isGroup) {
+    if (!rowGroup.type.isGroup || rowGroup.type.group.children.isEmpty) {
       return;
     }
 
@@ -203,35 +210,7 @@ mixin RowGroupState implements IPlutoGridState {
     assert(enabledRowGroups);
 
     _ensureRowGroups(() {
-      if (filter == null) {
-        void setFilter(FilteredList<PlutoRow> filteredList) {
-          filteredList.setFilter(null);
-
-          if (filteredList.originalList.isEmpty ||
-              !filteredList.originalList.first.type.isGroup) {
-            return;
-          }
-
-          for (final c in filteredList.originalList) {
-            setFilter(c.type.group.children);
-          }
-        }
-
-        setFilter(refRows);
-      } else {
-        void setFilter(FilteredList<PlutoRow> filteredList) {
-          filteredList.setFilter((row) {
-            if (!row.type.isGroup) {
-              return filter(row);
-            }
-
-            setFilter(row.type.group.children);
-            return row.type.group.children.filterOrOriginalList.isNotEmpty;
-          });
-        }
-
-        setFilter(refRows);
-      }
+      _rowGroupDelegate!.filter(rows: refRows, filter: filter);
     });
   }
 

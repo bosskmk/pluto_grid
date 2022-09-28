@@ -27,9 +27,23 @@ abstract class PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required int Function(PlutoRow, PlutoRow) compare,
   });
+
+  void filter({
+    required FilteredList<PlutoRow> rows,
+    required FilteredListFilter<PlutoRow>? filter,
+  });
 }
 
 class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
+  final bool Function(PlutoCell cell) showExpandableIcon;
+
+  final bool Function(PlutoCell cell) showText;
+
+  PlutoRowGroupTreeDelegate({
+    required this.showExpandableIcon,
+    required this.showText,
+  });
+
   @override
   PlutoRowGroupDelegateType get type => PlutoRowGroupDelegateType.tree;
 
@@ -37,23 +51,104 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   bool get enabled => true;
 
   @override
-  bool isEditableCell(PlutoCell cell) => true;
+  bool isEditableCell(PlutoCell cell) => showText(cell);
 
   @override
-  bool isExpandableCell(PlutoCell cell) => true;
+  bool isExpandableCell(PlutoCell cell) => showExpandableIcon(cell);
+
+  void initializeChildren({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+  }) {
+    PlutoGridStateManager.initializeRows(columns, rows);
+
+    for (final row in rows) {
+      if (row.type.isGroup) {
+        initializeChildren(
+          columns: columns,
+          rows: row.type.group.children.originalList,
+        );
+      }
+    }
+  }
 
   @override
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
-  }) =>
-      rows.toList();
+  }) {
+    return rows.toList();
+  }
 
   @override
   void sort({
     required PlutoColumn column,
     required FilteredList<PlutoRow> rows,
     required int Function(PlutoRow, PlutoRow) compare,
-  }) {}
+  }) {
+    if (rows.originalList.isEmpty) {
+      return;
+    }
+
+    rows.sort(compare);
+
+    sortChildren(PlutoRow row) {
+      if (!row.type.isGroup) {
+        return;
+      }
+
+      if (row.type.group.children.originalList.isEmpty) {
+        return;
+      }
+
+      row.type.group.children.sort(compare);
+
+      for (final child in row.type.group.children.originalList) {
+        sortChildren(child);
+      }
+    }
+
+    for (final row in rows.originalList) {
+      sortChildren(row);
+    }
+  }
+
+  @override
+  void filter({
+    required FilteredList<PlutoRow> rows,
+    required FilteredListFilter<PlutoRow>? filter,
+  }) {
+    if (filter == null) {
+      void setFilter(FilteredList<PlutoRow> filteredList) {
+        filteredList.setFilter(null);
+
+        if (filteredList.originalList.isEmpty) {
+          return;
+        }
+
+        for (final child in filteredList.originalList) {
+          if (child.type.isGroup) {
+            setFilter(child.type.group.children);
+          }
+        }
+      }
+
+      setFilter(rows);
+    } else {
+      void setFilter(FilteredList<PlutoRow> filteredList) {
+        filteredList.setFilter((row) {
+          if (!row.type.isGroup) {
+            return filter(row);
+          }
+
+          setFilter(row.type.group.children);
+          return filter(row) ||
+              row.type.group.children.filterOrOriginalList.isNotEmpty;
+        });
+      }
+
+      setFilter(rows);
+    }
+  }
 }
 
 class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
@@ -198,6 +293,42 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
 
     for (final row in rows.originalList) {
       sortChildren(row);
+    }
+  }
+
+  @override
+  void filter({
+    required FilteredList<PlutoRow> rows,
+    required FilteredListFilter<PlutoRow>? filter,
+  }) {
+    if (filter == null) {
+      void setFilter(FilteredList<PlutoRow> filteredList) {
+        filteredList.setFilter(null);
+
+        if (filteredList.originalList.isEmpty ||
+            !filteredList.originalList.first.type.isGroup) {
+          return;
+        }
+
+        for (final child in filteredList.originalList) {
+          setFilter(child.type.group.children);
+        }
+      }
+
+      setFilter(rows);
+    } else {
+      void setFilter(FilteredList<PlutoRow> filteredList) {
+        filteredList.setFilter((row) {
+          if (!row.type.isGroup) {
+            return filter(row);
+          }
+
+          setFilter(row.type.group.children);
+          return row.type.group.children.filterOrOriginalList.isNotEmpty;
+        });
+      }
+
+      setFilter(rows);
     }
   }
 
