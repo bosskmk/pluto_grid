@@ -1,17 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
-import 'visibility_state_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
-])
 void main() {
   PlutoGridStateManager createStateManager({
     required List<PlutoColumn> columns,

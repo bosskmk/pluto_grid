@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -8,11 +7,8 @@ import '../../helper/column_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../mock/mock_build_context.dart';
 import '../../mock/mock_on_change_listener.dart';
-import 'filter_helper_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-])
 void main() {
   group('createFilterRow', () {
     test(
