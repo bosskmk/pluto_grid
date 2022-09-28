@@ -174,13 +174,13 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
 
     _ApplyList applyList = _ApplyList([
       _ApplyCellForSetColumnRow(refColumns),
-      _ApplyCellForFormat(refColumns),
       _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
         increase: increase,
         start: start,
         firstRow: refRows.first,
       ),
+      _ApplyRowGroup(refColumns),
     ]);
 
     if (!applyList.apply) {
@@ -453,39 +453,6 @@ class _ApplyCellForSetColumnRow implements _Apply {
   }
 }
 
-class _ApplyCellForFormat implements _Apply {
-  final List<PlutoColumn> refColumns;
-
-  _ApplyCellForFormat(
-    this.refColumns,
-  ) {
-    assert(refColumns.isNotEmpty);
-
-    columnsToApply = refColumns.where(
-      (element) => element.type.applyFormatOnInit,
-    );
-  }
-
-  late Iterable<PlutoColumn> columnsToApply;
-
-  @override
-  bool get apply => columnsToApply.isNotEmpty;
-
-  @override
-  void execute(PlutoRow row) {
-    for (var column in columnsToApply) {
-      var value = column.type.applyFormat(row.cells[column.field]!.value);
-
-      if (column.type is PlutoColumnTypeWithNumberFormat) {
-        value =
-            (column.type as PlutoColumnTypeWithNumberFormat).toNumber(value);
-      }
-
-      row.cells[column.field]!.value = value;
-    }
-  }
-}
-
 class _ApplyRowForSortIdx implements _Apply {
   final bool forceApply;
 
@@ -512,9 +479,54 @@ class _ApplyRowForSortIdx implements _Apply {
   bool get apply => forceApply == true || firstRow!.sortIdx == null;
 
   @override
-  void execute(PlutoRow? row) {
-    row!.sortIdx = _sortIdx;
+  void execute(PlutoRow row) {
+    row.sortIdx = _sortIdx;
 
     _sortIdx = increase ? ++_sortIdx : --_sortIdx;
+  }
+}
+
+class _ApplyRowGroup implements _Apply {
+  final List<PlutoColumn> refColumns;
+
+  _ApplyRowGroup(this.refColumns);
+
+  @override
+  bool get apply => true;
+
+  @override
+  void execute(PlutoRow row) {
+    if (_hasChildren(row)) {
+      _initializeChildren(
+        columns: refColumns,
+        rows: row.type.group.children.originalList,
+        parent: row,
+      );
+    }
+  }
+
+  void _initializeChildren({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    required PlutoRow parent,
+  }) {
+    PlutoGridStateManager.initializeRows(columns, rows);
+
+    for (final row in rows) {
+      row.setParent(parent);
+
+      if (_hasChildren(row)) {
+        _initializeChildren(
+          columns: columns,
+          rows: row.type.group.children.originalList,
+          parent: row,
+        );
+      }
+    }
+  }
+
+  bool _hasChildren(PlutoRow row) {
+    return row.type.isGroup == true &&
+        row.type.group.children.originalList.isNotEmpty;
   }
 }

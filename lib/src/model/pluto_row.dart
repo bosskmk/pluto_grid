@@ -17,13 +17,7 @@ class PlutoRow {
   })  : type = type ?? PlutoRowTypeNormal.instance,
         _checked = checked,
         _state = PlutoRowState.none,
-        _key = key ?? UniqueKey() {
-    if (type is PlutoRowTypeGroup) {
-      for (final child in type.group.children.originalList) {
-        child.setParent(this);
-      }
-    }
-  }
+        _key = key ?? UniqueKey();
 
   final PlutoRowType type;
 

@@ -56,22 +56,6 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   @override
   bool isExpandableCell(PlutoCell cell) => showExpandableIcon(cell);
 
-  void initializeChildren({
-    required List<PlutoColumn> columns,
-    required List<PlutoRow> rows,
-  }) {
-    PlutoGridStateManager.initializeRows(columns, rows);
-
-    for (final row in rows) {
-      if (row.type.isGroup) {
-        initializeChildren(
-          columns: columns,
-          rows: row.type.group.children.originalList,
-        );
-      }
-    }
-  }
-
   @override
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
@@ -234,6 +218,10 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
               ),
             ),
           );
+
+          for (var e in row.type.group.children) {
+            e.setParent(row);
+          }
 
           for (var e in firstRow.cells.entries) {
             cells[e.key] = PlutoCell(

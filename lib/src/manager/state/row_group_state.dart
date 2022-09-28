@@ -65,9 +65,6 @@ abstract class IRowGroupState {
 
   @protected
   void updateRowGroupByHideColumn(List<PlutoColumn> columns);
-
-  @protected
-  void updateRowGroup();
 }
 
 mixin RowGroupState implements IPlutoGridState {
@@ -130,14 +127,7 @@ mixin RowGroupState implements IPlutoGridState {
   }) {
     _rowGroupDelegate = delegate;
 
-    updateRowGroup();
-
-    if (_rowGroupDelegate?.type.isTree == true) {
-      (_rowGroupDelegate as PlutoRowGroupTreeDelegate).initializeChildren(
-        columns: columns,
-        rows: refRows.originalList,
-      );
-    }
+    _updateRowGroup();
 
     if (notify) {
       notifyListeners();
@@ -312,7 +302,7 @@ mixin RowGroupState implements IPlutoGridState {
 
     delegate.columns.addAll(remaining);
 
-    updateRowGroup();
+    _updateRowGroup();
   }
 
   @override
@@ -331,35 +321,7 @@ mixin RowGroupState implements IPlutoGridState {
     final updated = delegate.columns.firstWhereOrNull(isUpdated) != null;
 
     if (updated) {
-      updateRowGroup();
-    }
-  }
-
-  @override
-  @protected
-  void updateRowGroup() {
-    assert(hasRowGroups);
-
-    List<PlutoRow> rows;
-
-    final previousRows = _previousEnabledRowGroups
-        ? _iterateRow(iterateMainRowGroup)
-        : refRows.originalList;
-
-    if (enabledRowGroups == true) {
-      rows = _rowGroupDelegate!.toGroup(rows: previousRows);
-    } else {
-      rows = previousRows.toList();
-    }
-
-    _previousEnabledRowGroups = enabledRowGroups;
-
-    refRows.clearFromOriginal();
-
-    refRows.addAll(rows);
-
-    if (isPaginated) {
-      resetPage(resetCurrentState: true, notify: false);
+      _updateRowGroup();
     }
   }
 
@@ -448,6 +410,32 @@ mixin RowGroupState implements IPlutoGridState {
 
     if (toResetPage) {
       resetPage(resetCurrentState: false, notify: false);
+    }
+  }
+
+  void _updateRowGroup() {
+    assert(hasRowGroups);
+
+    List<PlutoRow> rows;
+
+    final previousRows = _previousEnabledRowGroups
+        ? _iterateRow(iterateMainRowGroup)
+        : refRows.originalList;
+
+    if (enabledRowGroups == true) {
+      rows = _rowGroupDelegate!.toGroup(rows: previousRows);
+    } else {
+      rows = previousRows.toList();
+    }
+
+    _previousEnabledRowGroups = enabledRowGroups;
+
+    refRows.clearFromOriginal();
+
+    refRows.addAll(rows);
+
+    if (isPaginated) {
+      resetPage(resetCurrentState: true, notify: false);
     }
   }
 }
