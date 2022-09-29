@@ -2597,24 +2597,6 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: <_i3.PlutoRow>[],
       ) as List<_i3.PlutoRow>);
   @override
-  List<_i3.PlutoRow> setSortIdxOfRows(
-    List<_i3.PlutoRow>? rows, {
-    bool? increase = true,
-    int? start = 0,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #setSortIdxOfRows,
-          [rows],
-          {
-            #increase: increase,
-            #start: start,
-          },
-        ),
-        returnValue: <_i3.PlutoRow>[],
-        returnValueForMissingStub: <_i3.PlutoRow>[],
-      ) as List<_i3.PlutoRow>);
-  @override
   void setRowChecked(
     _i3.PlutoRow? row,
     bool? flag, {

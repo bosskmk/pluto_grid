@@ -148,8 +148,8 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   ///
   /// {@template initialize_rows_params}
   /// [forceApplySortIdx] determines whether to force PlutoRow.sortIdx to be set.
-  /// [PlutoRow.sortIdx] does not reset if the value is already set.
-  /// Set [forceApplySortIdx] to true to reset this value.
+  ///
+  /// [increase] and [start] are valid only when [forceApplySortIdx] is true.
   ///
   /// [increase] determines whether to increment or decrement when initializing [sortIdx].
   /// For example, if a row is added before an existing row,
@@ -476,7 +476,7 @@ class _ApplyRowForSortIdx implements _Apply {
   late int _sortIdx;
 
   @override
-  bool get apply => forceApply == true || firstRow!.sortIdx == null;
+  bool get apply => forceApply == true;
 
   @override
   void execute(PlutoRow row) {
@@ -510,7 +510,11 @@ class _ApplyRowGroup implements _Apply {
     required List<PlutoRow> rows,
     required PlutoRow parent,
   }) {
-    PlutoGridStateManager.initializeRows(columns, rows);
+    PlutoGridStateManager.initializeRows(
+      columns,
+      rows,
+      forceApplySortIdx: true,
+    );
 
     for (final row in rows) {
       row.setParent(parent);

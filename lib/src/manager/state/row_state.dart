@@ -36,12 +36,6 @@ abstract class IRowState {
     int count = 1,
   });
 
-  List<PlutoRow> setSortIdxOfRows(
-    List<PlutoRow> rows, {
-    bool increase = true,
-    int start = 0,
-  });
-
   void setRowChecked(
     PlutoRow row,
     bool flag, {
@@ -102,7 +96,12 @@ mixin RowState implements IPlutoGridState {
 
   @override
   set refRows(FilteredList<PlutoRow> setRows) {
-    PlutoGridStateManager.initializeRows(refColumns.originalList, setRows);
+    PlutoGridStateManager.initializeRows(
+      refColumns.originalList,
+      setRows,
+      forceApplySortIdx: true,
+    );
+
     _refRows = setRows;
   }
 
@@ -225,23 +224,6 @@ mixin RowState implements IPlutoGridState {
   }
 
   @override
-  List<PlutoRow> setSortIdxOfRows(
-    List<PlutoRow> rows, {
-    bool increase = true,
-    int start = 0,
-  }) {
-    int sortIdx = start;
-
-    for (final row in rows) {
-      row.sortIdx = sortIdx;
-
-      sortIdx = increase ? ++sortIdx : --sortIdx;
-    }
-
-    return rows;
-  }
-
-  @override
   void setRowChecked(
     PlutoRow row,
     bool flag, {
@@ -268,42 +250,7 @@ mixin RowState implements IPlutoGridState {
     List<PlutoRow> rows, {
     bool notify = true,
   }) {
-    if (rows.isEmpty) {
-      return;
-    }
-
-    if (rowIdx < 0 || refRows.length < rowIdx) {
-      return;
-    }
-
-    if (hasSortedColumn) {
-      final originalRowIdx = page > 1 ? rowIdx + (page - 1) * pageSize : rowIdx;
-
-      final int? sortIdx = refRows.originalList[originalRowIdx].sortIdx;
-
-      PlutoGridStateManager.initializeRows(
-        refColumns,
-        rows,
-        start: sortIdx ?? 0,
-      );
-
-      for (int i = 0; i < refRows.originalLength; i += 1) {
-        if (sortIdx! <= refRows.originalList[i].sortIdx!) {
-          refRows.originalList[i].sortIdx =
-              refRows.originalList[i].sortIdx! + rows.length;
-        }
-      }
-
-      _insertRows(rowIdx, rows, state: PlutoRowState.added);
-    } else {
-      _insertRows(rowIdx, rows, state: PlutoRowState.added);
-
-      PlutoGridStateManager.initializeRows(
-        refColumns,
-        refRows.originalList,
-        forceApplySortIdx: true,
-      );
-    }
+    _insertRows(rowIdx, rows);
 
     /// Update currentRowIdx
     if (currentCell != null) {
@@ -338,31 +285,7 @@ mixin RowState implements IPlutoGridState {
 
   @override
   void prependRows(List<PlutoRow> rows) {
-    if (rows.isEmpty) {
-      return;
-    }
-
-    final minSortIdx = (refRows.isNotEmpty
-        ? refRows.first.sortIdx == null
-            ? 0
-            : refRows.first.sortIdx!
-        : 0);
-
-    final start = minSortIdx - rows.length;
-
-    for (final element in refRows.originalList) {
-      if (element.sortIdx != null && element.sortIdx! < minSortIdx) {
-        element.sortIdx = element.sortIdx! - rows.length;
-      }
-    }
-
-    PlutoGridStateManager.initializeRows(
-      refColumns,
-      rows,
-      start: start,
-    );
-
-    _insertRows(0, rows, state: PlutoRowState.added);
+    _insertRows(0, rows);
 
     /// Update currentRowIdx
     if (currentCell != null) {
@@ -402,29 +325,7 @@ mixin RowState implements IPlutoGridState {
 
   @override
   void appendRows(List<PlutoRow> rows) {
-    if (rows.isEmpty) {
-      return;
-    }
-
-    final start = refRows.isNotEmpty
-        ? refRows.last.sortIdx == null
-            ? 1
-            : refRows.last.sortIdx! + 1
-        : 0;
-
-    for (final element in refRows.originalList) {
-      if (element.sortIdx != null && element.sortIdx! > start - 1) {
-        element.sortIdx = element.sortIdx! + rows.length;
-      }
-    }
-
-    PlutoGridStateManager.initializeRows(
-      refColumns,
-      rows,
-      start: start,
-    );
-
-    _insertRows(refRows.length, rows, state: PlutoRowState.added);
+    _insertRows(refRows.length, rows);
 
     notifyListeners();
   }
@@ -576,31 +477,47 @@ mixin RowState implements IPlutoGridState {
     }
   }
 
-  void _insertRows(
-    int index,
-    List<PlutoRow> rows, {
-    PlutoRowState? state,
-  }) {
+  @override
+  void setRowColorCallback(PlutoRowColorCallback? rowColorCallback) {
+    _rowColorCallback = rowColorCallback;
+  }
+
+  void _insertRows(int index, List<PlutoRow> rows) {
     if (rows.isEmpty) {
       return;
     }
 
-    if (state != null) {
-      for (final row in rows) {
-        row.setState(state);
-      }
+    for (final row in rows) {
+      row.setState(PlutoRowState.added);
     }
+
+    int safetyIndex = _getSafetyIndexForInsert(index);
 
     if (enabledRowGroups) {
       addRowGroup(rows);
     } else {
-      final originalRowIdx = page > 1 ? index + (page - 1) * pageSize : index;
+      _setSortIdx(rows: rows, start: safetyIndex);
 
-      if (originalRowIdx >= refRows.originalLength) {
-        refRows.addAll(rows);
+      if (hasSortedColumn) {
+        _increaseSortIdxGreaterThanOrEqual(
+          rows: refRows.originalList,
+          compare: safetyIndex,
+          increase: rows.length,
+        );
       } else {
-        refRows.insertAll(index, rows);
+        _increaseSortIdx(
+          rows: refRows.originalList,
+          start: safetyIndex,
+          increase: rows.length,
+        );
       }
+
+      refRows.insertAll(safetyIndex, rows);
+
+      PlutoGridStateManager.initializeRows(
+        refColumns,
+        rows,
+      );
     }
 
     if (isPaginated) {
@@ -608,8 +525,52 @@ mixin RowState implements IPlutoGridState {
     }
   }
 
-  @override
-  void setRowColorCallback(PlutoRowColorCallback? rowColorCallback) {
-    _rowColorCallback = rowColorCallback;
+  int _getSafetyIndexForInsert(int index) {
+    if (index < 0) {
+      return 0;
+    }
+
+    final originalRowIdx = isPaginated ? index + pageRangeFrom : index;
+
+    if (originalRowIdx > refRows.originalLength) {
+      return refRows.originalLength;
+    }
+
+    return index;
+  }
+
+  void _setSortIdx({
+    required List<PlutoRow> rows,
+    int start = 0,
+  }) {
+    for (final row in rows) {
+      row.sortIdx = start++;
+    }
+  }
+
+  void _increaseSortIdx({
+    required List<PlutoRow> rows,
+    int start = 0,
+    int increase = 1,
+  }) {
+    final length = rows.length;
+
+    for (int i = start; i < length; i += 1) {
+      rows[i].sortIdx += increase;
+    }
+  }
+
+  void _increaseSortIdxGreaterThanOrEqual({
+    required List<PlutoRow> rows,
+    int compare = 0,
+    int increase = 1,
+  }) {
+    for (final row in rows) {
+      if (row.sortIdx < compare) {
+        continue;
+      }
+
+      row.sortIdx += increase;
+    }
   }
 }

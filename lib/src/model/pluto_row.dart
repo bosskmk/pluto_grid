@@ -5,7 +5,7 @@ class PlutoRow {
   PlutoRow({
     required this.cells,
     PlutoRowType? type,
-    this.sortIdx,
+    this.sortIdx = 0,
     bool checked = false,
     Key? key,
   })  : type = type ?? PlutoRowTypeNormal.instance,
@@ -21,7 +21,7 @@ class PlutoRow {
 
   /// Value to maintain the default sort order when sorting columns.
   /// If there is no value, it is automatically set when loading the grid.
-  int? sortIdx;
+  int sortIdx;
 
   bool? _checked;
 

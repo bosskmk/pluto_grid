@@ -578,68 +578,6 @@ void main() {
     );
   });
 
-  group('setSortIdxOfRows', () {
-    testWidgets(
-        'The sortIdx value of rows should be increased from 0 and filled.',
-        (WidgetTester tester) async {
-      // given
-      List<PlutoColumn> columns = [
-        ...ColumnHelper.textColumn('text', count: 3, width: 150),
-      ];
-
-      List<PlutoRow> rows = RowHelper.count(5, columns);
-
-      PlutoGridStateManager stateManager = createStateManager(
-        columns: columns,
-        rows: rows,
-        gridFocusNode: null,
-        scroll: null,
-      );
-
-      // when
-      final rowsFilledSortIdx = stateManager.setSortIdxOfRows(rows);
-
-      // then
-      expect(rowsFilledSortIdx[0].sortIdx, 0);
-      expect(rowsFilledSortIdx[1].sortIdx, 1);
-      expect(rowsFilledSortIdx[2].sortIdx, 2);
-      expect(rowsFilledSortIdx[3].sortIdx, 3);
-      expect(rowsFilledSortIdx[4].sortIdx, 4);
-    });
-
-    testWidgets(
-        'The sortIdx value of rows should be decrease from 4 and filled.',
-        (WidgetTester tester) async {
-      // given
-      List<PlutoColumn> columns = [
-        ...ColumnHelper.textColumn('text', count: 3, width: 150),
-      ];
-
-      List<PlutoRow> rows = RowHelper.count(5, columns);
-
-      PlutoGridStateManager stateManager = createStateManager(
-        columns: columns,
-        rows: rows,
-        gridFocusNode: null,
-        scroll: null,
-      );
-
-      // when
-      final rowsFilledSortIdx = stateManager.setSortIdxOfRows(
-        rows,
-        increase: false,
-        start: 4,
-      );
-
-      // then
-      expect(rowsFilledSortIdx[0].sortIdx, 4);
-      expect(rowsFilledSortIdx[1].sortIdx, 3);
-      expect(rowsFilledSortIdx[2].sortIdx, 2);
-      expect(rowsFilledSortIdx[3].sortIdx, 1);
-      expect(rowsFilledSortIdx[4].sortIdx, 0);
-    });
-  });
-
   group('setRowChecked', () {
     testWidgets(
       '해당 row 가 없는 경우 notifyListener 가 호출 되지 않아야 한다.',
@@ -711,7 +649,7 @@ void main() {
 
   group('insertRows', () {
     testWidgets(
-      '삽입 할 위치가 rows 인덱스 범위가 아니면 행이 추가 되지 않아야 한다.',
+      '삽입 할 위치가 rows 인덱스 범위가 0 보다 작으면 0에 최대 index 보다 크면 최대 index 에 insert 된다.',
       (WidgetTester tester) async {
         // given
         List<PlutoColumn> columns = [
@@ -728,20 +666,33 @@ void main() {
         );
 
         // when
-        final countRows = stateManager.rows.length;
+        int countRows = stateManager.rows.length;
 
         // then
-        stateManager.insertRows(-1, RowHelper.count(3, columns));
-        expect(stateManager.rows.length, countRows);
+        {
+          final addedRows = RowHelper.count(3, columns);
+          stateManager.insertRows(-1, addedRows);
+          countRows += 3;
+          expect(stateManager.rows.length, countRows);
+          expect(stateManager.rows.getRange(0, 3), addedRows);
+        }
 
-        stateManager.insertRows(-2, RowHelper.count(3, columns));
-        expect(stateManager.rows.length, countRows);
+        {
+          final addedRows = RowHelper.count(3, columns);
+          stateManager.insertRows(-2, addedRows);
+          countRows += 3;
+          expect(stateManager.rows.length, countRows);
+          expect(stateManager.rows.getRange(0, 3), addedRows);
+        }
 
-        stateManager.insertRows(
-          stateManager.rows.length + 1,
-          RowHelper.count(3, columns),
-        );
-        expect(stateManager.rows.length, countRows);
+        {
+          final addedRows = RowHelper.count(3, columns);
+          stateManager.insertRows(stateManager.rows.length + 1, addedRows);
+          countRows += 3;
+          expect(stateManager.rows.length, countRows);
+          final length = stateManager.rows.length;
+          expect(stateManager.rows.getRange(length - 3, length), addedRows);
+        }
       },
     );
 
@@ -866,16 +817,16 @@ void main() {
         stateManager.insertRows(1, rowsToAdd);
 
         expect(stateManager.rows.length, 6);
-        expect(stateManager.rows[0].sortIdx, 1);
+        expect(stateManager.rows[0].sortIdx, 4);
         expect(stateManager.rows[0].cells['text0']!.value, '1');
 
-        expect(stateManager.rows[1].sortIdx, 2);
+        expect(stateManager.rows[1].sortIdx, 1);
         expect(stateManager.rows[1].cells['text0']!.value, 'a');
 
-        expect(stateManager.rows[2].sortIdx, 3);
+        expect(stateManager.rows[2].sortIdx, 2);
         expect(stateManager.rows[2].cells['text0']!.value, 'b');
 
-        expect(stateManager.rows[3].sortIdx, 4);
+        expect(stateManager.rows[3].sortIdx, 3);
         expect(stateManager.rows[3].cells['text0']!.value, 'c');
 
         expect(stateManager.rows[4].sortIdx, 5);
