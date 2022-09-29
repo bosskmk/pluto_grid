@@ -60,6 +60,19 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
   }) {
+    void setParent(PlutoRow row) {
+      if (row.type.isGroup) {
+        for (final child in row.type.group.children.originalList) {
+          child.setParent(row);
+          setParent(child);
+        }
+      }
+    }
+
+    for (final row in rows) {
+      setParent(row);
+    }
+
     return rows.toList();
   }
 

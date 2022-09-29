@@ -9,6 +9,11 @@ import 'package:pluto_grid/pluto_grid.dart';
     Row
       - Move
       - Check
+      - Improve initializeRows when adding rows
+    RowGroup
+      - Insert at index
+      - Append, Prepend rows
+      - addRowGroup for tree row group
  */
 
 abstract class IRowGroupState {
@@ -226,6 +231,10 @@ mixin RowGroupState implements IPlutoGridState {
 
     assert(enabledRowGroups);
 
+    if (!rows.first.initialized) {
+      PlutoGridStateManager.initializeRows(refColumns.originalList, rows);
+    }
+
     final grouped = _rowGroupDelegate!.toGroup(rows: rows);
 
     _ensureRowGroups(() {
@@ -244,6 +253,9 @@ mixin RowGroupState implements IPlutoGridState {
               found.type.group.children.addAll(row.type.group.children);
             }
           }
+
+          setParent(e) => e.setParent(found ?? row);
+          row.type.group.children.originalList.forEach(setParent);
         }
       }
 

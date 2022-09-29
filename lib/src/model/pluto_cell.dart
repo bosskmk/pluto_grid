@@ -30,6 +30,8 @@ class PlutoCell {
 
   Key get key => _key;
 
+  bool get initialized => _column != null && _row != null;
+
   PlutoColumn get column {
     _assertUnInitializedCell(_column != null);
 

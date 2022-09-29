@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRow {
-  Map<String, PlutoCell> cells;
-
-  /// Value to maintain the default sort order when sorting columns.
-  /// If there is no value, it is automatically set when loading the grid.
-  int? sortIdx;
-
   PlutoRow({
     required this.cells,
     PlutoRowType? type,
@@ -21,7 +15,29 @@ class PlutoRow {
 
   final PlutoRowType type;
 
+  final Key _key;
+
+  Map<String, PlutoCell> cells;
+
+  /// Value to maintain the default sort order when sorting columns.
+  /// If there is no value, it is automatically set when loading the grid.
+  int? sortIdx;
+
+  bool? _checked;
+
   PlutoRow? _parent;
+
+  PlutoRowState _state;
+
+  Key get key => _key;
+
+  bool get initialized {
+    if (cells.isEmpty) {
+      return true;
+    }
+
+    return cells.values.first.initialized;
+  }
 
   PlutoRow? get parent => _parent;
 
@@ -37,10 +53,6 @@ class PlutoRow {
 
   bool get isMain => parent == null;
 
-  void setParent(PlutoRow row) {
-    _parent = row;
-  }
-
   /// The state value that the checkbox is checked.
   /// If the enableRowChecked value of the [PlutoColumn] property is set to true,
   /// a check box appears in the cell of the corresponding column.
@@ -48,8 +60,6 @@ class PlutoRow {
   /// use the PlutoStateManager.setRowChecked
   /// or PlutoStateManager.toggleAllRowChecked methods.
   bool? get checked => _checked;
-
-  bool? _checked;
 
   /// State when a new row is added or the cell value in the row is changed.
   ///
@@ -61,11 +71,9 @@ class PlutoRow {
   /// Make sure it stays in the list unless you change the filtering again.
   PlutoRowState get state => _state;
 
-  PlutoRowState _state;
-
-  Key get key => _key;
-
-  final Key _key;
+  void setParent(PlutoRow row) {
+    _parent = row;
+  }
 
   void setChecked(bool? flag) {
     _checked = flag;
