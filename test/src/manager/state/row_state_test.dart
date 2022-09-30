@@ -797,9 +797,9 @@ void main() {
 
         stateManager.toggleSortColumn(columns.first);
         expect(stateManager.hasSortedColumn, isTrue);
-        expect(stateManager.rows[0].sortIdx, 1);
-        expect(stateManager.rows[1].sortIdx, 2);
-        expect(stateManager.rows[2].sortIdx, 0);
+        expect(stateManager.rows[0].sortIdx, 1); // 1
+        expect(stateManager.rows[1].sortIdx, 2); // 2
+        expect(stateManager.rows[2].sortIdx, 0); // 3
 
         // when
         final rowsToAdd = [
@@ -817,16 +817,16 @@ void main() {
         stateManager.insertRows(1, rowsToAdd);
 
         expect(stateManager.rows.length, 6);
-        expect(stateManager.rows[0].sortIdx, 4);
+        expect(stateManager.rows[0].sortIdx, 1);
         expect(stateManager.rows[0].cells['text0']!.value, '1');
 
-        expect(stateManager.rows[1].sortIdx, 1);
+        expect(stateManager.rows[1].sortIdx, 2);
         expect(stateManager.rows[1].cells['text0']!.value, 'a');
 
-        expect(stateManager.rows[2].sortIdx, 2);
+        expect(stateManager.rows[2].sortIdx, 3);
         expect(stateManager.rows[2].cells['text0']!.value, 'b');
 
-        expect(stateManager.rows[3].sortIdx, 3);
+        expect(stateManager.rows[3].sortIdx, 4);
         expect(stateManager.rows[3].cells['text0']!.value, 'c');
 
         expect(stateManager.rows[4].sortIdx, 5);

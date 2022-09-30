@@ -71,7 +71,7 @@ class PlutoRow {
   /// Make sure it stays in the list unless you change the filtering again.
   PlutoRowState get state => _state;
 
-  void setParent(PlutoRow row) {
+  void setParent(PlutoRow? row) {
     _parent = row;
   }
 

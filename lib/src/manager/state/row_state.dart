@@ -492,18 +492,22 @@ mixin RowState implements IPlutoGridState {
     if (enabledRowGroups) {
       insertRowGroup(safetyIndex, rows);
     } else {
-      _setSortIdx(rows: rows, start: safetyIndex);
+      final bool append = index >= refRows.length;
+      final targetIdx = append ? refRows.length - 1 : safetyIndex;
+      final target = refRows.isEmpty ? null : refRows[targetIdx];
+
+      _setSortIdx(rows: rows, start: target?.sortIdx ?? 0);
 
       if (hasSortedColumn) {
         _increaseSortIdxGreaterThanOrEqual(
           rows: refRows.originalList,
-          compare: safetyIndex,
+          compare: target?.sortIdx ?? 0,
           increase: rows.length,
         );
       } else {
         _increaseSortIdx(
           rows: refRows.originalList,
-          start: safetyIndex,
+          start: target == null ? 0 : refRows.originalList.indexOf(target),
           increase: rows.length,
         );
       }
@@ -527,10 +531,8 @@ mixin RowState implements IPlutoGridState {
       return 0;
     }
 
-    final originalRowIdx = isPaginated ? index + pageRangeFrom : index;
-
-    if (originalRowIdx > refRows.originalLength) {
-      return refRows.originalLength;
+    if (index > refRows.length) {
+      return refRows.length;
     }
 
     return index;

@@ -10,10 +10,8 @@ import 'package:pluto_grid/pluto_grid.dart';
       - Move
       - Check
       - Improve initializeRows when adding rows
-    RowGroup
-      - Insert at index
-      - Append, Prepend rows
-      - addRowGroup for tree row group
+    Test
+      - add, insert, prepend, append rows with pagination, sort, filter
  */
 
 abstract class IRowGroupState {
@@ -239,31 +237,155 @@ mixin RowGroupState implements IPlutoGridState {
       );
     }
 
+    final bool append = index >= refRows.length;
+    final targetIdx = append ? refRows.length - 1 : index;
+    final target = refRows.isEmpty ? null : refRows[targetIdx];
+
+    if (_rowGroupDelegate is PlutoRowGroupByColumnDelegate && !append) {
+      _updateCellsByTargetForGroupByColumn(rows: rows, target: target);
+    }
+
     final grouped = _rowGroupDelegate!.toGroup(rows: rows);
 
-    _ensureRowGroups(() {
-      addAll(Iterable<PlutoRow> groupedRows, FilteredList<PlutoRow> ref) {
-        for (final row in groupedRows) {
-          final found = ref.originalList.firstWhereOrNull(
-            (e) => e.key == row.key,
-          );
+    bool findByTargetKey(PlutoRow e) => e.key == target?.key;
 
-          if (found == null) {
-            ref.add(row);
-          } else {
-            if (found.type.group.children.originalList.first.type.isGroup) {
-              addAll(row.type.group.children, found.type.group.children);
-            } else {
-              found.type.group.children.addAll(row.type.group.children);
-            }
+    bool hasChildrenGroup(PlutoRow found) {
+      return found.type.isGroup &&
+          found.type.group.children.originalList.isNotEmpty &&
+          found.type.group.children.originalList.first.type.isGroup;
+    }
+
+    void updateSortIdx({
+      required List<PlutoRow> rows,
+      required int start,
+      required int compare,
+      required int increase,
+    }) {
+      if (hasSortedColumn) {
+        for (final row in rows) {
+          if (compare >= row.sortIdx) {
+            row.sortIdx += increase;
           }
+        }
+      } else {
+        final length = rows.length;
+        for (int i = start; i < length; i += 1) {
+          rows[i].sortIdx += increase;
+        }
+      }
+    }
 
+    void insertOrAdd({
+      required FilteredList<PlutoRow> ref,
+      required PlutoRow row,
+    }) {
+      final insertIdx = ref.indexWhere(findByTargetKey);
+      if (insertIdx > -1 && !append) {
+        row.sortIdx = ref[insertIdx].sortIdx;
+        updateSortIdx(
+          rows: ref,
+          start: insertIdx,
+          compare: row.sortIdx,
+          increase: 1,
+        );
+        ref.insert(insertIdx, row);
+      } else {
+        ref.add(row);
+      }
+    }
+
+    void insertOrAddToChildren({
+      required PlutoRow found,
+      required PlutoRow row,
+    }) {
+      final insertIdx = found.type.group.children.indexWhere(findByTargetKey);
+      if (insertIdx > -1 && !append) {
+        final length = row.type.group.children.length;
+        for (int i = 0; i < length; i += 1) {
+          row.type.group.children[i].sortIdx =
+              found.type.group.children[insertIdx].sortIdx + i;
+        }
+        updateSortIdx(
+          rows: found.type.group.children,
+          start: insertIdx,
+          compare: found.type.group.children[insertIdx].sortIdx,
+          increase: row.type.group.children.length,
+        );
+        found.type.group.children.insertAll(
+          insertIdx,
+          row.type.group.children,
+        );
+      } else {
+        found.type.group.children.addAll(row.type.group.children);
+      }
+    }
+
+    void addAllGroupByColumn(
+      Iterable<PlutoRow> groupedRows,
+      FilteredList<PlutoRow> ref,
+    ) {
+      for (final row in groupedRows) {
+        findByRowKey(PlutoRow e) => e.key == row.key;
+        final found = ref.originalList.firstWhereOrNull(findByRowKey);
+
+        if (found == null) {
+          insertOrAdd(ref: ref, row: row);
+        } else {
+          if (hasChildrenGroup(found)) {
+            addAllGroupByColumn(
+              row.type.group.children,
+              found.type.group.children,
+            );
+          } else {
+            insertOrAddToChildren(found: found, row: row);
+          }
+        }
+
+        if (row.type.isGroup) {
           setParent(e) => e.setParent(found ?? row);
           row.type.group.children.originalList.forEach(setParent);
         }
       }
+    }
 
-      addAll(grouped, refRows);
+    void addAllGroupTree() {
+      final targetParent = target?.parent?.type.group.children ?? refRows;
+
+      if (append) {
+        targetParent.addAll(grouped);
+        return;
+      }
+
+      final targetParentList = targetParent.filterOrOriginalList;
+      final insertIdx = targetParentList.indexWhere(findByTargetKey);
+      assert(insertIdx != -1);
+
+      final length = grouped.length;
+      for (int i = 0; i < length; i += 1) {
+        grouped[i].sortIdx = (target?.sortIdx ?? 0) + i;
+      }
+
+      updateSortIdx(
+        rows: targetParent.originalList,
+        start: target == null ? 0 : targetParent.originalList.indexOf(target),
+        compare: target?.sortIdx ?? 0,
+        increase: grouped.length,
+      );
+
+      targetParent.insertAll(insertIdx, grouped);
+      setParent(PlutoRow e) => e.setParent(target?.parent);
+      grouped.forEach(setParent);
+    }
+
+    _ensureRowGroups(() {
+      switch (_rowGroupDelegate!.type) {
+        case PlutoRowGroupDelegateType.tree:
+          addAllGroupTree();
+          break;
+        case PlutoRowGroupDelegateType.byColumn:
+          addAllGroupByColumn(grouped, refRows);
+          break;
+      }
     });
   }
 
@@ -426,6 +548,29 @@ mixin RowGroupState implements IPlutoGridState {
 
     if (toResetPage) {
       resetPage(resetCurrentState: false, notify: false);
+    }
+  }
+
+  void _updateCellsByTargetForGroupByColumn({
+    required List<PlutoRow> rows,
+    required PlutoRow? target,
+  }) {
+    if (target == null) {
+      return;
+    }
+
+    assert(_rowGroupDelegate is PlutoRowGroupByColumnDelegate);
+
+    final delegate = _rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+
+    final depth = target.depth;
+
+    final groupedColumn = delegate.columns.getRange(0, depth);
+
+    for (final row in rows) {
+      for (final column in groupedColumn) {
+        row.cells[column.field]!.value = target.cells[column.field]!.value;
+      }
     }
   }
 

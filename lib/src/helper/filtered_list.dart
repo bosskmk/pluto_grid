@@ -152,6 +152,9 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   /// Returns the length of all elements, regardless of filtering or ranging.
   int get originalLength => _list.length;
 
+  int get filterOrOriginalLength =>
+      hasFilter ? _filteredList.length : _list.length;
+
   @override
   set length(int length) {
     _list.length = length;

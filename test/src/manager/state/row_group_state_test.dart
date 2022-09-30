@@ -188,12 +188,31 @@ void main() {
     });
   });
 
+  /// A
+  ///   - 1
+  ///     - 001
+  ///   - 2
+  ///     - 002
+  /// B
+  ///   - 1
+  ///     - 003
+  ///     - 004
+  ///   - 2
+  ///     - 005
   group('2개의 컬럼으로 그룹핑 - PlutoRowGroupByColumnDelegate.', () {
     late List<PlutoColumn> columns;
 
     late List<PlutoRow> rows;
 
     late PlutoGridStateManager stateManager;
+
+    PlutoRow createRow(String value1, String value2, String value3) {
+      return PlutoRow(cells: {
+        'column1': PlutoCell(value: value1),
+        'column2': PlutoCell(value: value2),
+        'column3': PlutoCell(value: value3),
+      });
+    }
 
     setUp(() {
       columns = [
@@ -690,6 +709,548 @@ void main() {
         expect(rowGroup.type.group.children.length, 2);
       }
     });
+
+    group('insertRows', () {
+      test('index 0 에 (C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A [V]
+        /// 1. B
+        /// After
+        /// 0. C (1 > 006) [V]
+        /// 1. A
+        /// 2. B
+        expect(stateManager.refRows.length, 2);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+
+        stateManager.insertRows(0, [createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 3);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'C');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[2].cells['column1']!.value, 'B');
+
+        final GROUP_C = stateManager.refRows[0];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        expect(GROUP_C_1.parent, GROUP_C);
+        expect(GROUP_C_1.type.group.children.first.parent, GROUP_C_1);
+      });
+
+      test('index 2 에 (C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// 2. [V]
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2. C (1 > 006) [V]
+        expect(stateManager.refRows.length, 2);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+
+        stateManager.insertRows(2, [createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 3);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column1']!.value, 'C');
+
+        final GROUP_C = stateManager.refRows[2];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        expect(GROUP_C_1.parent, GROUP_C);
+        expect(GROUP_C_1.type.group.children.first.parent, GROUP_C_1);
+      });
+
+      test('index 1 에 (C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B [V]
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.   - 2
+        /// After
+        /// 0. A
+        /// 1. C (1 > 006) [V]
+        /// 2. B
+        /// 3.   - 1
+        /// 4.     - 003
+        /// 5.     - 004
+        /// 6.   - 2
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_1 = GROUP_B.type.group.children.first;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+        expect(stateManager.refRows.length, 6);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column3']!.value, '003');
+        expect(stateManager.refRows[4].cells['column3']!.value, '004');
+        expect(stateManager.refRows[5].cells['column2']!.value, '2');
+
+        stateManager.insertRows(1, [createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 7);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'C');
+        expect(stateManager.refRows[2].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[3].cells['column2']!.value, '1');
+        expect(stateManager.refRows[4].cells['column3']!.value, '003');
+        expect(stateManager.refRows[5].cells['column3']!.value, '004');
+        expect(stateManager.refRows[6].cells['column2']!.value, '2');
+
+        final GROUP_C = stateManager.refRows[1];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        expect(GROUP_C_1.parent, GROUP_C);
+        expect(GROUP_C_1.type.group.children.first.parent, GROUP_C_1);
+      });
+
+      test('index 5 에 (C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.   - 2
+        /// 4.     - 005
+        /// 5. [V]
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.   - 2
+        /// 4.     - 005
+        /// 5. C [V]
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_2 = GROUP_B.type.group.children.last;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_2);
+
+        expect(stateManager.refRows.length, 5);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column2']!.value, '2');
+        expect(stateManager.refRows[4].cells['column3']!.value, '005');
+
+        stateManager.insertRows(5, [createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 6);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column2']!.value, '2');
+        expect(stateManager.refRows[4].cells['column3']!.value, '005');
+        expect(stateManager.refRows[5].cells['column1']!.value, 'C');
+      });
+
+      test('index 5 에 (B, 3, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.   - 2
+        /// 4.     - 005
+        /// 5. [V]
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.   - 2
+        /// 4.     - 005
+        /// 5.   - 3 [V]
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_2 = GROUP_B.type.group.children.last;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_2);
+
+        stateManager.insertRows(5, [createRow('B', '3', '006')]);
+
+        expect(stateManager.refRows.length, 6);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column2']!.value, '2');
+        expect(stateManager.refRows[4].cells['column3']!.value, '005');
+        expect(stateManager.refRows[5].cells['column2']!.value, '3');
+      });
+
+      test('index 6 에 (B, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.   - 2
+        /// 6. [V]
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.     - 006 [V]
+        /// 6.   - 2
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_1 = GROUP_B.type.group.children.first;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+        stateManager.insertRows(6, [createRow('B', '1', '006')]);
+
+        expect(stateManager.refRows.length, 7);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column3']!.value, '003');
+        expect(stateManager.refRows[4].cells['column3']!.value, '004');
+        expect(stateManager.refRows[5].cells['column3']!.value, '006');
+        expect(stateManager.refRows[6].cells['column2']!.value, '2');
+      });
+
+      test('index 1 에 (C, 1, 006), (B, 3, 007) 을 추가', () {
+        /// Before
+        /// 0. A
+        /// 1. B [V]
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.   - 2
+        /// After
+        /// 0. A
+        /// 1. C (1 > 006) [V]
+        /// 2. B
+        /// 3.   - 1
+        /// 4.     - 003
+        /// 5.     - 004
+        /// 6.   - 2
+        /// 7.   - 3 > (007)
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_1 = GROUP_B.type.group.children.first;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+        expect(stateManager.refRows.length, 6);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[2].cells['column2']!.value, '1');
+        expect(stateManager.refRows[3].cells['column3']!.value, '003');
+        expect(stateManager.refRows[4].cells['column3']!.value, '004');
+        expect(stateManager.refRows[5].cells['column2']!.value, '2');
+
+        stateManager.insertRows(1, [
+          createRow('C', '1', '006'),
+          createRow('B', '3', '007'),
+        ]);
+
+        expect(stateManager.refRows.length, 8);
+        expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+        expect(stateManager.refRows[1].cells['column1']!.value, 'C');
+        expect(stateManager.refRows[2].cells['column1']!.value, 'B');
+        expect(stateManager.refRows[3].cells['column2']!.value, '1');
+        expect(stateManager.refRows[4].cells['column3']!.value, '003');
+        expect(stateManager.refRows[5].cells['column3']!.value, '004');
+        expect(stateManager.refRows[6].cells['column2']!.value, '2');
+        expect(stateManager.refRows[7].cells['column2']!.value, '3');
+
+        final GROUP_C = stateManager.refRows[1];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        expect(GROUP_C_1.parent, GROUP_C);
+        expect(GROUP_C_1.type.group.children.first.parent, GROUP_C_1);
+
+        final GROUP_B_3 = stateManager.refRows[7];
+        expect(GROUP_B_3.parent, GROUP_B);
+        expect(GROUP_B_3.type.group.children.first.parent, GROUP_B_3);
+      });
+
+      test('insert 5 에 (C, 2, 006), (C, 3, 007) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.   - 2 [V]
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2.   - 1
+        /// 3.     - 003
+        /// 4.     - 004
+        /// 5.   - 3 > (007) [V]
+        /// 6.   - 2 > (005, 006)
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_1 = GROUP_B.type.group.children.first;
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+        stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+        final GROUP_B_2 = stateManager.refRows[5];
+        expect(GROUP_B_2.type.group.children.length, 1);
+
+        stateManager.insertRows(5, [
+          createRow('C', '2', '006'),
+          createRow('C', '3', '007'),
+        ]);
+
+        expect(GROUP_B_2.type.group.children.length, 2);
+        final GROUP_B_2_006 = GROUP_B_2.type.group.children[1];
+        expect(GROUP_B_2_006.cells['column3']!.value, '006');
+        expect(GROUP_B_2_006.parent, GROUP_B_2);
+        expect(stateManager.refRows[6].cells['column2']!.value, '2');
+
+        expect(GROUP_B.type.group.children.length, 3);
+        final GROUP_B_3 = stateManager.refRows[5];
+        final GROUP_B_3_007 = GROUP_B_3.type.group.children[0];
+        expect(GROUP_B_3.cells['column2']!.value, '3');
+        expect(GROUP_B_3_007.cells['column3']!.value, '007');
+        expect(GROUP_B_3.parent, GROUP_B);
+        expect(GROUP_B_3_007.parent, GROUP_B_3);
+      });
+
+      test(
+        'Column1 을 Descending 정렬 상태에서 index 5 에, '
+        '(C, 1, 006), (D, 1, 007) 을 추가.',
+        () {
+          /// Before
+          /// 0. B
+          /// 1.   - 1
+          /// 2.     - 003
+          /// 3.     - 004
+          /// 4.   - 2
+          /// 5. A [V]
+          /// After
+          /// 0. B
+          /// 1.   - 1
+          /// 2.     - 003
+          /// 3.     - 004
+          /// 4.   - 2
+          /// 5. C (1 > 006) [V]
+          /// 6. D (1 > 007)
+          /// 7. A
+          final GROUP_B = stateManager.refRows[1];
+          final GROUP_B_1 = GROUP_B.type.group.children.first;
+
+          stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+          stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+          stateManager.sortDescending(stateManager.columns.first);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'B');
+          expect(stateManager.refRows[5].cells['column1']!.value, 'A');
+
+          stateManager.insertRows(5, [
+            createRow('C', '1', '006'),
+            createRow('D', '1', '007'),
+          ]);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'B');
+          expect(stateManager.refRows[5].cells['column1']!.value, 'C');
+          expect(stateManager.refRows[6].cells['column1']!.value, 'D');
+          expect(stateManager.refRows[7].cells['column1']!.value, 'A');
+
+          stateManager.sortBySortIdx(stateManager.columns.first);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'C');
+          expect(stateManager.refRows[1].cells['column1']!.value, 'D');
+          expect(stateManager.refRows[2].cells['column1']!.value, 'A');
+        },
+      );
+
+      test(
+        'Column1 을 Descending 정렬 상태에서 insert 2 에, '
+        '(C, 1, 006), (C, 3, 007) 을 추가.',
+        () {
+          /// Before
+          /// 0. B
+          /// 1.   - 1
+          /// 2.     - 003 [V]
+          /// 3.     - 004
+          /// 4.   - 2
+          /// 5. A
+          /// After
+          /// 0. B
+          /// 1.   - 1
+          /// 2.     - 006 [V]
+          /// 3.     - 007
+          /// 4.     - 003
+          /// 5.     - 004
+          /// 6.   - 2
+          /// 7. A
+          final GROUP_B = stateManager.refRows[1];
+          final GROUP_B_1 = GROUP_B.type.group.children.first;
+
+          stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B);
+          stateManager.toggleExpandedRowGroup(rowGroup: GROUP_B_1);
+
+          stateManager.sortDescending(stateManager.columns.first);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'B');
+          expect(stateManager.refRows[5].cells['column1']!.value, 'A');
+
+          stateManager.insertRows(2, [
+            createRow('C', '1', '006'),
+            createRow('C', '3', '007'),
+          ]);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'B');
+          expect(stateManager.refRows[1].cells['column2']!.value, '1');
+          expect(stateManager.refRows[2].cells['column3']!.value, '006');
+          expect(stateManager.refRows[3].cells['column3']!.value, '007');
+          expect(stateManager.refRows[4].cells['column3']!.value, '003');
+          expect(stateManager.refRows[5].cells['column3']!.value, '004');
+          expect(stateManager.refRows[6].cells['column2']!.value, '2');
+          expect(stateManager.refRows[7].cells['column1']!.value, 'A');
+
+          stateManager.sortBySortIdx(stateManager.columns.first);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'A');
+          expect(stateManager.refRows[1].cells['column1']!.value, 'B');
+          expect(stateManager.refRows[2].cells['column2']!.value, '1');
+          expect(stateManager.refRows[3].cells['column3']!.value, '006');
+          expect(stateManager.refRows[4].cells['column3']!.value, '007');
+          expect(stateManager.refRows[5].cells['column3']!.value, '003');
+          expect(stateManager.refRows[6].cells['column3']!.value, '004');
+        },
+      );
+    });
+
+    group('prependRows', () {
+      test('(C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// After
+        /// 0. C
+        /// 1. A
+        /// 2. B
+        stateManager.prependRows([createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 3);
+        final GROUP_C = stateManager.refRows[0];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        final GROUP_C_1_006 = GROUP_C_1.type.group.children.first;
+        expect(GROUP_C.cells['column1']!.value, 'C');
+        expect(GROUP_C_1.cells['column2']!.value, '1');
+        expect(GROUP_C_1_006.cells['column3']!.value, '006');
+        expect(GROUP_C_1_006.parent, GROUP_C_1);
+        expect(GROUP_C_1_006.parent?.parent, GROUP_C);
+      });
+
+      test('(B, 2, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// After
+        /// 0. A
+        /// 1. B (2 > 005, 006)
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_2 = GROUP_B.type.group.children[1];
+        expect(stateManager.refRows.length, 2);
+        expect(GROUP_B_2.type.group.children.length, 1);
+
+        stateManager.prependRows([createRow('B', '2', '006')]);
+
+        final GROUP_B_2_006 = GROUP_B_2.type.group.children[1];
+        expect(stateManager.refRows.length, 2);
+        expect(GROUP_B_2.type.group.children.length, 2);
+        expect(GROUP_B_2_006.cells['column3']!.value, '006');
+      });
+
+      test('(A, 1, 006), (B, 1, 007), (C, 1, 008) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// After
+        /// 0. C (1 > 008)
+        /// 1. A (1 > 001 006)
+        /// 2. B (1 > 003, 004, 007)
+        stateManager.prependRows([
+          createRow('A', '1', '006'),
+          createRow('B', '1', '007'),
+          createRow('C', '1', '008'),
+        ]);
+
+        final GROUP_C = stateManager.refRows[0];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        final GROUP_C_1_008 = GROUP_C_1.type.group.children.first;
+        final GROUP_A = stateManager.refRows[1];
+        final GROUP_A_1 = GROUP_A.type.group.children.first;
+        final GROUP_A_1_006 = GROUP_A_1.type.group.children.last;
+        final GROUP_B = stateManager.refRows[2];
+        final GROUP_B_1 = GROUP_B.type.group.children.first;
+        final GROUP_B_1_007 = GROUP_B_1.type.group.children.last;
+
+        expect(GROUP_C.cells['column1']!.value, 'C');
+        expect(GROUP_C_1.cells['column2']!.value, '1');
+        expect(GROUP_C_1_008.cells['column3']!.value, '008');
+        expect(GROUP_C_1_008.parent, GROUP_C_1);
+        expect(GROUP_C_1_008.parent?.parent, GROUP_C);
+
+        expect(GROUP_A_1_006.cells['column3']!.value, '006');
+        expect(GROUP_A_1_006.parent, GROUP_A_1);
+        expect(GROUP_A_1_006.parent?.parent, GROUP_A);
+        expect(GROUP_B_1_007.cells['column3']!.value, '007');
+        expect(GROUP_B_1_007.parent, GROUP_B_1);
+        expect(GROUP_B_1_007.parent?.parent, GROUP_B);
+      });
+    });
+
+    group('appendRows', () {
+      test('(C, 1, 006) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// After
+        /// 0. A
+        /// 1. B
+        /// 2. C (1 > 006)
+        stateManager.appendRows([createRow('C', '1', '006')]);
+
+        expect(stateManager.refRows.length, 3);
+        final GROUP_C = stateManager.refRows[2];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        final GROUP_C_1_006 = GROUP_C_1.type.group.children.first;
+        expect(GROUP_C.cells['column1']!.value, 'C');
+        expect(GROUP_C_1.cells['column2']!.value, '1');
+        expect(GROUP_C_1_006.cells['column3']!.value, '006');
+      });
+
+      test('(B, 3, 006), (C, 1, 007), (C, 2, 008) 을 추가.', () {
+        /// Before
+        /// 0. A
+        /// 1. B
+        /// After
+        /// 0. A
+        /// 1. B (3 > 006)
+        /// 2. C (1 > 007, 2 > 008)
+        stateManager.appendRows([
+          createRow('B', '3', '006'),
+          createRow('C', '1', '007'),
+          createRow('C', '2', '008'),
+        ]);
+
+        expect(stateManager.refRows.length, 3);
+        final GROUP_B = stateManager.refRows[1];
+        final GROUP_B_3 = GROUP_B.type.group.children.last;
+        final GROUP_B_3_006 = GROUP_B_3.type.group.children.first;
+        expect(GROUP_B_3.cells['column2']!.value, '3');
+        expect(GROUP_B_3_006.cells['column3']!.value, '006');
+
+        final GROUP_C = stateManager.refRows[2];
+        final GROUP_C_1 = GROUP_C.type.group.children.first;
+        final GROUP_C_1_007 = GROUP_C_1.type.group.children.first;
+        final GROUP_C_2 = GROUP_C.type.group.children.last;
+        final GROUP_C_2_008 = GROUP_C_2.type.group.children.first;
+        expect(GROUP_C.cells['column1']!.value, 'C');
+        expect(GROUP_C_1.cells['column2']!.value, '1');
+        expect(GROUP_C_1_007.cells['column3']!.value, '007');
+        expect(GROUP_C_2.cells['column2']!.value, '2');
+        expect(GROUP_C_2_008.cells['column3']!.value, '008');
+      });
+    });
   });
 
   /// G100
@@ -873,6 +1434,148 @@ void main() {
       expect(G220_CHILDREN[0].parent?.parent, G200);
       expect(G220_CHILDREN[1].parent, G220);
       expect(G220_CHILDREN[1].parent?.parent, G200);
+    });
+
+    /// G300
+    ///   - G310
+    ///   - G320
+    ///     - G321
+    ///     - G322
+    /// G100
+    ///   - G110
+    ///     - R111
+    ///     - R112
+    ///   - R120
+    ///   - R130
+    /// G200
+    ///   - R210
+    ///   - G220
+    ///     - R221
+    ///     - R222
+    group('insertAll', () {
+      group('0번에 3뎁스의 그룹 추가.', () {
+        setUp(() {
+          stateManager.insertRows(0, [
+            PlutoRow(
+              cells: createCell('G300'),
+              type: PlutoRowType.group(
+                children: FilteredList(initialList: [
+                  PlutoRow(cells: createCell('G310')),
+                  PlutoRow(
+                    cells: createCell('G320'),
+                    type: PlutoRowType.group(
+                      children: FilteredList(initialList: [
+                        PlutoRow(cells: createCell('G321')),
+                        PlutoRow(cells: createCell('G322')),
+                      ]),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+          ]);
+        });
+
+        test('첫번째 행에 G300 이 추가 되어야 한다.', () {
+          expect(stateManager.refRows[0].cells['column1']!.value, 'G300');
+          expect(stateManager.refRows[1].cells['column1']!.value, 'G100');
+          expect(stateManager.refRows[2].cells['column1']!.value, 'G200');
+        });
+
+        test('추가 된 행들의 parent 가 설정 되어야 한다.', () {
+          final G300 = stateManager.refRows[0];
+          final G310 = G300.type.group.children[0];
+          final G320 = G300.type.group.children[1];
+          final G321 = G320.type.group.children[0];
+          final G322 = G320.type.group.children[1];
+
+          expect(G310.parent, G300);
+          expect(G320.parent, G300);
+          expect(G321.parent, G320);
+          expect(G321.parent?.parent, G300);
+          expect(G322.parent, G320);
+          expect(G322.parent?.parent, G300);
+        });
+
+        test('추가 된 G300의 sortIdx 가 설정 되어야 한다.', () {
+          final G300 = stateManager.refRows[0];
+          final G100 = stateManager.refRows[1];
+          final G200 = stateManager.refRows[2];
+          expect(G300.sortIdx, 0);
+          expect(G100.sortIdx, 1);
+          expect(G200.sortIdx, 2);
+        });
+
+        test('G300 을 토글 하면 G310,G320 이 refRows 에 추가 되어야 한다.', () {
+          final G300 = stateManager.refRows[0];
+          expect(G300.cells['column1']!.value, 'G300');
+
+          stateManager.toggleExpandedRowGroup(rowGroup: G300);
+
+          expect(stateManager.refRows[0].cells['column1']!.value, 'G300');
+          expect(stateManager.refRows[1].cells['column1']!.value, 'G310');
+          expect(stateManager.refRows[2].cells['column1']!.value, 'G320');
+        });
+
+        test(
+          'G300 을 토글 후 1번 인덱스 G310에 G400을 추가하면, '
+          'G400 은 G310 의 부모인 G300 의 자식이 되어야 한다.',
+          () {
+            final G300 = stateManager.refRows[0];
+            stateManager.toggleExpandedRowGroup(rowGroup: G300);
+
+            final addedRow = PlutoRow(cells: createCell('G400'));
+
+            stateManager.insertRows(1, [addedRow]);
+
+            expect(stateManager.refRows[0].cells['column1']!.value, 'G300');
+            expect(stateManager.refRows[1].cells['column1']!.value, 'G400');
+            expect(stateManager.refRows[2].cells['column1']!.value, 'G310');
+            expect(stateManager.refRows[3].cells['column1']!.value, 'G320');
+            expect(stateManager.refRows[4].cells['column1']!.value, 'G100');
+            expect(stateManager.refRows[5].cells['column1']!.value, 'G200');
+
+            final G400 = stateManager.refRows[1];
+            expect(G400.parent, G300);
+
+            expect(G300.type.group.children[0].sortIdx, 0);
+            expect(G300.type.group.children[0], G400);
+            expect(G300.type.group.children[1].sortIdx, 1);
+            expect(G300.type.group.children[1].cells['column1']!.value, 'G310');
+            expect(G300.type.group.children[2].sortIdx, 2);
+            expect(G300.type.group.children[2].cells['column1']!.value, 'G320');
+
+            /// 다시 300 을 접으면 다음 레벨인 G100, G200 이 위치해야 한다.
+            stateManager.toggleExpandedRowGroup(rowGroup: G300);
+            expect(stateManager.refRows[0].cells['column1']!.value, 'G300');
+            expect(stateManager.refRows[1].cells['column1']!.value, 'G100');
+            expect(stateManager.refRows[2].cells['column1']!.value, 'G200');
+          },
+        );
+
+        test(
+          'G200, G220 을 토글 후 7번 인덱스에 G400 추가하면 마지막 그룹으로 추가 되어야 한다.',
+          () {
+            final G200 = stateManager.refRows[2];
+            final G220 = G200.type.group.children[1];
+            stateManager.toggleExpandedRowGroup(rowGroup: G200);
+            stateManager.toggleExpandedRowGroup(rowGroup: G220);
+
+            final addedRow = PlutoRow(cells: createCell('G400'));
+
+            stateManager.insertRows(7, [addedRow]);
+
+            expect(stateManager.refRows[0].cells['column1']!.value, 'G300');
+            expect(stateManager.refRows[1].cells['column1']!.value, 'G100');
+            expect(stateManager.refRows[2].cells['column1']!.value, 'G200');
+            expect(stateManager.refRows[3].cells['column1']!.value, 'R210');
+            expect(stateManager.refRows[4].cells['column1']!.value, 'G220');
+            expect(stateManager.refRows[5].cells['column1']!.value, 'R221');
+            expect(stateManager.refRows[6].cells['column1']!.value, 'R222');
+            expect(stateManager.refRows[7].cells['column1']!.value, 'G400');
+          },
+        );
+      });
     });
   });
 }
