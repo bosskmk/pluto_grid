@@ -2520,10 +2520,17 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void addRowGroup(List<_i3.PlutoRow>? rows) => super.noSuchMethod(
+  void insertRowGroup(
+    int? index,
+    List<_i3.PlutoRow>? rows,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
-          #addRowGroup,
-          [rows],
+          #insertRowGroup,
+          [
+            index,
+            rows,
+          ],
         ),
         returnValueForMissingStub: null,
       );

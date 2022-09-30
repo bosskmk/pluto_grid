@@ -96,11 +96,7 @@ mixin RowState implements IPlutoGridState {
 
   @override
   set refRows(FilteredList<PlutoRow> setRows) {
-    PlutoGridStateManager.initializeRows(
-      refColumns.originalList,
-      setRows,
-      forceApplySortIdx: true,
-    );
+    PlutoGridStateManager.initializeRows(refColumns.originalList, setRows);
 
     _refRows = setRows;
   }
@@ -494,7 +490,7 @@ mixin RowState implements IPlutoGridState {
     int safetyIndex = _getSafetyIndexForInsert(index);
 
     if (enabledRowGroups) {
-      addRowGroup(rows);
+      insertRowGroup(safetyIndex, rows);
     } else {
       _setSortIdx(rows: rows, start: safetyIndex);
 
@@ -517,6 +513,7 @@ mixin RowState implements IPlutoGridState {
       PlutoGridStateManager.initializeRows(
         refColumns,
         rows,
+        forceApplySortIdx: false,
       );
     }
 

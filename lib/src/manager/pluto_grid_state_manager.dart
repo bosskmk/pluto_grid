@@ -164,7 +164,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   static List<PlutoRow> initializeRows(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
-    bool forceApplySortIdx = false,
+    bool forceApplySortIdx = true,
     bool increase = true,
     int start = 0,
   }) {
@@ -225,7 +225,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   static Future<List<PlutoRow>> initializeRowsAsync(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
-    bool forceApplySortIdx = false,
+    bool forceApplySortIdx = true,
     bool increase = true,
     int start = 0,
     int chunkSize = 100,
@@ -445,6 +445,10 @@ class _ApplyCellForSetColumnRow implements _Apply {
 
   @override
   void execute(PlutoRow row) {
+    if (row.initialized) {
+      return;
+    }
+
     for (var element in refColumns) {
       row.cells[element.field]!
         ..setColumn(element)
@@ -510,11 +514,7 @@ class _ApplyRowGroup implements _Apply {
     required List<PlutoRow> rows,
     required PlutoRow parent,
   }) {
-    PlutoGridStateManager.initializeRows(
-      columns,
-      rows,
-      forceApplySortIdx: true,
-    );
+    PlutoGridStateManager.initializeRows(columns, rows);
 
     for (final row in rows) {
       row.setParent(parent);

@@ -57,7 +57,7 @@ abstract class IRowGroupState {
   });
 
   @protected
-  void addRowGroup(List<PlutoRow> rows);
+  void insertRowGroup(int index, List<PlutoRow> rows);
 
   @protected
   void removeRowAndGroupByKey(Iterable<Key> keys);
@@ -224,7 +224,7 @@ mixin RowGroupState implements IPlutoGridState {
 
   @override
   @protected
-  void addRowGroup(List<PlutoRow> rows) {
+  void insertRowGroup(int index, List<PlutoRow> rows) {
     if (rows.isEmpty) {
       return;
     }
@@ -232,7 +232,11 @@ mixin RowGroupState implements IPlutoGridState {
     assert(enabledRowGroups);
 
     if (!rows.first.initialized) {
-      PlutoGridStateManager.initializeRows(refColumns.originalList, rows);
+      PlutoGridStateManager.initializeRows(
+        refColumns.originalList,
+        rows,
+        forceApplySortIdx: false,
+      );
     }
 
     final grouped = _rowGroupDelegate!.toGroup(rows: rows);

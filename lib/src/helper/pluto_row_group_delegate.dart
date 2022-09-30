@@ -227,7 +227,7 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
                         depth: nextDepth,
                         previousKey: groupKey,
                       ).toList()
-                    : group.value.toList(),
+                    : _updateSortIdx(group.value),
               ),
             ),
           );
@@ -345,5 +345,15 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
 
   bool _isFirstChildGroup(PlutoRow row) {
     return row.type.group.children.originalList.first.type.isGroup;
+  }
+
+  List<PlutoRow> _updateSortIdx(List<PlutoRow> rows) {
+    int sortIdx = 0;
+
+    for (final row in rows) {
+      row.sortIdx = sortIdx++;
+    }
+
+    return rows;
   }
 }

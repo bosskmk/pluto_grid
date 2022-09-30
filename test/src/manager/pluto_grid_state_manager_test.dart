@@ -113,7 +113,9 @@ void main() {
       expect(rows.last.sortIdx, 4);
     });
 
-    test('이미 sortIdx 가 설정 된 경우 sortIdx 값이 유지 되어야 한다.', () {
+    test(
+        'forceApplySortIdx 가 false 이고 이미 sortIdx 가 설정 된 경우 sortIdx 값이 유지 되어야 한다.',
+        () {
       final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
 
       final List<PlutoRow> rows = [
@@ -134,7 +136,11 @@ void main() {
       expect(rows.first.sortIdx, 3);
       expect(rows.last.sortIdx, 5);
 
-      PlutoGridStateManager.initializeRows(columns, rows);
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        forceApplySortIdx: false,
+      );
 
       expect(rows.first.sortIdx, 3);
       expect(rows.last.sortIdx, 5);
