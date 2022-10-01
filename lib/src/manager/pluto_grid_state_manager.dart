@@ -514,23 +514,14 @@ class _ApplyRowGroup implements _Apply {
     required List<PlutoRow> rows,
     required PlutoRow parent,
   }) {
-    PlutoGridStateManager.initializeRows(columns, rows);
-
     for (final row in rows) {
       row.setParent(parent);
-
-      if (_hasChildren(row)) {
-        _initializeChildren(
-          columns: columns,
-          rows: row.type.group.children.originalList,
-          parent: row,
-        );
-      }
     }
+
+    PlutoGridStateManager.initializeRows(columns, rows);
   }
 
   bool _hasChildren(PlutoRow row) {
-    return row.type.isGroup == true &&
-        row.type.group.children.originalList.isNotEmpty;
+    return row.type.isGroup && row.type.group.children.originalList.isNotEmpty;
   }
 }
