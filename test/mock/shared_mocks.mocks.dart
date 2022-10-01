@@ -1184,8 +1184,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       ) as bool);
   @override
   bool canChangeCellValue({
-    required _i3.PlutoColumn? column,
-    required _i3.PlutoRow? row,
+    required _i3.PlutoCell? cell,
     dynamic newValue,
     dynamic oldValue,
   }) =>
@@ -1194,8 +1193,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           #canChangeCellValue,
           [],
           {
-            #column: column,
-            #row: row,
+            #cell: cell,
             #newValue: newValue,
             #oldValue: oldValue,
           },
@@ -1205,8 +1203,7 @@ class MockPlutoGridStateManager extends _i1.Mock
       ) as bool);
   @override
   bool canNotChangeCellValue({
-    required _i3.PlutoColumn? column,
-    required _i3.PlutoRow? row,
+    required _i3.PlutoCell? cell,
     dynamic newValue,
     dynamic oldValue,
   }) =>
@@ -1215,8 +1212,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           #canNotChangeCellValue,
           [],
           {
-            #column: column,
-            #row: row,
+            #cell: cell,
             #newValue: newValue,
             #oldValue: oldValue,
           },

@@ -464,9 +464,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: true);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: true),
-          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -486,9 +492,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(enableEditingMode: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(enableEditingMode: false),
-          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -509,9 +521,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
-          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -533,9 +551,15 @@ void main() {
           mode: PlutoGridMode.select,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
-          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -557,9 +581,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
-          row: PlutoRow(cells: {'field': PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'abc',
         );

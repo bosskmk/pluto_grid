@@ -275,10 +275,36 @@ mixin RowGroupState implements IPlutoGridState {
       }
     }
 
+    void updateAddedRow(PlutoRow row) {
+      row.setState(PlutoRowState.added);
+      if (row.type.isGroup) {
+        updateChild(PlutoRow e) {
+          e.setParent(row);
+          updateAddedRow(e);
+        }
+
+        row.type.group.children.originalList.forEach(updateChild);
+      }
+    }
+
+    void updateAddedChildren(PlutoRow parent, List<PlutoRow> children) {
+      parent.setState(PlutoRowState.updated);
+      updateChild(PlutoRow e) {
+        e.setParent(parent);
+        updateAddedRow(e);
+      }
+
+      children.forEach(updateChild);
+    }
+
     void insertOrAdd({
       required FilteredList<PlutoRow> ref,
       required PlutoRow row,
+      PlutoRow? parent,
     }) {
+      row.setParent(parent);
+      updateAddedRow(row);
+
       final insertIdx = ref.indexWhere(findByTargetKey);
       if (insertIdx > -1 && !append) {
         row.sortIdx = ref[insertIdx].sortIdx;
@@ -298,6 +324,9 @@ mixin RowGroupState implements IPlutoGridState {
       required PlutoRow found,
       required PlutoRow row,
     }) {
+      assert(row.type.isGroup);
+      updateAddedChildren(found, row.type.group.children.originalList);
+
       final insertIdx = found.type.group.children.indexWhere(findByTargetKey);
       if (insertIdx > -1 && !append) {
         final length = row.type.group.children.length;
@@ -323,33 +352,36 @@ mixin RowGroupState implements IPlutoGridState {
     void addAllGroupByColumn(
       Iterable<PlutoRow> groupedRows,
       FilteredList<PlutoRow> ref,
+      PlutoRow? parent,
     ) {
       for (final row in groupedRows) {
         findByRowKey(PlutoRow e) => e.key == row.key;
         final found = ref.originalList.firstWhereOrNull(findByRowKey);
 
         if (found == null) {
-          insertOrAdd(ref: ref, row: row);
+          insertOrAdd(ref: ref, row: row, parent: parent);
         } else {
           if (hasChildrenGroup(found)) {
             addAllGroupByColumn(
               row.type.group.children,
               found.type.group.children,
+              found,
             );
           } else {
             insertOrAddToChildren(found: found, row: row);
           }
-        }
-
-        if (row.type.isGroup) {
-          setParent(e) => e.setParent(found ?? row);
-          row.type.group.children.originalList.forEach(setParent);
         }
       }
     }
 
     void addAllGroupTree() {
       final targetParent = target?.parent?.type.group.children ?? refRows;
+
+      if (target?.parent == null) {
+        grouped.forEach(updateAddedRow);
+      } else {
+        updateAddedChildren(target!.parent!, grouped);
+      }
 
       if (append) {
         targetParent.addAll(grouped);
@@ -373,8 +405,6 @@ mixin RowGroupState implements IPlutoGridState {
       );
 
       targetParent.insertAll(insertIdx, grouped);
-      setParent(PlutoRow e) => e.setParent(target?.parent);
-      grouped.forEach(setParent);
     }
 
     _ensureRowGroups(() {
@@ -383,10 +413,12 @@ mixin RowGroupState implements IPlutoGridState {
           addAllGroupTree();
           break;
         case PlutoRowGroupDelegateType.byColumn:
-          addAllGroupByColumn(grouped, refRows);
+          addAllGroupByColumn(grouped, refRows, null);
           break;
       }
     });
+
+    refRows.update();
   }
 
   @override

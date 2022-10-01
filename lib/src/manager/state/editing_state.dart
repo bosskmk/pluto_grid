@@ -219,8 +219,7 @@ mixin EditingState implements IPlutoGridState {
 
     if (force == false &&
         canNotChangeCellValue(
-          column: currentColumn,
-          row: currentRow,
+          cell: cell,
           newValue: value,
           oldValue: oldValue,
         )) {
@@ -329,8 +328,7 @@ mixin EditingState implements IPlutoGridState {
         newValue = castValueByColumnType(newValue, currentColumn);
 
         if (canNotChangeCellValue(
-          column: currentColumn,
-          row: refRows[rowIdx],
+          cell: currentCell,
           newValue: newValue,
           oldValue: oldValue,
         )) {

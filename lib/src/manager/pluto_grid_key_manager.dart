@@ -280,10 +280,8 @@ class PlutoGridKeyManager {
       return;
     }
 
-    if (stateManager.currentRow?.type.isGroup == true) {
-      stateManager.toggleExpandedRowGroup(
-        rowGroup: stateManager.currentRow!,
-      );
+    if (!stateManager.isEditing && _isExpandableCell()) {
+      stateManager.toggleExpandedRowGroup(rowGroup: stateManager.currentRow!);
       return;
     }
 
@@ -492,5 +490,13 @@ class PlutoGridKeyManager {
       stateManager.refRows.elementAt(rowIdx).cells[currentColumn.field],
       rowIdx,
     );
+  }
+
+  bool _isExpandableCell() {
+    return stateManager.currentCell != null &&
+        stateManager.enabledRowGroups &&
+        stateManager.rowGroupDelegate
+                ?.isExpandableCell(stateManager.currentCell!) ==
+            true;
   }
 }

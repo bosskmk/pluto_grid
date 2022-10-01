@@ -483,10 +483,6 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    for (final row in rows) {
-      row.setState(PlutoRowState.added);
-    }
-
     int safetyIndex = _getSafetyIndexForInsert(index);
 
     if (enabledRowGroups) {
@@ -510,6 +506,10 @@ mixin RowState implements IPlutoGridState {
           start: target == null ? 0 : refRows.originalList.indexOf(target),
           increase: rows.length,
         );
+      }
+
+      for (final row in rows) {
+        row.setState(PlutoRowState.added);
       }
 
       refRows.insertAll(safetyIndex, rows);

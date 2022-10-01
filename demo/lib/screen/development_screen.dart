@@ -7,6 +7,16 @@ import 'package:pluto_menu_bar/pluto_menu_bar.dart';
 import '../dummy_data/development.dart';
 import 'home_screen.dart';
 
+enum _Test {
+  a,
+  b,
+  c;
+
+  bool get isA => this == _Test.a;
+  bool get isB => this == _Test.b;
+  bool get isC => this == _Test.c;
+}
+
 class DevelopmentScreen extends StatefulWidget {
   static const routeName = 'development';
 
@@ -35,83 +45,88 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   void initState() {
     super.initState();
 
+    const _Test test = _Test.b;
+
     /// Test A
-    // columns.addAll(testColumnsA);
-    // columnGroups.addAll(testColumnGroupsA);
-    // rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-    // rowColorCallback = (PlutoRowColorContext rowColorContext) {
-    //   return rowColorContext.row.cells['column2']?.value == 'green'
-    //       ? const Color(0xFFE2F6DF)
-    //       : Colors.white;
-    // };
+    if (test.isA) {
+      columns.addAll(testColumnsA);
+      columnGroups.addAll(testColumnGroupsA);
+      rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
+      rowColorCallback = (PlutoRowColorContext rowColorContext) {
+        return rowColorContext.row.cells['column2']?.value == 'green'
+            ? const Color(0xFFE2F6DF)
+            : Colors.white;
+      };
+    }
 
     /// Test B
-    columns.addAll(DummyData(10, 0).columns);
-    columnGroups.addAll(testColumnGroupsB);
-    DummyData.fetchRows(
-      columns,
-      chunkSize: 100,
-      chunkCount: 10,
-    ).then((fetchedRows) {
-      PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
-          .then((initializedRows) {
-        stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
-        stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
-          stateManager.columns[3],
-          stateManager.columns[4],
-        ]));
-        stateManager.moveColumn(
-          column: columns[5],
-          targetColumn: columns[0],
-        );
-        stateManager.setPage(1);
+    if (test.isB) {
+      columns.addAll(DummyData(10, 0).columns);
+      columnGroups.addAll(testColumnGroupsB);
+      DummyData.fetchRows(
+        columns,
+        chunkSize: 100,
+        chunkCount: 10,
+      ).then((fetchedRows) {
+        PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
+            .then((initializedRows) {
+          stateManager.refRows
+              .addAll(FilteredList(initialList: initializedRows));
+          stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
+            stateManager.columns[3],
+            stateManager.columns[4],
+          ]));
+          stateManager.moveColumn(
+            column: columns[5],
+            targetColumn: columns[0],
+          );
+          stateManager.setPage(1);
+        });
       });
-    });
-    columns[0].footerRenderer = (c) {
-      return PlutoAggregateColumnFooter(
-        rendererContext: c,
-        type: PlutoAggregateColumnType.count,
-        format: 'CheckedCount : #,###',
-        alignment: Alignment.center,
-        filter: (cell) => cell.row.checked == true,
-      );
-    };
-    columns[1].footerRenderer = (c) {
-      return PlutoAggregateColumnFooter(
-        rendererContext: c,
-        type: PlutoAggregateColumnType.sum,
-        format: '#,###',
-        alignment: Alignment.center,
-        formatAsCurrency: true,
-        filter: (cell) => cell.row.checked == true,
-        titleSpanBuilder: (text) {
-          return [
-            const TextSpan(text: 'CheckedSum : '),
-            TextSpan(text: text),
-          ];
-        },
-      );
-    };
-    columns[3].enableRowDrag = true;
-    columns[3].enableRowChecked = true;
-    columns[3].frozen = PlutoColumnFrozen.start;
-    columns[4].frozen = PlutoColumnFrozen.start;
+      columns[0].footerRenderer = (c) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: c,
+          type: PlutoAggregateColumnType.count,
+          format: 'CheckedCount : #,###',
+          alignment: Alignment.center,
+          filter: (cell) => cell.row.checked == true,
+        );
+      };
+      columns[1].footerRenderer = (c) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: c,
+          type: PlutoAggregateColumnType.sum,
+          format: '#,###',
+          alignment: Alignment.center,
+          formatAsCurrency: true,
+          filter: (cell) => cell.row.checked == true,
+          titleSpanBuilder: (text) {
+            return [
+              const TextSpan(text: 'CheckedSum : '),
+              TextSpan(text: text),
+            ];
+          },
+        );
+      };
+      columns[3].enableRowDrag = true;
+      columns[3].enableRowChecked = true;
+      columns[3].frozen = PlutoColumnFrozen.start;
+      columns[4].frozen = PlutoColumnFrozen.start;
+    }
 
     /// Test C
-    // columns.addAll(DummyData(10, 0).columns);
-    // rows.addAll(DummyData.treeRowsByColumn(
-    //   columns: columns,
-    //   count: 100,
-    //   // depth: 3,
-    // ));
-    // rowGroupDelegate = PlutoRowGroupTreeDelegate(
-    //   showExpandableIcon: (cell) =>
-    //   stateManager.columns.length > cell.row.depth &&
-    //       stateManager.columns[cell.row.depth].field ==
-    //           cell.column.field &&
-    //       cell.row.type.isGroup,
-    //   showText: (cell) => cell.row.type.isNormal,
-    // );
+    if (test.isC) {
+      columns.addAll(DummyData(10, 0).columns);
+      rows.addAll(DummyData.treeRowsByColumn(
+        columns: columns,
+        count: 100,
+        // depth: 3,
+      ));
+      rowGroupDelegate = PlutoRowGroupTreeDelegate(
+        resolveColumnDepth: (column) => stateManager.columnIndex(column),
+        showText: (cell) => true,
+      );
+    }
   }
 
   void handleOnRowChecked(PlutoGridOnRowCheckedEvent event) {

@@ -35,12 +35,12 @@ abstract class PlutoRowGroupDelegate {
 }
 
 class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
-  final bool Function(PlutoCell cell) showExpandableIcon;
+  final int? Function(PlutoColumn column) resolveColumnDepth;
 
   final bool Function(PlutoCell cell) showText;
 
   PlutoRowGroupTreeDelegate({
-    required this.showExpandableIcon,
+    required this.resolveColumnDepth,
     required this.showText,
   });
 
@@ -54,7 +54,9 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   bool isEditableCell(PlutoCell cell) => showText(cell);
 
   @override
-  bool isExpandableCell(PlutoCell cell) => showExpandableIcon(cell);
+  bool isExpandableCell(PlutoCell cell) =>
+      cell.row.type.isGroup &&
+      resolveColumnDepth(cell.column) == cell.row.depth;
 
   @override
   List<PlutoRow> toGroup({
@@ -86,7 +88,16 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
       return;
     }
 
-    rows.sort(compare);
+    final depth = resolveColumnDepth(column);
+
+    if (depth == null) {
+      return;
+    }
+
+    if (depth == 0) {
+      rows.sort(compare);
+      return;
+    }
 
     sortChildren(PlutoRow row) {
       if (!row.type.isGroup) {
@@ -100,13 +111,17 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
       row.type.group.children.sort(compare);
 
       for (final child in row.type.group.children.originalList) {
-        sortChildren(child);
+        if (child.type.isGroup) {
+          sortChildren(child);
+        }
       }
     }
 
     for (final row in rows.originalList) {
       sortChildren(row);
     }
+
+    rows.sort(compare);
   }
 
   @override
@@ -138,6 +153,7 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
           }
 
           setFilter(row.type.group.children);
+
           return filter(row) ||
               row.type.group.children.filterOrOriginalList.isNotEmpty;
         });
@@ -325,7 +341,9 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
           }
 
           setFilter(row.type.group.children);
-          return row.type.group.children.filterOrOriginalList.isNotEmpty;
+
+          return filter(row) ||
+              row.type.group.children.filterOrOriginalList.isNotEmpty;
         });
       }
 

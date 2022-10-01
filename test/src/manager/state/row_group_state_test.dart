@@ -1360,10 +1360,7 @@ void main() {
 
       stateManager.setRowGroup(
         PlutoRowGroupTreeDelegate(
-          showExpandableIcon: (cell) =>
-              stateManager.columns.length > cell.row.depth &&
-              stateManager.columns[cell.row.depth].field == cell.column.field &&
-              cell.row.type.isGroup,
+          resolveColumnDepth: (column) => stateManager.columnIndex(column),
           showText: (cell) => cell.row.type.isNormal,
         ),
       );

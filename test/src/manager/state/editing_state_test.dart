@@ -442,9 +442,15 @@ void main() {
           onChangedEventCallback: mock.onChangeOneParamListener,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = columns.first;
+        final row = PlutoRow(cells: {columns.first.field: cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
-          column: columns.first,
-          row: PlutoRow(cells: {columns.first.field: PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -477,9 +483,15 @@ void main() {
           layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
+        final cell = PlutoCell(value: '');
+        final column = columns.first;
+        final row = PlutoRow(cells: {columns.first.field: cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool canNotChangeCellValue = stateManager.canNotChangeCellValue(
-          column: columns.first,
-          row: PlutoRow(cells: {columns.first.field: PlutoCell(value: '')}),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
