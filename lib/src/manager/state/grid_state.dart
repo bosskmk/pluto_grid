@@ -261,9 +261,7 @@ mixin GridState implements IPlutoGridState {
 
     clearCurrentSelecting(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, resetCurrentState.hashCode);
   }
 
   @override

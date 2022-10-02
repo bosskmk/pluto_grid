@@ -132,9 +132,7 @@ mixin RowGroupState implements IPlutoGridState {
 
     _updateRowGroup();
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setRowGroup.hashCode);
   }
 
   @override
@@ -192,9 +190,7 @@ mixin RowGroupState implements IPlutoGridState {
 
     clearCurrentSelecting(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, toggleExpandedRowGroup.hashCode);
   }
 
   @override
@@ -618,6 +614,7 @@ mixin RowGroupState implements IPlutoGridState {
     if (enabledRowGroups == true) {
       rows = _rowGroupDelegate!.toGroup(rows: previousRows);
     } else {
+      // todo : reset sortIdx
       rows = previousRows.toList();
       setParent(PlutoRow e) => e.setParent(null);
       rows.forEach(setParent);

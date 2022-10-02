@@ -126,17 +126,19 @@ mixin RowState implements IPlutoGridState {
   bool? get tristateCheckedRow {
     final length = refRows.length;
 
-    if (length == 0) {
-      return false;
-    }
+    if (length == 0) return false;
 
-    final Set<bool> checkSet = {};
+    int countTrue = 0;
+
+    int countFalse = 0;
 
     for (var i = 0; i < length; i += 1) {
-      checkSet.add(refRows[i].checked == true);
+      refRows[i].checked == true ? ++countTrue : ++countFalse;
+
+      if (countTrue > 0 && countFalse > 0) return null;
     }
 
-    return checkSet.length == 2 ? null : checkSet.first;
+    return countTrue == length;
   }
 
   @override
@@ -235,9 +237,7 @@ mixin RowState implements IPlutoGridState {
 
     findRow.setChecked(flag);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setRowChecked.hashCode);
   }
 
   @override
@@ -267,9 +267,7 @@ mixin RowState implements IPlutoGridState {
       );
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, insertRows.hashCode);
   }
 
   @override
@@ -309,7 +307,7 @@ mixin RowState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    notifyListeners(true, prependRows.hashCode);
   }
 
   @override
@@ -323,7 +321,7 @@ mixin RowState implements IPlutoGridState {
   void appendRows(List<PlutoRow> rows) {
     _insertRows(refRows.length, rows);
 
-    notifyListeners();
+    notifyListeners(true, appendRows.hashCode);
   }
 
   @override
@@ -340,7 +338,7 @@ mixin RowState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    notifyListeners();
+    notifyListeners(true, removeCurrentRow.hashCode);
   }
 
   @override
@@ -382,9 +380,7 @@ mixin RowState implements IPlutoGridState {
 
     currentSelectingRows.removeWhere((row) => removeKeys.contains(row.key));
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, removeRows.hashCode);
   }
 
   @override
@@ -397,9 +393,7 @@ mixin RowState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, removeAllRows.hashCode);
   }
 
   @override
@@ -454,9 +448,7 @@ mixin RowState implements IPlutoGridState {
       ));
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, moveRowsByIndex.hashCode);
   }
 
   @override
@@ -468,9 +460,7 @@ mixin RowState implements IPlutoGridState {
       row.setChecked(flag == true);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, toggleAllRowChecked.hashCode);
   }
 
   @override

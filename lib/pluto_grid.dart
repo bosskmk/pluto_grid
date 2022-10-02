@@ -20,6 +20,7 @@ export './src/manager/event/pluto_grid_drag_rows_event.dart';
 export './src/manager/event/pluto_grid_event.dart';
 export './src/manager/event/pluto_grid_scroll_update_event.dart';
 export './src/manager/pluto_change_notifier.dart';
+export './src/manager/pluto_change_notifier_filter.dart';
 export './src/manager/pluto_grid_event_manager.dart';
 export './src/manager/pluto_grid_key_manager.dart';
 export './src/manager/pluto_grid_state_manager.dart';

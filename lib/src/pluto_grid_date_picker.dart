@@ -436,7 +436,7 @@ abstract class _DateCellHeaderStateWithChange
 
     _scroll = stateManager.scroll!.horizontal!.addAndGet();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -447,7 +447,7 @@ abstract class _DateCellHeaderStateWithChange
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _currentCell = update<PlutoCell?>(
       _currentCell,
       stateManager.currentCell,

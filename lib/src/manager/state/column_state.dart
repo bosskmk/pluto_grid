@@ -368,7 +368,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateVisibilityLayout();
 
-    notifyListeners();
+    notifyListeners(true, toggleFrozenColumn.hashCode);
   }
 
   @override
@@ -385,7 +385,7 @@ mixin ColumnState implements IPlutoGridState {
 
     _callOnSorted(column, oldSort);
 
-    notifyListeners();
+    notifyListeners(true, toggleSortColumn.hashCode);
   }
 
   @override
@@ -432,7 +432,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateVisibilityLayout();
 
-    notifyListeners();
+    notifyListeners(true, insertColumns.hashCode);
   }
 
   @override
@@ -465,7 +465,7 @@ mixin ColumnState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    notifyListeners();
+    notifyListeners(true, removeColumns.hashCode);
   }
 
   @override
@@ -521,7 +521,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateVisibilityLayout();
 
-    notifyListeners();
+    notifyListeners(true, moveColumn.hashCode);
   }
 
   @override
@@ -656,9 +656,7 @@ mixin ColumnState implements IPlutoGridState {
       refRows.sort(compare);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, sortAscending.hashCode);
   }
 
   @override
@@ -678,9 +676,7 @@ mixin ColumnState implements IPlutoGridState {
       refRows.sort(compare);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, sortDescending.hashCode);
   }
 
   @override
@@ -705,9 +701,7 @@ mixin ColumnState implements IPlutoGridState {
       refRows.sort(compare);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, sortBySortIdx.hashCode);
   }
 
   @override
@@ -993,9 +987,7 @@ mixin ColumnState implements IPlutoGridState {
 
     updateVisibilityLayout();
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, hideColumn.hashCode);
   }
 
   bool _updateResizeColumns({

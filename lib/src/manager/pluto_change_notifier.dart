@@ -9,8 +9,21 @@ class PlutoChangeNotifier extends ChangeNotifier {
 
   bool _disposed = false;
 
+  final Set<int> _notifier = {};
+
+  Set<int> _drainNotifier() {
+    final drain = <int>{..._notifier};
+    _notifier.clear();
+    return drain;
+  }
+
+  @protected
+  void addNotifier(int hash) {
+    _notifier.add(hash);
+  }
+
   @override
-  dispose() {
+  void dispose() {
     _disposed = true;
 
     _streamNotifier.close();
@@ -19,23 +32,49 @@ class PlutoChangeNotifier extends ChangeNotifier {
   }
 
   @override
-  notifyListeners() {
+  void notifyListeners([bool notify = true, int? notifier]) {
+    if (notifier != null) {
+      addNotifier(notifier);
+    }
+
+    if (!notify) {
+      return;
+    }
+
     if (!_disposed) {
       super.notifyListeners();
 
-      _streamNotifier.add(PlutoNotifierEvent.instance);
+      _streamNotifier.add(PlutoNotifierEvent(_drainNotifier()));
     }
   }
 
-  void notifyListenersOnPostFrame() {
+  void notifyListenersOnPostFrame([bool notify = true, int? notifier]) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      notifyListeners();
+      notifyListeners(notify, notifier);
     });
   }
 }
 
 class PlutoNotifierEvent {
-  const PlutoNotifierEvent();
+  PlutoNotifierEvent(this._notifier);
 
-  static PlutoNotifierEvent instance = const PlutoNotifierEvent();
+  final Set<int> _notifier;
+
+  Set<int> get notifier => {..._notifier};
+
+  bool any(Set<int> hashes) {
+    return _notifier.isEmpty ? true : _notifier.any((e) => hashes.contains(e));
+  }
+}
+
+class PlutoNotifierEventForceUpdate extends PlutoNotifierEvent {
+  PlutoNotifierEventForceUpdate._() : super({});
+
+  static PlutoNotifierEventForceUpdate instance =
+      PlutoNotifierEventForceUpdate._();
+
+  @override
+  bool any(Set<int> hashes) {
+    return true;
+  }
 }

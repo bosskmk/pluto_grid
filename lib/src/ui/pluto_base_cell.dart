@@ -174,11 +174,11 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     final style = stateManager.style;
 
     final isCurrentCell = stateManager.isCurrentCell(widget.cell);
@@ -334,13 +334,11 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
-    super.updateState();
-
+  void updateState(PlutoNotifierEvent event) {
     _showTypedCell = update<bool>(
       _showTypedCell,
       stateManager.isEditing && stateManager.isCurrentCell(widget.cell),

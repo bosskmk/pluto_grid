@@ -1048,6 +1048,14 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  void addNotifier(int? hash) => super.noSuchMethod(
+        Invocation.method(
+          #addNotifier,
+          [hash],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void dispose() => super.noSuchMethod(
         Invocation.method(
           #dispose,
@@ -1056,18 +1064,32 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void notifyListeners() => super.noSuchMethod(
+  void notifyListeners([
+    bool? notify = true,
+    int? notifier,
+  ]) =>
+      super.noSuchMethod(
         Invocation.method(
           #notifyListeners,
-          [],
+          [
+            notify,
+            notifier,
+          ],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void notifyListenersOnPostFrame() => super.noSuchMethod(
+  void notifyListenersOnPostFrame([
+    bool? notify = true,
+    int? notifier,
+  ]) =>
+      super.noSuchMethod(
         Invocation.method(
           #notifyListenersOnPostFrame,
-          [],
+          [
+            notify,
+            notifier,
+          ],
         ),
         returnValueForMissingStub: null,
       );
@@ -2373,6 +2395,14 @@ class MockPlutoGridStateManager extends _i1.Mock
         Invocation.method(
           #setTextDirection,
           [textDirection],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void performLayoutOnPostFrame() => super.noSuchMethod(
+        Invocation.method(
+          #performLayoutOnPostFrame,
+          [],
         ),
         returnValueForMissingStub: null,
       );

@@ -114,6 +114,8 @@ abstract class ILayoutState {
 
   void setTextDirection(TextDirection textDirection);
 
+  void performLayoutOnPostFrame();
+
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
 }
@@ -413,9 +415,7 @@ mixin LayoutState implements IPlutoGridState {
 
     _showColumnTitle = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowColumnTitle.hashCode);
   }
 
   @override
@@ -426,9 +426,7 @@ mixin LayoutState implements IPlutoGridState {
 
     _showColumnFooter = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowColumnFooter.hashCode);
   }
 
   @override
@@ -439,9 +437,7 @@ mixin LayoutState implements IPlutoGridState {
 
     _showColumnFilter = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowColumnFilter.hashCode);
   }
 
   @override
@@ -452,9 +448,7 @@ mixin LayoutState implements IPlutoGridState {
 
     _showLoading = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowLoading.hashCode);
   }
 
   @override
@@ -489,6 +483,11 @@ mixin LayoutState implements IPlutoGridState {
   @override
   void setTextDirection(TextDirection textDirection) {
     _textDirection = textDirection;
+  }
+
+  @override
+  void performLayoutOnPostFrame() {
+    notifyListenersOnPostFrame(true, performLayoutOnPostFrame.hashCode);
   }
 
   @override

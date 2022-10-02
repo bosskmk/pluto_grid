@@ -215,11 +215,11 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _decoration = update<BoxDecoration>(
       _decoration,
       _getBoxDecoration(),

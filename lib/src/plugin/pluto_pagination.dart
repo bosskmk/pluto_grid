@@ -36,11 +36,11 @@ abstract class _PlutoPaginationStateWithChange
 
     stateManager.setPage(page, notify: false);
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     page = update<int>(
       page,
       stateManager.page,

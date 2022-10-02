@@ -47,6 +47,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
 
     const _Test test = _Test.b;
 
+    // PlutoChangeNotifierFilter.debug = true;
+    // PlutoChangeNotifierFilter.debugWidgets = [
+    //   'CheckboxAllSelectionWidget',
+    // ];
+
     /// Test A
     if (test.isA) {
       columns.addAll(testColumnsA);

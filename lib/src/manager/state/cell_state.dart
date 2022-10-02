@@ -110,9 +110,7 @@ mixin CellState implements IPlutoGridState {
 
     _currentCellPosition = cellPosition;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setCurrentCellPosition.hashCode);
   }
 
   @override
@@ -126,9 +124,7 @@ mixin CellState implements IPlutoGridState {
       notify: false,
     );
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, updateCurrentCellPosition.hashCode);
   }
 
   @override
@@ -180,9 +176,7 @@ mixin CellState implements IPlutoGridState {
 
     _currentCellPosition = null;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, clearCurrentCell.hashCode);
   }
 
   @override
@@ -214,9 +208,7 @@ mixin CellState implements IPlutoGridState {
 
     setEditing(autoEditing, notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setCurrentCell.hashCode);
   }
 
   @override

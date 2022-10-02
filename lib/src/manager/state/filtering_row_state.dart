@@ -61,9 +61,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
     resetCurrentState(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setFilter.hashCode);
   }
 
   @override

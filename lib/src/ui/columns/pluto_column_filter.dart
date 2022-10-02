@@ -91,7 +91,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
     _event = stateManager.eventManager!.listener(_handleFocusFromRows);
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -106,7 +106,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _filterRows = update<List<PlutoRow>>(
       _filterRows,
       stateManager.filterRowsByField(widget.column.field),

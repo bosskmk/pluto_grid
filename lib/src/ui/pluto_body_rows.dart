@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -40,7 +39,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
 
     stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -53,20 +52,12 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   }
 
   @override
-  void updateState() {
-    _columns = update<List<PlutoColumn>>(
-      _columns,
-      _getColumns(),
-      compare: listEquals,
-    );
+  void updateState(PlutoNotifierEvent event) {
+    forceUpdate();
 
-    _rows = [
-      ...update<List<PlutoRow>>(
-        _rows,
-        stateManager.refRows,
-        compare: listEquals,
-      )
-    ];
+    _columns = _getColumns();
+
+    _rows = stateManager.refRows;
   }
 
   List<PlutoColumn> _getColumns() {

@@ -163,9 +163,7 @@ mixin SelectingState implements IPlutoGridState {
       clearCurrentSelecting(notify: false);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setSelecting.hashCode);
   }
 
   @override
@@ -180,9 +178,7 @@ mixin SelectingState implements IPlutoGridState {
 
     _selectingMode = mode;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setSelectingMode.hashCode);
   }
 
   @override
@@ -245,9 +241,7 @@ mixin SelectingState implements IPlutoGridState {
       );
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setCurrentSelectingPosition.hashCode);
   }
 
   @override
@@ -344,16 +338,16 @@ mixin SelectingState implements IPlutoGridState {
 
     _currentSelectingRows = refRows.getRange(maxFrom, maxTo).toList();
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setCurrentSelectingRowsByRange.hashCode);
   }
 
   @override
   void clearCurrentSelecting({bool notify = true}) {
-    _clearCurrentSelectingPosition(notify: notify);
+    _clearCurrentSelectingPosition(notify: false);
 
-    _clearCurrentSelectingRows(notify: notify);
+    _clearCurrentSelectingRows(notify: false);
+
+    notifyListeners(notify, clearCurrentSelecting.hashCode);
   }
 
   @override
@@ -376,9 +370,7 @@ mixin SelectingState implements IPlutoGridState {
       _currentSelectingRows.add(row);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, toggleSelectingRow.hashCode);
   }
 
   @override
@@ -508,7 +500,7 @@ mixin SelectingState implements IPlutoGridState {
 
     setKeepFocus(true, notify: false);
 
-    notifyListeners();
+    notifyListeners(true, handleAfterSelectingRow.hashCode);
   }
 
   List<PlutoGridSelectingCellPosition> _selectingCells() {

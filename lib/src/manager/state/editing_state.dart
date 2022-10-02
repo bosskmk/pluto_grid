@@ -105,9 +105,7 @@ mixin EditingState implements IPlutoGridState {
 
     clearCurrentSelecting(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setEditing.hashCode);
   }
 
   @override
@@ -121,9 +119,7 @@ mixin EditingState implements IPlutoGridState {
 
     _autoEditing = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setAutoEditing.hashCode);
   }
 
   @override
@@ -182,7 +178,7 @@ mixin EditingState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    notifyListeners(true, pasteCellValue.hashCode);
   }
 
   @override
@@ -241,9 +237,7 @@ mixin EditingState implements IPlutoGridState {
       ));
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, changeCellValue.hashCode);
   }
 
   void _pasteCellValueIntoSelectingRows({List<List<String>>? textList}) {

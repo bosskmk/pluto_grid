@@ -383,7 +383,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      updateState();
+      updateState(PlutoNotifierEventForceUpdate.instance);
     });
 
     super.initState();
@@ -399,7 +399,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _showColumnTitle = update<bool>(
       _showColumnTitle,
       stateManager.showColumnTitle,
@@ -591,8 +591,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
     final bool showColumnFooter = _stateManager.showColumnFooter;
 
-    _stateManager.setTextDirection(Directionality.of(context));
-
     return FocusScope(
       onFocusChange: _stateManager.setKeepFocus,
       onKey: _handleGridFocusOnKey,
@@ -601,7 +599,10 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
           stateManager: _stateManager,
           child: CustomMultiChildLayout(
             key: _stateManager.gridKey,
-            delegate: PlutoGridLayoutDelegate(_stateManager),
+            delegate: PlutoGridLayoutDelegate(
+              _stateManager,
+              Directionality.of(context),
+            ),
             children: [
               /// Body columns and rows.
               LayoutId(
@@ -746,15 +747,14 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   final PlutoGridStateManager _stateManager;
 
-  PlutoGridLayoutDelegate(this._stateManager)
+  final TextDirection _textDirection;
+
+  PlutoGridLayoutDelegate(this._stateManager, this._textDirection)
       : super(relayout: _stateManager.resizingChangeNotifier);
 
   @override
   void performLayout(Size size) {
-    if (_stateManager.showFrozenColumn !=
-        _stateManager.shouldShowFrozenColumns(size.width)) {
-      _stateManager.notifyListenersOnPostFrame();
-    }
+    _performLayoutOnPostFrame(size);
 
     _stateManager.setLayout(BoxConstraints.tight(size));
 
@@ -1094,6 +1094,24 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
     return true;
+  }
+
+  void _performLayoutOnPostFrame(Size size) {
+    bool update = false;
+
+    if (_stateManager.showFrozenColumn !=
+        _stateManager.shouldShowFrozenColumns(size.width)) {
+      update = true;
+    }
+
+    if (_textDirection != _stateManager.textDirection) {
+      _stateManager.setTextDirection(_textDirection);
+      update = true;
+    }
+
+    if (update) {
+      _stateManager.performLayoutOnPostFrame();
+    }
   }
 }
 

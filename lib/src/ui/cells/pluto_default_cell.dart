@@ -53,11 +53,11 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _hasFocus = update<bool>(
       _hasFocus,
       stateManager.hasFocus,
@@ -113,7 +113,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             ),
           ),
         if (widget.column.enableRowChecked)
-          _CheckboxSelectionWidget(
+          CheckboxSelectionWidget(
             column: widget.column,
             row: widget.row,
             rowIdx: widget.rowIdx,
@@ -254,7 +254,7 @@ class _RowDragIconWidget extends StatelessWidget {
   }
 }
 
-class _CheckboxSelectionWidget extends PlutoStatefulWidget {
+class CheckboxSelectionWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
@@ -263,20 +263,20 @@ class _CheckboxSelectionWidget extends PlutoStatefulWidget {
 
   final int rowIdx;
 
-  const _CheckboxSelectionWidget({
+  const CheckboxSelectionWidget({
     required this.stateManager,
     required this.column,
     required this.row,
     required this.rowIdx,
+    super.key,
   });
 
   @override
-  _CheckboxSelectionWidgetState createState() =>
-      _CheckboxSelectionWidgetState();
+  CheckboxSelectionWidgetState createState() => CheckboxSelectionWidgetState();
 }
 
-class _CheckboxSelectionWidgetState
-    extends PlutoStateWithChange<_CheckboxSelectionWidget> {
+class CheckboxSelectionWidgetState
+    extends PlutoStateWithChange<CheckboxSelectionWidget> {
   bool? _checked;
 
   @override
@@ -286,11 +286,11 @@ class _CheckboxSelectionWidgetState
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _checked = update<bool?>(
       _checked,
       widget.row.checked == true,

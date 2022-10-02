@@ -78,9 +78,7 @@ mixin PaginationRowState implements IPlutoGridState {
   void setPageSize(int pageSize, {bool notify = true}) {
     _pageSize = pageSize;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setPageSize.hashCode);
   }
 
   @override
@@ -135,9 +133,7 @@ mixin PaginationRowState implements IPlutoGridState {
       clearCurrentSelecting(notify: false);
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setPage.hashCode);
   }
 
   @override

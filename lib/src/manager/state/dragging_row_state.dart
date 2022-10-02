@@ -67,9 +67,7 @@ mixin DraggingRowState implements IPlutoGridState {
 
     _clearDraggingState();
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setIsDraggingRow.hashCode);
   }
 
   @override
@@ -79,9 +77,7 @@ mixin DraggingRowState implements IPlutoGridState {
   }) {
     _dragRows = rows;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setDragRows.hashCode);
   }
 
   @override
@@ -95,9 +91,7 @@ mixin DraggingRowState implements IPlutoGridState {
 
     _dragTargetRowIdx = rowIdx;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setDragTargetRowIdx.hashCode);
   }
 
   @override

@@ -156,7 +156,7 @@ class PlutoAggregateColumnFooterState
 
     _setAggregator();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   void _setAggregator() {
@@ -180,7 +180,7 @@ class PlutoAggregateColumnFooterState
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _aggregatedValue = update<num?>(
       _aggregatedValue,
       _aggregator(

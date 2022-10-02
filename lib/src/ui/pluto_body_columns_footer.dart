@@ -34,7 +34,7 @@ class PlutoBodyColumnsFooterState
 
     _scroll = stateManager.scroll!.horizontal!.addAndGet();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -45,7 +45,7 @@ class PlutoBodyColumnsFooterState
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _columns = update<List<PlutoColumn>>(
       _columns,
       _getColumns(),

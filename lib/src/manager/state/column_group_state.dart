@@ -61,9 +61,7 @@ mixin ColumnGroupState implements IPlutoGridState {
 
     _showColumnGroups = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowColumnGroups.hashCode);
   }
 
   @override
@@ -102,9 +100,7 @@ mixin ColumnGroupState implements IPlutoGridState {
       );
     });
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, removeColumnsInColumnGroup.hashCode);
   }
 
   bool _emptyGroupAfterRemoveColumns({
