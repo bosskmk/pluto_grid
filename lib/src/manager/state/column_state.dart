@@ -441,12 +441,6 @@ mixin ColumnState implements IPlutoGridState {
       return;
     }
 
-    final removeKeys = Set.from(columns.map((e) => e.key));
-
-    refColumns.removeWhereFromOriginal(
-      (column) => removeKeys.contains(column.key),
-    );
-
     removeColumnsInColumnGroup(columns, notify: false);
 
     removeColumnsInFilterRows(columns, notify: false);
@@ -454,6 +448,12 @@ mixin ColumnState implements IPlutoGridState {
     removeColumnsInRowGroupByColumn(columns, notify: false);
 
     _removeCellsInRows(columns);
+
+    final removeKeys = Set.from(columns.map((e) => e.key));
+
+    refColumns.removeWhereFromOriginal(
+      (column) => removeKeys.contains(column.key),
+    );
 
     resetShowFrozenColumn();
 

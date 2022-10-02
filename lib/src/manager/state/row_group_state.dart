@@ -619,6 +619,8 @@ mixin RowGroupState implements IPlutoGridState {
       rows = _rowGroupDelegate!.toGroup(rows: previousRows);
     } else {
       rows = previousRows.toList();
+      setParent(PlutoRow e) => e.setParent(null);
+      rows.forEach(setParent);
     }
 
     _previousEnabledRowGroups = enabledRowGroups;

@@ -308,6 +308,42 @@ void main() {
       expect(mainRowGroup.length, 5);
     });
 
+    test('전체 컬럼을 지우고 새 컬럼을 추가하면 기존 행의 셀이 추가 되어야 한다.', () {
+      stateManager.removeColumns(columns);
+
+      expect(stateManager.refColumns.originalList.length, 0);
+      expect(stateManager.refRows.originalList.length, 5);
+
+      for (final row in stateManager.refRows.originalList) {
+        // 그룹 된 컬럼이 삭제되어 모든 행의 parent 가 null 로 초기화 되어야 한다.
+        expect(row.parent, null);
+        expect(row.cells['column1'], null);
+        expect(row.cells['column2'], null);
+        expect(row.cells['column3'], null);
+      }
+
+      stateManager.insertColumns(0, [
+        PlutoColumn(
+          title: 'column4',
+          field: 'column4',
+          type: PlutoColumnType.text(),
+        ),
+      ]);
+
+      expect(stateManager.refColumns.originalList.length, 1);
+      expect(stateManager.refRows.originalList.length, 5);
+
+      final rowAndGroup = stateManager.iterateRowAndGroup.toList();
+
+      expect(rowAndGroup.length, 5);
+      for (final row in rowAndGroup) {
+        expect(row.cells['column1'], null);
+        expect(row.cells['column2'], null);
+        expect(row.cells['column3'], null);
+        expect(row.cells['column4'], isNot(null));
+      }
+    });
+
     test('첫번째 행을 expand 하면 refRows 는 4개의 행을 리턴해야 한다.', () {
       final firstRowGroup = stateManager.refRows.first;
 
@@ -1431,6 +1467,45 @@ void main() {
       expect(G220_CHILDREN[0].parent?.parent, G200);
       expect(G220_CHILDREN[1].parent, G220);
       expect(G220_CHILDREN[1].parent?.parent, G200);
+    });
+
+    test('전체 컬럼을 지우고 새 컬럼을 추가하면 기존 행의 셀이 추가 되어야 한다.', () {
+      stateManager.removeColumns(columns);
+
+      expect(stateManager.refColumns.originalList.length, 0);
+      expect(stateManager.refRows.originalList.length, 2);
+
+      for (final row in stateManager.refRows.originalList) {
+        expect(row.parent, null);
+        expect(row.cells['column1'], null);
+        expect(row.cells['column2'], null);
+        expect(row.cells['column3'], null);
+        expect(row.cells['column4'], null);
+        expect(row.cells['column5'], null);
+      }
+
+      stateManager.insertColumns(0, [
+        PlutoColumn(
+          title: 'column6',
+          field: 'column6',
+          type: PlutoColumnType.text(),
+        ),
+      ]);
+
+      expect(stateManager.refColumns.originalList.length, 1);
+      expect(stateManager.refRows.originalList.length, 2);
+
+      final rowAndGroup = stateManager.iterateRowAndGroup.toList();
+
+      expect(rowAndGroup.length, 11);
+      for (final row in rowAndGroup) {
+        expect(row.cells['column1'], null);
+        expect(row.cells['column2'], null);
+        expect(row.cells['column3'], null);
+        expect(row.cells['column4'], null);
+        expect(row.cells['column5'], null);
+        expect(row.cells['column6'], isNot(null));
+      }
     });
 
     /// G300
