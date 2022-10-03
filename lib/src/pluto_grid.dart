@@ -730,6 +730,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 LayoutId(
                   id: _StackName.loading,
                   child: PlutoLoading(
+                    level: _stateManager.loadingLevel,
                     backgroundColor: style.gridBackgroundColor,
                     indicatorColor: style.activatedBorderColor,
                     text: _stateManager.localeText.loadingText,
@@ -1084,9 +1085,26 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.loading)) {
+      Size loadingSize;
+
+      switch (_stateManager.loadingLevel) {
+        case PlutoGridLoadingLevel.grid:
+          loadingSize = size;
+          break;
+        case PlutoGridLoadingLevel.rows:
+          loadingSize = Size(size.width, 3);
+
+          positionChild(
+            _StackName.loading,
+            Offset(0, bodyRowsTopOffset),
+          );
+
+          break;
+      }
+
       layoutChild(
         _StackName.loading,
-        BoxConstraints.tight(size),
+        BoxConstraints.tight(loadingSize),
       );
     }
   }
@@ -1357,6 +1375,15 @@ extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isSelectModeWithOneTap => this == PlutoGridMode.selectWithOneTap;
 
   bool get isPopup => this == PlutoGridMode.popup;
+}
+
+enum PlutoGridLoadingLevel {
+  grid,
+  rows;
+
+  bool get isGrid => this == PlutoGridLoadingLevel.grid;
+
+  bool get isRows => this == PlutoGridLoadingLevel.rows;
 }
 
 class PlutoGridSettings {

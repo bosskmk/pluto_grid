@@ -766,6 +766,10 @@ class _HeaderState extends State<_Header> {
           PlutoMenuItem(
             title: 'Test',
             onTap: () {
+              widget.stateManager.setShowLoading(
+                !widget.stateManager.showLoading,
+                level: PlutoGridLoadingLevel.rows,
+              );
               // Insert column to row group by
               // widget.stateManager.insertColumns(0, [
               //   PlutoColumn(

@@ -12,6 +12,11 @@ import 'package:pluto_grid/pluto_grid.dart';
       - Improve initializeRows when adding rows
     Test
       - add, insert, prepend, append rows with pagination, sort, filter
+    Performance
+      - Toggle row group
+      - Filtering
+      - Sorting
+      - Aggregate footer
  */
 
 abstract class IRowGroupState {

@@ -41,6 +41,8 @@ abstract class ILayoutState {
 
   bool get showLoading;
 
+  PlutoGridLoadingLevel get loadingLevel;
+
   bool get hasLeftFrozenColumns;
 
   bool get hasRightFrozenColumns;
@@ -102,7 +104,11 @@ abstract class ILayoutState {
 
   void setShowColumnFilter(bool flag, {bool notify = true});
 
-  void setShowLoading(bool flag, {bool notify = true});
+  void setShowLoading(
+    bool flag, {
+    PlutoGridLoadingLevel level = PlutoGridLoadingLevel.grid,
+    bool notify = true,
+  });
 
   void resetShowFrozenColumn();
 
@@ -130,6 +136,22 @@ class _State {
   double? _footerHeight;
 
   double? _columnFooterHeight;
+
+  Offset? _gridGlobalOffset;
+
+  bool? _showFrozenColumn;
+
+  bool? _showColumnTitle = true;
+
+  bool? _showColumnFooter = false;
+
+  bool? _showColumnFilter;
+
+  bool? _showLoading;
+
+  PlutoGridLoadingLevel _loadingLevel = PlutoGridLoadingLevel.grid;
+
+  TextDirection _textDirection = TextDirection.ltr;
 }
 
 mixin LayoutState implements IPlutoGridState {
@@ -204,35 +226,25 @@ mixin LayoutState implements IPlutoGridState {
         gridKey.currentContext?.findRenderObject() as RenderBox?;
 
     if (gridRenderBox == null) {
-      return _gridGlobalOffset;
+      return _state._gridGlobalOffset;
     }
 
-    _gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);
+    _state._gridGlobalOffset = gridRenderBox.localToGlobal(Offset.zero);
 
-    return _gridGlobalOffset;
+    return _state._gridGlobalOffset;
   }
 
-  Offset? _gridGlobalOffset;
+  @override
+  bool get showFrozenColumn => _state._showFrozenColumn == true;
 
   @override
-  bool get showFrozenColumn => _showFrozenColumn == true;
-
-  bool? _showFrozenColumn;
+  bool get showColumnTitle => _state._showColumnTitle == true;
 
   @override
-  bool get showColumnTitle => _showColumnTitle == true;
-
-  bool? _showColumnTitle = true;
+  bool get showColumnFooter => _state._showColumnFooter == true;
 
   @override
-  bool get showColumnFooter => _showColumnFooter == true;
-
-  bool? _showColumnFooter = false;
-
-  @override
-  bool get showColumnFilter => _showColumnFilter == true;
-
-  bool? _showColumnFilter;
+  bool get showColumnFilter => _state._showColumnFilter == true;
 
   @override
   bool get showHeader => createHeader != null;
@@ -241,9 +253,10 @@ mixin LayoutState implements IPlutoGridState {
   bool get showFooter => createFooter != null;
 
   @override
-  bool get showLoading => _showLoading == true;
+  bool get showLoading => _state._showLoading == true;
 
-  bool? _showLoading;
+  @override
+  PlutoGridLoadingLevel get loadingLevel => _state._loadingLevel;
 
   @override
   bool get hasLeftFrozenColumns =>
@@ -362,7 +375,7 @@ mixin LayoutState implements IPlutoGridState {
   double get scrollOffsetByFrozenColumn {
     double offset = 0;
 
-    if (_showFrozenColumn!) {
+    if (showFrozenColumn) {
       offset +=
           leftFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
       offset +=
@@ -373,9 +386,7 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  TextDirection get textDirection => _textDirection;
-
-  TextDirection _textDirection = TextDirection.ltr;
+  TextDirection get textDirection => _state._textDirection;
 
   @override
   bool get isLTR => textDirection == TextDirection.ltr;
@@ -386,13 +397,13 @@ mixin LayoutState implements IPlutoGridState {
   @override
   void setLayout(BoxConstraints size) {
     final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
-    final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
+    final bool changedShowFrozenColumn = showFrozenColumn != showFrozenColumn;
     final bool changedMaxWidth = maxWidth != size.maxWidth;
 
     _state._maxWidth = size.maxWidth;
     _state._maxHeight = size.maxHeight;
-    _showFrozenColumn = showFrozenColumn;
-    _gridGlobalOffset = null;
+    _state._showFrozenColumn = showFrozenColumn;
+    _state._gridGlobalOffset = null;
 
     if (changedShowFrozenColumn || changedMaxWidth) {
       updateVisibilityLayout();
@@ -409,51 +420,57 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setShowColumnTitle(bool flag, {bool notify = true}) {
-    if (_showColumnTitle == flag) {
+    if (showColumnTitle == flag) {
       return;
     }
 
-    _showColumnTitle = flag;
+    _state._showColumnTitle = flag;
 
     notifyListeners(notify, setShowColumnTitle.hashCode);
   }
 
   @override
   void setShowColumnFooter(bool flag, {bool notify = true}) {
-    if (_showColumnFooter == flag) {
+    if (showColumnFooter == flag) {
       return;
     }
 
-    _showColumnFooter = flag;
+    _state._showColumnFooter = flag;
 
     notifyListeners(notify, setShowColumnFooter.hashCode);
   }
 
   @override
   void setShowColumnFilter(bool flag, {bool notify = true}) {
-    if (_showColumnFilter == flag) {
+    if (showColumnFilter == flag) {
       return;
     }
 
-    _showColumnFilter = flag;
+    _state._showColumnFilter = flag;
 
     notifyListeners(notify, setShowColumnFilter.hashCode);
   }
 
   @override
-  void setShowLoading(bool flag, {bool notify = true}) {
-    if (_showLoading == flag) {
+  void setShowLoading(
+    bool flag, {
+    PlutoGridLoadingLevel level = PlutoGridLoadingLevel.grid,
+    bool notify = true,
+  }) {
+    if (showLoading == flag) {
       return;
     }
 
-    _showLoading = flag;
+    _state._showLoading = flag;
+
+    _state._loadingLevel = level;
 
     notifyListeners(notify, setShowLoading.hashCode);
   }
 
   @override
   void resetShowFrozenColumn() {
-    _showFrozenColumn = shouldShowFrozenColumns(maxWidth!);
+    _state._showFrozenColumn = shouldShowFrozenColumns(maxWidth!);
   }
 
   @override
@@ -482,7 +499,7 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setTextDirection(TextDirection textDirection) {
-    _textDirection = textDirection;
+    _state._textDirection = textDirection;
   }
 
   @override
@@ -493,6 +510,6 @@ mixin LayoutState implements IPlutoGridState {
   @override
   @visibleForTesting
   void setGridGlobalOffset(Offset offset) {
-    _gridGlobalOffset = offset;
+    _state._gridGlobalOffset = offset;
   }
 }
