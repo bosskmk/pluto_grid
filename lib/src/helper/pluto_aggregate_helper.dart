@@ -8,26 +8,22 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    num sum = 0;
-
     if (column.type is! PlutoColumnTypeWithNumberFormat ||
         !_hasColumnField(rows: rows, column: column)) {
-      return sum;
+      return 0;
     }
 
     final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
 
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
-      if (filter == null || filter(cell)) {
-        return p += cell.value ?? 0;
-      }
+    final Iterable<num> numbers = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
-      return p;
-    });
-
-    return numberColumn.toNumber(numberColumn.applyFormat(sum));
+    return numberColumn.toNumber(numberColumn.applyFormat(numbers.sum));
   }
 
   static num average({
@@ -35,27 +31,22 @@ class PlutoAggregateHelper {
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    num sum = 0;
-
     if (column.type is! PlutoColumnTypeWithNumberFormat ||
         !_hasColumnField(rows: rows, column: column)) {
-      return sum;
+      return 0;
     }
 
-    int itemCount = 0;
+    final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
 
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
-      if (filter == null || filter(cell)) {
-        ++itemCount;
-        return p += cell.value ?? 0;
-      }
+    final Iterable<num> numbers = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
-      return p;
-    });
-
-    return sum / itemCount;
+    return numberColumn.toNumber(numberColumn.applyFormat(numbers.average));
   }
 
   static num? min({
@@ -72,8 +63,9 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    final Iterable<num> mapValues = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
     return mapValues.minOrNull;
   }
@@ -92,8 +84,9 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    final Iterable<num> mapValues = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
     return mapValues.maxOrNull;
   }

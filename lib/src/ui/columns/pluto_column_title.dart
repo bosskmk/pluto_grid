@@ -385,10 +385,7 @@ class _BuildColumnWidget extends StatelessWidget {
             child: Row(
               children: [
                 if (column.enableRowChecked)
-                  CheckboxAllSelectionWidget(
-                    column: column,
-                    stateManager: stateManager,
-                  ),
+                  CheckboxAllSelectionWidget(stateManager: stateManager),
                 Expanded(
                   child: _ColumnTextWidget(
                     column: column,
@@ -409,13 +406,8 @@ class _BuildColumnWidget extends StatelessWidget {
 class CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  final PlutoColumn? column;
-
-  const CheckboxAllSelectionWidget({
-    required this.stateManager,
-    this.column,
-    Key? key,
-  }) : super(key: key);
+  const CheckboxAllSelectionWidget({required this.stateManager, Key? key})
+      : super(key: key);
 
   @override
   CheckboxAllSelectionWidgetState createState() =>

@@ -159,6 +159,18 @@ class PlutoAggregateColumnFooterState
     updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
+  @override
+  void updateState(PlutoNotifierEvent event) {
+    _aggregatedValue = update<num?>(
+      _aggregatedValue,
+      _aggregator(
+        rows: stateManager.refRows,
+        column: column,
+        filter: widget.filter,
+      ),
+    );
+  }
+
   void _setAggregator() {
     switch (widget.type) {
       case PlutoAggregateColumnType.sum:
@@ -180,18 +192,6 @@ class PlutoAggregateColumnFooterState
   }
 
   @override
-  void updateState(PlutoNotifierEvent event) {
-    _aggregatedValue = update<num?>(
-      _aggregatedValue,
-      _aggregator(
-        rows: stateManager.refRows,
-        column: column,
-        filter: widget.filter,
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final hasTitleSpan = widget.titleSpanBuilder != null;
 
@@ -207,10 +207,7 @@ class PlutoAggregateColumnFooterState
       padding: widget.padding ?? PlutoGridSettings.columnTitlePadding,
       alignment: widget.alignment ?? AlignmentDirectional.centerStart,
       child: Text.rich(
-        TextSpan(
-          text: text,
-          children: children,
-        ),
+        TextSpan(text: text, children: children),
         style: stateManager.configuration.style.cellTextStyle.copyWith(
           decoration: TextDecoration.none,
           fontWeight: FontWeight.normal,
