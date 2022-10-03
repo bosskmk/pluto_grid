@@ -68,6 +68,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration,
+    this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
 
@@ -250,6 +251,8 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@endtemplate}
   final PlutoGridConfiguration? configuration;
 
+  final PlutoChangeNotifierFilterResolver? notifierFilterResolver;
+
   /// Execution mode of [PlutoGrid].
   ///
   /// [PlutoGridMode.normal]
@@ -382,10 +385,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       _gridFocusNode.dispose();
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      updateState(PlutoNotifierEventForceUpdate.instance);
-    });
-
     super.initState();
   }
 
@@ -466,19 +465,20 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
         horizontal: _horizontalScroll,
       ),
       columnGroups: widget.columnGroups,
-      mode: widget.mode,
-      onChangedEventCallback: widget.onChanged,
-      onSelectedEventCallback: widget.onSelected,
-      onSortedEventCallback: widget.onSorted,
-      onRowCheckedEventCallback: widget.onRowChecked,
-      onRowDoubleTapEventCallback: widget.onRowDoubleTap,
-      onRowSecondaryTapEventCallback: widget.onRowSecondaryTap,
-      onRowsMovedEventCallback: widget.onRowsMoved,
-      onRowColorCallback: widget.rowColorCallback,
-      columnMenuDelegate: widget.columnMenuDelegate,
+      onChanged: widget.onChanged,
+      onSelected: widget.onSelected,
+      onSorted: widget.onSorted,
+      onRowChecked: widget.onRowChecked,
+      onRowDoubleTap: widget.onRowDoubleTap,
+      onRowSecondaryTap: widget.onRowSecondaryTap,
+      onRowsMoved: widget.onRowsMoved,
+      rowColorCallback: widget.rowColorCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
+      columnMenuDelegate: widget.columnMenuDelegate,
+      notifierFilterResolver: widget.notifierFilterResolver,
       configuration: widget.configuration,
+      mode: widget.mode,
     );
 
     // Dispose
@@ -547,7 +547,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
         }
       }
 
-      _stateManager.gridFocusNode!.requestFocus();
+      _stateManager.gridFocusNode.requestFocus();
     });
   }
 

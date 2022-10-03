@@ -11,7 +11,7 @@ class _MockScrollController extends Mock implements ScrollController {}
 void main() {
   group('selectingModes', () {
     test('Square, Row, None 이 리턴 되야 한다.', () {
-      final selectingModes = PlutoGridStateManager.selectingModes;
+      const selectingModes = PlutoGridSelectingMode.values;
 
       expect(selectingModes.contains(PlutoGridSelectingMode.cell), isTrue);
       expect(selectingModes.contains(PlutoGridSelectingMode.row), isTrue);

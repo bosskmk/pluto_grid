@@ -274,7 +274,7 @@ mixin SelectingState implements IPlutoGridState {
 
     double currentCellOffsetDy = (currentRowIdx! * rowTotalHeight) +
         gridBodyOffsetDy -
-        scroll!.vertical!.offset;
+        scroll.vertical!.offset;
 
     if (gridBodyOffsetDy > offset!.dy) {
       return;
@@ -292,7 +292,7 @@ mixin SelectingState implements IPlutoGridState {
     final columnIndexes = columnIndexesByShowFrozen;
 
     final savedRightBlankOffset = rightBlankOffset;
-    final savedHorizontalScrollOffset = scroll!.horizontal!.offset;
+    final savedHorizontalScrollOffset = scroll.horizontal!.offset;
 
     for (int i = 0; i < columnIndexes.length; i += 1) {
       final column = refColumns[columnIndexes[i]];

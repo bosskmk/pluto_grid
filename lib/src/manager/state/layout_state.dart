@@ -196,12 +196,8 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   Offset? get gridGlobalOffset {
-    if (gridKey == null) {
-      return _gridGlobalOffset;
-    }
-
     final RenderBox? gridRenderBox =
-        gridKey!.currentContext?.findRenderObject() as RenderBox?;
+        gridKey.currentContext?.findRenderObject() as RenderBox?;
 
     if (gridRenderBox == null) {
       return _gridGlobalOffset;
@@ -356,7 +352,7 @@ mixin LayoutState implements IPlutoGridState {
       leftFrozenColumnsWidth -
       bodyColumnsWidth +
       PlutoGridSettings.totalShadowLineWidth +
-      scroll!.horizontal!.offset;
+      scroll.horizontal!.offset;
 
   @override
   double get scrollOffsetByFrozenColumn {

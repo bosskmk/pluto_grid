@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IRowState {
   List<PlutoRow> get rows;
 
-  FilteredList<PlutoRow> refRows = FilteredList();
+  FilteredList<PlutoRow> get refRows;
 
   List<PlutoRow> get checkedRows;
 
@@ -82,26 +82,11 @@ abstract class IRowState {
     bool flag, {
     bool notify = true,
   });
-
-  /// Dynamically change the background color of row by implementing a callback function.
-  void setRowColorCallback(PlutoRowColorCallback rowColorCallback);
 }
 
 mixin RowState implements IPlutoGridState {
   @override
   List<PlutoRow> get rows => [...refRows];
-
-  @override
-  FilteredList<PlutoRow> get refRows => _refRows;
-
-  @override
-  set refRows(FilteredList<PlutoRow> setRows) {
-    PlutoGridStateManager.initializeRows(refColumns.originalList, setRows);
-
-    _refRows = setRows;
-  }
-
-  FilteredList<PlutoRow> _refRows = FilteredList();
 
   @override
   List<PlutoRow> get checkedRows => refRows.where((row) => row.checked!).toList(
@@ -153,16 +138,9 @@ mixin RowState implements IPlutoGridState {
     return refRows[currentRowIdx!];
   }
 
-  PlutoRowColorCallback? _rowColorCallback;
-
-  @override
-  PlutoRowColorCallback? get rowColorCallback {
-    return _rowColorCallback;
-  }
-
   @override
   int? getRowIdxByOffset(double offset) {
-    offset -= bodyTopOffset - scroll!.verticalOffset;
+    offset -= bodyTopOffset - scroll.verticalOffset;
 
     double currentOffset = 0.0;
 
@@ -461,11 +439,6 @@ mixin RowState implements IPlutoGridState {
     }
 
     notifyListeners(notify, toggleAllRowChecked.hashCode);
-  }
-
-  @override
-  void setRowColorCallback(PlutoRowColorCallback? rowColorCallback) {
-    _rowColorCallback = rowColorCallback;
   }
 
   void _insertRows(int index, List<PlutoRow> rows) {

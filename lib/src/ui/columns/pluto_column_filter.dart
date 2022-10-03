@@ -140,7 +140,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
     stateManager.setKeepFocus(true, notify: false);
 
-    stateManager.gridFocusNode?.requestFocus();
+    stateManager.gridFocusNode.requestFocus();
 
     stateManager.notifyListeners();
   }

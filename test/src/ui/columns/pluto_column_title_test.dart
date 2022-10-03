@@ -29,7 +29,7 @@ void main() {
 
     when(stateManager.configuration).thenReturn(configuration);
     when(stateManager.columnMenuDelegate).thenReturn(
-      const PlutoDefaultColumnMenuDelegate(),
+      const PlutoColumnMenuDelegateDefault(),
     );
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.eventManager).thenReturn(eventManager);

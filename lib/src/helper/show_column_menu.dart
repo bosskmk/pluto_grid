@@ -16,9 +16,9 @@ abstract class PlutoColumnMenuDelegate<T> {
   });
 }
 
-class PlutoDefaultColumnMenuDelegate
+class PlutoColumnMenuDelegateDefault
     implements PlutoColumnMenuDelegate<PlutoGridColumnMenuItem> {
-  const PlutoDefaultColumnMenuDelegate();
+  const PlutoColumnMenuDelegateDefault();
 
   @override
   List<PopupMenuEntry<PlutoGridColumnMenuItem>> buildMenuItems({

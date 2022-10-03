@@ -7,7 +7,7 @@ abstract class IColumnState {
   /// Columns provided at grid start.
   List<PlutoColumn> get columns;
 
-  FilteredList<PlutoColumn> refColumns = FilteredList();
+  FilteredList<PlutoColumn> get refColumns;
 
   /// Column index list.
   List<int> get columnIndexes;
@@ -169,17 +169,6 @@ abstract class IColumnState {
 mixin ColumnState implements IPlutoGridState {
   @override
   List<PlutoColumn> get columns => List.from(refColumns, growable: false);
-
-  @override
-  FilteredList<PlutoColumn> get refColumns => _refColumns;
-
-  @override
-  set refColumns(FilteredList<PlutoColumn> setColumns) {
-    _refColumns = setColumns;
-    _refColumns.setFilter((element) => element.hide == false);
-  }
-
-  FilteredList<PlutoColumn> _refColumns = FilteredList();
 
   @override
   List<int> get columnIndexes => List.generate(

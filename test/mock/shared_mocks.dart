@@ -12,5 +12,6 @@ import 'package:pluto_grid/pluto_grid.dart';
   MockSpec<ScrollController>(),
   MockSpec<ScrollPosition>(),
   MockSpec<StreamSubscription>(),
+  MockSpec<FocusNode>(),
 ])
 void main() {}

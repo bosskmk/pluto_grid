@@ -150,7 +150,7 @@ void main() {
       stateManager.moveScrollByColumn(PlutoMoveDirection.right, 8);
       await tester.pumpAndSettle();
 
-      final scrollOffset = stateManager.scroll!.horizontal!.offset;
+      final scrollOffset = stateManager.scroll.horizontal!.offset;
 
       final lastColumn = find.text('title9');
       final lastStartPosition = tester.getTopRight(lastColumn);
@@ -192,7 +192,7 @@ void main() {
       stateManager.moveScrollByColumn(PlutoMoveDirection.right, 8);
       await tester.pumpAndSettle();
 
-      final scrollOffset = stateManager.scroll!.horizontal!.offset;
+      final scrollOffset = stateManager.scroll.horizontal!.offset;
 
       final lastCell = find.text('title9 value 0');
       final lastStartPosition = tester.getTopRight(lastCell);

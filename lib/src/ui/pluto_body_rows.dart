@@ -31,13 +31,13 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   void initState() {
     super.initState();
 
-    _horizontalScroll = stateManager.scroll!.horizontal!.addAndGet();
+    _horizontalScroll = stateManager.scroll.horizontal!.addAndGet();
 
-    stateManager.scroll!.setBodyRowsHorizontal(_horizontalScroll);
+    stateManager.scroll.setBodyRowsHorizontal(_horizontalScroll);
 
-    _verticalScroll = stateManager.scroll!.vertical!.addAndGet();
+    _verticalScroll = stateManager.scroll.vertical!.addAndGet();
 
-    stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
+    stateManager.scroll.setBodyRowsVertical(_verticalScroll);
 
     updateState(PlutoNotifierEventForceUpdate.instance);
   }

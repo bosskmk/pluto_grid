@@ -3,13 +3,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IFocusState {
   /// FocusNode to control keyboard input.
-  FocusNode? get gridFocusNode;
+  FocusNode get gridFocusNode;
 
   bool get keepFocus;
 
   bool get hasFocus;
-
-  void setGridFocusNode(FocusNode focusNode);
 
   void setKeepFocus(bool flag, {bool notify = true});
 
@@ -21,23 +19,12 @@ abstract class IFocusState {
 
 mixin FocusState implements IPlutoGridState {
   @override
-  FocusNode? get gridFocusNode => _gridFocusNode;
-
-  FocusNode? _gridFocusNode;
-
-  @override
   bool get keepFocus => _keepFocus;
 
   bool _keepFocus = false;
 
   @override
-  bool get hasFocus =>
-      _gridFocusNode != null && _keepFocus && _gridFocusNode!.hasFocus;
-
-  @override
-  void setGridFocusNode(FocusNode? focusNode) {
-    _gridFocusNode = focusNode;
-  }
+  bool get hasFocus => _keepFocus && gridFocusNode.hasFocus;
 
   @override
   void setKeepFocus(bool flag, {bool notify = true}) {
@@ -48,7 +35,7 @@ mixin FocusState implements IPlutoGridState {
     _keepFocus = flag;
 
     if (_keepFocus) {
-      _gridFocusNode!.requestFocus();
+      gridFocusNode.requestFocus();
     }
 
     if (_keepFocus) {

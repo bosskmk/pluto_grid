@@ -48,8 +48,8 @@ void main() {
           stateManager = PlutoGridStateManager(
             columns: columns,
             rows: rows,
-            gridFocusNode: null,
-            scroll: null,
+            gridFocusNode: MockFocusNode(),
+            scroll: MockPlutoGridScrollController(),
           );
 
           stateManager.setEventManager(eventManager);

@@ -30,7 +30,7 @@ class PlutoRightFrozenRowsState
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.vertical!.addAndGet();
+    _scroll = stateManager.scroll.vertical!.addAndGet();
 
     updateState(PlutoNotifierEventForceUpdate.instance);
   }

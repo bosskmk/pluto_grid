@@ -38,7 +38,7 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     super.initState();
 
     if (PlutoChangeNotifierFilter.enabled) {
-      _filter = PlutoChangeNotifierFilter(stateManager, T);
+      _filter = stateManager.resolveNotifierFilter<T>();
       _subscription = stateManager.streamNotifier.stream
           .where(_filter.any)
           .listen(_onChange);

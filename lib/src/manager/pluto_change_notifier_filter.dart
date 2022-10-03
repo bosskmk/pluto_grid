@@ -3,13 +3,9 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../ui/ui.dart';
 
-class PlutoChangeNotifierFilter {
-  PlutoChangeNotifierFilter(PlutoGridStateManager stateManager, Type type)
-      : _type = type,
-        _filter = _NotifierFilterHelper._getFilter(stateManager, type),
-        _debugNotifierMap = PlutoChangeNotifierFilter.debug
-            ? _NotifierFilterHelper._debugNotifierMap(stateManager)
-            : null;
+class PlutoChangeNotifierFilter<T> {
+  PlutoChangeNotifierFilter(this._filter, [this._debugNotifierNames])
+      : _type = T;
 
   static bool enabled = true;
 
@@ -21,7 +17,7 @@ class PlutoChangeNotifierFilter {
 
   final Set<int> _filter;
 
-  final Map<int, String>? _debugNotifierMap;
+  final Map<int, String>? _debugNotifierNames;
 
   final Type _type;
 
@@ -35,15 +31,12 @@ class PlutoChangeNotifierFilter {
 
     final length = event.notifier.length;
 
-    const multipleItem = '\u251c';
-    const lastItem = '\u2514';
-
     debugPrint('[$_type] called on $length notifier.');
     for (int i = 0; i < length; i += 1) {
       final bool isLast = length - 1 == i;
-      final depth = isLast ? lastItem : multipleItem;
+      final prefix = isLast ? '\u2514' : '\u251c';
       final notifier = event.notifier.elementAt(i);
-      debugPrint('  $depth ${_debugNotifierMap?[notifier]}');
+      debugPrint('  $prefix ${_debugNotifierNames?[notifier]}');
     }
   }
 
@@ -60,129 +53,13 @@ class PlutoChangeNotifierFilter {
   }
 }
 
-class _NotifierFilterHelper {
-  static Set<int> _getFilter(PlutoGridStateManager stateManager, Type type) {
-    switch (type) {
-      case PlutoGrid:
-        return {
-          stateManager.setShowColumnTitle.hashCode,
-          stateManager.setShowColumnFilter.hashCode,
-          stateManager.setShowColumnFooter.hashCode,
-          stateManager.setShowColumnGroups.hashCode,
-          stateManager.setShowLoading.hashCode,
-          stateManager.toggleFrozenColumn.hashCode,
-          stateManager.performLayoutOnPostFrame.hashCode,
-        };
-      case PlutoBodyColumns:
-      case PlutoBodyColumnsFooter:
-      case PlutoLeftFrozenColumns:
-      case PlutoLeftFrozenColumnsFooter:
-      case PlutoRightFrozenColumns:
-      case PlutoRightFrozenColumnsFooter:
-        return _defaultColumnsFilter(stateManager);
-      case PlutoBodyRows:
-      case PlutoLeftFrozenRows:
-      case PlutoRightFrozenRows:
-        return _defaultRowsFilter(stateManager);
-      case PlutoAggregateColumnFooter:
-        return {
-          stateManager.toggleAllRowChecked.hashCode,
-          stateManager.setRowChecked.hashCode,
-          stateManager.setPage.hashCode,
-          stateManager.setPageSize.hashCode,
-          stateManager.setFilter.hashCode,
-          stateManager.toggleSortColumn.hashCode,
-          stateManager.sortAscending.hashCode,
-          stateManager.sortDescending.hashCode,
-          stateManager.sortBySortIdx.hashCode,
-          stateManager.insertRows.hashCode,
-          stateManager.prependRows.hashCode,
-          stateManager.appendRows.hashCode,
-          stateManager.removeCurrentRow.hashCode,
-          stateManager.removeRows.hashCode,
-          stateManager.removeAllRows.hashCode,
-          stateManager.setRowGroup.hashCode,
-          stateManager.toggleExpandedRowGroup.hashCode,
-          stateManager.changeCellValue.hashCode,
-          stateManager.pasteCellValue.hashCode,
-        };
-      case CheckboxSelectionWidget:
-        return {
-          stateManager.toggleAllRowChecked.hashCode,
-          stateManager.setRowChecked.hashCode,
-        };
-      case CheckboxAllSelectionWidget:
-        return {
-          stateManager.toggleAllRowChecked.hashCode,
-          stateManager.setRowChecked.hashCode,
-          stateManager.setPage.hashCode,
-          stateManager.setPageSize.hashCode,
-          stateManager.setFilter.hashCode,
-          stateManager.toggleSortColumn.hashCode,
-          stateManager.sortAscending.hashCode,
-          stateManager.sortDescending.hashCode,
-          stateManager.sortBySortIdx.hashCode,
-          stateManager.insertRows.hashCode,
-          stateManager.prependRows.hashCode,
-          stateManager.appendRows.hashCode,
-          stateManager.removeCurrentRow.hashCode,
-          stateManager.removeRows.hashCode,
-          stateManager.removeAllRows.hashCode,
-          stateManager.setRowGroup.hashCode,
-          stateManager.toggleExpandedRowGroup.hashCode,
-        };
-    }
+abstract class PlutoChangeNotifierFilterResolver {
+  const PlutoChangeNotifierFilterResolver();
 
-    return <int>{};
-  }
+  Set<int> resolve(PlutoGridStateManager stateManager, Type type);
 
-  static Set<int> _defaultColumnsFilter(PlutoGridStateManager stateManager) {
+  static Map<int, String> notifierNames(PlutoGridStateManager stateManager) {
     return {
-      stateManager.toggleFrozenColumn.hashCode,
-      stateManager.insertColumns.hashCode,
-      stateManager.removeColumns.hashCode,
-      stateManager.moveColumn.hashCode,
-      stateManager.hideColumn.hashCode,
-      stateManager.setShowColumnGroups.hashCode,
-      stateManager.removeColumnsInColumnGroup.hashCode,
-      stateManager.performLayoutOnPostFrame.hashCode,
-    };
-  }
-
-  static Set<int> _defaultRowsFilter(PlutoGridStateManager stateManager) {
-    return {
-      stateManager.toggleFrozenColumn.hashCode,
-      stateManager.insertColumns.hashCode,
-      stateManager.removeColumns.hashCode,
-      stateManager.moveColumn.hashCode,
-      stateManager.hideColumn.hashCode,
-      stateManager.toggleSortColumn.hashCode,
-      stateManager.sortAscending.hashCode,
-      stateManager.sortDescending.hashCode,
-      stateManager.sortBySortIdx.hashCode,
-      stateManager.setShowColumnGroups.hashCode,
-      stateManager.setFilter.hashCode,
-      stateManager.removeColumnsInColumnGroup.hashCode,
-      stateManager.insertRows.hashCode,
-      stateManager.prependRows.hashCode,
-      stateManager.appendRows.hashCode,
-      stateManager.removeCurrentRow.hashCode,
-      stateManager.removeRows.hashCode,
-      stateManager.removeAllRows.hashCode,
-      stateManager.moveRowsByIndex.hashCode,
-      stateManager.setRowGroup.hashCode,
-      stateManager.toggleExpandedRowGroup.hashCode,
-      stateManager.performLayoutOnPostFrame.hashCode,
-      stateManager.setPage.hashCode,
-      stateManager.setPageSize.hashCode,
-    };
-  }
-
-  static Map<int, String> _debugNotifierMap(
-      PlutoGridStateManager stateManager) {
-    return {
-      stateManager.shouldShowFrozenColumns.hashCode: 'shouldShowFrozenColumns',
-
       /// pluto_change_notifier
       stateManager.notifyListeners.hashCode: 'notifyListeners',
       stateManager.notifyListenersOnPostFrame.hashCode:
@@ -268,6 +145,146 @@ class _NotifierFilterHelper {
       stateManager.clearCurrentSelecting.hashCode: 'clearCurrentSelecting',
       stateManager.toggleSelectingRow.hashCode: 'toggleSelectingRow',
       stateManager.handleAfterSelectingRow.hashCode: 'handleAfterSelectingRow',
+    };
+  }
+}
+
+class PlutoNotifierFilterResolverDefault
+    implements PlutoChangeNotifierFilterResolver {
+  const PlutoNotifierFilterResolverDefault();
+
+  @override
+  Set<int> resolve(PlutoGridStateManager stateManager, Type type) {
+    switch (type) {
+      case PlutoGrid:
+        return defaultGridFilter(stateManager);
+      case PlutoBodyColumns:
+      case PlutoBodyColumnsFooter:
+      case PlutoLeftFrozenColumns:
+      case PlutoLeftFrozenColumnsFooter:
+      case PlutoRightFrozenColumns:
+      case PlutoRightFrozenColumnsFooter:
+        return defaultColumnsFilter(stateManager);
+      case PlutoBodyRows:
+      case PlutoLeftFrozenRows:
+      case PlutoRightFrozenRows:
+        return defaultRowsFilter(stateManager);
+      case PlutoAggregateColumnFooter:
+        return defaultAggregateColumnFooterFilter(stateManager);
+      case CheckboxSelectionWidget:
+        return defaultCheckboxFilter(stateManager);
+      case CheckboxAllSelectionWidget:
+        return defaultCheckboxAllFilter(stateManager);
+    }
+
+    return <int>{};
+  }
+
+  static Set<int> defaultGridFilter(PlutoGridStateManager stateManager) {
+    return {
+      stateManager.setShowColumnTitle.hashCode,
+      stateManager.setShowColumnFilter.hashCode,
+      stateManager.setShowColumnFooter.hashCode,
+      stateManager.setShowColumnGroups.hashCode,
+      stateManager.setShowLoading.hashCode,
+      stateManager.toggleFrozenColumn.hashCode,
+      stateManager.performLayoutOnPostFrame.hashCode,
+    };
+  }
+
+  static Set<int> defaultColumnsFilter(PlutoGridStateManager stateManager) {
+    return {
+      stateManager.toggleFrozenColumn.hashCode,
+      stateManager.insertColumns.hashCode,
+      stateManager.removeColumns.hashCode,
+      stateManager.moveColumn.hashCode,
+      stateManager.hideColumn.hashCode,
+      stateManager.setShowColumnGroups.hashCode,
+      stateManager.removeColumnsInColumnGroup.hashCode,
+      stateManager.performLayoutOnPostFrame.hashCode,
+    };
+  }
+
+  static Set<int> defaultRowsFilter(PlutoGridStateManager stateManager) {
+    return {
+      stateManager.toggleFrozenColumn.hashCode,
+      stateManager.insertColumns.hashCode,
+      stateManager.removeColumns.hashCode,
+      stateManager.moveColumn.hashCode,
+      stateManager.hideColumn.hashCode,
+      stateManager.toggleSortColumn.hashCode,
+      stateManager.sortAscending.hashCode,
+      stateManager.sortDescending.hashCode,
+      stateManager.sortBySortIdx.hashCode,
+      stateManager.setShowColumnGroups.hashCode,
+      stateManager.setFilter.hashCode,
+      stateManager.removeColumnsInColumnGroup.hashCode,
+      stateManager.insertRows.hashCode,
+      stateManager.prependRows.hashCode,
+      stateManager.appendRows.hashCode,
+      stateManager.removeCurrentRow.hashCode,
+      stateManager.removeRows.hashCode,
+      stateManager.removeAllRows.hashCode,
+      stateManager.moveRowsByIndex.hashCode,
+      stateManager.setRowGroup.hashCode,
+      stateManager.toggleExpandedRowGroup.hashCode,
+      stateManager.performLayoutOnPostFrame.hashCode,
+      stateManager.setPage.hashCode,
+      stateManager.setPageSize.hashCode,
+    };
+  }
+
+  static Set<int> defaultAggregateColumnFooterFilter(
+      PlutoGridStateManager stateManager) {
+    return {
+      stateManager.toggleAllRowChecked.hashCode,
+      stateManager.setRowChecked.hashCode,
+      stateManager.setPage.hashCode,
+      stateManager.setPageSize.hashCode,
+      stateManager.setFilter.hashCode,
+      stateManager.toggleSortColumn.hashCode,
+      stateManager.sortAscending.hashCode,
+      stateManager.sortDescending.hashCode,
+      stateManager.sortBySortIdx.hashCode,
+      stateManager.insertRows.hashCode,
+      stateManager.prependRows.hashCode,
+      stateManager.appendRows.hashCode,
+      stateManager.removeCurrentRow.hashCode,
+      stateManager.removeRows.hashCode,
+      stateManager.removeAllRows.hashCode,
+      stateManager.setRowGroup.hashCode,
+      stateManager.toggleExpandedRowGroup.hashCode,
+      stateManager.changeCellValue.hashCode,
+      stateManager.pasteCellValue.hashCode,
+    };
+  }
+
+  static Set<int> defaultCheckboxFilter(PlutoGridStateManager stateManager) {
+    return {
+      stateManager.toggleAllRowChecked.hashCode,
+      stateManager.setRowChecked.hashCode,
+    };
+  }
+
+  static Set<int> defaultCheckboxAllFilter(PlutoGridStateManager stateManager) {
+    return {
+      stateManager.toggleAllRowChecked.hashCode,
+      stateManager.setRowChecked.hashCode,
+      stateManager.setPage.hashCode,
+      stateManager.setPageSize.hashCode,
+      stateManager.setFilter.hashCode,
+      stateManager.toggleSortColumn.hashCode,
+      stateManager.sortAscending.hashCode,
+      stateManager.sortDescending.hashCode,
+      stateManager.sortBySortIdx.hashCode,
+      stateManager.insertRows.hashCode,
+      stateManager.prependRows.hashCode,
+      stateManager.appendRows.hashCode,
+      stateManager.removeCurrentRow.hashCode,
+      stateManager.removeRows.hashCode,
+      stateManager.removeAllRows.hashCode,
+      stateManager.setRowGroup.hashCode,
+      stateManager.toggleExpandedRowGroup.hashCode,
     };
   }
 }

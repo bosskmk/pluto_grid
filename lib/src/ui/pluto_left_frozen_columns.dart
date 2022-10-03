@@ -52,7 +52,7 @@ class PlutoLeftFrozenColumnsState
     _columnGroups = update<List<PlutoColumnGroupPair>>(
       _columnGroups,
       stateManager.separateLinkedGroup(
-        columnGroupList: stateManager.refColumnGroups!,
+        columnGroupList: stateManager.refColumnGroups,
         columns: _columns,
       ),
     );
@@ -76,9 +76,7 @@ class PlutoLeftFrozenColumnsState
       child: PlutoBaseColumnGroup(
         stateManager: stateManager,
         columnGroup: e,
-        depth: stateManager.columnGroupDepth(
-          stateManager.refColumnGroups!,
-        ),
+        depth: stateManager.columnGroupDepth(stateManager.refColumnGroups),
       ),
     );
   }

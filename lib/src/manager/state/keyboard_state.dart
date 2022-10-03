@@ -189,8 +189,8 @@ mixin KeyboardState implements IPlutoGridState {
 
     if (!showFrozenColumn || column.frozen.isFrozen != true) {
       direction.isLeft
-          ? scroll!.horizontal!.jumpTo(0)
-          : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
+          ? scroll.horizontal!.jumpTo(0)
+          : scroll.horizontal!.jumpTo(scroll.maxScrollHorizontal);
     }
   }
 
@@ -217,8 +217,8 @@ mixin KeyboardState implements IPlutoGridState {
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
     direction.isUp
-        ? scroll!.vertical!.jumpTo(0)
-        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
+        ? scroll.vertical!.jumpTo(0)
+        : scroll.vertical!.jumpTo(scroll.maxScrollVertical);
   }
 
   @override
@@ -306,8 +306,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isLeft
-        ? scroll!.horizontal!.jumpTo(0)
-        : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
+        ? scroll.horizontal!.jumpTo(0)
+        : scroll.horizontal!.jumpTo(scroll.maxScrollHorizontal);
   }
 
   @override
@@ -343,8 +343,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isUp
-        ? scroll!.vertical!.jumpTo(0)
-        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
+        ? scroll.vertical!.jumpTo(0)
+        : scroll.vertical!.jumpTo(scroll.maxScrollVertical);
   }
 
   @override

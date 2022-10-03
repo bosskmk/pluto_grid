@@ -35,7 +35,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll.horizontal!.addAndGet();
 
     updateState(PlutoNotifierEventForceUpdate.instance);
   }
@@ -63,7 +63,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     _columnGroups = update<List<PlutoColumnGroupPair>>(
       _columnGroups,
       stateManager.separateLinkedGroup(
-        columnGroupList: stateManager.refColumnGroups!,
+        columnGroupList: stateManager.refColumnGroups,
         columns: _columns,
       ),
     );
@@ -91,7 +91,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
         stateManager: stateManager,
         columnGroup: e,
         depth: stateManager.columnGroupDepth(
-          stateManager.refColumnGroups!,
+          stateManager.refColumnGroups,
         ),
       ),
     );

@@ -354,7 +354,7 @@ class _HeaderState extends State<_Header> {
             DropdownButtonHideUnderline(
               child: DropdownButton(
                 value: gridSelectingMode,
-                items: PlutoGridStateManager.selectingModes
+                items: PlutoGridSelectingMode.values
                     .map<DropdownMenuItem<PlutoGridSelectingMode>>(
                         (PlutoGridSelectingMode item) {
                   final color = gridSelectingMode == item ? Colors.blue : null;

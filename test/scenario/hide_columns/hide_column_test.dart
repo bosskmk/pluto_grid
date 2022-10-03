@@ -58,7 +58,7 @@ void main() {
     withTenColumns.test(
       'showSetColumnsPopup 을 호출 하면 컬럼 설정 팝업이 호출 되어야 한다.',
       (tester) async {
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context!);
 
         await tester.pumpAndSettle();
 
@@ -73,7 +73,7 @@ void main() {
     withTenColumns.test(
       '컬럼 설정 팝업에서 전체 체크 박스를 탭하면 전체 컬럼이 숨겨져야 한다.',
       (tester) async {
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context!);
 
         await tester.pumpAndSettle();
 
@@ -93,7 +93,7 @@ void main() {
     withTenColumns.test(
       '컬럼 설정 팝업에서 header0 컬럼의 체크 박스를 탭하면 header0 컬럼이 숨겨져야 한다.',
       (tester) async {
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context!);
 
         await tester.pumpAndSettle();
 
@@ -145,7 +145,7 @@ void main() {
 
         expect(stateManager.refColumns.length, 9);
 
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context!);
 
         await tester.pumpAndSettle();
 
@@ -197,7 +197,7 @@ void main() {
 
         expect(stateManager.refColumns.length, 0);
 
-        stateManager.showSetColumnsPopup(stateManager.gridFocusNode!.context!);
+        stateManager.showSetColumnsPopup(stateManager.gridFocusNode.context!);
 
         await tester.pumpAndSettle();
 

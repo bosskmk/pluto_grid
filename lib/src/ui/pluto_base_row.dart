@@ -91,7 +91,7 @@ class PlutoBaseRow extends StatelessWidget {
                 stateManager: stateManager,
                 columns: columns,
               ),
-              scrollController: stateManager.scroll!.bodyRowsHorizontal!,
+              scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
               textDirection: stateManager.textDirection,
               children: columns.map(_buildCell).toList(growable: false),

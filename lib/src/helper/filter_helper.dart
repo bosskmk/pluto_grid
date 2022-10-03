@@ -478,7 +478,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
 
   void handleClearButton() {
     if (stateManager!.rows.isEmpty) {
-      Navigator.of(stateManager!.gridFocusNode!.context!).pop();
+      Navigator.of(stateManager!.gridFocusNode.context!).pop();
     } else {
       stateManager!.removeRows(stateManager!.rows);
     }

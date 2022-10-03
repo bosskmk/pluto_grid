@@ -5,22 +5,11 @@ class PlutoChangeNotifier extends ChangeNotifier {
   final PublishSubject<PlutoNotifierEvent> _streamNotifier =
       PublishSubject<PlutoNotifierEvent>();
 
+  final Set<int> _notifier = {};
+
   PublishSubject<PlutoNotifierEvent> get streamNotifier => _streamNotifier;
 
   bool _disposed = false;
-
-  final Set<int> _notifier = {};
-
-  Set<int> _drainNotifier() {
-    final drain = <int>{..._notifier};
-    _notifier.clear();
-    return drain;
-  }
-
-  @protected
-  void addNotifier(int hash) {
-    _notifier.add(hash);
-  }
 
   @override
   void dispose() {
@@ -52,6 +41,17 @@ class PlutoChangeNotifier extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners(notify, notifier);
     });
+  }
+
+  @protected
+  void addNotifier(int hash) {
+    _notifier.add(hash);
+  }
+
+  Set<int> _drainNotifier() {
+    final drain = <int>{..._notifier};
+    _notifier.clear();
+    return drain;
   }
 }
 

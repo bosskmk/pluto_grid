@@ -39,7 +39,7 @@ void main() {
       columns: columns,
       rows: rows,
       columnGroups: columnGroups,
-      gridFocusNode: gridFocusNode,
+      gridFocusNode: MockFocusNode(),
       scroll: scroll,
       configuration: configuration,
     )..setEventManager(eventManager);

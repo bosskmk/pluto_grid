@@ -62,7 +62,116 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         RowState,
         ScrollState,
         SelectingState,
-        VisibilityLayoutState {}
+        VisibilityLayoutState {
+  PlutoGridStateChangeNotifier({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    required this.gridFocusNode,
+    required this.scroll,
+    List<PlutoColumnGroup>? columnGroups,
+    this.onChanged,
+    this.onSelected,
+    this.onSorted,
+    this.onRowChecked,
+    this.onRowDoubleTap,
+    this.onRowSecondaryTap,
+    this.onRowsMoved,
+    this.rowColorCallback,
+    this.createHeader,
+    this.createFooter,
+    PlutoColumnMenuDelegate? columnMenuDelegate,
+    PlutoChangeNotifierFilterResolver? notifierFilterResolver,
+    PlutoGridConfiguration? configuration,
+    PlutoGridMode? mode,
+  })  : refColumns = FilteredList(initialList: columns),
+        refRows = FilteredList(initialList: rows),
+        refColumnGroups = FilteredList<PlutoColumnGroup>(
+          initialList: columnGroups,
+        ),
+        columnMenuDelegate =
+            columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
+        notifierFilterResolver = notifierFilterResolver ??
+            const PlutoNotifierFilterResolverDefault(),
+        gridKey = GlobalKey(),
+        mode = mode ?? PlutoGridMode.normal {
+    setConfiguration(configuration);
+    _initialize();
+  }
+
+  @override
+  final FilteredList<PlutoColumn> refColumns;
+
+  @override
+  final FilteredList<PlutoColumnGroup> refColumnGroups;
+
+  @override
+  final FilteredList<PlutoRow> refRows;
+
+  @override
+  final FocusNode gridFocusNode;
+
+  @override
+  final PlutoGridScrollController scroll;
+
+  @override
+  final PlutoOnChangedEventCallback? onChanged;
+
+  @override
+  final PlutoOnSelectedEventCallback? onSelected;
+
+  @override
+  final PlutoOnSortedEventCallback? onSorted;
+
+  @override
+  final PlutoOnRowCheckedEventCallback? onRowChecked;
+
+  @override
+  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
+
+  @override
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
+
+  @override
+  final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
+  @override
+  final PlutoRowColorCallback? rowColorCallback;
+
+  @override
+  final CreateHeaderCallBack? createHeader;
+
+  @override
+  final CreateFooterCallBack? createFooter;
+
+  @override
+  final PlutoColumnMenuDelegate columnMenuDelegate;
+
+  final PlutoChangeNotifierFilterResolver notifierFilterResolver;
+
+  @override
+  final GlobalKey gridKey;
+
+  @override
+  final PlutoGridMode mode;
+
+  void _initialize() {
+    PlutoGridStateManager.initializeRows(
+      refColumns.originalList,
+      refRows.originalList,
+    );
+
+    refColumns.setFilter((element) => element.hide == false);
+
+    setShowColumnGroups(columnGroups.isNotEmpty, notify: false);
+
+    setShowColumnFooter(
+      refColumns.originalList.any((e) => e.footerRenderer != null),
+      notify: false,
+    );
+
+    setGroupToColumn();
+  }
+}
 
 /// It manages the state of the [PlutoGrid] and contains methods used by the grid.
 ///
@@ -98,51 +207,35 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 /// ```
 class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   PlutoGridStateManager({
-    required List<PlutoColumn> columns,
-    required List<PlutoRow> rows,
-    required FocusNode? gridFocusNode,
-    required PlutoGridScrollController? scroll,
-    List<PlutoColumnGroup>? columnGroups,
-    PlutoGridMode? mode,
-    PlutoOnChangedEventCallback? onChangedEventCallback,
-    PlutoOnSelectedEventCallback? onSelectedEventCallback,
-    PlutoOnSortedEventCallback? onSortedEventCallback,
-    PlutoOnRowCheckedEventCallback? onRowCheckedEventCallback,
-    PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
-    PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
-    PlutoOnRowsMovedEventCallback? onRowsMovedEventCallback,
-    PlutoRowColorCallback? onRowColorCallback,
-    PlutoColumnMenuDelegate? columnMenuDelegate,
-    CreateHeaderCallBack? createHeader,
-    CreateFooterCallBack? createFooter,
-    PlutoGridConfiguration? configuration,
-  }) {
-    refColumns = FilteredList(initialList: columns);
-    refColumnGroups = FilteredList(initialList: columnGroups);
-    refRows = FilteredList(initialList: rows);
-    setGridFocusNode(gridFocusNode);
-    setScroll(scroll);
-    setGridMode(mode);
-    setOnChanged(onChangedEventCallback);
-    setOnSelected(onSelectedEventCallback);
-    setOnSorted(onSortedEventCallback);
-    setOnRowChecked(onRowCheckedEventCallback);
-    setOnRowDoubleTap(onRowDoubleTapEventCallback);
-    setOnRowSecondaryTap(onRowSecondaryTapEventCallback);
-    setOnRowsMoved(onRowsMovedEventCallback);
-    setRowColorCallback(onRowColorCallback);
-    setColumnMenuDelegate(columnMenuDelegate);
-    setCreateHeader(createHeader);
-    setCreateFooter(createFooter);
-    setConfiguration(configuration);
-    setShowColumnFooter(
-      columns.any((element) => element.footerRenderer != null),
-    );
-    setGridKey(GlobalKey());
-  }
+    required super.columns,
+    required super.rows,
+    required super.gridFocusNode,
+    required super.scroll,
+    super.columnGroups,
+    super.onChanged,
+    super.onSelected,
+    super.onSorted,
+    super.onRowChecked,
+    super.onRowDoubleTap,
+    super.onRowSecondaryTap,
+    super.onRowsMoved,
+    super.rowColorCallback,
+    super.createHeader,
+    super.createFooter,
+    super.columnMenuDelegate,
+    super.notifierFilterResolver,
+    super.configuration,
+    super.mode,
+  });
 
-  static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.values;
+  PlutoChangeNotifierFilter<T> resolveNotifierFilter<T>() {
+    return PlutoChangeNotifierFilter<T>(
+      notifierFilterResolver.resolve(this, T),
+      PlutoChangeNotifierFilter.debug
+          ? PlutoChangeNotifierFilterResolver.notifierNames(this)
+          : null,
+    );
+  }
 
   /// It handles the necessary settings when [rows] are first set or added to the [PlutoGrid].
   ///

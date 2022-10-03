@@ -6,6 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
 void main() {
   late List<PlutoColumn> columns;
@@ -26,8 +27,8 @@ void main() {
     stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
-      gridFocusNode: null,
-      scroll: null,
+      gridFocusNode: MockFocusNode(),
+      scroll: MockPlutoGridScrollController(),
     );
 
     listener = MockOnChangeListener();

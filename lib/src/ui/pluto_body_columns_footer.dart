@@ -32,7 +32,7 @@ class PlutoBodyColumnsFooterState
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll.horizontal!.addAndGet();
 
     updateState(PlutoNotifierEventForceUpdate.instance);
   }
