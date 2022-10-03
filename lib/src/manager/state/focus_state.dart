@@ -17,28 +17,32 @@ abstract class IFocusState {
   });
 }
 
-mixin FocusState implements IPlutoGridState {
-  @override
-  bool get keepFocus => _keepFocus;
-
+class _State {
   bool _keepFocus = false;
+}
+
+mixin FocusState implements IPlutoGridState {
+  final _State _state = _State();
 
   @override
-  bool get hasFocus => _keepFocus && gridFocusNode.hasFocus;
+  bool get keepFocus => _state._keepFocus;
+
+  @override
+  bool get hasFocus => keepFocus && gridFocusNode.hasFocus;
 
   @override
   void setKeepFocus(bool flag, {bool notify = true}) {
-    if (_keepFocus == flag) {
+    if (keepFocus == flag) {
       return;
     }
 
-    _keepFocus = flag;
+    _state._keepFocus = flag;
 
-    if (_keepFocus) {
+    if (keepFocus) {
       gridFocusNode.requestFocus();
     }
 
-    if (_keepFocus) {
+    if (keepFocus) {
       // RequestFocus is fired and notifies listeners with hasFocus true.
       // requestFocus delays up to one frame.
       notifyListenersOnPostFrame(notify, setKeepFocus.hashCode);

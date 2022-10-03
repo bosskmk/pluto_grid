@@ -58,10 +58,10 @@ abstract class IKeyboardState {
 }
 
 mixin KeyboardState implements IPlutoGridState {
+  final PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
+
   @override
   PlutoGridKeyPressed get keyPressed => _keyPressed;
-
-  final PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
 
   @override
   PlutoGridCellPosition cellPositionToMove(

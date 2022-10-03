@@ -27,12 +27,16 @@ abstract class IPaginationRowState {
   });
 }
 
-mixin PaginationRowState implements IPlutoGridState {
-  static int defaultPageSize = 40;
-
-  int _pageSize = defaultPageSize;
+class _State {
+  int _pageSize = PaginationRowState.defaultPageSize;
 
   int _page = 1;
+}
+
+mixin PaginationRowState implements IPlutoGridState {
+  final _State _state = _State();
+
+  static int defaultPageSize = 40;
 
   final FilteredListRange _range = FilteredListRange(0, defaultPageSize);
 
@@ -57,10 +61,10 @@ mixin PaginationRowState implements IPlutoGridState {
   }
 
   @override
-  int get page => _page;
+  int get page => _state._page;
 
   @override
-  int get pageSize => _pageSize;
+  int get pageSize => _state._pageSize;
 
   @override
   int get pageRangeFrom => _range.from;
@@ -69,14 +73,14 @@ mixin PaginationRowState implements IPlutoGridState {
   int get pageRangeTo => _range.to;
 
   @override
-  int get totalPage => (_length / _pageSize).ceil();
+  int get totalPage => (_length / pageSize).ceil();
 
   @override
   bool get isPaginated => refRows.hasRange;
 
   @override
   void setPageSize(int pageSize, {bool notify = true}) {
-    _pageSize = pageSize;
+    _state._pageSize = pageSize;
 
     notifyListeners(notify, setPageSize.hashCode);
   }
@@ -87,15 +91,15 @@ mixin PaginationRowState implements IPlutoGridState {
     bool resetCurrentState = true,
     bool notify = true,
   }) {
-    _page = page;
+    _state._page = page;
 
-    int from = (page - 1) * _pageSize;
+    int from = (page - 1) * pageSize;
 
     if (from < 0) {
       from = 0;
     }
 
-    int to = page * _pageSize;
+    int to = page * pageSize;
 
     if (to > _length) {
       to = _length;

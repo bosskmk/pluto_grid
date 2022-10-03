@@ -10,7 +10,7 @@ abstract class IEditingState {
   /// Automatically set to editing state when cell is selected.
   bool get autoEditing;
 
-  TextEditingController? textEditingController;
+  TextEditingController? get textEditingController;
 
   bool isEditableCell(PlutoCell cell);
 
@@ -24,6 +24,8 @@ abstract class IEditingState {
     bool flag, {
     bool notify = true,
   });
+
+  void setTextEditingController(TextEditingController? textEditingController);
 
   /// Toggle the editing status of the current cell.
   void toggleEditing({bool notify = true});
@@ -45,20 +47,27 @@ abstract class IEditingState {
   });
 }
 
-mixin EditingState implements IPlutoGridState {
-  @override
-  bool get isEditing => _isEditing;
-
+class _State {
   bool _isEditing = false;
-
-  @override
-  bool get autoEditing =>
-      _autoEditing || currentColumn?.enableAutoEditing == true;
 
   bool _autoEditing = false;
 
+  TextEditingController? _textEditingController;
+}
+
+mixin EditingState implements IPlutoGridState {
+  final _State _state = _State();
+
   @override
-  TextEditingController? textEditingController;
+  bool get isEditing => _state._isEditing;
+
+  @override
+  bool get autoEditing =>
+      _state._autoEditing || currentColumn?.enableAutoEditing == true;
+
+  @override
+  TextEditingController? get textEditingController =>
+      _state._textEditingController;
 
   @override
   bool isEditableCell(PlutoCell cell) {
@@ -82,7 +91,7 @@ mixin EditingState implements IPlutoGridState {
       return;
     }
 
-    if (currentCell == null || _isEditing == flag) {
+    if (currentCell == null || isEditing == flag) {
       return;
     }
 
@@ -101,7 +110,7 @@ mixin EditingState implements IPlutoGridState {
       flag = false;
     }
 
-    _isEditing = flag;
+    _state._isEditing = flag;
 
     clearCurrentSelecting(notify: false);
 
@@ -113,18 +122,23 @@ mixin EditingState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    if (_autoEditing == flag) {
+    if (autoEditing == flag) {
       return;
     }
 
-    _autoEditing = flag;
+    _state._autoEditing = flag;
 
     notifyListeners(notify, setAutoEditing.hashCode);
   }
 
   @override
+  void setTextEditingController(TextEditingController? textEditingController) {
+    _state._textEditingController = textEditingController;
+  }
+
+  @override
   void toggleEditing({bool notify = true}) => setEditing(
-        !(_isEditing == true),
+        !(isEditing == true),
         notify: notify,
       );
 

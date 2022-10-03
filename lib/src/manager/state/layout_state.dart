@@ -120,19 +120,8 @@ abstract class ILayoutState {
   void setGridGlobalOffset(Offset offset);
 }
 
-mixin LayoutState implements IPlutoGridState {
-  @override
-  ChangeNotifier get resizingChangeNotifier => _resizingChangeNotifier;
-
-  final ChangeNotifier _resizingChangeNotifier = ChangeNotifier();
-
-  @override
-  double? get maxWidth => _maxWidth;
-
+class _State {
   double? _maxWidth;
-
-  @override
-  double? get maxHeight => _maxHeight;
 
   double? _maxHeight;
 
@@ -141,18 +130,21 @@ mixin LayoutState implements IPlutoGridState {
   double? _footerHeight;
 
   double? _columnFooterHeight;
+}
 
-  set headerHeight(double value) {
-    _headerHeight = value;
-  }
+mixin LayoutState implements IPlutoGridState {
+  final _State _state = _State();
 
-  set footerHeight(double value) {
-    _footerHeight = value;
-  }
+  @override
+  ChangeNotifier get resizingChangeNotifier => _resizingChangeNotifier;
 
-  set columnFooterHeight(double value) {
-    _columnFooterHeight = value;
-  }
+  final ChangeNotifier _resizingChangeNotifier = ChangeNotifier();
+
+  @override
+  double? get maxWidth => _state._maxWidth;
+
+  @override
+  double? get maxHeight => _state._maxHeight;
 
   @override
   double get headerHeight {
@@ -160,9 +152,13 @@ mixin LayoutState implements IPlutoGridState {
       return 0;
     }
 
-    return _headerHeight == null
+    return _state._headerHeight == null
         ? PlutoGridSettings.rowTotalHeight
-        : _headerHeight!;
+        : _state._headerHeight!;
+  }
+
+  set headerHeight(double value) {
+    _state._headerHeight = value;
   }
 
   @override
@@ -171,9 +167,13 @@ mixin LayoutState implements IPlutoGridState {
       return 0;
     }
 
-    return _footerHeight == null
+    return _state._footerHeight == null
         ? PlutoGridSettings.rowTotalHeight
-        : _footerHeight!;
+        : _state._footerHeight!;
+  }
+
+  set footerHeight(double value) {
+    _state._footerHeight = value;
   }
 
   @override
@@ -182,9 +182,13 @@ mixin LayoutState implements IPlutoGridState {
       return 0;
     }
 
-    return _columnFooterHeight == null
+    return _state._columnFooterHeight == null
         ? PlutoGridSettings.rowTotalHeight
-        : _columnFooterHeight!;
+        : _state._columnFooterHeight!;
+  }
+
+  set columnFooterHeight(double value) {
+    _state._columnFooterHeight = value;
   }
 
   @override
@@ -383,10 +387,10 @@ mixin LayoutState implements IPlutoGridState {
   void setLayout(BoxConstraints size) {
     final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
     final bool changedShowFrozenColumn = _showFrozenColumn != showFrozenColumn;
-    final bool changedMaxWidth = _maxWidth != size.maxWidth;
+    final bool changedMaxWidth = maxWidth != size.maxWidth;
 
-    _maxWidth = size.maxWidth;
-    _maxHeight = size.maxHeight;
+    _state._maxWidth = size.maxWidth;
+    _state._maxHeight = size.maxHeight;
     _showFrozenColumn = showFrozenColumn;
     _gridGlobalOffset = null;
 

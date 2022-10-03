@@ -70,19 +70,23 @@ abstract class IRowGroupState {
   void updateRowGroupByHideColumn(List<PlutoColumn> columns);
 }
 
-mixin RowGroupState implements IPlutoGridState {
-  @override
-  bool get hasRowGroups => _rowGroupDelegate != null;
-
-  @override
-  bool get enabledRowGroups => _rowGroupDelegate?.enabled == true;
-
+class _State {
   bool _previousEnabledRowGroups = false;
 
   PlutoRowGroupDelegate? _rowGroupDelegate;
+}
+
+mixin RowGroupState implements IPlutoGridState {
+  final _State _state = _State();
 
   @override
-  PlutoRowGroupDelegate? get rowGroupDelegate => _rowGroupDelegate;
+  bool get hasRowGroups => _state._rowGroupDelegate != null;
+
+  @override
+  bool get enabledRowGroups => rowGroupDelegate?.enabled == true;
+
+  @override
+  PlutoRowGroupDelegate? get rowGroupDelegate => _state._rowGroupDelegate;
 
   @override
   Iterable<PlutoRow> get iterateMainRowGroup sync* {
@@ -112,6 +116,8 @@ mixin RowGroupState implements IPlutoGridState {
     }
   }
 
+  bool get _previousEnabledRowGroups => _state._previousEnabledRowGroups;
+
   @override
   bool isMainRow(PlutoRow row) => row.isMain;
 
@@ -128,7 +134,7 @@ mixin RowGroupState implements IPlutoGridState {
     PlutoRowGroupDelegate? delegate, {
     bool notify = true,
   }) {
-    _rowGroupDelegate = delegate;
+    _state._rowGroupDelegate = delegate;
 
     _updateRowGroup();
 
@@ -199,7 +205,7 @@ mixin RowGroupState implements IPlutoGridState {
     assert(enabledRowGroups);
 
     _ensureRowGroups(() {
-      _rowGroupDelegate!.filter(rows: refRows, filter: filter);
+      rowGroupDelegate!.filter(rows: refRows, filter: filter);
     });
   }
 
@@ -212,7 +218,7 @@ mixin RowGroupState implements IPlutoGridState {
     assert(enabledRowGroups);
 
     _ensureRowGroups(() {
-      _rowGroupDelegate!.sort(column: column, rows: refRows, compare: compare);
+      rowGroupDelegate!.sort(column: column, rows: refRows, compare: compare);
     });
   }
 
@@ -237,11 +243,11 @@ mixin RowGroupState implements IPlutoGridState {
     final targetIdx = append ? refRows.length - 1 : index;
     final target = refRows.isEmpty ? null : refRows[targetIdx];
 
-    if (_rowGroupDelegate is PlutoRowGroupByColumnDelegate && !append) {
+    if (rowGroupDelegate is PlutoRowGroupByColumnDelegate && !append) {
       _updateCellsByTargetForGroupByColumn(rows: rows, target: target);
     }
 
-    final grouped = _rowGroupDelegate!.toGroup(rows: rows);
+    final grouped = rowGroupDelegate!.toGroup(rows: rows);
 
     bool findByTargetKey(PlutoRow e) => e.key == target?.key;
 
@@ -404,7 +410,7 @@ mixin RowGroupState implements IPlutoGridState {
     }
 
     _ensureRowGroups(() {
-      switch (_rowGroupDelegate!.type) {
+      switch (rowGroupDelegate!.type) {
         case PlutoRowGroupDelegateType.tree:
           addAllGroupTree();
           break;
@@ -447,11 +453,11 @@ mixin RowGroupState implements IPlutoGridState {
     List<PlutoColumn> columns, {
     bool notify = true,
   }) {
-    if (columns.isEmpty || _rowGroupDelegate?.type.isByColumn != true) {
+    if (columns.isEmpty || rowGroupDelegate?.type.isByColumn != true) {
       return;
     }
 
-    final delegate = _rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+    final delegate = rowGroupDelegate as PlutoRowGroupByColumnDelegate;
 
     final Set<Key> removeKeys = Set.from(columns.map((e) => e.key));
 
@@ -587,9 +593,9 @@ mixin RowGroupState implements IPlutoGridState {
       return;
     }
 
-    assert(_rowGroupDelegate is PlutoRowGroupByColumnDelegate);
+    assert(rowGroupDelegate is PlutoRowGroupByColumnDelegate);
 
-    final delegate = _rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+    final delegate = rowGroupDelegate as PlutoRowGroupByColumnDelegate;
 
     final depth = target.depth;
 
@@ -612,7 +618,7 @@ mixin RowGroupState implements IPlutoGridState {
         : refRows.originalList;
 
     if (enabledRowGroups == true) {
-      rows = _rowGroupDelegate!.toGroup(rows: previousRows);
+      rows = rowGroupDelegate!.toGroup(rows: previousRows);
     } else {
       // todo : reset sortIdx
       rows = previousRows.toList();
@@ -620,7 +626,7 @@ mixin RowGroupState implements IPlutoGridState {
       rows.forEach(setParent);
     }
 
-    _previousEnabledRowGroups = enabledRowGroups;
+    _state._previousEnabledRowGroups = enabledRowGroups;
 
     refRows.clearFromOriginal();
 

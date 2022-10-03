@@ -685,16 +685,6 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
-  set textEditingController(
-          _i3.TextEditingController? _textEditingController) =>
-      super.noSuchMethod(
-        Invocation.setter(
-          #textEditingController,
-          _textEditingController,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
   bool get isEditing => (super.noSuchMethod(
         Invocation.getter(#isEditing),
         returnValue: false,
@@ -1972,6 +1962,16 @@ class MockPlutoGridStateManager extends _i1.Mock
           #setAutoEditing,
           [flag],
           {#notify: notify},
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void setTextEditingController(
+          _i3.TextEditingController? textEditingController) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setTextEditingController,
+          [textEditingController],
         ),
         returnValueForMissingStub: null,
       );

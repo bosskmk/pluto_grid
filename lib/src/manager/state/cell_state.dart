@@ -69,16 +69,20 @@ abstract class ICellState {
   bool isInvalidCellPosition(PlutoGridCellPosition? cellPosition);
 }
 
-mixin CellState implements IPlutoGridState {
-  @override
-  PlutoCell? get currentCell => _currentCell;
-
+class _State {
   PlutoCell? _currentCell;
 
-  @override
-  PlutoGridCellPosition? get currentCellPosition => _currentCellPosition;
-
   PlutoGridCellPosition? _currentCellPosition;
+}
+
+mixin CellState implements IPlutoGridState {
+  final _State _state = _State();
+
+  @override
+  PlutoCell? get currentCell => _state._currentCell;
+
+  @override
+  PlutoGridCellPosition? get currentCellPosition => _state._currentCellPosition;
 
   @override
   PlutoCell? get firstCell {
@@ -98,7 +102,7 @@ mixin CellState implements IPlutoGridState {
     PlutoGridCellPosition? cellPosition, {
     bool notify = true,
   }) {
-    if (_currentCellPosition == cellPosition) {
+    if (currentCellPosition == cellPosition) {
       return;
     }
 
@@ -108,19 +112,19 @@ mixin CellState implements IPlutoGridState {
       return;
     }
 
-    _currentCellPosition = cellPosition;
+    _state._currentCellPosition = cellPosition;
 
     notifyListeners(notify, setCurrentCellPosition.hashCode);
   }
 
   @override
   void updateCurrentCellPosition({bool notify = true}) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       return;
     }
 
     setCurrentCellPosition(
-      cellPositionByCellKey(_currentCell!.key),
+      cellPositionByCellKey(currentCell!.key),
       notify: false,
     );
 
@@ -168,13 +172,13 @@ mixin CellState implements IPlutoGridState {
 
   @override
   void clearCurrentCell({bool notify = true}) {
-    if (_currentCell == null) {
+    if (currentCell == null) {
       return;
     }
 
-    _currentCell = null;
+    _state._currentCell = null;
 
-    _currentCellPosition = null;
+    _state._currentCellPosition = null;
 
     notifyListeners(notify, clearCurrentCell.hashCode);
   }
@@ -193,13 +197,13 @@ mixin CellState implements IPlutoGridState {
       return;
     }
 
-    if (_currentCell != null && _currentCell!.key == cell.key) {
+    if (currentCell != null && currentCell!.key == cell.key) {
       return;
     }
 
-    _currentCell = cell;
+    _state._currentCell = cell;
 
-    _currentCellPosition = PlutoGridCellPosition(
+    _state._currentCellPosition = PlutoGridCellPosition(
       rowIdx: rowIdx,
       columnIdx: columnIdxByCellKeyAndRowIdx(cell.key, rowIdx),
     );
@@ -313,7 +317,7 @@ mixin CellState implements IPlutoGridState {
 
   @override
   bool isCurrentCell(PlutoCell? cell) {
-    return _currentCell != null && _currentCell!.key == cell!.key;
+    return currentCell != null && currentCell!.key == cell!.key;
   }
 
   @override

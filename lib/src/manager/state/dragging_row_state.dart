@@ -35,21 +35,25 @@ abstract class IDraggingRowState {
   bool isRowBeingDragged(Key rowKey);
 }
 
-mixin DraggingRowState implements IPlutoGridState {
-  @override
-  bool get isDraggingRow => _isDraggingRow;
-
+class _State {
   bool _isDraggingRow = false;
-
-  @override
-  List<PlutoRow> get dragRows => _dragRows;
 
   List<PlutoRow> _dragRows = [];
 
-  @override
-  int? get dragTargetRowIdx => _dragTargetRowIdx;
-
   int? _dragTargetRowIdx;
+}
+
+mixin DraggingRowState implements IPlutoGridState {
+  final _State _state = _State();
+
+  @override
+  bool get isDraggingRow => _state._isDraggingRow;
+
+  @override
+  List<PlutoRow> get dragRows => _state._dragRows;
+
+  @override
+  int? get dragTargetRowIdx => _state._dragTargetRowIdx;
 
   @override
   bool get canRowDrag => !hasFilter && !hasSortedColumn && !enabledRowGroups;
@@ -59,11 +63,11 @@ mixin DraggingRowState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    if (_isDraggingRow == flag) {
+    if (isDraggingRow == flag) {
       return;
     }
 
-    _isDraggingRow = flag;
+    _state._isDraggingRow = flag;
 
     _clearDraggingState();
 
@@ -75,7 +79,7 @@ mixin DraggingRowState implements IPlutoGridState {
     List<PlutoRow> rows, {
     bool notify = true,
   }) {
-    _dragRows = rows;
+    _state._dragRows = rows;
 
     notifyListeners(notify, setDragRows.hashCode);
   }
@@ -85,11 +89,11 @@ mixin DraggingRowState implements IPlutoGridState {
     int? rowIdx, {
     bool notify = true,
   }) {
-    if (_dragTargetRowIdx == rowIdx) {
+    if (dragTargetRowIdx == rowIdx) {
       return;
     }
 
-    _dragTargetRowIdx = rowIdx;
+    _state._dragTargetRowIdx = rowIdx;
 
     notifyListeners(notify, setDragTargetRowIdx.hashCode);
   }
@@ -97,36 +101,36 @@ mixin DraggingRowState implements IPlutoGridState {
   @override
   bool isRowIdxDragTarget(int? rowIdx) {
     return rowIdx != null &&
-        _dragTargetRowIdx != null &&
-        _dragTargetRowIdx! <= rowIdx &&
-        rowIdx < _dragTargetRowIdx! + _dragRows.length;
+        dragTargetRowIdx != null &&
+        dragTargetRowIdx! <= rowIdx &&
+        rowIdx < dragTargetRowIdx! + dragRows.length;
   }
 
   @override
   bool isRowIdxTopDragTarget(int? rowIdx) {
     return rowIdx != null &&
-        _dragTargetRowIdx != null &&
-        _dragTargetRowIdx == rowIdx &&
-        rowIdx + _dragRows.length <= refRows.length;
+        dragTargetRowIdx != null &&
+        dragTargetRowIdx == rowIdx &&
+        rowIdx + dragRows.length <= refRows.length;
   }
 
   @override
   bool isRowIdxBottomDragTarget(int? rowIdx) {
     return rowIdx != null &&
-        _dragTargetRowIdx != null &&
-        rowIdx == _dragTargetRowIdx! + _dragRows.length - 1;
+        dragTargetRowIdx != null &&
+        rowIdx == dragTargetRowIdx! + dragRows.length - 1;
   }
 
   @override
   bool isRowBeingDragged(Key? rowKey) {
     return rowKey != null &&
-        _isDraggingRow == true &&
+        isDraggingRow == true &&
         dragRows.firstWhereOrNull((element) => element.key == rowKey) != null;
   }
 
   void _clearDraggingState() {
-    _dragRows = [];
+    _state._dragRows = [];
 
-    _dragTargetRowIdx = null;
+    _state._dragTargetRowIdx = null;
   }
 }

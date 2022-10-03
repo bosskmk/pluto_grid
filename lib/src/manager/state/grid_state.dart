@@ -54,21 +54,25 @@ abstract class IGridState {
   void forceUpdate();
 }
 
-mixin GridState implements IPlutoGridState {
-  @override
-  PlutoGridConfiguration get configuration => _configuration!;
-
+class _State {
   PlutoGridConfiguration? _configuration;
 
   PlutoGridKeyManager? _keyManager;
 
-  @override
-  PlutoGridKeyManager? get keyManager => _keyManager;
-
   PlutoGridEventManager? _eventManager;
+}
+
+mixin GridState implements IPlutoGridState {
+  final _State _state = _State();
 
   @override
-  PlutoGridEventManager? get eventManager => _eventManager;
+  PlutoGridConfiguration get configuration => _state._configuration!;
+
+  @override
+  PlutoGridKeyManager? get keyManager => _state._keyManager;
+
+  @override
+  PlutoGridEventManager? get eventManager => _state._eventManager;
 
   @override
   PlutoGridLocaleText get localeText => configuration.localeText;
@@ -78,12 +82,12 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {
-    _keyManager = keyManager;
+    _state._keyManager = keyManager;
   }
 
   @override
   void setEventManager(PlutoGridEventManager? eventManager) {
-    _eventManager = eventManager;
+    _state._eventManager = eventManager;
   }
 
   @override
@@ -92,14 +96,14 @@ mixin GridState implements IPlutoGridState {
     bool updateLocale = true,
     bool applyColumnFilter = true,
   }) {
-    _configuration = configuration ?? const PlutoGridConfiguration();
+    _state._configuration = configuration ?? const PlutoGridConfiguration();
 
     if (updateLocale) {
-      _configuration!.updateLocale();
+      _state._configuration!.updateLocale();
     }
 
     if (applyColumnFilter) {
-      _configuration!.applyColumnFilter(refColumns.originalList);
+      _state._configuration!.applyColumnFilter(refColumns.originalList);
     }
   }
 

@@ -28,7 +28,13 @@ abstract class IColumnGroupState {
   void setGroupToColumn();
 }
 
+class _State {
+  bool _showColumnGroups = false;
+}
+
 mixin ColumnGroupState implements IPlutoGridState {
+  final _State _state = _State();
+
   @override
   List<PlutoColumnGroup> get columnGroups => [...refColumnGroups];
 
@@ -36,17 +42,16 @@ mixin ColumnGroupState implements IPlutoGridState {
   bool get hasColumnGroups => refColumnGroups.isNotEmpty;
 
   @override
-  bool get showColumnGroups => _showColumnGroups == true && hasColumnGroups;
-
-  bool _showColumnGroups = false;
+  bool get showColumnGroups =>
+      _state._showColumnGroups == true && hasColumnGroups;
 
   @override
   void setShowColumnGroups(bool flag, {bool notify = true}) {
-    if (_showColumnGroups == flag) {
+    if (showColumnGroups == flag) {
       return;
     }
 
-    _showColumnGroups = flag;
+    _state._showColumnGroups = flag;
 
     notifyListeners(notify, setShowColumnGroups.hashCode);
   }
