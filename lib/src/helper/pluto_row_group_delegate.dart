@@ -62,17 +62,16 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
   }) {
-    void setParent(PlutoRow row) {
-      if (row.type.isGroup) {
-        for (final child in row.type.group.children.originalList) {
-          child.setParent(row);
-          setParent(child);
-        }
-      }
-    }
+    if (rows.isEmpty) return rows.toList();
 
-    for (final row in rows) {
-      setParent(row);
+    final children = PlutoRowGroupHelper.iterateWithFilter(
+      rows,
+      (r) => r.type.isGroup,
+    );
+
+    for (final child in children) {
+      setParent(PlutoRow r) => r.setParent(child);
+      child.type.group.children.originalList.forEach(setParent);
     }
 
     return rows.toList();
@@ -84,44 +83,18 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required int Function(PlutoRow, PlutoRow) compare,
   }) {
-    if (rows.originalList.isEmpty) {
-      return;
-    }
-
-    final depth = resolveColumnDepth(column);
-
-    if (depth == null) {
-      return;
-    }
-
-    if (depth == 0) {
-      rows.sort(compare);
-      return;
-    }
-
-    sortChildren(PlutoRow row) {
-      if (!row.type.isGroup) {
-        return;
-      }
-
-      if (row.type.group.children.originalList.isEmpty) {
-        return;
-      }
-
-      row.type.group.children.sort(compare);
-
-      for (final child in row.type.group.children.originalList) {
-        if (child.type.isGroup) {
-          sortChildren(child);
-        }
-      }
-    }
-
-    for (final row in rows.originalList) {
-      sortChildren(row);
-    }
+    if (rows.originalList.isEmpty) return;
 
     rows.sort(compare);
+
+    final children = PlutoRowGroupHelper.iterateWithFilter(
+      rows.originalList,
+      (r) => r.type.isGroup,
+    );
+
+    for (final child in children) {
+      child.type.group.children.sort(compare);
+    }
   }
 
   @override
@@ -129,38 +102,9 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required FilteredListFilter<PlutoRow>? filter,
   }) {
-    if (filter == null) {
-      void setFilter(FilteredList<PlutoRow> filteredList) {
-        filteredList.setFilter(null);
+    if (rows.originalList.isEmpty) return;
 
-        if (filteredList.originalList.isEmpty) {
-          return;
-        }
-
-        for (final child in filteredList.originalList) {
-          if (child.type.isGroup) {
-            setFilter(child.type.group.children);
-          }
-        }
-      }
-
-      setFilter(rows);
-    } else {
-      void setFilter(FilteredList<PlutoRow> filteredList) {
-        filteredList.setFilter((row) {
-          if (!row.type.isGroup) {
-            return filter(row);
-          }
-
-          setFilter(row.type.group.children);
-
-          return filter(row) ||
-              row.type.group.children.filterOrOriginalList.isNotEmpty;
-        });
-      }
-
-      setFilter(rows);
-    }
+    PlutoRowGroupHelper.applyFilter(rows: rows, filter: filter);
   }
 }
 
@@ -278,9 +222,7 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required int Function(PlutoRow, PlutoRow) compare,
   }) {
-    if (rows.originalList.isEmpty) {
-      return;
-    }
+    if (rows.originalList.isEmpty) return;
 
     final depth = _columnDepth(column);
 
@@ -289,27 +231,18 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
       return;
     }
 
-    sortChildren(PlutoRow row) {
-      assert(row.type.isGroup);
+    final children = PlutoRowGroupHelper.iterateWithFilter(
+      rows.originalList,
+      (r) => r.type.isGroup,
+      (r) => _isFirstChildGroup(r)
+          ? r.type.group.children.originalList.iterator
+          : null,
+    );
 
-      if (row.type.group.children.originalList.isEmpty) {
-        return;
+    for (final child in children) {
+      if (_firstChildDepth(child) == depth) {
+        child.type.group.children.sort(compare);
       }
-
-      if (_firstChildDepth(row) == depth) {
-        row.type.group.children.sort(compare);
-        return;
-      }
-
-      if (_isFirstChildGroup(row)) {
-        for (final child in row.type.group.children.originalList) {
-          sortChildren(child);
-        }
-      }
-    }
-
-    for (final row in rows.originalList) {
-      sortChildren(row);
     }
   }
 
@@ -318,37 +251,9 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required FilteredListFilter<PlutoRow>? filter,
   }) {
-    if (filter == null) {
-      void setFilter(FilteredList<PlutoRow> filteredList) {
-        filteredList.setFilter(null);
+    if (rows.originalList.isEmpty) return;
 
-        if (filteredList.originalList.isEmpty ||
-            !filteredList.originalList.first.type.isGroup) {
-          return;
-        }
-
-        for (final child in filteredList.originalList) {
-          setFilter(child.type.group.children);
-        }
-      }
-
-      setFilter(rows);
-    } else {
-      void setFilter(FilteredList<PlutoRow> filteredList) {
-        filteredList.setFilter((row) {
-          if (!row.type.isGroup) {
-            return filter(row);
-          }
-
-          setFilter(row.type.group.children);
-
-          return filter(row) ||
-              row.type.group.children.filterOrOriginalList.isNotEmpty;
-        });
-      }
-
-      setFilter(rows);
-    }
+    PlutoRowGroupHelper.applyFilter(rows: rows, filter: filter);
   }
 
   int _columnDepth(PlutoColumn column) => visibleColumns.indexOf(column);

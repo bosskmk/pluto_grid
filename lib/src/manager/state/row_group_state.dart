@@ -529,7 +529,7 @@ mixin RowGroupState implements IPlutoGridState {
     }
 
     for (final rowGroup in expandedRows) {
-      final Iterable<PlutoRow> addRows = _iterateWithFilter(
+      final Iterable<PlutoRow> children = PlutoRowGroupHelper.iterateWithFilter(
         rowGroup.type.group.children,
         (r) => true,
         (r) => r.type.isGroup && r.type.group.expanded
@@ -539,7 +539,7 @@ mixin RowGroupState implements IPlutoGridState {
 
       final idx = refRows.filterOrOriginalList.indexOf(rowGroup);
 
-      refRows.insertAll(idx + 1, addRows);
+      refRows.insertAll(idx + 1, children);
     }
 
     if (toResetPage) {
@@ -600,64 +600,24 @@ mixin RowGroupState implements IPlutoGridState {
   }
 
   Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
-    for (final row in _iterateWithFilter(rows, (e) => !e.type.isGroup)) {
+    bool isNotGroup(PlutoRow e) => !e.type.isGroup;
+
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows, isNotGroup)) {
       yield row;
     }
   }
 
   Iterable<PlutoRow> _iterateRowGroup(Iterable<PlutoRow> rows) sync* {
-    for (final row in _iterateWithFilter(rows, (e) => e.type.isGroup)) {
+    bool isGroup(PlutoRow e) => e.type.isGroup;
+
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows, isGroup)) {
       yield row;
     }
   }
 
   Iterable<PlutoRow> _iterateRowAndGroup(Iterable<PlutoRow> rows) sync* {
-    for (final row in _iterateWithFilter(rows)) {
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows)) {
       yield row;
-    }
-  }
-
-  Iterable<PlutoRow> _iterateWithFilter(
-    Iterable<PlutoRow> rows, [
-    bool Function(PlutoRow)? filter,
-    Iterator<PlutoRow>? Function(PlutoRow)? childrenFilter,
-  ]) sync* {
-    List<Iterator<PlutoRow>> stack = [];
-    Iterator<PlutoRow>? currentIter = rows.iterator;
-
-    Iterator<PlutoRow>? defaultChildrenFilter(PlutoRow row) {
-      return row.type.isGroup
-          ? row.type.group.children.originalList.iterator
-          : null;
-    }
-
-    final filterChildren = childrenFilter ?? defaultChildrenFilter;
-
-    while (currentIter != null || stack.isNotEmpty) {
-      bool hasChildren = false;
-      if (currentIter != null) {
-        while (currentIter!.moveNext()) {
-          if (filter == null || filter(currentIter.current)) {
-            yield currentIter.current;
-          }
-
-          Iterator<PlutoRow>? children = filterChildren(currentIter.current);
-
-          if (children != null) {
-            stack.add(currentIter);
-            currentIter = children;
-            hasChildren = true;
-            break;
-          }
-        }
-      }
-
-      if (!hasChildren) {
-        currentIter = stack.lastOrNull;
-        if (currentIter != null) {
-          stack.removeLast();
-        }
-      }
     }
   }
 }

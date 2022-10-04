@@ -10,6 +10,7 @@ export './src/helper/pluto_debounce.dart';
 export './src/helper/pluto_key_manager_event.dart';
 export './src/helper/pluto_move_direction.dart';
 export './src/helper/pluto_row_group_delegate.dart';
+export './src/helper/pluto_row_group_helper.dart';
 export './src/helper/pluto_size_helper.dart';
 export './src/helper/show_column_menu.dart';
 export './src/manager/event/pluto_grid_cannot_move_current_cell_event.dart';
