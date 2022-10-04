@@ -847,6 +847,12 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
+  _i2.PlutoGridLoadingLevel get loadingLevel => (super.noSuchMethod(
+        Invocation.getter(#loadingLevel),
+        returnValue: _i2.PlutoGridLoadingLevel.grid,
+        returnValueForMissingStub: _i2.PlutoGridLoadingLevel.grid,
+      ) as _i2.PlutoGridLoadingLevel);
+  @override
   bool get hasLeftFrozenColumns => (super.noSuchMethod(
         Invocation.getter(#hasLeftFrozenColumns),
         returnValue: false,
@@ -2410,13 +2416,17 @@ class MockPlutoGridStateManager extends _i1.Mock
   @override
   void setShowLoading(
     bool? flag, {
+    _i2.PlutoGridLoadingLevel? level = _i2.PlutoGridLoadingLevel.grid,
     bool? notify = true,
   }) =>
       super.noSuchMethod(
         Invocation.method(
           #setShowLoading,
           [flag],
-          {#notify: notify},
+          {
+            #level: level,
+            #notify: notify,
+          },
         ),
         returnValueForMissingStub: null,
       );

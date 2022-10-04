@@ -75,8 +75,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       ).then((fetchedRows) {
         PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
             .then((initializedRows) {
-          stateManager.refRows
-              .addAll(FilteredList(initialList: initializedRows));
+          stateManager.refRows.addAll(initializedRows);
           stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
             stateManager.columns[3],
             stateManager.columns[4],
@@ -122,11 +121,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     /// Test C
     if (test.isC) {
       columns.addAll(DummyData(10, 0).columns);
+      print(DateTime.now());
       rows.addAll(DummyData.treeRowsByColumn(
         columns: columns,
         count: 100,
         // depth: 3,
       ));
+      print(DateTime.now());
       rowGroupDelegate = PlutoRowGroupTreeDelegate(
         resolveColumnDepth: (column) => stateManager.columnIndex(column),
         showText: (cell) => true,

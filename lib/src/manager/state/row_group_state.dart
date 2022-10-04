@@ -502,42 +502,6 @@ mixin RowGroupState implements IPlutoGridState {
     }
   }
 
-  Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
-    for (final row in rows) {
-      if (row.type.isGroup) {
-        for (final child in _iterateRow(row.type.group.children.originalList)) {
-          yield child;
-        }
-      } else {
-        yield row;
-      }
-    }
-  }
-
-  Iterable<PlutoRow> _iterateRowGroup(Iterable<PlutoRow> rows) sync* {
-    for (final row in rows) {
-      if (row.type.isGroup) {
-        yield row;
-        for (final child
-            in _iterateRowGroup(row.type.group.children.originalList)) {
-          yield child;
-        }
-      }
-    }
-  }
-
-  Iterable<PlutoRow> _iterateRowAndGroup(Iterable<PlutoRow> rows) sync* {
-    for (final row in rows) {
-      yield row;
-      if (row.type.isGroup) {
-        for (final child
-            in _iterateRowAndGroup(row.type.group.children.originalList)) {
-          yield child;
-        }
-      }
-    }
-  }
-
   void _ensureRowGroups(void Function() callback) {
     assert(enabledRowGroups);
 
@@ -565,20 +529,13 @@ mixin RowGroupState implements IPlutoGridState {
     }
 
     for (final rowGroup in expandedRows) {
-      final List<PlutoRow> addRows = [];
-
-      addExpandedChildren(PlutoRow row) {
-        if (row.type.group.expanded) {
-          for (final child in row.type.group.children) {
-            addRows.add(child);
-            if (child.type.isGroup && child.type.group.expanded) {
-              addExpandedChildren(child);
-            }
-          }
-        }
-      }
-
-      addExpandedChildren(rowGroup);
+      final Iterable<PlutoRow> addRows = _iterateWithFilter(
+        rowGroup.type.group.children,
+        (r) => true,
+        (r) => r.type.isGroup && r.type.group.expanded
+            ? r.type.group.children.iterator
+            : null,
+      );
 
       final idx = refRows.filterOrOriginalList.indexOf(rowGroup);
 
@@ -639,6 +596,68 @@ mixin RowGroupState implements IPlutoGridState {
 
     if (isPaginated) {
       resetPage(resetCurrentState: true, notify: false);
+    }
+  }
+
+  Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
+    for (final row in _iterateWithFilter(rows, (e) => !e.type.isGroup)) {
+      yield row;
+    }
+  }
+
+  Iterable<PlutoRow> _iterateRowGroup(Iterable<PlutoRow> rows) sync* {
+    for (final row in _iterateWithFilter(rows, (e) => e.type.isGroup)) {
+      yield row;
+    }
+  }
+
+  Iterable<PlutoRow> _iterateRowAndGroup(Iterable<PlutoRow> rows) sync* {
+    for (final row in _iterateWithFilter(rows)) {
+      yield row;
+    }
+  }
+
+  Iterable<PlutoRow> _iterateWithFilter(
+    Iterable<PlutoRow> rows, [
+    bool Function(PlutoRow)? filter,
+    Iterator<PlutoRow>? Function(PlutoRow)? childrenFilter,
+  ]) sync* {
+    List<Iterator<PlutoRow>> stack = [];
+    Iterator<PlutoRow>? currentIter = rows.iterator;
+
+    Iterator<PlutoRow>? defaultChildrenFilter(PlutoRow row) {
+      return row.type.isGroup
+          ? row.type.group.children.originalList.iterator
+          : null;
+    }
+
+    final filterChildren = childrenFilter ?? defaultChildrenFilter;
+
+    while (currentIter != null || stack.isNotEmpty) {
+      bool hasChildren = false;
+      if (currentIter != null) {
+        while (currentIter!.moveNext()) {
+          if (filter == null || filter(currentIter.current)) {
+            yield currentIter.current;
+          }
+
+          Iterator<PlutoRow>? children = filterChildren(currentIter.current);
+
+          if (children != null) {
+            stack.add(currentIter);
+            currentIter = children;
+            hasChildren = true;
+            break;
+          }
+        }
+      }
+
+      if (!hasChildren) {
+        currentIter = stack.lastOrNull;
+        if (currentIter != null) {
+          stack.removeLast();
+        }
+      }
     }
   }
 }

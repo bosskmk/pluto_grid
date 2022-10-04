@@ -71,15 +71,16 @@ void main() {
       setUp(() {
         children = FilteredList(
           initialList: [
-            PlutoRow(cells: {}),
-            PlutoRow(cells: {}),
-            PlutoRow(cells: {}),
+            PlutoRow(cells: {}, sortIdx: 10),
+            PlutoRow(cells: {}, sortIdx: 11),
+            PlutoRow(cells: {}, sortIdx: 12),
           ],
         );
 
         groupedRow = PlutoRow(
           cells: {},
           type: PlutoRowType.group(children: children),
+          sortIdx: 0,
         );
 
         setParent(e) => e.setParent(groupedRow);
@@ -88,8 +89,8 @@ void main() {
 
         rows = [
           groupedRow,
-          PlutoRow(cells: {}),
-          PlutoRow(cells: {}),
+          PlutoRow(cells: {}, sortIdx: 1),
+          PlutoRow(cells: {}, sortIdx: 2),
         ];
 
         stateManager = createStateManager(columns: [], rows: rows);
@@ -104,7 +105,14 @@ void main() {
       });
 
       test('iterateRowAndGroup.length 는 6을 리턴해야 한다.', () {
-        expect(stateManager.iterateRowAndGroup.length, 6);
+        final rowAndGroup = stateManager.iterateRowAndGroup;
+        expect(rowAndGroup.length, 6);
+        expect(rowAndGroup.elementAt(0).sortIdx, 0);
+        expect(rowAndGroup.elementAt(1).sortIdx, 10);
+        expect(rowAndGroup.elementAt(2).sortIdx, 11);
+        expect(rowAndGroup.elementAt(3).sortIdx, 12);
+        expect(rowAndGroup.elementAt(4).sortIdx, 1);
+        expect(rowAndGroup.elementAt(5).sortIdx, 2);
       });
 
       test('iterateRow.length 는 5을 리턴해야 한다.', () {
