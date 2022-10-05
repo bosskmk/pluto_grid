@@ -48,8 +48,7 @@ class PlutoRowTypeGroup implements PlutoRowType {
   PlutoRowTypeGroup({
     required this.children,
     bool expanded = false,
-  })  : assert(children.isNotEmpty),
-        _expanded = expanded;
+  }) : _expanded = expanded;
 
   final FilteredList<PlutoRow> children;
 

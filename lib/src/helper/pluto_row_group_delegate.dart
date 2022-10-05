@@ -146,74 +146,87 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
   }) {
+    if (rows.isEmpty) return rows.toList();
     assert(visibleColumns.isNotEmpty);
 
-    final maxDepth = visibleColumns.length;
+    final List<PlutoRow> groups = [];
+    final List<List<PlutoRow>> groupStack = [];
+    final List<PlutoRow> parentStack = [];
+    final List<String> groupFields =
+        visibleColumns.map((e) => e.field).toList();
+    final List<String> groupKeyStack = [];
+    final maxDepth = groupFields.length;
+
+    List<PlutoRow>? currentGroups = groups;
+    PlutoRow? currentParent;
+    int depth = 0;
     int sortIdx = 0;
+    List<Iterator<MapEntry<String, List<PlutoRow>>>> stack = [];
+    Iterator<MapEntry<String, List<PlutoRow>>>? currentIter;
+    currentIter = groupBy<PlutoRow, String>(
+      rows,
+      (r) => r.cells[groupFields[depth]]!.value.toString(),
+    ).entries.iterator;
 
-    List<PlutoRow> toGroup({
-      required Iterable<PlutoRow> children,
-      required int depth,
-      String? previousKey,
-    }) {
-      final groupedColumn = visibleColumns[depth];
+    while (currentIter != null || stack.isNotEmpty) {
+      if (currentIter != null && depth < maxDepth && currentIter.moveNext()) {
+        groupKeyStack.add(currentIter.current.key);
+        final groupKeys = [
+          visibleColumns[depth].field,
+          groupKeyStack.join('_'),
+          'rowGroup',
+        ];
 
-      return groupBy<PlutoRow, String>(children, (row) {
-        return row.cells[visibleColumns[depth].field]!.value.toString();
-      }).entries.map(
-        (group) {
-          final groupKey =
-              previousKey == null ? group.key : '${previousKey}_${group.key}';
+        final row = _createRowGroup(
+          groupKeys: groupKeys,
+          sortIdx: ++sortIdx,
+          sampleRow: currentIter.current.value.first,
+        );
 
-          final Key key = ValueKey(
-            '${groupedColumn.field}_${groupKey}_rowGroup',
-          );
+        currentParent = parentStack.lastOrNull;
+        if (currentParent != null) row.setParent(currentParent);
 
-          final nextDepth = depth + 1;
+        parentStack.add(row);
+        currentGroups!.add(row);
+        stack.add(currentIter);
+        groupStack.add(currentGroups);
+        currentGroups = row.type.group.children;
 
-          final firstRow = group.value.first;
+        if (depth + 1 < maxDepth) {
+          currentIter = groupBy<PlutoRow, String>(
+            currentIter.current.value,
+            (r) => r.cells[groupFields[depth + 1]]!.value.toString(),
+          ).entries.iterator;
+        }
 
-          final cells = <String, PlutoCell>{};
+        ++depth;
+      } else {
+        --depth;
+        if (depth < 0) break;
 
-          final row = PlutoRow(
-            cells: cells,
-            key: ValueKey(key),
-            sortIdx: sortIdx++,
-            type: PlutoRowType.group(
-              children: FilteredList(
-                initialList: nextDepth < maxDepth
-                    ? toGroup(
-                        children: group.value,
-                        depth: nextDepth,
-                        previousKey: groupKey,
-                      ).toList()
-                    : _updateSortIdx(group.value),
-              ),
-            ),
-          );
+        groupKeyStack.removeLast();
+        currentParent = parentStack.lastOrNull;
+        if (currentParent != null) parentStack.removeLast();
+        currentIter = stack.lastOrNull;
+        if (currentIter != null) stack.removeLast();
 
-          for (var e in row.type.group.children) {
-            e.setParent(row);
+        if (depth + 1 == maxDepth) {
+          int sortIdx = 0;
+          for (final child in currentIter!.current.value) {
+            currentGroups!.add(child);
+            child.setParent(currentParent);
+            child.sortIdx = ++sortIdx;
           }
+        }
 
-          for (var e in firstRow.cells.entries) {
-            cells[e.key] = PlutoCell(
-              value: visibleColumns.firstWhereOrNull((c) => c.field == e.key) !=
-                      null
-                  ? e.value.value
-                  : null,
-              key: ValueKey('${key}_${e.key}_cell'),
-            )
-              ..setColumn(e.value.column)
-              ..setRow(row);
-          }
+        currentGroups = groupStack.lastOrNull;
+        if (currentGroups != null) groupStack.removeLast();
+      }
 
-          return row;
-        },
-      ).toList();
+      if (depth == 0) groupKeyStack.clear();
     }
 
-    return toGroup(children: rows, depth: 0);
+    return groups;
   }
 
   @override
@@ -270,13 +283,35 @@ class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
     return row.type.group.children.originalList.first.type.isGroup;
   }
 
-  List<PlutoRow> _updateSortIdx(List<PlutoRow> rows) {
-    int sortIdx = 0;
+  PlutoRow _createRowGroup({
+    required List<String> groupKeys,
+    required int sortIdx,
+    required PlutoRow sampleRow,
+  }) {
+    final cells = <String, PlutoCell>{};
 
-    for (final row in rows) {
-      row.sortIdx = sortIdx++;
+    final groupKey = groupKeys.join('_');
+
+    final row = PlutoRow(
+      key: ValueKey(groupKey),
+      cells: cells,
+      sortIdx: sortIdx,
+      type: PlutoRowType.group(
+        children: FilteredList(initialList: []),
+      ),
+    );
+
+    for (var e in sampleRow.cells.entries) {
+      cells[e.key] = PlutoCell(
+        value: visibleColumns.firstWhereOrNull((c) => c.field == e.key) != null
+            ? e.value.value
+            : null,
+        key: ValueKey('${groupKey}_${e.key}_cell'),
+      )
+        ..setColumn(e.value.column)
+        ..setRow(row);
     }
 
-    return rows;
+    return row;
   }
 }
