@@ -308,7 +308,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   ///
   /// ```dart
   /// PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows).then((initializedRows) {
-  ///   stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+  ///   stateManager.refRows.addAll(initializedRows);
   ///   stateManager.setPage(1, notify: false);
   ///   stateManager.notifyListeners();
   /// });

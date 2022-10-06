@@ -596,15 +596,15 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         stateManager.setRowChecked(PlutoRow(cells: {}), true);
 
         // then
-        verifyNever(listener.onChangeVoidNoParamListener());
+        verifyNever(listener.noParamReturnVoid());
       },
     );
 
@@ -625,9 +625,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final row = rows.first;
@@ -642,7 +642,7 @@ void main() {
           isTrue,
         );
 
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
   });
@@ -1424,9 +1424,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows.first.key;
@@ -1442,7 +1442,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[1].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1471,9 +1471,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows[2].key;
@@ -1489,7 +1489,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[1].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1518,9 +1518,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows.first.key;
@@ -1536,7 +1536,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[4].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1565,9 +1565,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         const offset = -10.0;
@@ -1579,7 +1579,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        verifyNever(listener.onChangeVoidNoParamListener());
+        verifyNever(listener.noParamReturnVoid());
       },
     );
 
@@ -1608,9 +1608,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         // header + row0 ~ row4 + 1
@@ -1623,7 +1623,7 @@ void main() {
 
         // then
         expect(stateManager.rows.length, 5);
-        verifyNever(listener.onChangeVoidNoParamListener());
+        verifyNever(listener.noParamReturnVoid());
       },
     );
 
@@ -1654,9 +1654,9 @@ void main() {
 
         stateManager.setGridGlobalOffset(const Offset(0.0, 0.0));
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows[1].key;
@@ -1672,7 +1672,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[0].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
   });
@@ -1695,9 +1695,9 @@ void main() {
           scroll: scroll,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows.first.key;
@@ -1710,7 +1710,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[1].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1731,9 +1731,9 @@ void main() {
           scroll: scroll,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows[2].key;
@@ -1746,7 +1746,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 5);
         expect(stateManager.rows[1].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1767,9 +1767,9 @@ void main() {
           scroll: scroll,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         final rowKey = rows[0].key;
@@ -1782,7 +1782,7 @@ void main() {
         // then
         expect(stateManager.rows.length, 2);
         expect(stateManager.rows[1].key, rowKey);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
   });
@@ -1804,9 +1804,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         stateManager.toggleAllRowChecked(true);
@@ -1814,7 +1814,7 @@ void main() {
         // then
         expect(
             stateManager.rows.where((element) => element.checked!).length, 10);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1834,9 +1834,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         stateManager.toggleAllRowChecked(false);
@@ -1844,7 +1844,7 @@ void main() {
         // then
         expect(
             stateManager.rows.where((element) => !element.checked!).length, 10);
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -1864,9 +1864,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         // when
         stateManager.toggleAllRowChecked(true, notify: false);
@@ -1874,7 +1874,7 @@ void main() {
         // then
         expect(
             stateManager.rows.where((element) => element.checked!).length, 10);
-        verifyNever(listener.onChangeVoidNoParamListener());
+        verifyNever(listener.noParamReturnVoid());
       },
     );
   });

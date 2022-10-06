@@ -207,9 +207,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
@@ -226,7 +226,7 @@ void main() {
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -248,9 +248,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
@@ -275,7 +275,7 @@ void main() {
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(4);
+        verify(listener.noParamReturnVoid()).called(4);
       },
     );
 
@@ -298,9 +298,9 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
@@ -329,7 +329,7 @@ void main() {
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
   });

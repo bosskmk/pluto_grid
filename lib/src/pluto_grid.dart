@@ -102,7 +102,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///   columns,
   ///   fetchedRows,
   /// ).then((value) {
-  ///   stateManager.refRows.addAll(FilteredList(initialList: value));
+  ///   stateManager.refRows.addAll(value);
   ///
   ///   /// In this example,
   ///   /// the loading screen is activated in the onLoaded callback when the grid is created.
@@ -1093,12 +1093,10 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
           break;
         case PlutoGridLoadingLevel.rows:
           loadingSize = Size(size.width, 3);
-
           positionChild(
             _StackName.loading,
             Offset(0, bodyRowsTopOffset),
           );
-
           break;
       }
 

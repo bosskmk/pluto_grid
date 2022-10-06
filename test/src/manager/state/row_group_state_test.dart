@@ -1295,6 +1295,81 @@ void main() {
         expect(GROUP_C_2_008.cells['column3']!.value, '008');
       });
     });
+
+    group('removeRows', () {
+      test('A 그룹의 001 을 삭제하면 A 그룹의 1 그룹과 함께 삭제 되어야 한다.', () {
+        /// A - 1 - 001
+        ///   - 2 - 002
+        /// B - 1 - 003, 004
+        ///   - 2 - 005
+        final A = stateManager.refRows[0];
+        final A_1 = A.type.group.children[0];
+        final A_1_001 = A_1.type.group.children[0];
+        expect(A_1_001.cells['column3']!.value, '001');
+
+        stateManager.removeRows([A_1_001]);
+
+        expect(stateManager.refRows[0], A);
+        expect(stateManager.refRows[0].type.group.children.length, 1);
+        expect(stateManager.refRows[0].type.group.children[0], isNot(A_1));
+
+        findRemovedRows(e) => e.key == A_1.key || e.key == A_1_001.key;
+        expect(
+          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          0,
+        );
+      });
+
+      test('B 그룹의 003 을 삭제하면 003 만 삭제 되어야 한다.', () {
+        /// A - 1 - 001
+        ///   - 2 - 002
+        /// B - 1 - 003, 004
+        ///   - 2 - 005
+        final B = stateManager.refRows[1];
+        final B_1 = B.type.group.children[0];
+        final B_1_003 = B_1.type.group.children[0];
+
+        expect(stateManager.iterateRowAndGroup.length, 11);
+
+        stateManager.removeRows([B_1_003]);
+
+        expect(stateManager.iterateRowAndGroup.length, 10);
+
+        expect(B_1.type.group.children.length, 1);
+        expect(B_1.type.group.children[0], isNot(B_1_003));
+        findRemovedRows(e) => e.key == B_1_003;
+        expect(
+          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          0,
+        );
+      });
+
+      test('B 그룹의 003, 004 을 삭제하면 B_1 과 함께 삭제 되어야 한다.', () {
+        /// A - 1 - 001
+        ///   - 2 - 002
+        /// B - 1 - 003, 004
+        ///   - 2 - 005
+        final B = stateManager.refRows[1];
+        final B_1 = B.type.group.children[0];
+        final B_1_003 = B_1.type.group.children[0];
+        final B_1_004 = B_1.type.group.children[1];
+
+        expect(B.type.group.children.length, 2);
+        expect(stateManager.iterateRowAndGroup.length, 11);
+
+        stateManager.removeRows([B_1_003, B_1_004]);
+
+        expect(B.type.group.children.length, 1);
+        expect(stateManager.iterateRowAndGroup.length, 8);
+        expect(B.type.group.children[0], isNot(B_1));
+        findRemovedRows(e) =>
+            e.key == B_1 || e.key == B_1_003 || e.key == B_1_004;
+        expect(
+          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          0,
+        );
+      });
+    });
   });
 
   /// G100

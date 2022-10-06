@@ -272,7 +272,7 @@ void main() {
   });
 
   group('setEditing', () {
-    MockOnChangeListener? mock;
+    MockMethods? mock;
     List<PlutoColumn> columns;
     List<PlutoRow> rows;
     late PlutoGridStateManager stateManager;
@@ -291,7 +291,7 @@ void main() {
         setCurrentCell = false,
         setIsEditing = false,
       }) {
-        mock = MockOnChangeListener();
+        mock = MockMethods();
 
         columns = [
           PlutoColumn(
@@ -313,7 +313,7 @@ void main() {
           layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
-        stateManager.addListener(mock!.onChangeVoidNoParamListener);
+        stateManager.addListener(mock!.noParamReturnVoid);
 
         if (setCurrentCell!) {
           stateManager.setCurrentCell(rows.first.cells['column'], 0);
@@ -346,7 +346,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock!.onChangeVoidNoParamListener());
+        verifyNever(mock!.noParamReturnVoid());
       },
     );
 
@@ -369,7 +369,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verify(mock!.onChangeVoidNoParamListener()).called(1);
+        verify(mock!.noParamReturnVoid()).called(1);
       },
     );
 
@@ -392,7 +392,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock!.onChangeVoidNoParamListener());
+        verifyNever(mock!.noParamReturnVoid());
       },
     );
 
@@ -415,7 +415,7 @@ void main() {
         stateManager.setEditing(true);
 
         // then
-        verifyNever(mock!.onChangeVoidNoParamListener());
+        verifyNever(mock!.noParamReturnVoid());
       },
     );
   });
@@ -431,7 +431,7 @@ void main() {
       'force 가 false(기본값) 일 때, canNotChangeCellValue 가 true 면'
       'onChanged 콜백이 호출 되지 않아야 한다.',
       () {
-        final mock = MockOnChangeListener();
+        final mock = MockMethods();
 
         PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
@@ -439,7 +439,7 @@ void main() {
           gridFocusNode: null,
           scroll: null,
           mode: PlutoGridMode.select,
-          onChangedEventCallback: mock.onChangeOneParamListener,
+          onChangedEventCallback: mock.oneParamReturnVoid,
         );
 
         final cell = PlutoCell(value: '');
@@ -463,7 +463,7 @@ void main() {
           // force: false,
         );
 
-        verifyNever(mock.onChangeOneParamListener(any));
+        verifyNever(mock.oneParamReturnVoid(any));
       },
     );
 
@@ -471,7 +471,7 @@ void main() {
       'force 가 true 일 때, canNotChangeCellValue 가 true 라도'
       'onChanged 콜백이 호출 되어야 한다.',
       () {
-        final mock = MockOnChangeListener();
+        final mock = MockMethods();
 
         PlutoGridStateManager stateManager = createStateManager(
           columns: columns,
@@ -479,7 +479,7 @@ void main() {
           gridFocusNode: null,
           scroll: null,
           mode: PlutoGridMode.select,
-          onChangedEventCallback: mock.onChangeOneParamListener,
+          onChangedEventCallback: mock.oneParamReturnVoid,
           layout: const BoxConstraints(maxHeight: 300, maxWidth: 50),
         );
 
@@ -504,7 +504,7 @@ void main() {
           force: true,
         );
 
-        verify(mock.onChangeOneParamListener(any)).called(1);
+        verify(mock.oneParamReturnVoid(any)).called(1);
       },
     );
   });

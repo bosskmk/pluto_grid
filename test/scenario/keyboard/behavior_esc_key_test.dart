@@ -17,10 +17,10 @@ void main() {
 
     PlutoGridStateManager? stateManager;
 
-    late MockOnChangeListener mock = MockOnChangeListener();
+    late MockMethods mock = MockMethods();
 
     setUp(() {
-      mock = MockOnChangeListener();
+      mock = MockMethods();
     });
 
     withTheCellSelected([PlutoGridMode mode = PlutoGridMode.normal]) {
@@ -43,7 +43,7 @@ void main() {
                     stateManager = event.stateManager;
                   },
                   mode: mode,
-                  onSelected: mock.onChangeOneParamListener,
+                  onSelected: mock.oneParamReturnVoid,
                 ),
               ),
             ),
@@ -59,7 +59,7 @@ void main() {
     withTheCellSelected(PlutoGridMode.select).test(
       '그리드가 Select 모드 라면 onSelected 이벤트가 발생 되어야 한다.',
       (tester) async {
-        verify(mock.onChangeOneParamListener(any)).called(1);
+        verify(mock.oneParamReturnVoid(any)).called(1);
 
         await tester.sendKeyEvent(LogicalKeyboardKey.escape);
       },

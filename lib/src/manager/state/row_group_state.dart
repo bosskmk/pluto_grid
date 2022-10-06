@@ -20,31 +20,65 @@ import 'package:pluto_grid/pluto_grid.dart';
  */
 
 abstract class IRowGroupState {
+  /// Whether to set [PlutoRowGroupDelegate] for row grouping.
+  ///
+  /// Returns true if [PlutoRowGroupDelegate] is set with [setRowGroup].
   bool get hasRowGroups;
 
+  /// If [PlutoRowGroupDelegate] is set for row grouping,
+  /// return the active status of the actual grouping function.
+  ///
+  /// If grouped by [PlutoRowGroupByColumnDelegate],
+  /// return false if there is no set group column
+  /// because the set group column is deleted or hidden.
   bool get enabledRowGroups;
 
+  /// Setting delegate for grouping rows.
+  ///
+  /// {@template row_group_state_rowGroupDelegate}
+  /// As a class that implements [PlutoRowGroupDelegate],
+  /// it defines functions necessary for row grouping.
+  ///
+  /// [PlutoRowGroupTreeDelegate] allows grouping of complex depths.
+  ///
+  /// [PlutoRowGroupByColumnDelegate] groups rows by column.
+  /// {@endtemplate}
   PlutoRowGroupDelegate? get rowGroupDelegate;
 
+  /// Returns the rows with the highest depth.
+  ///
+  /// The depth is determined by [PlutoRow.parent].
+  /// If [PlutoRow.parent] does not exist, the depth is the top level,
+  /// and it continues to explore this property to determine the depth of the depth.
   Iterable<PlutoRow> get iterateMainRowGroup;
 
+  /// Returns rows where [PlutoRow.type] is set to [PlutoRowType.group].
   Iterable<PlutoRow> get iterateRowGroup;
 
+  /// Returns rows where [PlutoRow.type] is [PlutoRowType.group] or [PlutoRowType.normal].
   Iterable<PlutoRow> get iterateRowAndGroup;
 
+  /// Returns rows where [PlutoRow.type] is not [PlutoRowType.group].
   Iterable<PlutoRow> get iterateRow;
 
+  /// Returns whether it is the top row or not.
+  ///
+  /// If [PlutoRow.parent] does not exist, it is the top row.
   bool isMainRow(PlutoRow row);
 
   bool isNotMainGroupedRow(PlutoRow row);
 
   bool isExpandedGroupedRow(PlutoRow row);
 
+  /// Set up a delegate for grouping rows.
+  ///
+  /// {@macro row_group_state_rowGroupDelegate}
   void setRowGroup(
     PlutoRowGroupDelegate? delegate, {
     bool notify = true,
   });
 
+  /// Collapse or expand the group row.
   void toggleExpandedRowGroup({
     required PlutoRow rowGroup,
     bool notify = true,

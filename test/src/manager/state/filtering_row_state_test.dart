@@ -13,7 +13,7 @@ void main() {
 
   late PlutoGridStateManager stateManager;
 
-  MockOnChangeListener listener;
+  MockMethods listener;
 
   setUp(() {
     columns = [
@@ -29,9 +29,9 @@ void main() {
       scroll: MockPlutoGridScrollController(),
     );
 
-    listener = MockOnChangeListener();
+    listener = MockMethods();
 
-    stateManager.addListener(listener.onChangeVoidNoParamListener);
+    stateManager.addListener(listener.noParamReturnVoid);
   });
 
   group('hasFilter', () {

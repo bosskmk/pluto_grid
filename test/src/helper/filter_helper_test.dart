@@ -591,13 +591,13 @@ void main() {
     });
 
     test('onChanged', () {
-      var mock = MockOnChangeListener();
+      var mock = MockMethods();
 
       var filterPopupState = FilterPopupState(
         context: MockBuildContext(),
         configuration: const PlutoGridConfiguration(),
         handleAddNewFilter: (_) {},
-        handleApplyFilter: mock.onChangeOneParamListener,
+        handleApplyFilter: mock.oneParamReturnVoid,
         columns: ColumnHelper.textColumn('column'),
         filterRows: [],
         focusFirstFilterValue: true,
@@ -605,7 +605,7 @@ void main() {
 
       filterPopupState.onChanged(PlutoGridOnChangedEvent());
 
-      verify(mock.onChangeOneParamListener(any)).called(1);
+      verify(mock.oneParamReturnVoid(any)).called(1);
     });
 
     test('onSelected', () {
@@ -638,7 +638,7 @@ void main() {
 
     group('stateListener', () {
       test('filterRows 가 변경되지 않았으면 handleApplyFilter 가 호출되지 않아야 한다.', () {
-        var mock = MockOnChangeListener();
+        var mock = MockMethods();
 
         var columns = ColumnHelper.textColumn('column');
 
@@ -648,7 +648,7 @@ void main() {
           context: MockBuildContext(),
           configuration: const PlutoGridConfiguration(),
           handleAddNewFilter: (_) {},
-          handleApplyFilter: mock.onChangeOneParamListener,
+          handleApplyFilter: mock.oneParamReturnVoid,
           columns: columns,
           filterRows: filterRows,
           focusFirstFilterValue: false,
@@ -664,11 +664,11 @@ void main() {
 
         filterPopupState.stateListener();
 
-        verifyNever(mock.onChangeOneParamListener(stateManager));
+        verifyNever(mock.oneParamReturnVoid(stateManager));
       });
 
       test('filterRows 가 변경 되었으면 handleApplyFilter 가 호출 되어야 한다.', () {
-        var mock = MockOnChangeListener();
+        var mock = MockMethods();
 
         var columns = ColumnHelper.textColumn('column');
 
@@ -676,7 +676,7 @@ void main() {
           context: MockBuildContext(),
           configuration: const PlutoGridConfiguration(),
           handleAddNewFilter: (_) {},
-          handleApplyFilter: mock.onChangeOneParamListener,
+          handleApplyFilter: mock.oneParamReturnVoid,
           columns: columns,
           filterRows: [],
           focusFirstFilterValue: false,
@@ -692,7 +692,7 @@ void main() {
 
         filterPopupState.stateListener();
 
-        verify(mock.onChangeOneParamListener(stateManager)).called(1);
+        verify(mock.oneParamReturnVoid(stateManager)).called(1);
       });
     });
 
@@ -784,14 +784,14 @@ void main() {
       (tester) async {
         final stateManager = MockPlutoGridStateManager();
         const configuration = PlutoGridConfiguration();
-        final mockListener = MockOnChangeListener();
+        final mockListener = MockMethods();
 
         await tester.pumpWidget(MaterialApp(
           home: Material(
             child: PlutoGridFilterPopupHeader(
               stateManager: stateManager,
               configuration: configuration,
-              handleAddNewFilter: mockListener.onChangeOneParamListener,
+              handleAddNewFilter: mockListener.oneParamReturnVoid,
             ),
           ),
         ));
@@ -805,7 +805,7 @@ void main() {
           Icons.add,
         );
 
-        verify(mockListener.onChangeOneParamListener(any)).called(1);
+        verify(mockListener.oneParamReturnVoid(any)).called(1);
       },
     );
 
@@ -814,7 +814,7 @@ void main() {
       (tester) async {
         final stateManager = MockPlutoGridStateManager();
         const configuration = PlutoGridConfiguration();
-        final mockListener = MockOnChangeListener();
+        final mockListener = MockMethods();
 
         when(stateManager.currentSelectingRows).thenReturn([]);
 
@@ -823,7 +823,7 @@ void main() {
             child: PlutoGridFilterPopupHeader(
               stateManager: stateManager,
               configuration: configuration,
-              handleAddNewFilter: mockListener.onChangeOneParamListener,
+              handleAddNewFilter: mockListener.oneParamReturnVoid,
             ),
           ),
         ));
@@ -846,7 +846,7 @@ void main() {
       (tester) async {
         final stateManager = MockPlutoGridStateManager();
         const configuration = PlutoGridConfiguration();
-        final mockListener = MockOnChangeListener();
+        final mockListener = MockMethods();
 
         final dummyRow = PlutoRow(cells: {'test': PlutoCell(value: '')});
 
@@ -857,7 +857,7 @@ void main() {
             child: PlutoGridFilterPopupHeader(
               stateManager: stateManager,
               configuration: configuration,
-              handleAddNewFilter: mockListener.onChangeOneParamListener,
+              handleAddNewFilter: mockListener.oneParamReturnVoid,
             ),
           ),
         ));
