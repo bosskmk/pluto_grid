@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 enum PlutoRowGroupDelegateType {
@@ -12,11 +13,15 @@ enum PlutoRowGroupDelegateType {
 }
 
 abstract class PlutoRowGroupDelegate {
+  final countFormat = NumberFormat.compact();
+
   PlutoRowGroupDelegateType get type;
 
   bool get enabled;
 
   bool get showCount;
+
+  bool get enableCompactCount;
 
   bool isEditableCell(PlutoCell cell);
 
@@ -34,9 +39,13 @@ abstract class PlutoRowGroupDelegate {
     required FilteredList<PlutoRow> rows,
     required FilteredListFilter<PlutoRow>? filter,
   });
+
+  String compactNumber(num count) {
+    return countFormat.format(count);
+  }
 }
 
-class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
+class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
   final int? Function(PlutoColumn column) resolveColumnDepth;
 
   final bool Function(PlutoCell cell) showText;
@@ -44,10 +53,14 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   @override
   final bool showCount;
 
+  @override
+  final bool enableCompactCount;
+
   PlutoRowGroupTreeDelegate({
     required this.resolveColumnDepth,
     required this.showText,
     this.showCount = true,
+    this.enableCompactCount = true,
   });
 
   @override
@@ -114,15 +127,19 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
   }
 }
 
-class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
+class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
   final List<PlutoColumn> columns;
 
   @override
   final bool showCount;
 
+  @override
+  final bool enableCompactCount;
+
   PlutoRowGroupByColumnDelegate({
     required this.columns,
     this.showCount = true,
+    this.enableCompactCount = true,
   });
 
   @override

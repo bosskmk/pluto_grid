@@ -52,6 +52,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     //   'CheckboxAllSelectionWidget',
     // ];
 
+    // PlutoGrid.setDefaultLocale('ko');
+    // PlutoGrid.initializeDateFormat();
+
     /// Test A
     if (test.isA) {
       columns.addAll(testColumnsA);

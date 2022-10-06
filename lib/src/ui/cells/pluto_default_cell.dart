@@ -52,7 +52,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   bool get _isExpandableCell =>
       stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
 
-  bool get _isEmptyGroup => _groupCount == 0;
+  bool get _isEmptyGroup => widget.row.type.group.children.isEmpty;
 
   bool get _showGroupCount =>
       stateManager.enabledRowGroups &&
@@ -60,7 +60,12 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       widget.row.type.isGroup &&
       stateManager.rowGroupDelegate!.showCount;
 
-  int get _groupCount => widget.row.type.group.children.length;
+  String get _groupCount => _compactCount
+      ? stateManager.rowGroupDelegate!
+          .compactNumber(widget.row.type.group.children.length)
+      : widget.row.type.group.children.length.toString();
+
+  bool get _compactCount => stateManager.rowGroupDelegate!.enableCompactCount;
 
   @override
   void initState() {
