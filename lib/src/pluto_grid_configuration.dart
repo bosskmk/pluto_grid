@@ -161,6 +161,7 @@ class PlutoGridStyleConfig {
     this.columnDescendingIcon,
     this.rowGroupExpandedIcon = Icons.expand_less,
     this.rowGroupCollapsedIcon = Icons.expand_more,
+    this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -212,6 +213,7 @@ class PlutoGridStyleConfig {
     this.columnDescendingIcon,
     this.rowGroupExpandedIcon = Icons.expand_less,
     this.rowGroupCollapsedIcon = Icons.expand_more,
+    this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -352,6 +354,9 @@ class PlutoGridStyleConfig {
   /// Icon when RowGroup is collapsed.
   final IconData rowGroupCollapsedIcon;
 
+  /// Icon when RowGroup is empty.
+  final IconData rowGroupEmptyIcon;
+
   /// Apply the border radius of [PlutoGrid].
   final BorderRadiusGeometry gridBorderRadius;
 
@@ -397,6 +402,7 @@ class PlutoGridStyleConfig {
     PlutoOptional<Icon?>? columnDescendingIcon,
     IconData? rowGroupExpandedIcon,
     IconData? rowGroupCollapsedIcon,
+    IconData? rowGroupEmptyIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
   }) {
@@ -458,6 +464,7 @@ class PlutoGridStyleConfig {
       rowGroupExpandedIcon: rowGroupExpandedIcon ?? this.rowGroupExpandedIcon,
       rowGroupCollapsedIcon:
           rowGroupCollapsedIcon ?? this.rowGroupCollapsedIcon,
+      rowGroupEmptyIcon: rowGroupEmptyIcon ?? this.rowGroupEmptyIcon,
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,

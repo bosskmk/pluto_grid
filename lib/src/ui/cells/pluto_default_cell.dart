@@ -46,8 +46,21 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       return false;
     }
 
-    return stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
+    return _isExpandableCell;
   }
+
+  bool get _isExpandableCell =>
+      stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
+
+  bool get _isEmptyGroup => _groupCount == 0;
+
+  bool get _showGroupCount =>
+      stateManager.enabledRowGroups &&
+      _isExpandableCell &&
+      widget.row.type.isGroup &&
+      stateManager.rowGroupDelegate!.showCount;
+
+  int get _groupCount => widget.row.type.group.children.length;
 
   @override
   void initState() {
@@ -119,23 +132,35 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             rowIdx: widget.rowIdx,
             stateManager: stateManager,
           ),
-        Expanded(
-          child: cellWidget,
-        ),
+        Expanded(child: cellWidget),
+        if (_showGroupCount)
+          Text(
+            '($_groupCount)',
+            style: stateManager.configuration.style.cellTextStyle.copyWith(
+              decoration: TextDecoration.none,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
         if (_canExpand)
           IconButton(
-            onPressed: _handleToggleExpandedRowGroup,
-            icon: widget.row.type.group.expanded
+            onPressed: _isEmptyGroup ? null : _handleToggleExpandedRowGroup,
+            icon: _isEmptyGroup
                 ? Icon(
-                    style.rowGroupExpandedIcon,
-                    size: style.iconSize,
+                    style.rowGroupEmptyIcon,
+                    size: style.iconSize / 2,
                     color: style.iconColor,
                   )
-                : Icon(
-                    style.rowGroupCollapsedIcon,
-                    size: style.iconSize,
-                    color: style.iconColor,
-                  ),
+                : widget.row.type.group.expanded
+                    ? Icon(
+                        style.rowGroupExpandedIcon,
+                        size: style.iconSize,
+                        color: style.iconColor,
+                      )
+                    : Icon(
+                        style.rowGroupCollapsedIcon,
+                        size: style.iconSize,
+                        color: style.iconColor,
+                      ),
           ),
       ],
     );

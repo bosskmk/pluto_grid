@@ -16,6 +16,8 @@ abstract class PlutoRowGroupDelegate {
 
   bool get enabled;
 
+  bool get showCount;
+
   bool isEditableCell(PlutoCell cell);
 
   bool isExpandableCell(PlutoCell cell);
@@ -39,9 +41,13 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
 
   final bool Function(PlutoCell cell) showText;
 
+  @override
+  final bool showCount;
+
   PlutoRowGroupTreeDelegate({
     required this.resolveColumnDepth,
     required this.showText,
+    this.showCount = true,
   });
 
   @override
@@ -111,8 +117,12 @@ class PlutoRowGroupTreeDelegate implements PlutoRowGroupDelegate {
 class PlutoRowGroupByColumnDelegate implements PlutoRowGroupDelegate {
   final List<PlutoColumn> columns;
 
+  @override
+  final bool showCount;
+
   PlutoRowGroupByColumnDelegate({
     required this.columns,
+    this.showCount = true,
   });
 
   @override

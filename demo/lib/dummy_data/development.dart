@@ -155,27 +155,60 @@ class DummyData {
     required List<PlutoColumn> columns,
     int count = 100,
     int? depth,
+    List<int>? childCount,
   }) {
-    PlutoRowType? generateType(int currentDepth, int maxDepth) {
-      PlutoRowType? type;
+    assert(depth == null || depth >= 0);
+    assert(childCount == null || childCount.length == depth);
 
-      if (currentDepth < maxDepth) {
-        final childRows = <PlutoRow>[];
+    const defaultRandomDepth = 5;
+    const defaultRandomChildCount = 10;
 
-        for (final _ in List.generate(10, (index) => index)) {
-          childRows.add(
-            PlutoRow(
+    PlutoRowType? generateType(int maxDepth, List<int> countOfChildren) {
+      if (maxDepth < 1) return null;
+
+      final PlutoRowType type = PlutoRowType.group(
+        children: FilteredList(
+          initialList: [],
+        ),
+      );
+      List<PlutoRow>? currentChildren = type.group.children;
+      List<List<PlutoRow>> childrenStack = [];
+      List<List<PlutoRow>> childrenStackTemp = [];
+      int currentDepth = 0;
+      bool next = true;
+
+      while (currentDepth < maxDepth || currentChildren != null) {
+        bool isMax = currentDepth + 1 == maxDepth;
+        next = childrenStack.isEmpty;
+
+        if (currentChildren != null) {
+          for (final _
+              in List.generate(countOfChildren[currentDepth], (i) => i)) {
+            final children = <PlutoRow>[];
+            currentChildren.add(PlutoRow(
               cells: _cellsByColumn(columns),
-              type: generateType(currentDepth + 1, maxDepth),
-            ),
-          );
+              type: isMax
+                  ? null
+                  : PlutoRowType.group(
+                      children: FilteredList(
+                        initialList: children,
+                      ),
+                    ),
+            ));
+
+            if (!isMax) childrenStackTemp.add(children);
+          }
         }
 
-        type = PlutoRowType.group(
-          children: FilteredList(
-            initialList: childRows,
-          ),
-        );
+        if (next) {
+          childrenStack = [...childrenStackTemp];
+          childrenStackTemp = [];
+        }
+
+        currentChildren = childrenStack.isNotEmpty ? childrenStack.last : null;
+        if (currentChildren != null) childrenStack.removeLast();
+
+        if (next) ++currentDepth;
       }
 
       return type;
@@ -186,9 +219,23 @@ class DummyData {
     for (final _ in List.generate(count, (index) => index)) {
       PlutoRowType? type;
 
-      final depthOrRandom = depth ?? faker.randomGenerator.integer(5, min: 0);
+      final depthOrRandom = depth ??
+          faker.randomGenerator.integer(
+            defaultRandomDepth,
+            min: 0,
+          );
 
-      type = generateType(0, depthOrRandom);
+      final countOfChildren = childCount ??
+          List.generate(depthOrRandom, (index) {
+            return faker.randomGenerator.integer(
+              defaultRandomChildCount,
+              min: 0,
+            );
+          });
+
+      type = depthOrRandom == 0
+          ? null
+          : generateType(depthOrRandom, countOfChildren);
 
       rows.add(
         PlutoRow(

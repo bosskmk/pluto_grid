@@ -426,14 +426,18 @@ mixin RowGroupState implements IPlutoGridState {
 
     assert(enabledRowGroups);
 
+    bool removeEmptyGroup(PlutoRow row) =>
+        rowGroupDelegate!.type.isByColumn &&
+        row.type.group.children.originalList.isEmpty;
+
     _ensureRowGroups(() {
       bool removeAll(PlutoRow row) {
         if (row.type.isGroup) {
           row.type.group.children.removeWhereFromOriginal(removeAll);
-          if (row.type.group.children.originalList.isEmpty) {
-            return true;
-          }
+
+          if (removeEmptyGroup(row)) return true;
         }
+
         return keys.contains(row.key);
       }
 

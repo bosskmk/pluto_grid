@@ -125,7 +125,8 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       rows.addAll(DummyData.treeRowsByColumn(
         columns: columns,
         count: 100,
-        // depth: 3,
+        depth: 3,
+        // childCount: [1, 1, 1],
       ));
       print(DateTime.now());
       rowGroupDelegate = PlutoRowGroupTreeDelegate(
