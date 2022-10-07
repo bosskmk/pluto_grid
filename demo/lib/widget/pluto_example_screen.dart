@@ -56,35 +56,37 @@ class PlutoExampleScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('$title - PlutoGrid'),
       ),
-      body: LayoutBuilder(
-        builder: (ctx, size) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Container(
-              width: size.maxWidth,
-              height: size.maxHeight,
-              constraints: const BoxConstraints(
-                minHeight: 750,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (ctx, size) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
+                width: size.maxWidth,
+                height: size.maxHeight,
+                constraints: const BoxConstraints(
+                  minHeight: 750,
+                ),
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  children: [
+                    PlutoExpansionTile(
+                      title: topTitle!,
+                      buttons: topButtons,
+                      children: topContents,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: body!,
+                    ),
+                  ],
+                ),
               ),
-              padding: const EdgeInsets.all(30),
-              child: Column(
-                children: [
-                  PlutoExpansionTile(
-                    title: topTitle!,
-                    buttons: topButtons,
-                    children: topContents,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: body!,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
