@@ -525,11 +525,7 @@ mixin PlutoColumnTypeWithNumberFormat {
   }
 
   int compare(dynamic a, dynamic b) {
-    return _compareWithNull(
-      a,
-      b,
-      () => toNumber(a.toString()).compareTo(toNumber(b.toString())),
-    );
+    return _compareWithNull(a, b, () => a.compareTo(b));
   }
 
   dynamic makeCompareValue(dynamic v) {

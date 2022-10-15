@@ -158,7 +158,9 @@ class PlutoGridDatePicker {
         for (var entry in rows[i].cells.entries) {
           if (rows[i].cells[entry.key]!.value == initDateString) {
             datePickerStateManager.setCurrentCell(
-                datePickerStateManager.refRows[i].cells[entry.key], i);
+              datePickerStateManager.refRows[i].cells[entry.key],
+              i,
+            );
             break;
           }
         }
@@ -434,9 +436,9 @@ abstract class _DateCellHeaderStateWithChange
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll.horizontal!.addAndGet();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -447,7 +449,7 @@ abstract class _DateCellHeaderStateWithChange
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _currentCell = update<PlutoCell?>(
       _currentCell,
       stateManager.currentCell,

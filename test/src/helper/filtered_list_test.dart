@@ -602,4 +602,66 @@ void main() {
       },
     );
   });
+
+  group('pagination and insertAll', () {
+    late List<int> originalList;
+
+    late FilteredList<int> list;
+
+    setUp(() {
+      originalList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+      list = FilteredList(initialList: originalList);
+    });
+
+    test('0, 3 으로 필터링 한 후 3 다음에 [31, 32] 가 insertAll 되어야 한다.', () {
+      list.setFilterRange(FilteredListRange(0, 3));
+
+      expect(list, [1, 2, 3]);
+
+      list.insertAll(3, [31, 32]);
+
+      expect(list.originalList, [1, 2, 3, 31, 32, 4, 5, 6, 7, 8, 9]);
+    });
+
+    test('0, 3 으로 필터링 한 후 1 앞에 [31, 32] 가 insertAll 되어야 한다.', () {
+      list.setFilterRange(FilteredListRange(0, 3));
+
+      expect(list, [1, 2, 3]);
+
+      list.insertAll(0, [31, 32]);
+
+      expect(list.originalList, [31, 32, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
+    test('7, 9 으로 필터링 한 후 9 다음에 [91, 92] 가 insertAll 되어야 한다.', () {
+      list.setFilterRange(FilteredListRange(7, 9));
+
+      expect(list, [8, 9]);
+
+      list.insertAll(2, [91, 92]);
+
+      expect(list.originalList, [1, 2, 3, 4, 5, 6, 7, 8, 9, 91, 92]);
+    });
+
+    test('7, 9 으로 필터링 한 후 8 다음에 [91, 92] 가 insertAll 되어야 한다.', () {
+      list.setFilterRange(FilteredListRange(7, 9));
+
+      expect(list, [8, 9]);
+
+      list.insertAll(1, [91, 92]);
+
+      expect(list.originalList, [1, 2, 3, 4, 5, 6, 7, 8, 91, 92, 9]);
+    });
+
+    test('8, 10 으로 필터링 한 후 8 앞에 [91, 92] 가 insertAll 되어야 한다.', () {
+      list.setFilterRange(FilteredListRange(7, 9));
+
+      expect(list, [8, 9]);
+
+      list.insertAll(0, [91, 92]);
+
+      expect(list.originalList, [1, 2, 3, 4, 5, 6, 7, 91, 92, 8, 9]);
+    });
+  });
 }

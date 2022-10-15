@@ -318,6 +318,8 @@ class FilterPopupState {
   /// Height of filter popup
   final double height;
 
+  final void Function()? onClosed;
+
   FilterPopupState({
     required this.context,
     required this.configuration,
@@ -328,6 +330,7 @@ class FilterPopupState {
     required this.focusFirstFilterValue,
     this.width = 600,
     this.height = 450,
+    this.onClosed,
   })  : assert(columns.isNotEmpty),
         _previousFilterRows = [...filterRows];
 
@@ -364,6 +367,10 @@ class FilterPopupState {
 
   void onSelected(PlutoGridOnSelectedEvent e) {
     _stateManager!.removeListener(stateListener);
+
+    if (onClosed != null) {
+      onClosed!();
+    }
   }
 
   void stateListener() {
@@ -471,7 +478,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
 
   void handleClearButton() {
     if (stateManager!.rows.isEmpty) {
-      Navigator.of(stateManager!.gridFocusNode!.context!).pop();
+      Navigator.of(stateManager!.gridFocusNode.context!).pop();
     } else {
       stateManager!.removeRows(stateManager!.rows);
     }

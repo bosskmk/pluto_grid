@@ -41,7 +41,7 @@ class _AddRowsAsynchronouslyScreenState
         columns,
         fetchedRows,
       ).then((value) {
-        stateManager.refRows.addAll(FilteredList(initialList: value));
+        stateManager.refRows.addAll(value);
 
         /// In this example,
         /// the loading screen is activated in the onLoaded callback when the grid is created.

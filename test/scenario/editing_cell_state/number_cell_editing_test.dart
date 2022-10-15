@@ -92,12 +92,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 12345.11)}),
       ];
 
-      final mock = MockOnChangeListener();
+      final mock = MockMethods();
 
       await tester.pumpWidget(buildGrid(
         columns: columns,
         rows: rows,
-        onChanged: mock.onChangeOneParamListener,
+        onChanged: mock.oneParamReturnVoid,
       ));
 
       final cellWidget = find.text('12,345.01');
@@ -111,7 +111,7 @@ void main() {
       await tester.enterText(find.text('12345.01'), '12345.01');
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verifyNever(mock.onChangeOneParamListener(any));
+      verifyNever(mock.oneParamReturnVoid(any));
       expect(stateManager.rows.first.cells['column']?.value, 12345.01);
     });
 
@@ -130,12 +130,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 12345.11)}),
       ];
 
-      final mock = MockOnChangeListener();
+      final mock = MockMethods();
 
       await tester.pumpWidget(buildGrid(
         columns: columns,
         rows: rows,
-        onChanged: mock.onChangeOneParamListener,
+        onChanged: mock.oneParamReturnVoid,
       ));
 
       final cellWidget = find.text('12,345.01');
@@ -149,7 +149,7 @@ void main() {
       await tester.enterText(find.text('12345.01'), '12345.99');
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verify(mock.onChangeOneParamListener(any)).called(1);
+      verify(mock.oneParamReturnVoid(any)).called(1);
       expect(stateManager.rows.first.cells['column']?.value, 12345.99);
     });
   });
@@ -222,12 +222,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 12345.11)}),
       ];
 
-      final mock = MockOnChangeListener();
+      final mock = MockMethods();
 
       await tester.pumpWidget(buildGrid(
         columns: columns,
         rows: rows,
-        onChanged: mock.onChangeOneParamListener,
+        onChanged: mock.oneParamReturnVoid,
       ));
 
       final cellWidget = find.text('12.345,01');
@@ -241,7 +241,7 @@ void main() {
       await tester.enterText(find.text('12345,01'), '12345,01');
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verifyNever(mock.onChangeOneParamListener(any));
+      verifyNever(mock.oneParamReturnVoid(any));
       expect(stateManager.rows.first.cells['column']?.value, 12345.01);
     });
 
@@ -260,12 +260,12 @@ void main() {
         PlutoRow(cells: {'column': PlutoCell(value: 12345.11)}),
       ];
 
-      final mock = MockOnChangeListener();
+      final mock = MockMethods();
 
       await tester.pumpWidget(buildGrid(
         columns: columns,
         rows: rows,
-        onChanged: mock.onChangeOneParamListener,
+        onChanged: mock.oneParamReturnVoid,
       ));
 
       final cellWidget = find.text('12.345,01');
@@ -279,7 +279,7 @@ void main() {
       await tester.enterText(find.text('12345,01'), '12345,99');
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
 
-      verify(mock.onChangeOneParamListener(any)).called(1);
+      verify(mock.oneParamReturnVoid(any)).called(1);
       expect(stateManager.rows.first.cells['column']?.value, 12345.99);
     });
   });

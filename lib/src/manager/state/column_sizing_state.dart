@@ -50,7 +50,13 @@ abstract class IColumnSizingState {
   void setColumnSizeConfig(PlutoGridColumnSizeConfig config);
 }
 
+class _State {
+  bool? _activatedColumnsAutoSize;
+}
+
 mixin ColumnSizingState implements IPlutoGridState {
+  final _State _state = _State();
+
   @override
   PlutoGridColumnSizeConfig get columnSizeConfig => configuration.columnSize;
 
@@ -65,18 +71,16 @@ mixin ColumnSizingState implements IPlutoGridState {
 
   @override
   bool get activatedColumnsAutoSize =>
-      enableColumnsAutoSize && _activatedColumnsAutoSize != false;
-
-  bool? _activatedColumnsAutoSize;
+      enableColumnsAutoSize && _state._activatedColumnsAutoSize != false;
 
   @override
   void activateColumnsAutoSize() {
-    _activatedColumnsAutoSize = true;
+    _state._activatedColumnsAutoSize = true;
   }
 
   @override
   void deactivateColumnsAutoSize() {
-    _activatedColumnsAutoSize = false;
+    _state._activatedColumnsAutoSize = false;
   }
 
   @override

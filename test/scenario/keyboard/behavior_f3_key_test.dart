@@ -80,7 +80,7 @@ void main() {
 
         await tester.pump();
 
-        expect(stateManager.gridFocusNode!.hasFocus, true);
+        expect(stateManager.gridFocusNode.hasFocus, true);
 
         expect(find.byType(PlutoGridFilterPopupHeader), findsNothing);
       },
@@ -97,7 +97,7 @@ void main() {
 
         await tester.pump();
 
-        expect(stateManager.gridFocusNode!.hasFocus, true);
+        expect(stateManager.gridFocusNode.hasFocus, true);
 
         expect(find.byType(PlutoGridFilterPopupHeader), findsNothing);
       },

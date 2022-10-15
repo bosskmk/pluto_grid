@@ -30,11 +30,11 @@ class PlutoLeftFrozenColumnsFooterState
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _columns = update<List<PlutoColumn>>(
       _columns,
       _getColumns(),

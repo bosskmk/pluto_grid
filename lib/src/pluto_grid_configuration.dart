@@ -129,6 +129,7 @@ class PlutoGridStyleConfig {
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
+    this.cellColorGroupedRow,
     this.dragTargetColumnColor = const Color(0xFFDCF5FF),
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
@@ -158,6 +159,13 @@ class PlutoGridStyleConfig {
     this.columnResizeIcon = Icons.code_sharp,
     this.columnAscendingIcon,
     this.columnDescendingIcon,
+    this.rowGroupExpandedIcon = Icons.keyboard_arrow_down,
+    this.rowGroupCollapsedIcon = const IconData(
+      0xe355,
+      matchTextDirection: true,
+      fontFamily: 'MaterialIcons',
+    ),
+    this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -177,6 +185,7 @@ class PlutoGridStyleConfig {
     this.checkedColor = const Color(0x11202020),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
+    this.cellColorGroupedRow,
     this.dragTargetColumnColor = const Color(0xFF313131),
     this.iconColor = Colors.white38,
     this.disabledIconColor = Colors.white12,
@@ -206,6 +215,13 @@ class PlutoGridStyleConfig {
     this.columnResizeIcon = Icons.code_sharp,
     this.columnAscendingIcon,
     this.columnDescendingIcon,
+    this.rowGroupExpandedIcon = Icons.keyboard_arrow_down,
+    this.rowGroupCollapsedIcon = const IconData(
+      0xe355,
+      matchTextDirection: true,
+      fontFamily: 'MaterialIcons',
+    ),
+    this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
@@ -259,6 +275,9 @@ class PlutoGridStyleConfig {
 
   /// Cell color in read-only state
   final Color cellColorInReadOnlyState;
+
+  /// Background color of cells grouped by column.
+  final Color? cellColorGroupedRow;
 
   /// The background color of the column to be dragged.
   /// When moving a column by dragging it.
@@ -337,6 +356,15 @@ class PlutoGridStyleConfig {
   /// If no value is specified, the default icon is set.
   final Icon? columnDescendingIcon;
 
+  /// Icon when RowGroup is expanded.
+  final IconData rowGroupExpandedIcon;
+
+  /// Icon when RowGroup is collapsed.
+  final IconData rowGroupCollapsedIcon;
+
+  /// Icon when RowGroup is empty.
+  final IconData rowGroupEmptyIcon;
+
   /// Apply the border radius of [PlutoGrid].
   final BorderRadiusGeometry gridBorderRadius;
 
@@ -358,6 +386,7 @@ class PlutoGridStyleConfig {
     Color? checkedColor,
     Color? cellColorInEditState,
     Color? cellColorInReadOnlyState,
+    PlutoOptional<Color?>? cellColorGroupedRow,
     Color? dragTargetColumnColor,
     Color? iconColor,
     Color? disabledIconColor,
@@ -379,6 +408,9 @@ class PlutoGridStyleConfig {
     IconData? columnResizeIcon,
     PlutoOptional<Icon?>? columnAscendingIcon,
     PlutoOptional<Icon?>? columnDescendingIcon,
+    IconData? rowGroupExpandedIcon,
+    IconData? rowGroupCollapsedIcon,
+    IconData? rowGroupEmptyIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
   }) {
@@ -405,6 +437,9 @@ class PlutoGridStyleConfig {
       cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
       cellColorInReadOnlyState:
           cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
+      cellColorGroupedRow: cellColorGroupedRow == null
+          ? this.cellColorGroupedRow
+          : cellColorGroupedRow.value,
       dragTargetColumnColor:
           dragTargetColumnColor ?? this.dragTargetColumnColor,
       iconColor: iconColor ?? this.iconColor,
@@ -434,6 +469,10 @@ class PlutoGridStyleConfig {
       columnDescendingIcon: columnDescendingIcon == null
           ? this.columnDescendingIcon
           : columnDescendingIcon.value,
+      rowGroupExpandedIcon: rowGroupExpandedIcon ?? this.rowGroupExpandedIcon,
+      rowGroupCollapsedIcon:
+          rowGroupCollapsedIcon ?? this.rowGroupCollapsedIcon,
+      rowGroupEmptyIcon: rowGroupEmptyIcon ?? this.rowGroupEmptyIcon,
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,

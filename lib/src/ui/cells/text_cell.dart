@@ -54,7 +54,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     cellFocus = FocusNode(onKey: _handleOnKey);
 
-    widget.stateManager.textEditingController = _textController;
+    widget.stateManager.setTextEditingController(_textController);
 
     _textController.text = formattedValue;
 
@@ -89,7 +89,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     if (!widget.stateManager.isEditing ||
         widget.stateManager.currentColumn?.enableEditingMode != true) {
-      widget.stateManager.textEditingController = null;
+      widget.stateManager.setTextEditingController(null);
     }
 
     super.dispose();

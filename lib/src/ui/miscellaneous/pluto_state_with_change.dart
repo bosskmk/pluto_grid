@@ -18,6 +18,8 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     extends State<T> {
   late final StreamSubscription _subscription;
 
+  late final PlutoChangeNotifierFilter _filter;
+
   bool _initialized = false;
 
   bool _changed = false;
@@ -29,13 +31,20 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
   PlutoGridStateManager get stateManager;
 
-  void updateState() {}
+  void updateState(PlutoNotifierEvent event) {}
 
   @override
   void initState() {
     super.initState();
 
-    _subscription = stateManager.streamNotifier.stream.listen(_onChange);
+    if (PlutoChangeNotifierFilter.enabled) {
+      _filter = stateManager.resolveNotifierFilter<T>();
+      _subscription = stateManager.streamNotifier.stream
+          .where(_filter.any)
+          .listen(_onChange);
+    } else {
+      _subscription = stateManager.streamNotifier.stream.listen(_onChange);
+    }
 
     _initialized = true;
   }
@@ -64,12 +73,23 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     return newValue;
   }
 
+  void forceUpdate() {
+    _changed = true;
+  }
+
   void _onChange(PlutoNotifierEvent event) {
-    updateState();
+    bool rebuild = false;
+
+    updateState(event);
 
     if (mounted && _initialized && _changed && stateManager.maxWidth != null) {
+      rebuild = true;
       _changed = false;
       _statefulElement?.markNeedsBuild();
+    }
+
+    if (PlutoChangeNotifierFilter.printDebug) {
+      _filter.printNotifierOnChange(event, rebuild);
     }
   }
 }

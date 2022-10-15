@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IGridState {
-  GlobalKey? get gridKey;
+  GlobalKey get gridKey;
 
-  PlutoGridMode? get mode;
+  PlutoGridMode get mode;
 
   PlutoGridConfiguration get configuration;
 
@@ -36,34 +36,9 @@ abstract class IGridState {
 
   PlutoGridStyleConfig get style;
 
-  void setGridKey(GlobalKey key);
-
   void setKeyManager(PlutoGridKeyManager keyManager);
 
   void setEventManager(PlutoGridEventManager eventManager);
-
-  void setGridMode(PlutoGridMode mode);
-
-  void setOnChanged(PlutoOnChangedEventCallback onChanged);
-
-  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate);
-
-  void setCreateHeader(CreateHeaderCallBack createHeader);
-
-  void setCreateFooter(CreateFooterCallBack createFooter);
-
-  void setOnSelected(PlutoOnSelectedEventCallback onSelected);
-
-  void setOnSorted(PlutoOnSortedEventCallback? onSorted);
-
-  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked);
-
-  void setOnRowDoubleTap(PlutoOnRowDoubleTapEventCallback? onDoubleTap);
-
-  void setOnRowSecondaryTap(
-      PlutoOnRowSecondaryTapEventCallback? onSecondaryTap);
-
-  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved);
 
   void setConfiguration(
     PlutoGridConfiguration? configuration, {
@@ -79,83 +54,25 @@ abstract class IGridState {
   void forceUpdate();
 }
 
-mixin GridState implements IPlutoGridState {
-  @override
-  GlobalKey? get gridKey => _gridKey;
-
-  GlobalKey? _gridKey;
-
-  @override
-  PlutoGridMode? get mode => _mode;
-
-  PlutoGridMode? _mode;
-
-  @override
-  PlutoGridConfiguration get configuration => _configuration!;
-
+class _State {
   PlutoGridConfiguration? _configuration;
 
   PlutoGridKeyManager? _keyManager;
 
-  @override
-  PlutoGridKeyManager? get keyManager => _keyManager;
-
   PlutoGridEventManager? _eventManager;
+}
+
+mixin GridState implements IPlutoGridState {
+  final _State _state = _State();
 
   @override
-  PlutoGridEventManager? get eventManager => _eventManager;
+  PlutoGridConfiguration get configuration => _state._configuration!;
 
   @override
-  PlutoOnChangedEventCallback? get onChanged => _onChanged;
-
-  PlutoOnChangedEventCallback? _onChanged;
+  PlutoGridKeyManager? get keyManager => _state._keyManager;
 
   @override
-  PlutoOnSelectedEventCallback? get onSelected => _onSelected;
-
-  PlutoOnSelectedEventCallback? _onSelected;
-
-  @override
-  PlutoOnSortedEventCallback? get onSorted => _onSorted;
-
-  PlutoOnSortedEventCallback? _onSorted;
-
-  @override
-  PlutoOnRowCheckedEventCallback? get onRowChecked => _onRowChecked;
-
-  PlutoOnRowCheckedEventCallback? _onRowChecked;
-
-  @override
-  PlutoOnRowDoubleTapEventCallback? get onRowDoubleTap => _onRowDoubleTap;
-
-  PlutoOnRowDoubleTapEventCallback? _onRowDoubleTap;
-
-  @override
-  PlutoOnRowSecondaryTapEventCallback? get onRowSecondaryTap =>
-      _onRowSecondaryTap;
-
-  PlutoOnRowSecondaryTapEventCallback? _onRowSecondaryTap;
-
-  @override
-  PlutoOnRowsMovedEventCallback? get onRowsMoved => _onRowsMoved;
-
-  PlutoOnRowsMovedEventCallback? _onRowsMoved;
-
-  @override
-  PlutoColumnMenuDelegate get columnMenuDelegate => _columnMenuDelegate;
-
-  PlutoColumnMenuDelegate _columnMenuDelegate =
-      const PlutoDefaultColumnMenuDelegate();
-
-  @override
-  CreateHeaderCallBack? get createHeader => _createHeader;
-
-  CreateHeaderCallBack? _createHeader;
-
-  @override
-  CreateFooterCallBack? get createFooter => _createFooter;
-
-  CreateFooterCallBack? _createFooter;
+  PlutoGridEventManager? get eventManager => _state._eventManager;
 
   @override
   PlutoGridLocaleText get localeText => configuration.localeText;
@@ -165,72 +82,12 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {
-    _keyManager = keyManager;
+    _state._keyManager = keyManager;
   }
 
   @override
   void setEventManager(PlutoGridEventManager? eventManager) {
-    _eventManager = eventManager;
-  }
-
-  @override
-  void setGridMode(PlutoGridMode? mode) {
-    _mode = mode;
-  }
-
-  @override
-  void setOnChanged(PlutoOnChangedEventCallback? onChanged) {
-    _onChanged = onChanged;
-  }
-
-  @override
-  void setOnSelected(PlutoOnSelectedEventCallback? onSelected) {
-    _onSelected = onSelected;
-  }
-
-  @override
-  void setOnSorted(PlutoOnSortedEventCallback? onSorted) {
-    _onSorted = onSorted;
-  }
-
-  @override
-  void setOnRowChecked(PlutoOnRowCheckedEventCallback? onRowChecked) {
-    _onRowChecked = onRowChecked;
-  }
-
-  @override
-  void setOnRowDoubleTap(PlutoOnRowDoubleTapEventCallback? onRowDoubleTap) {
-    _onRowDoubleTap = onRowDoubleTap;
-  }
-
-  @override
-  void setOnRowSecondaryTap(
-      PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap) {
-    _onRowSecondaryTap = onRowSecondaryTap;
-  }
-
-  @override
-  void setOnRowsMoved(PlutoOnRowsMovedEventCallback? onRowsMoved) {
-    _onRowsMoved = onRowsMoved;
-  }
-
-  @override
-  void setColumnMenuDelegate(PlutoColumnMenuDelegate? columnMenuDelegate) {
-    if (columnMenuDelegate == null) {
-      return;
-    }
-
-    _columnMenuDelegate = columnMenuDelegate;
-  }
-
-  @override
-  void setCreateHeader(CreateHeaderCallBack? createHeader) {
-    _createHeader = createHeader;
-  }
-
-  @override
-  void setCreateFooter(CreateFooterCallBack? createFooter) {
-    _createFooter = createFooter;
+    _state._eventManager = eventManager;
   }
 
   @override
@@ -239,20 +96,15 @@ mixin GridState implements IPlutoGridState {
     bool updateLocale = true,
     bool applyColumnFilter = true,
   }) {
-    _configuration = configuration ?? const PlutoGridConfiguration();
+    _state._configuration = configuration ?? const PlutoGridConfiguration();
 
     if (updateLocale) {
-      _configuration!.updateLocale();
+      _state._configuration!.updateLocale();
     }
 
     if (applyColumnFilter) {
-      _configuration!.applyColumnFilter(refColumns);
+      _state._configuration!.applyColumnFilter(refColumns.originalList);
     }
-  }
-
-  @override
-  void setGridKey(GlobalKey key) {
-    _gridKey = key;
   }
 
   @override
@@ -261,15 +113,13 @@ mixin GridState implements IPlutoGridState {
 
     clearCurrentSelecting(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, resetCurrentState.hashCode);
   }
 
   @override
   void handleOnSelected() {
-    if (_mode.isSelect == true && _onSelected != null) {
-      _onSelected!(
+    if (mode.isSelect == true && onSelected != null) {
+      onSelected!(
         PlutoGridOnSelectedEvent(
           row: currentRow,
           rowIdx: currentRowIdx,
@@ -281,11 +131,11 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void forceUpdate() {
-    if (gridKey?.currentContext == null) {
+    if (gridKey.currentContext == null) {
       return;
     }
 
-    gridKey!.currentContext!
+    gridKey.currentContext!
         .findAncestorStateOfType<PlutoGridState>()!
         // ignore: invalid_use_of_protected_member
         .setState(() {});

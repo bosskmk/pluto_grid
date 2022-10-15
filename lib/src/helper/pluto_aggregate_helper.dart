@@ -4,61 +4,53 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoAggregateHelper {
   static num sum({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    num sum = 0;
-
     if (column.type is! PlutoColumnTypeWithNumberFormat ||
         !_hasColumnField(rows: rows, column: column)) {
-      return sum;
+      return 0;
     }
 
     final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
 
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
-      if (filter == null || filter(cell)) {
-        return p += cell.value!;
-      }
-      return p;
-    });
+    final Iterable<num> numbers = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
-    return numberColumn.toNumber(numberColumn.applyFormat(sum));
+    return numberColumn.toNumber(numberColumn.applyFormat(numbers.sum));
   }
 
   static num average({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
-    num sum = 0;
-
     if (column.type is! PlutoColumnTypeWithNumberFormat ||
         !_hasColumnField(rows: rows, column: column)) {
-      return sum;
+      return 0;
     }
 
-    int itemCount = 0;
+    final numberColumn = column.type as PlutoColumnTypeWithNumberFormat;
 
-    sum = rows.fold(0, (p, e) {
-      final cell = e.cells[column.field]!;
+    final foundItems = filter != null
+        ? rows.where((row) => filter(row.cells[column.field]!))
+        : rows;
 
-      if (filter == null || filter(cell)) {
-        ++itemCount;
-        return p += cell.value!;
-      }
+    final Iterable<num> numbers = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
-      return p;
-    });
-
-    return sum / itemCount;
+    return numberColumn.toNumber(numberColumn.applyFormat(numbers.average));
   }
 
   static num? min({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -71,14 +63,15 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    final Iterable<num> mapValues = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
     return mapValues.minOrNull;
   }
 
   static num? max({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -91,14 +84,15 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> mapValues =
-        foundItems.map((e) => e.cells[column.field]!.value);
+    final Iterable<num> mapValues = foundItems.map(
+      (e) => e.cells[column.field]!.value,
+    );
 
     return mapValues.maxOrNull;
   }
 
   static int count({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -114,7 +108,7 @@ class PlutoAggregateHelper {
   }
 
   static bool _hasColumnField({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
   }) {
     return rows.firstOrNull?.cells.containsKey(column.field) == true;

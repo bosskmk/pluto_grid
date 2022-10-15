@@ -35,9 +35,9 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.horizontal!.addAndGet();
+    _scroll = stateManager.scroll.horizontal!.addAndGet();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -48,7 +48,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _showColumnGroups = update<bool>(
       _showColumnGroups,
       stateManager.showColumnGroups,
@@ -60,12 +60,13 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
       compare: listEquals,
     );
 
-    if (changed && _showColumnGroups == true) {
-      _columnGroups = stateManager.separateLinkedGroup(
-        columnGroupList: stateManager.refColumnGroups!,
+    _columnGroups = update<List<PlutoColumnGroupPair>>(
+      _columnGroups,
+      stateManager.separateLinkedGroup(
+        columnGroupList: stateManager.refColumnGroups,
         columns: _columns,
-      );
-    }
+      ),
+    );
 
     _itemCount = update<int>(_itemCount, _getItemCount());
   }
@@ -90,7 +91,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
         stateManager: stateManager,
         columnGroup: e,
         depth: stateManager.columnGroupDepth(
-          stateManager.refColumnGroups!,
+          stateManager.refColumnGroups,
         ),
       ),
     );

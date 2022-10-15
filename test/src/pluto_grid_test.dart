@@ -682,7 +682,7 @@ void main() {
 
     testWidgets(
         'WHEN Row has sortIdx'
-        'THEN sortIdx is not changed', (WidgetTester tester) async {
+        'THEN sortIdx is reset.', (WidgetTester tester) async {
       // given
       final columns = [
         ...ColumnHelper.textColumn('header', count: 1),
@@ -716,11 +716,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // then
-      expect(stateManager!.rows[0].sortIdx, 5);
-      expect(stateManager!.rows[1].sortIdx, 6);
-      expect(stateManager!.rows[2].sortIdx, 7);
-      expect(stateManager!.rows[3].sortIdx, 8);
-      expect(stateManager!.rows[4].sortIdx, 9);
+      expect(stateManager!.rows[0].sortIdx, 0);
+      expect(stateManager!.rows[1].sortIdx, 1);
+      expect(stateManager!.rows[2].sortIdx, 2);
+      expect(stateManager!.rows[3].sortIdx, 3);
+      expect(stateManager!.rows[4].sortIdx, 4);
     });
   });
 

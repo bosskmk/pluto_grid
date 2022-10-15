@@ -91,7 +91,7 @@ class PlutoBaseRow extends StatelessWidget {
                 stateManager: stateManager,
                 columns: columns,
               ),
-              scrollController: stateManager.scroll!.bodyRowsHorizontal!,
+              scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
               textDirection: stateManager.textDirection,
               children: columns.map(_buildCell).toList(growable: false),
@@ -215,11 +215,11 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _decoration = update<BoxDecoration>(
       _decoration,
       _getBoxDecoration(),

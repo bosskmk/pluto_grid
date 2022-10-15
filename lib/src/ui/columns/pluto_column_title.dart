@@ -57,11 +57,11 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _sort = update<PlutoColumnSort>(
       _sort,
       widget.column.sort,
@@ -385,10 +385,7 @@ class _BuildColumnWidget extends StatelessWidget {
             child: Row(
               children: [
                 if (column.enableRowChecked)
-                  _CheckboxAllSelectionWidget(
-                    column: column,
-                    stateManager: stateManager,
-                  ),
+                  CheckboxAllSelectionWidget(stateManager: stateManager),
                 Expanded(
                   child: _ColumnTextWidget(
                     column: column,
@@ -406,24 +403,19 @@ class _BuildColumnWidget extends StatelessWidget {
   }
 }
 
-class _CheckboxAllSelectionWidget extends PlutoStatefulWidget {
+class CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  final PlutoColumn? column;
-
-  const _CheckboxAllSelectionWidget({
-    required this.stateManager,
-    this.column,
-    Key? key,
-  }) : super(key: key);
+  const CheckboxAllSelectionWidget({required this.stateManager, Key? key})
+      : super(key: key);
 
   @override
-  _CheckboxAllSelectionWidgetState createState() =>
-      _CheckboxAllSelectionWidgetState();
+  CheckboxAllSelectionWidgetState createState() =>
+      CheckboxAllSelectionWidgetState();
 }
 
-class _CheckboxAllSelectionWidgetState
-    extends PlutoStateWithChange<_CheckboxAllSelectionWidget> {
+class CheckboxAllSelectionWidgetState
+    extends PlutoStateWithChange<CheckboxAllSelectionWidget> {
   bool? _checked;
 
   @override
@@ -433,11 +425,11 @@ class _CheckboxAllSelectionWidgetState
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _checked = update<bool?>(
       _checked,
       stateManager.tristateCheckedRow,
@@ -451,9 +443,7 @@ class _CheckboxAllSelectionWidgetState
 
     changed ??= false;
 
-    if (_checked == null) {
-      changed = true;
-    }
+    if (_checked == null) changed = true;
 
     stateManager.toggleAllRowChecked(changed);
 
@@ -510,11 +500,11 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _isFilteredList = update<bool>(
       _isFilteredList,
       stateManager.isFilteredColumn(widget.column),

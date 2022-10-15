@@ -28,18 +28,22 @@ abstract class IFilteringRowState {
   });
 }
 
-mixin FilteringRowState implements IPlutoGridState {
-  @override
-  List<PlutoRow> get filterRows => _filterRows;
-
+class _State {
   List<PlutoRow> _filterRows = [];
+}
+
+mixin FilteringRowState implements IPlutoGridState {
+  final _State _state = _State();
+
+  @override
+  List<PlutoRow> get filterRows => _state._filterRows;
 
   @override
   bool get hasFilter => refRows.hasFilter;
 
   @override
   void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true}) {
-    for (final row in refRows.originalList) {
+    for (final row in iterateAllRowAndGroup) {
       row.setState(PlutoRowState.none);
     }
 
@@ -53,13 +57,15 @@ mixin FilteringRowState implements IPlutoGridState {
       };
     }
 
-    refRows.setFilter(savedFilter);
+    if (enabledRowGroups) {
+      setRowGroupFilter(savedFilter);
+    } else {
+      refRows.setFilter(savedFilter);
+    }
 
     resetCurrentState(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setFilter.hashCode);
   }
 
   @override
@@ -70,7 +76,7 @@ mixin FilteringRowState implements IPlutoGridState {
         refColumns.where((element) => element.enableFilterMenuItem).toList();
 
     setFilter(
-      FilterHelper.convertRowsToFilter(_filterRows, enabledFilterColumnFields),
+      FilterHelper.convertRowsToFilter(filterRows, enabledFilterColumnFields),
       notify: isPaginated ? false : notify,
     );
 
@@ -81,7 +87,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   void setFilterRows(List<PlutoRow> rows) {
-    _filterRows = rows
+    _state._filterRows = rows
         .where(
           (element) => element.cells[FilterHelper.filterFieldValue]!.value
               .toString()
@@ -92,7 +98,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   List<PlutoRow> filterRowsByField(String columnField) {
-    return _filterRows
+    return filterRows
         .where(
           (element) =>
               element.cells[FilterHelper.filterFieldColumn]!.value ==
@@ -103,7 +109,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   bool isFilteredColumn(PlutoColumn column) {
-    return hasFilter && FilterHelper.isFilteredColumn(column, _filterRows);
+    return hasFilter && FilterHelper.isFilteredColumn(column, filterRows);
   }
 
   @override
@@ -132,9 +138,10 @@ mixin FilteringRowState implements IPlutoGridState {
   void showFilterPopup(
     BuildContext context, {
     PlutoColumn? calledColumn,
+    void Function()? onClosed,
   }) {
     var shouldProvideDefaultFilterRow =
-        _filterRows.isEmpty && calledColumn != null;
+        filterRows.isEmpty && calledColumn != null;
 
     var rows = shouldProvideDefaultFilterRow
         ? [
@@ -145,7 +152,7 @@ mixin FilteringRowState implements IPlutoGridState {
               filterType: calledColumn.defaultFilter,
             ),
           ]
-        : _filterRows;
+        : filterRows;
 
     FilterHelper.filterPopup(
       FilterPopupState(
@@ -167,6 +174,7 @@ mixin FilteringRowState implements IPlutoGridState {
         columns: columns,
         filterRows: rows,
         focusFirstFilterValue: shouldProvideDefaultFilterRow,
+        onClosed: onClosed,
       ),
     );
   }
