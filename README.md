@@ -185,6 +185,7 @@ For other versions, contact the issue
 > develop packages that make it easy to develop admin pages or CMS with Flutter.
 * [PlutoGrid](https://github.com/bosskmk/pluto_grid)
 * [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
+* [PlutoLayout](https://github.com/bosskmk/pluto_layout)
 
 <br>
 
