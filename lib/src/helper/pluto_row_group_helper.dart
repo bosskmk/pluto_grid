@@ -1,7 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Helper class for grouping rows.
 class PlutoRowGroupHelper {
+  /// Traversing the group rows of [rows] according to the [filter] condition.
+  ///
+  /// If [childrenFilter] is passed, the traversal condition of child rows is applied.
+  ///
+  /// If [iterateAll] is true,
+  /// the filtering condition applied to the child row of each group is ignored and
+  /// Iterate through the entire row.
   static Iterable<PlutoRow> iterateWithFilter(
     Iterable<PlutoRow> rows, {
     bool Function(PlutoRow)? filter,
@@ -53,6 +61,7 @@ class PlutoRowGroupHelper {
     }
   }
 
+  /// Apply [filter] condition to all groups in [rows].
   static void applyFilter({
     required FilteredList<PlutoRow> rows,
     required FilteredListFilter<PlutoRow>? filter,

@@ -3,6 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// {@template pluto_row_group_delegate_type}
+/// Determines the grouping type of the row.
+///
+/// [tree] groups rows into an unformatted tree.
+///
+/// [byColumn] groups rows by a specified column.
+/// {@endtemplate}
 enum PlutoRowGroupDelegateType {
   tree,
   byColumn;
@@ -12,52 +19,109 @@ enum PlutoRowGroupDelegateType {
   bool get isByColumn => this == PlutoRowGroupDelegateType.byColumn;
 }
 
+/// Abstract class that defines a base interface for grouping rows.
+///
+/// [PlutoRowGroupTreeDelegate] or [PlutoRowGroupByColumnDelegate]
+/// class implements this abstract class.
 abstract class PlutoRowGroupDelegate {
   final countFormat = NumberFormat.compact();
 
+  /// {@macro pluto_row_group_delegate_type}
   PlutoRowGroupDelegateType get type;
 
+  /// {@template pluto_row_group_delegate_enabled}
+  /// Returns whether the grouping function is activated.
+  ///
+  /// It is enabled by default,
+  /// In the case of [PlutoRowGroupDelegateType.byColumn],
+  /// the column is hidden and temporarily deactivated when there is no column to group.
+  /// {@endtemplate}
   bool get enabled;
 
+  /// {@template pluto_row_group_delegate_showCount}
+  /// Decide whether to display the number of child rows in the cell
+  /// where the expand icon is displayed in the grouped state.
+  /// {@endtemplate}
   bool get showCount;
 
+  /// {@template pluto_row_group_delegate_enableCompactCount}
+  /// Decide whether to simply display the number of child rows when [showCount] is true.
+  ///
+  /// ex) 1,234,567 > 1.2M
+  /// {@endtemplate}
   bool get enableCompactCount;
 
+  /// {@template pluto_row_group_delegate_showFirstExpandableIon}
+  /// Decide whether to force the expand button to be displayed in the first cell.
+  /// {@endtemplate}
   bool get showFirstExpandableIcon;
 
+  /// {@template pluto_row_group_delegate_isEditableCell}
+  /// Determines whether the cell is editable.
+  /// {@endtemplate}
   bool isEditableCell(PlutoCell cell);
 
+  /// {@template pluto_row_group_delegate_isExpandableCell}
+  /// Decide whether to show the extended button.
+  /// {@endtemplate}
   bool isExpandableCell(PlutoCell cell);
 
+  /// {@template pluto_row_group_delegate_toGroup}
+  /// Handling for grouping rows.
+  /// {@endtemplate}
   List<PlutoRow> toGroup({required Iterable<PlutoRow> rows});
 
+  /// {@template pluto_row_group_delegate_sort}
+  /// Handle sorting of grouped rows.
+  /// {@endtemplate}
   void sort({
     required PlutoColumn column,
     required FilteredList<PlutoRow> rows,
     required int Function(PlutoRow, PlutoRow) compare,
   });
 
+  /// {@template pluto_row_group_delegate_filter}
+  /// Handle filtering of grouped rows.
+  /// {@endtemplate}
   void filter({
     required FilteredList<PlutoRow> rows,
     required FilteredListFilter<PlutoRow>? filter,
   });
 
+  /// {@template pluto_row_group_delegate_compactNumber}
+  /// Brief summary of numbers.
+  /// {@endtemplate}
   String compactNumber(num count) {
     return countFormat.format(count);
   }
 }
 
 class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
+  /// Determine the depth based on the cell column.
+  ///
+  /// ```dart
+  /// // Determine the depth according to the column order.
+  /// resolveColumnDepth: (column) => stateManager.columnIndex(column),
+  /// ```
   final int? Function(PlutoColumn column) resolveColumnDepth;
 
+  /// Decide whether to display the text in the cell.
+  ///
+  /// ```dart
+  /// // Display the text in all cells.
+  /// showText: (cell) => true,
+  /// ```
   final bool Function(PlutoCell cell) showText;
 
+  /// {@macro pluto_row_group_delegate_showFirstExpandableIon}
   @override
   final bool showFirstExpandableIcon;
 
+  /// {@macro pluto_row_group_delegate_showCount}
   @override
   final bool showCount;
 
+  /// {@macro pluto_row_group_delegate_enableCompactCount}
   @override
   final bool enableCompactCount;
 
@@ -69,15 +133,19 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
     this.enableCompactCount = true,
   });
 
+  /// {@macro pluto_row_group_delegate_type}
   @override
   PlutoRowGroupDelegateType get type => PlutoRowGroupDelegateType.tree;
 
+  /// {@macro pluto_row_group_delegate_enabled}
   @override
   bool get enabled => true;
 
+  /// {@macro pluto_row_group_delegate_isEditableCell}
   @override
   bool isEditableCell(PlutoCell cell) => showText(cell);
 
+  /// {@macro pluto_row_group_delegate_isExpandableCell}
   @override
   bool isExpandableCell(PlutoCell cell) {
     if (!cell.row.type.isGroup) return false;
@@ -86,6 +154,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
         resolveColumnDepth(cell.column) == checkDepth;
   }
 
+  /// {@macro pluto_row_group_delegate_toGroup}
   @override
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
@@ -105,6 +174,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
     return rows.toList();
   }
 
+  /// {@macro pluto_row_group_delegate_sort}
   @override
   void sort({
     required PlutoColumn column,
@@ -125,6 +195,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
     }
   }
 
+  /// {@macro pluto_row_group_delegate_filter}
   @override
   void filter({
     required FilteredList<PlutoRow> rows,
@@ -137,14 +208,18 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
 }
 
 class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
+  /// Column to group by.
   final List<PlutoColumn> columns;
 
+  /// {@macro pluto_row_group_delegate_showFirstExpandableIon}
   @override
   final bool showFirstExpandableIcon;
 
+  /// {@macro pluto_row_group_delegate_showCount}
   @override
   final bool showCount;
 
+  /// {@macro pluto_row_group_delegate_enableCompactCount}
   @override
   final bool enableCompactCount;
 
@@ -155,19 +230,24 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
     this.enableCompactCount = true,
   });
 
+  /// {@macro pluto_row_group_delegate_type}
   @override
   PlutoRowGroupDelegateType get type => PlutoRowGroupDelegateType.byColumn;
 
+  /// {@macro pluto_row_group_delegate_enabled}
   @override
   bool get enabled => visibleColumns.isNotEmpty;
 
+  /// Returns a non-hidden column from the column to be grouped.
   List<PlutoColumn> get visibleColumns =>
       columns.where((e) => !e.hide).toList();
 
+  /// {@macro pluto_row_group_delegate_isEditableCell}
   @override
   bool isEditableCell(PlutoCell cell) =>
       cell.row.type.isNormal && !isRowGroupColumn(cell.column);
 
+  /// {@macro pluto_row_group_delegate_isExpandableCell}
   @override
   bool isExpandableCell(PlutoCell cell) {
     if (cell.row.type.isNormal) return false;
@@ -175,11 +255,13 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
     return _columnDepth(cell.column) == checkDepth;
   }
 
+  /// Returns whether the column is a grouping column.
   bool isRowGroupColumn(PlutoColumn column) {
     return visibleColumns.firstWhereOrNull((e) => e.field == column.field) !=
         null;
   }
 
+  /// {@macro pluto_row_group_delegate_toGroup}
   @override
   List<PlutoRow> toGroup({
     required Iterable<PlutoRow> rows,
@@ -267,6 +349,7 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
     return groups;
   }
 
+  /// {@macro pluto_row_group_delegate_sort}
   @override
   void sort({
     required PlutoColumn column,
@@ -297,6 +380,7 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
     }
   }
 
+  /// {@macro pluto_row_group_delegate_filter}
   @override
   void filter({
     required FilteredList<PlutoRow> rows,

@@ -8,7 +8,6 @@ import 'package:pluto_grid/pluto_grid.dart';
       - Apply changed depth when removing column
     Row
       - Move
-      - Check
       - Improve initializeRows when adding rows
     Test
       - add, insert, prepend, append rows with pagination, sort, filter
