@@ -1065,6 +1065,46 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'جاري التحميل',
   });
+
+  const PlutoGridLocaleText.norway({
+    // Column menu
+    this.unfreezeColumn = 'Løsne',
+    this.freezeColumnToStart = 'Fest til start',
+    this.freezeColumnToEnd = 'Fest til slutt',
+    this.autoFitColumn = 'Auto-juster',
+    this.hideColumn = 'Gjem kolonne',
+    this.setColumns = 'Sett kolonner',
+    this.setFilter = 'Sett filter',
+    this.resetFilter = 'Tilbakestill filter',
+    // SetColumns popup
+    this.setColumnsTitle = 'Kolonnetittel',
+    // Filter popup
+    this.filterColumn = 'Kolonne',
+    this.filterType = 'Type',
+    this.filterValue = 'Verdi',
+    this.filterAllColumns = 'Alle kolonner',
+    this.filterContains = 'Inneholder',
+    this.filterEquals = 'Er lik',
+    this.filterStartsWith = 'Starter men',
+    this.filterEndsWith = 'Ender med',
+    this.filterGreaterThan = 'Større enn',
+    this.filterGreaterThanOrEqualTo = 'Større enn eller lik',
+    this.filterLessThan = 'Mindre enn',
+    this.filterLessThanOrEqualTo = 'Mindre enn eller lik',
+    // Date popup
+    this.sunday = 'Søn',
+    this.monday = 'Man',
+    this.tuesday = 'Tir',
+    this.wednesday = 'Ons',
+    this.thursday = 'Tor',
+    this.friday = 'Frr',
+    this.saturday = 'Lør',
+    // Time column popup
+    this.hour = 'Time',
+    this.minute = 'Minutt',
+    // Common
+    this.loadingText = 'Laster',
+  });
 }
 
 /// Behavior of the Enter key when a cell is selected.
