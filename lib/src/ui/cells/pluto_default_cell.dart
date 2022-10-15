@@ -352,7 +352,7 @@ class CheckboxSelectionWidgetState
   void updateState(PlutoNotifierEvent event) {
     _tristate = update<bool>(
       _tristate,
-      stateManager.hasRowGroups && widget.row.type.isGroup,
+      stateManager.enabledRowGroups && widget.row.type.isGroup,
     );
 
     _checked = update<bool?>(
