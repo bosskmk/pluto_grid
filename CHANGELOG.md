@@ -1,3 +1,7 @@
+## [5.1.3] - 2022. 10. 15
+
+* Add norway locale.
+
 ## [5.1.2] - 2022. 9. 27
 
 * Change PlutoGridStateManager.configuration to not null.

@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v5.1.2
+## PlutoGrid for flutter - v5.1.3
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -185,6 +185,7 @@ For other versions, contact the issue
 > develop packages that make it easy to develop admin pages or CMS with Flutter.
 * [PlutoGrid](https://github.com/bosskmk/pluto_grid)
 * [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
+* [PlutoLayout](https://github.com/bosskmk/pluto_layout)
 
 <br>
 
