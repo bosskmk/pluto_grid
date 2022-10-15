@@ -260,6 +260,12 @@ class PlutoNotifierFilterResolverDefault
   }
 
   static Set<int> defaultCheckboxFilter(PlutoGridStateManager stateManager) {
+    if (stateManager.hasRowGroups) {
+      return PlutoNotifierFilterResolverDefault.defaultCheckboxAllFilter(
+        stateManager,
+      );
+    }
+
     return {
       stateManager.toggleAllRowChecked.hashCode,
       stateManager.setRowChecked.hashCode,

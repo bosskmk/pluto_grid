@@ -59,7 +59,47 @@ class PlutoRow {
   /// To manually change the values at runtime,
   /// use the PlutoStateManager.setRowChecked
   /// or PlutoStateManager.toggleAllRowChecked methods.
-  bool? get checked => _checked;
+  bool? get checked {
+    return type.isGroup ? _tristateCheckedRow : _checked;
+  }
+
+  bool? get _tristateCheckedRow {
+    if (!type.isGroup) return false;
+
+    final children = type.group.children;
+
+    final length = children.length;
+
+    if (length == 0) return false;
+
+    int countTrue = 0;
+
+    int countFalse = 0;
+
+    int countTristate = 0;
+
+    for (var i = 0; i < length; i += 1) {
+      if (children[i].type.isGroup) {
+        switch (children[i]._tristateCheckedRow) {
+          case true:
+            ++countTrue;
+            break;
+          case false:
+            ++countFalse;
+            break;
+          case null:
+            ++countTristate;
+            break;
+        }
+      } else {
+        children[i].checked == true ? ++countTrue : ++countFalse;
+      }
+
+      if ((countTrue > 0 && countFalse > 0) || countTristate > 0) return null;
+    }
+
+    return countTrue == length;
+  }
 
   /// State when a new row is added or the cell value in the row is changed.
   ///
@@ -77,6 +117,11 @@ class PlutoRow {
 
   void setChecked(bool? flag) {
     _checked = flag;
+    if (type.isGroup) {
+      for (final child in type.group.children) {
+        child.setChecked(flag);
+      }
+    }
   }
 
   void setState(PlutoRowState state) {

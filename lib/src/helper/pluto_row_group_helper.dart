@@ -3,10 +3,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRowGroupHelper {
   static Iterable<PlutoRow> iterateWithFilter(
-    Iterable<PlutoRow> rows, [
+    Iterable<PlutoRow> rows, {
     bool Function(PlutoRow)? filter,
     Iterator<PlutoRow>? Function(PlutoRow)? childrenFilter,
-  ]) sync* {
+    bool iterateAll = true,
+  }) sync* {
     if (rows.isEmpty) return;
 
     final List<Iterator<PlutoRow>> stack = [];
@@ -15,7 +16,9 @@ class PlutoRowGroupHelper {
 
     Iterator<PlutoRow>? defaultChildrenFilter(PlutoRow row) {
       return row.type.isGroup
-          ? row.type.group.children.originalList.iterator
+          ? iterateAll
+              ? row.type.group.children.originalList.iterator
+              : row.type.group.children.iterator
           : null;
     }
 
@@ -63,7 +66,7 @@ class PlutoRowGroupHelper {
 
       final children = PlutoRowGroupHelper.iterateWithFilter(
         rows.originalList,
-        isGroup,
+        filter: isGroup,
       );
 
       for (final child in children) {
@@ -78,7 +81,7 @@ class PlutoRowGroupHelper {
 
       final children = PlutoRowGroupHelper.iterateWithFilter(
         rows.originalList,
-        isGroup,
+        filter: isGroup,
       );
 
       for (final child in children.toList().reversed) {

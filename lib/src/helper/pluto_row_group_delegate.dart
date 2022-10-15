@@ -94,7 +94,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
 
     final children = PlutoRowGroupHelper.iterateWithFilter(
       rows,
-      (r) => r.type.isGroup,
+      filter: (r) => r.type.isGroup,
     );
 
     for (final child in children) {
@@ -117,7 +117,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
 
     final children = PlutoRowGroupHelper.iterateWithFilter(
       rows.originalList,
-      (r) => r.type.isGroup,
+      filter: (r) => r.type.isGroup,
     );
 
     for (final child in children) {
@@ -284,8 +284,8 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
 
     final children = PlutoRowGroupHelper.iterateWithFilter(
       rows.originalList,
-      (r) => r.type.isGroup,
-      (r) => _isFirstChildGroup(r)
+      filter: (r) => r.type.isGroup,
+      childrenFilter: (r) => _isFirstChildGroup(r)
           ? r.type.group.children.originalList.iterator
           : null,
     );

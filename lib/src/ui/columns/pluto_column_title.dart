@@ -443,9 +443,7 @@ class CheckboxAllSelectionWidgetState
 
     changed ??= false;
 
-    if (_checked == null) {
-      changed = true;
-    }
+    if (_checked == null) changed = true;
 
     stateManager.toggleAllRowChecked(changed);
 

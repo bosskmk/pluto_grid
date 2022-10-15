@@ -334,6 +334,8 @@ class CheckboxSelectionWidget extends PlutoStatefulWidget {
 
 class CheckboxSelectionWidgetState
     extends PlutoStateWithChange<CheckboxSelectionWidget> {
+  bool _tristate = false;
+
   bool? _checked;
 
   @override
@@ -348,9 +350,14 @@ class CheckboxSelectionWidgetState
 
   @override
   void updateState(PlutoNotifierEvent event) {
+    _tristate = update<bool>(
+      _tristate,
+      stateManager.hasRowGroups && widget.row.type.isGroup,
+    );
+
     _checked = update<bool?>(
       _checked,
-      widget.row.checked == true,
+      _tristate ? widget.row.checked : widget.row.checked == true,
     );
   }
 
@@ -359,7 +366,15 @@ class CheckboxSelectionWidgetState
       return;
     }
 
-    stateManager.setRowChecked(widget.row, changed == true);
+    if (_tristate) {
+      changed ??= false;
+
+      if (_checked == null) changed = true;
+    } else {
+      changed = changed == true;
+    }
+
+    stateManager.setRowChecked(widget.row, changed);
 
     if (stateManager.onRowChecked != null) {
       stateManager.onRowChecked!(
@@ -381,6 +396,7 @@ class CheckboxSelectionWidgetState
     return PlutoScaledCheckbox(
       value: _checked,
       handleOnChanged: _handleOnChanged,
+      tristate: _tristate,
       scale: 0.86,
       unselectedColor: stateManager.configuration.style.iconColor,
       activeColor: stateManager.configuration.style.activatedBorderColor,

@@ -45,20 +45,56 @@ abstract class IRowGroupState {
   /// {@endtemplate}
   PlutoRowGroupDelegate? get rowGroupDelegate;
 
-  /// Returns the rows with the highest depth.
+  /// Regardless of filtering or pagination applied,
+  ///
+  /// {@macro row_group_state_iterateMainRowGroup}
+  Iterable<PlutoRow> get iterateAllMainRowGroup;
+
+  /// Regardless of filtering or pagination applied,
+  ///
+  /// {@macro row_group_state_iterateRowGroup}
+  Iterable<PlutoRow> get iterateAllRowGroup;
+
+  /// Regardless of filtering or pagination applied,
+  ///
+  /// {@macro row_group_state_iterateRowAndGroup}
+  Iterable<PlutoRow> get iterateAllRowAndGroup;
+
+  /// Regardless of filtering or pagination applied,
+  ///
+  /// {@macro row_group_state_iterateRow}
+  Iterable<PlutoRow> get iterateAllRow;
+
+  /// With filtering or pagination applied,
+  ///
+  /// {@template row_group_state_iterateMainRowGroup}
+  /// Returns the all rows with the highest depth.
   ///
   /// The depth is determined by [PlutoRow.parent].
   /// If [PlutoRow.parent] does not exist, the depth is the top level,
   /// and it continues to explore this property to determine the depth of the depth.
+  /// {@endtemplate}
   Iterable<PlutoRow> get iterateMainRowGroup;
 
-  /// Returns rows where [PlutoRow.type] is set to [PlutoRowType.group].
+  /// With filtering or pagination applied,
+  ///
+  /// {@template row_group_state_iterateRowGroup}
+  /// Returns all rows where [PlutoRow.type] is set to [PlutoRowType.group].
+  /// {@endtemplate}
   Iterable<PlutoRow> get iterateRowGroup;
 
-  /// Returns rows where [PlutoRow.type] is [PlutoRowType.group] or [PlutoRowType.normal].
+  /// With filtering or pagination applied,
+  ///
+  /// {@template row_group_state_iterateRowAndGroup}
+  /// Returns all rows where [PlutoRow.type] is [PlutoRowType.group] or [PlutoRowType.normal].
+  /// {@endtemplate}
   Iterable<PlutoRow> get iterateRowAndGroup;
 
-  /// Returns rows where [PlutoRow.type] is not [PlutoRowType.group].
+  /// With filtering or pagination applied,
+  ///
+  /// {@template row_group_state_iterateRow}
+  /// Returns all rows where [PlutoRow.type] is not [PlutoRowType.group].
+  /// {@endtemplate}
   Iterable<PlutoRow> get iterateRow;
 
   /// Returns whether it is the top row or not.
@@ -128,29 +164,59 @@ mixin RowGroupState implements IPlutoGridState {
   PlutoRowGroupDelegate? get rowGroupDelegate => _state._rowGroupDelegate;
 
   @override
-  Iterable<PlutoRow> get iterateMainRowGroup sync* {
+  Iterable<PlutoRow> get iterateAllMainRowGroup sync* {
     for (final row in refRows.originalList.where(isMainRow)) {
       yield row;
     }
   }
 
   @override
+  Iterable<PlutoRow> get iterateAllRowGroup sync* {
+    for (final row in _iterateRowGroup(iterateAllMainRowGroup)) {
+      yield row;
+    }
+  }
+
+  @override
+  Iterable<PlutoRow> get iterateAllRowAndGroup sync* {
+    for (final row in _iterateRowAndGroup(iterateAllMainRowGroup)) {
+      yield row;
+    }
+  }
+
+  @override
+  Iterable<PlutoRow> get iterateAllRow sync* {
+    for (final row in _iterateRow(iterateAllMainRowGroup)) {
+      yield row;
+    }
+  }
+
+  @override
+  Iterable<PlutoRow> get iterateMainRowGroup sync* {
+    for (final row in refRows.where(isMainRow)) {
+      yield row;
+    }
+  }
+
+  @override
   Iterable<PlutoRow> get iterateRowGroup sync* {
-    for (final row in _iterateRowGroup(iterateMainRowGroup)) {
+    for (final row
+        in _iterateRowGroup(iterateMainRowGroup, iterateAll: false)) {
       yield row;
     }
   }
 
   @override
   Iterable<PlutoRow> get iterateRowAndGroup sync* {
-    for (final row in _iterateRowAndGroup(iterateMainRowGroup)) {
+    for (final row
+        in _iterateRowAndGroup(iterateMainRowGroup, iterateAll: false)) {
       yield row;
     }
   }
 
   @override
   Iterable<PlutoRow> get iterateRow sync* {
-    for (final row in _iterateRow(iterateMainRowGroup)) {
+    for (final row in _iterateRow(iterateMainRowGroup, iterateAll: false)) {
       yield row;
     }
   }
@@ -203,8 +269,8 @@ mixin RowGroupState implements IPlutoGridState {
     } else {
       final Iterable<PlutoRow> children = PlutoRowGroupHelper.iterateWithFilter(
         rowGroup.type.group.children,
-        (r) => true,
-        (r) => r.type.isGroup && r.type.group.expanded
+        filter: (r) => true,
+        childrenFilter: (r) => r.type.isGroup && r.type.group.expanded
             ? r.type.group.children.iterator
             : null,
       );
@@ -559,8 +625,8 @@ mixin RowGroupState implements IPlutoGridState {
     for (final rowGroup in expandedRows) {
       final Iterable<PlutoRow> children = PlutoRowGroupHelper.iterateWithFilter(
         rowGroup.type.group.children,
-        (r) => true,
-        (r) => r.type.isGroup && r.type.group.expanded
+        filter: (r) => true,
+        childrenFilter: (r) => r.type.isGroup && r.type.group.expanded
             ? r.type.group.children.iterator
             : null,
       );
@@ -604,7 +670,7 @@ mixin RowGroupState implements IPlutoGridState {
     List<PlutoRow> rows;
 
     final previousRows = _previousEnabledRowGroups
-        ? _iterateRow(iterateMainRowGroup)
+        ? _iterateRow(iterateAllMainRowGroup)
         : refRows.originalList;
 
     if (enabledRowGroups == true) {
@@ -627,24 +693,36 @@ mixin RowGroupState implements IPlutoGridState {
     }
   }
 
-  Iterable<PlutoRow> _iterateRow(Iterable<PlutoRow> rows) sync* {
+  Iterable<PlutoRow> _iterateRow(
+    Iterable<PlutoRow> rows, {
+    bool iterateAll = true,
+  }) sync* {
     bool isNotGroup(PlutoRow e) => !e.type.isGroup;
 
-    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows, isNotGroup)) {
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows,
+        filter: isNotGroup, iterateAll: iterateAll)) {
       yield row;
     }
   }
 
-  Iterable<PlutoRow> _iterateRowGroup(Iterable<PlutoRow> rows) sync* {
+  Iterable<PlutoRow> _iterateRowGroup(
+    Iterable<PlutoRow> rows, {
+    bool iterateAll = true,
+  }) sync* {
     bool isGroup(PlutoRow e) => e.type.isGroup;
 
-    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows, isGroup)) {
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows,
+        filter: isGroup, iterateAll: iterateAll)) {
       yield row;
     }
   }
 
-  Iterable<PlutoRow> _iterateRowAndGroup(Iterable<PlutoRow> rows) sync* {
-    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows)) {
+  Iterable<PlutoRow> _iterateRowAndGroup(
+    Iterable<PlutoRow> rows, {
+    bool iterateAll = true,
+  }) sync* {
+    for (final row in PlutoRowGroupHelper.iterateWithFilter(rows,
+        iterateAll: iterateAll)) {
       yield row;
     }
   }

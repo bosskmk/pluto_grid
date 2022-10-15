@@ -434,7 +434,7 @@ mixin RowState implements IPlutoGridState {
     bool? flag, {
     bool notify = true,
   }) {
-    for (final row in refRows) {
+    for (final row in iterateRowAndGroup) {
       row.setChecked(flag == true);
     }
 

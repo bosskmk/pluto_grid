@@ -56,7 +56,7 @@ void main() {
 
       final stateManager = createStateManager(columns: [], rows: rows);
 
-      expect(stateManager.iterateMainRowGroup.length, 5);
+      expect(stateManager.iterateAllMainRowGroup.length, 5);
     });
 
     group('[그룹행(3 자식), 일반행, 일반행]', () {
@@ -97,15 +97,15 @@ void main() {
       });
 
       test('iterateMainRowGroup.length 는 3을 리턴해야 한다.', () {
-        expect(stateManager.iterateMainRowGroup.length, 3);
+        expect(stateManager.iterateAllMainRowGroup.length, 3);
       });
 
       test('iterateRowGroup.length 는 1을 리턴해야 한다.', () {
-        expect(stateManager.iterateRowGroup.length, 1);
+        expect(stateManager.iterateAllRowGroup.length, 1);
       });
 
       test('iterateRowAndGroup.length 는 6을 리턴해야 한다.', () {
-        final rowAndGroup = stateManager.iterateRowAndGroup;
+        final rowAndGroup = stateManager.iterateAllRowAndGroup;
         expect(rowAndGroup.length, 6);
         expect(rowAndGroup.elementAt(0).sortIdx, 0);
         expect(rowAndGroup.elementAt(1).sortIdx, 10);
@@ -116,7 +116,7 @@ void main() {
       });
 
       test('iterateRow.length 는 5을 리턴해야 한다.', () {
-        expect(stateManager.iterateRow.length, 5);
+        expect(stateManager.iterateAllRow.length, 5);
       });
 
       test('refRows 의 행은 isMainRow 가 true 를 리턴해야 한다.', () {
@@ -293,25 +293,25 @@ void main() {
     });
 
     test('iterateMainRowGroup 가 2개의 행을 리턴해야 한다.', () {
-      final mainRowGroup = stateManager.iterateMainRowGroup.toList();
+      final mainRowGroup = stateManager.iterateAllMainRowGroup.toList();
 
       expect(mainRowGroup.length, 2);
     });
 
     test('iterateRowGroup 가 6개의 행을 리턴해야 한다.', () {
-      final mainRowGroup = stateManager.iterateRowGroup.toList();
+      final mainRowGroup = stateManager.iterateAllRowGroup.toList();
 
       expect(mainRowGroup.length, 6);
     });
 
     test('iterateRowAndGroup 가 11개의 행을 리턴해야 한다.', () {
-      final mainRowGroup = stateManager.iterateRowAndGroup.toList();
+      final mainRowGroup = stateManager.iterateAllRowAndGroup.toList();
 
       expect(mainRowGroup.length, 11);
     });
 
     test('iterateRow 가 5개의 행을 리턴해야 한다.', () {
-      final mainRowGroup = stateManager.iterateRow.toList();
+      final mainRowGroup = stateManager.iterateAllRow.toList();
 
       expect(mainRowGroup.length, 5);
     });
@@ -341,7 +341,7 @@ void main() {
       expect(stateManager.refColumns.originalList.length, 1);
       expect(stateManager.refRows.originalList.length, 5);
 
-      final rowAndGroup = stateManager.iterateRowAndGroup.toList();
+      final rowAndGroup = stateManager.iterateAllRowAndGroup.toList();
 
       expect(rowAndGroup.length, 5);
       for (final row in rowAndGroup) {
@@ -673,11 +673,11 @@ void main() {
     test('첫번째 행을 삭제 하면 그 자식들도 모두 삭제 되어야 한다.', () {
       final firstRowGroup = stateManager.refRows.first;
 
-      expect(stateManager.iterateRowAndGroup.length, 11);
+      expect(stateManager.iterateAllRowAndGroup.length, 11);
 
       stateManager.removeRows([firstRowGroup]);
 
-      expect(stateManager.iterateRowAndGroup.length, 6);
+      expect(stateManager.iterateAllRowAndGroup.length, 6);
     });
 
     test('column1 을 삭제 하면 column2 로 다시 그룹핑 되어야 한다.', () {
@@ -1315,7 +1315,7 @@ void main() {
 
         findRemovedRows(e) => e.key == A_1.key || e.key == A_1_001.key;
         expect(
-          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          stateManager.iterateAllRowAndGroup.where(findRemovedRows).length,
           0,
         );
       });
@@ -1329,17 +1329,17 @@ void main() {
         final B_1 = B.type.group.children[0];
         final B_1_003 = B_1.type.group.children[0];
 
-        expect(stateManager.iterateRowAndGroup.length, 11);
+        expect(stateManager.iterateAllRowAndGroup.length, 11);
 
         stateManager.removeRows([B_1_003]);
 
-        expect(stateManager.iterateRowAndGroup.length, 10);
+        expect(stateManager.iterateAllRowAndGroup.length, 10);
 
         expect(B_1.type.group.children.length, 1);
         expect(B_1.type.group.children[0], isNot(B_1_003));
         findRemovedRows(e) => e.key == B_1_003;
         expect(
-          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          stateManager.iterateAllRowAndGroup.where(findRemovedRows).length,
           0,
         );
       });
@@ -1355,17 +1355,17 @@ void main() {
         final B_1_004 = B_1.type.group.children[1];
 
         expect(B.type.group.children.length, 2);
-        expect(stateManager.iterateRowAndGroup.length, 11);
+        expect(stateManager.iterateAllRowAndGroup.length, 11);
 
         stateManager.removeRows([B_1_003, B_1_004]);
 
         expect(B.type.group.children.length, 1);
-        expect(stateManager.iterateRowAndGroup.length, 8);
+        expect(stateManager.iterateAllRowAndGroup.length, 8);
         expect(B.type.group.children[0], isNot(B_1));
         findRemovedRows(e) =>
             e.key == B_1 || e.key == B_1_003 || e.key == B_1_004;
         expect(
-          stateManager.iterateRowAndGroup.where(findRemovedRows).length,
+          stateManager.iterateAllRowAndGroup.where(findRemovedRows).length,
           0,
         );
       });
@@ -1498,19 +1498,19 @@ void main() {
     });
 
     test('iterateMainRowGroup 가 2개 행을 리턴해야 한다.', () {
-      expect(stateManager.iterateMainRowGroup.length, 2);
+      expect(stateManager.iterateAllMainRowGroup.length, 2);
     });
 
     test('iterateRowGroup 가 4개 행을 리턴해야 한다.', () {
-      expect(stateManager.iterateRowGroup.length, 4);
+      expect(stateManager.iterateAllRowGroup.length, 4);
     });
 
     test('iterateRowAndGroup 가 11개 행을 리턴해야 한다.', () {
-      expect(stateManager.iterateRowAndGroup.length, 11);
+      expect(stateManager.iterateAllRowAndGroup.length, 11);
     });
 
     test('iterateRow 가 7개 행을 리턴해야 한다.', () {
-      expect(stateManager.iterateRow.length, 7);
+      expect(stateManager.iterateAllRow.length, 7);
     });
 
     test('refRows 의 두개의 행이 isMainRow true 를 반환해야 한다.', () {
@@ -1578,7 +1578,7 @@ void main() {
       expect(stateManager.refColumns.originalList.length, 1);
       expect(stateManager.refRows.originalList.length, 2);
 
-      final rowAndGroup = stateManager.iterateRowAndGroup.toList();
+      final rowAndGroup = stateManager.iterateAllRowAndGroup.toList();
 
       expect(rowAndGroup.length, 11);
       for (final row in rowAndGroup) {

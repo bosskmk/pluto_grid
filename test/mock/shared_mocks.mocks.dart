@@ -1057,6 +1057,30 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: false,
       ) as bool);
   @override
+  Iterable<_i2.PlutoRow> get iterateAllMainRowGroup => (super.noSuchMethod(
+        Invocation.getter(#iterateAllMainRowGroup),
+        returnValue: <_i2.PlutoRow>[],
+        returnValueForMissingStub: <_i2.PlutoRow>[],
+      ) as Iterable<_i2.PlutoRow>);
+  @override
+  Iterable<_i2.PlutoRow> get iterateAllRowGroup => (super.noSuchMethod(
+        Invocation.getter(#iterateAllRowGroup),
+        returnValue: <_i2.PlutoRow>[],
+        returnValueForMissingStub: <_i2.PlutoRow>[],
+      ) as Iterable<_i2.PlutoRow>);
+  @override
+  Iterable<_i2.PlutoRow> get iterateAllRowAndGroup => (super.noSuchMethod(
+        Invocation.getter(#iterateAllRowAndGroup),
+        returnValue: <_i2.PlutoRow>[],
+        returnValueForMissingStub: <_i2.PlutoRow>[],
+      ) as Iterable<_i2.PlutoRow>);
+  @override
+  Iterable<_i2.PlutoRow> get iterateAllRow => (super.noSuchMethod(
+        Invocation.getter(#iterateAllRow),
+        returnValue: <_i2.PlutoRow>[],
+        returnValueForMissingStub: <_i2.PlutoRow>[],
+      ) as Iterable<_i2.PlutoRow>);
+  @override
   Iterable<_i2.PlutoRow> get iterateMainRowGroup => (super.noSuchMethod(
         Invocation.getter(#iterateMainRowGroup),
         returnValue: <_i2.PlutoRow>[],
