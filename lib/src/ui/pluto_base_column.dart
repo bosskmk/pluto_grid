@@ -40,11 +40,11 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _showColumnFilter = update<bool>(
       _showColumnFilter,
       stateManager.showColumnFilter,

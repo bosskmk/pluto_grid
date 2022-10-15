@@ -17,6 +17,7 @@ import 'state/grid_state.dart';
 import 'state/keyboard_state.dart';
 import 'state/layout_state.dart';
 import 'state/pagination_row_state.dart';
+import 'state/row_group_state.dart';
 import 'state/row_state.dart';
 import 'state/scroll_state.dart';
 import 'state/selecting_state.dart';
@@ -37,6 +38,7 @@ abstract class IPlutoGridState
         IKeyboardState,
         ILayoutState,
         IPaginationRowState,
+        IRowGroupState,
         IRowState,
         IScrollState,
         ISelectingState,
@@ -56,10 +58,120 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         KeyboardState,
         LayoutState,
         PaginationRowState,
+        RowGroupState,
         RowState,
         ScrollState,
         SelectingState,
-        VisibilityLayoutState {}
+        VisibilityLayoutState {
+  PlutoGridStateChangeNotifier({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    required this.gridFocusNode,
+    required this.scroll,
+    List<PlutoColumnGroup>? columnGroups,
+    this.onChanged,
+    this.onSelected,
+    this.onSorted,
+    this.onRowChecked,
+    this.onRowDoubleTap,
+    this.onRowSecondaryTap,
+    this.onRowsMoved,
+    this.rowColorCallback,
+    this.createHeader,
+    this.createFooter,
+    PlutoColumnMenuDelegate? columnMenuDelegate,
+    PlutoChangeNotifierFilterResolver? notifierFilterResolver,
+    PlutoGridConfiguration? configuration,
+    PlutoGridMode? mode,
+  })  : refColumns = FilteredList(initialList: columns),
+        refRows = FilteredList(initialList: rows),
+        refColumnGroups = FilteredList<PlutoColumnGroup>(
+          initialList: columnGroups,
+        ),
+        columnMenuDelegate =
+            columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
+        notifierFilterResolver = notifierFilterResolver ??
+            const PlutoNotifierFilterResolverDefault(),
+        gridKey = GlobalKey(),
+        mode = mode ?? PlutoGridMode.normal {
+    setConfiguration(configuration);
+    _initialize();
+  }
+
+  @override
+  final FilteredList<PlutoColumn> refColumns;
+
+  @override
+  final FilteredList<PlutoColumnGroup> refColumnGroups;
+
+  @override
+  final FilteredList<PlutoRow> refRows;
+
+  @override
+  final FocusNode gridFocusNode;
+
+  @override
+  final PlutoGridScrollController scroll;
+
+  @override
+  final PlutoOnChangedEventCallback? onChanged;
+
+  @override
+  final PlutoOnSelectedEventCallback? onSelected;
+
+  @override
+  final PlutoOnSortedEventCallback? onSorted;
+
+  @override
+  final PlutoOnRowCheckedEventCallback? onRowChecked;
+
+  @override
+  final PlutoOnRowDoubleTapEventCallback? onRowDoubleTap;
+
+  @override
+  final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
+
+  @override
+  final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
+  @override
+  final PlutoRowColorCallback? rowColorCallback;
+
+  @override
+  final CreateHeaderCallBack? createHeader;
+
+  @override
+  final CreateFooterCallBack? createFooter;
+
+  @override
+  final PlutoColumnMenuDelegate columnMenuDelegate;
+
+  final PlutoChangeNotifierFilterResolver notifierFilterResolver;
+
+  @override
+  final GlobalKey gridKey;
+
+  @override
+  final PlutoGridMode mode;
+
+  void _initialize() {
+    PlutoGridStateManager.initializeRows(
+      refColumns.originalList,
+      refRows.originalList,
+    );
+
+    refColumns.setFilter((element) => element.hide == false);
+
+    setShowColumnGroups(columnGroups.isNotEmpty, notify: false);
+
+    setShowColumnFooter(
+      refColumns.originalList.any((e) => e.footerRenderer != null),
+      notify: false,
+    );
+
+    setGroupToColumn();
+  }
+}
 
 /// It manages the state of the [PlutoGrid] and contains methods used by the grid.
 ///
@@ -95,58 +207,42 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 /// ```
 class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   PlutoGridStateManager({
-    required List<PlutoColumn> columns,
-    required List<PlutoRow> rows,
-    required FocusNode? gridFocusNode,
-    required PlutoGridScrollController? scroll,
-    List<PlutoColumnGroup>? columnGroups,
-    PlutoGridMode? mode,
-    PlutoOnChangedEventCallback? onChangedEventCallback,
-    PlutoOnSelectedEventCallback? onSelectedEventCallback,
-    PlutoOnSortedEventCallback? onSortedEventCallback,
-    PlutoOnRowCheckedEventCallback? onRowCheckedEventCallback,
-    PlutoOnRowDoubleTapEventCallback? onRowDoubleTapEventCallback,
-    PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTapEventCallback,
-    PlutoOnRowsMovedEventCallback? onRowsMovedEventCallback,
-    PlutoRowColorCallback? onRowColorCallback,
-    PlutoColumnMenuDelegate? columnMenuDelegate,
-    CreateHeaderCallBack? createHeader,
-    CreateFooterCallBack? createFooter,
-    PlutoGridConfiguration? configuration,
-  }) {
-    refColumns = FilteredList(initialList: columns);
-    refColumnGroups = FilteredList(initialList: columnGroups);
-    refRows = FilteredList(initialList: rows);
-    setGridFocusNode(gridFocusNode);
-    setScroll(scroll);
-    setGridMode(mode);
-    setOnChanged(onChangedEventCallback);
-    setOnSelected(onSelectedEventCallback);
-    setOnSorted(onSortedEventCallback);
-    setOnRowChecked(onRowCheckedEventCallback);
-    setOnRowDoubleTap(onRowDoubleTapEventCallback);
-    setOnRowSecondaryTap(onRowSecondaryTapEventCallback);
-    setOnRowsMoved(onRowsMovedEventCallback);
-    setRowColorCallback(onRowColorCallback);
-    setColumnMenuDelegate(columnMenuDelegate);
-    setCreateHeader(createHeader);
-    setCreateFooter(createFooter);
-    setConfiguration(configuration);
-    setShowColumnFooter(
-      columns.any((element) => element.footerRenderer != null),
-    );
-    setGridKey(GlobalKey());
-  }
+    required super.columns,
+    required super.rows,
+    required super.gridFocusNode,
+    required super.scroll,
+    super.columnGroups,
+    super.onChanged,
+    super.onSelected,
+    super.onSorted,
+    super.onRowChecked,
+    super.onRowDoubleTap,
+    super.onRowSecondaryTap,
+    super.onRowsMoved,
+    super.rowColorCallback,
+    super.createHeader,
+    super.createFooter,
+    super.columnMenuDelegate,
+    super.notifierFilterResolver,
+    super.configuration,
+    super.mode,
+  });
 
-  static List<PlutoGridSelectingMode> get selectingModes =>
-      PlutoGridSelectingMode.values;
+  PlutoChangeNotifierFilter<T> resolveNotifierFilter<T>() {
+    return PlutoChangeNotifierFilter<T>(
+      notifierFilterResolver.resolve(this, T),
+      PlutoChangeNotifierFilter.debug
+          ? PlutoChangeNotifierFilterResolver.notifierNames(this)
+          : null,
+    );
+  }
 
   /// It handles the necessary settings when [rows] are first set or added to the [PlutoGrid].
   ///
   /// {@template initialize_rows_params}
   /// [forceApplySortIdx] determines whether to force PlutoRow.sortIdx to be set.
-  /// [PlutoRow.sortIdx] does not reset if the value is already set.
-  /// Set [forceApplySortIdx] to true to reset this value.
+  ///
+  /// [increase] and [start] are valid only when [forceApplySortIdx] is true.
   ///
   /// [increase] determines whether to increment or decrement when initializing [sortIdx].
   /// For example, if a row is added before an existing row,
@@ -161,7 +257,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   static List<PlutoRow> initializeRows(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
-    bool forceApplySortIdx = false,
+    bool forceApplySortIdx = true,
     bool increase = true,
     int start = 0,
   }) {
@@ -171,13 +267,13 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
 
     _ApplyList applyList = _ApplyList([
       _ApplyCellForSetColumnRow(refColumns),
-      _ApplyCellForFormat(refColumns),
       _ApplyRowForSortIdx(
         forceApply: forceApplySortIdx,
         increase: increase,
         start: start,
         firstRow: refRows.first,
       ),
+      _ApplyRowGroup(refColumns),
     ]);
 
     if (!applyList.apply) {
@@ -212,7 +308,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   ///
   /// ```dart
   /// PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows).then((initializedRows) {
-  ///   stateManager.refRows.addAll(FilteredList(initialList: initializedRows));
+  ///   stateManager.refRows.addAll(initializedRows);
   ///   stateManager.setPage(1, notify: false);
   ///   stateManager.notifyListeners();
   /// });
@@ -222,7 +318,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   static Future<List<PlutoRow>> initializeRowsAsync(
     List<PlutoColumn> refColumns,
     List<PlutoRow> refRows, {
-    bool forceApplySortIdx = false,
+    bool forceApplySortIdx = true,
     bool increase = true,
     int start = 0,
     int chunkSize = 100,
@@ -334,6 +430,8 @@ class PlutoGridCellPosition {
     this.rowIdx,
   });
 
+  bool get hasPosition => columnIdx != null && rowIdx != null;
+
   @override
   bool operator ==(covariant PlutoGridCellPosition other) {
     return columnIdx == other.columnIdx && rowIdx == other.rowIdx;
@@ -440,43 +538,14 @@ class _ApplyCellForSetColumnRow implements _Apply {
 
   @override
   void execute(PlutoRow row) {
+    if (row.initialized) {
+      return;
+    }
+
     for (var element in refColumns) {
       row.cells[element.field]!
         ..setColumn(element)
         ..setRow(row);
-    }
-  }
-}
-
-class _ApplyCellForFormat implements _Apply {
-  final List<PlutoColumn> refColumns;
-
-  _ApplyCellForFormat(
-    this.refColumns,
-  ) {
-    assert(refColumns.isNotEmpty);
-
-    columnsToApply = refColumns.where(
-      (element) => element.type.applyFormatOnInit,
-    );
-  }
-
-  late Iterable<PlutoColumn> columnsToApply;
-
-  @override
-  bool get apply => columnsToApply.isNotEmpty;
-
-  @override
-  void execute(PlutoRow row) {
-    for (var column in columnsToApply) {
-      var value = column.type.applyFormat(row.cells[column.field]!.value);
-
-      if (column.type is PlutoColumnTypeWithNumberFormat) {
-        value =
-            (column.type as PlutoColumnTypeWithNumberFormat).toNumber(value);
-      }
-
-      row.cells[column.field]!.value = value;
     }
   }
 }
@@ -504,12 +573,48 @@ class _ApplyRowForSortIdx implements _Apply {
   late int _sortIdx;
 
   @override
-  bool get apply => forceApply == true || firstRow!.sortIdx == null;
+  bool get apply => forceApply == true;
 
   @override
-  void execute(PlutoRow? row) {
-    row!.sortIdx = _sortIdx;
+  void execute(PlutoRow row) {
+    row.sortIdx = _sortIdx;
 
     _sortIdx = increase ? ++_sortIdx : --_sortIdx;
+  }
+}
+
+class _ApplyRowGroup implements _Apply {
+  final List<PlutoColumn> refColumns;
+
+  _ApplyRowGroup(this.refColumns);
+
+  @override
+  bool get apply => true;
+
+  @override
+  void execute(PlutoRow row) {
+    if (_hasChildren(row)) {
+      _initializeChildren(
+        columns: refColumns,
+        rows: row.type.group.children.originalList,
+        parent: row,
+      );
+    }
+  }
+
+  void _initializeChildren({
+    required List<PlutoColumn> columns,
+    required List<PlutoRow> rows,
+    required PlutoRow parent,
+  }) {
+    for (final row in rows) {
+      row.setParent(parent);
+    }
+
+    PlutoGridStateManager.initializeRows(columns, rows);
+  }
+
+  bool _hasChildren(PlutoRow row) {
+    return row.type.isGroup && row.type.group.children.originalList.isNotEmpty;
   }
 }

@@ -174,11 +174,11 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     final style = stateManager.style;
 
     final isCurrentCell = stateManager.isCurrentCell(widget.cell);
@@ -195,6 +195,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           widget.column,
           widget.rowIdx,
         ),
+        isGroupedRowCell: stateManager.enabledRowGroups &&
+            stateManager.rowGroupDelegate!.isExpandableCell(widget.cell),
         enableCellVerticalBorder: style.enableCellBorderVertical,
         borderColor: style.borderColor,
         activatedBorderColor: style.activatedBorderColor,
@@ -203,6 +205,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         gridBackgroundColor: style.gridBackgroundColor,
         cellColorInEditState: style.cellColorInEditState,
         cellColorInReadOnlyState: style.cellColorInReadOnlyState,
+        cellColorGroupedRow: style.cellColorGroupedRow,
         selectingMode: stateManager.selectingMode,
       ),
     );
@@ -235,6 +238,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required bool isEditing,
     required bool isCurrentCell,
     required bool isSelectedCell,
+    required bool isGroupedRowCell,
     required bool enableCellVerticalBorder,
     required Color borderColor,
     required Color activatedBorderColor,
@@ -243,6 +247,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required Color gridBackgroundColor,
     required Color cellColorInEditState,
     required Color cellColorInReadOnlyState,
+    required Color? cellColorGroupedRow,
     required PlutoGridSelectingMode selectingMode,
   }) {
     if (isCurrentCell) {
@@ -271,16 +276,17 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         ),
       );
     } else {
-      return enableCellVerticalBorder
-          ? BoxDecoration(
-              border: BorderDirectional(
+      return BoxDecoration(
+        color: isGroupedRowCell ? cellColorGroupedRow : null,
+        border: enableCellVerticalBorder
+            ? BorderDirectional(
                 end: BorderSide(
                   color: borderColor,
                   width: 1.0,
                 ),
-              ),
-            )
-          : const BoxDecoration();
+              )
+            : null,
+      );
     }
   }
 
@@ -328,13 +334,11 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
-    super.updateState();
-
+  void updateState(PlutoNotifierEvent event) {
     _showTypedCell = update<bool>(
       _showTypedCell,
       stateManager.isEditing && stateManager.isCurrentCell(widget.cell),

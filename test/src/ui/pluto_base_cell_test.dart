@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/ui/ui.dart';
@@ -9,12 +8,8 @@ import 'package:rxdart/rxdart.dart';
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../matcher/pluto_object_matcher.dart';
-import 'pluto_base_cell_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   MockPlutoGridEventManager? eventManager;
@@ -51,6 +46,8 @@ void main() {
     when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
+    when(stateManager.enabledRowGroups).thenReturn(false);
+    when(stateManager.rowGroupDelegate).thenReturn(null);
   });
 
   Widget buildApp({

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/ui/ui.dart';
@@ -8,14 +7,8 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/test_helper_util.dart';
-import 'pluto_column_title_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
@@ -36,7 +29,7 @@ void main() {
 
     when(stateManager.configuration).thenReturn(configuration);
     when(stateManager.columnMenuDelegate).thenReturn(
-      const PlutoDefaultColumnMenuDelegate(),
+      const PlutoColumnMenuDelegateDefault(),
     );
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.eventManager).thenReturn(eventManager);

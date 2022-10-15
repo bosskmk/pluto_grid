@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
 void main() {
   group('getColumnsAutoSizeHelper', () {
@@ -9,8 +10,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: [],
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
@@ -32,8 +33,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.none,
@@ -55,8 +56,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
@@ -78,8 +79,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.scale,
@@ -106,8 +107,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.scale,
@@ -136,8 +137,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.scale,
@@ -163,8 +164,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.none,
@@ -187,8 +188,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.normal,
@@ -211,8 +212,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.normal,

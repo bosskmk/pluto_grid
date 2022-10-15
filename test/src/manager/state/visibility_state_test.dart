@@ -1,17 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
-import 'visibility_state_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
-])
 void main() {
   PlutoGridStateManager createStateManager({
     required List<PlutoColumn> columns,
@@ -24,8 +18,8 @@ void main() {
     final stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
-      gridFocusNode: gridFocusNode,
-      scroll: scroll,
+      gridFocusNode: gridFocusNode ?? MockFocusNode(),
+      scroll: scroll ?? MockPlutoGridScrollController(),
       configuration: configuration,
     );
 
@@ -280,7 +274,7 @@ void main() {
           layout: const BoxConstraints(maxWidth: 800),
         );
 
-        stateManager.scroll!.setBodyRowsHorizontal(rowsScroll);
+        stateManager.scroll.setBodyRowsHorizontal(rowsScroll);
 
         // setLayout 메서드에서 applyViewportDimension 한번 호출 되어 리셋.
         reset(horizontalScroll);

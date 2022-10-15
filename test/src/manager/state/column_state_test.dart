@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/ui/ui.dart';
@@ -8,15 +7,8 @@ import 'package:pluto_grid/src/ui/ui.dart';
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
-import 'column_state_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   final PlutoGridScrollController scroll = MockPlutoGridScrollController();
   final LinkedScrollControllerGroup horizontal =
@@ -47,7 +39,7 @@ void main() {
       columns: columns,
       rows: rows,
       columnGroups: columnGroups,
-      gridFocusNode: gridFocusNode,
+      gridFocusNode: MockFocusNode(),
       scroll: scroll,
       configuration: configuration,
     )..setEventManager(eventManager);
@@ -1359,9 +1351,9 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 500));
 
-      final listeners = MockOnChangeListener();
+      final listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       final column = columns[0];
 
@@ -1372,7 +1364,7 @@ void main() {
         targetColumn: targetColumn,
       );
 
-      verifyNever(listeners.onChangeVoidNoParamListener());
+      verifyNever(listeners.noParamReturnVoid());
     });
 
     test('고정 컬럼 넓이가 충분하면 notifyListeners 가 호출 되어야 한다.', () async {
@@ -1387,9 +1379,9 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 500));
 
-      final listeners = MockOnChangeListener();
+      final listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       final column = columns[0]..width = 50;
 
@@ -1400,7 +1392,7 @@ void main() {
         targetColumn: targetColumn,
       );
 
-      verify(listeners.onChangeVoidNoParamListener()).called(1);
+      verify(listeners.noParamReturnVoid()).called(1);
     });
 
     test('0 번 비고정 컬럼을 4번 우측 고정 컬럼으로 이동 시키면 컬럼 순서가 바뀌어야 한다.', () async {
@@ -1565,7 +1557,7 @@ void main() {
     test('columnsResizeMode.isNone 이면 notifyResizingListeners 가 호출 되지 않아야 한다.',
         () {
       final columns = ColumnHelper.textColumn('title', count: 5);
-      final mockListener = MockOnChangeListener();
+      final mockListener = MockMethods();
 
       PlutoGridStateManager stateManager = getStateManager(
           columns: columns,
@@ -1581,15 +1573,15 @@ void main() {
       stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
       stateManager.resizingChangeNotifier.addListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
 
       stateManager.resizeColumn(columns.first, 10);
 
-      verifyNever(mockListener.onChangeVoidNoParamListener());
+      verifyNever(mockListener.noParamReturnVoid());
 
       stateManager.resizingChangeNotifier.removeListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
     });
 
@@ -1597,7 +1589,7 @@ void main() {
         'column.enableDropToResize 가 false 이면 notifyResizingListeners 가 호출 되지 않아야 한다.',
         () {
       final columns = ColumnHelper.textColumn('title', count: 5);
-      final mockListener = MockOnChangeListener();
+      final mockListener = MockMethods();
 
       PlutoGridStateManager stateManager = getStateManager(
           columns: columns,
@@ -1613,21 +1605,21 @@ void main() {
       stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
       stateManager.resizingChangeNotifier.addListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
 
       stateManager.resizeColumn(columns.first..enableDropToResize = false, 10);
 
-      verifyNever(mockListener.onChangeVoidNoParamListener());
+      verifyNever(mockListener.noParamReturnVoid());
 
       stateManager.resizingChangeNotifier.removeListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
     });
 
     test('offset 10 만큼 컬럼의 넓이가 늘어나야 한다.', () {
       final columns = ColumnHelper.textColumn('title', count: 5);
-      final mockListener = MockOnChangeListener();
+      final mockListener = MockMethods();
 
       PlutoGridStateManager stateManager = getStateManager(
           columns: columns,
@@ -1643,18 +1635,18 @@ void main() {
       stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
       stateManager.resizingChangeNotifier.addListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
 
       expect(columns.first.width, 200);
 
       stateManager.resizeColumn(columns.first, 10);
 
-      verify(mockListener.onChangeVoidNoParamListener()).called(1);
+      verify(mockListener.noParamReturnVoid()).called(1);
       expect(columns.first.width, 210);
 
       stateManager.resizingChangeNotifier.removeListener(
-        mockListener.onChangeVoidNoParamListener,
+        mockListener.noParamReturnVoid,
       );
     });
 
@@ -1889,9 +1881,9 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
-      var listeners = MockOnChangeListener();
+      var listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       // when
       expect(stateManager.columns.first.hide, isFalse);
@@ -1899,7 +1891,7 @@ void main() {
       stateManager.hideColumn(columns.first, true);
 
       // then
-      verify(listeners.onChangeVoidNoParamListener()).called(1);
+      verify(listeners.noParamReturnVoid()).called(1);
     });
 
     testWidgets(
@@ -1919,9 +1911,9 @@ void main() {
         scroll: scroll,
       );
 
-      var listeners = MockOnChangeListener();
+      var listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       // when
       expect(stateManager.columns.first.hide, isFalse);
@@ -1929,7 +1921,7 @@ void main() {
       stateManager.hideColumn(columns.first, false);
 
       // then
-      verifyNever(listeners.onChangeVoidNoParamListener());
+      verifyNever(listeners.noParamReturnVoid());
     });
   });
 
@@ -1944,13 +1936,13 @@ void main() {
         scroll: scroll,
       );
 
-      var listeners = MockOnChangeListener();
+      var listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       stateManager.hideColumns(columns, true);
 
-      verifyNever(listeners.onChangeVoidNoParamListener());
+      verifyNever(listeners.noParamReturnVoid());
     });
 
     test('columns 가 empty 가 아니면 notifyListeners 가 호출 되어야 한다.', () async {
@@ -1965,13 +1957,13 @@ void main() {
 
       stateManager.setLayout(const BoxConstraints(maxWidth: 800));
 
-      var listeners = MockOnChangeListener();
+      var listeners = MockMethods();
 
-      stateManager.addListener(listeners.onChangeVoidNoParamListener);
+      stateManager.addListener(listeners.noParamReturnVoid);
 
       stateManager.hideColumns(columns, true);
 
-      verify(listeners.onChangeVoidNoParamListener()).called(1);
+      verify(listeners.noParamReturnVoid()).called(1);
     });
 
     test('hide 가 true 면 컬럼이 모두 업데이트 되어야 한다.', () async {

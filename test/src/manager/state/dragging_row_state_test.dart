@@ -6,6 +6,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
 import '../../../mock/mock_on_change_listener.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
 void main() {
   late List<PlutoColumn> columns;
@@ -14,7 +15,7 @@ void main() {
 
   late PlutoGridStateManager stateManager;
 
-  MockOnChangeListener? listener;
+  MockMethods? listener;
 
   setUp(() {
     columns = [
@@ -26,13 +27,13 @@ void main() {
     stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
-      gridFocusNode: null,
-      scroll: null,
+      gridFocusNode: MockFocusNode(),
+      scroll: MockPlutoGridScrollController(),
     );
 
-    listener = MockOnChangeListener();
+    listener = MockMethods();
 
-    stateManager.addListener(listener!.onChangeVoidNoParamListener);
+    stateManager.addListener(listener!.noParamReturnVoid);
   });
 
   group('setIsDraggingRow', () {
@@ -47,7 +48,7 @@ void main() {
         stateManager.setIsDraggingRow(false);
 
         // then
-        verifyNever(listener!.onChangeVoidNoParamListener());
+        verifyNever(listener!.noParamReturnVoid());
       },
     );
 
@@ -63,7 +64,7 @@ void main() {
 
         // then
         expect(stateManager.isDraggingRow, isTrue);
-        verify(listener!.onChangeVoidNoParamListener()).called(1);
+        verify(listener!.noParamReturnVoid()).called(1);
       },
     );
 
@@ -79,7 +80,7 @@ void main() {
 
         // then
         expect(stateManager.isDraggingRow, isTrue);
-        verifyNever(listener!.onChangeVoidNoParamListener());
+        verifyNever(listener!.noParamReturnVoid());
       },
     );
   });
@@ -98,7 +99,7 @@ void main() {
         expect(stateManager.dragRows.length, 2);
         expect(stateManager.dragRows[0].key, rows[1].key);
         expect(stateManager.dragRows[1].key, rows[2].key);
-        verify(listener!.onChangeVoidNoParamListener()).called(1);
+        verify(listener!.noParamReturnVoid()).called(1);
       },
     );
 
@@ -116,7 +117,7 @@ void main() {
         expect(stateManager.dragRows.length, 2);
         expect(stateManager.dragRows[0].key, rows[1].key);
         expect(stateManager.dragRows[1].key, rows[2].key);
-        verifyNever(listener!.onChangeVoidNoParamListener());
+        verifyNever(listener!.noParamReturnVoid());
       },
     );
   });
@@ -135,7 +136,7 @@ void main() {
         stateManager.setDragTargetRowIdx(1);
 
         // then
-        verifyNever(listener!.onChangeVoidNoParamListener());
+        verifyNever(listener!.noParamReturnVoid());
       },
     );
 
@@ -153,7 +154,7 @@ void main() {
 
         // then
         expect(stateManager.dragTargetRowIdx, 2);
-        verify(listener!.onChangeVoidNoParamListener()).called(1);
+        verify(listener!.noParamReturnVoid()).called(1);
       },
     );
 
@@ -171,7 +172,7 @@ void main() {
 
         // then
         expect(stateManager.dragTargetRowIdx, 2);
-        verifyNever(listener!.onChangeVoidNoParamListener());
+        verifyNever(listener!.noParamReturnVoid());
       },
     );
   });

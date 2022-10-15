@@ -14,6 +14,10 @@ abstract class AbstractFilteredList<E> implements ListBase<E> {
   /// Filtered list. Same as [originalList] if filter is null.
   List<E> get filteredList;
 
+  /// If it is filtered, return the original list if it is not a filtered list.
+  /// (list before range is applied)
+  List<E> get filterOrOriginalList;
+
   /// Whether to set a filter.
   bool get hasFilter;
 
@@ -134,6 +138,9 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   List<E> get filteredList => [..._filteredList];
 
   @override
+  List<E> get filterOrOriginalList => hasFilter ? filteredList : originalList;
+
+  @override
   bool get hasFilter => _filter != null;
 
   bool get hasRange => _range != null;
@@ -144,6 +151,9 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
 
   /// Returns the length of all elements, regardless of filtering or ranging.
   int get originalLength => _list.length;
+
+  int get filterOrOriginalLength =>
+      hasFilter ? _filteredList.length : _list.length;
 
   @override
   set length(int length) {
@@ -425,7 +435,7 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   }
 
   int _toOriginalIndex(int index) {
-    if (!hasFilter && !hasRange || _effectiveList.isEmpty) {
+    if (_effectiveList.isEmpty || (!hasFilter && !hasRange)) {
       return index;
     }
 
@@ -454,17 +464,11 @@ class FilteredList<E> extends ListBase<E> implements AbstractFilteredList<E> {
   int _toOriginalIndexForInsert(int index) {
     var lastIndex = _effectiveList.length - 1;
 
-    var greaterThanLast = index > lastIndex + (_range?.from ?? 0);
+    var greaterThanLast = index > lastIndex;
 
-    var originalIndex = greaterThanLast
-        ? _toOriginalIndex(lastIndex + (_range?.from ?? 0))
-        : _toOriginalIndex(index);
+    var originalIndex = _toOriginalIndex(greaterThanLast ? lastIndex : index);
 
-    if (greaterThanLast) {
-      ++originalIndex;
-    }
-
-    return originalIndex;
+    return greaterThanLast ? ++originalIndex : originalIndex;
   }
 
   void _updateFilteredList() {

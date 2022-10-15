@@ -33,11 +33,11 @@ class PlutoLeftFrozenColumnsState
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _showColumnGroups = update<bool>(
       _showColumnGroups,
       stateManager.showColumnGroups,
@@ -49,12 +49,13 @@ class PlutoLeftFrozenColumnsState
       compare: listEquals,
     );
 
-    if (changed && _showColumnGroups == true) {
-      _columnGroups = stateManager.separateLinkedGroup(
-        columnGroupList: stateManager.refColumnGroups!,
+    _columnGroups = update<List<PlutoColumnGroupPair>>(
+      _columnGroups,
+      stateManager.separateLinkedGroup(
+        columnGroupList: stateManager.refColumnGroups,
         columns: _columns,
-      );
-    }
+      ),
+    );
 
     _itemCount = update<int>(_itemCount, _getItemCount());
   }
@@ -75,9 +76,7 @@ class PlutoLeftFrozenColumnsState
       child: PlutoBaseColumnGroup(
         stateManager: stateManager,
         columnGroup: e,
-        depth: stateManager.columnGroupDepth(
-          stateManager.refColumnGroups!,
-        ),
+        depth: stateManager.columnGroupDepth(stateManager.refColumnGroups),
       ),
     );
   }

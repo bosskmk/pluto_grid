@@ -32,9 +32,21 @@ class DummyData {
           } else if (i == 3) {
             return PlutoColumnType.text();
           } else if (i == 4) {
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
+            return PlutoColumnType.select(<String>[
+              'One',
+              'Two',
+              'Three',
+              'Four',
+              'Five',
+            ]);
           } else if (i == 5) {
-            return PlutoColumnType.select(<String>['One', 'Two', 'Three']);
+            return PlutoColumnType.select(<String>[
+              'One',
+              'Two',
+              'Three',
+              'Four',
+              'Five',
+            ]);
           } else if (i == 6) {
             return PlutoColumnType.date();
           } else if (i == 7) {
@@ -78,15 +90,7 @@ class DummyData {
   }
 
   static PlutoRow rowByColumns(List<PlutoColumn> columns) {
-    final cells = <String, PlutoCell>{};
-
-    for (var column in columns) {
-      cells[column.field] = PlutoCell(
-        value: valueByColumnType(column),
-      );
-    }
-
-    return PlutoRow(cells: cells);
+    return PlutoRow(cells: _cellsByColumn(columns));
   }
 
   static dynamic valueByColumnType(PlutoColumn column) {
@@ -145,5 +149,114 @@ class DummyData {
     });
 
     return completer.future;
+  }
+
+  static List<PlutoRow> treeRowsByColumn({
+    required List<PlutoColumn> columns,
+    int count = 100,
+    int? depth,
+    List<int>? childCount,
+  }) {
+    assert(depth == null || depth >= 0);
+    assert(childCount == null || childCount.length == depth);
+
+    const defaultRandomDepth = 5;
+    const defaultRandomChildCount = 10;
+
+    PlutoRowType? generateType(int maxDepth, List<int> countOfChildren) {
+      if (maxDepth < 1) return null;
+
+      final PlutoRowType type = PlutoRowType.group(
+        children: FilteredList(
+          initialList: [],
+        ),
+      );
+      List<PlutoRow>? currentChildren = type.group.children;
+      List<List<PlutoRow>> childrenStack = [];
+      List<List<PlutoRow>> childrenStackTemp = [];
+      int currentDepth = 0;
+      bool next = true;
+
+      while (currentDepth < maxDepth || currentChildren != null) {
+        bool isMax = currentDepth + 1 == maxDepth;
+        next = childrenStack.isEmpty;
+
+        if (currentChildren != null) {
+          for (final _
+              in List.generate(countOfChildren[currentDepth], (i) => i)) {
+            final children = <PlutoRow>[];
+            currentChildren.add(PlutoRow(
+              cells: _cellsByColumn(columns),
+              type: isMax
+                  ? null
+                  : PlutoRowType.group(
+                      children: FilteredList(
+                        initialList: children,
+                      ),
+                    ),
+            ));
+
+            if (!isMax) childrenStackTemp.add(children);
+          }
+        }
+
+        if (next) {
+          childrenStack = [...childrenStackTemp];
+          childrenStackTemp = [];
+        }
+
+        currentChildren = childrenStack.isNotEmpty ? childrenStack.last : null;
+        if (currentChildren != null) childrenStack.removeLast();
+
+        if (next) ++currentDepth;
+      }
+
+      return type;
+    }
+
+    final rows = <PlutoRow>[];
+
+    for (final _ in List.generate(count, (index) => index)) {
+      PlutoRowType? type;
+
+      final depthOrRandom = depth ??
+          faker.randomGenerator.integer(
+            defaultRandomDepth,
+            min: 0,
+          );
+
+      final countOfChildren = childCount ??
+          List.generate(depthOrRandom, (index) {
+            return faker.randomGenerator.integer(
+              defaultRandomChildCount,
+              min: 0,
+            );
+          });
+
+      type = depthOrRandom == 0
+          ? null
+          : generateType(depthOrRandom, countOfChildren);
+
+      rows.add(
+        PlutoRow(
+          cells: _cellsByColumn(columns),
+          type: type,
+        ),
+      );
+    }
+
+    return rows;
+  }
+
+  static Map<String, PlutoCell> _cellsByColumn(List<PlutoColumn> columns) {
+    final cells = <String, PlutoCell>{};
+
+    for (var column in columns) {
+      cells[column.field] = PlutoCell(
+        value: valueByColumnType(column),
+      );
+    }
+
+    return cells;
   }
 }

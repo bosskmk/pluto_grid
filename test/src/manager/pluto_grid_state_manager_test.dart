@@ -11,7 +11,7 @@ class _MockScrollController extends Mock implements ScrollController {}
 void main() {
   group('selectingModes', () {
     test('Square, Row, None 이 리턴 되야 한다.', () {
-      final selectingModes = PlutoGridStateManager.selectingModes;
+      const selectingModes = PlutoGridSelectingMode.values;
 
       expect(selectingModes.contains(PlutoGridSelectingMode.cell), isTrue);
       expect(selectingModes.contains(PlutoGridSelectingMode.row), isTrue);
@@ -103,16 +103,19 @@ void main() {
         PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
       ];
 
-      expect(rows.first.sortIdx, null);
-      expect(rows.last.sortIdx, null);
-
-      PlutoGridStateManager.initializeRows(columns, rows);
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        forceApplySortIdx: true,
+      );
 
       expect(rows.first.sortIdx, 0);
       expect(rows.last.sortIdx, 4);
     });
 
-    test('이미 sortIdx 가 설정 된 경우 sortIdx 값이 유지 되어야 한다.', () {
+    test(
+        'forceApplySortIdx 가 false 이고 이미 sortIdx 가 설정 된 경우 sortIdx 값이 유지 되어야 한다.',
+        () {
       final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
 
       final List<PlutoRow> rows = [
@@ -133,7 +136,11 @@ void main() {
       expect(rows.first.sortIdx, 3);
       expect(rows.last.sortIdx, 5);
 
-      PlutoGridStateManager.initializeRows(columns, rows);
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        forceApplySortIdx: false,
+      );
 
       expect(rows.first.sortIdx, 3);
       expect(rows.last.sortIdx, 5);
@@ -183,10 +190,12 @@ void main() {
         PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
       ];
 
-      expect(rows.first.sortIdx, null);
-      expect(rows.last.sortIdx, null);
-
-      PlutoGridStateManager.initializeRows(columns, rows, increase: false);
+      PlutoGridStateManager.initializeRows(
+        columns,
+        rows,
+        increase: false,
+        forceApplySortIdx: true,
+      );
 
       expect(rows.first.sortIdx, 0);
       expect(rows.last.sortIdx, -4);
@@ -203,14 +212,12 @@ void main() {
         PlutoRow(cells: {'title0': PlutoCell(value: 'test')}),
       ];
 
-      expect(rows.first.sortIdx, null);
-      expect(rows.last.sortIdx, null);
-
       PlutoGridStateManager.initializeRows(
         columns,
         rows,
         increase: false,
         start: -10,
+        forceApplySortIdx: true,
       );
 
       expect(rows.first.sortIdx, -10);
@@ -412,38 +419,6 @@ void main() {
         },
         throwsAssertionError,
       );
-    });
-
-    test(
-        'sortIdx 가 null 로 설정 된 rows 를 sortIdx 시작 값을 변경하여 실행하면, '
-        'sortIdx 값을 0 으로 변경 하면 rows 의 sortIdx 가 변경 되고, '
-        '원래 순서대로 리턴 되어야 한다.', () async {
-      final List<PlutoColumn> columns = ColumnHelper.textColumn('title');
-
-      final List<PlutoRow> rows = RowHelper.count(100, columns);
-
-      for (var value in rows) {
-        value.sortIdx = null;
-      }
-
-      final Iterable<Key> rowKeys = rows.map((e) => e.key);
-
-      expect(rows.first.sortIdx, null);
-      expect(rows.last.sortIdx, null);
-
-      final initializedRows = await PlutoGridStateManager.initializeRowsAsync(
-        columns,
-        rows,
-        forceApplySortIdx: true,
-        start: 0,
-        chunkSize: 10,
-        duration: const Duration(milliseconds: 1),
-      );
-
-      for (int i = 0; i < initializedRows.length; i += 1) {
-        expect(initializedRows[i].sortIdx, i);
-        expect(initializedRows[i].key, rowKeys.elementAt(i));
-      }
     });
 
     test(

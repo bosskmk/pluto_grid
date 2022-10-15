@@ -12,7 +12,7 @@ import '../mock/mock_on_change_listener.dart';
 
 final now = DateTime.now();
 
-final mockListener = MockOnChangeListener();
+final mockListener = MockMethods();
 
 void main() {
   late PlutoGridStateManager stateManager;
@@ -369,7 +369,7 @@ void main() {
     format: 'yyyy-MM-dd',
     headerFormat: 'yyyy-MM',
     initDate: DateTime(2022, 6, 11),
-    onSelected: mockListener.onChangeOneParamListener<PlutoGridOnSelectedEvent>,
+    onSelected: mockListener.oneParamReturnVoid<PlutoGridOnSelectedEvent>,
   ).test(
     '2022.6.11 일을 선택하고 탭하면, '
     'onSelected 콜백이 호출 되어야 한다.',
@@ -379,7 +379,7 @@ void main() {
       await tester.pump();
 
       verify(
-        mockListener.onChangeOneParamListener(argThat(
+        mockListener.oneParamReturnVoid(argThat(
             PlutoObjectMatcher<PlutoGridOnSelectedEvent>(rule: (object) {
           return object.cell!.value == '2022-06-11';
         }))),
@@ -391,7 +391,7 @@ void main() {
     format: 'yyyy-MM-dd',
     headerFormat: 'yyyy-MM',
     initDate: DateTime(2022, 6, 11),
-    onLoaded: mockListener.onChangeOneParamListener<PlutoGridOnLoadedEvent>,
+    onLoaded: mockListener.oneParamReturnVoid<PlutoGridOnLoadedEvent>,
   ).test(
     '2022.6.11 일을 선택하고 탭하면, '
     'onSelected 콜백이 호출 되어야 한다.',
@@ -401,7 +401,7 @@ void main() {
       await tester.pump();
 
       verify(
-        mockListener.onChangeOneParamListener(
+        mockListener.oneParamReturnVoid(
           argThat(
             isA<PlutoGridOnLoadedEvent>(),
           ),

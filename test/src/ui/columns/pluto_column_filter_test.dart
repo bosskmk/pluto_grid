@@ -1,21 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/ui/ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../matcher/pluto_object_matcher.dart';
-import 'pluto_column_filter_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-  MockSpec<StreamSubscription>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late PublishSubject<PlutoNotifierEvent> subject;

@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
-import 'selecting_state_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   PlutoGridStateManager createStateManager({
     required List<PlutoColumn> columns,
@@ -24,8 +19,8 @@ void main() {
     final stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
-      gridFocusNode: gridFocusNode,
-      scroll: scroll,
+      gridFocusNode: gridFocusNode ?? MockFocusNode(),
+      scroll: scroll ?? MockPlutoGridScrollController(),
       configuration: configuration,
     );
 

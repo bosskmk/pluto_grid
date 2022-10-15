@@ -121,6 +121,11 @@ class PlutoGridKeyManager {
       return;
     }
 
+    if (keyEvent.isF4) {
+      _handleF4(keyEvent);
+      return;
+    }
+
     if (keyEvent.isCharacter) {
       if (keyEvent.isCtrlC) {
         _handleCtrlC(keyEvent);
@@ -230,6 +235,10 @@ class PlutoGridKeyManager {
     }
 
     if (keyEvent.isAltPressed && stateManager.isPaginated) {
+      final currentColumn = stateManager.currentColumn;
+
+      final previousPosition = stateManager.currentCellPosition;
+
       int toPage =
           keyEvent.isPageUp ? stateManager.page - 1 : stateManager.page + 1;
 
@@ -240,6 +249,11 @@ class PlutoGridKeyManager {
       }
 
       stateManager.setPage(toPage);
+
+      _restoreCurrentCellPosition(
+        currentColumn: currentColumn,
+        previousPosition: previousPosition,
+      );
 
       return;
     }
@@ -263,6 +277,11 @@ class PlutoGridKeyManager {
     }
 
     if (stateManager.configuration.enterKeyAction.isNone) {
+      return;
+    }
+
+    if (!stateManager.isEditing && _isExpandableCell()) {
+      stateManager.toggleExpandedRowGroup(rowGroup: stateManager.currentRow!);
       return;
     }
 
@@ -351,6 +370,23 @@ class PlutoGridKeyManager {
     );
   }
 
+  void _handleF4(PlutoKeyManagerEvent keyEvent) {
+    final currentColumn = stateManager.currentColumn;
+
+    if (currentColumn == null) {
+      return;
+    }
+
+    final previousPosition = stateManager.currentCellPosition;
+
+    stateManager.toggleSortColumn(currentColumn);
+
+    _restoreCurrentCellPosition(
+      currentColumn: currentColumn,
+      previousPosition: previousPosition,
+    );
+  }
+
   void _handleCtrlC(PlutoKeyManagerEvent keyEvent) {
     if (stateManager.isEditing == true) {
       return;
@@ -434,5 +470,33 @@ class PlutoGridKeyManager {
         );
       }
     }
+  }
+
+  void _restoreCurrentCellPosition({
+    PlutoColumn? currentColumn,
+    PlutoGridCellPosition? previousPosition,
+  }) {
+    if (currentColumn == null || previousPosition?.hasPosition != true) {
+      return;
+    }
+
+    int rowIdx = previousPosition!.rowIdx!;
+
+    if (rowIdx > stateManager.refRows.length - 1) {
+      rowIdx = stateManager.refRows.length - 1;
+    }
+
+    stateManager.setCurrentCell(
+      stateManager.refRows.elementAt(rowIdx).cells[currentColumn.field],
+      rowIdx,
+    );
+  }
+
+  bool _isExpandableCell() {
+    return stateManager.currentCell != null &&
+        stateManager.enabledRowGroups &&
+        stateManager.rowGroupDelegate
+                ?.isExpandableCell(stateManager.currentCell!) ==
+            true;
   }
 }

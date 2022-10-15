@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class IColumnGroupState {
   List<PlutoColumnGroup> get columnGroups;
 
-  FilteredList<PlutoColumnGroup>? refColumnGroups;
+  FilteredList<PlutoColumnGroup> get refColumnGroups;
 
   bool get hasColumnGroups;
 
@@ -22,48 +23,37 @@ abstract class IColumnGroupState {
     List<PlutoColumn> columns, {
     bool notify = true,
   });
+
+  @protected
+  void setGroupToColumn();
+}
+
+class _State {
+  bool _showColumnGroups = false;
 }
 
 mixin ColumnGroupState implements IPlutoGridState {
-  @override
-  List<PlutoColumnGroup> get columnGroups => [...refColumnGroups!];
+  final _State _state = _State();
 
   @override
-  FilteredList<PlutoColumnGroup>? get refColumnGroups => _refColumnGroups;
+  List<PlutoColumnGroup> get columnGroups => [...refColumnGroups];
 
   @override
-  set refColumnGroups(FilteredList<PlutoColumnGroup>? setColumnGroups) {
-    if (setColumnGroups != null && setColumnGroups.isNotEmpty) {
-      _showColumnGroups = true;
-    }
-
-    _refColumnGroups = setColumnGroups;
-
-    _setGroupToColumn();
-  }
-
-  FilteredList<PlutoColumnGroup>? _refColumnGroups;
+  bool get hasColumnGroups => refColumnGroups.isNotEmpty;
 
   @override
-  bool get hasColumnGroups =>
-      refColumnGroups != null && refColumnGroups!.isNotEmpty;
-
-  @override
-  bool get showColumnGroups => _showColumnGroups == true && hasColumnGroups;
-
-  bool? _showColumnGroups;
+  bool get showColumnGroups =>
+      _state._showColumnGroups == true && hasColumnGroups;
 
   @override
   void setShowColumnGroups(bool flag, {bool notify = true}) {
-    if (_showColumnGroups == flag) {
+    if (showColumnGroups == flag) {
       return;
     }
 
-    _showColumnGroups = flag;
+    _state._showColumnGroups = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setShowColumnGroups.hashCode);
   }
 
   @override
@@ -89,21 +79,34 @@ mixin ColumnGroupState implements IPlutoGridState {
     List<PlutoColumn> columns, {
     bool notify = true,
   }) {
-    if (refColumnGroups?.originalList.isEmpty == true) {
+    if (refColumnGroups.originalList.isEmpty == true) {
       return;
     }
 
     final Set<String> columnFields = Set.from(columns.map((e) => e.field));
 
-    refColumnGroups!.removeWhereFromOriginal((group) {
+    refColumnGroups.removeWhereFromOriginal((group) {
       return _emptyGroupAfterRemoveColumns(
         columnGroup: group,
         columnFields: columnFields,
       );
     });
 
-    if (notify) {
-      notifyListeners();
+    notifyListeners(notify, removeColumnsInColumnGroup.hashCode);
+  }
+
+  @override
+  @protected
+  void setGroupToColumn() {
+    if (hasColumnGroups == false) {
+      return;
+    }
+
+    for (final column in refColumns.originalList) {
+      column.group = PlutoColumnGroupHelper.getParentGroupIfExistsFromList(
+        field: column.field,
+        columnGroupList: refColumnGroups,
+      );
     }
   }
 
@@ -124,18 +127,5 @@ mixin ColumnGroupState implements IPlutoGridState {
 
     return (columnGroup.hasFields && columnGroup.fields!.isEmpty) ||
         (columnGroup.hasChildren && columnGroup.children!.isEmpty);
-  }
-
-  void _setGroupToColumn() {
-    if (hasColumnGroups == false) {
-      return;
-    }
-
-    for (final column in refColumns) {
-      column.group = PlutoColumnGroupHelper.getParentGroupIfExistsFromList(
-        field: column.field,
-        columnGroupList: refColumnGroups!,
-      );
-    }
   }
 }

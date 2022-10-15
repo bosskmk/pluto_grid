@@ -77,7 +77,7 @@ mixin VisibilityLayoutState implements IPlutoGridState {
     updateScrollViewport();
 
     if (notify) {
-      scroll?.horizontal?.notifyListeners();
+      scroll.horizontal?.notifyListeners();
     }
   }
 }

@@ -66,13 +66,13 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
     PlutoGridScrollUpdateDirection scrollDirection,
   ) {
     if (scrollDirection.isHorizontal) {
-      final ScrollController scroll = stateManager.scroll!.bodyRowsHorizontal!;
+      final ScrollController scroll = stateManager.scroll.bodyRowsHorizontal!;
 
       scroll.jumpTo(scroll.offset);
     }
 
     if (scrollDirection.isVertical) {
-      final ScrollController scroll = stateManager.scroll!.bodyRowsVertical!;
+      final ScrollController scroll = stateManager.scroll.bodyRowsVertical!;
 
       scroll.jumpTo(scroll.offset);
     }
@@ -125,8 +125,8 @@ class PlutoGridScrollUpdateEvent extends PlutoGridEvent {
 
   void _scroll(PlutoGridStateManager? stateManager, PlutoMoveDirection move) {
     final ScrollController scroll = move.horizontal
-        ? stateManager!.scroll!.bodyRowsHorizontal!
-        : stateManager!.scroll!.bodyRowsVertical!;
+        ? stateManager!.scroll.bodyRowsHorizontal!
+        : stateManager!.scroll.bodyRowsVertical!;
 
     // If scrolling is in progress, the previous scroll animation continues.
     if (scroll.position.isScrollingNotifier.value) {

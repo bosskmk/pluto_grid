@@ -1,8 +1,15 @@
 import 'package:mockito/mockito.dart';
 
-class OnchangeListenerTest {
-  void onChangeVoidNoParamListener() {}
-  void onChangeOneParamListener<T>(T param) {}
+class _Methods {
+  void noParamReturnVoid() {}
+  void oneParamReturnVoid<T>(T param) {}
+  bool oneParamReturnBool<T>(T? param) => true;
 }
 
-class MockOnChangeListener extends Mock implements OnchangeListenerTest {}
+class MockMethods extends Mock implements _Methods {
+  @override
+  bool oneParamReturnBool<T>(T? param) => super.noSuchMethod(
+        Invocation.method(#onChangeOneParamReturnBoolListener, [param]),
+        returnValue: true,
+      );
+}

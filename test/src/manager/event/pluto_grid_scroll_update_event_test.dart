@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-import 'pluto_grid_scroll_update_event_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late PlutoGridScrollController scrollController;

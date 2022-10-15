@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
-import 'pluto_grid_key_manager_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
 

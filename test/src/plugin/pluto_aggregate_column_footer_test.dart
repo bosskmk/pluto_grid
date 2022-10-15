@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
-import 'pluto_aggregate_column_footer_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
 
@@ -20,12 +16,15 @@ void main() {
     required PlutoColumn column,
     required FilteredList<PlutoRow> rows,
     required PlutoAggregateColumnType type,
+    PlutoAggregateColumnGroupedRowType groupedRowType =
+        PlutoAggregateColumnGroupedRowType.all,
     PlutoAggregateFilter? filter,
     String? locale,
     String? format,
     List<InlineSpan> Function(String)? titleSpanBuilder,
     AlignmentGeometry? alignment,
     EdgeInsets? padding,
+    bool enabledRowGroups = false,
   }) {
     return PlutoWidgetTestHelper('PlutoAggregateColumnFooter : ',
         (tester) async {
@@ -40,6 +39,11 @@ void main() {
 
       when(stateManager.refRows).thenReturn(rows);
 
+      when(stateManager.enabledRowGroups).thenReturn(enabledRowGroups);
+
+      when(stateManager.iterateMainRowGroup)
+          .thenReturn(rows.where((r) => r.isMain));
+
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
@@ -49,6 +53,7 @@ void main() {
                 column: column,
               ),
               type: type,
+              groupedRowType: groupedRowType,
               filter: filter,
               format: format ?? '#,###',
               locale: locale,
@@ -246,6 +251,210 @@ void main() {
         expect(find.text('Left '), findsOneWidget);
         expect(find.text('Value : 6,000'), findsOneWidget);
         expect(find.text(' Right'), findsOneWidget);
+      },
+    );
+  });
+
+  group('RowGroups', () {
+    final columns = [
+      PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.number(),
+      ),
+    ];
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+                children: FilteredList(
+              initialList: [
+                PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+              ],
+            ))),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.all,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 all 인 경우 '
+      'Value : 10,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 10,000'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+                children: FilteredList(
+              initialList: [
+                PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+              ],
+            ))),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.expandedAll,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 expandedAll 이고 그룹행이 접혀진 경우 '
+      'Value : 6,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 6,000'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+              children: FilteredList(
+                initialList: [
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                ],
+              ),
+              expanded: true,
+            )),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.expandedAll,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 expandedAll 이고 그룹행이 펼쳐진 경우 '
+      'Value : 10,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 10,000'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+              children: FilteredList(
+                initialList: [
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                ],
+              ),
+              expanded: true,
+            )),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.rows,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 rows 인 경우 '
+      'Value : 9,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 9,000'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+              children: FilteredList(
+                initialList: [
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                ],
+              ),
+              expanded: false,
+            )),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.expandedRows,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 expandedRows 이고 그룹행이 접혀진 경우 '
+      'Value : 5,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 5,000'), findsOneWidget);
+      },
+    );
+
+    buildWidget(
+      column: columns.first,
+      rows: FilteredList<PlutoRow>(initialList: [
+        PlutoRow(
+            cells: {'column': PlutoCell(value: 1000)},
+            type: PlutoRowType.group(
+              children: FilteredList(
+                initialList: [
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                  PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+                ],
+              ),
+              expanded: true,
+            )),
+        PlutoRow(cells: {'column': PlutoCell(value: 2000)}),
+        PlutoRow(cells: {'column': PlutoCell(value: 3000)}),
+      ]),
+      type: PlutoAggregateColumnType.sum,
+      groupedRowType: PlutoAggregateColumnGroupedRowType.expandedRows,
+      enabledRowGroups: true,
+      titleSpanBuilder: (text) {
+        return [
+          WidgetSpan(child: Text('Value : $text')),
+        ];
+      },
+    ).test(
+      'GroupedRowType 이 expandedRows 이고 그룹행이 펼쳐진 경우 '
+      'Value : 9,000 이 출력 되어야 한다.',
+      (tester) async {
+        expect(find.text('Value : 9,000'), findsOneWidget);
       },
     );
   });
