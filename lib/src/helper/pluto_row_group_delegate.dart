@@ -23,6 +23,8 @@ abstract class PlutoRowGroupDelegate {
 
   bool get enableCompactCount;
 
+  bool get showFirstExpandableIcon;
+
   bool isEditableCell(PlutoCell cell);
 
   bool isExpandableCell(PlutoCell cell);
@@ -51,6 +53,9 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
   final bool Function(PlutoCell cell) showText;
 
   @override
+  final bool showFirstExpandableIcon;
+
+  @override
   final bool showCount;
 
   @override
@@ -59,6 +64,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
   PlutoRowGroupTreeDelegate({
     required this.resolveColumnDepth,
     required this.showText,
+    this.showFirstExpandableIcon = false,
     this.showCount = true,
     this.enableCompactCount = true,
   });
@@ -73,9 +79,12 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
   bool isEditableCell(PlutoCell cell) => showText(cell);
 
   @override
-  bool isExpandableCell(PlutoCell cell) =>
-      cell.row.type.isGroup &&
-      resolveColumnDepth(cell.column) == cell.row.depth;
+  bool isExpandableCell(PlutoCell cell) {
+    if (!cell.row.type.isGroup) return false;
+    final int checkDepth = showFirstExpandableIcon ? 0 : cell.row.depth;
+    return cell.row.type.isGroup &&
+        resolveColumnDepth(cell.column) == checkDepth;
+  }
 
   @override
   List<PlutoRow> toGroup({
@@ -131,6 +140,9 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
   final List<PlutoColumn> columns;
 
   @override
+  final bool showFirstExpandableIcon;
+
+  @override
   final bool showCount;
 
   @override
@@ -138,6 +150,7 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
 
   PlutoRowGroupByColumnDelegate({
     required this.columns,
+    this.showFirstExpandableIcon = false,
     this.showCount = true,
     this.enableCompactCount = true,
   });
@@ -157,11 +170,9 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
 
   @override
   bool isExpandableCell(PlutoCell cell) {
-    if (cell.row.type.isNormal) {
-      return false;
-    }
-
-    return _columnDepth(cell.column) == cell.row.depth;
+    if (cell.row.type.isNormal) return false;
+    final int checkDepth = showFirstExpandableIcon ? 0 : cell.row.depth;
+    return _columnDepth(cell.column) == checkDepth;
   }
 
   bool isRowGroupColumn(PlutoColumn column) {

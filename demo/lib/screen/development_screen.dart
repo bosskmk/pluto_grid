@@ -79,10 +79,13 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         PlutoGridStateManager.initializeRowsAsync(columns, fetchedRows)
             .then((initializedRows) {
           stateManager.refRows.addAll(initializedRows);
-          stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(columns: [
-            stateManager.columns[3],
-            stateManager.columns[4],
-          ]));
+          stateManager.setRowGroup(PlutoRowGroupByColumnDelegate(
+            columns: [
+              stateManager.columns[3],
+              stateManager.columns[4],
+            ],
+            showFirstExpandableIcon: false,
+          ));
           stateManager.moveColumn(
             column: columns[5],
             targetColumn: columns[0],

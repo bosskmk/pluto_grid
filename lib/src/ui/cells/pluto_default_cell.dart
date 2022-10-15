@@ -52,6 +52,20 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
   bool get _isExpandableCell =>
       stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
 
+  bool get _showSpacing {
+    if (!stateManager.enabledRowGroups ||
+        !stateManager.rowGroupDelegate!.showFirstExpandableIcon) {
+      return false;
+    }
+
+    if (_canExpand) return true;
+
+    final parentCell = widget.row.parent?.cells[widget.column.field];
+
+    return parentCell != null &&
+        stateManager.rowGroupDelegate!.isExpandableCell(parentCell);
+  }
+
   bool get _isEmptyGroup => widget.row.type.group.children.isEmpty;
 
   bool get _showGroupCount =>
@@ -115,60 +129,73 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
     final style = stateManager.configuration.style;
 
-    return Row(
-      children: [
-        if (_canRowDrag)
-          _RowDragIconWidget(
-            column: widget.column,
-            row: widget.row,
-            rowIdx: widget.rowIdx,
-            stateManager: stateManager,
-            feedbackWidget: cellWidget,
-            dragIcon: Icon(
-              Icons.drag_indicator,
-              size: style.iconSize,
-              color: style.iconColor,
-            ),
-          ),
-        if (widget.column.enableRowChecked)
-          CheckboxSelectionWidget(
-            column: widget.column,
-            row: widget.row,
-            rowIdx: widget.rowIdx,
-            stateManager: stateManager,
-          ),
-        Expanded(child: cellWidget),
-        if (_showGroupCount)
-          Text(
-            '($_groupCount)',
-            style: stateManager.configuration.style.cellTextStyle.copyWith(
-              decoration: TextDecoration.none,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        if (_canExpand)
-          IconButton(
-            onPressed: _isEmptyGroup ? null : _handleToggleExpandedRowGroup,
-            icon: _isEmptyGroup
+    Widget? spacingWidget;
+    if (_showSpacing) {
+      if (widget.row.depth > 0) {
+        double gap = style.iconSize * 1.5;
+        double spacing = widget.row.depth * gap;
+        if (!widget.row.type.isGroup) spacing += gap;
+        spacingWidget = SizedBox(width: spacing);
+      }
+    }
+
+    Widget? expandIcon;
+    if (_canExpand) {
+      expandIcon = IconButton(
+        onPressed: _isEmptyGroup ? null : _handleToggleExpandedRowGroup,
+        icon: _isEmptyGroup
+            ? Icon(
+                style.rowGroupEmptyIcon,
+                size: style.iconSize / 2,
+                color: style.iconColor,
+              )
+            : widget.row.type.group.expanded
                 ? Icon(
-                    style.rowGroupEmptyIcon,
-                    size: style.iconSize / 2,
+                    style.rowGroupExpandedIcon,
+                    size: style.iconSize,
                     color: style.iconColor,
                   )
-                : widget.row.type.group.expanded
-                    ? Icon(
-                        style.rowGroupExpandedIcon,
-                        size: style.iconSize,
-                        color: style.iconColor,
-                      )
-                    : Icon(
-                        style.rowGroupCollapsedIcon,
-                        size: style.iconSize,
-                        color: style.iconColor,
-                      ),
+                : Icon(
+                    style.rowGroupCollapsedIcon,
+                    size: style.iconSize,
+                    color: style.iconColor,
+                  ),
+      );
+    }
+
+    return Row(children: [
+      if (_canRowDrag)
+        _RowDragIconWidget(
+          column: widget.column,
+          row: widget.row,
+          rowIdx: widget.rowIdx,
+          stateManager: stateManager,
+          feedbackWidget: cellWidget,
+          dragIcon: Icon(
+            Icons.drag_indicator,
+            size: style.iconSize,
+            color: style.iconColor,
           ),
-      ],
-    );
+        ),
+      if (widget.column.enableRowChecked)
+        CheckboxSelectionWidget(
+          column: widget.column,
+          row: widget.row,
+          rowIdx: widget.rowIdx,
+          stateManager: stateManager,
+        ),
+      if (spacingWidget != null) spacingWidget,
+      if (expandIcon != null) expandIcon,
+      Expanded(child: cellWidget),
+      if (_showGroupCount)
+        Text(
+          '($_groupCount)',
+          style: stateManager.configuration.style.cellTextStyle.copyWith(
+            decoration: TextDecoration.none,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+    ]);
   }
 }
 
@@ -391,6 +418,25 @@ class _BuildDefaultCellWidget extends StatelessWidget {
         stateManager.rowGroupDelegate!.isEditableCell(cell);
   }
 
+  String get _text {
+    if (!_showText) return '';
+
+    dynamic cellValue = cell.value;
+
+    if (stateManager.enabledRowGroups &&
+        stateManager.rowGroupDelegate!.showFirstExpandableIcon &&
+        stateManager.rowGroupDelegate!.type.isByColumn) {
+      final delegate =
+          stateManager.rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+
+      if (row.depth < delegate.columns.length) {
+        cellValue = row.cells[delegate.columns[row.depth].field]!.value;
+      }
+    }
+
+    return column.formattedValueForDisplay(cellValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (column.hasRenderer) {
@@ -404,7 +450,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
     }
 
     return Text(
-      _showText ? column.formattedValueForDisplay(cell.value) : '',
+      _text,
       style: stateManager.configuration.style.cellTextStyle.copyWith(
         decoration: TextDecoration.none,
         fontWeight: FontWeight.normal,

@@ -512,7 +512,8 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   @protected
   void updateRowGroupByHideColumn(List<PlutoColumn> columns) {
-    if (rowGroupDelegate?.type.isByColumn != true) {
+    if (rowGroupDelegate?.type.isByColumn != true ||
+        rowGroupDelegate?.showFirstExpandableIcon == true) {
       return;
     }
 
