@@ -8,4 +8,5 @@
 /example/build
 /coverage
 /test
+/build
 pubspec.lock
