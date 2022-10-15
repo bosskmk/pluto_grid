@@ -497,31 +497,17 @@ class PlutoContributors extends StatelessWidget {
             },
           ),
           PlutoContributorTile(
-            name: 'Alexey Volkov',
+            name: 'Gian',
             linkTitle: 'Github',
             onTapLink: () {
-              launchUrl('https://github.com/ASGAlex');
+              launchUrl('https://github.com/Macacoazul01');
             },
           ),
           PlutoContributorTile(
-            name: 'MrCasCode',
+            name: 'Enrique Cardona',
             linkTitle: 'Github',
             onTapLink: () {
-              launchUrl('https://github.com/MrCasCode');
-            },
-          ),
-          PlutoContributorTile(
-            name: 'Wang Chuanbin',
-            linkTitle: 'Github',
-            onTapLink: () {
-              launchUrl('https://github.com/Chuanbin-Wang');
-            },
-          ),
-          PlutoContributorTile(
-            name: 'sheentim',
-            linkTitle: 'Github',
-            onTapLink: () {
-              launchUrl('https://github.com/sheentim');
+              launchUrl('https://github.com/henry2man');
             },
           ),
           PlutoContributorTile(
@@ -532,10 +518,66 @@ class PlutoContributors extends StatelessWidget {
             },
           ),
           PlutoContributorTile(
-            name: 'Enrique Cardona',
+            name: 'Wang Chuanbin',
             linkTitle: 'Github',
             onTapLink: () {
-              launchUrl('https://github.com/henry2man');
+              launchUrl('https://github.com/Chuanbin-Wang');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'HasanCihatS',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/HasanCihatS');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Majed DH',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/MajedDH');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Matěj Žídek',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/mzdm');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Henrique Deodato',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/h3nr1ke');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'tilongzs',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/tilongzs');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Alexey Volkov',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/ASGAlex');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Dmitry Sboychakov',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/DmitrySboychakov');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'MrCasCode',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/MrCasCode');
             },
           ),
           PlutoContributorTile(
@@ -553,17 +595,10 @@ class PlutoContributors extends StatelessWidget {
             },
           ),
           PlutoContributorTile(
-            name: 'Majed DH',
+            name: 's-yanev',
             linkTitle: 'Github',
             onTapLink: () {
-              launchUrl('https://github.com/MajedDH');
-            },
-          ),
-          PlutoContributorTile(
-            name: 'Dmitry Sboychakov',
-            linkTitle: 'Github',
-            onTapLink: () {
-              launchUrl('https://github.com/DmitrySboychakov');
+              launchUrl('https://github.com/s-yanev');
             },
           ),
           PlutoContributorTile(
@@ -574,10 +609,17 @@ class PlutoContributors extends StatelessWidget {
             },
           ),
           PlutoContributorTile(
-            name: 'Matěj Žídek',
+            name: 'sheentim',
             linkTitle: 'Github',
             onTapLink: () {
-              launchUrl('https://github.com/mzdm');
+              launchUrl('https://github.com/sheentim');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'Anders',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/RedRozio');
             },
           ),
           PlutoContributorTile.invisible(
