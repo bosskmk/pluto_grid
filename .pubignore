@@ -6,5 +6,6 @@
 /example/windows
 /example/linux
 /example/build
+/coverage
 /test
 pubspec.lock
