@@ -45,7 +45,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   void initState() {
     super.initState();
 
-    const _Test test = _Test.c;
+    const _Test test = _Test.b;
 
     // PlutoChangeNotifierFilter.debug = true;
     // PlutoChangeNotifierFilter.debugWidgets = [
@@ -578,6 +578,7 @@ class _HeaderState extends State<_Header> {
   Widget build(BuildContext context) {
     return PlutoMenuBar(
       borderColor: Colors.transparent,
+      mode: _isMobile ? PlutoMenuBarMode.tap : PlutoMenuBarMode.hover,
       textStyle: const TextStyle(
         color: Colors.black,
         fontSize: 14,
@@ -686,7 +687,8 @@ class _HeaderState extends State<_Header> {
           children: [
             PlutoMenuItem(title: 'Select all', onTap: handleSelectAll),
             PlutoMenuItem(title: 'Unselect all', onTap: handleUnselect),
-            PlutoMenuItem(title: 'Select mode', enable: false),
+            PlutoMenuItem.divider(),
+            PlutoMenuItem(title: 'Select modes', enable: false),
             PlutoMenuItem.radio(
               title: 'Mode',
               initialRadioValue: gridSelectingMode,
@@ -761,6 +763,7 @@ class _HeaderState extends State<_Header> {
                 ),
               ],
             ),
+            PlutoMenuItem.divider(),
             PlutoMenuItem(
               title: 'ReSizeMode',
               enable: false,
@@ -1084,3 +1087,8 @@ enum _Locale {
   arabic,
   norway,
 }
+
+final _isAndroid = defaultTargetPlatform == TargetPlatform.android;
+final _isIOS = defaultTargetPlatform == TargetPlatform.iOS;
+final _isFuchsia = defaultTargetPlatform == TargetPlatform.fuchsia;
+final _isMobile = _isAndroid || _isIOS || _isFuchsia;

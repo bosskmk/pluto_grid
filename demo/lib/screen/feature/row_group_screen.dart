@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../dummy_data/development.dart';
+import '../../widget/pluto_docs_button.dart';
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
 
@@ -144,6 +145,7 @@ class _RowGroupScreenState extends State<RowGroupScreen> {
           url:
               'https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/row_group_screen.dart',
         ),
+        PlutoDocsButton(url: 'https://pluto.weblaze.dev/row-grouping'),
       ],
       body: PlutoDualGrid(
         gridPropsA: PlutoDualGridProps(
