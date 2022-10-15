@@ -445,6 +445,9 @@ class _HeaderState extends State<_Header> {
         case _Locale.arabic:
           localeText = const PlutoGridLocaleText.arabic();
           break;
+        case _Locale.norway:
+          localeText = const PlutoGridLocaleText.norway();
+          break;
       }
 
       widget.stateManager.setConfiguration(
@@ -940,4 +943,5 @@ enum _Locale {
   spanish,
   persian,
   arabic,
+  norway,
 }
