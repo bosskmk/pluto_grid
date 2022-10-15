@@ -70,7 +70,7 @@ class PlutoRow {
 
     final length = children.length;
 
-    if (length == 0) return false;
+    if (length == 0) return _checked;
 
     int countTrue = 0;
 

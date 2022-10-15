@@ -45,7 +45,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
   void initState() {
     super.initState();
 
-    const _Test test = _Test.b;
+    const _Test test = _Test.c;
 
     // PlutoChangeNotifierFilter.debug = true;
     // PlutoChangeNotifierFilter.debugWidgets = [
@@ -97,6 +97,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         return PlutoAggregateColumnFooter(
           rendererContext: c,
           type: PlutoAggregateColumnType.count,
+          groupedRowType: PlutoAggregateColumnGroupedRowType.rows,
           format: 'CheckedCount : #,###',
           alignment: Alignment.center,
           filter: (cell) => cell.row.checked == true,
@@ -106,6 +107,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
         return PlutoAggregateColumnFooter(
           rendererContext: c,
           type: PlutoAggregateColumnType.sum,
+          groupedRowType: PlutoAggregateColumnGroupedRowType.rows,
           format: '#,###',
           alignment: Alignment.center,
           formatAsCurrency: true,
@@ -127,17 +129,44 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
     /// Test C
     if (test.isC) {
       columns.addAll(DummyData(10, 0).columns);
-      print(DateTime.now());
+      columns[0].enableRowChecked = true;
+      columns[0].footerRenderer = (c) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: c,
+          type: PlutoAggregateColumnType.count,
+          groupedRowType: PlutoAggregateColumnGroupedRowType.all,
+          format: 'CheckedCount : #,###',
+          alignment: Alignment.center,
+          filter: (cell) => cell.row.checked == true,
+        );
+      };
+      columns[1].footerRenderer = (c) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: c,
+          type: PlutoAggregateColumnType.sum,
+          groupedRowType: PlutoAggregateColumnGroupedRowType.all,
+          format: '#,###',
+          alignment: Alignment.center,
+          formatAsCurrency: true,
+          filter: (cell) => cell.row.checked == true,
+          titleSpanBuilder: (text) {
+            return [
+              const TextSpan(text: 'CheckedSum : '),
+              TextSpan(text: text),
+            ];
+          },
+        );
+      };
       rows.addAll(DummyData.treeRowsByColumn(
         columns: columns,
         count: 100,
-        depth: 3,
+        // depth: 3,
         // childCount: [1, 1, 1],
       ));
-      print(DateTime.now());
       rowGroupDelegate = PlutoRowGroupTreeDelegate(
         resolveColumnDepth: (column) => stateManager.columnIndex(column),
         showText: (cell) => true,
+        showFirstExpandableIcon: true,
       );
     }
   }

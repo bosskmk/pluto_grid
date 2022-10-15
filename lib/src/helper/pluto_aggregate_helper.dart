@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoAggregateHelper {
   static num sum({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -27,7 +27,7 @@ class PlutoAggregateHelper {
   }
 
   static num average({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -50,7 +50,7 @@ class PlutoAggregateHelper {
   }
 
   static num? min({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -71,7 +71,7 @@ class PlutoAggregateHelper {
   }
 
   static num? max({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -92,7 +92,7 @@ class PlutoAggregateHelper {
   }
 
   static int count({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
   }) {
@@ -108,7 +108,7 @@ class PlutoAggregateHelper {
   }
 
   static bool _hasColumnField({
-    required List<PlutoRow> rows,
+    required Iterable<PlutoRow> rows,
     required PlutoColumn column,
   }) {
     return rows.firstOrNull?.cells.containsKey(column.field) == true;
