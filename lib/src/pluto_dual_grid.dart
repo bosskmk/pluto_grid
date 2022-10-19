@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -87,15 +89,28 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
 
   late final PlutoDualGridDisplay display;
 
-  PlutoGridStateManager? _stateManagerA;
+  late final PlutoGridStateManager _stateManagerA;
 
-  PlutoGridStateManager? _stateManagerB;
+  late final PlutoGridStateManager _stateManagerB;
+
+  late final StreamSubscription<PlutoGridEvent> _streamA;
+
+  late final StreamSubscription<PlutoGridEvent> _streamB;
 
   @override
   void initState() {
     super.initState();
 
     display = widget.display ?? PlutoDualGridDisplayRatio();
+  }
+
+  @override
+  void dispose() {
+    _streamA.cancel();
+
+    _streamB.cancel();
+
+    super.dispose();
   }
 
   Widget _buildGrid({
@@ -119,18 +134,25 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
               _stateManagerB = onLoadedEvent.stateManager;
             }
 
-            onLoadedEvent.stateManager.eventManager!
-                .listener((PlutoGridEvent plutoEvent) {
+            handleEvent(PlutoGridEvent plutoEvent) {
               if (plutoEvent is PlutoGridCannotMoveCurrentCellEvent) {
                 if (isGridA == true && plutoEvent.direction.isRight) {
-                  _stateManagerA!.setKeepFocus(false);
-                  _stateManagerB!.setKeepFocus(true);
+                  _stateManagerA.setKeepFocus(false);
+                  _stateManagerB.setKeepFocus(true);
                 } else if (isGridA != true && plutoEvent.direction.isLeft) {
-                  _stateManagerA!.setKeepFocus(true);
-                  _stateManagerB!.setKeepFocus(false);
+                  _stateManagerA.setKeepFocus(true);
+                  _stateManagerB.setKeepFocus(false);
                 }
               }
-            });
+            }
+
+            if (isGridA) {
+              _streamA = onLoadedEvent.stateManager.eventManager!
+                  .listener(handleEvent);
+            } else {
+              _streamB = onLoadedEvent.stateManager.eventManager!
+                  .listener(handleEvent);
+            }
 
             if (props.onLoaded != null) {
               props.onLoaded!(onLoadedEvent);
@@ -149,14 +171,14 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
               widget.onSelected!(
                 PlutoDualOnSelectedEvent(
                   gridA: PlutoGridOnSelectedEvent(
-                    row: _stateManagerA!.currentRow,
-                    rowIdx: _stateManagerA!.currentRowIdx,
-                    cell: _stateManagerA!.currentCell,
+                    row: _stateManagerA.currentRow,
+                    rowIdx: _stateManagerA.currentRowIdx,
+                    cell: _stateManagerA.currentCell,
                   ),
                   gridB: PlutoGridOnSelectedEvent(
-                    row: _stateManagerB!.currentRow,
-                    rowIdx: _stateManagerB!.currentRowIdx,
-                    cell: _stateManagerB!.currentCell,
+                    row: _stateManagerB.currentRow,
+                    rowIdx: _stateManagerB.currentRowIdx,
+                    cell: _stateManagerB.currentCell,
                   ),
                 ),
               );
