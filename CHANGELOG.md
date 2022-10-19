@@ -1,3 +1,7 @@
+## [5.2.1] - 2022. 10. 19
+
+* Add pageSizeToMove to PlutoPagination.
+
 ## [5.2.0] - 2022. 10. 16
 
 * Add row group.

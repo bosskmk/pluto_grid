@@ -8,10 +8,19 @@ import '../ui/ui.dart';
 class PlutoPagination extends PlutoStatefulWidget {
   const PlutoPagination(
     this.stateManager, {
+    this.pageSizeToMove,
     super.key,
-  });
+  }) : assert(pageSizeToMove == null || pageSizeToMove > 0);
 
   final PlutoGridStateManager stateManager;
+
+  /// Set the number of moves to the previous or next page button.
+  ///
+  /// Default is null.
+  /// Moves the page as many as the number of page buttons currently displayed.
+  ///
+  /// If this value is set to 1, the next previous page is moved by one page.
+  final int? pageSizeToMove;
 
   @override
   PlutoPaginationState createState() => PlutoPaginationState();
@@ -103,13 +112,21 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
     );
   }
 
+  int get _pageSizeToMove {
+    if (widget.pageSizeToMove == null) {
+      return 1 + (_itemSize * 2);
+    }
+
+    return widget.pageSizeToMove!;
+  }
+
   void _firstPage() {
     _movePage(1);
   }
 
   void _beforePage() {
     setState(() {
-      page -= 1 + (_itemSize * 2);
+      page -= _pageSizeToMove;
 
       if (page < 1) {
         page = 1;
@@ -121,7 +138,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
   void _nextPage() {
     setState(() {
-      page += 1 + (_itemSize * 2);
+      page += _pageSizeToMove;
 
       if (page > totalPage) {
         page = totalPage;
