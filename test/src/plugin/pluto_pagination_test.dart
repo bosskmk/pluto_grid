@@ -9,7 +9,7 @@ import '../../helper/test_helper_util.dart';
 import '../../mock/shared_mocks.mocks.dart';
 
 void main() {
-  MockPlutoGridStateManager? stateManager;
+  late MockPlutoGridStateManager stateManager;
 
   late PublishSubject<PlutoNotifierEvent> subject;
 
@@ -17,13 +17,13 @@ void main() {
     stateManager = MockPlutoGridStateManager();
     subject = PublishSubject<PlutoNotifierEvent>();
 
-    when(stateManager!.configuration).thenReturn(
+    when(stateManager.configuration).thenReturn(
       const PlutoGridConfiguration(),
     );
 
-    when(stateManager!.footerHeight).thenReturn(45);
+    when(stateManager.footerHeight).thenReturn(45);
 
-    when(stateManager!.streamNotifier).thenAnswer((_) => subject);
+    when(stateManager.streamNotifier).thenAnswer((_) => subject);
   });
 
   tearDown(() {
@@ -34,15 +34,19 @@ void main() {
     buildWidget({
       int page = 1,
       int totalPage = 1,
+      int? pageSizeToMove,
     }) {
       return PlutoWidgetTestHelper('Tap cell', (tester) async {
-        when(stateManager!.page).thenReturn(page);
-        when(stateManager!.totalPage).thenReturn(totalPage);
+        when(stateManager.page).thenReturn(page);
+        when(stateManager.totalPage).thenReturn(totalPage);
 
         await tester.pumpWidget(
           MaterialApp(
             home: Material(
-              child: PlutoPagination(stateManager!),
+              child: PlutoPagination(
+                stateManager,
+                pageSizeToMove: pageSizeToMove,
+              ),
             ),
           ),
         );
@@ -206,6 +210,60 @@ void main() {
         expect(find.text('6'), findsOneWidget);
         expect(find.text('7'), findsOneWidget);
         expect(find.byType(TextButton), findsNWidgets(7));
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+    ).test(
+      '다음 페이지 버튼을 탭하면 setPage 가 8로 호출 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 1280,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        await tester.tap(find.byIcon(Icons.navigate_next));
+
+        verify(stateManager.setPage(8)).called(1);
+      },
+    );
+
+    buildWidget(
+      totalPage: 10,
+      pageSizeToMove: 1,
+    ).test(
+      'pageSizeToMove 를 1로 설정하고 다음 페이지 버튼을 탭하면 setPage 가 2로 호출 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 1280,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        await tester.tap(find.byIcon(Icons.navigate_next));
+
+        verify(stateManager.setPage(2)).called(1);
+      },
+    );
+
+    buildWidget(
+      page: 5,
+      totalPage: 10,
+      pageSizeToMove: 1,
+    ).test(
+      '5페이지에서 pageSizeToMove 를 1로 설정하고 이전 페이지 버튼을 탭하면 setPage 가 4로 호출 되어야 한다.',
+      (tester) async {
+        await TestHelperUtil.changeWidth(
+          tester: tester,
+          width: 1280,
+          height: PlutoGridSettings.rowHeight,
+        );
+
+        await tester.tap(find.byIcon(Icons.navigate_before));
+
+        verify(stateManager.setPage(4)).called(1);
       },
     );
   });
