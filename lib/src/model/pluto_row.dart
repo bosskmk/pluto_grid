@@ -127,6 +127,168 @@ class PlutoRow {
   void setState(PlutoRowState state) {
     _state = state;
   }
+
+  /// Create PlutoRow in json type.
+  /// The key of the json you want to generate must match the key of [PlutoColumn].
+  ///
+  /// ```dart
+  /// final json = {
+  ///   'column1': 'value1',
+  ///   'column2': 'value2',
+  ///   'column3': 'value3',
+  /// };
+  ///
+  /// final row = PlutoRow.fromJson(json);
+  /// ```
+  ///
+  /// If you want to create a group row with children, you need to pass [childrenField] .
+  ///
+  /// ```dart
+  /// // Example when the child row field is children
+  /// final json = {
+  ///   'column1': 'group value1',
+  ///   'column2': 'group value2',
+  ///   'column3': 'group value3',
+  ///   'children': [
+  ///     {
+  ///       'column1': 'child1 value1',
+  ///       'column2': 'child1 value2',
+  ///       'column3': 'child1 value3',
+  ///     },
+  ///     {
+  ///       'column1': 'child2 value1',
+  ///       'column2': 'child2 value2',
+  ///       'column3': 'child2 value3',
+  ///     },
+  ///   ],
+  /// };
+  ///
+  /// final rowGroup = PlutoRow.fromJson(json, childrenField: 'children');
+  /// ```
+  factory PlutoRow.fromJson(
+    Map<String, dynamic> json, {
+    String? childrenField,
+  }) {
+    final Map<String, PlutoCell> cells = {};
+
+    final bool hasChildren =
+        childrenField != null && json.containsKey(childrenField);
+
+    final entries = hasChildren
+        ? json.entries.where((e) => e.key != childrenField)
+        : json.entries;
+
+    assert(!hasChildren || json.length - 1 == entries.length);
+
+    for (final item in entries) {
+      cells[item.key] = PlutoCell(value: item.value);
+    }
+
+    PlutoRowType? type;
+
+    if (hasChildren) {
+      assert(json[childrenField] is List<Map<String, dynamic>>);
+
+      final children = <PlutoRow>[];
+
+      for (final child in json[childrenField]) {
+        children.add(PlutoRow.fromJson(child, childrenField: childrenField));
+      }
+
+      type = PlutoRowType.group(children: FilteredList(initialList: children));
+    }
+
+    return PlutoRow(cells: cells, type: type);
+  }
+
+  /// Convert the row to json type.
+  ///
+  /// ```dart
+  /// // Assuming you have a line like below.
+  /// final PlutoRow row = PlutoRow(cells: {
+  ///   'column1': PlutoCell(value: 'value1'),
+  ///   'column2': PlutoCell(value: 'value2'),
+  ///   'column3': PlutoCell(value: 'value3'),
+  /// });
+  ///
+  /// final json = row.toJson();
+  /// // toJson is returned as below.
+  /// // {
+  /// //   'column1': 'value1',
+  /// //   'column2': 'value2',
+  /// //   'column3': 'value3',
+  /// // }
+  /// ```
+  ///
+  /// In case of group row, [includeChildren] is true (default)
+  /// If [childrenField] is set to 'children' (default), the following is returned.
+  ///
+  /// ```dart
+  /// // Assuming you have rows grouped by 1 depth.
+  /// final PlutoRow row = PlutoRow(
+  ///   cells: {
+  ///     'column1': PlutoCell(value: 'group value1'),
+  ///     'column2': PlutoCell(value: 'group value2'),
+  ///     'column3': PlutoCell(value: 'group value3'),
+  ///   },
+  ///   type: PlutoRowType.group(
+  ///     children: FilteredList(initialList: [
+  ///       PlutoRow(
+  ///         cells: {
+  ///           'column1': PlutoCell(value: 'child1 value1'),
+  ///           'column2': PlutoCell(value: 'child1 value2'),
+  ///           'column3': PlutoCell(value: 'child1 value3'),
+  ///         },
+  ///       ),
+  ///       PlutoRow(
+  ///         cells: {
+  ///           'column1': PlutoCell(value: 'child2 value1'),
+  ///           'column2': PlutoCell(value: 'child2 value2'),
+  ///           'column3': PlutoCell(value: 'child2 value3'),
+  ///         },
+  ///       ),
+  ///     ]),
+  ///   ),
+  /// );
+  ///
+  /// final json = row.toJson();
+  /// // It is returned in the following format.
+  /// // {
+  /// //   'column1': 'group value1',
+  /// //   'column2': 'group value2',
+  /// //   'column3': 'group value3',
+  /// //   'children': [
+  /// //     {
+  /// //       'column1': 'child1 value1',
+  /// //       'column2': 'child1 value2',
+  /// //       'column3': 'child1 value3',
+  /// //     },
+  /// //     {
+  /// //       'column1': 'child2 value1',
+  /// //       'column2': 'child2 value2',
+  /// //       'column3': 'child2 value3',
+  /// //     },
+  /// //   ],
+  /// // }
+  /// ```
+  Map<String, dynamic> toJson({
+    bool includeChildren = true,
+    String childrenField = 'children',
+  }) {
+    final json = cells.map((key, value) => MapEntry(key, value.value));
+
+    if (!includeChildren || !type.isGroup) return json;
+
+    final List<Map<String, dynamic>> children = type.group.children
+        .map(
+          (e) => e.toJson(childrenField: childrenField),
+        )
+        .toList();
+
+    json[childrenField] = children;
+
+    return json;
+  }
 }
 
 enum PlutoRowState {
