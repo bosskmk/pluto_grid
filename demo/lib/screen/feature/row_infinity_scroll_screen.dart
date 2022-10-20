@@ -46,11 +46,11 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
       ),
     ];
 
-    /// Pass an empty row to the grid initially.
+    // Pass an empty row to the grid initially.
     rows = [];
 
-    /// Instead of fetching data from the server,
-    /// Create a fake row in advance.
+    // Instead of fetching data from the server,
+    // Create a fake row in advance.
     fakeFetchedRows = DummyData.rowsByColumns(length: 100, columns: columns);
   }
 
@@ -59,15 +59,35 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
   ) async {
     List<PlutoRow> tempList = fakeFetchedRows;
 
-    /// If you have a filtering state,
-    /// you need to implement it so that the user gets data from the server
-    /// according to the filtering state.
-    ///
-    /// request.lastRow is null when the filtering state changes.
-    /// This is because, when the filtering state is changed,
-    /// the first page must be loaded with the new filtering applied.
-    ///
-    /// todo : Convert filterRows to query style.
+    // If you have a filtering state,
+    // you need to implement it so that the user gets data from the server
+    // according to the filtering state.
+    //
+    // request.lastRow is null when the filtering state changes.
+    // This is because, when the filtering state is changed,
+    // the first page must be loaded with the new filtering applied.
+    //
+    // request.filterRows is a List<PlutoRow> type containing filtering information.
+    // To convert to Map type, you can do as follows.
+    //
+    // FilterHelper.convertRowsToMap(request.filterRows);
+    //
+    // When the filter of abc is applied as Contains type to column2
+    // and 123 as Contains type to column3, for example
+    // It is returned as below.
+    // {column2: [{Contains: 123}], column3: [{Contains: abc}]}
+    //
+    // If multiple filtering conditions are set in one column,
+    // multiple conditions are included as shown below.
+    // {column2: [{Contains: abc}, {Contains: 123}]}
+    //
+    // The filter type in FilterHelper.defaultFilters is the default,
+    // If there is user-defined filtering,
+    // the title set by the user is returned as the filtering type.
+    // All filtering can change the value returned as a filtering type by changing the name property.
+    // In case of PlutoFilterTypeContains filter, if you change the static type name to include
+    // PlutoFilterTypeContains.name = 'include';
+    // {column2: [{include: abc}, {include: 123}]} will be returned.
     if (request.filterRows.isNotEmpty) {
       final filter = FilterHelper.convertRowsToFilter(
         request.filterRows,
@@ -77,13 +97,13 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
       tempList = fakeFetchedRows.where(filter!).toList();
     }
 
-    /// If there is a sort state,
-    /// you need to implement it so that the user gets data from the server
-    /// according to the sort state.
-    ///
-    /// request.lastRow is null when the sort state changes.
-    /// This is because when the sort state changes,
-    /// new data to which the sort state is applied must be loaded.
+    // If there is a sort state,
+    // you need to implement it so that the user gets data from the server
+    // according to the sort state.
+    //
+    // request.lastRow is null when the sort state changes.
+    // This is because when the sort state changes,
+    // new data to which the sort state is applied must be loaded.
     if (request.sortColumn != null && !request.sortColumn!.sort.isNone) {
       tempList = [...tempList];
 
@@ -98,18 +118,18 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
       });
     }
 
-    /// Data needs to be implemented so that the next row
-    /// to be fetched by the user is fetched from the server according to the value of lastRow.
-    ///
-    /// If [request.lastRow] is null, it corresponds to the first page.
-    /// After that, implement request.lastRow to get the next row from the server.
-    ///
-    /// How many are fetched is not a concern in PlutoGrid.
-    /// The user just needs to bring as many as they can get at one time.
-    ///
-    /// To convert data from server to PlutoRow
-    /// You can convert it using [PlutoRow.fromJson].
-    /// In the example, PlutoRow is already created, so it is not created separately.
+    // Data needs to be implemented so that the next row
+    // to be fetched by the user is fetched from the server according to the value of lastRow.
+    //
+    // If [request.lastRow] is null, it corresponds to the first page.
+    // After that, implement request.lastRow to get the next row from the server.
+    //
+    // How many are fetched is not a concern in PlutoGrid.
+    // The user just needs to bring as many as they can get at one time.
+    //
+    // To convert data from server to PlutoRow
+    // You can convert it using [PlutoRow.fromJson].
+    // In the example, PlutoRow is already created, so it is not created separately.
     Iterable<PlutoRow> fetchedRows = tempList.skipWhile(
       (row) => request.lastRow != null && row.key != request.lastRow!.key,
     );
@@ -121,11 +141,11 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
 
     await Future.delayed(const Duration(milliseconds: 500));
 
-    /// The return value returns the PlutoInfinityScrollRowsResponse class.
-    /// isLast should be true when there is no more data to load.
-    /// rows should pass a List<PlutoRow>.
+    // The return value returns the PlutoInfinityScrollRowsResponse class.
+    // isLast should be true when there is no more data to load.
+    // rows should pass a List<PlutoRow>.
     return Future.value(PlutoInfinityScrollRowsResponse(
-      isLast: tempList.last.key == fetchedRows.last.key,
+      isLast: fetchedRows.isEmpty || tempList.last.key == fetchedRows.last.key,
       rows: fetchedRows.toList(),
     ));
   }
@@ -158,18 +178,18 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
           stateManager.setShowColumnFilter(true);
         },
         createFooter: (s) => PlutoInfinityScrollRows(
-          /// First call the fetch function to determine whether to load the page.
-          /// Default is true.
+          // First call the fetch function to determine whether to load the page.
+          // Default is true.
           initialFetch: true,
 
-          /// Decide whether sorting will be handled by the server.
-          /// If false, handle sorting on the client side.
-          /// Default is true.
+          // Decide whether sorting will be handled by the server.
+          // If false, handle sorting on the client side.
+          // Default is true.
           fetchWithSorting: true,
 
-          /// Decide whether filtering is handled by the server.
-          /// If false, handle filtering on the client side.
-          /// Default is true.
+          // Decide whether filtering is handled by the server.
+          // If false, handle filtering on the client side.
+          // Default is true.
           fetchWithFiltering: true,
           fetch: fetch,
           stateManager: s,
