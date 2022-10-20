@@ -36,8 +36,18 @@ abstract class IGridState {
 
   PlutoGridStyleConfig get style;
 
+  /// To delegate sort handling in the [PlutoInfinityScrollRows] or [PlutoLazyPagination] widget
+  /// Whether to override the default sort processing.
+  /// If this value is true,
+  /// the default sorting processing of [PlutoGrid] is ignored and only events are issued.
+  /// [PlutoGridChangeColumnSortEvent]
   bool get sortOnlyEvent;
 
+  /// To delegate filtering processing in the [PlutoInfinityScrollRows] or [PlutoLazyPagination] widget
+  /// Whether to override the default filtering processing.
+  /// If this value is true,
+  /// the default filtering processing of [PlutoGrid] is ignored and only events are issued.
+  /// [PlutoGridSetColumnFilterEvent]
   bool get filterOnlyEvent;
 
   void setKeyManager(PlutoGridKeyManager keyManager);
@@ -55,8 +65,12 @@ abstract class IGridState {
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
 
+  /// Set whether to ignore the default sort processing and issue only events.
+  /// [PlutoGridChangeColumnSortEvent]
   void setSortOnlyEvent(bool flag);
 
+  /// Set whether to ignore the basic filtering process and issue only events.
+  /// [PlutoGridSetColumnFilterEvent]
   void setFilterOnlyEvent(bool flag);
 
   void forceUpdate();

@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// A callback function to implement when the scroll reaches the end.
+typedef PlutoInfinityScrollRowsFetch = Future<PlutoInfinityScrollRowsResponse>
+    Function(PlutoInfinityScrollRowsRequest);
+
+/// Request data to get data when scrolling has reached the end.
 class PlutoInfinityScrollRowsRequest {
   PlutoInfinityScrollRowsRequest({
     this.lastRow,
@@ -10,27 +15,62 @@ class PlutoInfinityScrollRowsRequest {
     this.filterRows = const <PlutoRow>[],
   });
 
+  /// If [lastRow] is null , it points to the beginning of the data.
+  /// If not null, the next data is loaded with reference to this value.
   final PlutoRow? lastRow;
 
+  /// If the sort condition is set, the column for which the sort is set.
+  /// The value of [PlutoColumn.sort] is the sort status of the column.
   final PlutoColumn? sortColumn;
 
+  /// Filtering status when filtering conditions are set.
+  ///
+  /// If this list is empty, filtering is not set.
+  /// Filtering column, type, and filtering value are set in [PlutoRow.cells].
+  ///
+  /// [filterRows] can be converted to Map type as shown below.
+  /// ```dart
+  /// FilterHelper.convertRowsToMap(filterRows);
+  ///
+  /// // Assuming that filtering is set in column2, the following values are returned.
+  /// // {column2: [{Contains: 123}]}
+  /// ```
+  ///
+  /// The filter type in FilterHelper.defaultFilters is the default,
+  /// If there is user-defined filtering,
+  /// the title set by the user is returned as the filtering type.
+  /// All filtering can change the value returned as a filtering type by changing the name property.
+  /// In case of PlutoFilterTypeContains filter, if you change the static type name to include
+  /// PlutoFilterTypeContains.name = 'include';
+  /// {column2: [{include: abc}, {include: 123}]} will be returned.
   final List<PlutoRow> filterRows;
 }
 
+/// The return value of the fetch callback function of [PlutoInfinityScrollRow]
+/// when the scroll reaches the end.
 class PlutoInfinityScrollRowsResponse {
   PlutoInfinityScrollRowsResponse({
     required this.isLast,
     required this.rows,
   });
 
+  /// Set this value to true if all items are returned.
   final bool isLast;
 
+  /// Rows to be added.
   final List<PlutoRow> rows;
 }
 
-typedef PlutoInfinityScrollRowsFetch = Future<PlutoInfinityScrollRowsResponse>
-    Function(PlutoInfinityScrollRowsRequest);
-
+/// When the end of the list is reached
+/// by scrolling, arrow keys, or PageDown key manipulation
+/// Add the response result to the grid by calling the [fetch] callback function.
+///
+/// ```dart
+/// createFooter: (s) => PlutoInfinityScrollRows(
+///   fetch: fetch,
+///   stateManager: s,
+/// ),
+/// ```
 class PlutoInfinityScrollRows extends StatefulWidget {
   const PlutoInfinityScrollRows({
     this.initialFetch = true,
@@ -41,12 +81,21 @@ class PlutoInfinityScrollRows extends StatefulWidget {
     super.key,
   });
 
+  /// Decide whether to call the fetch function first.
   final bool initialFetch;
 
+  /// Decide whether to handle sorting in the fetch function.
+  /// Default is true.
+  /// If this value is false, the list is sorted with the current grid loaded.
   final bool fetchWithSorting;
 
+  /// Decide whether to handle filtering in the fetch function.
+  /// Default is true.
+  /// If this value is false,
+  /// the list is filtered while it is currently loaded in the grid.
   final bool fetchWithFiltering;
 
+  /// A callback function that returns the data to be added.
   final PlutoInfinityScrollRowsFetch fetch;
 
   final PlutoGridStateManager stateManager;

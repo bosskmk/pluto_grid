@@ -4,6 +4,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Callback function to implement to add lazy pagination data.
+typedef PlutoLazyPaginationFetch = Future<PlutoLazyPaginationResponse> Function(
+    PlutoLazyPaginationRequest);
+
+/// Request data for lazy pagination processing.
 class PlutoLazyPaginationRequest {
   PlutoLazyPaginationRequest({
     required this.page,
@@ -11,27 +16,60 @@ class PlutoLazyPaginationRequest {
     this.filterRows = const <PlutoRow>[],
   });
 
+  /// Request page.
   final int page;
 
+  /// If the sort condition is set, the column for which the sort is set.
+  /// The value of [PlutoColumn.sort] is the sort status of the column.
   final PlutoColumn? sortColumn;
 
+  /// Filtering status when filtering conditions are set.
+  ///
+  /// If this list is empty, filtering is not set.
+  /// Filtering column, type, and filtering value are set in [PlutoRow.cells].
+  ///
+  /// [filterRows] can be converted to Map type as shown below.
+  /// ```dart
+  /// FilterHelper.convertRowsToMap(filterRows);
+  ///
+  /// // Assuming that filtering is set in column2, the following values are returned.
+  /// // {column2: [{Contains: 123}]}
+  /// ```
+  ///
+  /// The filter type in FilterHelper.defaultFilters is the default,
+  /// If there is user-defined filtering,
+  /// the title set by the user is returned as the filtering type.
+  /// All filtering can change the value returned as a filtering type by changing the name property.
+  /// In case of PlutoFilterTypeContains filter, if you change the static type name to include
+  /// PlutoFilterTypeContains.name = 'include';
+  /// {column2: [{include: abc}, {include: 123}]} will be returned.
   final List<PlutoRow> filterRows;
 }
 
+/// Response data for lazy pagination.
 class PlutoLazyPaginationResponse {
   PlutoLazyPaginationResponse({
     required this.totalPage,
     required this.rows,
   });
 
+  /// Total number of pages to create pagination buttons.
   final int totalPage;
 
+  /// Rows to be added.
   final List<PlutoRow> rows;
 }
 
-typedef PlutoLazyPaginationFetch = Future<PlutoLazyPaginationResponse> Function(
-    PlutoLazyPaginationRequest);
-
+/// Widget for processing lazy pagination.
+///
+/// ```dart
+/// createFooter: (stateManager) {
+///   return PlutoLazyPagination(
+///     fetch: fetch,
+///     stateManager: stateManager,
+///   );
+/// },
+/// ```
 class PlutoLazyPagination extends StatefulWidget {
   const PlutoLazyPagination({
     this.initialPage = 1,
@@ -44,12 +82,21 @@ class PlutoLazyPagination extends StatefulWidget {
     super.key,
   });
 
+  /// Set the first page.
   final int initialPage;
 
+  /// Decide whether to call the fetch function first.
   final bool initialFetch;
 
+  /// Decide whether to handle sorting in the fetch function.
+  /// Default is true.
+  /// If this value is false, the list is sorted with the current grid loaded.
   final bool fetchWithSorting;
 
+  /// Decide whether to handle filtering in the fetch function.
+  /// Default is true.
+  /// If this value is false,
+  /// the list is filtered while it is currently loaded in the grid.
   final bool fetchWithFiltering;
 
   /// Set the number of moves to the previous or next page button.
@@ -60,6 +107,7 @@ class PlutoLazyPagination extends StatefulWidget {
   /// If this value is set to 1, the next previous page is moved by one page.
   final int? pageSizeToMove;
 
+  /// A callback function that returns the data to be added.
   final PlutoLazyPaginationFetch fetch;
 
   final PlutoGridStateManager stateManager;
