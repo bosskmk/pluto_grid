@@ -37,6 +37,7 @@ import 'feature/number_type_column_screen.dart';
 import 'feature/row_color_screen.dart';
 import 'feature/row_group_screen.dart';
 import 'feature/row_infinity_scroll_screen.dart';
+import 'feature/row_lazy_pagination_screen.dart';
 import 'feature/row_moving_screen.dart';
 import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
@@ -357,6 +358,15 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowPaginationScreen.routeName);
             },
+          ),
+          PlutoListTile(
+            title: 'Row lazy pagination',
+            description:
+                'Implement pagination in the form of fetching data from the server.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowLazyPaginationScreen.routeName);
+            },
+            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Row infinity scroll',

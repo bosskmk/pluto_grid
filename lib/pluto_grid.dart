@@ -34,6 +34,7 @@ export './src/model/pluto_row.dart';
 export './src/model/pluto_row_type.dart';
 export './src/plugin/pluto_aggregate_column_footer.dart';
 export './src/plugin/pluto_infinity_scroll_rows.dart';
+export './src/plugin/pluto_lazy_pagination.dart';
 export './src/plugin/pluto_pagination.dart';
 export './src/pluto_dual_grid.dart';
 export './src/pluto_dual_grid_popup.dart';

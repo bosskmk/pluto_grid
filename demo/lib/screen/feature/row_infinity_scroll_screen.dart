@@ -144,8 +144,17 @@ class _RowInfinityScrollScreenState extends State<RowInfinityScrollScreen> {
     // The return value returns the PlutoInfinityScrollRowsResponse class.
     // isLast should be true when there is no more data to load.
     // rows should pass a List<PlutoRow>.
+    final bool isLast =
+        fetchedRows.isEmpty || tempList.last.key == fetchedRows.last.key;
+
+    if (isLast && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Last Page!')),
+      );
+    }
+
     return Future.value(PlutoInfinityScrollRowsResponse(
-      isLast: fetchedRows.isEmpty || tempList.last.key == fetchedRows.last.key,
+      isLast: isLast,
       rows: fetchedRows.toList(),
     ));
   }
