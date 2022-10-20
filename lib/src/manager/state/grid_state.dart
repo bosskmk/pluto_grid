@@ -36,6 +36,10 @@ abstract class IGridState {
 
   PlutoGridStyleConfig get style;
 
+  bool get sortOnlyEvent;
+
+  bool get filterOnlyEvent;
+
   void setKeyManager(PlutoGridKeyManager keyManager);
 
   void setEventManager(PlutoGridEventManager eventManager);
@@ -51,6 +55,10 @@ abstract class IGridState {
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
 
+  void setSortOnlyEvent(bool flag);
+
+  void setFilterOnlyEvent(bool flag);
+
   void forceUpdate();
 }
 
@@ -60,6 +68,10 @@ class _State {
   PlutoGridKeyManager? _keyManager;
 
   PlutoGridEventManager? _eventManager;
+
+  bool _sortOnlyEvent = false;
+
+  bool _filterOnlyEvent = false;
 }
 
 mixin GridState implements IPlutoGridState {
@@ -79,6 +91,12 @@ mixin GridState implements IPlutoGridState {
 
   @override
   PlutoGridStyleConfig get style => configuration.style;
+
+  @override
+  bool get sortOnlyEvent => _state._sortOnlyEvent;
+
+  @override
+  bool get filterOnlyEvent => _state._filterOnlyEvent;
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {
@@ -127,6 +145,16 @@ mixin GridState implements IPlutoGridState {
         ),
       );
     }
+  }
+
+  @override
+  void setSortOnlyEvent(bool flag) {
+    _state._sortOnlyEvent = flag;
+  }
+
+  @override
+  void setFilterOnlyEvent(bool flag) {
+    _state._filterOnlyEvent = flag;
   }
 
   @override

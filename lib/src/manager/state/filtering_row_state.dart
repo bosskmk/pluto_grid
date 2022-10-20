@@ -43,6 +43,13 @@ mixin FilteringRowState implements IPlutoGridState {
 
   @override
   void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true}) {
+    if (filterOnlyEvent) {
+      eventManager!.addEvent(
+        PlutoGridSetColumnFilterEvent(filterRows: filterRows),
+      );
+      return;
+    }
+
     for (final row in iterateAllRowAndGroup) {
       row.setState(PlutoRowState.none);
     }
