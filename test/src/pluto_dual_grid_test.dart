@@ -463,9 +463,9 @@ void main() {
         );
 
         buildLeftGridCellSelected().test(
-          '우측 끝으로 이동 후 탭 키를 입력하면'
+          '우측 끝으로 이동 후 우측 방향키 입력하면'
           '포커스가 우측 그리드로 바뀌어야 한다.'
-          '그리고 탭 키를 입력하면'
+          '그리고 우측 방향키 입력하면'
           '우측 그리드의 첫번째 셀이 선택 되어야 한다.',
           (tester) async {
             // 0 > 1
@@ -475,24 +475,24 @@ void main() {
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             await tester.pumpAndSettle();
             // 2 > right grid
-            await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode.hasFocus, isFalse);
             expect(stateManagerB!.gridFocusNode.hasFocus, isTrue);
 
             // right grid > 0
-            await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
           },
         );
 
         buildLeftGridCellSelected().test(
-          '우측 끝으로 이동 후 탭 키를 입력하면'
+          '우측 끝으로 이동 후 우측 방향키 입력하면'
           '포커스가 우측 그리드로 바뀌어야 한다.'
-          '그리고 쉬프트 + 탭 키를 입력하면'
+          '그리고 우측 방향키 입력하면'
           '우측 그리드의 첫번째 셀이 선택 되어야 한다.'
-          '이어스 쉬프트 + 탭 키를 입력 하면'
+          '이어서 좌측 방향키 입력 하면'
           '다시 왼쪽 그리드로 포커스가 바뀌어야 한다.',
           (tester) async {
             // 0 > 1
@@ -502,27 +502,19 @@ void main() {
             await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             await tester.pumpAndSettle();
             // 2 > right grid
-            await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+            await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             await tester.pumpAndSettle();
 
             expect(stateManagerA!.gridFocusNode.hasFocus, isFalse);
             expect(stateManagerB!.gridFocusNode.hasFocus, isTrue);
 
             // right grid > 0
-            await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
-            await tester.pumpAndSettle();
-            await tester.sendKeyEvent(LogicalKeyboardKey.tab);
-            await tester.pumpAndSettle();
-            await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+            await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
             await tester.pumpAndSettle();
             expect(stateManagerB!.currentCell!.value, 'headerB0 value 0');
 
             // right grid > left grid
-            await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
-            await tester.pumpAndSettle();
-            await tester.sendKeyEvent(LogicalKeyboardKey.tab);
-            await tester.pumpAndSettle();
-            await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
+            await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
 
             expect(stateManagerA!.gridFocusNode.hasFocus, isTrue);
             expect(stateManagerB!.gridFocusNode.hasFocus, isFalse);
