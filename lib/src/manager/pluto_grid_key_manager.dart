@@ -315,10 +315,46 @@ class PlutoGridKeyManager {
 
     final saveIsEditing = stateManager.isEditing;
 
-    if (keyEvent.event.isShiftPressed) {
-      stateManager.moveCurrentCell(PlutoMoveDirection.left, force: true);
+   if (keyEvent.event.isShiftPressed) {
+      if (stateManager.rows.first == stateManager.currentCell!.row! &&
+          stateManager.columns.first == stateManager.currentCell!.column!) {
+        FocusScope.of(keyEvent.focusNode.context!).previousFocus();
+      } else if (stateManager.columns.first ==
+          stateManager.currentCell!.column!) {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.up,
+          force: true,
+        );
+        stateManager.moveCurrentCellToEdgeOfColumns(
+          PlutoMoveDirection.right,
+          force: true,
+        );
+      } else {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.left,
+          force: true,
+        );
+      }
     } else {
-      stateManager.moveCurrentCell(PlutoMoveDirection.right, force: true);
+      if (stateManager.rows.last == stateManager.currentCell!.row! &&
+          stateManager.columns.last == stateManager.currentCell!.column!) {
+        FocusScope.of(keyEvent.focusNode.context!).nextFocus();
+      } else if (stateManager.columns.last ==
+          stateManager.currentCell!.column!) {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.down,
+          force: true,
+        );
+        stateManager.moveCurrentCellToEdgeOfColumns(
+          PlutoMoveDirection.left,
+          force: true,
+        );
+      } else {
+        stateManager.moveCurrentCell(
+          PlutoMoveDirection.right,
+          force: true,
+        );
+      }
     }
 
     stateManager.setEditing(stateManager.autoEditing || saveIsEditing);
