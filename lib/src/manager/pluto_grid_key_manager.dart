@@ -380,6 +380,7 @@ class PlutoGridKeyManager {
     _restoreCurrentCellPosition(
       currentColumn: currentColumn,
       previousPosition: previousPosition,
+      ignore: stateManager.sortOnlyEvent,
     );
   }
 
@@ -530,8 +531,11 @@ class PlutoGridKeyManager {
   void _restoreCurrentCellPosition({
     PlutoColumn? currentColumn,
     PlutoGridCellPosition? previousPosition,
+    bool ignore = false,
   }) {
-    if (currentColumn == null || previousPosition?.hasPosition != true) {
+    if (ignore ||
+        currentColumn == null ||
+        previousPosition?.hasPosition != true) {
       return;
     }
 
