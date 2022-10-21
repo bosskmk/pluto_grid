@@ -173,7 +173,12 @@ class _PlutoInfinityScrollRowsState extends State<PlutoInfinityScrollRows> {
 
     _isFetching = true;
 
-    stateManager.setShowLoading(true, level: PlutoGridLoadingLevel.rows);
+    stateManager.setShowLoading(
+      true,
+      level: lastRow == null
+          ? PlutoGridLoadingLevel.rows
+          : PlutoGridLoadingLevel.rowsBottomCircular,
+    );
 
     final request = PlutoInfinityScrollRowsRequest(
       lastRow: lastRow,

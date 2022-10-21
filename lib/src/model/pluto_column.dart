@@ -74,6 +74,8 @@ class PlutoColumn {
   PlutoColumnTextAlign titleTextAlign;
 
   /// Freeze the column to the left and right.
+  /// If the total width of the non-frozen column is 200 or less,
+  /// it is processed to be unfreeze even if the frozen column is set.
   PlutoColumnFrozen frozen;
 
   /// Set column sorting.
