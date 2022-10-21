@@ -5,6 +5,10 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../ui/ui.dart';
 
+/// A widget for client-side pagination.
+///
+/// Server-side pagination can be implemented
+/// using the [PlutoLazyPagination] or [PlutoInfinityScrollRows] widgets.
 class PlutoPagination extends PlutoStatefulWidget {
   const PlutoPagination(
     this.stateManager, {

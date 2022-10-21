@@ -5,6 +5,21 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IRowState {
   List<PlutoRow> get rows;
 
+  /// [refRows] is a List<PlutoRow> type and holds the entire row data.
+  ///
+  /// [refRows] returns a list of final results
+  /// according to pagination and filtering status.
+  /// If the total number of rows is 100 and paginated in size 10,
+  /// [refRows] returns a list of 10 of the current page.
+  ///
+  /// [refRows.originalList] to get the entire row data with pagination or filtering.
+  ///
+  /// A list with pagination and filtering applied and pagination not applied
+  /// can be obtained with [refRows.filterOrOriginalList].
+  ///
+  /// Directly accessing [refRows] to process insert, remove, etc. may cause unexpected behavior.
+  /// It is preferable to use the methods
+  /// such as insertRows and removeRows of the built-in [PlutoGridStateManager] to handle it.
   FilteredList<PlutoRow> get refRows;
 
   List<PlutoRow> get checkedRows;
