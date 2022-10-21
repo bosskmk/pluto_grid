@@ -246,6 +246,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
               },
               rowColorCallback: rowColorCallback,
               configuration: PlutoGridConfiguration(
+                tabKeyAction: PlutoGridTabKeyAction.moveToNextOnEdge,
                 // columnHeight: 30.0,
                 // columnFilterHeight: 30.0,
                 // rowHeight: 30.0,

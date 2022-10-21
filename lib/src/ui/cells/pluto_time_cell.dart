@@ -63,6 +63,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
     final style = widget.stateManager.style;
 
     final configuration = widget.stateManager.configuration.copyWith(
+      tabKeyAction: PlutoGridTabKeyAction.normal,
       style: style.copyWith(
         enableColumnBorderVertical: false,
         enableColumnBorderHorizontal: false,

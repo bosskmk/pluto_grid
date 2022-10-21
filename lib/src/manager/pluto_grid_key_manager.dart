@@ -485,13 +485,17 @@ class PlutoGridKeyManager {
   }
 
   bool _willMoveToPreviousRow(PlutoGridCellPosition? position) {
-    if (position == null || !position.hasPosition) return false;
+    if (stateManager.configuration.tabKeyAction.isNormal ||
+        position == null ||
+        !position.hasPosition) return false;
 
     return position.rowIdx! > 0 && position.columnIdx == 0;
   }
 
   bool _willMoveToNextRow(PlutoGridCellPosition? position) {
-    if (position == null || !position.hasPosition) return false;
+    if (stateManager.configuration.tabKeyAction.isNormal ||
+        position == null ||
+        !position.hasPosition) return false;
 
     return position.rowIdx! < stateManager.refRows.length - 1 &&
         position.columnIdx == stateManager.refColumns.length - 1;

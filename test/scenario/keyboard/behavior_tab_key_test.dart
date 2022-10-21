@@ -9,7 +9,7 @@ import '../../helper/row_helper.dart';
 import '../../helper/test_helper_util.dart';
 
 void main() {
-  group('Tab 키 테스트', () {
+  group('PlutoGridTabKeyAction.moveToNextOnEdge - Tab 키 테스트', () {
     late List<PlutoColumn> columns;
 
     late List<PlutoRow> rows;
@@ -39,6 +39,9 @@ void main() {
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
+                  configuration: const PlutoGridConfiguration(
+                    tabKeyAction: PlutoGridTabKeyAction.moveToNextOnEdge,
+                  ),
                 ),
               ),
             ),
@@ -95,7 +98,7 @@ void main() {
     );
   });
 
-  group('Shift + Tab 키 테스트', () {
+  group('PlutoGridTabKeyAction.moveToNextOnEdge - Shift + Tab 키 테스트', () {
     late List<PlutoColumn> columns;
 
     late List<PlutoRow> rows;
@@ -125,6 +128,9 @@ void main() {
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;
                   },
+                  configuration: const PlutoGridConfiguration(
+                    tabKeyAction: PlutoGridTabKeyAction.moveToNextOnEdge,
+                  ),
                 ),
               ),
             ),
