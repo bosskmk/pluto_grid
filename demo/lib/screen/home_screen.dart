@@ -36,6 +36,8 @@ import 'feature/moving_screen.dart';
 import 'feature/number_type_column_screen.dart';
 import 'feature/row_color_screen.dart';
 import 'feature/row_group_screen.dart';
+import 'feature/row_infinity_scroll_screen.dart';
+import 'feature/row_lazy_pagination_screen.dart';
 import 'feature/row_moving_screen.dart';
 import 'feature/row_pagination_screen.dart';
 import 'feature/row_selection_screen.dart';
@@ -239,7 +241,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnResizingScreen.routeName);
             },
-            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Column sorting',
@@ -269,7 +270,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, ColumnMenuScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Column footer',
@@ -360,12 +360,28 @@ class PlutoFeatures extends StatelessWidget {
             },
           ),
           PlutoListTile(
+            title: 'Row lazy pagination',
+            description:
+                'Implement pagination in the form of fetching data from the server.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowLazyPaginationScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
+            title: 'Row infinity scroll',
+            description: 'Add a new row when scrolling reaches the bottom end.',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, RowInfinityScrollScreen.routeName);
+            },
+            trailing: newIcon,
+          ),
+          PlutoListTile(
             title: 'Row group',
             description: 'Grouping rows in a column or tree structure.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RowGroupScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Row with checkbox',
@@ -429,7 +445,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, RTLScreen.routeName);
             },
-            trailing: newIcon,
           ),
           PlutoListTile(
             title: 'Add and Remove Columns, Rows',
@@ -446,7 +461,6 @@ class PlutoFeatures extends StatelessWidget {
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DualModeScreen.routeName);
             },
-            trailing: updateIcon,
           ),
           PlutoListTile(
             title: 'Grid as Popup',

@@ -36,6 +36,20 @@ abstract class IGridState {
 
   PlutoGridStyleConfig get style;
 
+  /// To delegate sort handling in the [PlutoInfinityScrollRows] or [PlutoLazyPagination] widget
+  /// Whether to override the default sort processing.
+  /// If this value is true,
+  /// the default sorting processing of [PlutoGrid] is ignored and only events are issued.
+  /// [PlutoGridChangeColumnSortEvent]
+  bool get sortOnlyEvent;
+
+  /// To delegate filtering processing in the [PlutoInfinityScrollRows] or [PlutoLazyPagination] widget
+  /// Whether to override the default filtering processing.
+  /// If this value is true,
+  /// the default filtering processing of [PlutoGrid] is ignored and only events are issued.
+  /// [PlutoGridSetColumnFilterEvent]
+  bool get filterOnlyEvent;
+
   void setKeyManager(PlutoGridKeyManager keyManager);
 
   void setEventManager(PlutoGridEventManager eventManager);
@@ -51,6 +65,14 @@ abstract class IGridState {
   /// Event occurred after selecting Row in Select mode.
   void handleOnSelected();
 
+  /// Set whether to ignore the default sort processing and issue only events.
+  /// [PlutoGridChangeColumnSortEvent]
+  void setSortOnlyEvent(bool flag);
+
+  /// Set whether to ignore the basic filtering process and issue only events.
+  /// [PlutoGridSetColumnFilterEvent]
+  void setFilterOnlyEvent(bool flag);
+
   void forceUpdate();
 }
 
@@ -60,6 +82,10 @@ class _State {
   PlutoGridKeyManager? _keyManager;
 
   PlutoGridEventManager? _eventManager;
+
+  bool _sortOnlyEvent = false;
+
+  bool _filterOnlyEvent = false;
 }
 
 mixin GridState implements IPlutoGridState {
@@ -79,6 +105,12 @@ mixin GridState implements IPlutoGridState {
 
   @override
   PlutoGridStyleConfig get style => configuration.style;
+
+  @override
+  bool get sortOnlyEvent => _state._sortOnlyEvent;
+
+  @override
+  bool get filterOnlyEvent => _state._filterOnlyEvent;
 
   @override
   void setKeyManager(PlutoGridKeyManager? keyManager) {
@@ -127,6 +159,16 @@ mixin GridState implements IPlutoGridState {
         ),
       );
     }
+  }
+
+  @override
+  void setSortOnlyEvent(bool flag) {
+    _state._sortOnlyEvent = flag;
+  }
+
+  @override
+  void setFilterOnlyEvent(bool flag) {
+    _state._filterOnlyEvent = flag;
   }
 
   @override
