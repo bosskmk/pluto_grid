@@ -10,6 +10,10 @@ import '../helper/test_helper_util.dart';
 void main() {
   const columnWidth = PlutoGridSettings.columnWidth;
 
+  const ValueKey<String> sortableGestureKey = ValueKey(
+    'ColumnTitleSortableGesture',
+  );
+
   testWidgets(
     'Directionality 가 rtl 인 경우 rtl 상태가 적용 되어야 한다.',
     (WidgetTester tester) async {
@@ -242,23 +246,25 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    Finder headerInkWell = find.descendant(
-        of: find.byKey(columns.first.key), matching: find.byType(InkWell));
+    Finder sortableGesture = find.descendant(
+      of: find.byKey(columns.first.key),
+      matching: find.byKey(sortableGestureKey),
+    );
 
     // then
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Ascending
     expect(rows[0].cells['header0']!.value, 'header0 value 0');
     expect(rows[1].cells['header0']!.value, 'header0 value 1');
     expect(rows[2].cells['header0']!.value, 'header0 value 2');
 
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Descending
     expect(rows[0].cells['header0']!.value, 'header0 value 2');
     expect(rows[1].cells['header0']!.value, 'header0 value 1');
     expect(rows[2].cells['header0']!.value, 'header0 value 0');
 
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Original
     expect(rows[0].cells['header0']!.value, 'header0 value 0');
     expect(rows[1].cells['header0']!.value, 'header0 value 1');
@@ -323,22 +329,24 @@ void main() {
     expect(rows[1].cells['header0']!.value, 'header0 value 1');
     expect(rows[2].cells['header0']!.value, 'header0 value 2');
 
-    Finder headerInkWell = find.descendant(
-        of: find.byKey(columns.first.key), matching: find.byType(InkWell));
+    Finder sortableGesture = find.descendant(
+      of: find.byKey(columns.first.key),
+      matching: find.byKey(sortableGestureKey),
+    );
 
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Ascending
     expect(rows[0].cells['header0']!.value, 'header0 value 1');
     expect(rows[1].cells['header0']!.value, 'header0 value 2');
     expect(rows[2].cells['header0']!.value, 'header0 value 4');
 
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Descending
     expect(rows[0].cells['header0']!.value, 'header0 value 4');
     expect(rows[1].cells['header0']!.value, 'header0 value 2');
     expect(rows[2].cells['header0']!.value, 'header0 value 1');
 
-    await tester.tap(headerInkWell);
+    await tester.tap(sortableGesture);
     // Original
     expect(rows[0].cells['header0']!.value, 'header0 value 4');
     expect(rows[1].cells['header0']!.value, 'header0 value 1');

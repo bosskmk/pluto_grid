@@ -297,29 +297,35 @@ class _BuildDraggableWidget extends StatelessWidget {
 }
 
 class _BuildSortableWidget extends StatelessWidget {
-  final PlutoGridStateManager? stateManager;
+  final PlutoGridStateManager stateManager;
 
-  final PlutoColumn? column;
+  final PlutoColumn column;
 
-  final Widget? child;
+  final Widget child;
 
   const _BuildSortableWidget({
     Key? key,
-    this.stateManager,
-    this.column,
-    this.child,
+    required this.stateManager,
+    required this.column,
+    required this.child,
   }) : super(key: key);
+
+  void _onTap() {
+    stateManager.toggleSortColumn(column);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return column!.enableSorting
-        ? InkWell(
-            onTap: () {
-              stateManager!.toggleSortColumn(column!);
-            },
-            child: child,
+    return column.enableSorting
+        ? MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              key: const ValueKey('ColumnTitleSortableGesture'),
+              onTap: _onTap,
+              child: child,
+            ),
           )
-        : child!;
+        : child;
   }
 }
 
