@@ -1096,6 +1096,16 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
             Offset(0, bodyRowsTopOffset),
           );
           break;
+        case PlutoGridLoadingLevel.rowsBottomCircular:
+          loadingSize = const Size(30, 30);
+          positionChild(
+            _StackName.loading,
+            Offset(
+              (size.width / 2) + 15,
+              size.height - bodyRowsBottomOffset - 45,
+            ),
+          );
+          break;
       }
 
       layoutChild(
@@ -1373,13 +1383,41 @@ extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isPopup => this == PlutoGridMode.popup;
 }
 
+/// When calling loading screen with [PlutoGridStateManager.setShowLoading] method
+/// Determines the level of loading.
+///
+/// {@template pluto_grid_loading_level_grid}
+/// [grid] makes the entire grid opaque and puts the loading indicator in the center.
+/// The user is in a state where no interaction is possible.
+/// {@endtemplate}
+///
+/// {@template pluto_grid_loading_level_rows}
+/// [rows] represents the [LinearProgressIndicator] at the top of the widget area
+/// that displays the rows.
+/// User can interact.
+/// {@endtemplate}
+///
+/// {@template pluto_grid_loading_level_rowsBottomCircular}
+/// [rowsBottomCircular] represents the [CircularProgressIndicator] at the bottom of the widget
+/// that displays the rows.
+/// User can interact.
+/// {@endtemplate}
 enum PlutoGridLoadingLevel {
+  /// {@macro pluto_grid_loading_level_grid}
   grid,
-  rows;
+
+  /// {@macro pluto_grid_loading_level_rows}
+  rows,
+
+  /// {@macro pluto_grid_loading_level_rowsBottomCircular}
+  rowsBottomCircular;
 
   bool get isGrid => this == PlutoGridLoadingLevel.grid;
 
   bool get isRows => this == PlutoGridLoadingLevel.rows;
+
+  bool get isRowsBottomCircular =>
+      this == PlutoGridLoadingLevel.rowsBottomCircular;
 }
 
 class PlutoGridSettings {

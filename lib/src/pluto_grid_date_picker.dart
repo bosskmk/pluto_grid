@@ -93,6 +93,7 @@ class PlutoGridDatePicker {
       height: popupHeight,
       createHeader: _createHeader,
       configuration: configuration.copyWith(
+        tabKeyAction: PlutoGridTabKeyAction.normal,
         style: configuration.style.copyWith(
           enableColumnBorderVertical: false,
           enableColumnBorderHorizontal: false,

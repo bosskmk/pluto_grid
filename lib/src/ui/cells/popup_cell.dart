@@ -98,6 +98,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       createHeader: createHeader,
       createFooter: createFooter,
       configuration: widget.stateManager.configuration.copyWith(
+        tabKeyAction: PlutoGridTabKeyAction.normal,
         style: widget.stateManager.configuration.style.copyWith(
           oddRowColor: PlutoOptional(null),
           evenRowColor: PlutoOptional(null),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+/// Widget that is displayed when loading is enabled
+/// with the [PlutoGridStateManager.setShowLoading] method.
 class PlutoLoading extends StatelessWidget {
   final PlutoGridLoadingLevel level;
   final Color? backgroundColor;
@@ -29,6 +31,11 @@ class PlutoLoading extends StatelessWidget {
         );
       case PlutoGridLoadingLevel.rows:
         return LinearProgressIndicator(
+          backgroundColor: Colors.transparent,
+          color: indicatorColor,
+        );
+      case PlutoGridLoadingLevel.rowsBottomCircular:
+        return CircularProgressIndicator(
           backgroundColor: Colors.transparent,
           color: indicatorColor,
         );

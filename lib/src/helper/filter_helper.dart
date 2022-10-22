@@ -111,6 +111,52 @@ class FilterHelper {
     };
   }
 
+  /// Converts List<PlutoRow> type with filtering information to Map type.
+  ///
+  /// [allField] determines the key value of the filter applied to the entire scope.
+  /// Default is all.
+  ///
+  /// ```dart
+  /// // The return value below is an example of the condition
+  /// in which two filtering is applied with the Contains type condition to all ranges.
+  /// {all: [{Contains: abc}, {Contains: 123}]}
+  ///
+  /// // If filtering is applied to a column, the key is the field name of the column.
+  /// {column1: [{Contains: abc}]}
+  /// ```
+  static Map<String, List<Map<String, String>>> convertRowsToMap(
+    List<PlutoRow> filterRows, {
+    String allField = 'all',
+  }) {
+    final map = <String, List<Map<String, String>>>{};
+
+    if (filterRows.isEmpty) return map;
+
+    for (final row in filterRows) {
+      String columnField = row.cells[FilterHelper.filterFieldColumn]!.value;
+
+      if (columnField == FilterHelper.filterFieldAllColumns) {
+        columnField = allField;
+      }
+
+      final String filterType =
+          (row.cells[FilterHelper.filterFieldType]!.value as PlutoFilterType)
+              .title;
+
+      final filterValue = row.cells[FilterHelper.filterFieldValue]!.value;
+
+      if (map.containsKey(columnField)) {
+        map[columnField]!.add({filterType: filterValue});
+      } else {
+        map[columnField] = [
+          {filterType: filterValue},
+        ];
+      }
+    }
+
+    return map;
+  }
+
   /// Whether [column] is included in [filteredRows].
   ///
   /// That is, check if it is a filtered column.

@@ -3,21 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoUpdateState = T Function<T>(
-  T oldValue,
-  T newValue, {
-  bool Function(T a, T b)? compare,
-  bool? ignoreChange,
-});
-
 abstract class PlutoStatefulWidget extends StatefulWidget {
   const PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
 abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     extends State<T> {
+  /// Subscribe to the event
+  /// that is issued when a state change occurs in [PlutoGridStateManager].
   late final StreamSubscription _subscription;
 
+  /// Contains filtering information
+  /// so that only events related to widget change can be received.
   late final PlutoChangeNotifierFilter _filter;
 
   bool _initialized = false;
@@ -31,6 +28,22 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
   PlutoGridStateManager get stateManager;
 
+  /// Called when a state change of [PlutoGridStateManager] occurs.
+  ///
+  /// Widgets in [PlutoGrid] that inherit this widget implement this method
+  /// to decide whether to rebuild the widget according to the state change.
+  ///
+  /// By calling oldValue and newValue with the [update] method,
+  /// rebuild the widget according to the value change.
+  ///
+  /// ```dart
+  /// void updateState(PlutoNotifierEvent event) {
+  ///   _showColumnFilter = update<bool>(
+  ///     _showColumnFilter,
+  ///     stateManager.showColumnFilter,
+  ///   );
+  /// }
+  /// ```
   void updateState(PlutoNotifierEvent event) {}
 
   @override
@@ -56,6 +69,8 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     super.dispose();
   }
 
+  /// Call within the [updateState] method to determine the rebuild
+  /// of the widget according to the state change.
   U update<U>(
     U oldValue,
     U newValue, {
@@ -73,10 +88,15 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     return newValue;
   }
 
+  /// Process to be rebuilt with steel regardless of state change.
   void forceUpdate() {
     _changed = true;
   }
 
+  /// Called when a state change event occurs.
+  ///
+  /// Call [update] in [updateState] to handle rebuilding
+  /// depending on whether the value has changed.
   void _onChange(PlutoNotifierEvent event) {
     bool rebuild = false;
 

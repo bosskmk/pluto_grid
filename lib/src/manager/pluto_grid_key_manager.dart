@@ -315,11 +315,7 @@ class PlutoGridKeyManager {
 
     final saveIsEditing = stateManager.isEditing;
 
-    if (keyEvent.event.isShiftPressed) {
-      stateManager.moveCurrentCell(PlutoMoveDirection.left, force: true);
-    } else {
-      stateManager.moveCurrentCell(PlutoMoveDirection.right, force: true);
-    }
+    keyEvent.event.isShiftPressed ? _moveCellPrevious() : _moveCellNext();
 
     stateManager.setEditing(stateManager.autoEditing || saveIsEditing);
   }
@@ -384,6 +380,7 @@ class PlutoGridKeyManager {
     _restoreCurrentCellPosition(
       currentColumn: currentColumn,
       previousPosition: previousPosition,
+      ignore: stateManager.sortOnlyEvent,
     );
   }
 
@@ -472,11 +469,73 @@ class PlutoGridKeyManager {
     }
   }
 
+  void _moveCellPrevious() {
+    if (_willMoveToPreviousRow(stateManager.currentCellPosition)) {
+      _moveCellToPreviousRow();
+    } else {
+      stateManager.moveCurrentCell(PlutoMoveDirection.left, force: true);
+    }
+  }
+
+  void _moveCellNext() {
+    if (_willMoveToNextRow(stateManager.currentCellPosition)) {
+      _moveCellToNextRow();
+    } else {
+      stateManager.moveCurrentCell(PlutoMoveDirection.right, force: true);
+    }
+  }
+
+  bool _willMoveToPreviousRow(PlutoGridCellPosition? position) {
+    if (stateManager.configuration.tabKeyAction.isNormal ||
+        position == null ||
+        !position.hasPosition) return false;
+
+    return position.rowIdx! > 0 && position.columnIdx == 0;
+  }
+
+  bool _willMoveToNextRow(PlutoGridCellPosition? position) {
+    if (stateManager.configuration.tabKeyAction.isNormal ||
+        position == null ||
+        !position.hasPosition) return false;
+
+    return position.rowIdx! < stateManager.refRows.length - 1 &&
+        position.columnIdx == stateManager.refColumns.length - 1;
+  }
+
+  void _moveCellToPreviousRow() {
+    stateManager.moveCurrentCell(
+      PlutoMoveDirection.up,
+      force: true,
+      notify: false,
+    );
+
+    stateManager.moveCurrentCellToEdgeOfColumns(
+      PlutoMoveDirection.right,
+      force: true,
+    );
+  }
+
+  void _moveCellToNextRow() {
+    stateManager.moveCurrentCell(
+      PlutoMoveDirection.down,
+      force: true,
+      notify: false,
+    );
+
+    stateManager.moveCurrentCellToEdgeOfColumns(
+      PlutoMoveDirection.left,
+      force: true,
+    );
+  }
+
   void _restoreCurrentCellPosition({
     PlutoColumn? currentColumn,
     PlutoGridCellPosition? previousPosition,
+    bool ignore = false,
   }) {
-    if (currentColumn == null || previousPosition?.hasPosition != true) {
+    if (ignore ||
+        currentColumn == null ||
+        previousPosition?.hasPosition != true) {
       return;
     }
 

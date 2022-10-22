@@ -18,6 +18,10 @@ void main() {
   late PlutoGridEventManager eventManager;
   late PlutoGridConfiguration configuration;
 
+  const ValueKey<String> sortableGestureKey = ValueKey(
+    'ColumnTitleSortableGesture',
+  );
+
   setUp(() {
     stateManager = MockPlutoGridStateManager();
     scroll = MockPlutoGridScrollController();
@@ -122,7 +126,7 @@ void main() {
       buildApp(column: column),
     );
 
-    await tester.tap(find.byType(InkWell));
+    await tester.tap(find.byKey(sortableGestureKey));
 
     // then
     verify(stateManager.toggleSortColumn(captureAny)).called(1);
@@ -130,7 +134,7 @@ void main() {
 
   testWidgets(
       'enableSorting 가 false 인 상태에서 '
-      'InkWell 위젯이 없어야 한다.', (WidgetTester tester) async {
+      'GestureDetector 위젯이 없어야 한다.', (WidgetTester tester) async {
     // given
     final PlutoColumn column = PlutoColumn(
       title: 'header',
@@ -144,10 +148,10 @@ void main() {
       buildApp(column: column),
     );
 
-    Finder inkWell = find.byType(InkWell);
+    Finder gestureDetector = find.byKey(sortableGestureKey);
 
     // then
-    expect(inkWell, findsNothing);
+    expect(gestureDetector, findsNothing);
 
     verifyNever(stateManager.toggleSortColumn(captureAny));
   });
@@ -633,7 +637,7 @@ void main() {
         );
 
         final target = find.descendant(
-          of: find.byType(InkWell),
+          of: find.byKey(sortableGestureKey),
           matching: find.byType(Container),
         );
 
@@ -662,7 +666,7 @@ void main() {
         );
 
         final target = find.descendant(
-          of: find.byType(InkWell),
+          of: find.byKey(sortableGestureKey),
           matching: find.byType(Container),
         );
 

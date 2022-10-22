@@ -23,6 +23,15 @@ class PlutoGridConfiguration {
   /// There is no action.
   final PlutoGridEnterKeyAction enterKeyAction;
 
+  /// Tab key action type.
+  ///
+  /// [PlutoGridTabKeyAction.normal]
+  /// {@macro pluto_grid_tab_key_action_normal}
+  ///
+  /// [PlutoGridTabKeyAction.moveToNextOnEdge]
+  /// {@macro pluto_grid_tab_key_action_moveToNextOnEdge}
+  final PlutoGridTabKeyAction tabKeyAction;
+
   /// Set borders of [PlutoGrid] and columns, cells, and rows.
   final PlutoGridStyleConfig style;
 
@@ -41,6 +50,7 @@ class PlutoGridConfiguration {
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
+    this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.style = const PlutoGridStyleConfig(),
     this.scrollbar = const PlutoGridScrollbarConfig(),
     this.columnFilter = const PlutoGridColumnFilterConfig(),
@@ -52,6 +62,7 @@ class PlutoGridConfiguration {
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
+    this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.style = const PlutoGridStyleConfig.dark(),
     this.scrollbar = const PlutoGridScrollbarConfig(),
     this.columnFilter = const PlutoGridColumnFilterConfig(),
@@ -92,6 +103,7 @@ class PlutoGridConfiguration {
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
     PlutoGridEnterKeyAction? enterKeyAction,
+    PlutoGridTabKeyAction? tabKeyAction,
     PlutoGridStyleConfig? style,
     PlutoGridScrollbarConfig? scrollbar,
     PlutoGridColumnFilterConfig? columnFilter,
@@ -104,6 +116,7 @@ class PlutoGridConfiguration {
       enableMoveHorizontalInEditing:
           enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
+      tabKeyAction: tabKeyAction ?? this.tabKeyAction,
       style: style ?? this.style,
       scrollbar: scrollbar ?? this.scrollbar,
       columnFilter: columnFilter ?? this.columnFilter,
@@ -1171,4 +1184,22 @@ enum PlutoGridEnterKeyAction {
   bool get isToggleEditing => this == PlutoGridEnterKeyAction.toggleEditing;
 
   bool get isNone => this == PlutoGridEnterKeyAction.none;
+}
+
+/// Tab key action type.
+enum PlutoGridTabKeyAction {
+  /// {@template pluto_grid_tab_key_action_normal}
+  /// Tab or Shift Tab key moves when reaching the edge no longer moves.
+  /// {@endtemplate}
+  normal,
+
+  /// {@template pluto_grid_tab_key_action_moveToNextOnEdge}
+  /// Tab or Shift Tab key to continue moving to the next or previous row
+  /// of cells when the edge is reached.
+  /// {@endtemplate}
+  moveToNextOnEdge;
+
+  bool get isNormal => this == PlutoGridTabKeyAction.normal;
+
+  bool get isMoveToNextOnEdge => this == PlutoGridTabKeyAction.moveToNextOnEdge;
 }
