@@ -1,3 +1,8 @@
+## [5.3.0] - 2022. 10. 22
+
+* Add PlutoLazyPagination, PlutoInfinityScrollRows for server-side pagination.
+* Add tabKeyAction to PlutoGridConfiguration.
+
 ## [5.2.1] - 2022. 10. 19
 
 * Add pageSizeToMove to PlutoPagination.
