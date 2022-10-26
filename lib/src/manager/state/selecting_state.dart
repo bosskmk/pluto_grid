@@ -38,6 +38,13 @@ abstract class ISelectingState {
   /// Change Multi-Select Status.
   void setSelecting(bool flag, {bool notify = true});
 
+  /// Set the mode to select cells or rows.
+  ///
+  /// If [PlutoGrid.mode] is [PlutoGridMode.select] or [PlutoGridMode.selectWithOneTap]
+  /// Coerced to [PlutoGridSelectingMode.none] regardless of [selectingMode] value.
+  ///
+  /// When [PlutoGrid.mode] is [PlutoGridMode.multiSelect]
+  /// Coerced to [PlutoGridSelectingMode.row] regardless of [selectingMode] value.
   void setSelectingMode(
     PlutoGridSelectingMode selectingMode, {
     bool notify = true,

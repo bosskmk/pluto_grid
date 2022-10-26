@@ -255,40 +255,16 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// Execution mode of [PlutoGrid].
   ///
   /// [PlutoGridMode.normal]
-  /// {@template pluto_grid_mode_normal}
-  /// Basic mode with most functions not limited, such as editing and selection.
-  /// {@endtemplate}
+  /// {@macro pluto_grid_mode_normal}
   ///
   /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
-  /// {@template pluto_grid_mode_select}
-  /// Mode for selecting one list from a specific list.
-  /// Tap a row or press Enter to select the current row.
+  /// {@macro pluto_grid_mode_select}
   ///
-  /// [select]
-  /// Call the [PlutoGrid.onSelected] callback when the selected row is tapped.
-  /// To select an unselected row, select the row and then tap once more.
-  /// [selectWithOneTap]
-  /// Same as [select], but calls [PlutoGrid.onSelected] with one tap.
-  ///
-  /// This mode is non-editable, but programmatically possible.
-  /// ```dart
-  /// stateManager.changeCellValue(
-  ///   stateManager.currentRow!.cells['column_1']!,
-  ///   value,
-  ///   force: true,
-  /// );
-  /// ```
-  /// {@endtemplate}
+  /// [PlutoGridMode.multiSelect]
+  /// {@macro pluto_grid_mode_multiSelect}
   ///
   /// [PlutoGridMode.popup]
-  /// {@template pluto_grid_mode_popup}
-  /// This is a mode for popup type.
-  /// It is used when calling a popup for filtering or column setting
-  /// inside [PlutoGrid], and it is not a mode for users.
-  ///
-  /// If the user wants to run [PlutoGrid] as a popup,
-  /// use [PlutoGridPopup] or [PlutoGridDualGridPopup].
-  /// {@endtemplate}
+  /// {@macro pluto_grid_mode_popup}
   final PlutoGridMode mode;
 
   /// [setDefaultLocale] sets locale when [Intl] package is used in [PlutoGrid].
@@ -1227,6 +1203,16 @@ class PlutoGridOnChangedEvent {
   }
 }
 
+/// This is the argument value of the [PlutoGrid.onSelected] callback
+/// that is called when the [PlutoGrid.mode] value is in select mode.
+///
+/// If [row], [rowIdx], [cell] is [PlutoGridMode.select] or [PlutoGridMode.selectWithOneTap],
+/// Information of the row selected with the tab or enter key.
+/// If the Escape key is pressed, these values are null.
+///
+/// [selectedRows] is valid only in case of [PlutoGridMode.multiSelect].
+/// If rows are selected by tab or keyboard, the selected rows are included.
+/// If the Escape key is pressed, this value is null.
 class PlutoGridOnSelectedEvent {
   final PlutoRow? row;
   final int? rowIdx;
@@ -1423,18 +1409,55 @@ abstract class PlutoGridSettings {
 }
 
 enum PlutoGridMode {
-  /// {@macro pluto_grid_mode_normal}
+  /// {@template pluto_grid_mode_normal}
+  /// Basic mode with most functions not limited, such as editing and selection.
+  /// {@endtemplate}
   normal,
 
-  /// {@macro pluto_grid_mode_select}
+  /// {@template pluto_grid_mode_select}
+  /// Mode for selecting one list from a specific list.
+  /// Tap a row or press Enter to select the current row.
+  ///
+  /// [select]
+  /// Call the [PlutoGrid.onSelected] callback when the selected row is tapped.
+  /// To select an unselected row, select the row and then tap once more.
+  /// [selectWithOneTap]
+  /// Same as [select], but calls [PlutoGrid.onSelected] with one tap.
+  ///
+  /// This mode is non-editable, but programmatically possible.
+  /// ```dart
+  /// stateManager.changeCellValue(
+  ///   stateManager.currentRow!.cells['column_1']!,
+  ///   value,
+  ///   force: true,
+  /// );
+  /// ```
+  /// {@endtemplate}
   select,
 
   /// {@macro pluto_grid_mode_select}
   selectWithOneTap,
 
+  /// {@template pluto_grid_mode_multiSelect}
+  /// Mode to select multiple rows.
+  /// When a row is tapped, it is selected or deselected and the [PlutoGrid.onSelected] callback is called.
+  /// [PlutoGridOnSelectedEvent.selectedRows] contains the selected rows.
+  /// When a row is selected with keyboard shift + arrowDown/Up keys,
+  /// the [PlutoGrid.onSelected] callback is called only when the Enter key is pressed.
+  /// When the Escape key is pressed,
+  /// the selected row is canceled and the [PlutoGrid.onSelected] callback is called
+  /// with a [PlutoGridOnSelectedEvent.selectedRows] value of null.
+  /// {@endtemplate}
   multiSelect,
 
-  /// {@macro pluto_grid_mode_popup}
+  /// {@template pluto_grid_mode_popup}
+  /// This is a mode for popup type.
+  /// It is used when calling a popup for filtering or column setting
+  /// inside [PlutoGrid], and it is not a mode for users.
+  ///
+  /// If the user wants to run [PlutoGrid] as a popup,
+  /// use [PlutoGridPopup] or [PlutoGridDualGridPopup].
+  /// {@endtemplate}
   popup;
 
   bool get isNormal => this == PlutoGridMode.normal;
