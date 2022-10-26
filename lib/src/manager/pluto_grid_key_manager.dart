@@ -267,11 +267,14 @@ class PlutoGridKeyManager {
 
   void _handleEnter(PlutoKeyManagerEvent keyEvent) {
     // In SelectRow mode, the current Row is passed to the onSelected callback.
-    if (stateManager.mode.isSelect) {
+    if (stateManager.mode.isSelectMode && stateManager.onSelected != null) {
       stateManager.onSelected!(PlutoGridOnSelectedEvent(
         row: stateManager.currentRow,
         rowIdx: stateManager.currentRowIdx,
         cell: stateManager.currentCell,
+        selectedRows: stateManager.mode.isMultiSelectMode
+            ? stateManager.currentSelectingRows
+            : null,
       ));
       return;
     }
@@ -321,13 +324,12 @@ class PlutoGridKeyManager {
   }
 
   void _handleEsc(PlutoKeyManagerEvent keyEvent) {
-    if (stateManager.mode.isSelect ||
+    if (stateManager.mode.isSelectMode ||
         (stateManager.mode.isPopup && !stateManager.isEditing)) {
-      stateManager.onSelected!(const PlutoGridOnSelectedEvent(
-        row: null,
-        rowIdx: null,
-        cell: null,
-      ));
+      if (stateManager.onSelected != null) {
+        stateManager.clearCurrentSelecting();
+        stateManager.onSelected!(const PlutoGridOnSelectedEvent());
+      }
       return;
     }
 

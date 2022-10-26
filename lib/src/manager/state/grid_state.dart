@@ -150,12 +150,13 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void handleOnSelected() {
-    if (mode.isSelect == true && onSelected != null) {
+    if (mode.isSelectMode == true && onSelected != null) {
       onSelected!(
         PlutoGridOnSelectedEvent(
           row: currentRow,
           rowIdx: currentRowIdx,
           cell: currentCell,
+          selectedRows: mode.isMultiSelectMode ? currentSelectingRows : null,
         ),
       );
     }
