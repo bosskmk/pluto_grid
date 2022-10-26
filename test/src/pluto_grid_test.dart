@@ -1395,7 +1395,7 @@ void main() {
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
-      final PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
+      const PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
         columnIdx: null,
         rowIdx: 1,
       );

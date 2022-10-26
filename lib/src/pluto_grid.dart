@@ -1208,7 +1208,7 @@ class PlutoGridOnChangedEvent {
   final dynamic value;
   final dynamic oldValue;
 
-  PlutoGridOnChangedEvent({
+  const PlutoGridOnChangedEvent({
     this.columnIdx,
     this.column,
     this.rowIdx,
@@ -1232,7 +1232,7 @@ class PlutoGridOnSelectedEvent {
   final int? rowIdx;
   final PlutoCell? cell;
 
-  PlutoGridOnSelectedEvent({
+  const PlutoGridOnSelectedEvent({
     this.row,
     this.rowIdx,
     this.cell,
@@ -1244,7 +1244,7 @@ class PlutoGridOnSortedEvent {
 
   final PlutoColumnSort oldSort;
 
-  PlutoGridOnSortedEvent({
+  const PlutoGridOnSortedEvent({
     required this.column,
     required this.oldSort,
   });
@@ -1264,7 +1264,7 @@ abstract class PlutoGridOnRowCheckedEvent {
   final int? rowIdx;
   final bool? isChecked;
 
-  PlutoGridOnRowCheckedEvent({
+  const PlutoGridOnRowCheckedEvent({
     this.row,
     this.rowIdx,
     this.isChecked,
@@ -1283,7 +1283,7 @@ class PlutoGridOnRowDoubleTapEvent {
   final int? rowIdx;
   final PlutoCell? cell;
 
-  PlutoGridOnRowDoubleTapEvent({
+  const PlutoGridOnRowDoubleTapEvent({
     this.row,
     this.rowIdx,
     this.cell,
@@ -1296,7 +1296,7 @@ class PlutoGridOnRowSecondaryTapEvent {
   final PlutoCell? cell;
   final Offset? offset;
 
-  PlutoGridOnRowSecondaryTapEvent({
+  const PlutoGridOnRowSecondaryTapEvent({
     this.row,
     this.rowIdx,
     this.cell,
@@ -1308,14 +1308,14 @@ class PlutoGridOnRowsMovedEvent {
   final int? idx;
   final List<PlutoRow?>? rows;
 
-  PlutoGridOnRowsMovedEvent({
+  const PlutoGridOnRowsMovedEvent({
     required this.idx,
     required this.rows,
   });
 }
 
 class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
-  PlutoGridOnRowCheckedOneEvent({
+  const PlutoGridOnRowCheckedOneEvent({
     PlutoRow? row,
     int? rowIdx,
     bool? isChecked,
@@ -1323,7 +1323,7 @@ class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
 }
 
 class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
-  PlutoGridOnRowCheckedAllEvent({
+  const PlutoGridOnRowCheckedAllEvent({
     bool? isChecked,
   }) : super(row: null, rowIdx: null, isChecked: isChecked);
 }
@@ -1345,7 +1345,7 @@ class PlutoRowColorContext {
 
   final PlutoGridStateManager stateManager;
 
-  PlutoRowColorContext({
+  const PlutoRowColorContext({
     required this.row,
     required this.rowIdx,
     required this.stateManager,
@@ -1353,9 +1353,66 @@ class PlutoRowColorContext {
 }
 
 class PlutoOptional<T> {
-  PlutoOptional(this.value);
+  const PlutoOptional(this.value);
 
   final T? value;
+}
+
+abstract class PlutoGridSettings {
+  /// If there is a frozen column, the minimum width of the body
+  /// (if it is less than the value, the frozen column is released)
+  static const double bodyMinWidth = 200.0;
+
+  /// Default column width
+  static const double columnWidth = 200.0;
+
+  /// Column width
+  static const double minColumnWidth = 80.0;
+
+  /// Frozen column division line (ShadowLine) size
+  static const double shadowLineSize = 3.0;
+
+  /// Sum of frozen column division line width
+  static const double totalShadowLineWidth =
+      PlutoGridSettings.shadowLineSize * 2;
+
+  /// Grid - padding
+  static const double gridPadding = 2.0;
+
+  /// Grid - border width
+  static const double gridBorderWidth = 1.0;
+
+  static const double gridInnerSpacing =
+      (gridPadding * 2) + (gridBorderWidth * 2);
+
+  /// Row - Default row height
+  static const double rowHeight = 45.0;
+
+  /// Row - border width
+  static const double rowBorderWidth = 1.0;
+
+  /// Row - total height
+  static const double rowTotalHeight = rowHeight + rowBorderWidth;
+
+  /// Cell - padding
+  static const EdgeInsets cellPadding = EdgeInsets.symmetric(horizontal: 10);
+
+  /// Column title - padding
+  static const EdgeInsets columnTitlePadding =
+      EdgeInsets.symmetric(horizontal: 10);
+
+  static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
+
+  /// Cell - fontSize
+  static const double cellFontSize = 14;
+
+  /// Scroll when multi-selection is as close as that value from the edge
+  static const double offsetScrollingFromEdge = 10.0;
+
+  /// Size that scrolls from the edge at once when selecting multiple
+  static const double offsetScrollingFromEdgeAtOnce = 200.0;
+
+  static const int debounceMillisecondsForColumnFilter = 300;
 }
 
 enum PlutoGridMode {
@@ -1416,63 +1473,6 @@ enum PlutoGridLoadingLevel {
 
   bool get isRowsBottomCircular =>
       this == PlutoGridLoadingLevel.rowsBottomCircular;
-}
-
-class PlutoGridSettings {
-  /// If there is a frozen column, the minimum width of the body
-  /// (if it is less than the value, the frozen column is released)
-  static const double bodyMinWidth = 200.0;
-
-  /// Default column width
-  static const double columnWidth = 200.0;
-
-  /// Column width
-  static const double minColumnWidth = 80.0;
-
-  /// Frozen column division line (ShadowLine) size
-  static const double shadowLineSize = 3.0;
-
-  /// Sum of frozen column division line width
-  static const double totalShadowLineWidth =
-      PlutoGridSettings.shadowLineSize * 2;
-
-  /// Grid - padding
-  static const double gridPadding = 2.0;
-
-  /// Grid - border width
-  static const double gridBorderWidth = 1.0;
-
-  static const double gridInnerSpacing =
-      (gridPadding * 2) + (gridBorderWidth * 2);
-
-  /// Row - Default row height
-  static const double rowHeight = 45.0;
-
-  /// Row - border width
-  static const double rowBorderWidth = 1.0;
-
-  /// Row - total height
-  static const double rowTotalHeight = rowHeight + rowBorderWidth;
-
-  /// Cell - padding
-  static const EdgeInsets cellPadding = EdgeInsets.symmetric(horizontal: 10);
-
-  /// Column title - padding
-  static const EdgeInsets columnTitlePadding =
-      EdgeInsets.symmetric(horizontal: 10);
-
-  static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
-
-  /// Cell - fontSize
-  static const double cellFontSize = 14;
-
-  /// Scroll when multi-selection is as close as that value from the edge
-  static const double offsetScrollingFromEdge = 10.0;
-
-  /// Size that scrolls from the edge at once when selecting multiple
-  static const double offsetScrollingFromEdgeAtOnce = 200.0;
-
-  static const int debounceMillisecondsForColumnFilter = 300;
 }
 
 enum _StackName {

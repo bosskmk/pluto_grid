@@ -323,7 +323,7 @@ class PlutoGridKeyManager {
   void _handleEsc(PlutoKeyManagerEvent keyEvent) {
     if (stateManager.mode.isSelect ||
         (stateManager.mode.isPopup && !stateManager.isEditing)) {
-      stateManager.onSelected!(PlutoGridOnSelectedEvent(
+      stateManager.onSelected!(const PlutoGridOnSelectedEvent(
         row: null,
         rowIdx: null,
         cell: null,

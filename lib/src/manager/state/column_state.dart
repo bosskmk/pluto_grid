@@ -748,8 +748,8 @@ mixin ColumnState implements IPlutoGridState {
         style: configuration.style.copyWith(
           gridBorderRadius: configuration.style.gridPopupBorderRadius,
           enableRowColorAnimation: false,
-          oddRowColor: PlutoOptional(null),
-          evenRowColor: PlutoOptional(null),
+          oddRowColor: const PlutoOptional(null),
+          evenRowColor: const PlutoOptional(null),
         ),
       ),
       columns: columns,
