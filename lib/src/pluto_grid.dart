@@ -373,6 +373,15 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   }
 
   @override
+  void didUpdateWidget(covariant PlutoGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    stateManager
+      ..setConfiguration(widget.configuration)
+      ..setGridMode(widget.mode);
+  }
+
+  @override
   void updateState(PlutoNotifierEvent event) {
     _showColumnTitle = update<bool>(
       _showColumnTitle,
@@ -501,22 +510,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   }
 
   void _initSelectMode() {
-    PlutoGridSelectingMode selectingMode;
-
-    switch (widget.mode) {
-      case PlutoGridMode.normal:
-      case PlutoGridMode.popup:
-        return;
-      case PlutoGridMode.select:
-      case PlutoGridMode.selectWithOneTap:
-        selectingMode = PlutoGridSelectingMode.none;
-        break;
-      case PlutoGridMode.multiSelect:
-        selectingMode = PlutoGridSelectingMode.row;
-        break;
-    }
-
-    stateManager.setSelectingMode(selectingMode, notify: false);
+    if (!widget.mode.isSelectMode) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null) {

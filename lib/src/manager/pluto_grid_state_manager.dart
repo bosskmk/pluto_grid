@@ -92,9 +92,9 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
             columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
         notifierFilterResolver = notifierFilterResolver ??
             const PlutoNotifierFilterResolverDefault(),
-        gridKey = GlobalKey(),
-        mode = mode ?? PlutoGridMode.normal {
+        gridKey = GlobalKey() {
     setConfiguration(configuration);
+    setGridMode(mode ?? PlutoGridMode.normal);
     _initialize();
   }
 
@@ -150,9 +150,6 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 
   @override
   final GlobalKey gridKey;
-
-  @override
-  final PlutoGridMode mode;
 
   void _initialize() {
     PlutoGridStateManager.initializeRows(

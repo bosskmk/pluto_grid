@@ -4,13 +4,13 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IGridState {
   GlobalKey get gridKey;
 
-  PlutoGridMode get mode;
-
-  PlutoGridConfiguration get configuration;
-
   PlutoGridKeyManager? get keyManager;
 
   PlutoGridEventManager? get eventManager;
+
+  PlutoGridConfiguration get configuration;
+
+  PlutoGridMode get mode;
 
   PlutoOnChangedEventCallback? get onChanged;
 
@@ -60,6 +60,8 @@ abstract class IGridState {
     bool applyColumnFilter = true,
   });
 
+  void setGridMode(PlutoGridMode mode);
+
   void resetCurrentState({bool notify = true});
 
   /// Event occurred after selecting Row in Select mode.
@@ -72,16 +74,16 @@ abstract class IGridState {
   /// Set whether to ignore the basic filtering process and issue only events.
   /// [PlutoGridSetColumnFilterEvent]
   void setFilterOnlyEvent(bool flag);
-
-  void forceUpdate();
 }
 
 class _State {
-  PlutoGridConfiguration? _configuration;
-
   PlutoGridKeyManager? _keyManager;
 
   PlutoGridEventManager? _eventManager;
+
+  PlutoGridConfiguration? _configuration;
+
+  PlutoGridMode _mode = PlutoGridMode.normal;
 
   bool _sortOnlyEvent = false;
 
@@ -92,13 +94,16 @@ mixin GridState implements IPlutoGridState {
   final _State _state = _State();
 
   @override
-  PlutoGridConfiguration get configuration => _state._configuration!;
-
-  @override
   PlutoGridKeyManager? get keyManager => _state._keyManager;
 
   @override
   PlutoGridEventManager? get eventManager => _state._eventManager;
+
+  @override
+  PlutoGridConfiguration get configuration => _state._configuration!;
+
+  @override
+  PlutoGridMode get mode => _state._mode;
 
   @override
   PlutoGridLocaleText get localeText => configuration.localeText;
@@ -140,10 +145,39 @@ mixin GridState implements IPlutoGridState {
   }
 
   @override
+  void setGridMode(PlutoGridMode mode) {
+    if (_state._mode == mode) return;
+
+    _state._mode = mode;
+
+    PlutoGridSelectingMode selectingMode;
+
+    switch (mode) {
+      case PlutoGridMode.normal:
+      case PlutoGridMode.popup:
+        selectingMode = this.selectingMode;
+        break;
+      case PlutoGridMode.select:
+      case PlutoGridMode.selectWithOneTap:
+        selectingMode = PlutoGridSelectingMode.none;
+        break;
+      case PlutoGridMode.multiSelect:
+        selectingMode = PlutoGridSelectingMode.row;
+        break;
+    }
+
+    setSelectingMode(selectingMode);
+
+    resetCurrentState();
+  }
+
+  @override
   void resetCurrentState({bool notify = true}) {
     clearCurrentCell(notify: false);
 
     clearCurrentSelecting(notify: false);
+
+    setEditing(false, notify: false);
 
     notifyListeners(notify, resetCurrentState.hashCode);
   }
@@ -170,17 +204,5 @@ mixin GridState implements IPlutoGridState {
   @override
   void setFilterOnlyEvent(bool flag) {
     _state._filterOnlyEvent = flag;
-  }
-
-  @override
-  void forceUpdate() {
-    if (gridKey.currentContext == null) {
-      return;
-    }
-
-    gridKey.currentContext!
-        .findAncestorStateOfType<PlutoGridState>()!
-        // ignore: invalid_use_of_protected_member
-        .setState(() {});
   }
 }
