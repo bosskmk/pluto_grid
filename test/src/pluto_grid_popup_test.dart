@@ -33,7 +33,7 @@ void main() {
     PlutoRowColorCallback? rowColorCallback,
     PlutoColumnMenuDelegate? columnMenuDelegate,
     PlutoGridConfiguration? configuration,
-    PlutoGridMode? mode,
+    PlutoGridMode mode = PlutoGridMode.normal,
     TextDirection textDirection = TextDirection.ltr,
   }) async {
     await TestHelperUtil.changeWidth(

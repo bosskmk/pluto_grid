@@ -63,7 +63,7 @@ class PlutoGridPopup {
   ///
   /// [PlutoGridMode.popup]
   /// {@macro pluto_grid_mode_popup}
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   final double? width;
 
@@ -87,7 +87,7 @@ class PlutoGridPopup {
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration,
-    this.mode,
+    this.mode = PlutoGridMode.normal,
     this.width,
     this.height,
   }) {

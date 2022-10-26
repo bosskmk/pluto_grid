@@ -290,7 +290,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// If the user wants to run [PlutoGrid] as a popup,
   /// use [PlutoGridPopup] or [PlutoGridDualGridPopup].
   /// {@endtemplate}
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   /// [setDefaultLocale] sets locale when [Intl] package is used in [PlutoGrid].
   ///
@@ -1369,10 +1369,8 @@ enum PlutoGridMode {
   selectWithOneTap,
 
   /// {@macro pluto_grid_mode_popup}
-  popup,
-}
+  popup;
 
-extension PlutoGridModeExtension on PlutoGridMode? {
   bool get isNormal => this == PlutoGridMode.normal;
 
   bool get isSelect =>
