@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
@@ -518,33 +517,34 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   }
 
   void _initOnLoadedEvent() {
-    if (widget.onLoaded == null) {
-      return;
-    }
+    if (widget.onLoaded == null) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onLoaded!(PlutoGridOnLoadedEvent(
-        stateManager: _stateManager,
-      ));
+      widget.onLoaded!(PlutoGridOnLoadedEvent(stateManager: _stateManager));
     });
   }
 
   void _initSelectMode() {
-    if (widget.mode.isSelect != true) {
-      return;
+    PlutoGridSelectingMode selectingMode;
+
+    switch (widget.mode) {
+      case PlutoGridMode.normal:
+      case PlutoGridMode.popup:
+        return;
+      case PlutoGridMode.select:
+      case PlutoGridMode.selectWithOneTap:
+        selectingMode = PlutoGridSelectingMode.none;
+        break;
+      case PlutoGridMode.multiSelect:
+        selectingMode = PlutoGridSelectingMode.row;
+        break;
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_stateManager.currentCell == null && widget.rows.isNotEmpty) {
-        final firstVisible =
-            widget.columns.firstWhereOrNull((element) => !element.hide);
+    stateManager.setSelectingMode(selectingMode, notify: false);
 
-        if (firstVisible != null) {
-          _stateManager.setCurrentCell(
-            widget.rows.first.cells[firstVisible.field],
-            0,
-          );
-        }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_stateManager.currentCell == null) {
+        _stateManager.setCurrentCell(_stateManager.firstCell, 0);
       }
 
       _stateManager.gridFocusNode.requestFocus();
@@ -1231,12 +1231,19 @@ class PlutoGridOnSelectedEvent {
   final PlutoRow? row;
   final int? rowIdx;
   final PlutoCell? cell;
+  final List<PlutoRow>? selectedRows;
 
   const PlutoGridOnSelectedEvent({
     this.row,
     this.rowIdx,
     this.cell,
+    this.selectedRows,
   });
+
+  @override
+  String toString() {
+    return '[PlutoGridOnSelectedEvent] rowIdx: $rowIdx, selectedRows: ${selectedRows?.length}';
+  }
 }
 
 class PlutoGridOnSortedEvent {
@@ -1425,15 +1432,24 @@ enum PlutoGridMode {
   /// {@macro pluto_grid_mode_select}
   selectWithOneTap,
 
+  multiSelect,
+
   /// {@macro pluto_grid_mode_popup}
   popup;
 
   bool get isNormal => this == PlutoGridMode.normal;
 
-  bool get isSelect =>
-      this == PlutoGridMode.select || this == PlutoGridMode.selectWithOneTap;
+  bool get isSelectMode => isSingleSelectMode || isMultiSelectMode;
 
-  bool get isSelectModeWithOneTap => this == PlutoGridMode.selectWithOneTap;
+  bool get isSingleSelectMode => isSelect || isSelectWithOneTap;
+
+  bool get isMultiSelectMode => isMultiSelect;
+
+  bool get isSelect => this == PlutoGridMode.select;
+
+  bool get isSelectWithOneTap => this == PlutoGridMode.selectWithOneTap;
+
+  bool get isMultiSelect => this == PlutoGridMode.multiSelect;
 
   bool get isPopup => this == PlutoGridMode.popup;
 }

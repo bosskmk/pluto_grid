@@ -48,7 +48,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     } else if (stateManager.isSelectingInteraction()) {
       _selecting(stateManager);
       return;
-    } else if (stateManager.mode.isSelect) {
+    } else if (stateManager.mode.isSelectMode) {
       _selectMode(stateManager);
       return;
     }
@@ -89,6 +89,10 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       stateManager,
       PlutoGridScrollUpdateDirection.all,
     );
+
+    if (stateManager.mode.isMultiSelectMode) {
+      stateManager.handleOnSelected();
+    }
   }
 
   void _onDoubleTap(PlutoGridStateManager stateManager) {
@@ -123,6 +127,8 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   }
 
   void _selecting(PlutoGridStateManager stateManager) {
+    bool callOnSelected = stateManager.mode.isMultiSelectMode;
+
     if (stateManager.keyPressed.shift) {
       final int? columnIdx = stateManager.columnIndex(column);
 
@@ -134,16 +140,33 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       );
     } else if (stateManager.keyPressed.ctrl) {
       stateManager.toggleSelectingRow(rowIdx);
+    } else {
+      callOnSelected = false;
+    }
+
+    if (callOnSelected) {
+      stateManager.handleOnSelected();
     }
   }
 
   void _selectMode(PlutoGridStateManager stateManager) {
-    if (stateManager.isCurrentCell(cell) == false) {
-      stateManager.setCurrentCell(cell, rowIdx);
-
-      if (!stateManager.mode.isSelectModeWithOneTap) {
+    switch (stateManager.mode) {
+      case PlutoGridMode.normal:
+      case PlutoGridMode.popup:
         return;
-      }
+      case PlutoGridMode.select:
+      case PlutoGridMode.selectWithOneTap:
+        if (stateManager.isCurrentCell(cell) == false) {
+          stateManager.setCurrentCell(cell, rowIdx);
+
+          if (!stateManager.mode.isSelectWithOneTap) {
+            return;
+          }
+        }
+        break;
+      case PlutoGridMode.multiSelect:
+        stateManager.toggleSelectingRow(rowIdx);
+        break;
     }
 
     stateManager.handleOnSelected();
