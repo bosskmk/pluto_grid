@@ -211,7 +211,7 @@ void main() {
       stateManager.setCurrentCell(currentCell, 2);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 6,
           rowIdx: 4,
         ),

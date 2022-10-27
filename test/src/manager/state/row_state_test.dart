@@ -1008,7 +1008,7 @@ void main() {
       const int rowIdxBeforePrependRows = 3;
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 2,
           rowIdx: rowIdxBeforePrependRows,
         ),

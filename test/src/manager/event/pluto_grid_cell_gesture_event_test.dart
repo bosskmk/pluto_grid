@@ -189,7 +189,7 @@ void main() {
         // then
         verify(
           stateManager.setCurrentSelectingPosition(
-              cellPosition: PlutoGridCellPosition(
+              cellPosition: const PlutoGridCellPosition(
             columnIdx: columnIdx,
             rowIdx: rowIdx,
           )),
