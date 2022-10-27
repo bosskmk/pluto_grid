@@ -13,7 +13,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
   }) {
     final stateManager = PlutoGridStateManager(
       columns: columns,

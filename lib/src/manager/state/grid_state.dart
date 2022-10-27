@@ -55,7 +55,7 @@ abstract class IGridState {
   void setEventManager(PlutoGridEventManager eventManager);
 
   void setConfiguration(
-    PlutoGridConfiguration? configuration, {
+    PlutoGridConfiguration configuration, {
     bool updateLocale = true,
     bool applyColumnFilter = true,
   });
@@ -129,11 +129,13 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void setConfiguration(
-    PlutoGridConfiguration? configuration, {
+    PlutoGridConfiguration configuration, {
     bool updateLocale = true,
     bool applyColumnFilter = true,
   }) {
-    _state._configuration = configuration ?? const PlutoGridConfiguration();
+    if (_state._configuration == configuration) return;
+
+    _state._configuration = configuration;
 
     if (updateLocale) {
       _state._configuration!.updateLocale();

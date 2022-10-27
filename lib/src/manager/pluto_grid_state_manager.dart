@@ -81,7 +81,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     this.createFooter,
     PlutoColumnMenuDelegate? columnMenuDelegate,
     PlutoChangeNotifierFilterResolver? notifierFilterResolver,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
   })  : refColumns = FilteredList(initialList: columns),
         refRows = FilteredList(initialList: rows),

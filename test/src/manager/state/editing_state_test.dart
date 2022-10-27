@@ -15,7 +15,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
     void Function(PlutoGridOnChangedEvent)? onChangedEventCallback,
   }) {

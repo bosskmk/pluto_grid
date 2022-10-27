@@ -66,7 +66,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createFooter,
     this.rowColorCallback,
     this.columnMenuDelegate,
-    this.configuration,
+    this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
@@ -248,7 +248,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@template pluto_grid_property_configuration}
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
   /// {@endtemplate}
-  final PlutoGridConfiguration? configuration;
+  final PlutoGridConfiguration configuration;
 
   final PlutoChangeNotifierFilterResolver? notifierFilterResolver;
 
