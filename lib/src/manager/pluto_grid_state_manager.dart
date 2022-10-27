@@ -419,10 +419,10 @@ class PlutoGridScrollController {
 }
 
 class PlutoGridCellPosition {
-  int? columnIdx;
-  int? rowIdx;
+  final int? columnIdx;
+  final int? rowIdx;
 
-  PlutoGridCellPosition({
+  const PlutoGridCellPosition({
     this.columnIdx,
     this.rowIdx,
   });
@@ -430,8 +430,12 @@ class PlutoGridCellPosition {
   bool get hasPosition => columnIdx != null && rowIdx != null;
 
   @override
-  bool operator ==(covariant PlutoGridCellPosition other) {
-    return columnIdx == other.columnIdx && rowIdx == other.rowIdx;
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridCellPosition &&
+            runtimeType == other.runtimeType &&
+            columnIdx == other.columnIdx &&
+            rowIdx == other.rowIdx;
   }
 
   @override
@@ -439,17 +443,21 @@ class PlutoGridCellPosition {
 }
 
 class PlutoGridSelectingCellPosition {
-  String? field;
-  int? rowIdx;
+  final String? field;
+  final int? rowIdx;
 
-  PlutoGridSelectingCellPosition({
+  const PlutoGridSelectingCellPosition({
     this.field,
     this.rowIdx,
   });
 
   @override
-  bool operator ==(covariant PlutoGridSelectingCellPosition other) {
-    return field == other.field && rowIdx == other.rowIdx;
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridSelectingCellPosition &&
+            runtimeType == other.runtimeType &&
+            field == other.field &&
+            rowIdx == other.rowIdx;
   }
 
   @override
