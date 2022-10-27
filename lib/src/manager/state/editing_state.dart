@@ -87,7 +87,7 @@ mixin EditingState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    if (mode.isSelectMode) {
+    if (!mode.isEditableMode) {
       flag = false;
     }
 

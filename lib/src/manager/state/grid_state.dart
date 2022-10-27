@@ -156,6 +156,7 @@ mixin GridState implements IPlutoGridState {
 
     switch (mode) {
       case PlutoGridMode.normal:
+      case PlutoGridMode.readOnly:
       case PlutoGridMode.popup:
         selectingMode = this.selectingMode;
         break;

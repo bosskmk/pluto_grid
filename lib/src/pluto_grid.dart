@@ -257,6 +257,9 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// [PlutoGridMode.normal]
   /// {@macro pluto_grid_mode_normal}
   ///
+  /// [PlutoGridMode.readOnly]
+  /// {@macro pluto_grid_mode_readOnly}
+  ///
   /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
   /// {@macro pluto_grid_mode_select}
   ///
@@ -1408,6 +1411,20 @@ enum PlutoGridMode {
   /// {@endtemplate}
   normal,
 
+  /// {@template pluto_grid_mode_readOnly}
+  /// Cell cannot be edited.
+  /// To try to edit by force, it is possible as follows.
+  ///
+  /// ```dart
+  /// stateManager.changeCellValue(
+  ///   stateManager.currentCell!,
+  ///   'test',
+  ///   force: true,
+  /// );
+  /// ```
+  /// {@endtemplate}
+  readOnly,
+
   /// {@template pluto_grid_mode_select}
   /// Mode for selecting one list from a specific list.
   /// Tap a row or press Enter to select the current row.
@@ -1455,6 +1472,10 @@ enum PlutoGridMode {
   popup;
 
   bool get isNormal => this == PlutoGridMode.normal;
+
+  bool get isReadOnly => this == PlutoGridMode.readOnly;
+
+  bool get isEditableMode => isNormal || isPopup;
 
   bool get isSelectMode => isSingleSelectMode || isMultiSelectMode;
 

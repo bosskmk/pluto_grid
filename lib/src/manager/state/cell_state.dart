@@ -242,7 +242,7 @@ mixin CellState implements IPlutoGridState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (mode.isSelectMode) {
+    if (!mode.isEditableMode) {
       return false;
     }
 
