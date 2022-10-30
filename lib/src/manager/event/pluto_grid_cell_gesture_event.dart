@@ -152,6 +152,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   void _selectMode(PlutoGridStateManager stateManager) {
     switch (stateManager.mode) {
       case PlutoGridMode.normal:
+      case PlutoGridMode.readOnly:
       case PlutoGridMode.popup:
         return;
       case PlutoGridMode.select:

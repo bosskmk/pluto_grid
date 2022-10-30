@@ -320,6 +320,24 @@ void main() {
   });
 
   testWidgets(
+      '필터링이 적용된 상태에서, '
+      '필터링 아이콘이 렌더링 되어야 한다.', (tester) async {
+    final dummyRows = RowHelper.count(90, columns);
+    final fetch = makeFetch(dummyRows: dummyRows);
+
+    await buildGrid(tester, fetch: fetch, showColumnFilter: true);
+    await tester.pumpAndSettle(const Duration(milliseconds: 30));
+
+    expect(stateManager.hasFilter, false);
+
+    await tapAndEnterTextColumnFilter(tester, 'column0', 'value');
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    expect(stateManager.hasFilter, true);
+    expect(find.byIcon(Icons.filter_alt_outlined), findsOneWidget);
+  });
+
+  testWidgets(
       '마지막 페이지까지 스크롤을 하면, '
       '총 90 개의 행이 렌더링 되어야 한다.', (tester) async {
     final dummyRows = RowHelper.count(90, columns);

@@ -32,7 +32,7 @@ void main() {
     CreateFooterCallBack? createFooter,
     PlutoRowColorCallback? rowColorCallback,
     PlutoColumnMenuDelegate? columnMenuDelegate,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode mode = PlutoGridMode.normal,
     TextDirection textDirection = TextDirection.ltr,
   }) async {

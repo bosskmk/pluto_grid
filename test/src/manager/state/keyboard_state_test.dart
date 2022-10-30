@@ -409,7 +409,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 0,
           ),
@@ -466,7 +466,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 0,
           ),
@@ -617,7 +617,7 @@ void main() {
         expect(stateManager.isEditing, isFalse);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 3,
             rowIdx: 2,
           ),
@@ -728,7 +728,7 @@ void main() {
         expect(stateManager.currentCell, isNotNull);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 5,
             rowIdx: 3,
           ),

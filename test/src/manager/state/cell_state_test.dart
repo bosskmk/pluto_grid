@@ -15,7 +15,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
   }) {
     final stateManager = PlutoGridStateManager(
@@ -214,7 +214,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -222,7 +222,7 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         // then
@@ -255,7 +255,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -263,15 +263,15 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 1, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 2, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 2, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 2, rowIdx: 2),
+          const PlutoGridCellPosition(columnIdx: 2, rowIdx: 2),
         );
 
         // then
@@ -305,7 +305,7 @@ void main() {
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -313,7 +313,7 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: -1, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: -1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
@@ -321,7 +321,7 @@ void main() {
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 1, rowIdx: -1),
+          const PlutoGridCellPosition(columnIdx: 1, rowIdx: -1),
         );
 
         stateManager.setCurrentCellPosition(

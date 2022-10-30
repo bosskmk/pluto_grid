@@ -1392,6 +1392,55 @@ void main() {
     expect(stateManager.currentCell!.value, 'column1 value 0');
   });
 
+  testWidgets('normal 모드에서 readOnly 모드로 변경 하면 셀이 편집 불가 상태가 되어야 한다.',
+      (tester) async {
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+    late final PlutoGridStateManager stateManager;
+    const ValueKey buttonKey = ValueKey('setReadOnly');
+    PlutoGridMode mode = PlutoGridMode.normal;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return PlutoGrid(
+                columns: columns,
+                rows: rows,
+                mode: mode,
+                onLoaded: (e) => stateManager = e.stateManager,
+                createHeader: (s) => TextButton(
+                  key: buttonKey,
+                  onPressed: () {
+                    setState(() {
+                      mode = PlutoGridMode.readOnly;
+                    });
+                  },
+                  child: const Text('set readOnly'),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    await tester.tap(find.text('column0 value 0'));
+    await tester.pump();
+    await tester.tap(find.text('column0 value 0'));
+    await tester.pump();
+    expect(stateManager.isEditing, true);
+
+    await tester.tap(find.byKey(buttonKey));
+    await tester.pumpAndSettle();
+    expect(stateManager.mode, PlutoGridMode.readOnly);
+    expect(stateManager.isEditing, false);
+  });
+
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {

@@ -33,7 +33,7 @@ void main() {
     required FocusNode? gridFocusNode,
     required PlutoGridScrollController scroll,
     List<PlutoColumnGroup>? columnGroups,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
   }) {
     return PlutoGridStateManager(
       columns: columns,

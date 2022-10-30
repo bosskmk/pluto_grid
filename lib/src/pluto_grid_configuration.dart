@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -124,6 +125,37 @@ class PlutoGridConfiguration {
       localeText: localeText ?? this.localeText,
     );
   }
+
+  @override
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridConfiguration &&
+            runtimeType == other.runtimeType &&
+            enableMoveDownAfterSelecting ==
+                other.enableMoveDownAfterSelecting &&
+            enableMoveHorizontalInEditing ==
+                other.enableMoveHorizontalInEditing &&
+            enterKeyAction == other.enterKeyAction &&
+            tabKeyAction == other.tabKeyAction &&
+            style == other.style &&
+            scrollbar == other.scrollbar &&
+            columnFilter == other.columnFilter &&
+            columnSize == other.columnSize &&
+            localeText == other.localeText;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        enableMoveDownAfterSelecting,
+        enableMoveHorizontalInEditing,
+        enterKeyAction,
+        tabKeyAction,
+        style,
+        scrollbar,
+        columnFilter,
+        columnSize,
+        localeText,
+      );
 }
 
 class PlutoGridStyleConfig {
@@ -491,6 +523,100 @@ class PlutoGridStyleConfig {
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,
     );
   }
+
+  @override
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridStyleConfig &&
+            runtimeType == other.runtimeType &&
+            enableGridBorderShadow == other.enableGridBorderShadow &&
+            enableColumnBorderVertical == other.enableColumnBorderVertical &&
+            enableColumnBorderHorizontal ==
+                other.enableColumnBorderHorizontal &&
+            enableCellBorderVertical == other.enableCellBorderVertical &&
+            enableCellBorderHorizontal == other.enableCellBorderHorizontal &&
+            enableRowColorAnimation == other.enableRowColorAnimation &&
+            gridBackgroundColor == other.gridBackgroundColor &&
+            rowColor == other.rowColor &&
+            oddRowColor == other.oddRowColor &&
+            evenRowColor == other.evenRowColor &&
+            activatedColor == other.activatedColor &&
+            checkedColor == other.checkedColor &&
+            cellColorInEditState == other.cellColorInEditState &&
+            cellColorInReadOnlyState == other.cellColorInReadOnlyState &&
+            cellColorGroupedRow == other.cellColorGroupedRow &&
+            dragTargetColumnColor == other.dragTargetColumnColor &&
+            iconColor == other.iconColor &&
+            disabledIconColor == other.disabledIconColor &&
+            menuBackgroundColor == other.menuBackgroundColor &&
+            gridBorderColor == other.gridBorderColor &&
+            borderColor == other.borderColor &&
+            activatedBorderColor == other.activatedBorderColor &&
+            inactivatedBorderColor == other.inactivatedBorderColor &&
+            iconSize == other.iconSize &&
+            rowHeight == other.rowHeight &&
+            columnHeight == other.columnHeight &&
+            columnFilterHeight == other.columnFilterHeight &&
+            defaultColumnTitlePadding == other.defaultColumnTitlePadding &&
+            defaultColumnFilterPadding == other.defaultColumnFilterPadding &&
+            defaultCellPadding == other.defaultCellPadding &&
+            columnTextStyle == other.columnTextStyle &&
+            cellTextStyle == other.cellTextStyle &&
+            columnContextIcon == other.columnContextIcon &&
+            columnResizeIcon == other.columnResizeIcon &&
+            columnAscendingIcon == other.columnAscendingIcon &&
+            columnDescendingIcon == other.columnDescendingIcon &&
+            rowGroupExpandedIcon == other.rowGroupExpandedIcon &&
+            rowGroupCollapsedIcon == other.rowGroupCollapsedIcon &&
+            rowGroupEmptyIcon == other.rowGroupEmptyIcon &&
+            gridBorderRadius == other.gridBorderRadius &&
+            gridPopupBorderRadius == other.gridPopupBorderRadius;
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+        enableGridBorderShadow,
+        enableColumnBorderVertical,
+        enableColumnBorderHorizontal,
+        enableCellBorderVertical,
+        enableCellBorderHorizontal,
+        enableRowColorAnimation,
+        gridBackgroundColor,
+        rowColor,
+        oddRowColor,
+        evenRowColor,
+        activatedColor,
+        checkedColor,
+        cellColorInEditState,
+        cellColorInReadOnlyState,
+        cellColorGroupedRow,
+        dragTargetColumnColor,
+        iconColor,
+        disabledIconColor,
+        menuBackgroundColor,
+        gridBorderColor,
+        borderColor,
+        activatedBorderColor,
+        inactivatedBorderColor,
+        iconSize,
+        rowHeight,
+        columnHeight,
+        columnFilterHeight,
+        defaultColumnTitlePadding,
+        defaultColumnFilterPadding,
+        defaultCellPadding,
+        columnTextStyle,
+        cellTextStyle,
+        columnContextIcon,
+        columnResizeIcon,
+        columnAscendingIcon,
+        columnDescendingIcon,
+        rowGroupExpandedIcon,
+        rowGroupCollapsedIcon,
+        rowGroupEmptyIcon,
+        gridBorderRadius,
+        gridPopupBorderRadius,
+      ]);
 }
 
 /// Allows to customise scrollbars "look and feel"
@@ -515,6 +641,30 @@ class PlutoGridScrollbarConfig {
   final double scrollbarThicknessWhileDragging;
   final Radius scrollbarRadius;
   final Radius scrollbarRadiusWhileDragging;
+
+  @override
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridScrollbarConfig &&
+            runtimeType == other.runtimeType &&
+            draggableScrollbar == other.draggableScrollbar &&
+            isAlwaysShown == other.isAlwaysShown &&
+            scrollbarThickness == other.scrollbarThickness &&
+            scrollbarThicknessWhileDragging ==
+                other.scrollbarThicknessWhileDragging &&
+            scrollbarRadius == other.scrollbarRadius &&
+            scrollbarRadiusWhileDragging == other.scrollbarRadiusWhileDragging;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        draggableScrollbar,
+        isAlwaysShown,
+        scrollbarThickness,
+        scrollbarThicknessWhileDragging,
+        scrollbarRadius,
+        scrollbarRadiusWhileDragging,
+      );
 }
 
 typedef PlutoGridColumnFilterResolver = Function<T>();
@@ -616,6 +766,24 @@ class PlutoGridColumnFilterConfig {
 
     return resolvedFilter;
   }
+
+  @override
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridColumnFilterConfig &&
+            runtimeType == other.runtimeType &&
+            listEquals(_userFilters, other._userFilters) &&
+            _userResolveDefaultColumnFilter ==
+                other._userResolveDefaultColumnFilter &&
+            _debounceMilliseconds == other._debounceMilliseconds;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        _userFilters,
+        _userResolveDefaultColumnFilter,
+        _debounceMilliseconds,
+      );
 }
 
 /// Automatically change the column width or set the mode when changing the width.
@@ -687,19 +855,22 @@ class PlutoGridColumnSizeConfig {
   }
 
   @override
-  bool operator ==(covariant PlutoGridColumnSizeConfig other) {
-    return autoSizeMode == other.autoSizeMode &&
-        resizeMode == other.resizeMode &&
-        restoreAutoSizeAfterHideColumn ==
-            other.restoreAutoSizeAfterHideColumn &&
-        restoreAutoSizeAfterFrozenColumn ==
-            other.restoreAutoSizeAfterFrozenColumn &&
-        restoreAutoSizeAfterMoveColumn ==
-            other.restoreAutoSizeAfterMoveColumn &&
-        restoreAutoSizeAfterInsertColumn ==
-            other.restoreAutoSizeAfterInsertColumn &&
-        restoreAutoSizeAfterRemoveColumn ==
-            other.restoreAutoSizeAfterRemoveColumn;
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridColumnSizeConfig &&
+            runtimeType == other.runtimeType &&
+            autoSizeMode == other.autoSizeMode &&
+            resizeMode == other.resizeMode &&
+            restoreAutoSizeAfterHideColumn ==
+                other.restoreAutoSizeAfterHideColumn &&
+            restoreAutoSizeAfterFrozenColumn ==
+                other.restoreAutoSizeAfterFrozenColumn &&
+            restoreAutoSizeAfterMoveColumn ==
+                other.restoreAutoSizeAfterMoveColumn &&
+            restoreAutoSizeAfterInsertColumn ==
+                other.restoreAutoSizeAfterInsertColumn &&
+            restoreAutoSizeAfterRemoveColumn ==
+                other.restoreAutoSizeAfterRemoveColumn;
   }
 
   @override
@@ -1157,6 +1328,79 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Laster',
   });
+
+  @override
+  bool operator ==(covariant Object other) {
+    return identical(this, other) ||
+        other is PlutoGridLocaleText &&
+            runtimeType == other.runtimeType &&
+            unfreezeColumn == other.unfreezeColumn &&
+            freezeColumnToStart == other.freezeColumnToStart &&
+            freezeColumnToEnd == other.freezeColumnToEnd &&
+            autoFitColumn == other.autoFitColumn &&
+            hideColumn == other.hideColumn &&
+            setColumns == other.setColumns &&
+            setFilter == other.setFilter &&
+            resetFilter == other.resetFilter &&
+            setColumnsTitle == other.setColumnsTitle &&
+            filterColumn == other.filterColumn &&
+            filterType == other.filterType &&
+            filterValue == other.filterValue &&
+            filterAllColumns == other.filterAllColumns &&
+            filterContains == other.filterContains &&
+            filterEquals == other.filterEquals &&
+            filterStartsWith == other.filterStartsWith &&
+            filterEndsWith == other.filterEndsWith &&
+            filterGreaterThan == other.filterGreaterThan &&
+            filterGreaterThanOrEqualTo == other.filterGreaterThanOrEqualTo &&
+            filterLessThan == other.filterLessThan &&
+            filterLessThanOrEqualTo == other.filterLessThanOrEqualTo &&
+            sunday == other.sunday &&
+            monday == other.monday &&
+            tuesday == other.tuesday &&
+            wednesday == other.wednesday &&
+            thursday == other.thursday &&
+            friday == other.friday &&
+            saturday == other.saturday &&
+            hour == other.hour &&
+            minute == other.minute &&
+            loadingText == other.loadingText;
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+        unfreezeColumn,
+        freezeColumnToStart,
+        freezeColumnToEnd,
+        autoFitColumn,
+        hideColumn,
+        setColumns,
+        setFilter,
+        resetFilter,
+        setColumnsTitle,
+        filterColumn,
+        filterType,
+        filterValue,
+        filterAllColumns,
+        filterContains,
+        filterEquals,
+        filterStartsWith,
+        filterEndsWith,
+        filterGreaterThan,
+        filterGreaterThanOrEqualTo,
+        filterLessThan,
+        filterLessThanOrEqualTo,
+        sunday,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        hour,
+        minute,
+        loadingText,
+      ]);
 }
 
 /// Behavior of the Enter key when a cell is selected.

@@ -66,7 +66,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createFooter,
     this.rowColorCallback,
     this.columnMenuDelegate,
-    this.configuration,
+    this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
   }) : super(key: key);
@@ -248,7 +248,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@template pluto_grid_property_configuration}
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
   /// {@endtemplate}
-  final PlutoGridConfiguration? configuration;
+  final PlutoGridConfiguration configuration;
 
   final PlutoChangeNotifierFilterResolver? notifierFilterResolver;
 
@@ -256,6 +256,9 @@ class PlutoGrid extends PlutoStatefulWidget {
   ///
   /// [PlutoGridMode.normal]
   /// {@macro pluto_grid_mode_normal}
+  ///
+  /// [PlutoGridMode.readOnly]
+  /// {@macro pluto_grid_mode_readOnly}
   ///
   /// [PlutoGridMode.select], [PlutoGridMode.selectWithOneTap]
   /// {@macro pluto_grid_mode_select}
@@ -370,6 +373,15 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     }
 
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant PlutoGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    stateManager
+      ..setConfiguration(widget.configuration)
+      ..setGridMode(widget.mode);
   }
 
   @override
@@ -501,22 +513,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   }
 
   void _initSelectMode() {
-    PlutoGridSelectingMode selectingMode;
-
-    switch (widget.mode) {
-      case PlutoGridMode.normal:
-      case PlutoGridMode.popup:
-        return;
-      case PlutoGridMode.select:
-      case PlutoGridMode.selectWithOneTap:
-        selectingMode = PlutoGridSelectingMode.none;
-        break;
-      case PlutoGridMode.multiSelect:
-        selectingMode = PlutoGridSelectingMode.row;
-        break;
-    }
-
-    stateManager.setSelectingMode(selectingMode, notify: false);
+    if (!widget.mode.isSelectMode) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_stateManager.currentCell == null) {
@@ -1414,6 +1411,20 @@ enum PlutoGridMode {
   /// {@endtemplate}
   normal,
 
+  /// {@template pluto_grid_mode_readOnly}
+  /// Cell cannot be edited.
+  /// To try to edit by force, it is possible as follows.
+  ///
+  /// ```dart
+  /// stateManager.changeCellValue(
+  ///   stateManager.currentCell!,
+  ///   'test',
+  ///   force: true,
+  /// );
+  /// ```
+  /// {@endtemplate}
+  readOnly,
+
   /// {@template pluto_grid_mode_select}
   /// Mode for selecting one list from a specific list.
   /// Tap a row or press Enter to select the current row.
@@ -1461,6 +1472,10 @@ enum PlutoGridMode {
   popup;
 
   bool get isNormal => this == PlutoGridMode.normal;
+
+  bool get isReadOnly => this == PlutoGridMode.readOnly;
+
+  bool get isEditableMode => isNormal || isPopup;
 
   bool get isSelectMode => isSingleSelectMode || isMultiSelectMode;
 

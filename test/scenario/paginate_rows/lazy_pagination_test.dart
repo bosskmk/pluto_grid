@@ -137,6 +137,34 @@ void main() {
     return find.byType(TextButton);
   }
 
+  Finder findFilterTextField(String columnTitle) {
+    return find.descendant(
+      of: find.descendant(
+          of: find.ancestor(
+            of: find.text(columnTitle),
+            matching: find.byType(PlutoBaseColumn),
+          ),
+          matching: find.byType(PlutoColumnFilter)),
+      matching: find.byType(TextField),
+    );
+  }
+
+  Future<void> tapAndEnterTextColumnFilter(
+    WidgetTester tester,
+    String columnTitle,
+    String? enterText,
+  ) async {
+    final textField = findFilterTextField(columnTitle);
+
+    // 텍스트 박스가 최초에 포커스를 받으려면 두번 탭.
+    await tester.tap(textField);
+    await tester.tap(textField);
+
+    if (enterText != null) {
+      await tester.enterText(textField, enterText);
+    }
+  }
+
   testWidgets('최초에 20개 행이 렌더링 되어야 한다.', (tester) async {
     final dummyRows = RowHelper.count(90, columns);
     final fetch = makeFetch(fakeFetchedRows: dummyRows);
@@ -343,5 +371,23 @@ void main() {
     final style1 = textStyleFromTextButton(pageButtonsAsTextButton[2]);
 
     expect(style1.color, stateManager.configuration.style.activatedBorderColor);
+  });
+
+  testWidgets(
+      '필터링이 적용된 상태에서, '
+      '필터링 아이콘이 렌더링 되어야 한다.', (tester) async {
+    final dummyRows = RowHelper.count(90, columns);
+    final fetch = makeFetch(fakeFetchedRows: dummyRows);
+
+    await buildGrid(tester, fetch: fetch, showColumnFilter: true);
+    await tester.pumpAndSettle(const Duration(milliseconds: 30));
+
+    expect(stateManager.hasFilter, false);
+
+    await tapAndEnterTextColumnFilter(tester, 'column0', 'value');
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    expect(stateManager.hasFilter, true);
+    expect(find.byIcon(Icons.filter_alt_outlined), findsOneWidget);
   });
 }
