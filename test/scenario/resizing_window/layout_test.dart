@@ -11,7 +11,7 @@ void main() {
   Widget buildGrid({
     required List<PlutoColumn> columns,
     required List<PlutoRow> rows,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
   }) {
     return MaterialApp(
       home: Material(

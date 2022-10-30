@@ -38,7 +38,7 @@ void main() {
   group('PlutoCellPosition', () {
     testWidgets('null 과의 비교는 false 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoGridCellPosition(
+      const cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
@@ -54,12 +54,12 @@ void main() {
 
     testWidgets('값이 다른 비교는 false 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoGridCellPosition(
+      const cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
 
-      final cellPositionB = PlutoGridCellPosition(
+      const cellPositionB = PlutoGridCellPosition(
         columnIdx: 2,
         rowIdx: 1,
       );
@@ -73,12 +73,12 @@ void main() {
 
     testWidgets('값이 동일한 비교는 true 를 리턴 해야 한다.', (WidgetTester tester) async {
       // given
-      final cellPositionA = PlutoGridCellPosition(
+      const cellPositionA = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );
 
-      final cellPositionB = PlutoGridCellPosition(
+      const cellPositionB = PlutoGridCellPosition(
         columnIdx: 1,
         rowIdx: 1,
       );

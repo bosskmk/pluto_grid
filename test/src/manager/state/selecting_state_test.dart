@@ -14,7 +14,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
   }) {
     final stateManager = PlutoGridStateManager(
       columns: columns,
@@ -92,7 +92,7 @@ void main() {
         stateManager.setCurrentCell(currentCell, 3);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 2,
             rowIdx: 4,
           ),
@@ -433,7 +433,7 @@ void main() {
       stateManager.setCurrentCell(currentCell, 3);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 2,
           rowIdx: 4,
         ),
@@ -630,7 +630,7 @@ void main() {
         stateManager.setCurrentCell(rows.first.cells['text1'], 0);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 0,
             rowIdx: 1,
           ),
@@ -859,7 +859,7 @@ void main() {
         stateManager.setCurrentCell(rows[3].cells['text1'], 3);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             columnIdx: 1,
             rowIdx: 4,
           ),
@@ -1148,7 +1148,7 @@ void main() {
       stateManager.setCurrentCell(stateManager.firstCell, 0);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 1,
           rowIdx: 0,
         ),
@@ -1207,7 +1207,7 @@ void main() {
       stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           rowIdx: 3,
           columnIdx: 2,
         ),
@@ -1273,7 +1273,7 @@ void main() {
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             rowIdx: 3,
             columnIdx: 2,
           ),
@@ -1325,7 +1325,7 @@ void main() {
         stateManager.setCurrentCell(rows[1].cells['text1'], 1);
 
         stateManager.setCurrentSelectingPosition(
-          cellPosition: PlutoGridCellPosition(
+          cellPosition: const PlutoGridCellPosition(
             rowIdx: 3,
             columnIdx: 2,
           ),

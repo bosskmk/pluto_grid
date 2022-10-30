@@ -87,27 +87,27 @@ mixin EditingState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    if (mode.isSelect) {
-      return;
+    if (!mode.isEditableMode || (flag && currentCell == null)) {
+      flag = false;
     }
 
-    if (currentCell == null || isEditing == flag) {
-      return;
-    }
+    if (isEditing == flag) return;
 
-    assert(
-      currentCell?.column != null && currentCell?.row != null,
-      """
+    if (flag) {
+      assert(
+        currentCell?.column != null && currentCell?.row != null,
+        """
       PlutoCell is not Initialized. 
       PlutoColumn and PlutoRow must be initialized in PlutoCell via PlutoGridStateManager.
       initializeRows method. When adding or deleting columns or rows, 
       you must use methods on PlutoGridStateManager. Otherwise, 
       the PlutoCell is not initialized and this error occurs.
       """,
-    );
+      );
 
-    if (!isEditableCell(currentCell!)) {
-      flag = false;
+      if (!isEditableCell(currentCell!)) {
+        flag = false;
+      }
     }
 
     _state._isEditing = flag;

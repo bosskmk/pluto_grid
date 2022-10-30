@@ -86,7 +86,7 @@ mixin CellState implements IPlutoGridState {
 
   @override
   PlutoCell? get firstCell {
-    if (refRows.isEmpty) {
+    if (refRows.isEmpty || refColumns.isEmpty) {
       return null;
     }
 
@@ -242,7 +242,7 @@ mixin CellState implements IPlutoGridState {
     dynamic newValue,
     dynamic oldValue,
   }) {
-    if (mode.isSelect) {
+    if (!mode.isEditableMode) {
       return false;
     }
 

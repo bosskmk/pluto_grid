@@ -15,7 +15,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
     void Function(PlutoGridOnChangedEvent)? onChangedEventCallback,
   }) {
@@ -211,7 +211,7 @@ void main() {
       stateManager.setCurrentCell(currentCell, 2);
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 6,
           rowIdx: 4,
         ),

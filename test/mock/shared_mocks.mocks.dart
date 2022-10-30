@@ -497,12 +497,6 @@ class MockPlutoGridStateManager extends _i1.Mock
         ),
       ) as _i3.GlobalKey<_i3.State<_i3.StatefulWidget>>);
   @override
-  _i2.PlutoGridMode get mode => (super.noSuchMethod(
-        Invocation.getter(#mode),
-        returnValue: _i2.PlutoGridMode.normal,
-        returnValueForMissingStub: _i2.PlutoGridMode.normal,
-      ) as _i2.PlutoGridMode);
-  @override
   _i4.PublishSubject<_i2.PlutoNotifierEvent> get streamNotifier =>
       (super.noSuchMethod(
         Invocation.getter(#streamNotifier),
@@ -733,6 +727,12 @@ class MockPlutoGridStateManager extends _i1.Mock
         ),
       ) as _i2.PlutoGridConfiguration);
   @override
+  _i2.PlutoGridMode get mode => (super.noSuchMethod(
+        Invocation.getter(#mode),
+        returnValue: _i2.PlutoGridMode.normal,
+        returnValueForMissingStub: _i2.PlutoGridMode.normal,
+      ) as _i2.PlutoGridMode);
+  @override
   _i2.PlutoGridLocaleText get localeText => (super.noSuchMethod(
         Invocation.getter(#localeText),
         returnValue: _FakePlutoGridLocaleText_9(
@@ -756,6 +756,18 @@ class MockPlutoGridStateManager extends _i1.Mock
           Invocation.getter(#style),
         ),
       ) as _i2.PlutoGridStyleConfig);
+  @override
+  bool get sortOnlyEvent => (super.noSuchMethod(
+        Invocation.getter(#sortOnlyEvent),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool get filterOnlyEvent => (super.noSuchMethod(
+        Invocation.getter(#filterOnlyEvent),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
   @override
   _i2.PlutoGridKeyPressed get keyPressed => (super.noSuchMethod(
         Invocation.getter(#keyPressed),
@@ -2204,6 +2216,14 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  void setGridMode(_i2.PlutoGridMode? mode) => super.noSuchMethod(
+        Invocation.method(
+          #setGridMode,
+          [mode],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void resetCurrentState({bool? notify = true}) => super.noSuchMethod(
         Invocation.method(
           #resetCurrentState,
@@ -2221,10 +2241,18 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void forceUpdate() => super.noSuchMethod(
+  void setSortOnlyEvent(bool? flag) => super.noSuchMethod(
         Invocation.method(
-          #forceUpdate,
-          [],
+          #setSortOnlyEvent,
+          [flag],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void setFilterOnlyEvent(bool? flag) => super.noSuchMethod(
+        Invocation.method(
+          #setFilterOnlyEvent,
+          [flag],
         ),
         returnValueForMissingStub: null,
       );
@@ -3009,13 +3037,13 @@ class MockPlutoGridStateManager extends _i1.Mock
       );
   @override
   void setSelectingMode(
-    _i2.PlutoGridSelectingMode? mode, {
+    _i2.PlutoGridSelectingMode? selectingMode, {
     bool? notify = true,
   }) =>
       super.noSuchMethod(
         Invocation.method(
           #setSelectingMode,
-          [mode],
+          [selectingMode],
           {#notify: notify},
         ),
         returnValueForMissingStub: null,

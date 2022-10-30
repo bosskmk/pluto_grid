@@ -603,7 +603,7 @@ void main() {
         focusFirstFilterValue: true,
       );
 
-      filterPopupState.onChanged(PlutoGridOnChangedEvent());
+      filterPopupState.onChanged(const PlutoGridOnChangedEvent());
 
       verify(mock.oneParamReturnVoid(any)).called(1);
     });
@@ -629,7 +629,7 @@ void main() {
         PlutoGridOnLoadedEvent(stateManager: stateManager),
       );
 
-      filterPopupState.onSelected(PlutoGridOnSelectedEvent());
+      filterPopupState.onSelected(const PlutoGridOnSelectedEvent());
 
       verify(
         stateManager.removeListener(filterPopupState.stateListener),

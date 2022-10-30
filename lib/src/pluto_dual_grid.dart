@@ -43,7 +43,7 @@ class PlutoDualGrid extends StatefulWidget {
 
   final PlutoDualGridProps gridPropsB;
 
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   final PlutoDualOnSelectedEventCallback? onSelected;
 
@@ -64,7 +64,7 @@ class PlutoDualGrid extends StatefulWidget {
   const PlutoDualGrid({
     required this.gridPropsA,
     required this.gridPropsB,
-    this.mode,
+    this.mode = PlutoGridMode.normal,
     this.onSelected,
     this.display,
     this.divider = const PlutoDualGridDivider(),
@@ -116,7 +116,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
   Widget _buildGrid({
     required PlutoDualGridProps props,
     required bool isGridA,
-    PlutoGridMode? mode,
+    required PlutoGridMode mode,
   }) {
     return LayoutId(
       id: isGridA == true ? _PlutoDualGridId.gridA : _PlutoDualGridId.gridB,

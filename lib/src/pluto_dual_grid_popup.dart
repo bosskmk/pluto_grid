@@ -11,7 +11,7 @@ class PlutoDualGridPopup {
 
   final PlutoDualGridProps gridPropsB;
 
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   final PlutoDualOnSelectedEventCallback? onSelected;
 
@@ -27,7 +27,7 @@ class PlutoDualGridPopup {
     required this.context,
     required this.gridPropsA,
     required this.gridPropsB,
-    this.mode,
+    this.mode = PlutoGridMode.normal,
     this.onSelected,
     this.display,
     this.width,

@@ -51,7 +51,7 @@ class PlutoGridPopup {
   final PlutoColumnMenuDelegate? columnMenuDelegate;
 
   /// {@macro pluto_grid_property_configuration}
-  final PlutoGridConfiguration? configuration;
+  final PlutoGridConfiguration configuration;
 
   /// Execution mode of [PlutoGrid].
   ///
@@ -63,7 +63,7 @@ class PlutoGridPopup {
   ///
   /// [PlutoGridMode.popup]
   /// {@macro pluto_grid_mode_popup}
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   final double? width;
 
@@ -86,8 +86,8 @@ class PlutoGridPopup {
     this.createFooter,
     this.rowColorCallback,
     this.columnMenuDelegate,
-    this.configuration,
-    this.mode,
+    this.configuration = const PlutoGridConfiguration(),
+    this.mode = PlutoGridMode.normal,
     this.width,
     this.height,
   }) {
@@ -100,9 +100,9 @@ class PlutoGridPopup {
             context: context,
             builder: (BuildContext ctx) {
               return Dialog(
-                shape: configuration?.style.gridBorderRadius != null
+                shape: configuration.style.gridBorderRadius != BorderRadius.zero
                     ? RoundedRectangleBorder(
-                        borderRadius: configuration!.style.gridBorderRadius,
+                        borderRadius: configuration.style.gridBorderRadius,
                       )
                     : null,
                 child: LayoutBuilder(

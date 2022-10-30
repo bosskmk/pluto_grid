@@ -1,3 +1,8 @@
+## [5.3.1] - 2022. 10. 30
+
+* Add readOnly, multiSelect modes to PlutoGridMode.
+* Fix Bug showing filter icon when filterOnlyEvent is true.
+
 ## [5.3.0] - 2022. 10. 22
 
 * Add PlutoLazyPagination, PlutoInfinityScrollRows for server-side pagination.

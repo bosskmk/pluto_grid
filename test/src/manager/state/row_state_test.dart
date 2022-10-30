@@ -22,7 +22,7 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     Widget Function(PlutoGridStateManager)? createHeader,
   }) {
     final stateManager = PlutoGridStateManager(
@@ -1008,7 +1008,7 @@ void main() {
       const int rowIdxBeforePrependRows = 3;
 
       stateManager.setCurrentSelectingPosition(
-        cellPosition: PlutoGridCellPosition(
+        cellPosition: const PlutoGridCellPosition(
           columnIdx: 2,
           rowIdx: rowIdxBeforePrependRows,
         ),

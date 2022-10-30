@@ -23,7 +23,7 @@ void main() {
       );
 
       final copiedStyle = style.copyWith(
-        oddRowColor: PlutoOptional<Color?>(null),
+        oddRowColor: const PlutoOptional<Color?>(null),
       );
 
       expect(copiedStyle.oddRowColor, null);
@@ -35,7 +35,7 @@ void main() {
       );
 
       final copiedStyle = style.copyWith(
-        evenRowColor: PlutoOptional<Color?>(null),
+        evenRowColor: const PlutoOptional<Color?>(null),
       );
 
       expect(copiedStyle.evenRowColor, null);
