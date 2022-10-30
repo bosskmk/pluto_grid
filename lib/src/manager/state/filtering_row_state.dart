@@ -39,10 +39,15 @@ mixin FilteringRowState implements IPlutoGridState {
   List<PlutoRow> get filterRows => _state._filterRows;
 
   @override
-  bool get hasFilter => refRows.hasFilter;
+  bool get hasFilter =>
+      refRows.hasFilter || (filterOnlyEvent && filterRows.isNotEmpty);
 
   @override
   void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true}) {
+    if (filter == null) {
+      setFilterRows([]);
+    }
+
     if (filterOnlyEvent) {
       eventManager!.addEvent(
         PlutoGridSetColumnFilterEvent(filterRows: filterRows),
@@ -56,9 +61,7 @@ mixin FilteringRowState implements IPlutoGridState {
 
     var savedFilter = filter;
 
-    if (filter == null) {
-      setFilterRows([]);
-    } else {
+    if (filter != null) {
       savedFilter = (PlutoRow row) {
         return !row.state.isNone || filter(row);
       };
