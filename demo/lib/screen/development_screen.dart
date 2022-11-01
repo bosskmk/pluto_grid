@@ -324,6 +324,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 stateManager.setPageSize(20, notify: false);
                 return PlutoPagination(stateManager);
               },
+              noRowsWidget: const _NoRows(),
               rowColorCallback: rowColorCallback,
               configuration: _configuration,
             ),
@@ -350,6 +351,37 @@ class ClassYouImplemented implements PlutoFilterType {
       };
 
   const ClassYouImplemented();
+}
+
+class _NoRows extends StatelessWidget {
+  const _NoRows({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Center(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.info_outline),
+                SizedBox(height: 5),
+                Text('There are no records'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _Header extends StatefulWidget {

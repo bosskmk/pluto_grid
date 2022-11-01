@@ -1576,4 +1576,94 @@ void main() {
       return e.idx == 3 && e.visualIdx == 3 && e.columns.length == 1;
     }))).called(1);
   });
+
+  group('noRowsWidget', () {
+    testWidgets('행이 없는 경우 noRowsWidget 이 렌더링 되어야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = <PlutoRow>[];
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              noRowsWidget: noRowsWidget,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+    });
+
+    testWidgets('행을 삭제하는 경우 noRowsWidget 이 렌더링 되어야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = RowHelper.count(10, columns);
+      late final PlutoGridStateManager stateManager;
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (e) => stateManager = e.stateManager,
+              noRowsWidget: noRowsWidget,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(noRowsWidget.key!), findsNothing);
+
+      stateManager.removeAllRows();
+
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+    });
+
+    testWidgets('행을 추가하는 경우 noRowsWidget 이 렌더링 되지 않아야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = <PlutoRow>[];
+      late final PlutoGridStateManager stateManager;
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      // when
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoGrid(
+              columns: columns,
+              rows: rows,
+              onLoaded: (e) => stateManager = e.stateManager,
+              noRowsWidget: noRowsWidget,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+
+      stateManager.appendNewRows();
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 350));
+
+      expect(find.byKey(noRowsWidget.key!), findsNothing);
+    });
+  });
 }

@@ -68,6 +68,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
+    this.noRowsWidget,
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
@@ -233,6 +234,45 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// ```
   /// {@endtemplate}
   final CreateFooterCallBack? createFooter;
+
+  /// {@template pluto_grid_property_noRowsWidget}
+  /// Widget to be shown if there are no rows.
+  ///
+  /// Create a widget like the one below and pass it to [PlutoGrid.noRowsWidget].
+  /// ```dart
+  /// class _NoRows extends StatelessWidget {
+  ///   const _NoRows({Key? key}) : super(key: key);
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return IgnorePointer(
+  ///       child: Center(
+  ///         child: DecoratedBox(
+  ///           decoration: BoxDecoration(
+  ///             color: Colors.white,
+  ///             border: Border.all(),
+  ///             borderRadius: const BorderRadius.all(Radius.circular(5)),
+  ///           ),
+  ///           child: Padding(
+  ///             padding: const EdgeInsets.all(10),
+  ///             child: Column(
+  ///               mainAxisSize: MainAxisSize.min,
+  ///               mainAxisAlignment: MainAxisAlignment.center,
+  ///               children: const [
+  ///                 Icon(Icons.info_outline),
+  ///                 SizedBox(height: 5),
+  ///                 Text('There are no records'),
+  ///               ],
+  ///             ),
+  ///           ),
+  ///         ),
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// {@endtemplate}
+  final Widget? noRowsWidget;
 
   /// {@template pluto_grid_property_rowColorCallback}
   /// [rowColorCallback] can change the row background color dynamically according to the state.
@@ -722,6 +762,16 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   textStyle: style.cellTextStyle,
                 ),
               ),
+
+            /// NoRows
+            if (widget.noRowsWidget != null)
+              LayoutId(
+                id: _StackName.noRows,
+                child: PlutoNoRowsWidget(
+                  stateManager: _stateManager,
+                  child: widget.noRowsWidget!,
+                ),
+              ),
           ],
         ),
       ),
@@ -1097,6 +1147,20 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         _StackName.loading,
         BoxConstraints.tight(loadingSize),
+      );
+    }
+
+    if (hasChild(_StackName.noRows)) {
+      var height = size.height - bodyRowsTopOffset - bodyRowsBottomOffset;
+
+      layoutChild(
+        _StackName.noRows,
+        BoxConstraints.loose(Size(size.width, height)),
+      );
+
+      positionChild(
+        _StackName.noRows,
+        Offset(0, bodyRowsTopOffset),
       );
     }
   }
@@ -1614,4 +1678,5 @@ enum _StackName {
   footer,
   footerDivider,
   loading,
+  noRows,
 }

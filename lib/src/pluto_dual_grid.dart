@@ -189,6 +189,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         onColumnsMoved: props.onColumnsMoved,
         createHeader: props.createHeader,
         createFooter: props.createFooter,
+        noRowsWidget: props.noRowsWidget,
         rowColorCallback: props.rowColorCallback,
         columnMenuDelegate: props.columnMenuDelegate,
         configuration: props.configuration,
@@ -540,6 +541,9 @@ class PlutoDualGridProps {
   /// {@macro pluto_grid_property_createFooter}
   final CreateFooterCallBack? createFooter;
 
+  /// {@macro pluto_grid_property_noRowsWidget}
+  final Widget? noRowsWidget;
+
   /// {@macro pluto_grid_property_rowColorCallback}
   final PlutoRowColorCallback? rowColorCallback;
 
@@ -577,6 +581,7 @@ class PlutoDualGridProps {
     this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
+    this.noRowsWidget,
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
@@ -598,6 +603,7 @@ class PlutoDualGridProps {
     PlutoOptional<PlutoOnColumnsMovedEventCallback?>? onColumnsMoved,
     PlutoOptional<CreateHeaderCallBack?>? createHeader,
     PlutoOptional<CreateFooterCallBack?>? createFooter,
+    PlutoOptional<Widget?>? noRowsWidget,
     PlutoOptional<PlutoRowColorCallback?>? rowColorCallback,
     PlutoOptional<PlutoColumnMenuDelegate?>? columnMenuDelegate,
     PlutoGridConfiguration? configuration,
@@ -626,6 +632,8 @@ class PlutoDualGridProps {
           createHeader == null ? this.createHeader : createHeader.value,
       createFooter:
           createFooter == null ? this.createFooter : createFooter.value,
+      noRowsWidget:
+          noRowsWidget == null ? this.noRowsWidget : noRowsWidget.value,
       rowColorCallback: rowColorCallback == null
           ? this.rowColorCallback
           : rowColorCallback.value,

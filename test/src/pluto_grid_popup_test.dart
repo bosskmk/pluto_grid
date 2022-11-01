@@ -34,6 +34,7 @@ void main() {
     PlutoOnColumnsMovedEventCallback? onColumnsMoved,
     CreateHeaderCallBack? createHeader,
     CreateFooterCallBack? createFooter,
+    Widget? noRowsWidget,
     PlutoRowColorCallback? rowColorCallback,
     PlutoColumnMenuDelegate? columnMenuDelegate,
     PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
@@ -71,6 +72,7 @@ void main() {
                       onColumnsMoved: onColumnsMoved,
                       createHeader: createHeader,
                       createFooter: createFooter,
+                      noRowsWidget: noRowsWidget,
                       rowColorCallback: rowColorCallback,
                       columnMenuDelegate: columnMenuDelegate,
                       configuration: configuration,
@@ -642,6 +644,83 @@ void main() {
         PlutoObjectMatcher<PlutoGridOnColumnsMovedEvent>(rule: (e) {
       return e.idx == 3 && e.visualIdx == 3 && e.columns.length == 1;
     }))).called(1);
+  });
+
+  group('noRowsWidget', () {
+    testWidgets('행이 없는 경우 noRowsWidget 이 렌더링 되어야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = <PlutoRow>[];
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      await build(
+        tester: tester,
+        columns: columns,
+        rows: rows,
+        noRowsWidget: noRowsWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+    });
+
+    testWidgets('행을 삭제하는 경우 noRowsWidget 이 렌더링 되어야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = RowHelper.count(10, columns);
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      await build(
+        tester: tester,
+        columns: columns,
+        rows: rows,
+        noRowsWidget: noRowsWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(noRowsWidget.key!), findsNothing);
+
+      stateManager.removeAllRows();
+
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+    });
+
+    testWidgets('행을 추가하는 경우 noRowsWidget 이 렌더링 되지 않아야 한다.', (tester) async {
+      final columns = ColumnHelper.textColumn('column', count: 10);
+      final rows = <PlutoRow>[];
+      const noRowsWidget = Center(
+        key: ValueKey('NoRowsWidget'),
+        child: Text('There are no rows.'),
+      );
+
+      await build(
+        tester: tester,
+        columns: columns,
+        rows: rows,
+        noRowsWidget: noRowsWidget,
+      );
+
+      await tester.tap(find.text(buttonText));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(noRowsWidget.key!), findsOneWidget);
+
+      stateManager.appendNewRows();
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 350));
+
+      expect(find.byKey(noRowsWidget.key!), findsNothing);
+    });
   });
 }
 
