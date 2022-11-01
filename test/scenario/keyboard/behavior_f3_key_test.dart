@@ -15,6 +15,8 @@ void main() {
 
     late PlutoGridStateManager stateManager;
 
+    final focusedCell = find.text('header3 value 3');
+
     final withTheCellSelected = PlutoWidgetTestHelper(
       '3, 3 셀이 선택 된 상태에서',
       (tester) async {
@@ -41,7 +43,7 @@ void main() {
 
         await tester.pump();
 
-        await tester.tap(find.text('header3 value 3'));
+        await tester.tap(focusedCell);
       },
     );
 
@@ -66,6 +68,96 @@ void main() {
         await tester.pump();
 
         expect(find.byType(PlutoGridFilterPopupHeader), findsOneWidget);
+      },
+    );
+
+    withTheCellSelected.test(
+      'F3 키 입력 하여 포커스를 header3 컬럼의 필터링 입력 박스로 이동 후, '
+      '방향키 아래를 입력하면 해당 컬럼의 첫번째 행의 셀로 포커스가 변경 되어야 한다.',
+      (tester) async {
+        await tester.sendKeyEvent(LogicalKeyboardKey.f3);
+
+        await tester.pump();
+
+        final currentColumn = stateManager.currentColumn;
+
+        final focusNode = currentColumn!.filterFocusNode;
+
+        expect(currentColumn.title, 'header3');
+
+        expect(focusNode!.hasFocus, true);
+
+        expect(stateManager.hasFocus, false);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+
+        await tester.pump();
+
+        expect(focusNode.hasFocus, false);
+
+        expect(stateManager.hasFocus, true);
+
+        expect(stateManager.currentCell?.value, 'header3 value 0');
+      },
+    );
+
+    withTheCellSelected.test(
+      'F3 키 입력 하여 포커스를 header3 컬럼의 필터링 입력 박스로 이동 후, '
+      '엔터키를 입력하면 해당 컬럼의 첫번째 행의 셀로 포커스가 변경 되어야 한다.',
+      (tester) async {
+        await tester.sendKeyEvent(LogicalKeyboardKey.f3);
+
+        await tester.pump();
+
+        final currentColumn = stateManager.currentColumn;
+
+        final focusNode = currentColumn!.filterFocusNode;
+
+        expect(currentColumn.title, 'header3');
+
+        expect(focusNode!.hasFocus, true);
+
+        expect(stateManager.hasFocus, false);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+        await tester.pump();
+
+        expect(focusNode.hasFocus, false);
+
+        expect(stateManager.hasFocus, true);
+
+        expect(stateManager.currentCell?.value, 'header3 value 0');
+      },
+    );
+
+    withTheCellSelected.test(
+      'F3 키 입력 하여 포커스를 header3 컬럼의 필터링 입력 박스로 이동 후, '
+      'ESC 키를 입력하면 기존 셀로 포커스가 변경 되어야 한다.',
+      (tester) async {
+        await tester.sendKeyEvent(LogicalKeyboardKey.f3);
+
+        await tester.pump();
+
+        final currentColumn = stateManager.currentColumn;
+
+        final focusNode = currentColumn!.filterFocusNode;
+
+        expect(currentColumn.title, 'header3');
+
+        expect(focusNode!.hasFocus, true);
+
+        expect(stateManager.hasFocus, false);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+
+        await tester.pump();
+
+        expect(focusNode.hasFocus, false);
+
+        expect(stateManager.hasFocus, true);
+
+        expect(stateManager.currentCell?.value, 'header3 value 3');
       },
     );
 
