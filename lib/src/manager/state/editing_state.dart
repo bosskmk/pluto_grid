@@ -242,7 +242,7 @@ mixin EditingState implements IPlutoGridState {
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(PlutoGridOnChangedEvent(
-        columnIdx: columnIndex(currentColumn),
+        columnIdx: columnIndex(currentColumn)!,
         column: currentColumn,
         rowIdx: refRows.indexOf(currentRow),
         row: currentRow,

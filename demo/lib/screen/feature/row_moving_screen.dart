@@ -96,7 +96,7 @@ class _RowMovingScreenState extends State<RowMovingScreen> {
 
           // Shift (Control) + Click or Shift + Move keys
           // allows you to select multiple rows and move them at the same time.
-          print(event.rows!.first!.cells['column1']!.value);
+          print(event.rows.first.cells['column1']!.value);
         },
       ),
     );

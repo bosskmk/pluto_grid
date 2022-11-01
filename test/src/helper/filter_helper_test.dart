@@ -591,6 +591,10 @@ void main() {
     });
 
     test('onChanged', () {
+      final columns = ColumnHelper.textColumn('column');
+
+      final rows = RowHelper.count(1, columns);
+
       var mock = MockMethods();
 
       var filterPopupState = FilterPopupState(
@@ -598,12 +602,17 @@ void main() {
         configuration: const PlutoGridConfiguration(),
         handleAddNewFilter: (_) {},
         handleApplyFilter: mock.oneParamReturnVoid,
-        columns: ColumnHelper.textColumn('column'),
+        columns: columns,
         filterRows: [],
         focusFirstFilterValue: true,
       );
 
-      filterPopupState.onChanged(const PlutoGridOnChangedEvent());
+      filterPopupState.onChanged(PlutoGridOnChangedEvent(
+        columnIdx: 0,
+        column: columns.first,
+        rowIdx: 0,
+        row: rows.first,
+      ));
 
       verify(mock.oneParamReturnVoid(any)).called(1);
     });

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../helper/column_helper.dart';
 import '../helper/row_helper.dart';
 import '../helper/test_helper_util.dart';
+import '../matcher/pluto_object_matcher.dart';
+import '../mock/mock_on_change_listener.dart';
 
 void main() {
   const columnWidth = PlutoGridSettings.columnWidth;
@@ -1441,16 +1444,136 @@ void main() {
     expect(stateManager.isEditing, false);
   });
 
-  testWidgets(
-    '생성자를 호출 할 수 있어야 한다.',
-    (WidgetTester tester) async {
-      const PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
-        columnIdx: null,
-        rowIdx: 1,
-      );
+  testWidgets('셀 값을 변경하면 onChanged 콜백이 호출 되어야 한다.', (tester) async {
+    final mock = MockMethods();
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
 
-      expect(onChangedEvent.columnIdx, null);
-      expect(onChangedEvent.rowIdx, 1);
-    },
-  );
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onChanged: mock.oneParamReturnVoid<PlutoGridOnChangedEvent>,
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    final sampleCell = find.text('column1 value 2');
+
+    await tester.tap(sampleCell);
+    await tester.pump();
+    await tester.tap(sampleCell);
+    await tester.pump();
+
+    await tester.enterText(sampleCell, 'text');
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+
+    verify(mock.oneParamReturnVoid(
+        PlutoObjectMatcher<PlutoGridOnChangedEvent>(rule: (e) {
+      return e.row == rows[2] &&
+          e.column == columns[1] &&
+          e.rowIdx == 2 &&
+          e.columnIdx == 1 &&
+          e.value == 'text' &&
+          e.oldValue == 'column1 value 2';
+    }))).called(1);
+  });
+
+  testWidgets('컬럼을 좌측 고정 하면 onColumnsMoved 콜백이 호출 되어야 한다.', (tester) async {
+    final mock = MockMethods();
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+    late final PlutoGridStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (e) => stateManager = e.stateManager,
+            onColumnsMoved:
+                mock.oneParamReturnVoid<PlutoGridOnColumnsMovedEvent>,
+          ),
+        ),
+      ),
+    );
+
+    stateManager.toggleFrozenColumn(columns[1], PlutoColumnFrozen.start);
+    await tester.pump();
+
+    verify(mock.oneParamReturnVoid(
+        PlutoObjectMatcher<PlutoGridOnColumnsMovedEvent>(rule: (e) {
+      return e.idx == 1 && e.visualIdx == 0 && e.columns.length == 1;
+    }))).called(1);
+  });
+
+  testWidgets('컬럼을 우측 고정 하면 onColumnsMoved 콜백이 호출 되어야 한다.', (tester) async {
+    final mock = MockMethods();
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+    late final PlutoGridStateManager stateManager;
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onLoaded: (e) => stateManager = e.stateManager,
+            onColumnsMoved:
+                mock.oneParamReturnVoid<PlutoGridOnColumnsMovedEvent>,
+          ),
+        ),
+      ),
+    );
+
+    stateManager.toggleFrozenColumn(columns[1], PlutoColumnFrozen.end);
+    await tester.pump();
+
+    verify(mock.oneParamReturnVoid(
+        PlutoObjectMatcher<PlutoGridOnColumnsMovedEvent>(rule: (e) {
+      return e.idx == 1 && e.visualIdx == 9 && e.columns.length == 1;
+    }))).called(1);
+  });
+
+  testWidgets('컬럼을 드래그하여 이동하면 onColumnsMoved 콜백이 호출 되어야 한다.', (tester) async {
+    final mock = MockMethods();
+    final columns = ColumnHelper.textColumn('column', count: 10);
+    final rows = RowHelper.count(10, columns);
+
+    // when
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Material(
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onColumnsMoved:
+                mock.oneParamReturnVoid<PlutoGridOnColumnsMovedEvent>,
+          ),
+        ),
+      ),
+    );
+
+    final sampleColumn = find.text('column1');
+
+    await tester.drag(sampleColumn, const Offset(400, 0));
+
+    await tester.pumpAndSettle(const Duration(milliseconds: 300));
+
+    verify(mock.oneParamReturnVoid(
+        PlutoObjectMatcher<PlutoGridOnColumnsMovedEvent>(rule: (e) {
+      return e.idx == 3 && e.visualIdx == 3 && e.columns.length == 1;
+    }))).called(1);
+  });
 }

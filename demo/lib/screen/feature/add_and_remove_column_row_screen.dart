@@ -149,8 +149,8 @@ class _AddAndRemoveColumnRowScreenState
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
 
-          if (event.row!.cells['status']!.value == 'saved') {
-            event.row!.cells['status']!.value = 'edited';
+          if (event.row.cells['status']!.value == 'saved') {
+            event.row.cells['status']!.value = 'edited';
           }
 
           stateManager.notifyListeners();

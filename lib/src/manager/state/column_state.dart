@@ -357,6 +357,14 @@ mixin ColumnState implements IPlutoGridState {
 
     updateVisibilityLayout();
 
+    if (onColumnsMoved != null) {
+      onColumnsMoved!(PlutoGridOnColumnsMovedEvent(
+        idx: refColumns.indexOf(column),
+        visualIdx: columnIndex(column)!,
+        columns: [column],
+      ));
+    }
+
     notifyListeners(true, toggleFrozenColumn.hashCode);
   }
 
@@ -509,6 +517,14 @@ mixin ColumnState implements IPlutoGridState {
     }
 
     updateVisibilityLayout();
+
+    if (onColumnsMoved != null) {
+      onColumnsMoved!(PlutoGridOnColumnsMovedEvent(
+        idx: targetIndex,
+        visualIdx: columnIndex(columnToMove)!,
+        columns: [columnToMove],
+      ));
+    }
 
     notifyListeners(true, moveColumn.hashCode);
   }

@@ -64,51 +64,321 @@ void main() {
     });
   });
 
-  test('PlutoGridColumnSizeConfig 의 속성이 동일한 경우 동등 비교가 true 여야 한다.', () {
-    const sizeA = PlutoGridColumnSizeConfig(
-      autoSizeMode: PlutoAutoSizeMode.scale,
-      resizeMode: PlutoResizeMode.none,
-      restoreAutoSizeAfterHideColumn: true,
-      restoreAutoSizeAfterFrozenColumn: false,
-      restoreAutoSizeAfterMoveColumn: true,
-      restoreAutoSizeAfterInsertColumn: false,
-      restoreAutoSizeAfterRemoveColumn: false,
-    );
+  group('configuration', () {
+    test('configuration 의 값이 동일한 경우 동등 비교가 true 여야 한다.', () {
+      const configurationA = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: true,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: true,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
 
-    const sizeB = PlutoGridColumnSizeConfig(
-      autoSizeMode: PlutoAutoSizeMode.scale,
-      resizeMode: PlutoResizeMode.none,
-      restoreAutoSizeAfterHideColumn: true,
-      restoreAutoSizeAfterFrozenColumn: false,
-      restoreAutoSizeAfterMoveColumn: true,
-      restoreAutoSizeAfterInsertColumn: false,
-      restoreAutoSizeAfterRemoveColumn: false,
-    );
+      const configurationB = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: true,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: true,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
 
-    expect(sizeA == sizeB, true);
+      expect(configurationA == configurationB, true);
+    });
+
+    test('enableMoveDownAfterSelecting 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const configurationA = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: true,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: true,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
+
+      const configurationB = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: false,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: true,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
+
+      expect(configurationA == configurationB, false);
+    });
+
+    test('isAlwaysShown 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const configurationA = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: true,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: true,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
+
+      const configurationB = PlutoGridConfiguration(
+        enableMoveDownAfterSelecting: true,
+        enterKeyAction: PlutoGridEnterKeyAction.editingAndMoveRight,
+        style: PlutoGridStyleConfig(
+          columnResizeIcon: IconData(0),
+        ),
+        scrollbar: PlutoGridScrollbarConfig(
+          isAlwaysShown: false,
+        ),
+        localeText: PlutoGridLocaleText(
+          setColumnsTitle: 'test',
+        ),
+      );
+
+      expect(configurationA == configurationB, false);
+    });
   });
 
-  test('PlutoGridColumnSizeConfig 의 속성이 다른 경우 동등 비교가 false 여야 한다.', () {
-    const sizeA = PlutoGridColumnSizeConfig(
-      autoSizeMode: PlutoAutoSizeMode.none,
-      resizeMode: PlutoResizeMode.none,
-      restoreAutoSizeAfterHideColumn: true,
-      restoreAutoSizeAfterFrozenColumn: false,
-      restoreAutoSizeAfterMoveColumn: true,
-      restoreAutoSizeAfterInsertColumn: false,
-      restoreAutoSizeAfterRemoveColumn: false,
-    );
+  group('style', () {
+    test('값이 동일한 경우 동등 비교가 true 여야 한다.', () {
+      const styleA = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
 
-    const sizeB = PlutoGridColumnSizeConfig(
-      autoSizeMode: PlutoAutoSizeMode.scale,
-      resizeMode: PlutoResizeMode.none,
-      restoreAutoSizeAfterHideColumn: true,
-      restoreAutoSizeAfterFrozenColumn: false,
-      restoreAutoSizeAfterMoveColumn: true,
-      restoreAutoSizeAfterInsertColumn: false,
-      restoreAutoSizeAfterRemoveColumn: false,
-    );
+      const styleB = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
 
-    expect(sizeA == sizeB, false);
+      expect(styleA == styleB, true);
+    });
+
+    test('enableGridBorderShadow 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const styleA = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
+
+      const styleB = PlutoGridStyleConfig(
+        enableGridBorderShadow: false,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
+
+      expect(styleA == styleB, false);
+    });
+
+    test('oddRowColor 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const styleA = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
+
+      const styleB = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.red,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
+
+      expect(styleA == styleB, false);
+    });
+
+    test('gridBorderRadius 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const styleA = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.lightGreen,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+      );
+
+      const styleB = PlutoGridStyleConfig(
+        enableGridBorderShadow: true,
+        oddRowColor: Colors.red,
+        columnTextStyle: TextStyle(fontSize: 20),
+        rowGroupExpandedIcon: IconData(0),
+        gridBorderRadius: BorderRadius.all(Radius.circular(15)),
+      );
+
+      expect(styleA == styleB, false);
+    });
+  });
+
+  group('scrollbar', () {
+    test('값이 동일한 경우 동등 비교가 true 여야 한다.', () {
+      const scrollA = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: true,
+        scrollbarThicknessWhileDragging: 10,
+      );
+
+      const scrollB = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: true,
+        scrollbarThicknessWhileDragging: 10,
+      );
+
+      expect(scrollA == scrollB, true);
+    });
+
+    test('isAlwaysShown 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const scrollA = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: true,
+        scrollbarThicknessWhileDragging: 10,
+      );
+
+      const scrollB = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: false,
+        scrollbarThicknessWhileDragging: 10,
+      );
+
+      expect(scrollA == scrollB, false);
+    });
+
+    test('scrollbarThicknessWhileDragging 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const scrollA = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: true,
+        scrollbarThicknessWhileDragging: 10,
+      );
+
+      const scrollB = PlutoGridScrollbarConfig(
+        draggableScrollbar: true,
+        isAlwaysShown: true,
+        scrollbarThicknessWhileDragging: 10.1,
+      );
+
+      expect(scrollA == scrollB, false);
+    });
+  });
+
+  group('columnFilter', () {
+    test('값이 동일한 경우 동등 비교가 true 여야 한다.', () {
+      const columnFilterA = PlutoGridColumnFilterConfig(
+        filters: [
+          ...FilterHelper.defaultFilters,
+        ],
+        debounceMilliseconds: 300,
+      );
+
+      const columnFilterB = PlutoGridColumnFilterConfig(
+        filters: [
+          ...FilterHelper.defaultFilters,
+        ],
+        debounceMilliseconds: 300,
+      );
+
+      expect(columnFilterA == columnFilterB, true);
+    });
+
+    test('filters 값이 다른 경우 동등 비교가 false 여야 한다.', () {
+      final columnFilterA = PlutoGridColumnFilterConfig(
+        filters: [
+          ...FilterHelper.defaultFilters,
+        ].reversed.toList(),
+        debounceMilliseconds: 300,
+      );
+
+      const columnFilterB = PlutoGridColumnFilterConfig(
+        filters: [
+          ...FilterHelper.defaultFilters,
+        ],
+        debounceMilliseconds: 300,
+      );
+
+      expect(columnFilterA == columnFilterB, false);
+    });
+  });
+
+  group('columnSize', () {
+    test('PlutoGridColumnSizeConfig 의 속성이 동일한 경우 동등 비교가 true 여야 한다.', () {
+      const sizeA = PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.scale,
+        resizeMode: PlutoResizeMode.none,
+        restoreAutoSizeAfterHideColumn: true,
+        restoreAutoSizeAfterFrozenColumn: false,
+        restoreAutoSizeAfterMoveColumn: true,
+        restoreAutoSizeAfterInsertColumn: false,
+        restoreAutoSizeAfterRemoveColumn: false,
+      );
+
+      const sizeB = PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.scale,
+        resizeMode: PlutoResizeMode.none,
+        restoreAutoSizeAfterHideColumn: true,
+        restoreAutoSizeAfterFrozenColumn: false,
+        restoreAutoSizeAfterMoveColumn: true,
+        restoreAutoSizeAfterInsertColumn: false,
+        restoreAutoSizeAfterRemoveColumn: false,
+      );
+
+      expect(sizeA == sizeB, true);
+    });
+
+    test('PlutoGridColumnSizeConfig 의 속성이 다른 경우 동등 비교가 false 여야 한다.', () {
+      const sizeA = PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.none,
+        resizeMode: PlutoResizeMode.none,
+        restoreAutoSizeAfterHideColumn: true,
+        restoreAutoSizeAfterFrozenColumn: false,
+        restoreAutoSizeAfterMoveColumn: true,
+        restoreAutoSizeAfterInsertColumn: false,
+        restoreAutoSizeAfterRemoveColumn: false,
+      );
+
+      const sizeB = PlutoGridColumnSizeConfig(
+        autoSizeMode: PlutoAutoSizeMode.scale,
+        resizeMode: PlutoResizeMode.none,
+        restoreAutoSizeAfterHideColumn: true,
+        restoreAutoSizeAfterFrozenColumn: false,
+        restoreAutoSizeAfterMoveColumn: true,
+        restoreAutoSizeAfterInsertColumn: false,
+        restoreAutoSizeAfterRemoveColumn: false,
+      );
+
+      expect(sizeA == sizeB, false);
+    });
   });
 }
