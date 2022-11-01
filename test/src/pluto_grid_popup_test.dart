@@ -397,7 +397,7 @@ void main() {
 
     expect(event, isNotNull);
     expect(event!.rowIdx, 2);
-    expect(event!.cell!.value, 'title2 value 2');
+    expect(event!.cell.value, 'title2 value 2');
   });
 
   testWidgets('Secondary 버튼을 탭하면 onRowSecondaryTap 콜백이 호출 되어야 한다.',
@@ -423,7 +423,7 @@ void main() {
 
     expect(event, isNotNull);
     expect(event!.rowIdx, 5);
-    expect(event!.cell!.value, 'title3 value 5');
+    expect(event!.cell.value, 'title3 value 5');
   });
 
   testWidgets('행을 드래그 하면 onRowsMoved 콜백이 호출 되어야 한다.', (tester) async {
@@ -455,8 +455,8 @@ void main() {
 
     expect(event, isNotNull);
     expect(event!.idx, 2);
-    expect(event!.rows!.length, 1);
-    expect(event!.rows![0]!.cells['title0']!.value, 'title0 value 0');
+    expect(event!.rows.length, 1);
+    expect(event!.rows[0].cells['title0']!.value, 'title0 value 0');
   });
 
   testWidgets('createHeader 위젯이 렌더링 되어야 한다.', (tester) async {

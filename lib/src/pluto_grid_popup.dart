@@ -38,6 +38,9 @@ class PlutoGridPopup {
   /// {@macro pluto_grid_property_onRowsMoved}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@macro pluto_grid_property_onColumnsMoved}
+  final PlutoOnColumnsMovedEventCallback? onColumnsMoved;
+
   /// {@macro pluto_grid_property_createHeader}
   final CreateHeaderCallBack? createHeader;
 
@@ -82,6 +85,7 @@ class PlutoGridPopup {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
     this.rowColorCallback,
@@ -127,6 +131,7 @@ class PlutoGridPopup {
                           onRowDoubleTap: onRowDoubleTap,
                           onRowSecondaryTap: onRowSecondaryTap,
                           onRowsMoved: onRowsMoved,
+                          onColumnsMoved: onColumnsMoved,
                           createHeader: createHeader,
                           createFooter: createFooter,
                           rowColorCallback: rowColorCallback,

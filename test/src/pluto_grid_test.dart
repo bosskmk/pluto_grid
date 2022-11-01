@@ -1444,13 +1444,19 @@ void main() {
   testWidgets(
     '생성자를 호출 할 수 있어야 한다.',
     (WidgetTester tester) async {
-      const PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
-        columnIdx: null,
-        rowIdx: 1,
+      final column = ColumnHelper.textColumn('column').first;
+
+      final row = RowHelper.count(1, [column]).first;
+
+      final PlutoGridOnChangedEvent onChangedEvent = PlutoGridOnChangedEvent(
+        columnIdx: 0,
+        column: column,
+        rowIdx: 0,
+        row: row,
       );
 
-      expect(onChangedEvent.columnIdx, null);
-      expect(onChangedEvent.rowIdx, 1);
+      expect(onChangedEvent.columnIdx, 0);
+      expect(onChangedEvent.rowIdx, 0);
     },
   );
 }

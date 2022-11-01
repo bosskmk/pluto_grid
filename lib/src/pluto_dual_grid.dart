@@ -186,6 +186,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         onRowDoubleTap: props.onRowDoubleTap,
         onRowSecondaryTap: props.onRowSecondaryTap,
         onRowsMoved: props.onRowsMoved,
+        onColumnsMoved: props.onColumnsMoved,
         createHeader: props.createHeader,
         createFooter: props.createFooter,
         rowColorCallback: props.rowColorCallback,
@@ -530,6 +531,9 @@ class PlutoDualGridProps {
   /// {@macro pluto_grid_property_onRowsMoved}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@macro pluto_grid_property_onColumnsMoved}
+  final PlutoOnColumnsMovedEventCallback? onColumnsMoved;
+
   /// {@macro pluto_grid_property_createHeader}
   final CreateHeaderCallBack? createHeader;
 
@@ -570,6 +574,7 @@ class PlutoDualGridProps {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
     this.rowColorCallback,
@@ -590,6 +595,7 @@ class PlutoDualGridProps {
     PlutoOptional<PlutoOnRowDoubleTapEventCallback?>? onRowDoubleTap,
     PlutoOptional<PlutoOnRowSecondaryTapEventCallback?>? onRowSecondaryTap,
     PlutoOptional<PlutoOnRowsMovedEventCallback?>? onRowsMoved,
+    PlutoOptional<PlutoOnColumnsMovedEventCallback?>? onColumnsMoved,
     PlutoOptional<CreateHeaderCallBack?>? createHeader,
     PlutoOptional<CreateFooterCallBack?>? createFooter,
     PlutoOptional<PlutoRowColorCallback?>? rowColorCallback,
@@ -614,6 +620,8 @@ class PlutoDualGridProps {
           ? this.onRowSecondaryTap
           : onRowSecondaryTap.value,
       onRowsMoved: onRowsMoved == null ? this.onRowsMoved : onRowsMoved.value,
+      onColumnsMoved:
+          onColumnsMoved == null ? this.onColumnsMoved : onColumnsMoved.value,
       createHeader:
           createHeader == null ? this.createHeader : createHeader.value,
       createFooter:
