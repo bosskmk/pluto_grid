@@ -217,22 +217,28 @@ mixin CellState implements IPlutoGridState {
 
   @override
   bool canMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
+    PlutoGridCellPosition? cellPosition,
+    PlutoMoveDirection direction,
+  ) {
+    if (cellPosition == null || !cellPosition.hasPosition) return false;
+
     switch (direction) {
       case PlutoMoveDirection.left:
-        return cellPosition!.columnIdx! > 0;
+        return cellPosition.columnIdx! > 0;
       case PlutoMoveDirection.right:
-        return cellPosition!.columnIdx! < refColumns.length - 1;
+        return cellPosition.columnIdx! < refColumns.length - 1;
       case PlutoMoveDirection.up:
-        return cellPosition!.rowIdx! > 0;
+        return cellPosition.rowIdx! > 0;
       case PlutoMoveDirection.down:
-        return cellPosition!.rowIdx! < refRows.length - 1;
+        return cellPosition.rowIdx! < refRows.length - 1;
     }
   }
 
   @override
   bool canNotMoveCell(
-      PlutoGridCellPosition? cellPosition, PlutoMoveDirection direction) {
+    PlutoGridCellPosition? cellPosition,
+    PlutoMoveDirection direction,
+  ) {
     return !canMoveCell(cellPosition, direction);
   }
 
