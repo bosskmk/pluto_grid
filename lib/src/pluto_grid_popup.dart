@@ -38,11 +38,17 @@ class PlutoGridPopup {
   /// {@macro pluto_grid_property_onRowsMoved}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
 
+  /// {@macro pluto_grid_property_onColumnsMoved}
+  final PlutoOnColumnsMovedEventCallback? onColumnsMoved;
+
   /// {@macro pluto_grid_property_createHeader}
   final CreateHeaderCallBack? createHeader;
 
   /// {@macro pluto_grid_property_createFooter}
   final CreateFooterCallBack? createFooter;
+
+  /// {@macro pluto_grid_property_noRowsWidget}
+  final Widget? noRowsWidget;
 
   /// {@macro pluto_grid_property_rowColorCallback}
   final PlutoRowColorCallback? rowColorCallback;
@@ -82,8 +88,10 @@ class PlutoGridPopup {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
+    this.noRowsWidget,
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
@@ -127,8 +135,10 @@ class PlutoGridPopup {
                           onRowDoubleTap: onRowDoubleTap,
                           onRowSecondaryTap: onRowSecondaryTap,
                           onRowsMoved: onRowsMoved,
+                          onColumnsMoved: onColumnsMoved,
                           createHeader: createHeader,
                           createFooter: createFooter,
+                          noRowsWidget: noRowsWidget,
                           rowColorCallback: rowColorCallback,
                           columnMenuDelegate: columnMenuDelegate,
                           configuration: configuration,

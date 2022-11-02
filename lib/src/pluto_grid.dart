@@ -31,6 +31,9 @@ typedef PlutoOnRowSecondaryTapEventCallback = void Function(
 typedef PlutoOnRowsMovedEventCallback = void Function(
     PlutoGridOnRowsMovedEvent event);
 
+typedef PlutoOnColumnsMovedEventCallback = void Function(
+    PlutoGridOnColumnsMovedEvent event);
+
 typedef CreateHeaderCallBack = Widget Function(
     PlutoGridStateManager stateManager);
 
@@ -62,8 +65,10 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
     this.onRowsMoved,
+    this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
+    this.noRowsWidget,
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
@@ -180,9 +185,17 @@ class PlutoGrid extends PlutoStatefulWidget {
   final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
 
   /// {@template pluto_grid_property_onRowsMoved}
-  /// [onRowsMoved] is called after the row is dragged and moved if [PlutoColumn.enableRowDrag] is enabled.
+  /// [onRowsMoved] is called after the row is dragged and moved
+  /// if [PlutoColumn.enableRowDrag] is enabled.
   /// {@endtemplate}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
+  /// {@template pluto_grid_property_onColumnsMoved}
+  /// Callback for receiving events
+  /// when the column is moved by dragging the column
+  /// or frozen it to the left or right.
+  /// {@endtemplate}
+  final PlutoOnColumnsMovedEventCallback? onColumnsMoved;
 
   /// {@template pluto_grid_property_createHeader}
   /// [createHeader] is a user-definable area located above the upper column area of [PlutoGrid].
@@ -221,6 +234,45 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// ```
   /// {@endtemplate}
   final CreateFooterCallBack? createFooter;
+
+  /// {@template pluto_grid_property_noRowsWidget}
+  /// Widget to be shown if there are no rows.
+  ///
+  /// Create a widget like the one below and pass it to [PlutoGrid.noRowsWidget].
+  /// ```dart
+  /// class _NoRows extends StatelessWidget {
+  ///   const _NoRows({Key? key}) : super(key: key);
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return IgnorePointer(
+  ///       child: Center(
+  ///         child: DecoratedBox(
+  ///           decoration: BoxDecoration(
+  ///             color: Colors.white,
+  ///             border: Border.all(),
+  ///             borderRadius: const BorderRadius.all(Radius.circular(5)),
+  ///           ),
+  ///           child: Padding(
+  ///             padding: const EdgeInsets.all(10),
+  ///             child: Column(
+  ///               mainAxisSize: MainAxisSize.min,
+  ///               mainAxisAlignment: MainAxisAlignment.center,
+  ///               children: const [
+  ///                 Icon(Icons.info_outline),
+  ///                 SizedBox(height: 5),
+  ///                 Text('There are no records'),
+  ///               ],
+  ///             ),
+  ///           ),
+  ///         ),
+  ///       ),
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// {@endtemplate}
+  final Widget? noRowsWidget;
 
   /// {@template pluto_grid_property_rowColorCallback}
   /// [rowColorCallback] can change the row background color dynamically according to the state.
@@ -459,6 +511,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowDoubleTap: widget.onRowDoubleTap,
       onRowSecondaryTap: widget.onRowSecondaryTap,
       onRowsMoved: widget.onRowsMoved,
+      onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
@@ -707,6 +760,16 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   indicatorColor: style.activatedBorderColor,
                   text: _stateManager.localeText.loadingText,
                   textStyle: style.cellTextStyle,
+                ),
+              ),
+
+            /// NoRows
+            if (widget.noRowsWidget != null)
+              LayoutId(
+                id: _StackName.noRows,
+                child: PlutoNoRowsWidget(
+                  stateManager: _stateManager,
+                  child: widget.noRowsWidget!,
                 ),
               ),
           ],
@@ -1086,6 +1149,20 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.tight(loadingSize),
       );
     }
+
+    if (hasChild(_StackName.noRows)) {
+      var height = size.height - bodyRowsTopOffset - bodyRowsBottomOffset;
+
+      layoutChild(
+        _StackName.noRows,
+        BoxConstraints.loose(Size(size.width, height)),
+      );
+
+      positionChild(
+        _StackName.noRows,
+        Offset(0, bodyRowsTopOffset),
+      );
+    }
   }
 
   @override
@@ -1153,6 +1230,7 @@ class _GridContainer extends StatelessWidget {
   }
 }
 
+/// [PlutoGrid.onLoaded] Argument received by registering callback.
 class PlutoGridOnLoadedEvent {
   final PlutoGridStateManager stateManager;
 
@@ -1174,18 +1252,18 @@ class PlutoGridOnLoadedEvent {
 /// [PlutoGridStateManager.refColumns.originalList]
 /// [PlutoGridStateManager.refRows.originalList]
 class PlutoGridOnChangedEvent {
-  final int? columnIdx;
-  final PlutoColumn? column;
-  final int? rowIdx;
-  final PlutoRow? row;
+  final int columnIdx;
+  final PlutoColumn column;
+  final int rowIdx;
+  final PlutoRow row;
   final dynamic value;
   final dynamic oldValue;
 
   const PlutoGridOnChangedEvent({
-    this.columnIdx,
-    this.column,
-    this.rowIdx,
-    this.row,
+    required this.columnIdx,
+    required this.column,
+    required this.rowIdx,
+    required this.row,
     this.value,
     this.oldValue,
   });
@@ -1229,6 +1307,7 @@ class PlutoGridOnSelectedEvent {
   }
 }
 
+/// Argument of [PlutoGrid.onSorted] callback for receiving column sort change event.
 class PlutoGridOnSortedEvent {
   final PlutoColumn column;
 
@@ -1245,6 +1324,13 @@ class PlutoGridOnSortedEvent {
   }
 }
 
+/// Argument of [PlutoGrid.onRowChecked] callback to receive row checkbox event.
+///
+/// [runtimeType] is [PlutoGridOnRowCheckedAllEvent] if [isAll] is true.
+/// When [isAll] is true, it means the entire check button event of the column.
+///
+/// [runtimeType] is [PlutoGridOnRowCheckedOneEvent] if [isRow] is true.
+/// If [isRow] is true, it means the check button event of a specific row.
 abstract class PlutoGridOnRowCheckedEvent {
   bool get isAll => runtimeType == PlutoGridOnRowCheckedAllEvent;
 
@@ -1268,35 +1354,57 @@ abstract class PlutoGridOnRowCheckedEvent {
   }
 }
 
+/// Argument of [PlutoGrid.onRowChecked] callback when the checkbox of the row is tapped.
+class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
+  const PlutoGridOnRowCheckedOneEvent({
+    required PlutoRow row,
+    required int rowIdx,
+    required bool? isChecked,
+  }) : super(row: row, rowIdx: rowIdx, isChecked: isChecked);
+}
+
+/// Argument of [PlutoGrid.onRowChecked] callback when all checkboxes of the column are tapped.
+class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
+  const PlutoGridOnRowCheckedAllEvent({
+    bool? isChecked,
+  }) : super(row: null, rowIdx: null, isChecked: isChecked);
+}
+
+/// The argument of the [PlutoGrid.onRowDoubleTap] callback
+/// to receive the event of double-tapping the row.
 class PlutoGridOnRowDoubleTapEvent {
-  final PlutoRow? row;
-  final int? rowIdx;
-  final PlutoCell? cell;
+  final PlutoRow row;
+  final int rowIdx;
+  final PlutoCell cell;
 
   const PlutoGridOnRowDoubleTapEvent({
-    this.row,
-    this.rowIdx,
-    this.cell,
+    required this.row,
+    required this.rowIdx,
+    required this.cell,
   });
 }
 
+/// Argument of the [PlutoGrid.onRowSecondaryTap] callback
+/// to receive the event of tapping the row with the right mouse button.
 class PlutoGridOnRowSecondaryTapEvent {
-  final PlutoRow? row;
-  final int? rowIdx;
-  final PlutoCell? cell;
-  final Offset? offset;
+  final PlutoRow row;
+  final int rowIdx;
+  final PlutoCell cell;
+  final Offset offset;
 
   const PlutoGridOnRowSecondaryTapEvent({
-    this.row,
-    this.rowIdx,
-    this.cell,
-    this.offset,
+    required this.row,
+    required this.rowIdx,
+    required this.cell,
+    required this.offset,
   });
 }
 
+/// Argument of [PlutoGrid.onRowsMoved] callback
+/// to receive the event of moving the row by dragging it.
 class PlutoGridOnRowsMovedEvent {
-  final int? idx;
-  final List<PlutoRow?>? rows;
+  final int idx;
+  final List<PlutoRow> rows;
 
   const PlutoGridOnRowsMovedEvent({
     required this.idx,
@@ -1304,30 +1412,40 @@ class PlutoGridOnRowsMovedEvent {
   });
 }
 
-class PlutoGridOnRowCheckedOneEvent extends PlutoGridOnRowCheckedEvent {
-  const PlutoGridOnRowCheckedOneEvent({
-    PlutoRow? row,
-    int? rowIdx,
-    bool? isChecked,
-  }) : super(row: row, rowIdx: rowIdx, isChecked: isChecked);
-}
+/// Argument of [PlutoGrid.onColumnsMoved] callback
+/// to move columns by dragging or receive left or right fixed events.
+///
+/// [idx] means the actual index of
+/// [PlutoGridStateManager.columns] or [PlutoGridStateManager.refColumns].
+///
+/// [visualIdx] means the order displayed on the screen, not the actual index.
+/// For example, if there are 5 columns of [0, 1, 2, 3, 4]
+/// If 1 column is frozen to the right, [visualIndex] becomes 4.
+/// But the actual index is preserved.
+class PlutoGridOnColumnsMovedEvent {
+  final int idx;
+  final int visualIdx;
+  final List<PlutoColumn> columns;
 
-class PlutoGridOnRowCheckedAllEvent extends PlutoGridOnRowCheckedEvent {
-  const PlutoGridOnRowCheckedAllEvent({
-    bool? isChecked,
-  }) : super(row: null, rowIdx: null, isChecked: isChecked);
-}
-
-class PlutoScrollBehavior extends MaterialScrollBehavior {
-  const PlutoScrollBehavior() : super();
+  const PlutoGridOnColumnsMovedEvent({
+    required this.idx,
+    required this.visualIdx,
+    required this.columns,
+  });
 
   @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+  String toString() {
+    String text =
+        '[PlutoGridOnColumnsMovedEvent] idx: $idx, visualIdx: $visualIdx\n';
+
+    text += columns.map((e) => e.title).join(',');
+
+    return text;
+  }
 }
 
+/// Argument of [PlutoGrid.rowColumnCallback] callback
+/// to dynamically change the background color of a row.
 class PlutoRowColorContext {
   final PlutoRow row;
 
@@ -1342,6 +1460,18 @@ class PlutoRowColorContext {
   });
 }
 
+/// Extension class for [ScrollConfiguration.behavior] of [PlutoGrid].
+class PlutoScrollBehavior extends MaterialScrollBehavior {
+  const PlutoScrollBehavior() : super();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+}
+
+/// A class for changing the value of a nullable property in a method such as [copyWith].
 class PlutoOptional<T> {
   const PlutoOptional(this.value);
 
@@ -1548,4 +1678,5 @@ enum _StackName {
   footer,
   footerDivider,
   loading,
+  noRows,
 }
