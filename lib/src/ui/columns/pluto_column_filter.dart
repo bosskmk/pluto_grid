@@ -241,35 +241,39 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   Widget build(BuildContext context) {
     final style = stateManager.style;
 
-    return Container(
+    return SizedBox(
       height: stateManager.columnFilterHeight,
-      padding: _padding,
-      decoration: BoxDecoration(
-        border: BorderDirectional(
-          top: BorderSide(color: style.borderColor),
-          end: style.enableColumnBorderVertical
-              ? BorderSide(color: style.borderColor)
-              : BorderSide.none,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(color: style.borderColor),
+            end: style.enableColumnBorderVertical
+                ? BorderSide(color: style.borderColor)
+                : BorderSide.none,
+          ),
         ),
-      ),
-      child: Center(
-        child: TextField(
-          focusNode: _focusNode,
-          controller: _controller,
-          enabled: _enabled,
-          style: style.cellTextStyle,
-          onTap: _handleOnTap,
-          onChanged: _handleOnChanged,
-          onEditingComplete: _handleOnEditingComplete,
-          decoration: InputDecoration(
-            hintText: _enabled ? widget.column.defaultFilter.title : '',
-            filled: true,
-            fillColor: _textFieldColor,
-            border: _border,
-            enabledBorder: _border,
-            disabledBorder: _disabledBorder,
-            focusedBorder: _enabledBorder,
-            contentPadding: const EdgeInsets.all(5),
+        child: Padding(
+          padding: _padding,
+          child: Center(
+            child: TextField(
+              focusNode: _focusNode,
+              controller: _controller,
+              enabled: _enabled,
+              style: style.cellTextStyle,
+              onTap: _handleOnTap,
+              onChanged: _handleOnChanged,
+              onEditingComplete: _handleOnEditingComplete,
+              decoration: InputDecoration(
+                hintText: _enabled ? widget.column.defaultFilter.title : '',
+                filled: true,
+                fillColor: _textFieldColor,
+                border: _border,
+                enabledBorder: _border,
+                disabledBorder: _disabledBorder,
+                focusedBorder: _enabledBorder,
+                contentPadding: const EdgeInsets.all(5),
+              ),
+            ),
           ),
         ),
       ),

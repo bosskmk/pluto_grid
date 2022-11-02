@@ -218,8 +218,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
         ? widget.stateManager.style.gridBackgroundColor
         : widget.stateManager.style.cellTextStyle.color;
 
-    return Container(
-      padding: const EdgeInsets.all(5),
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cellColor,
         shape: BoxShape.circle,
@@ -232,10 +231,13 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
                   )
                 : null,
       ),
-      child: Center(
-        child: Text(
-          cell.value,
-          style: TextStyle(color: textColor),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Center(
+          child: Text(
+            cell.value,
+            style: TextStyle(color: textColor),
+          ),
         ),
       ),
     );

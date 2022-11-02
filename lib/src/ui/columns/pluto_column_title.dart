@@ -125,32 +125,34 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   Widget build(BuildContext context) {
     final style = stateManager.configuration.style;
 
-    final columnWidget = _BuildSortableWidget(
+    final columnWidget = _SortableWidget(
       stateManager: stateManager,
       column: widget.column,
-      child: _BuildColumnWidget(
+      child: _ColumnWidget(
         stateManager: stateManager,
         column: widget.column,
         height: widget.height,
       ),
     );
 
-    final contextMenuIcon = Container(
+    final contextMenuIcon = SizedBox(
       height: widget.height,
-      alignment: Alignment.center,
-      child: IconButton(
-        icon: PlutoGridColumnIcon(
-          sort: _sort,
-          color: style.iconColor,
-          icon: widget.column.enableContextMenu
-              ? style.columnContextIcon
-              : style.columnResizeIcon,
-          ascendingIcon: style.columnAscendingIcon,
-          descendingIcon: style.columnDescendingIcon,
+      child: Align(
+        alignment: Alignment.center,
+        child: IconButton(
+          icon: PlutoGridColumnIcon(
+            sort: _sort,
+            color: style.iconColor,
+            icon: widget.column.enableContextMenu
+                ? style.columnContextIcon
+                : style.columnResizeIcon,
+            ascendingIcon: style.columnAscendingIcon,
+            descendingIcon: style.columnDescendingIcon,
+          ),
+          iconSize: style.iconSize,
+          mouseCursor: contextMenuCursor,
+          onPressed: null,
         ),
-        iconSize: style.iconSize,
-        mouseCursor: contextMenuCursor,
-        onPressed: null,
       ),
     );
 
@@ -160,7 +162,7 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
           left: 0,
           right: 0,
           child: widget.column.enableColumnDrag
-              ? _BuildDraggableWidget(
+              ? _DraggableWidget(
                   stateManager: stateManager,
                   column: widget.column,
                   child: columnWidget,
@@ -234,14 +236,14 @@ class PlutoGridColumnIcon extends StatelessWidget {
   }
 }
 
-class _BuildDraggableWidget extends StatelessWidget {
+class _DraggableWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
 
   final Widget child;
 
-  const _BuildDraggableWidget({
+  const _DraggableWidget({
     required this.stateManager,
     required this.column,
     required this.child,
@@ -296,14 +298,14 @@ class _BuildDraggableWidget extends StatelessWidget {
   }
 }
 
-class _BuildSortableWidget extends StatelessWidget {
+class _SortableWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
 
   final Widget child;
 
-  const _BuildSortableWidget({
+  const _SortableWidget({
     Key? key,
     required this.stateManager,
     required this.column,
@@ -329,14 +331,14 @@ class _BuildSortableWidget extends StatelessWidget {
   }
 }
 
-class _BuildColumnWidget extends StatelessWidget {
+class _ColumnWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
 
   final double height;
 
-  const _BuildColumnWidget({
+  const _ColumnWidget({
     required this.stateManager,
     required this.column,
     required this.height,
@@ -372,35 +374,39 @@ class _BuildColumnWidget extends StatelessWidget {
 
         final style = stateManager.style;
 
-        return Container(
+        return SizedBox(
           width: column.width,
           height: height,
-          padding: padding,
-          decoration: BoxDecoration(
-            color: noDragTarget
-                ? column.backgroundColor
-                : style.dragTargetColumnColor,
-            border: BorderDirectional(
-              end: style.enableColumnBorderVertical
-                  ? BorderSide(color: style.borderColor, width: 1.0)
-                  : BorderSide.none,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: noDragTarget
+                  ? column.backgroundColor
+                  : style.dragTargetColumnColor,
+              border: BorderDirectional(
+                end: style.enableColumnBorderVertical
+                    ? BorderSide(color: style.borderColor, width: 1.0)
+                    : BorderSide.none,
+              ),
             ),
-          ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                if (column.enableRowChecked)
-                  CheckboxAllSelectionWidget(stateManager: stateManager),
-                Expanded(
-                  child: _ColumnTextWidget(
-                    column: column,
-                    stateManager: stateManager,
-                    height: height,
-                  ),
+            child: Padding(
+              padding: padding,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    if (column.enableRowChecked)
+                      CheckboxAllSelectionWidget(stateManager: stateManager),
+                    Expanded(
+                      child: _ColumnTextWidget(
+                        column: column,
+                        stateManager: stateManager,
+                        height: height,
+                      ),
+                    ),
+                    if (showSizedBoxForIcon) SizedBox(width: style.iconSize),
+                  ],
                 ),
-                if (showSizedBoxForIcon) SizedBox(width: style.iconSize),
-              ],
+              ),
             ),
           ),
         );

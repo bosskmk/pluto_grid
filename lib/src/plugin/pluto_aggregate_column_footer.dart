@@ -263,14 +263,16 @@ class PlutoAggregateColumnFooterState
     final children =
         hasTitleSpan ? widget.titleSpanBuilder!(formattedValue) : null;
 
-    return Container(
+    return Padding(
       padding: widget.padding ?? PlutoGridSettings.columnTitlePadding,
-      alignment: widget.alignment ?? AlignmentDirectional.centerStart,
-      child: Text.rich(
-        TextSpan(text: text, children: children),
-        style: stateManager.configuration.style.cellTextStyle.copyWith(
-          decoration: TextDecoration.none,
-          fontWeight: FontWeight.normal,
+      child: Align(
+        alignment: widget.alignment ?? AlignmentDirectional.centerStart,
+        child: Text.rich(
+          TextSpan(text: text, children: children),
+          style: stateManager.configuration.style.cellTextStyle.copyWith(
+            decoration: TextDecoration.none,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       ),
     );

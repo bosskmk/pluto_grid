@@ -84,7 +84,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     return _showColumnGroups == true ? _columnGroups.length : _columns.length;
   }
 
-  PlutoVisibilityLayoutId _buildColumnGroup(PlutoColumnGroupPair e) {
+  PlutoVisibilityLayoutId _makeColumnGroup(PlutoColumnGroupPair e) {
     return PlutoVisibilityLayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
@@ -97,7 +97,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
     );
   }
 
-  PlutoVisibilityLayoutId _buildColumn(e) {
+  PlutoVisibilityLayoutId _makeColumn(PlutoColumn e) {
     return PlutoVisibilityLayoutId(
       id: e.field,
       child: PlutoBaseColumn(
@@ -124,8 +124,8 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
         initialViewportDimension: MediaQuery.of(context).size.width,
         textDirection: stateManager.textDirection,
         children: _showColumnGroups == true
-            ? _columnGroups.map(_buildColumnGroup).toList()
-            : _columns.map(_buildColumn).toList(),
+            ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
+            : _columns.map(_makeColumn).toList(growable: false),
       ),
     );
   }
