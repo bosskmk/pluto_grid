@@ -169,6 +169,11 @@ class PlutoNotifierFilterResolverDefault
       case PlutoLeftFrozenRows:
       case PlutoRightFrozenRows:
         return defaultRowsFilter(stateManager);
+      case PlutoNoRowsWidget:
+        return {
+          ...defaultRowsFilter(stateManager),
+          stateManager.setShowLoading.hashCode,
+        };
       case PlutoAggregateColumnFooter:
         return defaultAggregateColumnFooterFilter(stateManager);
       case CheckboxSelectionWidget:
