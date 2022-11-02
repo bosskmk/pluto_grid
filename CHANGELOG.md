@@ -1,3 +1,7 @@
+## [5.3.2] - 2022. 11. 2
+
+* Add onColumnsMoved, noRowsWidget.
+
 ## [5.3.1] - 2022. 10. 30
 
 * Add readOnly, multiSelect modes to PlutoGridMode.
