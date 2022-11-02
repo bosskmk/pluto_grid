@@ -193,6 +193,10 @@ class PlutoNotifierFilterResolverDefault
       stateManager.setShowColumnGroups.hashCode,
       stateManager.setShowLoading.hashCode,
       stateManager.toggleFrozenColumn.hashCode,
+      stateManager.insertColumns.hashCode,
+      stateManager.removeColumns.hashCode,
+      stateManager.moveColumn.hashCode,
+      stateManager.hideColumn.hashCode,
       stateManager.performLayoutOnPostFrame.hashCode,
     };
   }
