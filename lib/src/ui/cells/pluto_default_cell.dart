@@ -119,7 +119,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
   @override
   Widget build(BuildContext context) {
-    final cellWidget = _BuildDefaultCellWidget(
+    final cellWidget = _DefaultCellWidget(
       stateManager: stateManager,
       rowIdx: widget.rowIdx,
       row: widget.row,
@@ -405,7 +405,7 @@ class CheckboxSelectionWidgetState
   }
 }
 
-class _BuildDefaultCellWidget extends StatelessWidget {
+class _DefaultCellWidget extends StatelessWidget {
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;
@@ -416,7 +416,7 @@ class _BuildDefaultCellWidget extends StatelessWidget {
 
   final PlutoCell cell;
 
-  const _BuildDefaultCellWidget({
+  const _DefaultCellWidget({
     required this.stateManager,
     required this.rowIdx,
     required this.row,

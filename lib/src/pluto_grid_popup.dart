@@ -103,16 +103,20 @@ class PlutoGridPopup {
   }
 
   Future<void> open() async {
+    final textDirection = Directionality.of(context);
+
+    final borderRadius = configuration.style.gridBorderRadius.resolve(
+      textDirection,
+    );
+
     PlutoGridOnSelectedEvent? selected =
         await showDialog<PlutoGridOnSelectedEvent>(
             context: context,
             builder: (BuildContext ctx) {
               return Dialog(
-                shape: configuration.style.gridBorderRadius != BorderRadius.zero
-                    ? RoundedRectangleBorder(
-                        borderRadius: configuration.style.gridBorderRadius,
-                      )
-                    : null,
+                shape: borderRadius == BorderRadius.zero
+                    ? null
+                    : RoundedRectangleBorder(borderRadius: borderRadius),
                 child: LayoutBuilder(
                   builder: (ctx, size) {
                     return SizedBox(
@@ -120,7 +124,7 @@ class PlutoGridPopup {
                           PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,
                       child: Directionality(
-                        textDirection: Directionality.of(context),
+                        textDirection: textDirection,
                         child: PlutoGrid(
                           columns: columns,
                           rows: rows,

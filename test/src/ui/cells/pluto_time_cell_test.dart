@@ -32,12 +32,12 @@ void main() {
     final container = find
         .ancestor(
           of: cell,
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         )
         .first
         .evaluate()
         .first
-        .widget as Container;
+        .widget as DecoratedBox;
 
     return container.decoration as BoxDecoration;
   }

@@ -54,7 +54,7 @@ class PlutoRightFrozenColumnsFooterState
     return _columns.length;
   }
 
-  Widget _buildColumn(e) {
+  Widget _makeColumn(PlutoColumn e) {
     return LayoutId(
       id: e.field,
       child: PlutoBaseColumnFooter(
@@ -71,7 +71,7 @@ class PlutoRightFrozenColumnsFooterState
         stateManager: stateManager,
         columns: _columns,
       ),
-      children: _columns.map(_buildColumn).toList(),
+      children: _columns.map(_makeColumn).toList(growable: false),
     );
   }
 }

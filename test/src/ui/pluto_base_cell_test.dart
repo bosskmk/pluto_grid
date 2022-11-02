@@ -675,10 +675,10 @@ void main() {
 
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -707,10 +707,10 @@ void main() {
       (tester) async {
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -739,10 +739,10 @@ void main() {
       (tester) async {
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 

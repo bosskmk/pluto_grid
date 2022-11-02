@@ -68,7 +68,7 @@ class PlutoBodyColumnsFooterState
     return _columns.length;
   }
 
-  PlutoVisibilityLayoutId _buildFooter(e) {
+  PlutoVisibilityLayoutId _makeFooter(PlutoColumn e) {
     return PlutoVisibilityLayoutId(
       id: e.field,
       child: PlutoBaseColumnFooter(
@@ -92,7 +92,7 @@ class PlutoBodyColumnsFooterState
         scrollController: _scroll,
         initialViewportDimension: MediaQuery.of(context).size.width,
         textDirection: stateManager.textDirection,
-        children: _columns.map(_buildFooter).toList(),
+        children: _columns.map(_makeFooter).toList(growable: false),
       ),
     );
   }

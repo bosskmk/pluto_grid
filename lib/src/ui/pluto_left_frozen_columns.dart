@@ -70,7 +70,7 @@ class PlutoLeftFrozenColumnsState
     return _showColumnGroups == true ? _columnGroups.length : _columns.length;
   }
 
-  Widget _buildColumnGroup(PlutoColumnGroupPair e) {
+  Widget _makeColumnGroup(PlutoColumnGroupPair e) {
     return LayoutId(
       id: e.key,
       child: PlutoBaseColumnGroup(
@@ -81,7 +81,7 @@ class PlutoLeftFrozenColumnsState
     );
   }
 
-  Widget _buildColumn(e) {
+  Widget _makeColumn(PlutoColumn e) {
     return LayoutId(
       id: e.field,
       child: PlutoBaseColumn(
@@ -101,8 +101,8 @@ class PlutoLeftFrozenColumnsState
         frozen: PlutoColumnFrozen.start,
       ),
       children: _showColumnGroups == true
-          ? _columnGroups.map(_buildColumnGroup).toList()
-          : _columns.map(_buildColumn).toList(),
+          ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
+          : _columns.map(_makeColumn).toList(growable: false),
     );
   }
 }
