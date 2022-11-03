@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 abstract class PlutoColumnType {
@@ -85,15 +86,22 @@ abstract class PlutoColumnType {
   }
 
   /// Provides a selection list and sets it as a selection column.
+  ///
+  /// If [enableColumnFilter] is true, column filtering is enabled in the selection popup.
+  ///
+  /// Set the suffixIcon in the [popupIcon] cell. Tapping this icon will open a selection popup.
+  /// The default icon is displayed, and if this value is set to null , the icon does not appear.
   factory PlutoColumnType.select(
     List<dynamic> items, {
     dynamic defaultValue = '',
     bool enableColumnFilter = false,
+    IconData? popupIcon = Icons.arrow_drop_down,
   }) {
     return PlutoColumnTypeSelect(
       defaultValue: defaultValue,
       items: items,
       enableColumnFilter: enableColumnFilter,
+      popupIcon: popupIcon,
     );
   }
 
@@ -109,6 +117,9 @@ abstract class PlutoColumnType {
   /// Display year and month in header in date picker popup.
   ///
   /// [applyFormatOnInit] When the editor loads, it resets the value to [format].
+  ///
+  /// Set the suffixIcon in the [popupIcon] cell. Tap this icon to open the date selection popup.
+  /// The default icon is displayed, and if this value is set to null , the icon does not appear.
   factory PlutoColumnType.date({
     dynamic defaultValue = '',
     DateTime? startDate,
@@ -116,6 +127,7 @@ abstract class PlutoColumnType {
     String format = 'yyyy-MM-dd',
     String headerFormat = 'yyyy-MM',
     bool applyFormatOnInit = true,
+    IconData? popupIcon = Icons.date_range,
   }) {
     return PlutoColumnTypeDate(
       defaultValue: defaultValue,
@@ -124,14 +136,21 @@ abstract class PlutoColumnType {
       format: format,
       headerFormat: headerFormat,
       applyFormatOnInit: applyFormatOnInit,
+      popupIcon: popupIcon,
     );
   }
 
+  /// A column for the time type.
+  ///
+  /// Set the suffixIcon in the [popupIcon] cell. Tap this icon to open the time selection popup.
+  /// The default icon is displayed, and if this value is set to null , the icon does not appear.
   factory PlutoColumnType.time({
     dynamic defaultValue = '00:00',
+    IconData? popupIcon = Icons.access_time,
   }) {
     return PlutoColumnTypeTime(
       defaultValue: defaultValue,
+      popupIcon: popupIcon,
     );
   }
 
@@ -332,7 +351,8 @@ class PlutoColumnTypeCurrency
   late final int decimalPoint;
 }
 
-class PlutoColumnTypeSelect implements PlutoColumnType {
+class PlutoColumnTypeSelect
+    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -340,10 +360,14 @@ class PlutoColumnTypeSelect implements PlutoColumnType {
 
   final bool enableColumnFilter;
 
+  @override
+  final IconData? popupIcon;
+
   const PlutoColumnTypeSelect({
     this.defaultValue,
     required this.items,
     required this.enableColumnFilter,
+    this.popupIcon,
   });
 
   @override
@@ -366,7 +390,8 @@ class PlutoColumnTypeDate
     implements
         PlutoColumnType,
         PlutoColumnTypeHasFormat<String>,
-        PlutoColumnTypeHasDateFormat {
+        PlutoColumnTypeHasDateFormat,
+        PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -383,6 +408,9 @@ class PlutoColumnTypeDate
   @override
   final bool applyFormatOnInit;
 
+  @override
+  final IconData? popupIcon;
+
   PlutoColumnTypeDate({
     this.defaultValue,
     this.startDate,
@@ -390,6 +418,7 @@ class PlutoColumnTypeDate
     required this.format,
     required this.headerFormat,
     required this.applyFormatOnInit,
+    this.popupIcon,
   })  : dateFormat = intl.DateFormat(format),
         headerDateFormat = intl.DateFormat(headerFormat);
 
@@ -448,12 +477,17 @@ class PlutoColumnTypeDate
   }
 }
 
-class PlutoColumnTypeTime implements PlutoColumnType {
+class PlutoColumnTypeTime
+    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
+  @override
+  final IconData? popupIcon;
+
   const PlutoColumnTypeTime({
     this.defaultValue,
+    this.popupIcon,
   });
 
   static final _timeFormat = RegExp(r'^([0-1]?\d|2[0-3]):[0-5]\d$');
@@ -499,6 +533,10 @@ abstract class PlutoColumnTypeHasDateFormat {
   final String headerFormat;
 
   final intl.DateFormat headerDateFormat;
+}
+
+abstract class PlutoColumnTypeHasPopupIcon {
+  IconData? get popupIcon;
 }
 
 mixin PlutoColumnTypeWithNumberFormat {

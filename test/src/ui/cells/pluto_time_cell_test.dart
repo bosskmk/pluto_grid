@@ -48,6 +48,89 @@ void main() {
     return text.style as TextStyle;
   }
 
+  group('suffixIcon 렌더링', () {
+    final PlutoCell cell = PlutoCell(value: '12:30');
+
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
+    testWidgets('기본 시간 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.access_time), findsOneWidget);
+    });
+
+    testWidgets('변경한 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(
+          popupIcon: Icons.add,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
+
+    testWidgets('popupIcon 이 null 인 경우 아이콘이 렌더링 되지 않아야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(
+          popupIcon: null,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Icon), findsNothing);
+    });
+  });
+
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
     final PlutoColumn column = PlutoColumn(

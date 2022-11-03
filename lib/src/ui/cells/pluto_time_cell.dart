@@ -39,9 +39,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
   List<PlutoRow> popupRows = [];
 
   @override
-  Icon? icon = const Icon(
-    Icons.access_time,
-  );
+  IconData? get icon => widget.column.type.time.popupIcon;
 
   String get cellValue =>
       widget.cell.value ?? widget.column.type.time.defaultValue;

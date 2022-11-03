@@ -37,6 +37,89 @@ void main() {
     when(stateManager.hasFocus).thenReturn(true);
   });
 
+  group('suffixIcon 렌더링', () {
+    final PlutoCell cell = PlutoCell(value: '2020-01-01');
+
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
+    testWidgets('기본 날짜 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.date(),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoDateCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.date_range), findsOneWidget);
+    });
+
+    testWidgets('변경한 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.date(
+          popupIcon: Icons.add,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoDateCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
+
+    testWidgets('popupIcon 이 null 인 경우 아이콘이 렌더링 되지 않아야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.date(
+          popupIcon: null,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoDateCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Icon), findsNothing);
+    });
+  });
+
   group('기본 date 컬럼', () {
     final PlutoColumn column = PlutoColumn(
       title: 'column title',
