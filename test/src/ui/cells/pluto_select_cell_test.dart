@@ -43,6 +43,91 @@ void main() {
     when(stateManager.hasFocus).thenReturn(true);
   });
 
+  group('suffixIcon 렌더링', () {
+    final PlutoCell cell = PlutoCell(value: 'A');
+
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
+    testWidgets('기본 드롭다운 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.select(['A']),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoSelectCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
+    });
+
+    testWidgets('변경한 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.select(
+          ['A'],
+          popupIcon: Icons.add,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoSelectCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
+
+    testWidgets('popupIcon 이 null 인 경우 아이콘이 렌더링 되지 않아야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.select(
+          ['A'],
+          popupIcon: null,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoSelectCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Icon), findsNothing);
+    });
+  });
+
   group(
     'enterKeyAction 이 PlutoGridEnterKeyAction.toggleEditing 이고, '
     'enableMoveDownAfterSelecting 가 false 인 상태에서, ',

@@ -37,9 +37,7 @@ class PlutoSelectCellState extends State<PlutoSelectCell>
   List<PlutoRow> popupRows = [];
 
   @override
-  Icon? icon = const Icon(
-    Icons.arrow_drop_down,
-  );
+  IconData? get icon => widget.column.type.select.popupIcon;
 
   late bool enableColumnFilter;
 
