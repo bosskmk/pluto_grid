@@ -1,3 +1,10 @@
+## [5.4.0] - 2022. 11. 5
+
+* Add shortcut to PlutoGridConfiguration.  
+  https://pluto.weblaze.dev/shortcuts
+* Add popupIcon for popup type column.  
+  You can change the icon that appears on the right of the date, time, or selection type column cell or set it to null to remove it.
+
 ## [5.3.2] - 2022. 11. 2
 
 * Add onColumnsMoved, noRowsWidget.
