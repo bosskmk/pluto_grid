@@ -5,6 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/row_helper.dart';
+import '../../matcher/pluto_object_matcher.dart';
 import '../../mock/mock_build_context.dart';
 import '../../mock/mock_on_change_listener.dart';
 import '../../mock/shared_mocks.mocks.dart';
@@ -227,6 +228,143 @@ void main() {
           );
         },
       );
+    });
+  });
+
+  group('convertRowsToMap', () {
+    test('filterRows 가 비어있으면 빈 맵을 리턴해야 한다.', () {
+      final List<PlutoRow> filterRows = [];
+
+      final result = FilterHelper.convertRowsToMap(filterRows);
+
+      expect(result.isEmpty, true);
+      expect(result, isA<Map<String, List<Map<String, String>>>>());
+    });
+
+    test('filterRows 가 설정 되어 있으면 Map 에 값이 설정되어 리턴되어야 한다.', () {
+      final List<PlutoRow> filterRows = [
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(value: 'column'),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+      ];
+
+      final result = FilterHelper.convertRowsToMap(filterRows);
+
+      expect(result.length, 1);
+      expect(result, PlutoObjectMatcher<Map<String, List<Map<String, String>>>>(
+        rule: (value) {
+          return value.keys.first == 'column' &&
+              value.values.first[0].keys.first ==
+                  PlutoFilterTypeContains.name &&
+              value.values.first[0].values.first == '123';
+        },
+      ));
+    });
+
+    test(
+        'filterRows 에 동일한 컬럼의 조건이 2개 설정 되어 있으면, '
+        'Map 에 값이 설정되어 리턴되어야 한다.', () {
+      final List<PlutoRow> filterRows = [
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(value: 'column'),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(value: 'column'),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeEndsWith(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '456'),
+        }),
+      ];
+
+      final result = FilterHelper.convertRowsToMap(filterRows);
+
+      expect(result.length, 1);
+      expect(result, PlutoObjectMatcher<Map<String, List<Map<String, String>>>>(
+        rule: (value) {
+          return value.keys.contains('column') &&
+              value['column']!.length == 2 &&
+              value['column']![0].keys.contains(PlutoFilterTypeContains.name) &&
+              value['column']![0].values.contains('123') &&
+              value['column']![1].keys.contains(PlutoFilterTypeEndsWith.name) &&
+              value['column']![1].values.contains('456');
+        },
+      ));
+    });
+
+    test(
+        'filtering 조건에 모든 컬럼 조건이 포함 되어 있으면, '
+        'Map 에 기본값 all 로 설정되어 리턴되어야 한다.', () {
+      final List<PlutoRow> filterRows = [
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(value: 'column'),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(
+            value: FilterHelper.filterFieldAllColumns,
+          ),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+      ];
+
+      final result = FilterHelper.convertRowsToMap(filterRows);
+
+      expect(result.length, 2);
+      expect(result, PlutoObjectMatcher<Map<String, List<Map<String, String>>>>(
+        rule: (value) {
+          return value.containsKey('all');
+        },
+      ));
+    });
+
+    test(
+        'allField 을 allColumns 로 변경하면, '
+        'Map 에 기본값 allColumns 로 설정되어 리턴되어야 한다.', () {
+      final List<PlutoRow> filterRows = [
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(value: 'column'),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+        PlutoRow(cells: {
+          FilterHelper.filterFieldColumn: PlutoCell(
+            value: FilterHelper.filterFieldAllColumns,
+          ),
+          FilterHelper.filterFieldType: PlutoCell(
+            value: const PlutoFilterTypeContains(),
+          ),
+          FilterHelper.filterFieldValue: PlutoCell(value: '123'),
+        }),
+      ];
+
+      final result = FilterHelper.convertRowsToMap(
+        filterRows,
+        allField: 'allColumns',
+      );
+
+      expect(result.length, 2);
+      expect(result, PlutoObjectMatcher<Map<String, List<Map<String, String>>>>(
+        rule: (value) {
+          return value.containsKey('allColumns');
+        },
+      ));
     });
   });
 

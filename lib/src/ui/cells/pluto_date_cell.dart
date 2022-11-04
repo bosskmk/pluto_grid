@@ -39,9 +39,7 @@ class PlutoDateCellState extends State<PlutoDateCell>
   List<PlutoRow> popupRows = [];
 
   @override
-  Icon? icon = const Icon(
-    Icons.date_range,
-  );
+  IconData? get icon => widget.column.type.date.popupIcon;
 
   @override
   void openPopup() {

@@ -117,37 +117,41 @@ class _ColumnGroupTitle extends StatelessWidget {
 
     final style = stateManager.style;
 
-    return Container(
+    return SizedBox(
       height: groupTitleHeight,
-      padding: _padding,
-      decoration: BoxDecoration(
-        color: columnGroup.group.backgroundColor,
-        border: BorderDirectional(
-          end: style.enableColumnBorderVertical
-              ? BorderSide(
-                  color: style.borderColor,
-                  width: 1.0,
-                )
-              : BorderSide.none,
-          bottom: style.enableColumnBorderHorizontal
-              ? BorderSide(
-                  color: style.borderColor,
-                  width: 1.0,
-                )
-              : BorderSide.none,
-        ),
-      ),
-      child: Center(
-        child: Text.rich(
-          TextSpan(
-            text: _title,
-            children: _children,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: columnGroup.group.backgroundColor,
+          border: BorderDirectional(
+            end: style.enableColumnBorderVertical
+                ? BorderSide(
+                    color: style.borderColor,
+                    width: 1.0,
+                  )
+                : BorderSide.none,
+            bottom: style.enableColumnBorderHorizontal
+                ? BorderSide(
+                    color: style.borderColor,
+                    width: 1.0,
+                  )
+                : BorderSide.none,
           ),
-          style: style.columnTextStyle,
-          overflow: TextOverflow.ellipsis,
-          softWrap: false,
-          maxLines: 1,
-          textAlign: columnGroup.group.titleTextAlign.value,
+        ),
+        child: Padding(
+          padding: _padding,
+          child: Center(
+            child: Text.rich(
+              TextSpan(
+                text: _title,
+                children: _children,
+              ),
+              style: style.columnTextStyle,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 1,
+              textAlign: columnGroup.group.titleTextAlign.value,
+            ),
+          ),
         ),
       ),
     );
@@ -199,13 +203,15 @@ class _ColumnGroup extends StatelessWidget {
     if (columnGroup.group.hasFields) {
       return CustomMultiChildLayout(
         delegate: ColumnsLayout(stateManager, columnGroup.columns),
-        children: columnGroup.columns.map(_makeFieldWidget).toList(),
+        children:
+            columnGroup.columns.map(_makeFieldWidget).toList(growable: false),
       );
     }
 
     return CustomMultiChildLayout(
       delegate: ColumnGroupLayout(stateManager, _separateLinkedGroup, depth),
-      children: _separateLinkedGroup.map(_makeChildWidget).toList(),
+      children:
+          _separateLinkedGroup.map(_makeChildWidget).toList(growable: false),
     );
   }
 }

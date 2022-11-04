@@ -638,10 +638,10 @@ void main() {
 
         final target = find.descendant(
           of: find.byKey(sortableGestureKey),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().single.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -667,10 +667,10 @@ void main() {
 
         final target = find.descendant(
           of: find.byKey(sortableGestureKey),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().single.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 

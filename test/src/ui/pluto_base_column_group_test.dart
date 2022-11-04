@@ -190,11 +190,11 @@ void main() {
       final groupTitle = find.text('column group title');
 
       final groupTitleWidget = find
-          .ancestor(of: groupTitle, matching: find.byType(Container))
+          .ancestor(of: groupTitle, matching: find.byType(SizedBox))
           .first
           .evaluate()
           .first
-          .widget as Container;
+          .widget as SizedBox;
 
       final columnTitle = find.text('column1');
 
@@ -202,7 +202,7 @@ void main() {
 
       expect(columnTitle, findsOneWidget);
 
-      expect(groupTitleWidget.constraints?.maxHeight, columnHeight * 3);
+      expect(groupTitleWidget.height, columnHeight * 3);
     },
   );
 

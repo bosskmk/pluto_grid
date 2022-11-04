@@ -1204,14 +1204,15 @@ class _GridContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = stateManager.style;
 
+    final borderRadius = style.gridBorderRadius.resolve(TextDirection.ltr);
+
     return Focus(
       focusNode: stateManager.gridFocusNode,
       child: ScrollConfiguration(
         behavior: const PlutoScrollBehavior().copyWith(
           scrollbars: false,
         ),
-        child: Container(
-          padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
+        child: DecoratedBox(
           decoration: BoxDecoration(
             color: style.gridBackgroundColor,
             borderRadius: style.gridBorderRadius,
@@ -1220,9 +1221,11 @@ class _GridContainer extends StatelessWidget {
               width: PlutoGridSettings.gridBorderWidth,
             ),
           ),
-          child: ClipRRect(
-            borderRadius: style.gridBorderRadius.resolve(TextDirection.ltr),
-            child: child,
+          child: Padding(
+            padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
+            child: borderRadius == BorderRadius.zero
+                ? child
+                : ClipRRect(borderRadius: borderRadius, child: child),
           ),
         ),
       ),

@@ -62,7 +62,7 @@ class PlutoBaseRow extends StatelessWidget {
     );
   }
 
-  PlutoVisibilityLayoutId _buildCell(PlutoColumn column) {
+  PlutoVisibilityLayoutId _makeCell(PlutoColumn column) {
     return PlutoVisibilityLayoutId(
       id: column.field,
       child: PlutoBaseCell(
@@ -94,7 +94,7 @@ class PlutoBaseRow extends StatelessWidget {
               scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
               textDirection: stateManager.textDirection,
-              children: columns.map(_buildCell).toList(growable: false),
+              children: columns.map(_makeCell).toList(growable: false),
             )
           : CustomMultiChildLayout(
               key: ValueKey('rowContainer_${row.key}_row'),
@@ -102,7 +102,7 @@ class PlutoBaseRow extends StatelessWidget {
                 stateManager: stateManager,
                 columns: columns,
               ),
-              children: columns.map(_buildCell).toList(growable: false),
+              children: columns.map(_makeCell).toList(growable: false),
             ),
     );
   }

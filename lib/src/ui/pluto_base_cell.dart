@@ -123,7 +123,7 @@ class PlutoBaseCell extends StatelessWidget
         cellPadding: column.cellPadding ??
             stateManager.configuration.style.defaultCellPadding,
         stateManager: stateManager,
-        child: _BuildCell(
+        child: _Cell(
           stateManager: stateManager,
           rowIdx: rowIdx,
           column: column,
@@ -292,15 +292,17 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: _decoration,
-      padding: widget.cellPadding,
-      child: widget.child,
+      child: Padding(
+        padding: widget.cellPadding,
+        child: widget.child,
+      ),
     );
   }
 }
 
-class _BuildCell extends PlutoStatefulWidget {
+class _Cell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;
@@ -311,7 +313,7 @@ class _BuildCell extends PlutoStatefulWidget {
 
   final PlutoCell cell;
 
-  const _BuildCell({
+  const _Cell({
     required this.stateManager,
     required this.rowIdx,
     required this.row,
@@ -321,10 +323,10 @@ class _BuildCell extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_BuildCell> createState() => _BuildCellState();
+  State<_Cell> createState() => _CellState();
 }
 
-class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
+class _CellState extends PlutoStateWithChange<_Cell> {
   bool _showTypedCell = false;
 
   @override

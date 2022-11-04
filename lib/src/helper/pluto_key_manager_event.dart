@@ -102,6 +102,10 @@ class PlutoKeyManagerEvent {
   bool get isAltPressed {
     return event.isAltPressed;
   }
+
+  bool get isModifierPressed {
+    return isShiftPressed || isCtrlPressed || isAltPressed;
+  }
 }
 
 const _characters = {

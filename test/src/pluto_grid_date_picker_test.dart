@@ -243,12 +243,12 @@ void main() {
       final selectedDayWidget = find
           .ancestor(
             of: selectedDayText,
-            matching: find.byType(Container),
+            matching: find.byType(DecoratedBox),
           )
           .first;
 
       final selectedDayContainer =
-          selectedDayWidget.first.evaluate().first.widget as Container;
+          selectedDayWidget.first.evaluate().first.widget as DecoratedBox;
 
       final decoration = selectedDayContainer.decoration as BoxDecoration;
 
