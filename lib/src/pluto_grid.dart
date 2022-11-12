@@ -1103,9 +1103,11 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.bodyRows)) {
-      var height = size.height - bodyRowsTopOffset - bodyRowsBottomOffset;
+      double width = size.width - bodyLeftOffset - bodyRightOffset;
+      double height = size.height - bodyRowsTopOffset - bodyRowsBottomOffset;
 
-      var width = size.width - bodyLeftOffset - bodyRightOffset;
+      if (width < 0) width = 0;
+      if (height < 0) height = 0;
 
       layoutChild(
         _StackName.bodyRows,
