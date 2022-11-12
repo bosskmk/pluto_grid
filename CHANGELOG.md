@@ -1,3 +1,7 @@
+## [5.4.1] - 2022. 11. 12
+
+* Fix layout size bug.
+
 ## [5.4.0] - 2022. 11. 5
 
 * Add shortcut to PlutoGridConfiguration.  
