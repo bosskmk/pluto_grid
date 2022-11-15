@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -659,19 +658,42 @@ class PlutoGridScrollbarConfig {
   const PlutoGridScrollbarConfig({
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
-    this.scrollbarRadius = CupertinoScrollbar.defaultRadius,
-    this.scrollbarRadiusWhileDragging =
-        CupertinoScrollbar.defaultRadiusWhileDragging,
-    this.scrollbarThickness = CupertinoScrollbar.defaultThickness,
+    this.onlyDraggingThumb = true,
+    this.scrollbarThickness = PlutoScrollbar.defaultThickness,
     this.scrollbarThicknessWhileDragging =
-        CupertinoScrollbar.defaultThicknessWhileDragging,
+        PlutoScrollbar.defaultThicknessWhileDragging,
+    this.mainAxisMargin,
+    this.crossAxisMargin,
+    this.scrollBarColor,
+    this.scrollBarTrackColor,
+    this.scrollbarRadius = PlutoScrollbar.defaultRadius,
+    this.scrollbarRadiusWhileDragging =
+        PlutoScrollbar.defaultRadiusWhileDragging,
   });
 
   final bool draggableScrollbar;
+
   final bool isAlwaysShown;
+
+  /// If [onlyDraggingThumb] is false, scrolling can be done by dragging the track area.
+  final bool onlyDraggingThumb;
+
   final double scrollbarThickness;
+
   final double scrollbarThicknessWhileDragging;
+
+  final double? mainAxisMargin;
+
+  final double? crossAxisMargin;
+
+  /// ScrollBar Color
+  final Color? scrollBarColor;
+
+  /// ScrollBar Track Color
+  final Color? scrollBarTrackColor;
+
   final Radius scrollbarRadius;
+
   final Radius scrollbarRadiusWhileDragging;
 
   @override
@@ -681,9 +703,14 @@ class PlutoGridScrollbarConfig {
             runtimeType == other.runtimeType &&
             draggableScrollbar == other.draggableScrollbar &&
             isAlwaysShown == other.isAlwaysShown &&
+            onlyDraggingThumb == other.onlyDraggingThumb &&
             scrollbarThickness == other.scrollbarThickness &&
             scrollbarThicknessWhileDragging ==
                 other.scrollbarThicknessWhileDragging &&
+            mainAxisMargin == other.mainAxisMargin &&
+            crossAxisMargin == other.crossAxisMargin &&
+            scrollBarColor == other.scrollBarColor &&
+            scrollBarTrackColor == other.scrollBarTrackColor &&
             scrollbarRadius == other.scrollbarRadius &&
             scrollbarRadiusWhileDragging == other.scrollbarRadiusWhileDragging;
   }
@@ -692,8 +719,13 @@ class PlutoGridScrollbarConfig {
   int get hashCode => Object.hash(
         draggableScrollbar,
         isAlwaysShown,
+        onlyDraggingThumb,
         scrollbarThickness,
         scrollbarThicknessWhileDragging,
+        mainAxisMargin,
+        crossAxisMargin,
+        scrollBarColor,
+        scrollBarTrackColor,
         scrollbarRadius,
         scrollbarRadiusWhileDragging,
       );

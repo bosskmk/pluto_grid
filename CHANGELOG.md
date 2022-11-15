@@ -1,3 +1,12 @@
+## [5.4.2] - 2022. 11. 15
+
+* Add properties of PlutoGridScrollbarConfig.
+  - onlyDraggingThumb
+  - mainAxisMargin
+  - crossAxisMargin
+  - scrollBarColor
+  - scrollBarTrackColor
+
 ## [5.4.1] - 2022. 11. 12
 
 * Fix layout size bug.
