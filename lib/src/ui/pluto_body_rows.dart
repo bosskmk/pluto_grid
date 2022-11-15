@@ -72,8 +72,11 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   @override
   Widget build(BuildContext context) {
     final scrollbarConfig = stateManager.configuration.scrollbar;
+    final styleConfig = stateManager.configuration.style;
 
     return PlutoScrollbar(
+      scrollBarColor: styleConfig.scrollBarColor,
+      scrollBarTrackColor: styleConfig.scrollBarTrackColor,
       verticalController:
           scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
       horizontalController:

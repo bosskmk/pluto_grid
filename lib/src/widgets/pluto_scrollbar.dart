@@ -19,11 +19,11 @@ const Duration _kScrollbarFadeDuration = Duration(milliseconds: 250);
 const Duration _kScrollbarResizeDuration = Duration(milliseconds: 100);
 
 // Extracted from iOS 13.1 beta using Debug View Hierarchy.
-const Color _kScrollbarColor = CupertinoDynamicColor.withBrightness(
+const Color kScrollbarColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x59000000),
   darkColor: Color(0x80FFFFFF),
 );
-
+const Color kTrackColor = Color(0x00000000);
 // This is the amount of space from the top of a vertical scrollbar to the
 // top edge of the scrollable, measured when the vertical scrollbar overscrolls
 // to the top.
@@ -36,6 +36,8 @@ class PlutoScrollbar extends StatefulWidget {
     Key? key,
     this.horizontalController,
     this.verticalController,
+    required this.scrollBarColor,
+    required this.scrollBarTrackColor,
     this.isAlwaysShown = false,
     this.thickness = defaultThickness,
     this.thicknessWhileDragging = defaultThicknessWhileDragging,
@@ -47,6 +49,9 @@ class PlutoScrollbar extends StatefulWidget {
         assert(!isAlwaysShown ||
             (horizontalController != null || verticalController != null)),
         super(key: key);
+  final Color scrollBarColor;
+
+  final Color scrollBarTrackColor;
 
   static const double defaultThickness = 3;
 
@@ -146,7 +151,7 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     } else {
       _painter!
         ..textDirection = Directionality.of(context)
-        ..color = CupertinoDynamicColor.resolve(_kScrollbarColor, context)
+        ..color = CupertinoDynamicColor.resolve(widget.scrollBarColor, context)
         ..padding = MediaQuery.of(context).padding;
     }
     _triggerScrollbar();
@@ -170,7 +175,9 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
   /// Returns a [ScrollbarPainter] visually styled like the iOS scrollbar.
   _ScrollbarPainter _buildCupertinoScrollbarPainter(BuildContext context) {
     return _ScrollbarPainter(
-      color: CupertinoDynamicColor.resolve(_kScrollbarColor, context),
+      trackColor:
+          CupertinoDynamicColor.resolve(widget.scrollBarTrackColor, context),
+      color: CupertinoDynamicColor.resolve(widget.scrollBarColor, context),
       textDirection: Directionality.of(context),
       thickness: _thickness,
       fadeoutOpacityAnimation: _fadeoutOpacityAnimation,
@@ -445,7 +452,7 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   _ScrollbarPainter({
     required Color color,
     required this.fadeoutOpacityAnimation,
-    Color trackColor = const Color(0x00000000),
+    required Color trackColor,
     Color trackBorderColor = const Color(0x00000000),
     TextDirection? textDirection,
     double thickness = _kScrollbarThickness,

@@ -192,6 +192,8 @@ class PlutoGridConfiguration {
 
 class PlutoGridStyleConfig {
   const PlutoGridStyleConfig({
+    this.scrollBarColor = kScrollbarColor,
+    this.scrollBarTrackColor = kTrackColor,
     this.enableGridBorderShadow = false,
     this.enableColumnBorderVertical = true,
     this.enableColumnBorderHorizontal = true,
@@ -248,6 +250,8 @@ class PlutoGridStyleConfig {
   });
 
   const PlutoGridStyleConfig.dark({
+    this.scrollBarColor = kScrollbarColor,
+    this.scrollBarTrackColor = kTrackColor,
     this.enableGridBorderShadow = false,
     this.enableColumnBorderVertical = true,
     this.enableColumnBorderHorizontal = true,
@@ -302,6 +306,12 @@ class PlutoGridStyleConfig {
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
+
+  /// ScrollBar Color
+  final Color scrollBarColor;
+
+  /// ScrollBar Track Color
+  final Color scrollBarTrackColor;
 
   /// Enable borderShadow in [PlutoGrid].
   final bool enableGridBorderShadow;
