@@ -23,7 +23,7 @@ const Color _kScrollbarColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x59000000),
   darkColor: Color(0x80FFFFFF),
 );
-
+const Color _kTrackColor = Color(0x00000000);
 // This is the amount of space from the top of a vertical scrollbar to the
 // top edge of the scrollable, measured when the vertical scrollbar overscrolls
 // to the top.
@@ -37,8 +37,13 @@ class PlutoScrollbar extends StatefulWidget {
     this.horizontalController,
     this.verticalController,
     this.isAlwaysShown = false,
+    this.onlyDraggingThumb = true,
     this.thickness = defaultThickness,
     this.thicknessWhileDragging = defaultThicknessWhileDragging,
+    double? mainAxisMargin,
+    double? crossAxisMargin,
+    Color? scrollBarColor,
+    Color? scrollBarTrackColor,
     this.radius = defaultRadius,
     this.radiusWhileDragging = defaultRadiusWhileDragging,
     required this.child,
@@ -46,7 +51,36 @@ class PlutoScrollbar extends StatefulWidget {
         assert(thicknessWhileDragging < double.infinity),
         assert(!isAlwaysShown ||
             (horizontalController != null || verticalController != null)),
+        mainAxisMargin = mainAxisMargin ?? _kScrollbarMainAxisMargin,
+        crossAxisMargin = crossAxisMargin ?? _kScrollbarCrossAxisMargin,
+        scrollBarColor = scrollBarColor ?? _kScrollbarColor,
+        scrollBarTrackColor = scrollBarTrackColor ?? _kTrackColor,
         super(key: key);
+  final ScrollController? horizontalController;
+
+  final ScrollController? verticalController;
+
+  final bool isAlwaysShown;
+
+  final bool onlyDraggingThumb;
+
+  final double thickness;
+
+  final double thicknessWhileDragging;
+
+  final double mainAxisMargin;
+
+  final double crossAxisMargin;
+
+  final Color scrollBarColor;
+
+  final Color scrollBarTrackColor;
+
+  final Radius radius;
+
+  final Radius radiusWhileDragging;
+
+  final Widget child;
 
   static const double defaultThickness = 3;
 
@@ -55,24 +89,6 @@ class PlutoScrollbar extends StatefulWidget {
   static const Radius defaultRadius = Radius.circular(1.5);
 
   static const Radius defaultRadiusWhileDragging = Radius.circular(4.0);
-
-  final Widget child;
-
-  final ScrollController? horizontalController;
-
-  final ScrollController? verticalController;
-
-  final bool isAlwaysShown;
-
-  final double thickness;
-
-  final double thicknessWhileDragging;
-
-  final Radius radius;
-
-  final bool onlyDraggingThumb = true;
-
-  final Radius radiusWhileDragging;
 
   @override
   PlutoGridCupertinoScrollbarState createState() =>
@@ -146,7 +162,7 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     } else {
       _painter!
         ..textDirection = Directionality.of(context)
-        ..color = CupertinoDynamicColor.resolve(_kScrollbarColor, context)
+        ..color = CupertinoDynamicColor.resolve(widget.scrollBarColor, context)
         ..padding = MediaQuery.of(context).padding;
     }
     _triggerScrollbar();
@@ -170,12 +186,14 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
   /// Returns a [ScrollbarPainter] visually styled like the iOS scrollbar.
   _ScrollbarPainter _buildCupertinoScrollbarPainter(BuildContext context) {
     return _ScrollbarPainter(
-      color: CupertinoDynamicColor.resolve(_kScrollbarColor, context),
+      trackColor:
+          CupertinoDynamicColor.resolve(widget.scrollBarTrackColor, context),
+      color: CupertinoDynamicColor.resolve(widget.scrollBarColor, context),
       textDirection: Directionality.of(context),
       thickness: _thickness,
       fadeoutOpacityAnimation: _fadeoutOpacityAnimation,
-      mainAxisMargin: _kScrollbarMainAxisMargin,
-      crossAxisMargin: _kScrollbarCrossAxisMargin,
+      mainAxisMargin: widget.mainAxisMargin,
+      crossAxisMargin: widget.crossAxisMargin,
       radius: _radius,
       padding: MediaQuery.of(context).padding,
       minLength: _kScrollbarMinLength,
@@ -445,7 +463,7 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   _ScrollbarPainter({
     required Color color,
     required this.fadeoutOpacityAnimation,
-    Color trackColor = const Color(0x00000000),
+    required Color trackColor,
     Color trackBorderColor = const Color(0x00000000),
     TextDirection? textDirection,
     double thickness = _kScrollbarThickness,

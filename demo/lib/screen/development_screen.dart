@@ -89,6 +89,9 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       isAlwaysShown: false,
       scrollbarThickness: 8,
       scrollbarThicknessWhileDragging: 10,
+      // mainAxisMargin: 0,
+      // scrollBarColor: Colors.blueAccent,
+      // scrollBarTrackColor: Colors.red,
     ),
     // localeText: const PlutoGridLocaleText.korean(),
     columnFilter: PlutoGridColumnFilterConfig(
