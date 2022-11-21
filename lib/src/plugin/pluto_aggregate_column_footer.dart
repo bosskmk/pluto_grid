@@ -146,6 +146,8 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
 
   final bool formatAsCurrency;
 
+  /// aggregate column data across all Pages
+  final bool allPages;
   const PlutoAggregateColumnFooter({
     required this.rendererContext,
     required this.type,
@@ -156,6 +158,7 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
     this.titleSpanBuilder,
     this.alignment,
     this.padding,
+    this.allPages = false,
     this.formatAsCurrency = false,
     super.key,
   });
@@ -183,7 +186,11 @@ class PlutoAggregateColumnFooterState
   }) _aggregator;
 
   Iterable<PlutoRow> get rows {
-    if (!stateManager.enabledRowGroups) return stateManager.refRows;
+    if (!stateManager.enabledRowGroups) {
+      return widget.allPages
+          ? stateManager.refRows.originalList
+          : stateManager.refRows;
+    }
 
     bool Function(PlutoRow)? filter;
     Iterator<PlutoRow>? Function(PlutoRow)? childrenFilter;
@@ -200,7 +207,7 @@ class PlutoAggregateColumnFooterState
 
     return PlutoRowGroupHelper.iterateWithFilter(
       stateManager.iterateMainRowGroup,
-      iterateAll: false,
+      iterateAll: widget.allPages,
       filter: filter,
       childrenFilter: childrenFilter,
     );
