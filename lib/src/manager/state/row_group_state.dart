@@ -297,6 +297,13 @@ mixin RowGroupState implements IPlutoGridState {
       resetPage(resetCurrentState: false, notify: false);
     }
 
+    if (rowGroupDelegate?.onToggled != null) {
+      rowGroupDelegate!.onToggled!(
+        row: rowGroup,
+        expanded: rowGroup.type.group.expanded,
+      );
+    }
+
     updateCurrentCellPosition(notify: false);
 
     clearCurrentSelecting(notify: false);

@@ -39,8 +39,11 @@ class PlutoRow {
     return cells.values.first.initialized;
   }
 
+  /// If [PlutoRow] is included as a child of a group row,
+  /// [parent] is the parent's reference.
   PlutoRow? get parent => _parent;
 
+  /// Returns the depth if [PlutoRow] is a child of a group row.
   int get depth {
     int depth = 0;
     var current = parent;
@@ -51,6 +54,7 @@ class PlutoRow {
     return depth;
   }
 
+  /// Returns whether [PlutoRow] is the top position.
   bool get isMain => parent == null;
 
   /// The state value that the checkbox is checked.
