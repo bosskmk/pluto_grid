@@ -82,6 +82,8 @@ class PlutoGridShortcut {
     // Default enter key action
     LogicalKeySet(LogicalKeyboardKey.enter):
         const PlutoGridActionDefaultEnterKey(),
+    LogicalKeySet(LogicalKeyboardKey.numpadEnter):
+        const PlutoGridActionDefaultEnterKey(),
     LogicalKeySet(LogicalKeyboardKey.shift, LogicalKeyboardKey.enter):
         const PlutoGridActionDefaultEnterKey(),
     // Default escape key action

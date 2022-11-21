@@ -19,12 +19,33 @@ enum PlutoRowGroupDelegateType {
   bool get isByColumn => this == PlutoRowGroupDelegateType.byColumn;
 }
 
+/// {@template pluto_row_group_on_toggled}
+/// A callback that is called when a group row is expanded or collapsed.
+///
+/// For [row], [row.type] is a group.
+/// You can access the parent row with [row.parent].
+/// You can access child rows with [row.group.children].
+///
+/// If [expanded] is true, the group row is expanded, if false, it is collapsed.
+/// {@endtemplate}
+typedef PlutoRowGroupOnToggled = void Function({
+  required PlutoRow row,
+  required bool expanded,
+});
+
 /// Abstract class that defines a base interface for grouping rows.
 ///
 /// [PlutoRowGroupTreeDelegate] or [PlutoRowGroupByColumnDelegate]
 /// class implements this abstract class.
 abstract class PlutoRowGroupDelegate {
+  PlutoRowGroupDelegate({
+    this.onToggled,
+  });
+
   final countFormat = NumberFormat.compact();
+
+  /// {@macro pluto_row_group_on_toggled}
+  final PlutoRowGroupOnToggled? onToggled;
 
   /// {@macro pluto_row_group_delegate_type}
   PlutoRowGroupDelegateType get type;
@@ -131,6 +152,7 @@ class PlutoRowGroupTreeDelegate extends PlutoRowGroupDelegate {
     this.showFirstExpandableIcon = false,
     this.showCount = true,
     this.enableCompactCount = true,
+    super.onToggled,
   });
 
   /// {@macro pluto_row_group_delegate_type}
@@ -228,6 +250,7 @@ class PlutoRowGroupByColumnDelegate extends PlutoRowGroupDelegate {
     this.showFirstExpandableIcon = false,
     this.showCount = true,
     this.enableCompactCount = true,
+    super.onToggled,
   });
 
   /// {@macro pluto_row_group_delegate_type}

@@ -11,40 +11,59 @@ typedef PlutoAggregateFilter = bool Function(PlutoCell);
 
 /// {@template pluto_aggregate_column_type}
 /// Determine the aggregate type.
-///
-/// [sum] Returns the sum of all values.
-///
-/// [average] Returns the result of adding up all values and dividing by the number of elements.
-///
-/// [min] Returns the smallest value among all values.
-///
-/// [max] Returns the largest value out of all values.
-///
-/// [count] Returns the total count.
 /// {@endtemplate}
 enum PlutoAggregateColumnType {
+  /// Returns the sum of all values.
   sum,
+
+  /// Returns the result of adding up all values and dividing by the number of elements.
   average,
+
+  /// Returns the smallest value among all values.
   min,
+
+  /// Returns the largest value out of all values.
   max,
+
+  /// Returns the total count.
   count,
+}
+
+/// {@template pluto_aggregate_column_iterate_row_type}
+/// Determine the condition of the rows to be included in the aggregation.
+/// {@endtemplate}
+enum PlutoAggregateColumnIterateRowType {
+  /// Include all rows in the aggregation.
+  all,
+
+  /// Include the rows of the filtered result in the aggregation.
+  filtered,
+
+  /// Include rows from filtered and paginated results in aggregates.
+  filteredAndPaginated;
+
+  bool get isAll => this == PlutoAggregateColumnIterateRowType.all;
+
+  bool get isFiltered => this == PlutoAggregateColumnIterateRowType.filtered;
+
+  bool get isFilteredAndPaginated =>
+      this == PlutoAggregateColumnIterateRowType.filteredAndPaginated;
 }
 
 /// {@template pluto_aggregate_column_grouped_row_type}
 /// When grouping row is applied, set the condition of row to be aggregated.
-///
-/// [all] processes both groups and rows.
-///
-/// [expandedAll] processes only the group and the children of the expanded group.
-///
-/// [rows] processes non-group rows.
-///
-/// [expandedRows] processes only expanded rows, not groups.
 /// {@endtemplate}
 enum PlutoAggregateColumnGroupedRowType {
+  /// processes both groups and rows.
   all,
+
+  /// processes only the group and the children of the expanded group.
   expandedAll,
+
+  /// processes non-group rows.
   rows,
+
+  /// processes only expanded rows, not groups.
   expandedRows;
 
   bool get isAll => this == PlutoAggregateColumnGroupedRowType.all;
@@ -93,6 +112,9 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
 
   /// {@macro pluto_aggregate_column_type}
   final PlutoAggregateColumnType type;
+
+  /// {@macro pluto_aggregate_column_iterate_row_type}
+  final PlutoAggregateColumnIterateRowType iterateRowType;
 
   /// {@macro pluto_aggregate_column_grouped_row_type}
   final PlutoAggregateColumnGroupedRowType groupedRowType;
@@ -149,6 +171,8 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
   const PlutoAggregateColumnFooter({
     required this.rendererContext,
     required this.type,
+    this.iterateRowType =
+        PlutoAggregateColumnIterateRowType.filteredAndPaginated,
     this.groupedRowType = PlutoAggregateColumnGroupedRowType.all,
     this.filter,
     this.format = '#,###',
@@ -167,11 +191,6 @@ class PlutoAggregateColumnFooter extends PlutoStatefulWidget {
 
 class PlutoAggregateColumnFooterState
     extends PlutoStateWithChange<PlutoAggregateColumnFooter> {
-  @override
-  PlutoGridStateManager get stateManager => widget.rendererContext.stateManager;
-
-  PlutoColumn get column => widget.rendererContext.column;
-
   num? _aggregatedValue;
 
   late final NumberFormat _numberFormat;
@@ -182,27 +201,57 @@ class PlutoAggregateColumnFooterState
     PlutoAggregateFilter? filter,
   }) _aggregator;
 
-  Iterable<PlutoRow> get rows {
-    if (!stateManager.enabledRowGroups) return stateManager.refRows;
+  @override
+  PlutoGridStateManager get stateManager => widget.rendererContext.stateManager;
 
-    bool Function(PlutoRow)? filter;
-    Iterator<PlutoRow>? Function(PlutoRow)? childrenFilter;
+  PlutoColumn get column => widget.rendererContext.column;
 
-    if (widget.groupedRowType.isRowsOnly) {
-      filter = (r) => !r.type.isGroup;
+  Iterable<PlutoRow> get rows =>
+      stateManager.enabledRowGroups ? _groupedRows : _normalRows;
+
+  Iterable<PlutoRow> get _normalRows {
+    switch (widget.iterateRowType) {
+      case PlutoAggregateColumnIterateRowType.all:
+        return stateManager.refRows.originalList;
+      case PlutoAggregateColumnIterateRowType.filtered:
+        return stateManager.refRows.filterOrOriginalList;
+      case PlutoAggregateColumnIterateRowType.filteredAndPaginated:
+        return stateManager.refRows;
     }
+  }
 
-    if (widget.groupedRowType.isExpanded) {
-      childrenFilter = (r) => r.type.isGroup && r.type.group.expanded
-          ? r.type.group.children.iterator
-          : null;
+  Iterable<PlutoRow> get _groupedRows {
+    Iterable<PlutoRow> iterableRows;
+
+    switch (widget.iterateRowType) {
+      case PlutoAggregateColumnIterateRowType.all:
+        iterableRows = stateManager.iterateAllMainRowGroup;
+        break;
+      case PlutoAggregateColumnIterateRowType.filtered:
+        iterableRows = stateManager.iterateFilteredMainRowGroup;
+        break;
+      case PlutoAggregateColumnIterateRowType.filteredAndPaginated:
+        iterableRows = stateManager.iterateMainRowGroup;
+        break;
     }
 
     return PlutoRowGroupHelper.iterateWithFilter(
-      stateManager.iterateMainRowGroup,
-      iterateAll: false,
-      filter: filter,
-      childrenFilter: childrenFilter,
+      iterableRows,
+      filter: widget.groupedRowType.isRowsOnly ? (r) => !r.type.isGroup : null,
+      childrenFilter: (r) {
+        if (!r.type.isGroup ||
+            (widget.groupedRowType.isExpanded && !r.type.group.expanded)) {
+          return null;
+        }
+
+        switch (widget.iterateRowType) {
+          case PlutoAggregateColumnIterateRowType.all:
+            return r.type.group.children.originalList.iterator;
+          case PlutoAggregateColumnIterateRowType.filtered:
+          case PlutoAggregateColumnIterateRowType.filteredAndPaginated:
+            return r.type.group.children.iterator;
+        }
+      },
     );
   }
 
