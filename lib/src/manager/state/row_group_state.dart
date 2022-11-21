@@ -64,6 +64,11 @@ abstract class IRowGroupState {
   /// {@macro row_group_state_iterateRow}
   Iterable<PlutoRow> get iterateAllRow;
 
+  /// Regardless of pagination applied,
+  ///
+  /// {@macro row_group_state_iterateMainRowGroup}
+  Iterable<PlutoRow> get iterateFilteredMainRowGroup;
+
   /// With filtering or pagination applied,
   ///
   /// {@template row_group_state_iterateMainRowGroup}
@@ -186,6 +191,13 @@ mixin RowGroupState implements IPlutoGridState {
   @override
   Iterable<PlutoRow> get iterateAllRow sync* {
     for (final row in _iterateRow(iterateAllMainRowGroup)) {
+      yield row;
+    }
+  }
+
+  @override
+  Iterable<PlutoRow> get iterateFilteredMainRowGroup sync* {
+    for (final row in refRows.filterOrOriginalList.where(isMainRow)) {
       yield row;
     }
   }
