@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../helper/platform_helper.dart';
 import 'ui.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
@@ -80,8 +81,10 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
           scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
       isAlwaysShown: scrollbarConfig.isAlwaysShown,
       onlyDraggingThumb: scrollbarConfig.onlyDraggingThumb,
+      enableHover: PlatformHelper.isDesktop,
       thickness: scrollbarConfig.scrollbarThickness,
       thicknessWhileDragging: scrollbarConfig.scrollbarThicknessWhileDragging,
+      hoverWidth: scrollbarConfig.hoverWidth,
       mainAxisMargin: scrollbarConfig.mainAxisMargin,
       crossAxisMargin: scrollbarConfig.crossAxisMargin,
       scrollBarColor: scrollbarConfig.scrollBarColor,
