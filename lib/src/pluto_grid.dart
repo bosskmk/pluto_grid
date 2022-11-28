@@ -786,7 +786,8 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
   PlutoGridLayoutDelegate(this._stateManager, this._textDirection)
       : super(relayout: _stateManager.resizingChangeNotifier){
-    // _stateManager.setTextDirection(_textDirection);
+    // set textDirection before the first frame is laid-out
+    _stateManager.setTextDirection(_textDirection);
   }
 
   @override
