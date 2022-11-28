@@ -95,10 +95,9 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _handleOnPointMove(PointerMoveEvent event) {
-    _isPointMoving =
-        (_columnRightPosition - event.position).distanceSquared > 0.5;
+    _isPointMoving = true;
 
-    if (!_isPointMoving) {
+    if ((_columnRightPosition - event.position).distanceSquared <= 0.5) {
       return;
     }
 
