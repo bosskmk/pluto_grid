@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -662,6 +663,7 @@ class PlutoGridScrollbarConfig {
     this.scrollbarThickness = PlutoScrollbar.defaultThickness,
     this.scrollbarThicknessWhileDragging =
         PlutoScrollbar.defaultThicknessWhileDragging,
+    this.hoverWidth = PlutoScrollbar.defaultScrollbarHoverWidth,
     this.mainAxisMargin,
     this.crossAxisMargin,
     this.scrollBarColor,
@@ -669,6 +671,7 @@ class PlutoGridScrollbarConfig {
     this.scrollbarRadius = PlutoScrollbar.defaultRadius,
     this.scrollbarRadiusWhileDragging =
         PlutoScrollbar.defaultRadiusWhileDragging,
+    this.dragDevices,
   });
 
   final bool draggableScrollbar;
@@ -681,6 +684,8 @@ class PlutoGridScrollbarConfig {
   final double scrollbarThickness;
 
   final double scrollbarThicknessWhileDragging;
+
+  final double hoverWidth;
 
   final double? mainAxisMargin;
 
@@ -696,6 +701,8 @@ class PlutoGridScrollbarConfig {
 
   final Radius scrollbarRadiusWhileDragging;
 
+  final Set<PointerDeviceKind>? dragDevices;
+
   @override
   bool operator ==(covariant Object other) {
     return identical(this, other) ||
@@ -707,12 +714,15 @@ class PlutoGridScrollbarConfig {
             scrollbarThickness == other.scrollbarThickness &&
             scrollbarThicknessWhileDragging ==
                 other.scrollbarThicknessWhileDragging &&
+            hoverWidth == other.hoverWidth &&
             mainAxisMargin == other.mainAxisMargin &&
             crossAxisMargin == other.crossAxisMargin &&
             scrollBarColor == other.scrollBarColor &&
             scrollBarTrackColor == other.scrollBarTrackColor &&
             scrollbarRadius == other.scrollbarRadius &&
-            scrollbarRadiusWhileDragging == other.scrollbarRadiusWhileDragging;
+            scrollbarRadiusWhileDragging ==
+                other.scrollbarRadiusWhileDragging &&
+            dragDevices == other.dragDevices;
   }
 
   @override
@@ -722,12 +732,14 @@ class PlutoGridScrollbarConfig {
         onlyDraggingThumb,
         scrollbarThickness,
         scrollbarThicknessWhileDragging,
+        hoverWidth,
         mainAxisMargin,
         crossAxisMargin,
         scrollBarColor,
         scrollBarTrackColor,
         scrollbarRadius,
         scrollbarRadiusWhileDragging,
+        dragDevices,
       );
 }
 

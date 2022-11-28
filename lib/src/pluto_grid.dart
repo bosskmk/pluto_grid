@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'helper/platform_helper.dart';
 import 'ui/ui.dart';
 
 typedef PlutoOnLoadedEventCallback = void Function(
@@ -1211,8 +1212,9 @@ class _GridContainer extends StatelessWidget {
     return Focus(
       focusNode: stateManager.gridFocusNode,
       child: ScrollConfiguration(
-        behavior: const PlutoScrollBehavior().copyWith(
-          scrollbars: false,
+        behavior: PlutoScrollBehavior(
+          isMobile: PlatformHelper.isMobile,
+          userDragDevices: stateManager.configuration.scrollbar.dragDevices,
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -1467,13 +1469,41 @@ class PlutoRowColorContext {
 
 /// Extension class for [ScrollConfiguration.behavior] of [PlutoGrid].
 class PlutoScrollBehavior extends MaterialScrollBehavior {
-  const PlutoScrollBehavior() : super();
+  const PlutoScrollBehavior({
+    required this.isMobile,
+    Set<PointerDeviceKind>? userDragDevices,
+  })  : _dragDevices = userDragDevices ??
+            (isMobile ? _mobileDragDevices : _desktopDragDevices),
+        super();
+
+  final bool isMobile;
 
   @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+  Set<PointerDeviceKind> get dragDevices => _dragDevices;
+
+  final Set<PointerDeviceKind> _dragDevices;
+
+  static const Set<PointerDeviceKind> _mobileDragDevices = {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.invertedStylus,
+    PointerDeviceKind.unknown,
+  };
+
+  static const Set<PointerDeviceKind> _desktopDragDevices = {
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.unknown,
+  };
+
+  @override
+  Widget buildScrollbar(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
+  }
 }
 
 /// A class for changing the value of a nullable property in a method such as [copyWith].
