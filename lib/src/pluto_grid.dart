@@ -785,7 +785,9 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   final TextDirection _textDirection;
 
   PlutoGridLayoutDelegate(this._stateManager, this._textDirection)
-      : super(relayout: _stateManager.resizingChangeNotifier);
+      : super(relayout: _stateManager.resizingChangeNotifier){
+    // _stateManager.setTextDirection(_textDirection);
+  }
 
   @override
   void performLayout(Size size) {
@@ -1174,7 +1176,6 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
   void _performLayoutOnPostFrame(Size size) {
     bool update = false;
-
     if (_stateManager.showFrozenColumn !=
         _stateManager.shouldShowFrozenColumns(size.width)) {
       update = true;
