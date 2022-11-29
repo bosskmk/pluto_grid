@@ -1,3 +1,8 @@
+## [5.4.4] - 2022. 11. 29
+
+* Add hovered scrollbar.
+  https://pluto.weblaze.dev/scrollbar-and-scroll-behavior
+
 ## [5.4.3] - 2022. 11. 21
 
 * Add iterateRowType to PlutoAggregateColumnFooter.
