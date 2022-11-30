@@ -1,3 +1,10 @@
+## [5.4.5] - 2022. 11. 30
+
+* Fix RTL initiation flicker.   
+  By https://github.com/Milad-Akarie
+* Fix column context menu is triggered after drag (column resizing).  
+  By https://github.com/Milad-Akarie
+
 ## [5.4.4] - 2022. 11. 29
 
 * Add hovered scrollbar.
