@@ -786,7 +786,10 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   final TextDirection _textDirection;
 
   PlutoGridLayoutDelegate(this._stateManager, this._textDirection)
-      : super(relayout: _stateManager.resizingChangeNotifier);
+      : super(relayout: _stateManager.resizingChangeNotifier) {
+    // set textDirection before the first frame is laid-out
+    _stateManager.setTextDirection(_textDirection);
+  }
 
   @override
   void performLayout(Size size) {
@@ -1169,24 +1172,17 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return true;
+  bool shouldRelayout(covariant PlutoGridLayoutDelegate oldDelegate) {
+    final update = _textDirection != oldDelegate._textDirection;
+
+    if (update) _stateManager.performLayoutOnPostFrame();
+
+    return update;
   }
 
   void _performLayoutOnPostFrame(Size size) {
-    bool update = false;
-
     if (_stateManager.showFrozenColumn !=
         _stateManager.shouldShowFrozenColumns(size.width)) {
-      update = true;
-    }
-
-    if (_textDirection != _stateManager.textDirection) {
-      _stateManager.setTextDirection(_textDirection);
-      update = true;
-    }
-
-    if (update) {
       _stateManager.performLayoutOnPostFrame();
     }
   }
