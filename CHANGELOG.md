@@ -1,3 +1,9 @@
+## [5.4.6] - 2022. 11. 30
+
+* Fix keepAlive.  
+  Fixed a bug that slowed down when moving horizontally/vertically   
+  with the keyboard direction keys for a long time in succession.
+
 ## [5.4.5] - 2022. 11. 30
 
 * Fix RTL initiation flicker.   
