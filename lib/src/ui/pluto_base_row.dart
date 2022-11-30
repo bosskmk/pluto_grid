@@ -225,7 +225,8 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
       _getBoxDecoration(),
     );
 
-    setKeepAlive(stateManager.currentRowIdx == widget.rowIdx);
+    setKeepAlive(stateManager.isSelecting &&
+        stateManager.currentRowIdx == widget.rowIdx);
   }
 
   Color _getDefaultRowColor() {
