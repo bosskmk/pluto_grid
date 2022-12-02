@@ -1,3 +1,9 @@
+## [5.4.7] - 2022. 12. 2
+
+* Fix sorting bug.  
+  Fixed sorting issue with pagination applied.  
+  https://github.com/bosskmk/pluto_grid/issues/668
+
 ## [5.4.6] - 2022. 11. 30
 
 * Fix keepAlive.  
