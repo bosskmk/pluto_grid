@@ -2523,18 +2523,18 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void setTextDirection(_i5.TextDirection? textDirection) => super.noSuchMethod(
+  void notifyChangedShowFrozenColumn() => super.noSuchMethod(
         Invocation.method(
-          #setTextDirection,
-          [textDirection],
+          #notifyChangedShowFrozenColumn,
+          [],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void performLayoutOnPostFrame() => super.noSuchMethod(
+  void setTextDirection(_i5.TextDirection? textDirection) => super.noSuchMethod(
         Invocation.method(
-          #performLayoutOnPostFrame,
-          [],
+          #setTextDirection,
+          [textDirection],
         ),
         returnValueForMissingStub: null,
       );

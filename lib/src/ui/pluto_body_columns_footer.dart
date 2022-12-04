@@ -52,20 +52,13 @@ class PlutoBodyColumnsFooterState
       compare: listEquals,
     );
 
-    _itemCount = update<int>(_itemCount, _getItemCount());
+    _itemCount = update<int>(_itemCount, _columns.length);
   }
 
   List<PlutoColumn> _getColumns() {
-    final columns = stateManager.showFrozenColumn
+    return stateManager.showFrozenColumn
         ? stateManager.bodyColumns
         : stateManager.columns;
-    return stateManager.isLTR
-        ? columns
-        : columns.reversed.toList(growable: false);
-  }
-
-  int _getItemCount() {
-    return _columns.length;
   }
 
   PlutoVisibilityLayoutId _makeFooter(PlutoColumn e) {
@@ -88,10 +81,10 @@ class PlutoBodyColumnsFooterState
         delegate: ColumnFooterLayoutDelegate(
           stateManager: stateManager,
           columns: _columns,
+          textDirection: stateManager.textDirection,
         ),
         scrollController: _scroll,
         initialViewportDimension: MediaQuery.of(context).size.width,
-        textDirection: stateManager.textDirection,
         children: _columns.map(_makeFooter).toList(growable: false),
       ),
     );
@@ -103,9 +96,12 @@ class ColumnFooterLayoutDelegate extends MultiChildLayoutDelegate {
 
   final List<PlutoColumn> columns;
 
+  final TextDirection textDirection;
+
   ColumnFooterLayoutDelegate({
     required this.stateManager,
     required this.columns,
+    required this.textDirection,
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
@@ -121,8 +117,11 @@ class ColumnFooterLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? columns : columns.reversed;
     double dx = 0;
-    for (PlutoColumn col in columns) {
+
+    for (PlutoColumn col in items) {
       var width = col.width;
 
       if (hasChild(col.field)) {
