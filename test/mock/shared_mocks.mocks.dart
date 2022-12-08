@@ -193,7 +193,8 @@ class _FakePlutoChangeNotifierFilter_14<T> extends _i1.SmartFake
         );
 }
 
-class _FakePlutoAutoSize_15 extends _i1.SmartFake implements _i2.PlutoAutoSize {
+class _FakePlutoAutoSize_15<T> extends _i1.SmartFake
+    implements _i2.PlutoAutoSize<T> {
   _FakePlutoAutoSize_15(
     Object parent,
     Invocation parentInvocation,
@@ -1569,7 +1570,7 @@ class MockPlutoGridStateManager extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i2.PlutoAutoSize getColumnsAutoSizeHelper({
+  _i2.PlutoAutoSize<dynamic> getColumnsAutoSizeHelper({
     required Iterable<_i2.PlutoColumn>? columns,
     required double? maxWidth,
   }) =>
@@ -1582,7 +1583,7 @@ class MockPlutoGridStateManager extends _i1.Mock
             #maxWidth: maxWidth,
           },
         ),
-        returnValue: _FakePlutoAutoSize_15(
+        returnValue: _FakePlutoAutoSize_15<dynamic>(
           this,
           Invocation.method(
             #getColumnsAutoSizeHelper,
@@ -1593,7 +1594,7 @@ class MockPlutoGridStateManager extends _i1.Mock
             },
           ),
         ),
-        returnValueForMissingStub: _FakePlutoAutoSize_15(
+        returnValueForMissingStub: _FakePlutoAutoSize_15<dynamic>(
           this,
           Invocation.method(
             #getColumnsAutoSizeHelper,
@@ -1604,7 +1605,7 @@ class MockPlutoGridStateManager extends _i1.Mock
             },
           ),
         ),
-      ) as _i2.PlutoAutoSize);
+      ) as _i2.PlutoAutoSize<dynamic>);
   @override
   _i2.PlutoResize<dynamic> getColumnsResizeHelper({
     required List<_i2.PlutoColumn>? columns,

@@ -18,40 +18,44 @@ abstract class IVisibilityLayoutState {
 mixin VisibilityLayoutState implements IPlutoGridState {
   @override
   void updateVisibilityLayout({bool notify = false}) {
-    if (refColumns.isEmpty) {
-      return;
+    if (refColumns.isEmpty) return;
+
+    _updateColumnSize();
+
+    _updateColumnPosition();
+
+    updateScrollViewport();
+
+    if (notify) scroll.horizontal?.notifyListeners();
+  }
+
+  void _updateColumnSize() {
+    if (!activatedColumnsAutoSize) return;
+
+    double offset = 0;
+
+    if (showFrozenColumn) {
+      if (hasLeftFrozenColumns) {
+        offset += PlutoGridSettings.gridBorderWidth;
+      }
+
+      if (hasRightFrozenColumns) {
+        offset += PlutoGridSettings.gridBorderWidth;
+      }
     }
 
+    getColumnsAutoSizeHelper(
+      columns: refColumns,
+      maxWidth: maxWidth! - offset,
+    ).update();
+  }
+
+  void _updateColumnPosition() {
     double leftX = 0;
     double bodyX = 0;
     double rightX = 0;
 
-    PlutoAutoSize? autoSizeHelper;
-
-    if (activatedColumnsAutoSize) {
-      double offsetMaxWidth = maxWidth!;
-
-      if (showFrozenColumn) {
-        if (hasLeftFrozenColumns) {
-          offsetMaxWidth -= PlutoGridSettings.gridBorderWidth;
-        }
-
-        if (hasRightFrozenColumns) {
-          offsetMaxWidth -= PlutoGridSettings.gridBorderWidth;
-        }
-      }
-
-      autoSizeHelper = getColumnsAutoSizeHelper(
-        columns: refColumns,
-        maxWidth: offsetMaxWidth,
-      );
-    }
-
     for (final column in refColumns) {
-      if (autoSizeHelper != null) {
-        column.width = autoSizeHelper.getItemSize(column.width);
-      }
-
       if (showFrozenColumn) {
         switch (column.frozen) {
           case PlutoColumnFrozen.none:
@@ -72,12 +76,6 @@ mixin VisibilityLayoutState implements IPlutoGridState {
         column.frozen = PlutoColumnFrozen.none;
         bodyX += column.width;
       }
-    }
-
-    updateScrollViewport();
-
-    if (notify) {
-      scroll.horizontal?.notifyListeners();
     }
   }
 }

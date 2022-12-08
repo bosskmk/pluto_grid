@@ -563,6 +563,10 @@ mixin ColumnState implements IPlutoGridState {
       PlutoMoveDirection.right,
       correctHorizontalOffset,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      activateColumnsAutoSize();
+    });
   }
 
   @override
