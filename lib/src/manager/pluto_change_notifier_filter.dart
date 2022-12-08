@@ -113,8 +113,8 @@ abstract class PlutoChangeNotifierFilterResolver {
       stateManager.setShowColumnFooter.hashCode: 'setShowColumnFooter',
       stateManager.setShowColumnFilter.hashCode: 'setShowColumnFilter',
       stateManager.setShowLoading.hashCode: 'setShowLoading',
-      stateManager.performLayoutOnPostFrame.hashCode:
-          'performLayoutOnPostFrame',
+      stateManager.notifyChangedShowFrozenColumn.hashCode:
+          'notifyChangedShowFrozenColumn',
 
       /// pagination_state
       stateManager.setPageSize.hashCode: 'setPageSize',
@@ -197,7 +197,7 @@ class PlutoNotifierFilterResolverDefault
       stateManager.removeColumns.hashCode,
       stateManager.moveColumn.hashCode,
       stateManager.hideColumn.hashCode,
-      stateManager.performLayoutOnPostFrame.hashCode,
+      stateManager.notifyChangedShowFrozenColumn.hashCode,
     };
   }
 
@@ -210,7 +210,7 @@ class PlutoNotifierFilterResolverDefault
       stateManager.hideColumn.hashCode,
       stateManager.setShowColumnGroups.hashCode,
       stateManager.removeColumnsInColumnGroup.hashCode,
-      stateManager.performLayoutOnPostFrame.hashCode,
+      stateManager.notifyChangedShowFrozenColumn.hashCode,
     };
   }
 
@@ -237,7 +237,7 @@ class PlutoNotifierFilterResolverDefault
       stateManager.moveRowsByIndex.hashCode,
       stateManager.setRowGroup.hashCode,
       stateManager.toggleExpandedRowGroup.hashCode,
-      stateManager.performLayoutOnPostFrame.hashCode,
+      stateManager.notifyChangedShowFrozenColumn.hashCode,
       stateManager.setPage.hashCode,
       stateManager.setPageSize.hashCode,
     };

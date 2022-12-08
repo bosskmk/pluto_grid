@@ -16,7 +16,6 @@ class PlutoVisibilityLayout extends RenderObjectWidget
     required this.delegate,
     required this.scrollController,
     this.initialViewportDimension = 1920,
-    this.textDirection = TextDirection.ltr,
   });
 
   @override
@@ -30,15 +29,12 @@ class PlutoVisibilityLayout extends RenderObjectWidget
   /// it is used instead of viewportDimension of scroll.
   final double initialViewportDimension;
 
-  final TextDirection textDirection;
-
   @override
   PlutoVisibilityLayoutRenderObjectElement createElement() =>
       PlutoVisibilityLayoutRenderObjectElement(
         widget: this,
         scrollController: scrollController,
         initialViewportDimension: initialViewportDimension,
-        textDirection: textDirection,
       );
 
   @override
@@ -61,15 +57,12 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     required PlutoVisibilityLayout widget,
     required this.scrollController,
     this.initialViewportDimension = 1920,
-    this.textDirection = TextDirection.ltr,
   })  : assert(!debugChildrenHaveDuplicateKeys(widget, widget.children)),
         super(widget);
 
   final ScrollController scrollController;
 
   final double initialViewportDimension;
-
-  TextDirection textDirection;
 
   @override
   ContainerRenderObjectMixin<RenderObject,
@@ -90,11 +83,7 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
   final Set<Element> _forgottenChildren = HashSet<Element>();
 
   Iterable<PlutoVisibilityLayoutId> get _widgetChildren {
-    if (textDirection == TextDirection.ltr) {
-      return (widget as PlutoVisibilityLayout).children;
-    }
-
-    return (widget as PlutoVisibilityLayout).children.reversed;
+    return (widget as PlutoVisibilityLayout).children;
   }
 
   double get _visibleFirst => scrollController.offset;
@@ -290,8 +279,6 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     super.update(newWidget);
 
     assert(widget == newWidget);
-
-    textDirection = newWidget.textDirection;
 
     assert(!debugChildrenHaveDuplicateKeys(
       widget,

@@ -118,9 +118,9 @@ abstract class ILayoutState {
 
   void notifyResizingListeners();
 
-  void setTextDirection(TextDirection textDirection);
+  void notifyChangedShowFrozenColumn();
 
-  void performLayoutOnPostFrame();
+  void setTextDirection(TextDirection textDirection);
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -396,22 +396,22 @@ mixin LayoutState implements IPlutoGridState {
 
   @override
   void setLayout(BoxConstraints size) {
-    final showFrozenColumn = shouldShowFrozenColumns(size.maxWidth);
-    final bool changedShowFrozenColumn = showFrozenColumn != showFrozenColumn;
-    final bool changedMaxWidth = maxWidth != size.maxWidth;
+    final firstLayout = maxWidth == null;
+    final changedSize = _updateSize(size, firstLayout);
+    final changedShowFrozen = _updateShowFrozenColumn(
+      size: size,
+      firstLayout: firstLayout,
+      changedSize: changedSize,
+    );
+    final bool updateVisibility =
+        changedShowFrozen || firstLayout || changedSize;
+    final bool notifyResizing = !firstLayout && changedSize;
 
-    _state._maxWidth = size.maxWidth;
-    _state._maxHeight = size.maxHeight;
-    _state._showFrozenColumn = showFrozenColumn;
-    _state._gridGlobalOffset = null;
+    if (updateVisibility) updateVisibilityLayout();
 
-    if (changedShowFrozenColumn || changedMaxWidth) {
-      updateVisibilityLayout();
+    if (notifyResizing) notifyResizingListeners();
 
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        notifyResizingListeners();
-      });
-    }
+    if (changedShowFrozen) notifyChangedShowFrozenColumn();
 
     if (enableColumnsAutoSize && !activatedColumnsAutoSize) {
       activateColumnsAutoSize();
@@ -498,18 +498,46 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  void setTextDirection(TextDirection textDirection) {
-    _state._textDirection = textDirection;
+  void notifyChangedShowFrozenColumn() {
+    notifyListeners(true, notifyChangedShowFrozenColumn.hashCode);
   }
 
   @override
-  void performLayoutOnPostFrame() {
-    notifyListenersOnPostFrame(true, performLayoutOnPostFrame.hashCode);
+  void setTextDirection(TextDirection textDirection) {
+    _state._textDirection = textDirection;
   }
 
   @override
   @visibleForTesting
   void setGridGlobalOffset(Offset offset) {
     _state._gridGlobalOffset = offset;
+  }
+
+  bool _updateSize(BoxConstraints size, bool firstLayout) {
+    final changedMaxWidth = !firstLayout && maxWidth != size.maxWidth;
+
+    _state._maxWidth = size.maxWidth;
+    _state._maxHeight = size.maxHeight;
+
+    return changedMaxWidth;
+  }
+
+  bool _updateShowFrozenColumn({
+    required BoxConstraints size,
+    required bool firstLayout,
+    required bool changedSize,
+  }) {
+    final updateShowFrozen = firstLayout || changedSize;
+
+    final showFrozen = updateShowFrozen
+        ? shouldShowFrozenColumns(size.maxWidth)
+        : _state._showFrozenColumn!;
+
+    final changedShowFrozen =
+        !firstLayout && _state._showFrozenColumn != showFrozen;
+
+    _state._showFrozenColumn = showFrozen;
+
+    return changedShowFrozen;
   }
 }
