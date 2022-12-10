@@ -41,42 +41,34 @@ enum PlutoAutoSizeMode {
 
 /// Returns the auto-sizing class according to
 /// [PlutoAutoSizeMode.equal] or [PlutoAutoSizeMode.scale].
-///
-/// {@template exceeds_max_size}
-/// If [itemMinSize] * [length] is greater than [maxSize],
-/// all items are changed to [itemMinSize]
-/// The total size of items exceeds [maxSize].
-/// {@endtemplate}
-///
-/// {@template auto_size_scale_mode}
-/// If [mode] is [PlutoAutoSizeMode.scale], you must pass the value of [scale].
-/// If the screen size is 1,000 and the total width of the items is 500
-/// scale is 1,000 / 500 = 2
-/// In this case, the size of the items is doubled.
-/// {@endtemplate}
 class PlutoAutoSizeHelper {
-  static PlutoAutoSize items({
+  static PlutoAutoSize items<T>({
     required double maxSize,
-    required int length,
-    required double itemMinSize,
+    required Iterable<T> items,
+    required bool Function(T) isSuppressed,
+    required double Function(T) getItemSize,
+    required double Function(T) getItemMinSize,
+    required void Function(T, double) setItemSize,
     required PlutoAutoSizeMode mode,
-    double? scale,
   }) {
-    if (mode.isScale) assert(scale != null);
-
     switch (mode) {
       case PlutoAutoSizeMode.equal:
-        return PlutoAutoSizeEqual(
+        return PlutoAutoSizeEqual<T>(
           maxSize: maxSize,
-          length: length,
-          itemMinSize: itemMinSize,
+          items: items,
+          isSuppressedItem: isSuppressed,
+          getItemSize: getItemSize,
+          getItemMinSize: getItemMinSize,
+          setItemSize: setItemSize,
         );
       case PlutoAutoSizeMode.scale:
-        return PlutoAutoSizeScale(
+        return PlutoAutoSizeScale<T>(
           maxSize: maxSize,
-          length: length,
-          scale: scale!,
-          itemMinSize: itemMinSize,
+          items: items,
+          isSuppressedItem: isSuppressed,
+          getItemSize: getItemSize,
+          getItemMinSize: getItemMinSize,
+          setItemSize: setItemSize,
         );
       case PlutoAutoSizeMode.none:
         throw Exception('Mode cannot be called with PlutoAutoSizeMode.none.');
@@ -84,134 +76,130 @@ class PlutoAutoSizeHelper {
   }
 }
 
-abstract class PlutoAutoSize {
-  double getItemSize(double originalSize);
+abstract class PlutoAutoSize<T> {
+  const PlutoAutoSize({
+    required this.maxSize,
+    required this.items,
+    required this.isSuppressedItem,
+    required this.getItemSize,
+    required this.getItemMinSize,
+    required this.setItemSize,
+  });
+
+  /// Total size the item will occupy.
+  final double maxSize;
+
+  /// List of items to set size for.
+  final Iterable<T> items;
+
+  /// A callback to override the auto size setting.
+  final bool Function(T) isSuppressedItem;
+
+  /// A callback that returns the original size of the item.
+  final double Function(T) getItemSize;
+
+  /// A callback that returns the minimum size of an item.
+  final double Function(T) getItemMinSize;
+
+  /// Callback for setting the size of the item.
+  final void Function(T, double) setItemSize;
+
+  /// Call the [setItemSize] callback while traversing the [items] list.
+  void update();
 }
 
 /// Change the width of the items equally within the [maxSize] range.
-///
-/// [getItemSize] must be called for the length of the items.
-///
-/// {@macro exceeds_max_size}
-class PlutoAutoSizeEqual implements PlutoAutoSize {
-  PlutoAutoSizeEqual({
-    required this.maxSize,
-    required this.length,
-    required this.itemMinSize,
-  })  : _eachSize = maxSize / length,
-        _overSize = length * itemMinSize > maxSize;
-
-  final double maxSize;
-
-  final int length;
-
-  final double itemMinSize;
-
-  final double _eachSize;
-
-  final bool _overSize;
-
-  int _count = 1;
-
-  double _accumulateSize = 0;
+class PlutoAutoSizeEqual<T> extends PlutoAutoSize<T> {
+  const PlutoAutoSizeEqual({
+    required super.maxSize,
+    required super.items,
+    required super.isSuppressedItem,
+    required super.getItemSize,
+    required super.getItemMinSize,
+    required super.setItemSize,
+  });
 
   @override
-  double getItemSize(double originalSize) {
-    assert(_count <= length);
+  void update() {
+    final length = items.length;
 
-    double size = _overSize ? itemMinSize : _eachSize;
+    double eachSize = maxSize / length;
 
-    if (_overSize) {
-      size = itemMinSize;
-    } else {
-      size = _eachSize;
-
-      // Last item
-      if (_count == length) {
-        size = maxSize - _accumulateSize;
-
-        ++_count;
-
-        return size;
-      }
+    bool isSuppressed(T e) {
+      return isSuppressedItem(e) || eachSize < getItemMinSize(e);
     }
 
-    _accumulateSize += size;
+    final suppressedItems = items.where(isSuppressed);
 
-    ++_count;
+    if (suppressedItems.isNotEmpty) {
+      final totalSuppressedSize = suppressedItems.fold<double>(0, (p, e) {
+        return p + (isSuppressedItem(e) ? getItemSize(e) : getItemMinSize(e));
+      });
 
-    return size;
+      eachSize =
+          (maxSize - totalSuppressedSize) / (length - suppressedItems.length);
+    }
+
+    for (final item in items) {
+      if (isSuppressedItem(item)) continue;
+
+      setItemSize(item, max(eachSize, getItemMinSize(item)));
+    }
   }
 }
 
 /// Change the size of items according to the ratio.
-///
-/// [getItemSize] must be called for the length of the items.
-///
-/// {@macro exceeds_max_size}
-///
-/// {@macro auto_size_scale_mode}
-class PlutoAutoSizeScale implements PlutoAutoSize {
-  PlutoAutoSizeScale({
-    required this.maxSize,
-    required this.length,
-    required this.scale,
-    required this.itemMinSize,
-  }) : _overSize = length * itemMinSize > maxSize;
-
-  final double maxSize;
-
-  final int length;
-
-  final double scale;
-
-  final double itemMinSize;
-
-  final bool _overSize;
-
-  int _count = 1;
-
-  double _accumulateSize = 0;
+class PlutoAutoSizeScale<T> extends PlutoAutoSize<T> {
+  const PlutoAutoSizeScale({
+    required super.maxSize,
+    required super.items,
+    required super.isSuppressedItem,
+    required super.getItemSize,
+    required super.getItemMinSize,
+    required super.setItemSize,
+  });
 
   @override
-  double getItemSize(double originalSize) {
-    assert(_count <= length);
+  void update() {
+    final length = items.length;
 
-    double size;
+    double effectiveMaxSize = maxSize;
 
-    if (_overSize) {
-      size = itemMinSize;
-    } else {
-      size = max(originalSize * scale, itemMinSize).roundToDouble();
+    double totalWidth = items.fold<double>(0, (p, e) => p += getItemSize(e));
 
-      final remaining = maxSize - _accumulateSize - size;
+    double scale = maxSize / totalWidth;
 
-      final remainingCount = length - _count;
-
-      if (remainingCount > 0) {
-        final remainingMinSize = remaining / remainingCount;
-
-        if (remainingMinSize < itemMinSize) {
-          double needingSize =
-              remainingCount * (itemMinSize - remainingMinSize);
-
-          size -= needingSize;
-        }
-      }
-
-      // Last item
-      if (_count == length) {
-        ++_count;
-
-        return maxSize - _accumulateSize;
-      }
+    bool isSuppressed(T e) {
+      return isSuppressedItem(e) || getItemSize(e) * scale < getItemMinSize(e);
     }
 
-    _accumulateSize += size;
+    final suppressedItems = items.where(isSuppressed);
 
-    ++_count;
+    if (suppressedItems.isNotEmpty) {
+      final totalSuppressedSize = suppressedItems.fold<double>(0, (p, e) {
+        return p + (isSuppressedItem(e) ? getItemSize(e) : getItemMinSize(e));
+      });
 
-    return size;
+      effectiveMaxSize = maxSize - totalSuppressedSize;
+
+      totalWidth = items.whereNot(isSuppressed).fold(0, (p, e) {
+        return p + getItemSize(e);
+      });
+
+      scale = effectiveMaxSize / totalWidth;
+    }
+
+    for (int i = 0; i < length; i += 1) {
+      final item = items.elementAt(i);
+
+      if (isSuppressedItem(item)) continue;
+
+      final minSize = getItemMinSize(item);
+
+      final size = max(minSize, getItemSize(item) * scale);
+
+      setItemSize(item, size);
+    }
   }
 }
 

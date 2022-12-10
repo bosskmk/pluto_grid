@@ -90,10 +90,10 @@ class PlutoBaseRow extends StatelessWidget {
               delegate: _RowCellsLayoutDelegate(
                 stateManager: stateManager,
                 columns: columns,
+                textDirection: stateManager.textDirection,
               ),
               scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
-              textDirection: stateManager.textDirection,
               children: columns.map(_makeCell).toList(growable: false),
             )
           : CustomMultiChildLayout(
@@ -101,6 +101,7 @@ class PlutoBaseRow extends StatelessWidget {
               delegate: _RowCellsLayoutDelegate(
                 stateManager: stateManager,
                 columns: columns,
+                textDirection: stateManager.textDirection,
               ),
               children: columns.map(_makeCell).toList(growable: false),
             ),
@@ -122,9 +123,12 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   final List<PlutoColumn> columns;
 
+  final TextDirection textDirection;
+
   _RowCellsLayoutDelegate({
     required this.stateManager,
     required this.columns,
+    required this.textDirection,
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
@@ -139,9 +143,11 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? columns : columns.reversed;
     double dx = 0;
 
-    for (var element in columns) {
+    for (var element in items) {
       var width = element.width;
 
       if (hasChild(element.field)) {

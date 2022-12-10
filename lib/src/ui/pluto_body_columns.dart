@@ -72,12 +72,9 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
   }
 
   List<PlutoColumn> _getColumns() {
-    final columns = stateManager.showFrozenColumn
+    return stateManager.showFrozenColumn
         ? stateManager.bodyColumns
         : stateManager.columns;
-    return stateManager.isLTR
-        ? columns
-        : columns.reversed.toList(growable: false);
   }
 
   int _getItemCount() {
@@ -119,10 +116,10 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
           columns: _columns,
           columnGroups: _columnGroups,
           frozen: PlutoColumnFrozen.none,
+          textDirection: stateManager.textDirection,
         ),
         scrollController: _scroll,
         initialViewportDimension: MediaQuery.of(context).size.width,
-        textDirection: stateManager.textDirection,
         children: _showColumnGroups == true
             ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
             : _columns.map(_makeColumn).toList(growable: false),
@@ -140,11 +137,14 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
 
   final PlutoColumnFrozen frozen;
 
+  final TextDirection textDirection;
+
   MainColumnLayoutDelegate({
     required this.stateManager,
     required this.columns,
     required this.columnGroups,
     required this.frozen,
+    required this.textDirection,
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
@@ -173,10 +173,13 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+
     if (stateManager.showColumnGroups) {
+      final items = isLTR ? columnGroups : columnGroups.reversed;
       double dx = 0;
 
-      for (PlutoColumnGroupPair pair in columnGroups) {
+      for (PlutoColumnGroupPair pair in items) {
         final double width = pair.columns.fold<double>(
           0,
           (previousValue, element) => previousValue + element.width,
@@ -195,9 +198,10 @@ class MainColumnLayoutDelegate extends MultiChildLayoutDelegate {
         dx += width;
       }
     } else {
+      final items = isLTR ? columns : columns.reversed;
       double dx = 0;
 
-      for (PlutoColumn col in columns) {
+      for (PlutoColumn col in items) {
         var width = col.width;
 
         if (hasChild(col.field)) {

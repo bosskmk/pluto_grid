@@ -6,6 +6,7 @@ class _ResizeItem {
     required this.index,
     required this.size,
     required this.minSize,
+    this.suppressed = false,
   });
 
   final int index;
@@ -13,6 +14,8 @@ class _ResizeItem {
   double size;
 
   final double minSize;
+
+  final bool suppressed;
 }
 
 void main() {
@@ -22,10 +25,13 @@ void main() {
 
       test('mode 를 none 으로 호출하면 예외가 발생 되어야 한다.', () {
         expect(() {
-          PlutoAutoSizeHelper.items(
+          PlutoAutoSizeHelper.items<_ResizeItem>(
             maxSize: 100,
-            length: 1,
-            itemMinSize: 80,
+            items: [],
+            isSuppressed: (i) => false,
+            getItemSize: (i) => i.size,
+            getItemMinSize: (i) => i.minSize,
+            setItemSize: (i, size) => i.size = size,
             mode: mode,
           );
         }, throwsException);
@@ -35,156 +41,173 @@ void main() {
     group('PlutoAutoSizeMode.equal.', () {
       const mode = PlutoAutoSizeMode.equal;
 
-      test('getItemSize 가 length 보다 많이 호출 되면 assertion 이 발생 되어야 한다.', () {
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: 100,
-          length: 1,
-          itemMinSize: 80,
-          mode: mode,
-        );
+      test('각 아이템의 사이즈가 동일하게 설정 되어야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 120, minSize: 50),
+          _ResizeItem(index: 2, size: 130, minSize: 50),
+          _ResizeItem(index: 3, size: 140, minSize: 50),
+          _ResizeItem(index: 4, size: 150, minSize: 50),
+        ];
 
-        expect(() {
-          helper.getItemSize(100);
-          helper.getItemSize(100);
-        }, throwsAssertionError);
-      });
-
-      test('maxSize 범위에서 5번의 getItemSize 호출이 100 을 리턴해야 한다.', () {
-        final helper = PlutoAutoSizeHelper.items(
+        PlutoAutoSizeHelper.items<_ResizeItem>(
           maxSize: 500,
-          length: 5,
-          itemMinSize: 80,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
           mode: mode,
-        );
+        ).update();
 
-        expect(helper.getItemSize(100), 100);
-        expect(helper.getItemSize(100), 100);
-        expect(helper.getItemSize(100), 100);
-        expect(helper.getItemSize(100), 100);
-        expect(helper.getItemSize(100), 100);
+        expect(items[0].size, 100);
+        expect(items[1].size, 100);
+        expect(items[2].size, 100);
+        expect(items[3].size, 100);
+        expect(items[4].size, 100);
       });
 
-      test('maxSize 가 length * itemMinSize 보다 작은 경우 itemMinSize.', () {
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: 380,
-          length: 5,
-          itemMinSize: 80,
-          mode: mode,
-        );
+      test(
+          '각 아이템의 최소크기의 합계 보다 maxSize 가 작은 경우, '
+          '각 아이템은 minSize 로 설정 되어야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 120, minSize: 50),
+          _ResizeItem(index: 2, size: 130, minSize: 50),
+          _ResizeItem(index: 3, size: 140, minSize: 50),
+          _ResizeItem(index: 4, size: 150, minSize: 50),
+        ];
 
-        expect(helper.getItemSize(100), 80);
-        expect(helper.getItemSize(100), 80);
-        expect(helper.getItemSize(100), 80);
-        expect(helper.getItemSize(100), 80);
-        expect(helper.getItemSize(100), 80);
+        PlutoAutoSizeHelper.items<_ResizeItem>(
+          maxSize: 200,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
+          mode: mode,
+        ).update();
+
+        expect(items[0].size, 50);
+        expect(items[1].size, 50);
+        expect(items[2].size, 50);
+        expect(items[3].size, 50);
+        expect(items[4].size, 50);
       });
 
-      test('maxSize 가 length * itemMinSize 보다 큰 경우 마지막 아이템은 남은 넓이.', () {
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: 502,
-          length: 3,
-          itemMinSize: 80,
-          mode: mode,
-        );
+      test('suppressed 인 아이템의 경우 사이즈가 변경되지 않아야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 120, minSize: 50, suppressed: true),
+          _ResizeItem(index: 2, size: 130, minSize: 50),
+          _ResizeItem(index: 3, size: 140, minSize: 50, suppressed: true),
+          _ResizeItem(index: 4, size: 150, minSize: 50, suppressed: true),
+        ];
 
-        double size = 502 / 3;
-        double lastSize = 502 - (size + size);
-        expect(helper.getItemSize(100), size);
-        expect(helper.getItemSize(100), size);
-        expect(helper.getItemSize(100), lastSize);
+        PlutoAutoSizeHelper.items<_ResizeItem>(
+          maxSize: 200,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
+          mode: mode,
+        ).update();
+
+        expect(items[0].size, 50);
+        expect(items[1].size, 120);
+        expect(items[2].size, 50);
+        expect(items[3].size, 140);
+        expect(items[4].size, 150);
       });
     });
 
     group('PlutoAutoSizeMode.scale.', () {
       const mode = PlutoAutoSizeMode.scale;
 
-      test('scale 이 null 이면 assertion 이 발생 되어야 한다.', () {
-        expect(() {
-          PlutoAutoSizeHelper.items(
-            maxSize: 100,
-            length: 1,
-            itemMinSize: 80,
-            mode: mode,
-            scale: null,
-          );
-        }, throwsAssertionError);
-      });
+      test('각 아이템의 사이즈가 비율에 맞게 설정 되어야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 200, minSize: 50),
+          _ResizeItem(index: 2, size: 200, minSize: 50),
+          _ResizeItem(index: 3, size: 100, minSize: 50),
+          _ResizeItem(index: 4, size: 100, minSize: 50),
+        ];
 
-      test('getItemSize 가 length 보다 많이 호출 되면 assertion 이 발생 되어야 한다.', () {
-        const mode = PlutoAutoSizeMode.scale;
+        final double scale = 500 / items.fold(0, (p, e) => p + e.size);
 
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: 100,
-          length: 1,
-          itemMinSize: 80,
-          mode: mode,
-          scale: 1,
-        );
-
-        expect(() {
-          helper.getItemSize(100);
-          helper.getItemSize(100);
-        }, throwsAssertionError);
-      });
-
-      test('maxSize 가 length * itemMinSize 보다 작으면 itemMinSize.', () {
-        final helper = PlutoAutoSizeHelper.items(
+        PlutoAutoSizeHelper.items<_ResizeItem>(
           maxSize: 500,
-          length: 5,
-          itemMinSize: 120,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
           mode: mode,
-          scale: 1,
-        );
+        ).update();
 
-        expect(helper.getItemSize(150), 120);
-        expect(helper.getItemSize(150), 120);
-        expect(helper.getItemSize(150), 120);
-        expect(helper.getItemSize(150), 120);
-        expect(helper.getItemSize(150), 120);
+        expect(items[0].size, 100 * scale);
+        expect(items[1].size, 200 * scale);
+        expect(items[2].size, 200 * scale);
+        expect(items[3].size, 100 * scale);
+        expect(items[4].size, 100 * scale);
       });
 
-      test('scale 2.', () {
-        const maxSize = 1000.0;
-        final originalSize = <double>[100, 150, 50, 80, 120];
-        // scale 2 : maxSize 1000 / originalSize 500
-        final scale =
-            maxSize / originalSize.fold<double>(0, (pre, e) => pre + e);
+      test(
+          '각 아이템의 최소크기의 합계 보다 maxSize 가 작은 경우, '
+          '각 아이템은 minSize 로 설정 되어야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 200, minSize: 50),
+          _ResizeItem(index: 2, size: 200, minSize: 50),
+          _ResizeItem(index: 3, size: 100, minSize: 50),
+          _ResizeItem(index: 4, size: 100, minSize: 50),
+        ];
 
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: maxSize,
-          length: originalSize.length,
-          itemMinSize: 50,
+        PlutoAutoSizeHelper.items<_ResizeItem>(
+          maxSize: 200,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
           mode: mode,
-          scale: scale,
-        );
+        ).update();
 
-        expect(helper.getItemSize(originalSize[0]), originalSize[0] * 2);
-        expect(helper.getItemSize(originalSize[1]), originalSize[1] * 2);
-        expect(helper.getItemSize(originalSize[2]), originalSize[2] * 2);
-        expect(helper.getItemSize(originalSize[3]), originalSize[3] * 2);
-        expect(helper.getItemSize(originalSize[4]), originalSize[4] * 2);
+        expect(items[0].size, 50);
+        expect(items[1].size, 50);
+        expect(items[2].size, 50);
+        expect(items[3].size, 50);
+        expect(items[4].size, 50);
       });
 
-      test('scale 0.5.', () {
-        const maxSize = 250.0;
-        final originalSize = <double>[100, 150, 50, 80, 120];
-        // scale 2 : maxSize 250 / originalSize 500
-        final scale =
-            maxSize / originalSize.fold<double>(0, (pre, e) => pre + e);
+      test('suppressed 인 아이템의 경우 사이즈가 변경되지 않아야 한다.', () {
+        final items = [
+          _ResizeItem(index: 0, size: 100, minSize: 50),
+          _ResizeItem(index: 1, size: 120, minSize: 50, suppressed: true),
+          _ResizeItem(index: 2, size: 130, minSize: 50),
+          _ResizeItem(index: 3, size: 140, minSize: 50, suppressed: true),
+          _ResizeItem(index: 4, size: 150, minSize: 50, suppressed: true),
+        ];
 
-        final helper = PlutoAutoSizeHelper.items(
-          maxSize: maxSize,
-          length: originalSize.length,
-          itemMinSize: 25,
+        // (전체 - suppressed 사이즈) / suppressed 가 아닌 아이템 사이즈
+        const scale = (1000 - 410) / 230;
+
+        PlutoAutoSizeHelper.items<_ResizeItem>(
+          maxSize: 1000,
+          items: items,
+          isSuppressed: (i) => i.suppressed,
+          getItemSize: (i) => i.size,
+          getItemMinSize: (i) => i.minSize,
+          setItemSize: (i, size) => i.size = size,
           mode: mode,
-          scale: scale,
-        );
+        ).update();
 
-        expect(helper.getItemSize(originalSize[0]), originalSize[0] / 2);
-        expect(helper.getItemSize(originalSize[1]), originalSize[1] / 2);
-        expect(helper.getItemSize(originalSize[2]), originalSize[2] / 2);
-        expect(helper.getItemSize(originalSize[3]), originalSize[3] / 2);
-        expect(helper.getItemSize(originalSize[4]), originalSize[4] / 2);
+        expect(items[0].size, 100 * scale);
+        expect(items[1].size, 120);
+        expect(items[2].size, 130 * scale);
+        expect(items[3].size, 140);
+        expect(items[4].size, 150);
       });
     });
   });

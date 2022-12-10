@@ -46,15 +46,9 @@ class PlutoLeftFrozenRowsState
   void updateState(PlutoNotifierEvent event) {
     forceUpdate();
 
-    _columns = _getColumns();
+    _columns = stateManager.leftFrozenColumns;
 
     _rows = stateManager.refRows;
-  }
-
-  List<PlutoColumn> _getColumns() {
-    return stateManager.isLTR
-        ? stateManager.leftFrozenColumns
-        : stateManager.leftFrozenColumns.reversed.toList(growable: false);
   }
 
   @override

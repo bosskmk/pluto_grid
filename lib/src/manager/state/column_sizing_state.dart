@@ -91,20 +91,14 @@ mixin ColumnSizingState implements IPlutoGridState {
     assert(columnsAutoSizeMode.isNone == false);
     assert(columns.isNotEmpty);
 
-    double? scale;
-
-    if (columnsAutoSizeMode.isScale) {
-      final totalWidth = columns.fold<double>(0, (pre, e) => pre += e.width);
-
-      scale = maxWidth / totalWidth;
-    }
-
-    return PlutoAutoSizeHelper.items(
+    return PlutoAutoSizeHelper.items<PlutoColumn>(
       maxSize: maxWidth,
-      length: columns.length,
-      itemMinSize: PlutoGridSettings.minColumnWidth,
+      items: columns,
+      isSuppressed: (e) => e.suppressedAutoSize,
+      getItemSize: (e) => e.width,
+      getItemMinSize: (e) => e.minWidth,
+      setItemSize: (e, size) => e.width = size,
       mode: columnsAutoSizeMode,
-      scale: scale,
     );
   }
 
