@@ -1,3 +1,9 @@
+## [5.4.8] - 2022. 12. 10
+
+* Add suppressed auto size of column.
+* Fix china locale.
+* Modify didUpdateWidget.
+
 ## [5.4.7] - 2022. 12. 2
 
 * Fix sorting bug.  
