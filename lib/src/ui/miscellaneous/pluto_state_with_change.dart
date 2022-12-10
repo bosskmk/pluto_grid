@@ -63,6 +63,13 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
   }
 
   @override
+  void didUpdateWidget(covariant T oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    updateState(PlutoNotifierEventForceUpdate.instance);
+  }
+
+  @override
   void dispose() {
     _subscription.cancel();
 
