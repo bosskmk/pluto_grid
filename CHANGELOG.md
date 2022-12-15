@@ -1,3 +1,7 @@
+## [5.4.9] - 2022. 12. 15
+
+* Fix sortIdx bug.
+
 ## [5.4.8] - 2022. 12. 10
 
 * Add suppressed auto size of column.
