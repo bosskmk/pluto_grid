@@ -860,9 +860,16 @@ void main() {
         stateManager.prependNewRows();
 
         // then
+        // 추가된 행의 기본 값 및 sortIdx
         expect(stateManager.rows.length, 6);
+        expect(
+          stateManager.rows[0].cells['text0']!.value,
+          columns[0].type.defaultValue,
+        );
+        expect(stateManager.rows[0].sortIdx, 0);
         // 원래 있던 첫번 째 Row 의 셀이 두번 째로 이동
         expect(stateManager.rows[1].cells['text0']!.value, 'text0 value 0');
+        expect(stateManager.rows[1].sortIdx, 1);
       },
     );
 
@@ -890,6 +897,7 @@ void main() {
         expect(stateManager.rows.length, 10);
         // 원래 있던 첫번 째 Row 의 셀이 6번 째로 이동
         expect(stateManager.rows[5].cells['text0']!.value, 'text0 value 0');
+        expect(stateManager.rows[5].sortIdx, 5);
       },
     );
   });
@@ -918,6 +926,7 @@ void main() {
 
       // then
       expect(stateManager.rows[0].key, newRow.key);
+      expect(stateManager.rows[0].sortIdx, 0);
       expect(stateManager.rows.length, 6);
     });
 
@@ -1052,6 +1061,8 @@ void main() {
           scroll: null,
         );
 
+        expect(stateManager.rows[4].sortIdx, 4);
+
         // when
         stateManager.appendNewRows();
 
@@ -1062,6 +1073,9 @@ void main() {
           stateManager.rows[5].cells['text0']!.value,
           columns[0].type.defaultValue,
         );
+        // sortIdx 가 마지막
+        expect(stateManager.rows[4].sortIdx, 4);
+        expect(stateManager.rows[5].sortIdx, 5);
       },
     );
 
@@ -1096,6 +1110,9 @@ void main() {
           stateManager.rows[9].cells['text0']!.value,
           columns[0].type.defaultValue,
         );
+        // sortIdx
+        expect(stateManager.rows[5].sortIdx, 5);
+        expect(stateManager.rows[9].sortIdx, 9);
       },
     );
   });
@@ -1125,6 +1142,8 @@ void main() {
       // then
       expect(stateManager.rows[5].key, newRows[0].key);
       expect(stateManager.rows[6].key, newRows[1].key);
+      expect(stateManager.rows[5].sortIdx, 5);
+      expect(stateManager.rows[6].sortIdx, 6);
       expect(stateManager.rows.length, 7);
     });
 
