@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -571,18 +572,13 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void autoFitColumn(BuildContext context, PlutoColumn column) {
-    final String maxValue = refRows.fold('', (previousValue, element) {
+    final String maxValue = refRows.fold(column.title, (previousValue, element) {
       final value = column.formattedValueForDisplay(
-        element.cells.entries
-            .firstWhere((element) => element.key == column.field)
-            .value
-            .value,
+        element.cells.entries.firstWhere((element) => element.key == column.field).value.value,
       );
-
       if (previousValue.length < value.length) {
         return value;
       }
-
       return previousValue;
     });
 
@@ -595,22 +591,27 @@ mixin ColumnState implements IPlutoGridState {
 
     TextPainter textPainter = TextPainter(
       text: textSpan,
-      textDirection: TextDirection.ltr,
+      textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
     );
 
     textPainter.layout();
 
-    // todo : Apply (popup type icon, checkbox, drag indicator, renderer)
+    // todo : Apply (renderer)
 
-    EdgeInsets cellPadding =
-        column.cellPadding ?? configuration.style.defaultCellPadding;
+    EdgeInsets cellPadding = column.cellPadding ?? style.defaultCellPadding;
+    EdgeInsets titlePadding = column.titlePadding ?? style.defaultColumnTitlePadding;
+
+
+    final calculatedWidths = [
+      math.max(titlePadding.horizontal, cellPadding.horizontal),
+      if (column.enableRowChecked) _getEffectiveCheckboxWidth(context),
+      if (column.isShowRightIcon) style.iconSize,
+      2,
+    ].reduce((acc, a) => acc + a);
 
     resizeColumn(
       column,
-      textPainter.width -
-          column.width +
-          (cellPadding.left + cellPadding.right) +
-          2,
+      textPainter.width - column.width + calculatedWidths
     );
   }
 
@@ -1019,9 +1020,7 @@ mixin ColumnState implements IPlutoGridState {
       return false;
     }
 
-    final columns = showFrozenColumn
-        ? leftFrozenColumns + bodyColumns + rightFrozenColumns
-        : refColumns;
+    final columns = showFrozenColumn ? leftFrozenColumns + bodyColumns + rightFrozenColumns : refColumns;
 
     final resizeHelper = getColumnsResizeHelper(
       columns: columns,
@@ -1030,5 +1029,19 @@ mixin ColumnState implements IPlutoGridState {
     );
 
     return resizeHelper.update();
+  }
+
+  double _getEffectiveCheckboxWidth(BuildContext context) {
+    final theme = Theme.of(context);
+    late double width;
+    switch (theme.materialTapTargetSize) {
+      case MaterialTapTargetSize.padded:
+        width = kMinInteractiveDimension;
+        break;
+      case MaterialTapTargetSize.shrinkWrap:
+        width = kMinInteractiveDimension - 8.0;
+        break;
+    }
+    return width + theme.visualDensity.baseSizeAdjustment.dx;
   }
 }
