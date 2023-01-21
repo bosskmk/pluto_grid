@@ -37,21 +37,11 @@ class PlutoLeftFrozenColumnsFooterState
   void updateState(PlutoNotifierEvent event) {
     _columns = update<List<PlutoColumn>>(
       _columns,
-      _getColumns(),
+      stateManager.leftFrozenColumns,
       compare: listEquals,
     );
 
-    _itemCount = update<int>(_itemCount, _getItemCount());
-  }
-
-  List<PlutoColumn> _getColumns() {
-    return stateManager.isLTR
-        ? stateManager.leftFrozenColumns
-        : stateManager.leftFrozenColumns.reversed.toList(growable: false);
-  }
-
-  int _getItemCount() {
-    return _columns.length;
+    _itemCount = update<int>(_itemCount, _columns.length);
   }
 
   Widget _makeColumn(PlutoColumn e) {
@@ -70,6 +60,7 @@ class PlutoLeftFrozenColumnsFooterState
       delegate: ColumnFooterLayoutDelegate(
         stateManager: stateManager,
         columns: _columns,
+        textDirection: stateManager.textDirection,
       ),
       children: _columns.map(_makeColumn).toList(growable: false),
     );

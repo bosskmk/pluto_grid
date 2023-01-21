@@ -90,6 +90,10 @@ class PlutoCell {
       return _value;
     }
 
+    if (_needToApplyFormatOnInit) {
+      _applyFormatOnInit();
+    }
+
     return _column!.type.makeCompareValue(_value);
   }
 

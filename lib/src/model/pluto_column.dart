@@ -135,6 +135,10 @@ class PlutoColumn {
   /// ```
   PlutoColumnFooterRenderer? footerRenderer;
 
+  /// If [PlutoAutoSizeMode] is enabled,
+  /// column autoscaling is ignored if [suppressedAutoSize] is true.
+  bool suppressedAutoSize;
+
   /// Change the position of the column by dragging the column title.
   bool enableColumnDrag;
 
@@ -209,6 +213,7 @@ class PlutoColumn {
     this.backgroundColor,
     this.renderer,
     this.footerRenderer,
+    this.suppressedAutoSize = false,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,

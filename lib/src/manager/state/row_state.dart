@@ -466,19 +466,21 @@ mixin RowState implements IPlutoGridState {
     if (enabledRowGroups) {
       insertRowGroup(safetyIndex, rows);
     } else {
-      final bool append = index >= refRows.length;
+      final bool append = refRows.isNotEmpty && index >= refRows.length;
       final targetIdx = append ? refRows.length - 1 : safetyIndex;
       final target = refRows.isEmpty ? null : refRows[targetIdx];
+      int sortIdx = target?.sortIdx ?? 0;
+      if (append) ++sortIdx;
 
-      _setSortIdx(rows: rows, start: target?.sortIdx ?? 0);
+      _setSortIdx(rows: rows, start: sortIdx);
 
       if (hasSortedColumn) {
         _increaseSortIdxGreaterThanOrEqual(
           rows: refRows.originalList,
-          compare: target?.sortIdx ?? 0,
+          compare: sortIdx,
           increase: rows.length,
         );
-      } else {
+      } else if (!append) {
         _increaseSortIdx(
           rows: refRows.originalList,
           start: target == null ? 0 : refRows.originalList.indexOf(target),

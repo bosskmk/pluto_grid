@@ -45,7 +45,7 @@ class PlutoLeftFrozenColumnsState
 
     _columns = update<List<PlutoColumn>>(
       _columns,
-      _getColumns(),
+      stateManager.leftFrozenColumns,
       compare: listEquals,
     );
 
@@ -58,12 +58,6 @@ class PlutoLeftFrozenColumnsState
     );
 
     _itemCount = update<int>(_itemCount, _getItemCount());
-  }
-
-  List<PlutoColumn> _getColumns() {
-    return stateManager.isLTR
-        ? stateManager.leftFrozenColumns
-        : stateManager.leftFrozenColumns.reversed.toList(growable: false);
   }
 
   int _getItemCount() {
@@ -99,6 +93,7 @@ class PlutoLeftFrozenColumnsState
         columns: _columns,
         columnGroups: _columnGroups,
         frozen: PlutoColumnFrozen.start,
+        textDirection: stateManager.textDirection,
       ),
       children: _showColumnGroups == true
           ? _columnGroups.map(_makeColumnGroup).toList(growable: false)

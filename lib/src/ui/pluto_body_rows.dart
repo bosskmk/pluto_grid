@@ -62,12 +62,9 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   }
 
   List<PlutoColumn> _getColumns() {
-    final columns = stateManager.showFrozenColumn == true
+    return stateManager.showFrozenColumn == true
         ? stateManager.bodyColumns
         : stateManager.columns;
-    return stateManager.isLTR
-        ? columns
-        : columns.reversed.toList(growable: false);
   }
 
   @override

@@ -202,14 +202,23 @@ class _ColumnGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     if (columnGroup.group.hasFields) {
       return CustomMultiChildLayout(
-        delegate: ColumnsLayout(stateManager, columnGroup.columns),
+        delegate: ColumnsLayout(
+          stateManager: stateManager,
+          columns: columnGroup.columns,
+          textDirection: stateManager.textDirection,
+        ),
         children:
             columnGroup.columns.map(_makeFieldWidget).toList(growable: false),
       );
     }
 
     return CustomMultiChildLayout(
-      delegate: ColumnGroupLayout(stateManager, _separateLinkedGroup, depth),
+      delegate: ColumnGroupLayout(
+        stateManager: stateManager,
+        separateLinkedGroups: _separateLinkedGroup,
+        depth: depth,
+        textDirection: stateManager.textDirection,
+      ),
       children:
           _separateLinkedGroup.map(_makeChildWidget).toList(growable: false),
     );
@@ -217,16 +226,22 @@ class _ColumnGroup extends StatelessWidget {
 }
 
 class ColumnGroupLayout extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumnGroupPair> separateLinkedGroups;
+  final List<PlutoColumnGroupPair> separateLinkedGroups;
+
+  final int depth;
+
+  final TextDirection textDirection;
+
+  ColumnGroupLayout({
+    required this.stateManager,
+    required this.separateLinkedGroups,
+    required this.depth,
+    required this.textDirection,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   late double totalHeightOfGroup;
-
-  int depth;
-
-  ColumnGroupLayout(this.stateManager, this.separateLinkedGroups, this.depth)
-      : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   Size getSize(BoxConstraints constraints) {
@@ -249,9 +264,11 @@ class ColumnGroupLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? separateLinkedGroups : separateLinkedGroups.reversed;
     double dx = 0;
 
-    for (PlutoColumnGroupPair pair in separateLinkedGroups) {
+    for (PlutoColumnGroupPair pair in items) {
       final double width = pair.columns.fold<double>(
         0,
         (previousValue, element) => previousValue + element.width,
@@ -276,12 +293,17 @@ class ColumnGroupLayout extends MultiChildLayoutDelegate {
 }
 
 class ColumnsLayout extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumn> columns;
+  final List<PlutoColumn> columns;
 
-  ColumnsLayout(this.stateManager, this.columns)
-      : super(relayout: stateManager.resizingChangeNotifier);
+  final TextDirection textDirection;
+
+  ColumnsLayout({
+    required this.stateManager,
+    required this.columns,
+    required this.textDirection,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
 
@@ -303,9 +325,11 @@ class ColumnsLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? columns : columns.reversed;
     double dx = 0;
 
-    for (PlutoColumn col in columns) {
+    for (PlutoColumn col in items) {
       final double width = col.width;
 
       var boxConstraints = BoxConstraints.tight(

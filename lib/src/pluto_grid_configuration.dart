@@ -1073,9 +1073,9 @@ class PlutoGridLocaleText {
     // Date popup
     this.sunday = '日',
     this.monday = '一',
-    this.tuesday = '四',
+    this.tuesday = '二',
     this.wednesday = '三',
-    this.thursday = '二',
+    this.thursday = '四',
     this.friday = '五',
     this.saturday = '六',
     // Time column popup
