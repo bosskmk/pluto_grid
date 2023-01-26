@@ -149,8 +149,8 @@ class _AddAndRemoveColumnRowScreenState
         onChanged: (PlutoGridOnChangedEvent event) {
           print(event);
 
-          if (event.row!.cells['status']!.value == 'saved') {
-            event.row!.cells['status']!.value = 'edited';
+          if (event.row.cells['status']!.value == 'saved') {
+            event.row.cells['status']!.value = 'edited';
           }
 
           stateManager.notifyListeners();
@@ -354,7 +354,7 @@ class _HeaderState extends State<_Header> {
             DropdownButtonHideUnderline(
               child: DropdownButton(
                 value: gridSelectingMode,
-                items: PlutoGridStateManager.selectingModes
+                items: PlutoGridSelectingMode.values
                     .map<DropdownMenuItem<PlutoGridSelectingMode>>(
                         (PlutoGridSelectingMode item) {
                   final color = gridSelectingMode == item ? Colors.blue : null;

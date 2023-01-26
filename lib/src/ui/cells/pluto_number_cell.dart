@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'decimal_input_formatter.dart';
 import 'text_cell.dart';
 
 class PlutoNumberCell extends StatefulWidget implements TextCell {
@@ -37,64 +38,40 @@ class PlutoNumberCellState extends State<PlutoNumberCell>
 
   late final bool allowFirstDot;
 
-  @override
-  TextInputType get keyboardType => TextInputType.number;
+  late final String decimalSeparator;
 
   @override
-  List<TextInputFormatter>? get inputFormatters => [
-        DecimalTextInputFormatter(
-          decimalRange: decimalRange,
-          activatedNegativeValues: activatedNegative,
-          allowFirstDot: allowFirstDot,
-        ),
-      ];
+  late final TextInputType keyboardType;
+
+  @override
+  late final List<TextInputFormatter>? inputFormatters;
 
   @override
   void initState() {
     super.initState();
 
-    decimalRange = widget.column.type.number!.decimalPoint;
+    final numberColumn = widget.column.type.number;
 
-    activatedNegative = widget.column.type.number!.negative;
+    decimalRange = numberColumn.decimalPoint;
 
-    allowFirstDot = widget.column.type.number!.allowFirstDot;
-  }
-}
+    activatedNegative = numberColumn.negative;
 
-// https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input
-class DecimalTextInputFormatter extends TextInputFormatter {
-  DecimalTextInputFormatter({
-    int? decimalRange,
-    required bool activatedNegativeValues,
-    required bool allowFirstDot,
-  }) : assert(decimalRange == null || decimalRange >= 0,
-            'DecimalTextInputFormatter declaration error') {
-    String dp = (decimalRange != null && decimalRange > 0)
-        ? '([.][0-9]{0,$decimalRange}){0,1}'
-        : '';
-    String num = '[0-9]*$dp';
+    allowFirstDot = numberColumn.allowFirstDot;
 
-    if (activatedNegativeValues) {
-      final firstSymbols = allowFirstDot ? '[-.]' : '[-]';
+    decimalSeparator = numberColumn.numberFormat.symbols.DECIMAL_SEP;
 
-      _exp = RegExp(
-        '^(((($firstSymbols){0,1})|(($firstSymbols){0,1}[0-9]$num))){0,1}\$',
-      );
-    } else {
-      _exp = RegExp('^($num){0,1}\$');
-    }
-  }
+    inputFormatters = [
+      DecimalTextInputFormatter(
+        decimalRange: decimalRange,
+        activatedNegativeValues: activatedNegative,
+        allowFirstDot: allowFirstDot,
+        decimalSeparator: decimalSeparator,
+      ),
+    ];
 
-  late RegExp _exp;
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    if (_exp.hasMatch(newValue.text)) {
-      return newValue;
-    }
-    return oldValue;
+    keyboardType = TextInputType.numberWithOptions(
+      decimal: decimalRange > 0,
+      signed: activatedNegative,
+    );
   }
 }

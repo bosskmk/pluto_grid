@@ -66,6 +66,30 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       field: 'working_time',
       type: PlutoColumnType.time(),
     ),
+    PlutoColumn(
+      title: 'salary',
+      field: 'salary',
+      type: PlutoColumnType.currency(),
+      footerRenderer: (rendererContext) {
+        return PlutoAggregateColumnFooter(
+          rendererContext: rendererContext,
+          formatAsCurrency: true,
+          type: PlutoAggregateColumnType.sum,
+          format: '#,###',
+          alignment: Alignment.center,
+          titleSpanBuilder: (text) {
+            return [
+              const TextSpan(
+                text: 'Sum',
+                style: TextStyle(color: Colors.red),
+              ),
+              const TextSpan(text: ' : '),
+              TextSpan(text: text),
+            ];
+          },
+        );
+      },
+    ),
   ];
 
   final List<PlutoRow> rows = [
@@ -77,6 +101,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'role': PlutoCell(value: 'Programmer'),
         'joined': PlutoCell(value: '2021-01-01'),
         'working_time': PlutoCell(value: '09:00'),
+        'salary': PlutoCell(value: 300),
       },
     ),
     PlutoRow(
@@ -87,6 +112,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'role': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
         'working_time': PlutoCell(value: '10:00'),
+        'salary': PlutoCell(value: 400),
       },
     ),
     PlutoRow(
@@ -97,6 +123,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'role': PlutoCell(value: 'Owner'),
         'joined': PlutoCell(value: '2021-03-01'),
         'working_time': PlutoCell(value: '11:00'),
+        'salary': PlutoCell(value: 700),
       },
     ),
   ];
@@ -126,6 +153,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           columnGroups: columnGroups,
           onLoaded: (PlutoGridOnLoadedEvent event) {
             stateManager = event.stateManager;
+            stateManager.setShowColumnFilter(true);
           },
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);

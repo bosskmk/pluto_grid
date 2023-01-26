@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseRow extends StatelessWidget {
   final int rowIdx;
 
@@ -60,7 +62,7 @@ class PlutoBaseRow extends StatelessWidget {
     );
   }
 
-  PlutoVisibilityLayoutId _buildCell(PlutoColumn column) {
+  PlutoVisibilityLayoutId _makeCell(PlutoColumn column) {
     return PlutoVisibilityLayoutId(
       id: column.field,
       child: PlutoBaseCell(
@@ -80,7 +82,7 @@ class PlutoBaseRow extends StatelessWidget {
       rowIdx: rowIdx,
       row: row,
       enableRowColorAnimation:
-          stateManager.configuration!.style.enableRowColorAnimation,
+          stateManager.configuration.style.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
       child: visibilityLayout
           ? PlutoVisibilityLayout(
@@ -88,19 +90,20 @@ class PlutoBaseRow extends StatelessWidget {
               delegate: _RowCellsLayoutDelegate(
                 stateManager: stateManager,
                 columns: columns,
+                textDirection: stateManager.textDirection,
               ),
-              scrollController: stateManager.scroll!.bodyRowsHorizontal!,
+              scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
-              textDirection: stateManager.textDirection,
-              children: columns.map(_buildCell).toList(growable: false),
+              children: columns.map(_makeCell).toList(growable: false),
             )
           : CustomMultiChildLayout(
               key: ValueKey('rowContainer_${row.key}_row'),
               delegate: _RowCellsLayoutDelegate(
                 stateManager: stateManager,
                 columns: columns,
+                textDirection: stateManager.textDirection,
               ),
-              children: columns.map(_buildCell).toList(growable: false),
+              children: columns.map(_makeCell).toList(growable: false),
             ),
     );
   }
@@ -120,9 +123,12 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   final List<PlutoColumn> columns;
 
+  final TextDirection textDirection;
+
   _RowCellsLayoutDelegate({
     required this.stateManager,
     required this.columns,
+    required this.textDirection,
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
@@ -137,9 +143,11 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? columns : columns.reversed;
     double dx = 0;
 
-    for (var element in columns) {
+    for (var element in items) {
       var width = element.width;
 
       if (hasChild(element.field)) {
@@ -200,31 +208,31 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   BoxDecoration _decoration = const BoxDecoration();
 
-  Color get _oddRowColor =>
-      stateManager.configuration!.style.oddRowColor == null
-          ? stateManager.configuration!.style.rowColor
-          : stateManager.configuration!.style.oddRowColor!;
+  Color get _oddRowColor => stateManager.configuration.style.oddRowColor == null
+      ? stateManager.configuration.style.rowColor
+      : stateManager.configuration.style.oddRowColor!;
 
   Color get _evenRowColor =>
-      stateManager.configuration!.style.evenRowColor == null
-          ? stateManager.configuration!.style.rowColor
-          : stateManager.configuration!.style.evenRowColor!;
+      stateManager.configuration.style.evenRowColor == null
+          ? stateManager.configuration.style.rowColor
+          : stateManager.configuration.style.evenRowColor!;
 
   @override
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _decoration = update<BoxDecoration>(
       _decoration,
       _getBoxDecoration(),
     );
 
-    setKeepAlive(stateManager.currentRowIdx == widget.rowIdx);
+    setKeepAlive(stateManager.isSelecting &&
+        stateManager.currentRowIdx == widget.rowIdx);
   }
 
   Color _getDefaultRowColor() {
@@ -251,7 +259,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     Color color = _getDefaultRowColor();
 
     if (isDragTarget) {
-      color = stateManager.configuration!.style.cellColorInReadOnlyState;
+      color = stateManager.configuration.style.cellColorInReadOnlyState;
     } else {
       final bool checkCurrentRow = !stateManager.selectingMode.isRow &&
           isFocusedCurrentRow &&
@@ -261,13 +269,12 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
           stateManager.isSelectedRow(widget.row.key);
 
       if (checkCurrentRow || checkSelectedRow) {
-        color = stateManager.configuration!.style.activatedColor;
+        color = stateManager.configuration.style.activatedColor;
       }
     }
 
     return isCheckedRow
-        ? Color.alphaBlend(
-            stateManager.configuration!.style.checkedColor, color)
+        ? Color.alphaBlend(stateManager.configuration.style.checkedColor, color)
         : color;
   }
 
@@ -313,18 +320,18 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
         top: isTopDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: stateManager.configuration!.style.activatedBorderColor,
+                color: stateManager.configuration.style.activatedBorderColor,
               )
             : BorderSide.none,
         bottom: isBottomDragTarget
             ? BorderSide(
                 width: PlutoGridSettings.rowBorderWidth,
-                color: stateManager.configuration!.style.activatedBorderColor,
+                color: stateManager.configuration.style.activatedBorderColor,
               )
-            : stateManager.configuration!.style.enableCellBorderHorizontal
+            : stateManager.configuration.style.enableCellBorderHorizontal
                 ? BorderSide(
                     width: PlutoGridSettings.rowBorderWidth,
-                    color: stateManager.configuration!.style.borderColor,
+                    color: stateManager.configuration.style.borderColor,
                   )
                 : BorderSide.none,
       ),
@@ -365,9 +372,6 @@ class _AnimatedOrNormalContainer extends StatelessWidget {
             decoration: decoration,
             child: child,
           )
-        : Container(
-            decoration: decoration,
-            child: child,
-          );
+        : DecoratedBox(decoration: decoration, child: child);
   }
 }

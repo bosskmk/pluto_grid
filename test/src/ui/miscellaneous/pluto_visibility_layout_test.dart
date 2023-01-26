@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/src/ui/miscellaneous/pluto_visibility_layout.dart';
 
-import 'pluto_visibility_layout_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
 const double childHeight = 50;
 const double defaultChildWidth = 200;
@@ -100,10 +99,6 @@ class _TestDelegate extends MultiChildLayoutDelegate {
   }
 }
 
-@GenerateMocks([], customMocks: [
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-  MockSpec<ScrollPosition>(returnNullOnMissingStub: true),
-])
 void main() {
   late MultiChildLayoutDelegate delegate;
 

@@ -6,6 +6,9 @@ typedef PlutoColumnValueFormatter = String Function(dynamic value);
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
 
+typedef PlutoColumnFooterRenderer = Widget Function(
+    PlutoColumnFooterRendererContext context);
+
 /// It dynamically determines whether the cells of the column are in the edit state.
 ///
 /// Once the [readOnly] value is set,
@@ -71,6 +74,8 @@ class PlutoColumn {
   PlutoColumnTextAlign titleTextAlign;
 
   /// Freeze the column to the left and right.
+  /// If the total width of the non-frozen column is 200 or less,
+  /// it is processed to be unfreeze even if the frozen column is set.
   PlutoColumnFrozen frozen;
 
   /// Set column sorting.
@@ -86,8 +91,53 @@ class PlutoColumn {
 
   Color? backgroundColor;
 
-  /// Rendering for cell widget.
+  /// Customize the widget in the default cell.
+  ///
+  /// ```dart
+  /// renderer: (rendererContext) {
+  ///  Color textColor = Colors.black;
+  ///
+  ///  if (rendererContext.cell.value == 'red') {
+  ///    textColor = Colors.red;
+  ///  } else if (rendererContext.cell.value == 'blue') {
+  ///    textColor = Colors.blue;
+  ///  } else if (rendererContext.cell.value == 'green') {
+  ///    textColor = Colors.green;
+  ///  }
+  ///
+  ///  return Text(
+  ///    rendererContext.cell.value.toString(),
+  ///    style: TextStyle(
+  ///      color: textColor,
+  ///      fontWeight: FontWeight.bold,
+  ///    ),
+  ///  );
+  /// },
+  /// ```
+  ///
+  /// Consider wrapping a RepaintBoundary widget
+  /// if you are defining custom cells with high paint cost.
   PlutoColumnRenderer? renderer;
+
+  /// A callback that returns a widget
+  /// for expressing aggregate values at the bottom.
+  ///
+  /// ```dart
+  /// footerRenderer: (rendererContext) {
+  ///   return PlutoAggregateColumnFooter(
+  ///     rendererContext: rendererContext,
+  ///     type: PlutoAggregateColumnType.count,
+  ///     format: 'Checked : #,###.###',
+  ///     filter: (cell) => cell.row.checked == true,
+  ///     alignment: Alignment.center,
+  ///   );
+  /// },
+  /// ```
+  PlutoColumnFooterRenderer? footerRenderer;
+
+  /// If [PlutoAutoSizeMode] is enabled,
+  /// column autoscaling is ignored if [suppressedAutoSize] is true.
+  bool suppressedAutoSize;
 
   /// Change the position of the column by dragging the column title.
   bool enableColumnDrag;
@@ -162,6 +212,8 @@ class PlutoColumn {
     this.applyFormatterInEditing = false,
     this.backgroundColor,
     this.renderer,
+    this.footerRenderer,
+    this.suppressedAutoSize = false,
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,
@@ -231,12 +283,8 @@ class PlutoColumn {
   /// or whether the columns in the center area are displayed in the screen area.
   double startPosition = 0;
 
-  bool checkReadOnly(PlutoRow? row, PlutoCell? cell) {
-    if (!hasCheckReadOnly || row == null || cell == null) {
-      return readOnly;
-    }
-
-    return _checkReadOnly!(row, cell);
+  bool checkReadOnly(PlutoRow row, PlutoCell cell) {
+    return hasCheckReadOnly ? _checkReadOnly!(row, cell) : readOnly;
   }
 
   void setFilterFocusNode(FocusNode? node) {
@@ -248,8 +296,8 @@ class PlutoColumn {
   }
 
   String formattedValueForType(dynamic value) {
-    if (type.isNumber) {
-      return type.number!.applyFormat(value);
+    if (type is PlutoColumnTypeWithNumberFormat) {
+      return type.applyFormat(value);
     }
 
     return value.toString();
@@ -264,6 +312,16 @@ class PlutoColumn {
   }
 
   String formattedValueForDisplayInEditing(dynamic value) {
+    if (type is PlutoColumnTypeWithNumberFormat) {
+      return value.toString().replaceFirst(
+            '.',
+            (type as PlutoColumnTypeWithNumberFormat)
+                .numberFormat
+                .symbols
+                .DECIMAL_SEP,
+          );
+    }
+
     if (formatter != null) {
       final bool allowFormatting =
           readOnly || type.isSelect || type.isTime || type.isDate;
@@ -293,6 +351,17 @@ class PlutoColumnRendererContext {
     required this.rowIdx,
     required this.row,
     required this.cell,
+    required this.stateManager,
+  });
+}
+
+class PlutoColumnFooterRendererContext {
+  final PlutoColumn column;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoColumnFooterRendererContext({
+    required this.column,
     required this.stateManager,
   });
 }

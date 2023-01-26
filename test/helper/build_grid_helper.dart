@@ -39,7 +39,34 @@ class BuildGridHelper {
     await tester.pumpAndSettle();
   }
 
-  buildSelectedRows({
+  Future<void> selectCells({
+    required String startCellValue,
+    required String endCellValue,
+    required WidgetTester tester,
+  }) async {
+    final startCell = find.text(startCellValue);
+
+    final targetCell = find.text(endCellValue);
+
+    final startPosition = tester.getCenter(startCell);
+
+    final targetPosition = tester.getCenter(targetCell);
+
+    gesture = await tester.startGesture(startPosition);
+
+    await tester.longPress(startCell);
+
+    await gesture.moveTo(
+      targetPosition,
+      timeStamp: const Duration(milliseconds: 10),
+    );
+
+    await gesture.up();
+
+    await tester.pumpAndSettle();
+  }
+
+  PlutoWidgetTestHelper buildSelectedRows({
     required int numberOfRows,
     required int startRowIdx,
     required int endRowIdx,
@@ -94,6 +121,51 @@ class BuildGridHelper {
         final length = (startRowIdx - endRowIdx).abs() + 1;
 
         expect(stateManager.currentSelectingRows.length, length);
+      },
+    );
+  }
+
+  PlutoWidgetTestHelper build({
+    List<PlutoColumn>? columns,
+    List<PlutoRow>? rows,
+    int numberOfColumns = 1,
+    int numberOfRows = 1,
+    int startColumnIndex = 1,
+    String columnName = 'column',
+    PlutoGridSelectingMode selectingMode = PlutoGridSelectingMode.none,
+  }) {
+    // given
+    final safetyColumns = columns ??
+        ColumnHelper.textColumn(
+          columnName,
+          count: numberOfColumns,
+          start: startColumnIndex,
+        );
+
+    final safetyRows = rows ??
+        RowHelper.count(
+          numberOfRows,
+          safetyColumns,
+          start: startColumnIndex,
+        );
+
+    return PlutoWidgetTestHelper(
+      'build with selecting rows.',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Material(
+              child: PlutoGrid(
+                columns: safetyColumns,
+                rows: safetyRows,
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                  stateManager.setSelectingMode(selectingMode);
+                },
+              ),
+            ),
+          ),
+        );
       },
     );
   }

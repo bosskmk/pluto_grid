@@ -1,6 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import 'ui.dart';
 
 class PlutoLeftFrozenRows extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
@@ -29,9 +30,9 @@ class PlutoLeftFrozenRowsState
   void initState() {
     super.initState();
 
-    _scroll = stateManager.scroll!.vertical!.addAndGet();
+    _scroll = stateManager.scroll.vertical!.addAndGet();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -42,26 +43,12 @@ class PlutoLeftFrozenRowsState
   }
 
   @override
-  void updateState() {
-    _columns = update<List<PlutoColumn>>(
-      _columns,
-      _getColumns(),
-      compare: listEquals,
-    );
+  void updateState(PlutoNotifierEvent event) {
+    forceUpdate();
 
-    _rows = [
-      ...update<List<PlutoRow>>(
-        _rows,
-        stateManager.refRows,
-        compare: listEquals,
-      )
-    ];
-  }
+    _columns = stateManager.leftFrozenColumns;
 
-  List<PlutoColumn> _getColumns() {
-    return stateManager.isLTR
-        ? stateManager.leftFrozenColumns
-        : stateManager.leftFrozenColumns.reversed.toList(growable: false);
+    _rows = stateManager.refRows;
   }
 
   @override

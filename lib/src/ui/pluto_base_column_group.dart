@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseColumnGroup extends StatelessWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;
@@ -98,7 +100,7 @@ class _ColumnGroupTitle extends StatelessWidget {
 
   EdgeInsets get _padding =>
       columnGroup.group.titlePadding ??
-      stateManager.configuration!.style.defaultColumnTitlePadding;
+      stateManager.configuration.style.defaultColumnTitlePadding;
 
   String? get _title =>
       columnGroup.group.titleSpan == null ? columnGroup.group.title : null;
@@ -115,37 +117,41 @@ class _ColumnGroupTitle extends StatelessWidget {
 
     final style = stateManager.style;
 
-    return Container(
+    return SizedBox(
       height: groupTitleHeight,
-      padding: _padding,
-      decoration: BoxDecoration(
-        color: columnGroup.group.backgroundColor,
-        border: BorderDirectional(
-          end: style.enableColumnBorderVertical
-              ? BorderSide(
-                  color: style.borderColor,
-                  width: 1.0,
-                )
-              : BorderSide.none,
-          bottom: style.enableColumnBorderHorizontal
-              ? BorderSide(
-                  color: style.borderColor,
-                  width: 1.0,
-                )
-              : BorderSide.none,
-        ),
-      ),
-      child: Center(
-        child: Text.rich(
-          TextSpan(
-            text: _title,
-            children: _children,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: columnGroup.group.backgroundColor,
+          border: BorderDirectional(
+            end: style.enableColumnBorderVertical
+                ? BorderSide(
+                    color: style.borderColor,
+                    width: 1.0,
+                  )
+                : BorderSide.none,
+            bottom: style.enableColumnBorderHorizontal
+                ? BorderSide(
+                    color: style.borderColor,
+                    width: 1.0,
+                  )
+                : BorderSide.none,
           ),
-          style: style.columnTextStyle,
-          overflow: TextOverflow.ellipsis,
-          softWrap: false,
-          maxLines: 1,
-          textAlign: columnGroup.group.titleTextAlign.value,
+        ),
+        child: Padding(
+          padding: _padding,
+          child: Center(
+            child: Text.rich(
+              TextSpan(
+                text: _title,
+                children: _children,
+              ),
+              style: style.columnTextStyle,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 1,
+              textAlign: columnGroup.group.titleTextAlign.value,
+            ),
+          ),
         ),
       ),
     );
@@ -196,29 +202,46 @@ class _ColumnGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     if (columnGroup.group.hasFields) {
       return CustomMultiChildLayout(
-        delegate: ColumnsLayout(stateManager, columnGroup.columns),
-        children: columnGroup.columns.map(_makeFieldWidget).toList(),
+        delegate: ColumnsLayout(
+          stateManager: stateManager,
+          columns: columnGroup.columns,
+          textDirection: stateManager.textDirection,
+        ),
+        children:
+            columnGroup.columns.map(_makeFieldWidget).toList(growable: false),
       );
     }
 
     return CustomMultiChildLayout(
-      delegate: ColumnGroupLayout(stateManager, _separateLinkedGroup, depth),
-      children: _separateLinkedGroup.map(_makeChildWidget).toList(),
+      delegate: ColumnGroupLayout(
+        stateManager: stateManager,
+        separateLinkedGroups: _separateLinkedGroup,
+        depth: depth,
+        textDirection: stateManager.textDirection,
+      ),
+      children:
+          _separateLinkedGroup.map(_makeChildWidget).toList(growable: false),
     );
   }
 }
 
 class ColumnGroupLayout extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumnGroupPair> separateLinkedGroups;
+  final List<PlutoColumnGroupPair> separateLinkedGroups;
+
+  final int depth;
+
+  final TextDirection textDirection;
+
+  ColumnGroupLayout({
+    required this.stateManager,
+    required this.separateLinkedGroups,
+    required this.depth,
+    required this.textDirection,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   late double totalHeightOfGroup;
-
-  int depth;
-
-  ColumnGroupLayout(this.stateManager, this.separateLinkedGroups, this.depth)
-      : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   Size getSize(BoxConstraints constraints) {
@@ -241,9 +264,11 @@ class ColumnGroupLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? separateLinkedGroups : separateLinkedGroups.reversed;
     double dx = 0;
 
-    for (PlutoColumnGroupPair pair in separateLinkedGroups) {
+    for (PlutoColumnGroupPair pair in items) {
       final double width = pair.columns.fold<double>(
         0,
         (previousValue, element) => previousValue + element.width,
@@ -268,12 +293,17 @@ class ColumnGroupLayout extends MultiChildLayoutDelegate {
 }
 
 class ColumnsLayout extends MultiChildLayoutDelegate {
-  PlutoGridStateManager stateManager;
+  final PlutoGridStateManager stateManager;
 
-  List<PlutoColumn> columns;
+  final List<PlutoColumn> columns;
 
-  ColumnsLayout(this.stateManager, this.columns)
-      : super(relayout: stateManager.resizingChangeNotifier);
+  final TextDirection textDirection;
+
+  ColumnsLayout({
+    required this.stateManager,
+    required this.columns,
+    required this.textDirection,
+  }) : super(relayout: stateManager.resizingChangeNotifier);
 
   double totalColumnsHeight = 0;
 
@@ -295,9 +325,11 @@ class ColumnsLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    final isLTR = textDirection == TextDirection.ltr;
+    final items = isLTR ? columns : columns.reversed;
     double dx = 0;
 
-    for (PlutoColumn col in columns) {
+    for (PlutoColumn col in items) {
       final double width = col.width;
 
       var boxConstraints = BoxConstraints.tight(

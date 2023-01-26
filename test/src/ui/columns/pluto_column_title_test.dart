@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/test_helper_util.dart';
-import 'pluto_column_title_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridScrollController>(returnNullOnMissingStub: true),
-  MockSpec<LinkedScrollControllerGroup>(returnNullOnMissingStub: true),
-  MockSpec<ScrollController>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   late MockPlutoGridScrollController scroll;
@@ -23,6 +17,10 @@ void main() {
   late PublishSubject<PlutoNotifierEvent> subject;
   late PlutoGridEventManager eventManager;
   late PlutoGridConfiguration configuration;
+
+  const ValueKey<String> sortableGestureKey = ValueKey(
+    'ColumnTitleSortableGesture',
+  );
 
   setUp(() {
     stateManager = MockPlutoGridStateManager();
@@ -35,7 +33,7 @@ void main() {
 
     when(stateManager.configuration).thenReturn(configuration);
     when(stateManager.columnMenuDelegate).thenReturn(
-      const PlutoDefaultColumnMenuDelegate(),
+      const PlutoColumnMenuDelegateDefault(),
     );
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.eventManager).thenReturn(eventManager);
@@ -128,7 +126,7 @@ void main() {
       buildApp(column: column),
     );
 
-    await tester.tap(find.byType(InkWell));
+    await tester.tap(find.byKey(sortableGestureKey));
 
     // then
     verify(stateManager.toggleSortColumn(captureAny)).called(1);
@@ -136,7 +134,7 @@ void main() {
 
   testWidgets(
       'enableSorting 가 false 인 상태에서 '
-      'InkWell 위젯이 없어야 한다.', (WidgetTester tester) async {
+      'GestureDetector 위젯이 없어야 한다.', (WidgetTester tester) async {
     // given
     final PlutoColumn column = PlutoColumn(
       title: 'header',
@@ -150,10 +148,10 @@ void main() {
       buildApp(column: column),
     );
 
-    Finder inkWell = find.byType(InkWell);
+    Finder gestureDetector = find.byKey(sortableGestureKey);
 
     // then
-    expect(inkWell, findsNothing);
+    expect(gestureDetector, findsNothing);
 
     verifyNever(stateManager.toggleSortColumn(captureAny));
   });
@@ -603,20 +601,24 @@ void main() {
   });
 
   group('configuration', () {
-    final PlutoColumn column = PlutoColumn(
-      title: 'column title',
-      field: 'column_field_name',
-      type: PlutoColumnType.text(),
-      frozen: PlutoColumnFrozen.end,
-    );
-
-    aColumnWithConfiguration(PlutoGridConfiguration configuration) {
+    aColumnWithConfiguration(
+      PlutoGridConfiguration configuration, {
+      PlutoColumn? column,
+    }) {
       return PlutoWidgetTestHelper('a column.', (tester) async {
         when(stateManager.configuration).thenReturn(configuration);
         when(stateManager.style).thenReturn(configuration.style);
 
         await tester.pumpWidget(
-          buildApp(column: column),
+          buildApp(
+            column: column ??
+                PlutoColumn(
+                  title: 'column title',
+                  field: 'column_field_name',
+                  type: PlutoColumnType.text(),
+                  frozen: PlutoColumnFrozen.end,
+                ),
+          ),
         );
       });
     }
@@ -630,16 +632,16 @@ void main() {
       'if enableColumnBorder is true, should be set the border.',
       (tester) async {
         expect(
-          stateManager.configuration!.style.enableColumnBorderVertical,
+          stateManager.configuration.style.enableColumnBorderVertical,
           true,
         );
 
         final target = find.descendant(
-          of: find.byType(InkWell),
-          matching: find.byType(Container),
+          of: find.byKey(sortableGestureKey),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().single.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -659,22 +661,82 @@ void main() {
       'if enableColumnBorder is false, should not be set the border.',
       (tester) async {
         expect(
-          stateManager.configuration!.style.enableColumnBorderVertical,
+          stateManager.configuration.style.enableColumnBorderVertical,
           false,
         );
 
         final target = find.descendant(
-          of: find.byType(InkWell),
-          matching: find.byType(Container),
+          of: find.byKey(sortableGestureKey),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().single.widget as Container;
+        final container = target.evaluate().single.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
         final BorderDirectional border = decoration.border as BorderDirectional;
 
         expect(border.end, BorderSide.none);
+      },
+    );
+
+    aColumnWithConfiguration(
+      const PlutoGridConfiguration(
+        style: PlutoGridStyleConfig(
+          columnAscendingIcon: Icon(
+            Icons.arrow_upward,
+            color: Colors.cyan,
+          ),
+        ),
+      ),
+      column: PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        sort: PlutoColumnSort.ascending,
+      ),
+    ).test(
+      'If columnAscendingIcon is set, the set icon should appear.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(PlutoColumnTitle),
+          matching: find.byType(Icon),
+        );
+
+        final icon = target.evaluate().first.widget as Icon;
+
+        expect(icon.icon, Icons.arrow_upward);
+        expect(icon.color, Colors.cyan);
+      },
+    );
+
+    aColumnWithConfiguration(
+      const PlutoGridConfiguration(
+        style: PlutoGridStyleConfig(
+          columnDescendingIcon: Icon(
+            Icons.arrow_downward,
+            color: Colors.pink,
+          ),
+        ),
+      ),
+      column: PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.text(),
+        sort: PlutoColumnSort.descending,
+      ),
+    ).test(
+      'If columnDescendingIcon is set, the set icon should appear.',
+      (tester) async {
+        final target = find.descendant(
+          of: find.byType(PlutoColumnTitle),
+          matching: find.byType(Icon),
+        );
+
+        final icon = target.evaluate().first.widget as Icon;
+
+        expect(icon.icon, Icons.arrow_downward);
+        expect(icon.color, Colors.pink);
       },
     );
   });

@@ -23,7 +23,7 @@ const Color _kScrollbarColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x59000000),
   darkColor: Color(0x80FFFFFF),
 );
-
+const Color _kTrackColor = Color(0x00000000);
 // This is the amount of space from the top of a vertical scrollbar to the
 // top edge of the scrollable, measured when the vertical scrollbar overscrolls
 // to the top.
@@ -37,8 +37,15 @@ class PlutoScrollbar extends StatefulWidget {
     this.horizontalController,
     this.verticalController,
     this.isAlwaysShown = false,
+    this.onlyDraggingThumb = true,
+    this.enableHover = true,
     this.thickness = defaultThickness,
     this.thicknessWhileDragging = defaultThicknessWhileDragging,
+    this.hoverWidth = defaultScrollbarHoverWidth,
+    double? mainAxisMargin,
+    double? crossAxisMargin,
+    Color? scrollBarColor,
+    Color? scrollBarTrackColor,
     this.radius = defaultRadius,
     this.radiusWhileDragging = defaultRadiusWhileDragging,
     required this.child,
@@ -46,33 +53,50 @@ class PlutoScrollbar extends StatefulWidget {
         assert(thicknessWhileDragging < double.infinity),
         assert(!isAlwaysShown ||
             (horizontalController != null || verticalController != null)),
+        mainAxisMargin = mainAxisMargin ?? _kScrollbarMainAxisMargin,
+        crossAxisMargin = crossAxisMargin ?? _kScrollbarCrossAxisMargin,
+        scrollBarColor = scrollBarColor ?? _kScrollbarColor,
+        scrollBarTrackColor = scrollBarTrackColor ?? _kTrackColor,
         super(key: key);
-
-  static const double defaultThickness = 3;
-
-  static const double defaultThicknessWhileDragging = 8.0;
-
-  static const Radius defaultRadius = Radius.circular(1.5);
-
-  static const Radius defaultRadiusWhileDragging = Radius.circular(4.0);
-
-  final Widget child;
-
   final ScrollController? horizontalController;
 
   final ScrollController? verticalController;
 
   final bool isAlwaysShown;
 
+  final bool onlyDraggingThumb;
+
+  final bool enableHover;
+
   final double thickness;
 
   final double thicknessWhileDragging;
 
+  final double hoverWidth;
+
+  final double mainAxisMargin;
+
+  final double crossAxisMargin;
+
+  final Color scrollBarColor;
+
+  final Color scrollBarTrackColor;
+
   final Radius radius;
 
-  final bool onlyDraggingThumb = true;
-
   final Radius radiusWhileDragging;
+
+  final Widget child;
+
+  static const double defaultThickness = 3;
+
+  static const double defaultThicknessWhileDragging = 8.0;
+
+  static const double defaultScrollbarHoverWidth = 16.0;
+
+  static const Radius defaultRadius = Radius.circular(1.5);
+
+  static const Radius defaultRadiusWhileDragging = Radius.circular(4.0);
 
   @override
   PlutoGridCupertinoScrollbarState createState() =>
@@ -84,6 +108,7 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
   final GlobalKey _customPaintKey = GlobalKey();
   _ScrollbarPainter? _painter;
 
+  late TextDirection _textDirection;
   late AnimationController _fadeoutAnimationController;
   late Animation<double> _fadeoutOpacityAnimation;
   late AnimationController _thicknessAnimationController;
@@ -118,6 +143,8 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
 
   Axis? _currentAxis;
 
+  _HoverAxis _currentHoverAxis = _HoverAxis.none;
+
   @override
   void initState() {
     super.initState();
@@ -141,12 +168,13 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _textDirection = Directionality.of(context);
     if (_painter == null) {
       _painter = _buildCupertinoScrollbarPainter(context);
     } else {
       _painter!
-        ..textDirection = Directionality.of(context)
-        ..color = CupertinoDynamicColor.resolve(_kScrollbarColor, context)
+        ..textDirection = _textDirection
+        ..color = CupertinoDynamicColor.resolve(widget.scrollBarColor, context)
         ..padding = MediaQuery.of(context).padding;
     }
     _triggerScrollbar();
@@ -170,12 +198,14 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
   /// Returns a [ScrollbarPainter] visually styled like the iOS scrollbar.
   _ScrollbarPainter _buildCupertinoScrollbarPainter(BuildContext context) {
     return _ScrollbarPainter(
-      color: CupertinoDynamicColor.resolve(_kScrollbarColor, context),
+      trackColor:
+          CupertinoDynamicColor.resolve(widget.scrollBarTrackColor, context),
+      color: CupertinoDynamicColor.resolve(widget.scrollBarColor, context),
       textDirection: Directionality.of(context),
       thickness: _thickness,
       fadeoutOpacityAnimation: _fadeoutOpacityAnimation,
-      mainAxisMargin: _kScrollbarMainAxisMargin,
-      crossAxisMargin: _kScrollbarCrossAxisMargin,
+      mainAxisMargin: widget.mainAxisMargin,
+      crossAxisMargin: widget.crossAxisMargin,
       radius: _radius,
       padding: MediaQuery.of(context).padding,
       minLength: _kScrollbarMinLength,
@@ -418,18 +448,168 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     super.dispose();
   }
 
+  bool _needUpdatePainterByHover(Axis axis) {
+    switch (_painter?._lastAxisDirection) {
+      case AxisDirection.up:
+      case AxisDirection.down:
+        return axis != Axis.vertical;
+      case AxisDirection.left:
+      case AxisDirection.right:
+        return axis != Axis.horizontal;
+      default:
+        return true;
+    }
+  }
+
+  void _handleHoverExit(PointerExitEvent event) {
+    _callFadeoutTimer();
+  }
+
+  void _handleHover(PointerHoverEvent event) {
+    final hoverAxis = _getHoverAxis(event.position, event.kind, forHover: true);
+    if (hoverAxis == _currentHoverAxis) return;
+    _currentHoverAxis = hoverAxis;
+
+    ScrollMetrics? metrics;
+    bool needUpdate = false;
+
+    switch (hoverAxis) {
+      case _HoverAxis.vertical:
+        _currentAxis = Axis.vertical;
+        _currentController = widget.verticalController;
+        needUpdate = _needUpdatePainterByHover(Axis.vertical);
+        if (needUpdate) {
+          metrics = FixedScrollMetrics(
+            minScrollExtent:
+                widget.verticalController?.position.minScrollExtent,
+            maxScrollExtent:
+                widget.verticalController?.position.maxScrollExtent,
+            pixels: widget.verticalController?.position.pixels,
+            viewportDimension:
+                widget.verticalController?.position.viewportDimension,
+            axisDirection: widget.verticalController?.position.axisDirection ??
+                AxisDirection.down,
+          );
+        }
+        break;
+      case _HoverAxis.horizontal:
+        _currentAxis = Axis.horizontal;
+        _currentController = widget.horizontalController;
+        needUpdate = _needUpdatePainterByHover(Axis.horizontal);
+        if (needUpdate) {
+          metrics = FixedScrollMetrics(
+            minScrollExtent:
+                widget.horizontalController?.position.minScrollExtent,
+            maxScrollExtent:
+                widget.horizontalController?.position.maxScrollExtent,
+            pixels: widget.horizontalController?.position.pixels,
+            viewportDimension:
+                widget.horizontalController?.position.viewportDimension,
+            axisDirection:
+                widget.horizontalController?.position.axisDirection ??
+                    AxisDirection.right,
+          );
+        }
+        break;
+      case _HoverAxis.none:
+        _callFadeoutTimer();
+        return;
+    }
+
+    if (_fadeoutAnimationController.status != AnimationStatus.forward) {
+      _fadeoutAnimationController.forward();
+    }
+
+    _fadeoutTimer?.cancel();
+
+    if (needUpdate) {
+      _painter!.update(metrics!, metrics.axisDirection);
+    }
+  }
+
+  _HoverAxis _getHoverAxis(
+    Offset position,
+    PointerDeviceKind kind, {
+    bool forHover = false,
+  }) {
+    if (_customPaintKey.currentContext == null || _painter == null) {
+      return _HoverAxis.none;
+    }
+
+    final RenderBox renderBox =
+        _customPaintKey.currentContext!.findRenderObject()! as RenderBox;
+    final localOffset = renderBox.globalToLocal(position);
+    final trackSize = renderBox.size;
+    final isRTL = _textDirection == TextDirection.rtl;
+    final hoverWidth = widget.hoverWidth;
+
+    if (Rect.fromLTRB(
+      isRTL ? 0 : trackSize.width - hoverWidth,
+      0,
+      isRTL ? hoverWidth : trackSize.width,
+      trackSize.height,
+    ).contains(localOffset)) {
+      return _HoverAxis.vertical;
+    }
+
+    if (Rect.fromLTRB(
+      0,
+      trackSize.height - hoverWidth,
+      trackSize.width,
+      trackSize.height,
+    ).contains(localOffset)) {
+      return _HoverAxis.horizontal;
+    }
+
+    return _HoverAxis.none;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget child = CustomPaint(
+      key: _customPaintKey,
+      foregroundPainter: _painter,
+      child: RepaintBoundary(child: widget.child),
+    );
+
+    if (widget.enableHover) {
+      child = MouseRegion(
+        onExit: (PointerExitEvent event) {
+          switch (event.kind) {
+            case PointerDeviceKind.mouse:
+            case PointerDeviceKind.trackpad:
+              _handleHoverExit(event);
+              break;
+            case PointerDeviceKind.stylus:
+            case PointerDeviceKind.invertedStylus:
+            case PointerDeviceKind.unknown:
+            case PointerDeviceKind.touch:
+              break;
+          }
+        },
+        onHover: (PointerHoverEvent event) {
+          switch (event.kind) {
+            case PointerDeviceKind.mouse:
+            case PointerDeviceKind.trackpad:
+              _handleHover(event);
+              break;
+            case PointerDeviceKind.stylus:
+            case PointerDeviceKind.invertedStylus:
+            case PointerDeviceKind.unknown:
+            case PointerDeviceKind.touch:
+              break;
+          }
+        },
+        child: child,
+      );
+    }
+
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: RepaintBoundary(
         child: RawGestureDetector(
           gestures: _gestures,
-          child: CustomPaint(
-            key: _customPaintKey,
-            foregroundPainter: _painter,
-            child: RepaintBoundary(child: widget.child),
-          ),
+          child: child,
         ),
       ),
     );
@@ -445,7 +625,7 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   _ScrollbarPainter({
     required Color color,
     required this.fadeoutOpacityAnimation,
-    Color trackColor = const Color(0x00000000),
+    required Color trackColor,
     Color trackBorderColor = const Color(0x00000000),
     TextDirection? textDirection,
     double thickness = _kScrollbarThickness,
@@ -746,7 +926,8 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
           _lastVerticalMetrics!.extentBefore == metrics.extentBefore &&
           _lastVerticalMetrics!.extentInside == metrics.extentInside &&
           _lastVerticalMetrics!.extentAfter == metrics.extentAfter &&
-          _lastVerticalAxisDirection == axisDirection) {
+          _lastVerticalAxisDirection == axisDirection &&
+          _lastAxisDirection == axisDirection) {
         return;
       }
 
@@ -757,7 +938,8 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
           _lastHorizontalMetrics!.extentBefore == metrics.extentBefore &&
           _lastHorizontalMetrics!.extentInside == metrics.extentInside &&
           _lastHorizontalMetrics!.extentAfter == metrics.extentAfter &&
-          _lastHorizontalAxisDirection == axisDirection) {
+          _lastHorizontalAxisDirection == axisDirection &&
+          _lastAxisDirection == axisDirection) {
         return;
       }
 
@@ -772,9 +954,9 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
     _lastAxisDirection =
         vertical ? _lastVerticalAxisDirection : _lastHorizontalAxisDirection;
 
-    bool _needPaint(ScrollMetrics? metrics) =>
+    bool needPaint(ScrollMetrics? metrics) =>
         metrics != null && metrics.maxScrollExtent > metrics.minScrollExtent;
-    if (!_needPaint(oldMetrics) && !_needPaint(metrics)) return;
+    if (!needPaint(oldMetrics) && !needPaint(metrics)) return;
 
     notifyListeners();
   }
@@ -1238,4 +1420,14 @@ Offset _getLocalOffset(GlobalKey scrollbarPainterKey, Offset position) {
   final RenderBox renderBox =
       scrollbarPainterKey.currentContext!.findRenderObject()! as RenderBox;
   return renderBox.globalToLocal(position);
+}
+
+enum _HoverAxis {
+  vertical,
+  horizontal,
+  none;
+
+  bool get isVertical => this == _HoverAxis.vertical;
+  bool get isHorizontal => this == _HoverAxis.horizontal;
+  bool get isNone => this == _HoverAxis.none;
 }

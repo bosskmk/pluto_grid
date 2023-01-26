@@ -51,13 +51,17 @@ class PlutoKeyManagerEvent {
 
   bool get isEsc => event.logicalKey.keyId == LogicalKeyboardKey.escape.keyId;
 
-  bool get isEnter => event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId;
+  bool get isEnter =>
+      event.logicalKey.keyId == LogicalKeyboardKey.enter.keyId ||
+      event.logicalKey.keyId == LogicalKeyboardKey.numpadEnter.keyId;
 
   bool get isTab => event.logicalKey.keyId == LogicalKeyboardKey.tab.keyId;
 
   bool get isF2 => event.logicalKey.keyId == LogicalKeyboardKey.f2.keyId;
 
   bool get isF3 => event.logicalKey.keyId == LogicalKeyboardKey.f3.keyId;
+
+  bool get isF4 => event.logicalKey.keyId == LogicalKeyboardKey.f4.keyId;
 
   bool get isBackspace =>
       event.logicalKey.keyId == LogicalKeyboardKey.backspace.keyId;
@@ -99,6 +103,10 @@ class PlutoKeyManagerEvent {
 
   bool get isAltPressed {
     return event.isAltPressed;
+  }
+
+  bool get isModifierPressed {
+    return isShiftPressed || isCtrlPressed || isAltPressed;
   }
 }
 

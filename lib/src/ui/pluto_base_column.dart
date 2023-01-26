@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseColumn extends PlutoStatefulWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoGridStateManager stateManager;
@@ -38,11 +40,11 @@ class PlutoBaseColumnState extends PlutoStateWithChange<PlutoBaseColumn> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _showColumnFilter = update<bool>(
       _showColumnFilter,
       stateManager.showColumnFilter,

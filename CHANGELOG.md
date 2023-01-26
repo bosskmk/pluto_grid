@@ -1,3 +1,137 @@
+## [5.4.9] - 2022. 12. 15
+
+* Fix sortIdx bug.
+
+## [5.4.8] - 2022. 12. 10
+
+* Add suppressed auto size of column.
+* Fix china locale.
+* Modify didUpdateWidget.
+
+## [5.4.7] - 2022. 12. 2
+
+* Fix sorting bug.  
+  Fixed sorting issue with pagination applied.  
+  https://github.com/bosskmk/pluto_grid/issues/668
+
+## [5.4.6] - 2022. 11. 30
+
+* Fix keepAlive.  
+  Fixed a bug that slowed down when moving horizontally/vertically   
+  with the keyboard direction keys for a long time in succession.
+
+## [5.4.5] - 2022. 11. 30
+
+* Fix RTL initiation flicker.   
+  By https://github.com/Milad-Akarie
+* Fix column context menu is triggered after drag (column resizing).  
+  By https://github.com/Milad-Akarie
+
+## [5.4.4] - 2022. 11. 29
+
+* Add hovered scrollbar.
+  https://pluto.weblaze.dev/scrollbar-and-scroll-behavior
+
+## [5.4.3] - 2022. 11. 21
+
+* Add iterateRowType to PlutoAggregateColumnFooter.
+* Modify enter key.(Included numpadEnter)
+* Add onToggled to row group delegate.
+
+## [5.4.2] - 2022. 11. 15
+
+* Add properties of PlutoGridScrollbarConfig.
+  - onlyDraggingThumb
+  - mainAxisMargin
+  - crossAxisMargin
+  - scrollBarColor
+  - scrollBarTrackColor
+
+## [5.4.1] - 2022. 11. 12
+
+* Fix layout size bug.
+
+## [5.4.0] - 2022. 11. 5
+
+* Add shortcut to PlutoGridConfiguration.  
+  https://pluto.weblaze.dev/shortcuts
+* Add popupIcon for popup type column.  
+  You can change the icon that appears on the right of the date, time, or selection type column cell or set it to null to remove it.
+
+## [5.3.2] - 2022. 11. 2
+
+* Add onColumnsMoved, noRowsWidget.
+
+## [5.3.1] - 2022. 10. 30
+
+* Add readOnly, multiSelect modes to PlutoGridMode.
+* Fix Bug showing filter icon when filterOnlyEvent is true.
+
+## [5.3.0] - 2022. 10. 22
+
+* Add PlutoLazyPagination, PlutoInfinityScrollRows for server-side pagination.
+* Add tabKeyAction to PlutoGridConfiguration.
+
+## [5.2.1] - 2022. 10. 19
+
+* Add pageSizeToMove to PlutoPagination.
+
+## [5.2.0] - 2022. 10. 16
+
+* Add row group.
+
+## [5.1.3] - 2022. 10. 15
+
+* Add norway locale.
+
+## [5.1.2] - 2022. 9. 27
+
+* Change PlutoGridStateManager.configuration to not null.
+* Add Currency column.
+  https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/currency_type_column_screen.dart
+
+## [5.1.1] - 2022. 9. 25
+
+* Fix dispose condition of TextEditingController.
+
+## [5.1.0] - 2022. 9. 10
+
+* Add Column footer.  
+  https://weblaze.dev/pluto_grid/build/web/#feature/column-footer
+* Add to be able to set locale for numeric type PlutoColumn.
+
+## [5.0.6] - 2022. 9. 5
+
+* Add support for countries that use comma as Decimal separator.
+* Breaking change - Only available for flutter 3.3,   
+  otherwise it'll show this error on console: "Error: No named parameter with the name 'disabledForegroundColor'"
+
+## [5.0.5] - 2022. 8. 30
+
+* Add columnAscendingIcon, columnDescendingIcon.
+* Modify column menu tap position.
+* Update Persian locale.
+* Fix bug on select mode.
+* Add disabledBorder to PlutoColumnFilter.
+
+## [5.0.4] - 2022. 7. 18
+
+* Add properties to PlutoGridPopup, PlutoDualGrid. (properties used in PlutoGrid)
+* Fix a bug where some columns and cells were not displayed when changing the screen size.
+* Remove RepaintBoundary from Column and Cell widgets.
+
+## [5.0.3] - 2022. 7. 16
+
+* Update czech locale.
+
+## [5.0.2] - 2022. 7. 15
+
+* Fix menu position.
+
+## [5.0.1] - 2022. 7. 13
+
+* Fix a problem that left or right scrolling was a bit out of sync with TextDirection.rtl.
+
 ## [5.0.0] - 2022. 7. 11
 
 * Added middle divider for `PlutoDualGrid`, `PlutoDualPopup` widget.  

@@ -47,18 +47,20 @@ class _EmptyScreenState extends State<EmptyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(15),
-        child: PlutoGrid(
-          columns: columns,
-          rows: rows,
-          onChanged: (PlutoGridOnChangedEvent event) {
-            print(event);
-          },
-          onLoaded: (PlutoGridOnLoadedEvent event) {
-            stateManager = event.stateManager;
-          },
-          configuration: const PlutoGridConfiguration(),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          child: PlutoGrid(
+            columns: columns,
+            rows: rows,
+            onChanged: (PlutoGridOnChangedEvent event) {
+              print(event);
+            },
+            onLoaded: (PlutoGridOnLoadedEvent event) {
+              stateManager = event.stateManager;
+            },
+            configuration: const PlutoGridConfiguration(),
+          ),
         ),
       ),
     );

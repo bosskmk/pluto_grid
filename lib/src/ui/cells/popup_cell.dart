@@ -20,11 +20,11 @@ abstract class PopupCell extends StatefulWidget {
 }
 
 abstract class GridPopupProps {
-  List<PlutoColumn> popupColumns = [];
+  List<PlutoColumn> get popupColumns;
 
-  List<PlutoRow> popupRows = [];
+  List<PlutoRow> get popupRows;
 
-  Icon? icon;
+  IconData? get icon;
 }
 
 mixin PopupCellState<T extends PopupCell> on State<T>
@@ -97,16 +97,16 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       height: popupHeight,
       createHeader: createHeader,
       createFooter: createFooter,
-      configuration: widget.stateManager.configuration?.copyWith(
-        style: widget.stateManager.configuration?.style.copyWith(
-          oddRowColor: PlutoOptional(null),
-          evenRowColor: PlutoOptional(null),
+      configuration: widget.stateManager.configuration.copyWith(
+        tabKeyAction: PlutoGridTabKeyAction.normal,
+        style: widget.stateManager.configuration.style.copyWith(
+          oddRowColor: const PlutoOptional(null),
+          evenRowColor: const PlutoOptional(null),
           gridBorderRadius:
-              widget.stateManager.configuration?.style.gridPopupBorderRadius ??
-                  BorderRadius.zero,
+              widget.stateManager.configuration.style.gridPopupBorderRadius,
           defaultColumnTitlePadding: PlutoGridSettings.columnTitlePadding,
           defaultCellPadding: PlutoGridSettings.cellPadding,
-          rowHeight: widget.stateManager.configuration!.style.rowHeight,
+          rowHeight: widget.stateManager.configuration.style.rowHeight,
           enableRowColorAnimation: false,
         ),
       ),
@@ -172,7 +172,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       widget.cell.value,
     );
 
-    if (!widget.stateManager.configuration!.enableMoveDownAfterSelecting) {
+    if (!widget.stateManager.configuration.enableMoveDownAfterSelecting) {
       textFocus.requestFocus();
     }
   }
@@ -218,18 +218,20 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       readOnly: true,
       textInputAction: TextInputAction.none,
       onTap: openPopup,
-      style: widget.stateManager.configuration!.style.cellTextStyle,
+      style: widget.stateManager.configuration.style.cellTextStyle,
       decoration: InputDecoration(
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.zero,
-        suffixIcon: IconButton(
-          icon: icon!,
-          color: widget.stateManager.configuration!.style.iconColor,
-          iconSize: widget.stateManager.configuration!.style.iconSize,
-          onPressed: openPopup,
-        ),
+        suffixIcon: icon == null
+            ? null
+            : IconButton(
+                icon: Icon(icon),
+                color: widget.stateManager.configuration.style.iconColor,
+                iconSize: widget.stateManager.configuration.style.iconSize,
+                onPressed: openPopup,
+              ),
       ),
       maxLines: 1,
       textAlignVertical: TextAlignVertical.center,

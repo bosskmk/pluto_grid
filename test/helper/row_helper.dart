@@ -10,31 +10,33 @@ class RowHelper {
     bool checked = false,
     int start = 0,
   }) {
-    return Iterable<int>.generate(count)
-        .map((rowIdx) => PlutoRow(
-              sortIdx: rowIdx,
-              cells: Map.fromIterable(
-                columns!,
-                key: (dynamic column) => column.field.toString(),
-                value: (dynamic column) {
-                  rowIdx += start;
+    return Iterable<int>.generate(count).map((rowIdx) {
+      rowIdx += start;
 
-                  if ((column as PlutoColumn).type.isText) {
-                    return cellOfTextColumn(column, rowIdx);
-                  } else if (column.type.isDate) {
-                    return cellOfDateColumn(column, rowIdx);
-                  } else if (column.type.isTime) {
-                    return cellOfTimeColumn(column, rowIdx);
-                  } else if (column.type.isSelect) {
-                    return cellOfTimeColumn(column, rowIdx);
-                  }
+      return PlutoRow(
+        sortIdx: rowIdx,
+        cells: Map.fromIterable(
+          columns!,
+          key: (dynamic column) => column.field.toString(),
+          value: (dynamic column) {
+            if ((column as PlutoColumn).type.isText) {
+              return cellOfTextColumn(column, rowIdx);
+            } else if (column.type.isDate) {
+              return cellOfDateColumn(column, rowIdx);
+            } else if (column.type.isTime) {
+              return cellOfTimeColumn(column, rowIdx);
+            } else if (column.type.isSelect) {
+              return cellOfTimeColumn(column, rowIdx);
+            } else if (column.type.isNumber || column.type.isCurrency) {
+              return cellOfNumberColumn(column, rowIdx);
+            }
 
-                  throw Exception('Column is not implemented.');
-                },
-              ),
-              checked: checked,
-            ))
-        .toList();
+            throw Exception('Column is not implemented.');
+          },
+        ),
+        checked: checked,
+      );
+    }).toList();
   }
 
   static PlutoCell cellOfTextColumn(PlutoColumn column, int rowIdx) {
@@ -57,7 +59,12 @@ class RowHelper {
 
   static PlutoCell cellOfSelectColumn(PlutoColumn column, int rowIdx) {
     return PlutoCell(
-        value: (column.type.select!.items.toList()..shuffle()).first);
+      value: (column.type.select.items.toList()..shuffle()).first,
+    );
+  }
+
+  static PlutoCell cellOfNumberColumn(PlutoColumn column, int rowIdx) {
+    return PlutoCell(value: Random().nextInt(10000));
   }
 
   static double resolveRowTotalHeight(double rowHeight) {

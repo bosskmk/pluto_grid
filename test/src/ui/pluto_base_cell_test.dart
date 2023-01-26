@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';
 import '../../helper/row_helper.dart';
 import '../../matcher/pluto_object_matcher.dart';
-import 'pluto_base_cell_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   late MockPlutoGridStateManager stateManager;
   MockPlutoGridEventManager? eventManager;
@@ -30,17 +26,17 @@ void main() {
     when(stateManager.style).thenReturn(configuration.style);
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowHeight).thenReturn(
-      stateManager.configuration!.style.rowHeight,
+      stateManager.configuration.style.rowHeight,
     );
     when(stateManager.columnHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.columnFilterHeight).thenReturn(
-      stateManager.configuration!.style.columnHeight,
+      stateManager.configuration.style.columnHeight,
     );
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
@@ -50,6 +46,8 @@ void main() {
     when(stateManager.selectingMode).thenReturn(PlutoGridSelectingMode.cell);
     when(stateManager.canRowDrag).thenReturn(true);
     when(stateManager.isSelectedCell(any, any, any)).thenReturn(false);
+    when(stateManager.enabledRowGroups).thenReturn(false);
+    when(stateManager.rowGroupDelegate).thenReturn(null);
   });
 
   Widget buildApp({
@@ -677,10 +675,10 @@ void main() {
 
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -688,7 +686,7 @@ void main() {
 
         expect(
           color,
-          stateManager.configuration!.style.cellColorInReadOnlyState,
+          stateManager.configuration.style.cellColorInReadOnlyState,
         );
       },
     );
@@ -709,10 +707,10 @@ void main() {
       (tester) async {
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 
@@ -720,7 +718,7 @@ void main() {
 
         expect(
           border.end.color,
-          stateManager.configuration!.style.borderColor,
+          stateManager.configuration.style.borderColor,
         );
       },
     );
@@ -741,10 +739,10 @@ void main() {
       (tester) async {
         final target = find.descendant(
           of: find.byType(GestureDetector),
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         );
 
-        final container = target.evaluate().first.widget as Container;
+        final container = target.evaluate().first.widget as DecoratedBox;
 
         final BoxDecoration decoration = container.decoration as BoxDecoration;
 

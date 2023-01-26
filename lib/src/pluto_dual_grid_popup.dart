@@ -11,7 +11,7 @@ class PlutoDualGridPopup {
 
   final PlutoDualGridProps gridPropsB;
 
-  final PlutoGridMode? mode;
+  final PlutoGridMode mode;
 
   final PlutoDualOnSelectedEventCallback? onSelected;
 
@@ -27,7 +27,7 @@ class PlutoDualGridPopup {
     required this.context,
     required this.gridPropsA,
     required this.gridPropsB,
-    this.mode,
+    this.mode = PlutoGridMode.normal,
     this.onSelected,
     this.display,
     this.width,
@@ -38,17 +38,19 @@ class PlutoDualGridPopup {
   }
 
   Future<void> open() async {
-    final splitBorderRadius = _splitBorderRadius();
+    final textDirection = Directionality.of(context);
+
+    final splitBorderRadius = _splitBorderRadius(textDirection);
 
     final shape = _getShape(splitBorderRadius);
 
     final propsA = _applyBorderRadiusToGridProps(
-      splitBorderRadius?.elementAt(0),
+      splitBorderRadius.elementAt(0),
       gridPropsA,
     );
 
     final propsB = _applyBorderRadiusToGridProps(
-      splitBorderRadius?.elementAt(1),
+      splitBorderRadius.elementAt(1),
       gridPropsB,
     );
 
@@ -65,7 +67,7 @@ class PlutoDualGridPopup {
                           PlutoGridSettings.gridInnerSpacing,
                       height: height ?? size.maxHeight,
                       child: Directionality(
-                        textDirection: Directionality.of(context),
+                        textDirection: textDirection,
                         child: PlutoDualGrid(
                           gridPropsA: propsA,
                           gridPropsB: propsB,
@@ -87,45 +89,41 @@ class PlutoDualGridPopup {
     }
   }
 
-  List<BorderRadius>? _splitBorderRadius() {
-    final left = gridPropsA.configuration.style.gridBorderRadius;
+  List<BorderRadius> _splitBorderRadius(TextDirection textDirection) {
+    final left = gridPropsA.configuration.style.gridBorderRadius.resolve(
+      TextDirection.ltr,
+    );
 
-    final right = gridPropsB.configuration.style.gridBorderRadius;
+    final right = gridPropsB.configuration.style.gridBorderRadius.resolve(
+      TextDirection.ltr,
+    );
 
     return [
-      BorderRadius.only(
-        topLeft: left.resolve(TextDirection.ltr).topLeft,
-        bottomLeft: left.resolve(TextDirection.ltr).bottomLeft,
-        topRight: Radius.zero,
-        bottomRight: Radius.zero,
-      ),
-      BorderRadius.only(
-        topLeft: Radius.zero,
-        bottomLeft: Radius.zero,
-        topRight: right.resolve(TextDirection.ltr).topRight,
-        bottomRight: right.resolve(TextDirection.ltr).bottomRight,
-      ),
+      BorderRadiusDirectional.only(
+        topStart: left.topLeft,
+        bottomStart: left.bottomLeft,
+        topEnd: Radius.zero,
+        bottomEnd: Radius.zero,
+      ).resolve(textDirection),
+      BorderRadiusDirectional.only(
+        topStart: Radius.zero,
+        bottomStart: Radius.zero,
+        topEnd: right.topRight,
+        bottomEnd: right.bottomRight,
+      ).resolve(textDirection),
     ];
   }
 
-  ShapeBorder? _getShape(List<BorderRadius>? borderRadius) {
-    if (borderRadius == null) {
-      return null;
-    }
-
+  ShapeBorder _getShape(List<BorderRadius> borderRadius) {
     return RoundedRectangleBorder(
       borderRadius: borderRadius.elementAt(0) + borderRadius.elementAt(1),
     );
   }
 
   PlutoDualGridProps _applyBorderRadiusToGridProps(
-    BorderRadius? borderRadius,
+    BorderRadius borderRadius,
     PlutoDualGridProps gridProps,
   ) {
-    if (borderRadius == null) {
-      return gridProps;
-    }
-
     return gridProps.copyWith(
       configuration: gridProps.configuration.copyWith(
         style: gridProps.configuration.style.copyWith(

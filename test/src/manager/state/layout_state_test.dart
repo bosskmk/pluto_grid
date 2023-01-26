@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
-import 'layout_state_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   group('속성 값 테스트.', () {
     late PlutoGridStateManager stateManager;
@@ -52,8 +48,8 @@ void main() {
           stateManager = PlutoGridStateManager(
             columns: columns,
             rows: rows,
-            gridFocusNode: null,
-            scroll: null,
+            gridFocusNode: MockFocusNode(),
+            scroll: MockPlutoGridScrollController(),
           );
 
           stateManager.setEventManager(eventManager);

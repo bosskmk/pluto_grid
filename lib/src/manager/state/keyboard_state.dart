@@ -58,10 +58,10 @@ abstract class IKeyboardState {
 }
 
 mixin KeyboardState implements IPlutoGridState {
+  final PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
+
   @override
   PlutoGridKeyPressed get keyPressed => _keyPressed;
-
-  final PlutoGridKeyPressed _keyPressed = PlutoGridKeyPressed();
 
   @override
   PlutoGridCellPosition cellPositionToMove(
@@ -112,6 +112,9 @@ mixin KeyboardState implements IPlutoGridState {
       }
       // Time type column can be moved left or right even in edit state
       else if (currentColumn?.type.isTime == true) {
+      }
+      // Currency type column can be moved left or right even in edit state
+      else if (currentColumn?.type.isCurrency == true) {
       }
       // Read only type column can be moved left or right even in edit state
       else if (currentColumn?.readOnly == true) {
@@ -186,8 +189,8 @@ mixin KeyboardState implements IPlutoGridState {
 
     if (!showFrozenColumn || column.frozen.isFrozen != true) {
       direction.isLeft
-          ? scroll!.horizontal!.jumpTo(0)
-          : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
+          ? scroll.horizontal!.jumpTo(0)
+          : scroll.horizontal!.jumpTo(scroll.maxScrollHorizontal);
     }
   }
 
@@ -214,8 +217,8 @@ mixin KeyboardState implements IPlutoGridState {
     setCurrentCell(cellToMove, rowIdx, notify: notify);
 
     direction.isUp
-        ? scroll!.vertical!.jumpTo(0)
-        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
+        ? scroll.vertical!.jumpTo(0)
+        : scroll.vertical!.jumpTo(scroll.maxScrollVertical);
   }
 
   @override
@@ -303,8 +306,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isLeft
-        ? scroll!.horizontal!.jumpTo(0)
-        : scroll!.horizontal!.jumpTo(scroll!.maxScrollHorizontal);
+        ? scroll.horizontal!.jumpTo(0)
+        : scroll.horizontal!.jumpTo(scroll.maxScrollHorizontal);
   }
 
   @override
@@ -340,8 +343,8 @@ mixin KeyboardState implements IPlutoGridState {
     );
 
     direction.isUp
-        ? scroll!.vertical!.jumpTo(0)
-        : scroll!.vertical!.jumpTo(scroll!.maxScrollVertical);
+        ? scroll.vertical!.jumpTo(0)
+        : scroll.vertical!.jumpTo(scroll.maxScrollVertical);
   }
 
   @override

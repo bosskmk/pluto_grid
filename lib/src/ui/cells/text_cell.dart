@@ -45,19 +45,20 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   @override
   List<TextInputFormatter>? get inputFormatters => [];
 
+  String get formattedValue =>
+      widget.column.formattedValueForDisplayInEditing(widget.cell.value);
+
   @override
   void initState() {
     super.initState();
 
     cellFocus = FocusNode(onKey: _handleOnKey);
 
-    widget.stateManager.textEditingController = _textController;
+    widget.stateManager.setTextEditingController(_textController);
 
-    _textController.text = widget.column.formattedValueForDisplayInEditing(
-      widget.cell.value,
-    );
+    _textController.text = formattedValue;
 
-    _initialCellValue = widget.cell.value;
+    _initialCellValue = _textController.text;
 
     _cellEditingStatus = _CellEditingStatus.init;
 
@@ -86,7 +87,10 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       });
     }
 
-    widget.stateManager.textEditingController = null;
+    if (!widget.stateManager.isEditing ||
+        widget.stateManager.currentColumn?.enableEditingMode != true) {
+      widget.stateManager.setTextEditingController(null);
+    }
 
     super.dispose();
   }
@@ -134,7 +138,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   }
 
   void _changeValue({bool notify = true}) {
-    if (widget.cell.value.toString() == _textController.text) {
+    if (formattedValue == _textController.text) {
       return;
     }
 
@@ -145,9 +149,9 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     );
 
     if (notify) {
-      _initialCellValue = widget.cell.value;
+      _textController.text = formattedValue;
 
-      _textController.text = _initialCellValue.toString();
+      _initialCellValue = _textController.text;
 
       _textController.selection = TextSelection.fromPosition(
         TextPosition(offset: _textController.text.length),
@@ -158,7 +162,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   }
 
   void _handleOnChanged(String value) {
-    _cellEditingStatus = widget.cell.value.toString() != value.toString()
+    _cellEditingStatus = formattedValue != value.toString()
         ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
             ? _CellEditingStatus.init
@@ -245,7 +249,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       onEditingComplete: _handleOnComplete,
       onSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
-      style: widget.stateManager.configuration!.style.cellTextStyle,
+      style: widget.stateManager.configuration.style.cellTextStyle,
       decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide.none,

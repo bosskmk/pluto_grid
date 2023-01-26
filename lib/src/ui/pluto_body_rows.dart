@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+
+import '../helper/platform_helper.dart';
+import 'ui.dart';
 
 class PlutoBodyRows extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
@@ -30,15 +32,15 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   void initState() {
     super.initState();
 
-    _horizontalScroll = stateManager.scroll!.horizontal!.addAndGet();
+    _horizontalScroll = stateManager.scroll.horizontal!.addAndGet();
 
-    stateManager.scroll!.setBodyRowsHorizontal(_horizontalScroll);
+    stateManager.scroll.setBodyRowsHorizontal(_horizontalScroll);
 
-    _verticalScroll = stateManager.scroll!.vertical!.addAndGet();
+    _verticalScroll = stateManager.scroll.vertical!.addAndGet();
 
-    stateManager.scroll!.setBodyRowsVertical(_verticalScroll);
+    stateManager.scroll.setBodyRowsVertical(_verticalScroll);
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -51,34 +53,23 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   }
 
   @override
-  void updateState() {
-    _columns = update<List<PlutoColumn>>(
-      _columns,
-      _getColumns(),
-      compare: listEquals,
-    );
+  void updateState(PlutoNotifierEvent event) {
+    forceUpdate();
 
-    _rows = [
-      ...update<List<PlutoRow>>(
-        _rows,
-        stateManager.refRows,
-        compare: listEquals,
-      )
-    ];
+    _columns = _getColumns();
+
+    _rows = stateManager.refRows;
   }
 
   List<PlutoColumn> _getColumns() {
-    final columns = stateManager.showFrozenColumn == true
+    return stateManager.showFrozenColumn == true
         ? stateManager.bodyColumns
         : stateManager.columns;
-    return stateManager.isLTR
-        ? columns
-        : columns.reversed.toList(growable: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final scrollbarConfig = stateManager.configuration!.scrollbar;
+    final scrollbarConfig = stateManager.configuration.scrollbar;
 
     return PlutoScrollbar(
       verticalController:
@@ -86,8 +77,15 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       horizontalController:
           scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
       isAlwaysShown: scrollbarConfig.isAlwaysShown,
+      onlyDraggingThumb: scrollbarConfig.onlyDraggingThumb,
+      enableHover: PlatformHelper.isDesktop,
       thickness: scrollbarConfig.scrollbarThickness,
       thicknessWhileDragging: scrollbarConfig.scrollbarThicknessWhileDragging,
+      hoverWidth: scrollbarConfig.hoverWidth,
+      mainAxisMargin: scrollbarConfig.mainAxisMargin,
+      crossAxisMargin: scrollbarConfig.crossAxisMargin,
+      scrollBarColor: scrollbarConfig.scrollBarColor,
+      scrollBarTrackColor: scrollbarConfig.scrollBarTrackColor,
       radius: scrollbarConfig.scrollbarRadius,
       radiusWhileDragging: scrollbarConfig.scrollbarRadiusWhileDragging,
       child: SingleChildScrollView(

@@ -10,7 +10,9 @@ abstract class IEditingState {
   /// Automatically set to editing state when cell is selected.
   bool get autoEditing;
 
-  TextEditingController? textEditingController;
+  TextEditingController? get textEditingController;
+
+  bool isEditableCell(PlutoCell cell);
 
   /// Change the editing status of the current cell.
   void setEditing(
@@ -22,6 +24,8 @@ abstract class IEditingState {
     bool flag, {
     bool notify = true,
   });
+
+  void setTextEditingController(TextEditingController? textEditingController);
 
   /// Toggle the editing status of the current cell.
   void toggleEditing({bool notify = true});
@@ -43,45 +47,74 @@ abstract class IEditingState {
   });
 }
 
-mixin EditingState implements IPlutoGridState {
-  @override
-  bool get isEditing => _isEditing;
-
+class _State {
   bool _isEditing = false;
-
-  @override
-  bool get autoEditing =>
-      _autoEditing || currentColumn?.enableAutoEditing == true;
 
   bool _autoEditing = false;
 
+  TextEditingController? _textEditingController;
+}
+
+mixin EditingState implements IPlutoGridState {
+  final _State _state = _State();
+
   @override
-  TextEditingController? textEditingController;
+  bool get isEditing => _state._isEditing;
+
+  @override
+  bool get autoEditing =>
+      _state._autoEditing || currentColumn?.enableAutoEditing == true;
+
+  @override
+  TextEditingController? get textEditingController =>
+      _state._textEditingController;
+
+  @override
+  bool isEditableCell(PlutoCell cell) {
+    if (cell.column.enableEditingMode != true) {
+      return false;
+    }
+
+    if (enabledRowGroups) {
+      return rowGroupDelegate?.isEditableCell(cell) == true;
+    }
+
+    return true;
+  }
 
   @override
   void setEditing(
     bool flag, {
     bool notify = true,
   }) {
-    if (mode.isSelect) {
-      return;
-    }
-
-    if (currentColumn?.enableEditingMode != true) {
+    if (!mode.isEditableMode || (flag && currentCell == null)) {
       flag = false;
     }
 
-    if (currentCell == null || _isEditing == flag) {
-      return;
+    if (isEditing == flag) return;
+
+    if (flag) {
+      assert(
+        currentCell?.column != null && currentCell?.row != null,
+        """
+      PlutoCell is not Initialized. 
+      PlutoColumn and PlutoRow must be initialized in PlutoCell via PlutoGridStateManager.
+      initializeRows method. When adding or deleting columns or rows, 
+      you must use methods on PlutoGridStateManager. Otherwise, 
+      the PlutoCell is not initialized and this error occurs.
+      """,
+      );
+
+      if (!isEditableCell(currentCell!)) {
+        flag = false;
+      }
     }
 
-    _isEditing = flag;
+    _state._isEditing = flag;
 
     clearCurrentSelecting(notify: false);
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setEditing.hashCode);
   }
 
   @override
@@ -89,20 +122,23 @@ mixin EditingState implements IPlutoGridState {
     bool flag, {
     bool notify = true,
   }) {
-    if (_autoEditing == flag) {
+    if (autoEditing == flag) {
       return;
     }
 
-    _autoEditing = flag;
+    _state._autoEditing = flag;
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, setAutoEditing.hashCode);
+  }
+
+  @override
+  void setTextEditingController(TextEditingController? textEditingController) {
+    _state._textEditingController = textEditingController;
   }
 
   @override
   void toggleEditing({bool notify = true}) => setEditing(
-        !(_isEditing == true),
+        !(isEditing == true),
         notify: notify,
       );
 
@@ -156,13 +192,14 @@ mixin EditingState implements IPlutoGridState {
       );
     }
 
-    notifyListeners();
+    notifyListeners(true, pasteCellValue.hashCode);
   }
 
   @override
   dynamic castValueByColumnType(dynamic value, PlutoColumn column) {
-    if (column.type.isNumber) {
-      return column.type.number!.toNumber(column.type.applyFormat(value));
+    if (column.type is PlutoColumnTypeWithNumberFormat) {
+      return (column.type as PlutoColumnTypeWithNumberFormat)
+          .toNumber(column.type.applyFormat(value));
     }
 
     return value;
@@ -192,8 +229,7 @@ mixin EditingState implements IPlutoGridState {
 
     if (force == false &&
         canNotChangeCellValue(
-          column: currentColumn,
-          row: currentRow,
+          cell: cell,
           newValue: value,
           oldValue: oldValue,
         )) {
@@ -206,7 +242,7 @@ mixin EditingState implements IPlutoGridState {
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(PlutoGridOnChangedEvent(
-        columnIdx: columnIndex(currentColumn),
+        columnIdx: columnIndex(currentColumn)!,
         column: currentColumn,
         rowIdx: refRows.indexOf(currentRow),
         row: currentRow,
@@ -215,9 +251,7 @@ mixin EditingState implements IPlutoGridState {
       ));
     }
 
-    if (notify) {
-      notifyListeners();
-    }
+    notifyListeners(notify, changeCellValue.hashCode);
   }
 
   void _pasteCellValueIntoSelectingRows({List<List<String>>? textList}) {
@@ -302,8 +336,7 @@ mixin EditingState implements IPlutoGridState {
         newValue = castValueByColumnType(newValue, currentColumn);
 
         if (canNotChangeCellValue(
-          column: currentColumn,
-          row: refRows[rowIdx],
+          cell: currentCell,
           newValue: newValue,
           oldValue: oldValue,
         )) {

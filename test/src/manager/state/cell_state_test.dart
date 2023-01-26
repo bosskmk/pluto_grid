@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/row_helper.dart';
-import '../../../mock/mock_on_change_listener.dart';
-import 'cell_state_test.mocks.dart';
+import '../../../mock/mock_methods.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridEventManager>(returnNullOnMissingStub: true),
-])
 void main() {
   PlutoGridStateManager createStateManager({
     required List<PlutoColumn> columns,
@@ -19,14 +15,14 @@ void main() {
     FocusNode? gridFocusNode,
     PlutoGridScrollController? scroll,
     BoxConstraints? layout,
-    PlutoGridConfiguration? configuration,
+    PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
   }) {
     final stateManager = PlutoGridStateManager(
       columns: columns,
       rows: rows,
-      gridFocusNode: gridFocusNode,
-      scroll: scroll,
+      gridFocusNode: gridFocusNode ?? MockFocusNode(),
+      scroll: scroll ?? MockPlutoGridScrollController(),
       configuration: configuration,
       mode: mode,
     );
@@ -211,14 +207,14 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -226,11 +222,11 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
 
@@ -252,14 +248,14 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -267,19 +263,19 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 1, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 2, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 2, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 2, rowIdx: 2),
+          const PlutoGridCellPosition(columnIdx: 2, rowIdx: 2),
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(4);
+        verify(listener.noParamReturnVoid()).called(4);
       },
     );
 
@@ -302,14 +298,14 @@ void main() {
           scroll: null,
         );
 
-        final listener = MockOnChangeListener();
+        final listener = MockMethods();
 
-        stateManager.addListener(listener.onChangeVoidNoParamListener);
+        stateManager.addListener(listener.noParamReturnVoid);
 
         expect(stateManager.currentCellPosition, isNull);
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: 0, rowIdx: 1),
         );
 
         expect(stateManager.currentCellPosition!.columnIdx, 0);
@@ -317,7 +313,7 @@ void main() {
 
         // when
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: -1, rowIdx: 1),
+          const PlutoGridCellPosition(columnIdx: -1, rowIdx: 1),
         );
 
         stateManager.setCurrentCellPosition(
@@ -325,7 +321,7 @@ void main() {
         );
 
         stateManager.setCurrentCellPosition(
-          PlutoGridCellPosition(columnIdx: 1, rowIdx: -1),
+          const PlutoGridCellPosition(columnIdx: 1, rowIdx: -1),
         );
 
         stateManager.setCurrentCellPosition(
@@ -333,7 +329,7 @@ void main() {
         );
 
         // then
-        verify(listener.onChangeVoidNoParamListener()).called(1);
+        verify(listener.noParamReturnVoid()).called(1);
       },
     );
   });
@@ -468,8 +464,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: true);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: true),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -489,8 +492,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(enableEditingMode: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(enableEditingMode: false),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -511,8 +521,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -534,8 +551,15 @@ void main() {
           mode: PlutoGridMode.select,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'ABC',
         );
@@ -557,8 +581,15 @@ void main() {
           scroll: null,
         );
 
+        final cell = PlutoCell(value: '');
+        final column = createColumn(readonly: false);
+        final row = PlutoRow(cells: {'field': cell});
+        cell
+          ..setColumn(column)
+          ..setRow(row);
+
         final bool result = normalGridAndReadonlyColumn.canChangeCellValue(
-          column: createColumn(readonly: false),
+          cell: cell,
           newValue: 'abc',
           oldValue: 'abc',
         );

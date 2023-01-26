@@ -39,12 +39,10 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
   List<PlutoRow> popupRows = [];
 
   @override
-  Icon? icon = const Icon(
-    Icons.access_time,
-  );
+  IconData? get icon => widget.column.type.time.popupIcon;
 
   String get cellValue =>
-      widget.cell.value ?? widget.column.type.time!.defaultValue;
+      widget.cell.value ?? widget.column.type.time.defaultValue;
 
   String get cellHour => cellValue.toString().substring(0, 2);
 
@@ -62,15 +60,16 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
 
     final style = widget.stateManager.style;
 
-    final configuration = widget.stateManager.configuration!.copyWith(
+    final configuration = widget.stateManager.configuration.copyWith(
+      tabKeyAction: PlutoGridTabKeyAction.normal,
       style: style.copyWith(
         enableColumnBorderVertical: false,
         enableColumnBorderHorizontal: false,
         enableCellBorderVertical: false,
         enableCellBorderHorizontal: false,
         enableRowColorAnimation: false,
-        oddRowColor: PlutoOptional(null),
-        evenRowColor: PlutoOptional(null),
+        oddRowColor: const PlutoOptional(null),
+        evenRowColor: const PlutoOptional(null),
         activatedColor: style.gridBackgroundColor,
         gridBorderColor: style.gridBackgroundColor,
         borderColor: style.gridBackgroundColor,
@@ -217,8 +216,7 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
         ? widget.stateManager.style.gridBackgroundColor
         : widget.stateManager.style.cellTextStyle.color;
 
-    return Container(
-      padding: const EdgeInsets.all(5),
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: cellColor,
         shape: BoxShape.circle,
@@ -231,10 +229,13 @@ class PlutoTimeCellState extends State<PlutoTimeCell>
                   )
                 : null,
       ),
-      child: Center(
-        child: Text(
-          cell.value,
-          style: TextStyle(color: textColor),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Center(
+          child: Text(
+            cell.value,
+            style: TextStyle(color: textColor),
+          ),
         ),
       ),
     );

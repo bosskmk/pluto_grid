@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
-import 'pluto_time_cell_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks(
-  [],
-  customMocks: [
-    MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  ],
-)
 void main() {
   late MockPlutoGridStateManager stateManager;
 
@@ -26,7 +20,7 @@ void main() {
     when(stateManager.keyPressed).thenReturn(PlutoGridKeyPressed());
     when(stateManager.rowTotalHeight).thenReturn(
       RowHelper.resolveRowTotalHeight(
-        stateManager.configuration!.style.rowHeight,
+        stateManager.configuration.style.rowHeight,
       ),
     );
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
@@ -38,12 +32,12 @@ void main() {
     final container = find
         .ancestor(
           of: cell,
-          matching: find.byType(Container),
+          matching: find.byType(DecoratedBox),
         )
         .first
         .evaluate()
         .first
-        .widget as Container;
+        .widget as DecoratedBox;
 
     return container.decoration as BoxDecoration;
   }
@@ -53,6 +47,89 @@ void main() {
 
     return text.style as TextStyle;
   }
+
+  group('suffixIcon 렌더링', () {
+    final PlutoCell cell = PlutoCell(value: '12:30');
+
+    final PlutoRow row = PlutoRow(
+      cells: {
+        'column_field_name': cell,
+      },
+    );
+
+    testWidgets('기본 시간 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.access_time), findsOneWidget);
+    });
+
+    testWidgets('변경한 아이콘이 렌더링 되어야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(
+          popupIcon: Icons.add,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
+
+    testWidgets('popupIcon 이 null 인 경우 아이콘이 렌더링 되지 않아야 한다.', (tester) async {
+      final PlutoColumn column = PlutoColumn(
+        title: 'column title',
+        field: 'column_field_name',
+        type: PlutoColumnType.time(
+          popupIcon: null,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: PlutoTimeCell(
+              stateManager: stateManager,
+              cell: cell,
+              column: column,
+              row: row,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Icon), findsNothing);
+    });
+  });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {
     // given
@@ -176,13 +253,13 @@ void main() {
 
       setUp(() {
         activatedCellColor =
-            stateManager.configuration!.style.activatedBorderColor;
+            stateManager.configuration.style.activatedBorderColor;
         activatedTextColor =
-            stateManager.configuration!.style.gridBackgroundColor;
+            stateManager.configuration.style.gridBackgroundColor;
         inactivatedCellColor =
-            stateManager.configuration!.style.gridBackgroundColor;
+            stateManager.configuration.style.gridBackgroundColor;
         inactivatedTextColor =
-            stateManager.configuration!.style.cellTextStyle.color!;
+            stateManager.configuration.style.cellTextStyle.color!;
       });
 
       tapCell.test(

@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 
-import 'pluto_text_cell_test.mocks.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks(
-  [],
-  customMocks: [
-    MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-  ],
-)
 void main() {
   late PlutoGridStateManager stateManager;
 
@@ -23,6 +17,7 @@ void main() {
     when(stateManager.localeText).thenReturn(const PlutoGridLocaleText());
     when(stateManager.keepFocus).thenReturn(true);
     when(stateManager.hasFocus).thenReturn(true);
+    when(stateManager.isEditing).thenReturn(true);
   });
 
   testWidgets('셀 값이 출력 되어야 한다.', (WidgetTester tester) async {
@@ -40,6 +35,8 @@ void main() {
         'column_field_name': cell,
       },
     );
+
+    when(stateManager.currentColumn).thenReturn(column);
 
     // when
     await tester.pumpWidget(

@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v5.0.0
+## PlutoGrid for flutter - v5.4.9
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -171,27 +171,30 @@ Widget build(BuildContext context) {
 
 ### Flutter version compatible
 
-| Flutter         | PlutoGrid               |
-|-----------------|-------------------------|
-| 3.0.0 or higher | 3.0.0-0.pre or higher   |
-| 2.5.0 or higher | 2.5.0 or higher         |
+| Flutter         | PlutoGrid             |
+|-----------------|-----------------------|
+| 3.3.0 or higher | 5.0.6 or higher       |
+| 3.0.0 or higher | 3.0.0-0.pre or higher |
+| 2.5.0 or higher | 2.5.0 or higher       |
 
 For other versions, contact the issue
 
 <br>
 
-### Pluto series
+### Related packages
 > develop packages that make it easy to develop admin pages or CMS with Flutter.
 * [PlutoGrid](https://github.com/bosskmk/pluto_grid)
 * [PlutoMenuBar](https://github.com/bosskmk/pluto_menu_bar)
+* [PlutoLayout](https://github.com/bosskmk/pluto_layout)
 
 <br>
 
-### Support
+### Donate to this project
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/white_img.png)](https://www.buymeacoffee.com/manki)
 
 <br>
 
-### License
-> MIT
+### Jetbrains provides a free license
+
+[<img alt="IDE license support" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="170"/>](https://www.jetbrains.com/community/opensource/#support)

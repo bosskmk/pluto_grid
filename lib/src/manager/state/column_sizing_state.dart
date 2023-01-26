@@ -50,9 +50,15 @@ abstract class IColumnSizingState {
   void setColumnSizeConfig(PlutoGridColumnSizeConfig config);
 }
 
+class _State {
+  bool? _activatedColumnsAutoSize;
+}
+
 mixin ColumnSizingState implements IPlutoGridState {
+  final _State _state = _State();
+
   @override
-  PlutoGridColumnSizeConfig get columnSizeConfig => configuration!.columnSize;
+  PlutoGridColumnSizeConfig get columnSizeConfig => configuration.columnSize;
 
   @override
   PlutoAutoSizeMode get columnsAutoSizeMode => columnSizeConfig.autoSizeMode;
@@ -65,18 +71,16 @@ mixin ColumnSizingState implements IPlutoGridState {
 
   @override
   bool get activatedColumnsAutoSize =>
-      enableColumnsAutoSize && _activatedColumnsAutoSize != false;
-
-  bool? _activatedColumnsAutoSize;
+      enableColumnsAutoSize && _state._activatedColumnsAutoSize != false;
 
   @override
   void activateColumnsAutoSize() {
-    _activatedColumnsAutoSize = true;
+    _state._activatedColumnsAutoSize = true;
   }
 
   @override
   void deactivateColumnsAutoSize() {
-    _activatedColumnsAutoSize = false;
+    _state._activatedColumnsAutoSize = false;
   }
 
   @override
@@ -87,20 +91,14 @@ mixin ColumnSizingState implements IPlutoGridState {
     assert(columnsAutoSizeMode.isNone == false);
     assert(columns.isNotEmpty);
 
-    double? scale;
-
-    if (columnsAutoSizeMode.isScale) {
-      final totalWidth = columns.fold<double>(0, (pre, e) => pre += e.width);
-
-      scale = maxWidth / totalWidth;
-    }
-
-    return PlutoAutoSizeHelper.items(
+    return PlutoAutoSizeHelper.items<PlutoColumn>(
       maxSize: maxWidth,
-      length: columns.length,
-      itemMinSize: PlutoGridSettings.minColumnWidth,
+      items: columns,
+      isSuppressed: (e) => e.suppressedAutoSize,
+      getItemSize: (e) => e.width,
+      getItemMinSize: (e) => e.minWidth,
+      setItemSize: (e, size) => e.width = size,
       mode: columnsAutoSizeMode,
-      scale: scale,
     );
   }
 
@@ -127,7 +125,7 @@ mixin ColumnSizingState implements IPlutoGridState {
   @override
   void setColumnSizeConfig(PlutoGridColumnSizeConfig config) {
     setConfiguration(
-      configuration!.copyWith(columnSize: config),
+      configuration.copyWith(columnSize: config),
       updateLocale: false,
       applyColumnFilter: false,
     );

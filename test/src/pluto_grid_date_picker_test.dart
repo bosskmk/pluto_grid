@@ -4,14 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 
 import '../helper/pluto_widget_test_helper.dart';
 import '../matcher/pluto_object_matcher.dart';
-import '../mock/mock_on_change_listener.dart';
+import '../mock/mock_methods.dart';
 
 final now = DateTime.now();
 
-final mockListener = MockOnChangeListener();
+final mockListener = MockMethods();
 
 void main() {
   late PlutoGridStateManager stateManager;
@@ -242,12 +243,12 @@ void main() {
       final selectedDayWidget = find
           .ancestor(
             of: selectedDayText,
-            matching: find.byType(Container),
+            matching: find.byType(DecoratedBox),
           )
           .first;
 
       final selectedDayContainer =
-          selectedDayWidget.first.evaluate().first.widget as Container;
+          selectedDayWidget.first.evaluate().first.widget as DecoratedBox;
 
       final decoration = selectedDayContainer.decoration as BoxDecoration;
 
@@ -270,6 +271,7 @@ void main() {
 
       expect(find.text(currentMonthYear), findsOneWidget);
 
+      await tester.tap(find.text('2'));
       await tester.tap(find.text('1'));
 
       await tester.pump();
@@ -368,7 +370,7 @@ void main() {
     format: 'yyyy-MM-dd',
     headerFormat: 'yyyy-MM',
     initDate: DateTime(2022, 6, 11),
-    onSelected: mockListener.onChangeOneParamListener<PlutoGridOnSelectedEvent>,
+    onSelected: mockListener.oneParamReturnVoid<PlutoGridOnSelectedEvent>,
   ).test(
     '2022.6.11 일을 선택하고 탭하면, '
     'onSelected 콜백이 호출 되어야 한다.',
@@ -378,7 +380,7 @@ void main() {
       await tester.pump();
 
       verify(
-        mockListener.onChangeOneParamListener(argThat(
+        mockListener.oneParamReturnVoid(argThat(
             PlutoObjectMatcher<PlutoGridOnSelectedEvent>(rule: (object) {
           return object.cell!.value == '2022-06-11';
         }))),
@@ -390,7 +392,7 @@ void main() {
     format: 'yyyy-MM-dd',
     headerFormat: 'yyyy-MM',
     initDate: DateTime(2022, 6, 11),
-    onLoaded: mockListener.onChangeOneParamListener<PlutoGridOnLoadedEvent>,
+    onLoaded: mockListener.oneParamReturnVoid<PlutoGridOnLoadedEvent>,
   ).test(
     '2022.6.11 일을 선택하고 탭하면, '
     'onSelected 콜백이 호출 되어야 한다.',
@@ -400,7 +402,7 @@ void main() {
       await tester.pump();
 
       verify(
-        mockListener.onChangeOneParamListener(
+        mockListener.oneParamReturnVoid(
           argThat(
             isA<PlutoGridOnLoadedEvent>(),
           ),

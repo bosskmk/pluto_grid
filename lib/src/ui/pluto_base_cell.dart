@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import 'ui.dart';
+
 class PlutoBaseCell extends StatelessWidget
     implements PlutoVisibilityLayoutChild {
   final PlutoCell cell;
@@ -119,9 +121,9 @@ class PlutoBaseCell extends StatelessWidget
         row: row,
         column: column,
         cellPadding: column.cellPadding ??
-            stateManager.configuration!.style.defaultCellPadding,
+            stateManager.configuration.style.defaultCellPadding,
         stateManager: stateManager,
-        child: _BuildCell(
+        child: _Cell(
           stateManager: stateManager,
           rowIdx: rowIdx,
           column: column,
@@ -172,11 +174,11 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     final style = stateManager.style;
 
     final isCurrentCell = stateManager.isCurrentCell(widget.cell);
@@ -193,6 +195,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           widget.column,
           widget.rowIdx,
         ),
+        isGroupedRowCell: stateManager.enabledRowGroups &&
+            stateManager.rowGroupDelegate!.isExpandableCell(widget.cell),
         enableCellVerticalBorder: style.enableCellBorderVertical,
         borderColor: style.borderColor,
         activatedBorderColor: style.activatedBorderColor,
@@ -201,6 +205,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         gridBackgroundColor: style.gridBackgroundColor,
         cellColorInEditState: style.cellColorInEditState,
         cellColorInReadOnlyState: style.cellColorInReadOnlyState,
+        cellColorGroupedRow: style.cellColorGroupedRow,
         selectingMode: stateManager.selectingMode,
       ),
     );
@@ -233,6 +238,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required bool isEditing,
     required bool isCurrentCell,
     required bool isSelectedCell,
+    required bool isGroupedRowCell,
     required bool enableCellVerticalBorder,
     required Color borderColor,
     required Color activatedBorderColor,
@@ -241,6 +247,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required Color gridBackgroundColor,
     required Color cellColorInEditState,
     required Color cellColorInReadOnlyState,
+    required Color? cellColorGroupedRow,
     required PlutoGridSelectingMode selectingMode,
   }) {
     if (isCurrentCell) {
@@ -269,32 +276,33 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
         ),
       );
     } else {
-      return enableCellVerticalBorder
-          ? BoxDecoration(
-              border: BorderDirectional(
+      return BoxDecoration(
+        color: isGroupedRowCell ? cellColorGroupedRow : null,
+        border: enableCellVerticalBorder
+            ? BorderDirectional(
                 end: BorderSide(
                   color: borderColor,
                   width: 1.0,
                 ),
-              ),
-            )
-          : const BoxDecoration();
+              )
+            : null,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: _decoration,
-      padding: widget.cellPadding,
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.centerLeft,
-      child: widget.child,
+      child: Padding(
+        padding: widget.cellPadding,
+        child: widget.child,
+      ),
     );
   }
 }
 
-class _BuildCell extends PlutoStatefulWidget {
+class _Cell extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
   final int rowIdx;
@@ -305,7 +313,7 @@ class _BuildCell extends PlutoStatefulWidget {
 
   final PlutoCell cell;
 
-  const _BuildCell({
+  const _Cell({
     required this.stateManager,
     required this.rowIdx,
     required this.row,
@@ -315,10 +323,10 @@ class _BuildCell extends PlutoStatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_BuildCell> createState() => _BuildCellState();
+  State<_Cell> createState() => _CellState();
 }
 
-class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
+class _CellState extends PlutoStateWithChange<_Cell> {
   bool _showTypedCell = false;
 
   @override
@@ -328,13 +336,11 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
   void initState() {
     super.initState();
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
-  void updateState() {
-    super.updateState();
-
+  void updateState(PlutoNotifierEvent event) {
     _showTypedCell = update<bool>(
       _showTypedCell,
       stateManager.isEditing && stateManager.isCurrentCell(widget.cell),
@@ -374,6 +380,13 @@ class _BuildCellState extends PlutoStateWithChange<_BuildCell> {
         );
       } else if (widget.column.type.isText) {
         return PlutoTextCell(
+          stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
+      } else if (widget.column.type.isCurrency) {
+        return PlutoCurrencyCell(
           stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,

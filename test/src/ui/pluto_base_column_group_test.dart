@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../helper/column_helper.dart';
 import '../../helper/pluto_widget_test_helper.dart';
-import 'pluto_base_column_group_test.mocks.dart';
+import '../../mock/shared_mocks.mocks.dart';
 
-@GenerateMocks([], customMocks: [
-  MockSpec<PlutoGridStateManager>(returnNullOnMissingStub: true),
-])
 void main() {
   MockPlutoGridStateManager? stateManager;
 
@@ -193,11 +190,11 @@ void main() {
       final groupTitle = find.text('column group title');
 
       final groupTitleWidget = find
-          .ancestor(of: groupTitle, matching: find.byType(Container))
+          .ancestor(of: groupTitle, matching: find.byType(SizedBox))
           .first
           .evaluate()
           .first
-          .widget as Container;
+          .widget as SizedBox;
 
       final columnTitle = find.text('column1');
 
@@ -205,7 +202,7 @@ void main() {
 
       expect(columnTitle, findsOneWidget);
 
-      expect(groupTitleWidget.constraints?.maxHeight, columnHeight * 3);
+      expect(groupTitleWidget.height, columnHeight * 3);
     },
   );
 

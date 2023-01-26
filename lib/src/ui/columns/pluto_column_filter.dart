@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../ui.dart';
+
 class PlutoColumnFilter extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
@@ -48,24 +50,31 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
   InputBorder get _border => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.style.borderColor, width: 0.0),
+            color: stateManager.configuration.style.borderColor, width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   InputBorder get _enabledBorder => OutlineInputBorder(
         borderSide: BorderSide(
-            color: stateManager.configuration!.style.activatedBorderColor,
+            color: stateManager.configuration.style.activatedBorderColor,
+            width: 0.0),
+        borderRadius: BorderRadius.zero,
+      );
+
+  InputBorder get _disabledBorder => OutlineInputBorder(
+        borderSide: BorderSide(
+            color: stateManager.configuration.style.inactivatedBorderColor,
             width: 0.0),
         borderRadius: BorderRadius.zero,
       );
 
   Color get _textFieldColor => _enabled
-      ? stateManager.configuration!.style.cellColorInEditState
-      : stateManager.configuration!.style.cellColorInReadOnlyState;
+      ? stateManager.configuration.style.cellColorInEditState
+      : stateManager.configuration.style.cellColorInReadOnlyState;
 
   EdgeInsets get _padding =>
       widget.column.filterPadding ??
-      stateManager.configuration!.style.defaultColumnFilterPadding;
+      stateManager.configuration.style.defaultColumnFilterPadding;
 
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
@@ -82,7 +91,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
 
     _event = stateManager.eventManager!.listener(_handleFocusFromRows);
 
-    updateState();
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -97,7 +106,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   }
 
   @override
-  void updateState() {
+  void updateState(PlutoNotifierEvent event) {
     _filterRows = update<List<PlutoRow>>(
       _filterRows,
       stateManager.filterRowsByField(widget.column.field),
@@ -119,8 +128,6 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   }
 
   void _moveDown({required bool focusToPreviousCell}) {
-    _focusNode.unfocus();
-
     if (!focusToPreviousCell || stateManager.currentCell == null) {
       stateManager.setCurrentCell(
         stateManager.refRows.first.cells[widget.column.field],
@@ -132,6 +139,8 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
     }
 
     stateManager.setKeepFocus(true, notify: false);
+
+    stateManager.gridFocusNode.requestFocus();
 
     stateManager.notifyListeners();
   }
@@ -176,6 +185,10 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
       stateManager.showFilterPopup(
         _focusNode.context!,
         calledColumn: widget.column,
+        onClosed: () {
+          stateManager.setKeepFocus(true, notify: false);
+          _focusNode.requestFocus();
+        },
       );
     }
 
@@ -215,7 +228,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
         filterType: widget.column.defaultFilter,
         filterValue: changed,
         debounceMilliseconds:
-            stateManager.configuration!.columnFilter.debounceMilliseconds,
+            stateManager.configuration.columnFilter.debounceMilliseconds,
       ),
     );
   }
@@ -228,34 +241,39 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   Widget build(BuildContext context) {
     final style = stateManager.style;
 
-    return Container(
+    return SizedBox(
       height: stateManager.columnFilterHeight,
-      padding: _padding,
-      decoration: BoxDecoration(
-        border: BorderDirectional(
-          top: BorderSide(color: style.borderColor),
-          end: style.enableColumnBorderVertical
-              ? BorderSide(color: style.borderColor)
-              : BorderSide.none,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(color: style.borderColor),
+            end: style.enableColumnBorderVertical
+                ? BorderSide(color: style.borderColor)
+                : BorderSide.none,
+          ),
         ),
-      ),
-      child: Center(
-        child: TextField(
-          focusNode: _focusNode,
-          controller: _controller,
-          enabled: _enabled,
-          style: style.cellTextStyle,
-          onTap: _handleOnTap,
-          onChanged: _handleOnChanged,
-          onEditingComplete: _handleOnEditingComplete,
-          decoration: InputDecoration(
-            hintText: _enabled ? widget.column.defaultFilter.title : '',
-            filled: true,
-            fillColor: _textFieldColor,
-            border: _border,
-            enabledBorder: _border,
-            focusedBorder: _enabledBorder,
-            contentPadding: const EdgeInsets.all(5),
+        child: Padding(
+          padding: _padding,
+          child: Center(
+            child: TextField(
+              focusNode: _focusNode,
+              controller: _controller,
+              enabled: _enabled,
+              style: style.cellTextStyle,
+              onTap: _handleOnTap,
+              onChanged: _handleOnChanged,
+              onEditingComplete: _handleOnEditingComplete,
+              decoration: InputDecoration(
+                hintText: _enabled ? widget.column.defaultFilter.title : '',
+                filled: true,
+                fillColor: _textFieldColor,
+                border: _border,
+                enabledBorder: _border,
+                disabledBorder: _disabledBorder,
+                focusedBorder: _enabledBorder,
+                contentPadding: const EdgeInsets.all(5),
+              ),
+            ),
           ),
         ),
       ),

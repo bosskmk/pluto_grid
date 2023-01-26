@@ -3,20 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoUpdateState = T Function<T>(
-  T oldValue,
-  T newValue, {
-  bool Function(T a, T b)? compare,
-  bool? ignoreChange,
-});
-
 abstract class PlutoStatefulWidget extends StatefulWidget {
   const PlutoStatefulWidget({Key? key}) : super(key: key);
 }
 
 abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     extends State<T> {
+  /// Subscribe to the event
+  /// that is issued when a state change occurs in [PlutoGridStateManager].
   late final StreamSubscription _subscription;
+
+  /// Contains filtering information
+  /// so that only events related to widget change can be received.
+  late final PlutoChangeNotifierFilter _filter;
 
   bool _initialized = false;
 
@@ -29,15 +28,45 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
 
   PlutoGridStateManager get stateManager;
 
-  void updateState() {}
+  /// Called when a state change of [PlutoGridStateManager] occurs.
+  ///
+  /// Widgets in [PlutoGrid] that inherit this widget implement this method
+  /// to decide whether to rebuild the widget according to the state change.
+  ///
+  /// By calling oldValue and newValue with the [update] method,
+  /// rebuild the widget according to the value change.
+  ///
+  /// ```dart
+  /// void updateState(PlutoNotifierEvent event) {
+  ///   _showColumnFilter = update<bool>(
+  ///     _showColumnFilter,
+  ///     stateManager.showColumnFilter,
+  ///   );
+  /// }
+  /// ```
+  void updateState(PlutoNotifierEvent event) {}
 
   @override
   void initState() {
     super.initState();
 
-    _subscription = stateManager.streamNotifier.stream.listen(_onChange);
+    if (PlutoChangeNotifierFilter.enabled) {
+      _filter = stateManager.resolveNotifierFilter<T>();
+      _subscription = stateManager.streamNotifier.stream
+          .where(_filter.any)
+          .listen(_onChange);
+    } else {
+      _subscription = stateManager.streamNotifier.stream.listen(_onChange);
+    }
 
     _initialized = true;
+  }
+
+  @override
+  void didUpdateWidget(covariant T oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   @override
@@ -47,6 +76,8 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     super.dispose();
   }
 
+  /// Call within the [updateState] method to determine the rebuild
+  /// of the widget according to the state change.
   U update<U>(
     U oldValue,
     U newValue, {
@@ -64,12 +95,28 @@ abstract class PlutoStateWithChange<T extends PlutoStatefulWidget>
     return newValue;
   }
 
+  /// Process to be rebuilt with steel regardless of state change.
+  void forceUpdate() {
+    _changed = true;
+  }
+
+  /// Called when a state change event occurs.
+  ///
+  /// Call [update] in [updateState] to handle rebuilding
+  /// depending on whether the value has changed.
   void _onChange(PlutoNotifierEvent event) {
-    updateState();
+    bool rebuild = false;
+
+    updateState(event);
 
     if (mounted && _initialized && _changed && stateManager.maxWidth != null) {
+      rebuild = true;
       _changed = false;
       _statefulElement?.markNeedsBuild();
+    }
+
+    if (PlutoChangeNotifierFilter.printDebug) {
+      _filter.printNotifierOnChange(event, rebuild);
     }
   }
 }
@@ -108,7 +155,7 @@ mixin PlutoStateWithKeepAlive<T extends StatefulWidget>
   }
 
   void _releaseKeepAlive() {
-    _keepAliveHandle!.release();
+    _keepAliveHandle!.dispose();
     _keepAliveHandle = null;
   }
 }

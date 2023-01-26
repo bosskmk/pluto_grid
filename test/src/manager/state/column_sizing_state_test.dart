@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
+import '../../../mock/shared_mocks.mocks.dart';
 
 void main() {
   group('getColumnsAutoSizeHelper', () {
@@ -9,8 +10,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: [],
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
@@ -32,8 +33,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.none,
@@ -55,8 +56,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.equal,
@@ -78,8 +79,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             autoSizeMode: PlutoAutoSizeMode.scale,
@@ -94,66 +95,6 @@ void main() {
 
       expect(helper, isA<PlutoAutoSize>());
     });
-
-    test('scale 0.5를 리턴 해야 한다.', () {
-      final columns = ColumnHelper.textColumn('title', count: 5);
-      const maxWidth = 500.0;
-      final double columnsWidth = columns.fold<double>(
-        0,
-        (p, e) => p + e.width,
-      );
-
-      final stateManager = PlutoGridStateManager(
-        columns: columns,
-        rows: [],
-        gridFocusNode: null,
-        scroll: null,
-        configuration: const PlutoGridConfiguration(
-          columnSize: PlutoGridColumnSizeConfig(
-            autoSizeMode: PlutoAutoSizeMode.scale,
-          ),
-        ),
-      );
-
-      final helper = stateManager.getColumnsAutoSizeHelper(
-        columns: columns,
-        maxWidth: maxWidth,
-      );
-
-      // maxWidth 500 / columns width 1000
-      expect(columnsWidth, 1000);
-      expect((helper as PlutoAutoSizeScale).scale, 0.5);
-    });
-
-    test('scale 2 를 리턴 해야 한다.', () {
-      final columns = ColumnHelper.textColumn('title', count: 5);
-      const maxWidth = 2000.0;
-      final double columnsWidth = columns.fold<double>(
-        0,
-        (p, e) => p + e.width,
-      );
-
-      final stateManager = PlutoGridStateManager(
-        columns: columns,
-        rows: [],
-        gridFocusNode: null,
-        scroll: null,
-        configuration: const PlutoGridConfiguration(
-          columnSize: PlutoGridColumnSizeConfig(
-            autoSizeMode: PlutoAutoSizeMode.scale,
-          ),
-        ),
-      );
-
-      final helper = stateManager.getColumnsAutoSizeHelper(
-        columns: columns,
-        maxWidth: maxWidth,
-      );
-
-      // maxWidth 2000 / columns width 1000
-      expect(columnsWidth, 1000);
-      expect((helper as PlutoAutoSizeScale).scale, 2);
-    });
   });
 
   group('getColumnsResizeHelper', () {
@@ -163,8 +104,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.none,
@@ -187,8 +128,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.normal,
@@ -211,8 +152,8 @@ void main() {
       final stateManager = PlutoGridStateManager(
         columns: columns,
         rows: [],
-        gridFocusNode: null,
-        scroll: null,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
         configuration: const PlutoGridConfiguration(
           columnSize: PlutoGridColumnSizeConfig(
             resizeMode: PlutoResizeMode.normal,

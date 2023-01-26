@@ -16,9 +16,9 @@ abstract class PlutoColumnMenuDelegate<T> {
   });
 }
 
-class PlutoDefaultColumnMenuDelegate
+class PlutoColumnMenuDelegateDefault
     implements PlutoColumnMenuDelegate<PlutoGridColumnMenuItem> {
-  const PlutoDefaultColumnMenuDelegate();
+  const PlutoColumnMenuDelegateDefault();
 
   @override
   List<PopupMenuEntry<PlutoGridColumnMenuItem>> buildMenuItems({
@@ -82,14 +82,19 @@ Future<T?>? showColumnMenu<T>({
   Color backgroundColor = Colors.white,
 }) {
   final RenderBox overlay =
-      Overlay.of(context)!.context.findRenderObject() as RenderBox;
+      Overlay.of(context).context.findRenderObject() as RenderBox;
 
   return showMenu<T>(
     context: context,
     color: backgroundColor,
-    position: RelativeRect.fromRect(
-        position & const Size(40, 40), Offset.zero & overlay.size),
+    position: RelativeRect.fromLTRB(
+      position.dx,
+      position.dy,
+      position.dx + overlay.size.width,
+      position.dy + overlay.size.height,
+    ),
     items: items,
+    useRootNavigator: true,
   );
 }
 
