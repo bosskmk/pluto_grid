@@ -9,7 +9,8 @@ import 'dart:ui' as _i5;
 import 'package:flutter/gestures.dart' as _i7;
 import 'package:flutter/material.dart' as _i3;
 import 'package:flutter/rendering.dart' as _i9;
-import 'package:flutter/src/foundation/assertions.dart' as _i10;
+import 'package:flutter/services.dart' as _i10;
+import 'package:flutter/src/foundation/assertions.dart' as _i11;
 import 'package:flutter/src/foundation/diagnostics.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pluto_grid/pluto_grid.dart' as _i2;
@@ -3360,6 +3361,25 @@ class MockPlutoGridScrollController extends _i1.Mock
       );
 }
 
+/// A class which mocks [PlutoGridKeyPressed].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPlutoGridKeyPressed extends _i1.Mock
+    implements _i2.PlutoGridKeyPressed {
+  @override
+  bool get shift => (super.noSuchMethod(
+        Invocation.getter(#shift),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  bool get ctrl => (super.noSuchMethod(
+        Invocation.getter(#ctrl),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+}
+
 /// A class which mocks [LinkedScrollControllerGroup].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -4645,7 +4665,7 @@ class MockFocusNode extends _i1.Mock implements _i3.FocusNode {
   @override
   _i3.DiagnosticsNode toDiagnosticsNode({
     String? name,
-    _i10.DiagnosticsTreeStyle? style,
+    _i11.DiagnosticsTreeStyle? style,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
