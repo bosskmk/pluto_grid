@@ -32,7 +32,7 @@ mixin FocusState implements IPlutoGridState {
 
   @override
   void setKeepFocus(bool flag, {bool notify = true}) {
-    if (keepFocus == flag) {
+    if (keepFocus == flag && keepFocus == hasFocus) {
       return;
     }
 

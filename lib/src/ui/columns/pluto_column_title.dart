@@ -79,13 +79,15 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
       ),
     );
 
-    stateManager.columnMenuDelegate.onSelected(
-      context: context,
-      stateManager: stateManager,
-      column: widget.column,
-      mounted: mounted,
-      selected: selected,
-    );
+    if (context.mounted) {
+      stateManager.columnMenuDelegate.onSelected(
+        context: context,
+        stateManager: stateManager,
+        column: widget.column,
+        mounted: mounted,
+        selected: selected,
+      );
+    }
   }
 
   void _handleOnPointDown(PointerDownEvent event) {

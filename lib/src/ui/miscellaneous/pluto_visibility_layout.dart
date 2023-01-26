@@ -417,7 +417,10 @@ class _NullElement extends Element {
   bool get debugDoingBuild => throw UnimplementedError();
 
   @override
-  void performRebuild() => throw UnimplementedError();
+  void performRebuild() {
+    super.performRebuild();
+    throw UnimplementedError();
+  }
 }
 
 class _NullWidget extends Widget {

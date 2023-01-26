@@ -1,3 +1,7 @@
+## [6.0.0] - 2023. 1. 26
+
+* Updated for flutter 3.7 version.
+
 ## [5.4.9] - 2022. 12. 15
 
 * Fix sortIdx bug.
