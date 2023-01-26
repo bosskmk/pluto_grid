@@ -1,3 +1,7 @@
+## [1.0.4] - 2023. 1. 26
+
+* Bump PlutoGrid.
+
 ## [1.0.3] - 2022. 7. 12
 
 * Bump PlutoGrid.
