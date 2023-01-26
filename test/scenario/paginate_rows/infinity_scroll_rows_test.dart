@@ -266,9 +266,6 @@ void main() {
 
     expect(stateManager.refRows.length, 40);
 
-    await tester.tap(find.text('column0 value 19'));
-    await tester.pumpAndSettle();
-
     await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
     await tester.pumpAndSettle();
 

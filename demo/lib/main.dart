@@ -116,8 +116,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: PlutoGridExampleColors.primaryColor,
         fontFamily: 'OpenSans',
-        backgroundColor: PlutoGridExampleColors.backgroundColor,
         scaffoldBackgroundColor: PlutoGridExampleColors.backgroundColor,
+        colorScheme: const ColorScheme.light(
+          primary: PlutoGridExampleColors.primaryColor,
+          background: PlutoGridExampleColors.backgroundColor,
+        ),
       ),
     );
   }
