@@ -255,25 +255,30 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
         child: Padding(
           padding: _padding,
           child: Center(
-            child: TextField(
-              focusNode: _focusNode,
-              controller: _controller,
-              enabled: _enabled,
-              style: style.cellTextStyle,
-              onTap: _handleOnTap,
-              onChanged: _handleOnChanged,
-              onEditingComplete: _handleOnEditingComplete,
-              decoration: InputDecoration(
-                hintText: _enabled ? widget.column.defaultFilter.title : '',
-                filled: true,
-                fillColor: _textFieldColor,
-                border: _border,
-                enabledBorder: _border,
-                disabledBorder: _disabledBorder,
-                focusedBorder: _enabledBorder,
-                contentPadding: const EdgeInsets.all(5),
-              ),
-            ),
+            child: widget.column.columnFilterWidget ??
+                TextField(
+                  focusNode: _focusNode,
+                  controller: _controller,
+                  enabled: _enabled,
+                  style: style.cellTextStyle,
+                  onTap: _handleOnTap,
+                  onChanged: _handleOnChanged,
+                  onEditingComplete: _handleOnEditingComplete,
+                  decoration: InputDecoration(
+                    suffixIcon: widget.column.columnFilterSuffixIcon,
+                    hintText: widget.column.columnFilterHintText ??
+                        (_enabled ? widget.column.defaultFilter.title : ''),
+                    filled: true,
+                    hintStyle: TextStyle(
+                        color: widget.column.columnFilterHintTextColor),
+                    fillColor: _textFieldColor,
+                    border: _border,
+                    enabledBorder: _border,
+                    disabledBorder: _disabledBorder,
+                    focusedBorder: _enabledBorder,
+                    contentPadding: const EdgeInsets.all(5),
+                  ),
+                ),
           ),
         ),
       ),
