@@ -67,8 +67,6 @@ mixin PopupCellState<T extends PopupCell> on State<T>
 
   @override
   void dispose() {
-    widget.stateManager.keyPressed.reset();
-
     textController.dispose();
 
     textFocus.dispose();

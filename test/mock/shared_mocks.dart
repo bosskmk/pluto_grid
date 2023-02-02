@@ -8,6 +8,7 @@ import 'package:pluto_grid/pluto_grid.dart';
   MockSpec<PlutoGridStateManager>(),
   MockSpec<PlutoGridEventManager>(),
   MockSpec<PlutoGridScrollController>(),
+  MockSpec<PlutoGridKeyPressed>(),
   MockSpec<LinkedScrollControllerGroup>(),
   MockSpec<ScrollController>(),
   MockSpec<ScrollPosition>(),

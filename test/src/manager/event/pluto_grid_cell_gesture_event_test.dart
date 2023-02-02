@@ -14,6 +14,7 @@ void main() {
   late MockLinkedScrollControllerGroup verticalScroll;
   late MockScrollController verticalScrollController;
   late MockPlutoGridEventManager eventManager;
+  late PlutoGridKeyPressed keyPressed;
 
   eventBuilder({
     required PlutoGridGestureType gestureType,
@@ -43,10 +44,12 @@ void main() {
     verticalScroll = MockLinkedScrollControllerGroup();
     verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
+    keyPressed = MockPlutoGridKeyPressed();
 
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.scroll).thenReturn(scroll);
     when(stateManager.isLTR).thenReturn(true);
+    when(stateManager.keyPressed).thenReturn(keyPressed);
     when(scroll.horizontal).thenReturn(horizontalScroll);
     when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
     when(scroll.vertical).thenReturn(verticalScroll);
@@ -172,8 +175,7 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(true);
-        when(stateManager.keyPressed)
-            .thenReturn(PlutoGridKeyPressed(shift: true));
+        when(keyPressed.shift).thenReturn(true);
         when(stateManager.columnIndex(column)).thenReturn(columnIdx);
         clearInteractions(stateManager);
 
@@ -214,8 +216,7 @@ void main() {
 
         when(stateManager.hasFocus).thenReturn(true);
         when(stateManager.isSelectingInteraction()).thenReturn(true);
-        when(stateManager.keyPressed)
-            .thenReturn(PlutoGridKeyPressed(ctrl: true));
+        when(keyPressed.ctrl).thenReturn(true);
         clearInteractions(stateManager);
 
         // when
