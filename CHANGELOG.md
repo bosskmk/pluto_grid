@@ -1,3 +1,15 @@
+## [6.0.2] - 2023. 2. 2
+
+* Fix filtering bug of number.
+
+## [6.0.1] - 2023. 1. 26
+
+* Fix rendering issue when tapping another cell after editing a cell.
+
+## [6.0.0] - 2023. 1. 26
+
+* Updated for flutter 3.7 version.
+
 ## [5.4.9] - 2022. 12. 15
 
 * Fix sortIdx bug.
