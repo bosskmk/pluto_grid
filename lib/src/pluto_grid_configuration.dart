@@ -1405,6 +1405,46 @@ class PlutoGridLocaleText {
     this.loadingText = 'Laster',
   });
 
+  const PlutoGridLocaleText.german({
+    // Column menu
+    this.unfreezeColumn = 'Spalte lösen',
+    this.freezeColumnToStart = 'An den Anfang pinnen',
+    this.freezeColumnToEnd = 'Ans Ende pinnen',
+    this.autoFitColumn = 'Auto fit',
+    this.hideColumn = 'Spalte verstecken',
+    this.setColumns = 'Spalten auswählen',
+    this.setFilter = 'Filter anwenden',
+    this.resetFilter = 'Filter zurücksetzen',
+    // SetColumns popup
+    this.setColumnsTitle = 'Spaltentitel',
+    // Filter popup
+    this.filterColumn = 'Spalte',
+    this.filterType = 'Typ',
+    this.filterValue = 'Wert',
+    this.filterAllColumns = 'Alle Spalten',
+    this.filterContains = 'Beinhaltet',
+    this.filterEquals = 'Ist gleich',
+    this.filterStartsWith = 'Started mit',
+    this.filterEndsWith = 'Endet mit',
+    this.filterGreaterThan = 'Größer als',
+    this.filterGreaterThanOrEqualTo = 'Größer als oder gleich',
+    this.filterLessThan = 'Kleiner als',
+    this.filterLessThanOrEqualTo = 'Kleiner als oder gleich',
+    // Date popup
+    this.sunday = 'So',
+    this.monday = 'Mo',
+    this.tuesday = 'Di',
+    this.wednesday = 'Mi',
+    this.thursday = 'Do',
+    this.friday = 'Fr',
+    this.saturday = 'Sa',
+    // Time column popup
+    this.hour = 'Stunde',
+    this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Lädt',
+  });
+
   @override
   bool operator ==(covariant Object other) {
     return identical(this, other) ||
