@@ -1167,6 +1167,7 @@ enum _Locale {
   czech,
   english,
   french,
+  german,
   korean,
   norway,
   persian,
