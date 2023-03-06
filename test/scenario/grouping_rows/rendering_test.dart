@@ -193,6 +193,54 @@ void main() {
         }
       },
     );
+
+    testWidgets('B 행을 expanded : true 로 설정 하면 자식이 렌더링 되어야 한다.', (tester) async {
+      rows[1].type.group.setExpanded(true);
+
+      await buildGrid(
+        tester: tester,
+        columns: columns,
+        rows: rows,
+        delegate: PlutoRowGroupTreeDelegate(
+          resolveColumnDepth: (column) =>
+              int.parse(column.field.replaceAll('column', '')) - 1,
+          showText: (cell) => true,
+          showFirstExpandableIcon: true,
+        ),
+      );
+
+      expect(find.text('B1'), findsOneWidget);
+      expect(find.text('B2'), findsOneWidget);
+      expect(find.text('B3'), findsOneWidget);
+      expect(find.text('B4'), findsOneWidget);
+    });
+
+    testWidgets('B, B4 행을 expanded : true 로 설정 하면 자식이 렌더링 되어야 한다.',
+        (tester) async {
+      rows[1].type.group.setExpanded(true);
+      rows[1].type.group.children[3].type.group.setExpanded(true);
+
+      await buildGrid(
+        tester: tester,
+        columns: columns,
+        rows: rows,
+        delegate: PlutoRowGroupTreeDelegate(
+          resolveColumnDepth: (column) =>
+              int.parse(column.field.replaceAll('column', '')) - 1,
+          showText: (cell) => true,
+          showFirstExpandableIcon: true,
+        ),
+      );
+
+      expect(find.text('B1'), findsOneWidget);
+      expect(find.text('B2'), findsOneWidget);
+      expect(find.text('B3'), findsOneWidget);
+      expect(find.text('B4'), findsOneWidget);
+
+      expect(find.text('B41'), findsOneWidget);
+      expect(find.text('B42'), findsOneWidget);
+      expect(find.text('B43'), findsOneWidget);
+    });
   });
 
   group('PlutoRowGroupByColumnDelegate - 2개 컬럼으로 그룹핑.', () {
