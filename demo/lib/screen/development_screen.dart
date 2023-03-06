@@ -610,6 +610,9 @@ class _HeaderState extends State<_Header> {
         case _Locale.german:
           localeText = const PlutoGridLocaleText.german();
           break;
+        case _Locale.french:
+          localeText = const PlutoGridLocaleText.french();
+          break;
       }
 
       widget.setConfiguration(widget.stateManager.configuration.copyWith(
@@ -1158,17 +1161,17 @@ enum _RestoreAutoSizeOptions {
 }
 
 enum _Locale {
-  english,
-  korean,
-  china,
-  russian,
-  czech,
-  brazilianPortuguese,
-  spanish,
-  persian,
   arabic,
+  brazilianPortuguese,
+  china,
+  czech,
+  english,
+  french,
+  korean,
   norway,
-  german,
+  persian,
+  russian,
+  spanish,
 }
 
 final _isAndroid = defaultTargetPlatform == TargetPlatform.android;
