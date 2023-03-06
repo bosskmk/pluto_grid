@@ -1044,7 +1044,47 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Loading',
   });
-
+  
+  const PlutoGridLocaleText.french({
+    // Column menu
+    this.unfreezeColumn = 'Libérer',
+    this.freezeColumnToStart = 'Figer au début',
+    this.freezeColumnToEnd = 'Figer à la fin',
+    this.autoFitColumn = 'Ajuster automatiquement',
+    this.hideColumn = 'Cacher colonne',
+    this.setColumns = 'Définir les colonnes',
+    this.setFilter = 'Filtrer',
+    this.resetFilter = 'Défiltrer',
+    // SetColumns popup
+    this.setColumnsTitle = 'Titre de colonne',
+    // Filter popup
+    this.filterColumn = 'Colonne',
+    this.filterType = 'Type',
+    this.filterValue = 'Valeur',
+    this.filterAllColumns = 'Toutes colonnes',
+    this.filterContains = 'Contient',
+    this.filterEquals = 'Egal',
+    this.filterStartsWith = 'Commence par',
+    this.filterEndsWith = 'Termine par',
+    this.filterGreaterThan = 'Supérieur à',
+    this.filterGreaterThanOrEqualTo = 'Supérieur ou égal à',
+    this.filterLessThan = 'Inférieur à',
+    this.filterLessThanOrEqualTo = 'Inférieur ou égal à',
+    // Date popup
+    this.sunday = 'Di',
+    this.monday = 'Lu',
+    this.tuesday = 'Ma',
+    this.wednesday = 'Me',
+    this.thursday = 'Je',
+    this.friday = 'Ve',
+    this.saturday = 'Sa',
+    // Time column popup
+    this.hour = 'Heure',
+    this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Chargement',
+  });
+  
   const PlutoGridLocaleText.china({
     // Column menu
     this.unfreezeColumn = '解冻列',
