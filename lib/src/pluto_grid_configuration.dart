@@ -1044,7 +1044,7 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Loading',
   });
-  
+
   const PlutoGridLocaleText.french({
     // Column menu
     this.unfreezeColumn = 'Libérer',
@@ -1084,7 +1084,7 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Chargement',
   });
-  
+
   const PlutoGridLocaleText.china({
     // Column menu
     this.unfreezeColumn = '解冻列',
