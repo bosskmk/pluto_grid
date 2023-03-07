@@ -17,6 +17,7 @@ const double _kScrollbarMinOverscrollLength = 8.0;
 const Duration _kScrollbarTimeToFade = Duration(milliseconds: 1200);
 const Duration _kScrollbarFadeDuration = Duration(milliseconds: 250);
 const Duration _kScrollbarResizeDuration = Duration(milliseconds: 100);
+const Duration _kScrollbarLongPressDuration = Duration(milliseconds: 100);
 
 // Extracted from iOS 13.1 beta using Debug View Hierarchy.
 const Color _kScrollbarColor = CupertinoDynamicColor.withBrightness(
@@ -39,6 +40,7 @@ class PlutoScrollbar extends StatefulWidget {
     this.isAlwaysShown = false,
     this.onlyDraggingThumb = true,
     this.enableHover = true,
+    this.enableScrollAfterDragEnd = true,
     this.thickness = defaultThickness,
     this.thicknessWhileDragging = defaultThicknessWhileDragging,
     this.hoverWidth = defaultScrollbarHoverWidth,
@@ -46,6 +48,7 @@ class PlutoScrollbar extends StatefulWidget {
     double? crossAxisMargin,
     Color? scrollBarColor,
     Color? scrollBarTrackColor,
+    Duration? longPressDuration,
     this.radius = defaultRadius,
     this.radiusWhileDragging = defaultRadiusWhileDragging,
     required this.child,
@@ -57,6 +60,7 @@ class PlutoScrollbar extends StatefulWidget {
         crossAxisMargin = crossAxisMargin ?? _kScrollbarCrossAxisMargin,
         scrollBarColor = scrollBarColor ?? _kScrollbarColor,
         scrollBarTrackColor = scrollBarTrackColor ?? _kTrackColor,
+        longPressDuration = longPressDuration ?? _kScrollbarLongPressDuration,
         super(key: key);
   final ScrollController? horizontalController;
 
@@ -67,6 +71,10 @@ class PlutoScrollbar extends StatefulWidget {
   final bool onlyDraggingThumb;
 
   final bool enableHover;
+
+  final bool enableScrollAfterDragEnd;
+
+  final Duration longPressDuration;
 
   final double thickness;
 
@@ -361,7 +369,9 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     _startFadeoutTimer();
     _thicknessAnimationController.reverse();
     _dragScrollbarAxisPosition = null;
-    final double scrollVelocity = _painter!.getTrackToScroll(trackVelocity);
+    final double scrollVelocity = widget.enableScrollAfterDragEnd
+        ? _painter!.getTrackToScroll(trackVelocity)
+        : 0;
     _drag?.end(DragEndDetails(
       primaryVelocity: -scrollVelocity,
       velocity: Velocity(
@@ -423,8 +433,9 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
     gestures[_ThumbPressGestureRecognizer] =
         GestureRecognizerFactoryWithHandlers<_ThumbPressGestureRecognizer>(
       () => _ThumbPressGestureRecognizer(
-        debugOwner: this,
         customPaintKey: _customPaintKey,
+        debugOwner: this,
+        duration: widget.longPressDuration,
         onlyDraggingThumb: widget.onlyDraggingThumb,
       ),
       (_ThumbPressGestureRecognizer instance) {
@@ -1373,15 +1384,16 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
   _ThumbPressGestureRecognizer({
     double? postAcceptSlopTolerance,
     Set<PointerDeviceKind>? supportedDevices,
-    required Object debugOwner,
     required GlobalKey customPaintKey,
+    required Object debugOwner,
+    required Duration duration,
     this.onlyDraggingThumb = false,
   })  : _customPaintKey = customPaintKey,
         super(
           postAcceptSlopTolerance: postAcceptSlopTolerance,
           supportedDevices: supportedDevices,
           debugOwner: debugOwner,
-          duration: const Duration(milliseconds: 100),
+          duration: duration,
         );
 
   final GlobalKey _customPaintKey;

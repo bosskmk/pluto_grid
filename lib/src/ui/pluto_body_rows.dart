@@ -79,6 +79,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       isAlwaysShown: scrollbarConfig.isAlwaysShown,
       onlyDraggingThumb: scrollbarConfig.onlyDraggingThumb,
       enableHover: PlatformHelper.isDesktop,
+      enableScrollAfterDragEnd: scrollbarConfig.enableScrollAfterDragEnd,
       thickness: scrollbarConfig.scrollbarThickness,
       thicknessWhileDragging: scrollbarConfig.scrollbarThicknessWhileDragging,
       hoverWidth: scrollbarConfig.hoverWidth,
@@ -88,6 +89,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       scrollBarTrackColor: scrollbarConfig.scrollBarTrackColor,
       radius: scrollbarConfig.scrollbarRadius,
       radiusWhileDragging: scrollbarConfig.scrollbarRadiusWhileDragging,
+      longPressDuration: scrollbarConfig.longPressDuration,
       child: SingleChildScrollView(
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,

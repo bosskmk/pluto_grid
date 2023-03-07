@@ -660,6 +660,7 @@ class PlutoGridScrollbarConfig {
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
     this.onlyDraggingThumb = true,
+    this.enableScrollAfterDragEnd = true,
     this.scrollbarThickness = PlutoScrollbar.defaultThickness,
     this.scrollbarThicknessWhileDragging =
         PlutoScrollbar.defaultThicknessWhileDragging,
@@ -671,6 +672,7 @@ class PlutoGridScrollbarConfig {
     this.scrollbarRadius = PlutoScrollbar.defaultRadius,
     this.scrollbarRadiusWhileDragging =
         PlutoScrollbar.defaultRadiusWhileDragging,
+    this.longPressDuration,
     this.dragDevices,
   });
 
@@ -680,6 +682,13 @@ class PlutoGridScrollbarConfig {
 
   /// If [onlyDraggingThumb] is false, scrolling can be done by dragging the track area.
   final bool onlyDraggingThumb;
+
+  /// If you release the scroll bar after scrolling,
+  /// the scroll bar moves further according to the moving speed.
+  ///
+  /// If set to false,
+  /// the scroll bar will stop moving as soon as the scroll bar is released.
+  final bool enableScrollAfterDragEnd;
 
   final double scrollbarThickness;
 
@@ -701,6 +710,9 @@ class PlutoGridScrollbarConfig {
 
   final Radius scrollbarRadiusWhileDragging;
 
+  /// Set the long press time of the scroll bar. 100 ms if not set.
+  final Duration? longPressDuration;
+
   final Set<PointerDeviceKind>? dragDevices;
 
   @override
@@ -711,6 +723,7 @@ class PlutoGridScrollbarConfig {
             draggableScrollbar == other.draggableScrollbar &&
             isAlwaysShown == other.isAlwaysShown &&
             onlyDraggingThumb == other.onlyDraggingThumb &&
+            enableScrollAfterDragEnd == other.enableScrollAfterDragEnd &&
             scrollbarThickness == other.scrollbarThickness &&
             scrollbarThicknessWhileDragging ==
                 other.scrollbarThicknessWhileDragging &&
@@ -722,6 +735,7 @@ class PlutoGridScrollbarConfig {
             scrollbarRadius == other.scrollbarRadius &&
             scrollbarRadiusWhileDragging ==
                 other.scrollbarRadiusWhileDragging &&
+            longPressDuration == other.longPressDuration &&
             dragDevices == other.dragDevices;
   }
 
@@ -730,6 +744,7 @@ class PlutoGridScrollbarConfig {
         draggableScrollbar,
         isAlwaysShown,
         onlyDraggingThumb,
+        enableScrollAfterDragEnd,
         scrollbarThickness,
         scrollbarThicknessWhileDragging,
         hoverWidth,
@@ -739,6 +754,7 @@ class PlutoGridScrollbarConfig {
         scrollBarTrackColor,
         scrollbarRadius,
         scrollbarRadiusWhileDragging,
+        longPressDuration,
         dragDevices,
       );
 }
