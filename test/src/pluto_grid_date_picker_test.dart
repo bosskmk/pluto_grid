@@ -271,6 +271,7 @@ void main() {
 
       expect(find.text(currentMonthYear), findsOneWidget);
 
+      await tester.tap(find.text('2'));
       await tester.tap(find.text('1'));
 
       await tester.pump();

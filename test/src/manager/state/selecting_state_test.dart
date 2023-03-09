@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -988,7 +989,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.keyPressed.shift = true;
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1017,7 +1018,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.keyPressed.ctrl = true;
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.control);
 
         // then
         expect(stateManager.isSelectingInteraction(), isFalse);
@@ -1046,7 +1047,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.row);
-        stateManager.keyPressed.shift = true;
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.shift);
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then
@@ -1076,7 +1077,7 @@ void main() {
 
         // when
         stateManager.setSelectingMode(PlutoGridSelectingMode.cell);
-        stateManager.keyPressed.ctrl = true;
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.control);
         stateManager.setCurrentCell(rows.first.cells['text0'], 0);
 
         // then
