@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/cells/pluto_default_cell.dart';
 
 abstract class IColumnState {
   /// Columns provided at grid start.
@@ -572,47 +573,64 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void autoFitColumn(BuildContext context, PlutoColumn column) {
-    final String maxValue = refRows.fold(column.title, (previousValue, element) {
-      final value = column.formattedValueForDisplay(
-        element.cells.entries.firstWhere((element) => element.key == column.field).value.value,
-      );
-      if (previousValue.length < value.length) {
-        return value;
+    String maxValue = '';
+    bool hasExpandableRowGroup = false;
+    for (final row in refRows) {
+      final cell = row.cells.entries.firstWhere((element) => element.key == column.field).value;
+      var value = column.formattedValueForDisplay(cell.value);
+      if (hasRowGroups) {
+        if (PlutoDefaultCell.showGroupCount(rowGroupDelegate!, cell)) {
+          final groupCountValue = PlutoDefaultCell.groupCountText(rowGroupDelegate!, row);
+          if (groupCountValue.isNotEmpty) {
+            value = '$value $groupCountValue';
+          }
+        }
+
+        hasExpandableRowGroup |= PlutoDefaultCell.canExpand(rowGroupDelegate!, cell);
       }
-      return previousValue;
-    });
+      if (maxValue.length < value.length) {
+        maxValue = value;
+      }
+    }
 
     // Get size after rendering virtually
     // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-    TextSpan textSpan = TextSpan(
-      style: DefaultTextStyle.of(context).style,
-      text: maxValue,
-    );
+    final titleTextWidth = _visualTextWidth(column.title, style.columnTextStyle);
+    final maxValueTextWidth = _visualTextWidth(maxValue, style.cellTextStyle);
 
-    TextPainter textPainter = TextPainter(
-      text: textSpan,
+    // todo : Handle (renderer) width
+
+    final calculatedTileWidth = titleTextWidth -
+        column.width +
+        [
+          (column.titlePadding ?? style.defaultColumnTitlePadding).horizontal,
+          if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
+          if (column.isShowRightIcon) style.iconSize,
+          6,
+        ].reduce((acc, a) => acc + a);
+
+    final calculatedCellWidth = maxValueTextWidth -
+        column.width +
+        [
+          (column.cellPadding ?? style.defaultCellPadding).horizontal,
+          if (hasExpandableRowGroup) _getEffectiveButtonWidth(context),
+          if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
+          2,
+        ].reduce((acc, a) => acc + a);
+
+    resizeColumn(column, math.max(calculatedTileWidth, calculatedCellWidth));
+  }
+
+  double _visualTextWidth(String text, TextStyle style) {
+    if (text.isEmpty) return 0;
+    final painter = TextPainter(
+      text: TextSpan(
+        style: style,
+        text: text,
+      ),
       textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
-    );
-
-    textPainter.layout();
-
-    // todo : Apply (renderer)
-
-    EdgeInsets cellPadding = column.cellPadding ?? style.defaultCellPadding;
-    EdgeInsets titlePadding = column.titlePadding ?? style.defaultColumnTitlePadding;
-
-
-    final calculatedWidths = [
-      math.max(titlePadding.horizontal, cellPadding.horizontal),
-      if (column.enableRowChecked) _getEffectiveCheckboxWidth(context),
-      if (column.isShowRightIcon) style.iconSize,
-      2,
-    ].reduce((acc, a) => acc + a);
-
-    resizeColumn(
-      column,
-      textPainter.width - column.width + calculatedWidths
-    );
+    )..layout();
+    return painter.width;
   }
 
   @override
@@ -1031,7 +1049,7 @@ mixin ColumnState implements IPlutoGridState {
     return resizeHelper.update();
   }
 
-  double _getEffectiveCheckboxWidth(BuildContext context) {
+  double _getEffectiveButtonWidth(BuildContext context, {bool checkBox = false}) {
     final theme = Theme.of(context);
     late double width;
     switch (theme.materialTapTargetSize) {
@@ -1042,6 +1060,10 @@ mixin ColumnState implements IPlutoGridState {
         width = kMinInteractiveDimension - 8.0;
         break;
     }
+    if (!checkBox) {
+      return width;
+    }
     return width + theme.visualDensity.baseSizeAdjustment.dx;
   }
 }
+
