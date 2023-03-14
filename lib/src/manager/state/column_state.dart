@@ -606,7 +606,7 @@ mixin ColumnState implements IPlutoGridState {
           (column.titlePadding ?? style.defaultColumnTitlePadding).horizontal,
           if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
           if (column.isShowRightIcon) style.iconSize,
-          6,
+          8,
         ].reduce((acc, a) => acc + a);
 
     final calculatedCellWidth = maxValueTextWidth -
@@ -615,6 +615,7 @@ mixin ColumnState implements IPlutoGridState {
           (column.cellPadding ?? style.defaultCellPadding).horizontal,
           if (hasExpandableRowGroup) _getEffectiveButtonWidth(context),
           if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
+          if (column.isShowRightIcon) style.iconSize,
           2,
         ].reduce((acc, a) => acc + a);
 
