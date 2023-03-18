@@ -662,6 +662,20 @@ class PlutoContributors extends StatelessWidget {
               launchUrl('https://github.com/Milad-Akarie');
             },
           ),
+          PlutoContributorTile(
+            name: 'Verry',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/novas1r1');
+            },
+          ),
+          PlutoContributorTile(
+            name: 'coda538',
+            linkTitle: 'Github',
+            onTapLink: () {
+              launchUrl('https://github.com/coda538');
+            },
+          ),
           PlutoContributorTile.invisible(
             name: 'And you.',
             linkTitle: 'Github',

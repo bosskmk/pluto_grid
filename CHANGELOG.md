@@ -1,3 +1,12 @@
+## [6.0.4] - 2023. 3. 7
+
+* Add Scrollbar properties. https://github.com/bosskmk/pluto_grid/issues/743
+
+## [6.0.3] - 2023. 3. 6
+
+* Add locales.(German, French)
+* Fix row group expanded bug. https://github.com/bosskmk/pluto_grid/issues/775
+
 ## [6.0.2] - 2023. 2. 2
 
 * Fix filtering bug of number.

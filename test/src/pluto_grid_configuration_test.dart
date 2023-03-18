@@ -644,5 +644,11 @@ void main() {
 
       expect(locale.loadingText, 'Laster');
     });
+
+    test('german 이 호출 되어야 한다.', () {
+      const locale = PlutoGridLocaleText.german();
+
+      expect(locale.loadingText, 'Lädt');
+    });
   });
 }
