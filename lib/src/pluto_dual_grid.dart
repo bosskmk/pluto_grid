@@ -47,6 +47,8 @@ class PlutoDualGrid extends StatefulWidget {
 
   final PlutoDualOnSelectedEventCallback? onSelected;
 
+  final bool? isVertical;
+
   /// [PlutoDualGridDisplayRatio]
   /// Set the width of the two grids by specifying the ratio of the left grid.
   /// 0.5 is 5(left grid):5(right grid).
@@ -67,6 +69,7 @@ class PlutoDualGrid extends StatefulWidget {
     this.mode = PlutoGridMode.normal,
     this.onSelected,
     this.display,
+    this.isVertical,
     this.divider = const PlutoDualGridDivider(),
     Key? key,
   }) : super(key: key);
@@ -97,11 +100,14 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
 
   late final StreamSubscription<PlutoGridEvent> _streamB;
 
+  late final bool isVertical;
+
   @override
   void initState() {
     super.initState();
 
     display = widget.display ?? PlutoDualGridDisplayRatio();
+    isVertical = widget.isVertical ?? false;
   }
 
   @override
@@ -209,6 +215,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         display: display,
         showDraggableDivider: widget.divider.show,
         isLTR: isLTR,
+        isVertical: isVertical,
       ),
       children: [
         _buildGrid(
@@ -227,12 +234,19 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
                 final RenderBox object =
                     context.findRenderObject() as RenderBox;
 
-                display.offset = object
-                    .globalToLocal(Offset(
-                      details.globalPosition.dx,
-                      details.globalPosition.dy,
-                    ))
-                    .dx;
+                display.offset = isVertical
+                    ? object
+                        .globalToLocal(Offset(
+                          details.globalPosition.dx,
+                          details.globalPosition.dy,
+                        ))
+                        .dy
+                    : object
+                        .globalToLocal(Offset(
+                          details.globalPosition.dx,
+                          details.globalPosition.dy,
+                        ))
+                        .dx;
 
                 resizeNotifier.resize();
               },
@@ -306,15 +320,24 @@ class PlutoDualGridDividerWidgetState
           onHorizontalDragStart: onHorizontalDragStart,
           onHorizontalDragUpdate: onHorizontalDragUpdate,
           onHorizontalDragEnd: onHorizontalDragEnd,
+          onVerticalDragStart: onHorizontalDragStart,
+          onVerticalDragUpdate: onHorizontalDragUpdate,
+          onVerticalDragEnd: onHorizontalDragEnd,
           child: ColoredBox(
             color: isDragging ? widget.draggingColor : widget.backgroundColor,
             child: Stack(
               children: [
                 Positioned(
-                  top: (size.maxHeight / 2) - 18,
-                  left: -4,
+                  top: size.maxHeight > size.maxWidth
+                      ? (size.maxHeight / 2) - 18
+                      : -4,
+                  left: size.maxHeight > size.maxWidth
+                      ? -4
+                      : (size.maxWidth / 2) - 18,
                   child: Icon(
-                    Icons.drag_indicator,
+                    size.maxHeight > size.maxWidth
+                        ? Icons.drag_indicator
+                        : Icons.drag_handle,
                     color: widget.indicatorColor,
                     size: 18,
                   ),
@@ -340,6 +363,7 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
     required this.display,
     required this.showDraggableDivider,
     required this.isLTR,
+    required this.isVertical,
   }) : super(relayout: notifier);
 
   final PlutoDualGridDisplay display;
@@ -347,6 +371,8 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
   final bool showDraggableDivider;
 
   final bool isLTR;
+
+  final bool isVertical;
 
   @override
   void performLayout(Size size) {
@@ -366,11 +392,36 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
             : display.offset! - dividerHalf
         : display.gridAWidth(constrains) - dividerHalf;
     double gridBWidth = size.width - gridAWidth - dividerWidth;
+    double gridAHeight = size.height;
+    double gridBHeight = size.height;
 
     if (!isLTR) {
       final savedGridBWidth = gridBWidth;
       gridBWidth = gridAWidth;
       gridAWidth = savedGridBWidth;
+    }
+
+    if (isVertical) {
+      gridAWidth = size.width;
+      gridBWidth = size.width;
+      gridAHeight = showDraggableDivider
+          ? display.offset == null
+              ? display.gridAHeight(constrains) - dividerHalf
+              : display.offset! - dividerHalf
+          : display.gridAHeight(constrains) - dividerHalf;
+      gridBHeight = size.height - gridAHeight - dividerWidth;
+
+      if (gridAHeight < 0) {
+        gridAHeight = 0;
+      } else if (gridAHeight > size.height - dividerWidth) {
+        gridAHeight = size.height - dividerWidth;
+      }
+
+      if (gridBHeight < 0) {
+        gridBHeight = 0;
+      } else if (gridBHeight > size.height - dividerWidth) {
+        gridBHeight = size.height - dividerWidth;
+      }
     }
 
     if (gridAWidth < 0) {
@@ -389,39 +440,51 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         _PlutoDualGridId.gridA,
         BoxConstraints.tight(
-          Size(gridAWidth, size.height),
+          Size(gridAWidth, gridAHeight),
         ),
       );
 
       final double posX = isLTR ? 0 : gridBWidth + dividerWidth;
-
-      positionChild(_PlutoDualGridId.gridA, Offset(posX, 0));
+      if (isVertical) {
+        positionChild(_PlutoDualGridId.gridA, const Offset(0, 0));
+      } else {
+        positionChild(_PlutoDualGridId.gridA, Offset(posX, 0));
+      }
     }
 
     if (hasChild(_PlutoDualGridId.divider)) {
       layoutChild(
         _PlutoDualGridId.divider,
         BoxConstraints.tight(
-          Size(PlutoDualGrid.dividerWidth, size.height),
+          isVertical
+              ? Size(size.width, PlutoDualGrid.dividerWidth)
+              : Size(PlutoDualGrid.dividerWidth, size.height),
         ),
       );
 
       final double posX = isLTR ? gridAWidth : gridBWidth;
-
-      positionChild(_PlutoDualGridId.divider, Offset(posX, 0));
+      if (isVertical) {
+        positionChild(_PlutoDualGridId.divider, Offset(0, gridAHeight));
+      } else {
+        positionChild(_PlutoDualGridId.divider, Offset(posX, 0));
+      }
     }
 
     if (hasChild(_PlutoDualGridId.gridB)) {
       layoutChild(
         _PlutoDualGridId.gridB,
         BoxConstraints.tight(
-          Size(gridBWidth, size.height),
+          Size(gridBWidth, gridBHeight),
         ),
       );
 
       final double posX = isLTR ? gridAWidth + dividerWidth : 0;
-
-      positionChild(_PlutoDualGridId.gridB, Offset(posX, 0));
+      if (isVertical) {
+        positionChild(
+            _PlutoDualGridId.gridB, Offset(0, gridAHeight + dividerWidth));
+      } else {
+        positionChild(_PlutoDualGridId.gridB, Offset(posX, 0));
+      }
     }
   }
 
@@ -444,8 +507,9 @@ class PlutoDualOnSelectedEvent {
 
 abstract class PlutoDualGridDisplay {
   double gridAWidth(BoxConstraints size);
-
+  double gridAHeight(BoxConstraints size);
   double gridBWidth(BoxConstraints size);
+  double gridBHeight(BoxConstraints size);
 
   double? offset;
 }
@@ -465,6 +529,12 @@ class PlutoDualGridDisplayRatio implements PlutoDualGridDisplay {
 
   @override
   double gridBWidth(BoxConstraints size) => size.maxWidth * (1 - ratio);
+
+  @override
+  double gridAHeight(BoxConstraints size) => size.maxHeight * ratio;
+
+  @override
+  double gridBHeight(BoxConstraints size) => size.maxHeight * (1 - ratio);
 }
 
 class PlutoDualGridDisplayFixedAndExpanded implements PlutoDualGridDisplay {
@@ -482,6 +552,12 @@ class PlutoDualGridDisplayFixedAndExpanded implements PlutoDualGridDisplay {
 
   @override
   double gridBWidth(BoxConstraints size) => size.maxWidth - width;
+
+  @override
+  double gridAHeight(BoxConstraints size) => width;
+
+  @override
+  double gridBHeight(BoxConstraints size) => size.maxHeight - width;
 }
 
 class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
@@ -499,6 +575,12 @@ class PlutoDualGridDisplayExpandedAndFixed implements PlutoDualGridDisplay {
 
   @override
   double gridBWidth(BoxConstraints size) => width;
+
+  @override
+  double gridAHeight(BoxConstraints size) => size.maxHeight - width;
+
+  @override
+  double gridBHeight(BoxConstraints size) => width;
 }
 
 class PlutoDualGridProps {
