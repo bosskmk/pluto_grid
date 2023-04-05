@@ -199,7 +199,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
             stateManager.rowGroupDelegate!.isExpandableCell(widget.cell),
         enableCellVerticalBorder: style.enableCellBorderVertical,
         borderColor: style.borderColor,
-        activatedBorderColor: style.activatedBorderColor,
+        activatedBorderColor:
+            style.activatedCellBorderColor ?? style.activatedBorderColor,
         activatedColor: style.activatedColor,
         inactivatedBorderColor: style.inactivatedBorderColor,
         gridBackgroundColor: style.gridBackgroundColor,
