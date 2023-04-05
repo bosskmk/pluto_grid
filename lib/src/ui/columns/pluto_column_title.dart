@@ -532,40 +532,37 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   }
 
   String? get _title =>
-      widget.column.titleSpan == null ? widget.column.title : null;
+      widget.column.titleWidget == null ? widget.column.title : null;
 
-  List<InlineSpan> get _children => [
-        if (widget.column.titleSpan != null) widget.column.titleSpan!,
+  List<Widget> get _children => [
+        if (widget.column.titleWidget != null) widget.column.titleWidget!,
         if (_isFilteredList)
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: IconButton(
-              icon: Icon(
-                Icons.filter_alt_outlined,
-                color: stateManager.configuration.style.iconColor,
-                size: stateManager.configuration.style.iconSize,
-              ),
-              onPressed: _handleOnPressedFilter,
-              constraints: BoxConstraints(
-                maxHeight:
-                    widget.height + (PlutoGridSettings.rowBorderWidth * 2),
-              ),
+          IconButton(
+            icon: Icon(
+              Icons.filter_alt_outlined,
+              color: stateManager.configuration.style.iconColor,
+              size: stateManager.configuration.style.iconSize,
+            ),
+            onPressed: _handleOnPressedFilter,
+            constraints: BoxConstraints(
+              maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
             ),
           ),
       ];
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        text: _title,
-        children: _children,
-      ),
+    return DefaultTextStyle(
       style: stateManager.configuration.style.columnTextStyle,
       overflow: TextOverflow.ellipsis,
       softWrap: false,
       maxLines: 1,
       textAlign: widget.column.titleTextAlign.value,
+      child: _title != null
+          ? Text(_title!)
+          : Row(
+              children: _children,
+            ),
     );
   }
 }
