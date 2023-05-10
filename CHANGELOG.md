@@ -1,3 +1,7 @@
+## [7.0.1] - 2023. 5. 11
+
+* Fix SDK version.
+
 ## [7.0.0] - 2023. 5. 11
 
 * Compatible with Flutter 3.10.
