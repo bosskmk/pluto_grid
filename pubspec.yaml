@@ -11,13 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.18.0
+  intl: ^0.18.1
   rxdart: ^0.27.7
-  collection: ^1.17.0
+  collection: ^1.17.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.3.2
-  build_runner: ^2.3.3
+  mockito: ^5.4.0
+  build_runner: ^2.4.2
   flutter_lints: ^2.0.1
