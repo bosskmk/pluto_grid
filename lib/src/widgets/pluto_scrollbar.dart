@@ -500,6 +500,7 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
                 widget.verticalController?.position.viewportDimension,
             axisDirection: widget.verticalController?.position.axisDirection ??
                 AxisDirection.down,
+            devicePixelRatio: 1.0,
           );
         }
         break;
@@ -519,6 +520,7 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
             axisDirection:
                 widget.horizontalController?.position.axisDirection ??
                     AxisDirection.right,
+            devicePixelRatio: 1.0,
           );
         }
         break;
