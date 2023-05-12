@@ -1500,7 +1500,7 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Lädt',
   });
-  
+
   const PlutoGridLocaleText.turkish({
     // Column menu
     this.unfreezeColumn = 'Sütunu serbest bırak',
@@ -1539,7 +1539,7 @@ class PlutoGridLocaleText {
     this.minute = 'Dakika',
     // Common
     this.loadingText = 'Yükleniyor',
-});
+  });
 
   const PlutoGridLocaleText.japanese({
     // Column menu
