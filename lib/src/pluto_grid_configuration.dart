@@ -1500,6 +1500,46 @@ class PlutoGridLocaleText {
     // Common
     this.loadingText = 'Lädt',
   });
+  
+  const PlutoGridLocaleText.turkish({
+    // Column menu
+    this.unfreezeColumn = 'Sütunu serbest bırak',
+    this.freezeColumnToStart = 'Başa sabitle',
+    this.freezeColumnToEnd = 'Sona sabitle',
+    this.autoFitColumn = 'Otomatik genişlik',
+    this.hideColumn = 'Sütunu gizle',
+    this.setColumns = 'Sütunları seç',
+    this.setFilter = 'Filtre uygula',
+    this.resetFilter = 'Filtreyi sıfırla',
+    // SetColumns popup
+    this.setColumnsTitle = 'Sütun başlıkları',
+    // Filter popup
+    this.filterColumn = 'Sütun',
+    this.filterType = 'Tip',
+    this.filterValue = 'Değer',
+    this.filterAllColumns = 'Tüm sütunlar',
+    this.filterContains = 'İçerir',
+    this.filterEquals = 'Eşittir',
+    this.filterStartsWith = 'Başlar',
+    this.filterEndsWith = 'Biter',
+    this.filterGreaterThan = 'Büyüktür',
+    this.filterGreaterThanOrEqualTo = 'Büyük veya eşittir',
+    this.filterLessThan = 'Küçüktür',
+    this.filterLessThanOrEqualTo = 'Küçük veya eşittir',
+    // Date popup
+    this.sunday = 'Paz',
+    this.monday = 'Pzt',
+    this.tuesday = 'Sal',
+    this.wednesday = 'Çar',
+    this.thursday = 'Per',
+    this.friday = 'Cum',
+    this.saturday = 'Cmt',
+    // Time column popup
+    this.hour = 'Saat',
+    this.minute = 'Dakika',
+    // Common
+    this.loadingText = 'Yükleniyor',
+});
 
   @override
   bool operator ==(covariant Object other) {
