@@ -369,12 +369,12 @@ class _NoRows extends StatelessWidget {
             border: Border.all(),
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
+          child: const Padding(
+            padding: EdgeInsets.all(10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.info_outline),
                 SizedBox(height: 5),
                 Text('There are no records'),
