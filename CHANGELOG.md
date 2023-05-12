@@ -1,3 +1,8 @@
+## [7.0.2] - 2023. 5. 13
+
+* Add Japanese, Turkish languages.
+* Fix Intl version.
+
 ## [7.0.1] - 2023. 5. 11
 
 * Fix SDK version.
