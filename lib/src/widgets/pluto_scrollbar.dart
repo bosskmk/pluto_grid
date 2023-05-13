@@ -491,6 +491,8 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
         needUpdate = _needUpdatePainterByHover(Axis.vertical);
         if (needUpdate) {
           metrics = FixedScrollMetrics(
+            devicePixelRatio: WidgetsBinding
+                .instance.platformDispatcher.views.first.devicePixelRatio,
             minScrollExtent:
                 widget.verticalController?.position.minScrollExtent,
             maxScrollExtent:
@@ -510,6 +512,8 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
         needUpdate = _needUpdatePainterByHover(Axis.horizontal);
         if (needUpdate) {
           metrics = FixedScrollMetrics(
+            devicePixelRatio: WidgetsBinding
+                .instance.platformDispatcher.views.first.devicePixelRatio,
             minScrollExtent:
                 widget.horizontalController?.position.minScrollExtent,
             maxScrollExtent:
