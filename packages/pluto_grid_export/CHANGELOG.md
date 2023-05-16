@@ -1,3 +1,8 @@
+## [1.0.5] - 2023. 5. 17
+
+* Bump PlutoGrid.
+* Removed ternary operator bug. (https://github.com/bosskmk/pluto_grid/pull/834)
+
 ## [1.0.4] - 2023. 1. 26
 
 * Bump PlutoGrid.
