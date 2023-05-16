@@ -1,3 +1,7 @@
+## [1.0.6] - 2023. 5. 17
+
+* Bump pdf package version.
+
 ## [1.0.5] - 2023. 5. 17
 
 * Bump PlutoGrid.

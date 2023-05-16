@@ -1,4 +1,4 @@
-## PlutoGridExport for PlutoGrid - v1.0.5
+## PlutoGridExport for PlutoGrid - v1.0.6
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
