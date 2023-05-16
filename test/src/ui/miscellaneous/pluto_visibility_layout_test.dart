@@ -146,7 +146,7 @@ void main() {
       'scrollController.addListener 가 호출 되어야 한다.',
       (tester) async {
         when(scrollPosition.viewportDimension).thenReturn(
-          tester.binding.window.physicalSize.width,
+          tester.view.physicalSize.width,
         );
 
         final children = <PlutoVisibilityLayoutId>[
@@ -166,7 +166,7 @@ void main() {
       '위젯이 사라지면 scrollController.removeListener 가 호출 되어야 한다.',
       (tester) async {
         when(scrollPosition.viewportDimension).thenReturn(
-          tester.binding.window.physicalSize.width,
+          tester.view.physicalSize.width,
         );
 
         final children = <PlutoVisibilityLayoutId>[
@@ -193,7 +193,7 @@ void main() {
       '_TestLayoutChild 가 노출 되어야 한다.',
       (tester) async {
         when(scrollPosition.viewportDimension).thenReturn(
-          tester.binding.window.physicalSize.width,
+          tester.view.physicalSize.width,
         );
 
         final children = <PlutoVisibilityLayoutId>[
@@ -223,7 +223,7 @@ void main() {
       '_TestLayoutChild 3개, 순서대로 노출 되어야 한다.',
       (tester) async {
         when(scrollPosition.viewportDimension).thenReturn(
-          tester.binding.window.physicalSize.width,
+          tester.view.physicalSize.width,
         );
 
         final children = <PlutoVisibilityLayoutId>[

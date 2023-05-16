@@ -660,6 +660,7 @@ class PlutoGridScrollbarConfig {
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
     this.onlyDraggingThumb = true,
+    this.enableScrollAfterDragEnd = true,
     this.scrollbarThickness = PlutoScrollbar.defaultThickness,
     this.scrollbarThicknessWhileDragging =
         PlutoScrollbar.defaultThicknessWhileDragging,
@@ -671,6 +672,7 @@ class PlutoGridScrollbarConfig {
     this.scrollbarRadius = PlutoScrollbar.defaultRadius,
     this.scrollbarRadiusWhileDragging =
         PlutoScrollbar.defaultRadiusWhileDragging,
+    this.longPressDuration,
     this.dragDevices,
   });
 
@@ -680,6 +682,13 @@ class PlutoGridScrollbarConfig {
 
   /// If [onlyDraggingThumb] is false, scrolling can be done by dragging the track area.
   final bool onlyDraggingThumb;
+
+  /// If you release the scroll bar after scrolling,
+  /// the scroll bar moves further according to the moving speed.
+  ///
+  /// If set to false,
+  /// the scroll bar will stop moving as soon as the scroll bar is released.
+  final bool enableScrollAfterDragEnd;
 
   final double scrollbarThickness;
 
@@ -701,6 +710,9 @@ class PlutoGridScrollbarConfig {
 
   final Radius scrollbarRadiusWhileDragging;
 
+  /// Set the long press time of the scroll bar. 100 ms if not set.
+  final Duration? longPressDuration;
+
   final Set<PointerDeviceKind>? dragDevices;
 
   @override
@@ -711,6 +723,7 @@ class PlutoGridScrollbarConfig {
             draggableScrollbar == other.draggableScrollbar &&
             isAlwaysShown == other.isAlwaysShown &&
             onlyDraggingThumb == other.onlyDraggingThumb &&
+            enableScrollAfterDragEnd == other.enableScrollAfterDragEnd &&
             scrollbarThickness == other.scrollbarThickness &&
             scrollbarThicknessWhileDragging ==
                 other.scrollbarThicknessWhileDragging &&
@@ -722,6 +735,7 @@ class PlutoGridScrollbarConfig {
             scrollbarRadius == other.scrollbarRadius &&
             scrollbarRadiusWhileDragging ==
                 other.scrollbarRadiusWhileDragging &&
+            longPressDuration == other.longPressDuration &&
             dragDevices == other.dragDevices;
   }
 
@@ -730,6 +744,7 @@ class PlutoGridScrollbarConfig {
         draggableScrollbar,
         isAlwaysShown,
         onlyDraggingThumb,
+        enableScrollAfterDragEnd,
         scrollbarThickness,
         scrollbarThicknessWhileDragging,
         hoverWidth,
@@ -739,6 +754,7 @@ class PlutoGridScrollbarConfig {
         scrollBarTrackColor,
         scrollbarRadius,
         scrollbarRadiusWhileDragging,
+        longPressDuration,
         dragDevices,
       );
 }
@@ -1043,6 +1059,46 @@ class PlutoGridLocaleText {
     this.minute = 'Minute',
     // Common
     this.loadingText = 'Loading',
+  });
+
+  const PlutoGridLocaleText.french({
+    // Column menu
+    this.unfreezeColumn = 'Libérer',
+    this.freezeColumnToStart = 'Figer au début',
+    this.freezeColumnToEnd = 'Figer à la fin',
+    this.autoFitColumn = 'Ajuster automatiquement',
+    this.hideColumn = 'Cacher colonne',
+    this.setColumns = 'Définir les colonnes',
+    this.setFilter = 'Filtrer',
+    this.resetFilter = 'Défiltrer',
+    // SetColumns popup
+    this.setColumnsTitle = 'Titre de colonne',
+    // Filter popup
+    this.filterColumn = 'Colonne',
+    this.filterType = 'Type',
+    this.filterValue = 'Valeur',
+    this.filterAllColumns = 'Toutes colonnes',
+    this.filterContains = 'Contient',
+    this.filterEquals = 'Egal',
+    this.filterStartsWith = 'Commence par',
+    this.filterEndsWith = 'Termine par',
+    this.filterGreaterThan = 'Supérieur à',
+    this.filterGreaterThanOrEqualTo = 'Supérieur ou égal à',
+    this.filterLessThan = 'Inférieur à',
+    this.filterLessThanOrEqualTo = 'Inférieur ou égal à',
+    // Date popup
+    this.sunday = 'Di',
+    this.monday = 'Lu',
+    this.tuesday = 'Ma',
+    this.wednesday = 'Me',
+    this.thursday = 'Je',
+    this.friday = 'Ve',
+    this.saturday = 'Sa',
+    // Time column popup
+    this.hour = 'Heure',
+    this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Chargement',
   });
 
   const PlutoGridLocaleText.china({
@@ -1403,6 +1459,126 @@ class PlutoGridLocaleText {
     this.minute = 'Minutt',
     // Common
     this.loadingText = 'Laster',
+  });
+
+  const PlutoGridLocaleText.german({
+    // Column menu
+    this.unfreezeColumn = 'Spalte lösen',
+    this.freezeColumnToStart = 'An den Anfang pinnen',
+    this.freezeColumnToEnd = 'Ans Ende pinnen',
+    this.autoFitColumn = 'Auto fit',
+    this.hideColumn = 'Spalte verstecken',
+    this.setColumns = 'Spalten auswählen',
+    this.setFilter = 'Filter anwenden',
+    this.resetFilter = 'Filter zurücksetzen',
+    // SetColumns popup
+    this.setColumnsTitle = 'Spaltentitel',
+    // Filter popup
+    this.filterColumn = 'Spalte',
+    this.filterType = 'Typ',
+    this.filterValue = 'Wert',
+    this.filterAllColumns = 'Alle Spalten',
+    this.filterContains = 'Beinhaltet',
+    this.filterEquals = 'Ist gleich',
+    this.filterStartsWith = 'Started mit',
+    this.filterEndsWith = 'Endet mit',
+    this.filterGreaterThan = 'Größer als',
+    this.filterGreaterThanOrEqualTo = 'Größer als oder gleich',
+    this.filterLessThan = 'Kleiner als',
+    this.filterLessThanOrEqualTo = 'Kleiner als oder gleich',
+    // Date popup
+    this.sunday = 'So',
+    this.monday = 'Mo',
+    this.tuesday = 'Di',
+    this.wednesday = 'Mi',
+    this.thursday = 'Do',
+    this.friday = 'Fr',
+    this.saturday = 'Sa',
+    // Time column popup
+    this.hour = 'Stunde',
+    this.minute = 'Minute',
+    // Common
+    this.loadingText = 'Lädt',
+  });
+
+  const PlutoGridLocaleText.turkish({
+    // Column menu
+    this.unfreezeColumn = 'Sütunu serbest bırak',
+    this.freezeColumnToStart = 'Başa sabitle',
+    this.freezeColumnToEnd = 'Sona sabitle',
+    this.autoFitColumn = 'Otomatik genişlik',
+    this.hideColumn = 'Sütunu gizle',
+    this.setColumns = 'Sütunları seç',
+    this.setFilter = 'Filtre uygula',
+    this.resetFilter = 'Filtreyi sıfırla',
+    // SetColumns popup
+    this.setColumnsTitle = 'Sütun başlıkları',
+    // Filter popup
+    this.filterColumn = 'Sütun',
+    this.filterType = 'Tip',
+    this.filterValue = 'Değer',
+    this.filterAllColumns = 'Tüm sütunlar',
+    this.filterContains = 'İçerir',
+    this.filterEquals = 'Eşittir',
+    this.filterStartsWith = 'Başlar',
+    this.filterEndsWith = 'Biter',
+    this.filterGreaterThan = 'Büyüktür',
+    this.filterGreaterThanOrEqualTo = 'Büyük veya eşittir',
+    this.filterLessThan = 'Küçüktür',
+    this.filterLessThanOrEqualTo = 'Küçük veya eşittir',
+    // Date popup
+    this.sunday = 'Paz',
+    this.monday = 'Pzt',
+    this.tuesday = 'Sal',
+    this.wednesday = 'Çar',
+    this.thursday = 'Per',
+    this.friday = 'Cum',
+    this.saturday = 'Cmt',
+    // Time column popup
+    this.hour = 'Saat',
+    this.minute = 'Dakika',
+    // Common
+    this.loadingText = 'Yükleniyor',
+  });
+
+  const PlutoGridLocaleText.japanese({
+    // Column menu
+    this.unfreezeColumn = '列の固定を解除する',
+    this.freezeColumnToStart = '列を最初に固定する',
+    this.freezeColumnToEnd = '列を最後に固定する',
+    this.autoFitColumn = '列幅の自動修正',
+    this.hideColumn = '列を非表示にする',
+    this.setColumns = '列の表示設定',
+    this.setFilter = 'フィルタの作成',
+    this.resetFilter = 'フィルタの削除',
+    // SetColumns popup
+    this.setColumnsTitle = '列のタイトル',
+    // Filter popup
+    this.filterColumn = '列',
+    this.filterType = '種類',
+    this.filterValue = '値',
+    this.filterAllColumns = '全列',
+    this.filterContains = '含む',
+    this.filterEquals = '等しい',
+    this.filterStartsWith = '指定の値で始まる',
+    this.filterEndsWith = '指定の値で終わる',
+    this.filterGreaterThan = 'より大きい',
+    this.filterGreaterThanOrEqualTo = '以上',
+    this.filterLessThan = '未満',
+    this.filterLessThanOrEqualTo = '以下',
+    // Date popup
+    this.sunday = '日',
+    this.monday = '月',
+    this.tuesday = '火',
+    this.wednesday = '水',
+    this.thursday = '木',
+    this.friday = '金',
+    this.saturday = '土',
+    // Time column popup
+    this.hour = '時間',
+    this.minute = '分',
+    // Common
+    this.loadingText = 'にゃ〜',
   });
 
   @override

@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import 'state/cell_state.dart';
@@ -470,18 +471,18 @@ class PlutoGridSelectingCellPosition {
 }
 
 class PlutoGridKeyPressed {
-  bool shift;
+  bool get shift {
+    final keysPressed = HardwareKeyboard.instance.logicalKeysPressed;
 
-  bool ctrl;
+    return !(!keysPressed.contains(LogicalKeyboardKey.shiftLeft) &&
+        !keysPressed.contains(LogicalKeyboardKey.shiftRight));
+  }
 
-  PlutoGridKeyPressed({
-    this.shift = false,
-    this.ctrl = false,
-  });
+  bool get ctrl {
+    final keysPressed = HardwareKeyboard.instance.logicalKeysPressed;
 
-  void reset() {
-    shift = false;
-    ctrl = false;
+    return !(!keysPressed.contains(LogicalKeyboardKey.controlLeft) &&
+        !keysPressed.contains(LogicalKeyboardKey.controlRight));
   }
 }
 

@@ -65,8 +65,8 @@ void main() {
 
       String? copied;
 
-      SystemChannels.platform
-          .setMockMethodCallHandler((MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform, (MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.setData') {
           copied = (await methodCall.arguments['text']).toString();
         }
@@ -119,8 +119,8 @@ void main() {
 
       String? copied;
 
-      SystemChannels.platform
-          .setMockMethodCallHandler((MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform, (MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.setData') {
           copied = (await methodCall.arguments['text']).toString();
         }
@@ -167,8 +167,8 @@ void main() {
       when(stateManager.currentCell).thenReturn(PlutoCell(value: 'test'));
       when(stateManager.isEditing).thenReturn(false);
 
-      SystemChannels.platform
-          .setMockMethodCallHandler((MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform, (MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.getData') {
           return const <String, dynamic>{'text': 'pasted'};
         }
@@ -221,8 +221,8 @@ void main() {
       when(stateManager.currentCell).thenReturn(null);
       when(stateManager.isEditing).thenReturn(false);
 
-      SystemChannels.platform
-          .setMockMethodCallHandler((MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform, (MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.getData') {
           return const <String, dynamic>{'text': 'pasted'};
         }
@@ -275,8 +275,8 @@ void main() {
       when(stateManager.currentCell).thenReturn(PlutoCell(value: 'test'));
       when(stateManager.isEditing).thenReturn(true);
 
-      SystemChannels.platform
-          .setMockMethodCallHandler((MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform, (MethodCall methodCall) async {
         if (methodCall.method == 'Clipboard.getData') {
           return const <String, dynamic>{'text': 'pasted'};
         }

@@ -628,7 +628,7 @@ mixin RowGroupState implements IPlutoGridState {
     refRows.removeWhereFromOriginal(isNotMainGroupedRow);
   }
 
-  void _restoreExpandedRowGroup() {
+  void _restoreExpandedRowGroup({bool resetCurrentState = false}) {
     final Iterable<PlutoRow> expandedRows = refRows.filterOrOriginalList
         .where(isExpandedGroupedRow)
         .toList(growable: false);
@@ -655,7 +655,7 @@ mixin RowGroupState implements IPlutoGridState {
     }
 
     if (toResetPage) {
-      resetPage(resetCurrentState: false, notify: false);
+      resetPage(resetCurrentState: resetCurrentState, notify: false);
     }
   }
 
@@ -706,7 +706,9 @@ mixin RowGroupState implements IPlutoGridState {
 
     refRows.addAll(rows);
 
-    if (isPaginated) {
+    if (enabledRowGroups) {
+      _restoreExpandedRowGroup(resetCurrentState: true);
+    } else if (isPaginated) {
       resetPage(resetCurrentState: true, notify: false);
     }
   }

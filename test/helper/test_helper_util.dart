@@ -10,11 +10,11 @@ class TestHelperUtil {
     required double width,
     required double height,
   }) async {
-    addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+    addTearDown(tester.view.resetPhysicalSize);
 
-    tester.binding.window.physicalSizeTestValue = Size(width, height);
+    tester.view.physicalSize = Size(width, height);
 
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
+    tester.view.devicePixelRatio = 1.0;
 
     await tester.pumpAndSettle();
   }

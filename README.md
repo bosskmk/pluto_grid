@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v5.4.9
+## PlutoGrid for flutter - v7.0.2
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -171,11 +171,13 @@ Widget build(BuildContext context) {
 
 ### Flutter version compatible
 
-| Flutter         | PlutoGrid             |
-|-----------------|-----------------------|
-| 3.3.0 or higher | 5.0.6 or higher       |
-| 3.0.0 or higher | 3.0.0-0.pre or higher |
-| 2.5.0 or higher | 2.5.0 or higher       |
+| Flutter          | PlutoGrid             |
+|------------------|-----------------------|
+| 3.10.0 or higher | 7.0.0 or higher       |
+| 3.7.0 or higher  | 6.0.0 or higher       |
+| 3.3.0 or higher  | 5.0.6 or higher       |
+| 3.0.0 or higher  | 3.0.0-0.pre or higher |
+| 2.5.0 or higher  | 2.5.0 or higher       |
 
 For other versions, contact the issue
 

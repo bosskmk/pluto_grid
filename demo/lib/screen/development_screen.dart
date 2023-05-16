@@ -369,12 +369,12 @@ class _NoRows extends StatelessWidget {
             border: Border.all(),
             borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
+          child: const Padding(
+            padding: EdgeInsets.all(10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.info_outline),
                 SizedBox(height: 5),
                 Text('There are no records'),
@@ -606,6 +606,18 @@ class _HeaderState extends State<_Header> {
           break;
         case _Locale.norway:
           localeText = const PlutoGridLocaleText.norway();
+          break;
+        case _Locale.german:
+          localeText = const PlutoGridLocaleText.german();
+          break;
+        case _Locale.french:
+          localeText = const PlutoGridLocaleText.french();
+          break;
+        case _Locale.turkish:
+          localeText = const PlutoGridLocaleText.turkish();
+          break;
+        case _Locale.japanese:
+          localeText = const PlutoGridLocaleText.japanese();
           break;
       }
 
@@ -1155,16 +1167,20 @@ enum _RestoreAutoSizeOptions {
 }
 
 enum _Locale {
-  english,
-  korean,
-  china,
-  russian,
-  czech,
-  brazilianPortuguese,
-  spanish,
-  persian,
   arabic,
+  brazilianPortuguese,
+  china,
+  czech,
+  english,
+  french,
+  german,
+  korean,
   norway,
+  persian,
+  russian,
+  spanish,
+  turkish,
+  japanese,
 }
 
 final _isAndroid = defaultTargetPlatform == TargetPlatform.android;
