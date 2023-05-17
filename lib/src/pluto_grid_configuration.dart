@@ -215,6 +215,7 @@ class PlutoGridStyleConfig {
     this.borderColor = const Color(0xFFDDE2EB),
     this.activatedBorderColor = Colors.lightBlue,
     this.inactivatedBorderColor = const Color(0xFFC4C7CC),
+    this.activatedCellBorderColor,
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
@@ -271,6 +272,7 @@ class PlutoGridStyleConfig {
     this.borderColor = const Color(0xFF222222),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
     this.inactivatedBorderColor = const Color(0xFF666666),
+    this.activatedCellBorderColor,
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
     this.columnHeight = PlutoGridSettings.rowHeight,
@@ -381,6 +383,12 @@ class PlutoGridStyleConfig {
   /// Border color set when widgets such as [PlutoRow] and [PlutoCell]
   /// receive focus or are currently selected.
   final Color activatedBorderColor;
+
+  /// Cell border color set when widgets such as [PlutoRow] and [PlutoCell]
+  /// receive focus or are currently selected.
+  ///
+  /// If it is not set, the [activatedBorderColor] is used as the cell border color.
+  final Color? activatedCellBorderColor;
 
   /// Border color set when widgets such as [PlutoRow] and [PlutoCell] lose focus.
   final Color inactivatedBorderColor;
