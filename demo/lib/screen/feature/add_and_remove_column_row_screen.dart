@@ -42,14 +42,16 @@ class _AddAndRemoveColumnRowScreenState
         type: PlutoColumnType.text(),
         readOnly: true,
         checkReadOnly: checkReadOnly,
-        titleSpan: const TextSpan(children: [
-          WidgetSpan(
-              child: Icon(
-            Icons.lock_outlined,
-            size: 17,
-          )),
-          TextSpan(text: 'Id'),
-        ]),
+        titleWidget: RichText(
+          text: const TextSpan(children: [
+            WidgetSpan(
+                child: Icon(
+              Icons.lock_outlined,
+              size: 17,
+            )),
+            TextSpan(text: 'Id'),
+          ]),
+        ),
       ),
       PlutoColumn(
         title: 'Name',
@@ -66,14 +68,16 @@ class _AddAndRemoveColumnRowScreenState
         ]),
         enableEditingMode: false,
         frozen: PlutoColumnFrozen.end,
-        titleSpan: const TextSpan(children: [
-          WidgetSpan(
-              child: Icon(
-            Icons.lock,
-            size: 17,
-          )),
-          TextSpan(text: 'Status'),
-        ]),
+        titleWidget: RichText(
+          text: const TextSpan(children: [
+            WidgetSpan(
+                child: Icon(
+              Icons.lock,
+              size: 17,
+            )),
+            TextSpan(text: 'Status'),
+          ]),
+        ),
         renderer: (rendererContext) {
           Color textColor = Colors.black;
 

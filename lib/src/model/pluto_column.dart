@@ -46,22 +46,24 @@ class PlutoColumn {
 
   EdgeInsets? filterPadding;
 
-  /// Customize the column with TextSpan or WidgetSpan instead of the column's title string.
+  /// Customize the column with a Widget instead of the column's title string.
   ///
   /// ```
-  /// titleSpan: const TextSpan(
-  ///   children: [
-  ///     WidgetSpan(
-  ///       child: Text(
-  ///         '* ',
-  ///         style: TextStyle(color: Colors.red),
+  /// titleWidget: RichText(
+  ///   text: const TextSpan(
+  ///     children: [
+  ///       WidgetSpan(
+  ///         child: Text(
+  ///           '* ',
+  ///           style: TextStyle(color: Colors.red),
+  ///         ),
   ///       ),
-  ///     ),
-  ///     TextSpan(text: 'column title'),
-  ///   ],
+  ///       TextSpan(text: 'column title'),
+  ///     ],
+  ///   ),
   /// ),
   /// ```
-  InlineSpan? titleSpan;
+  Widget? titleWidget;
 
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
@@ -202,7 +204,7 @@ class PlutoColumn {
     this.minWidth = PlutoGridSettings.minColumnWidth,
     this.titlePadding,
     this.filterPadding,
-    this.titleSpan,
+    this.titleWidget,
     this.cellPadding,
     this.textAlign = PlutoColumnTextAlign.start,
     this.titleTextAlign = PlutoColumnTextAlign.start,

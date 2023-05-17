@@ -958,17 +958,19 @@ final testColumnsA = [
     enableDropToResize: true,
     enableAutoEditing: true,
     titleTextAlign: PlutoColumnTextAlign.right,
-    titleSpan: const TextSpan(
-      children: [
-        WidgetSpan(
-          child: Text(
-            '* ',
-            style: TextStyle(color: Colors.red),
+    titleWidget: RichText(
+      text: const TextSpan(
+        children: [
+          WidgetSpan(
+            child: Text(
+              '* ',
+              style: TextStyle(color: Colors.red),
+            ),
+            alignment: PlaceholderAlignment.bottom,
           ),
-          alignment: PlaceholderAlignment.bottom,
-        ),
-        TextSpan(text: 'column1'),
-      ],
+          TextSpan(text: 'column1'),
+        ],
+      ),
     ),
     width: 250,
     minWidth: 175,
