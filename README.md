@@ -1,3 +1,16 @@
+## PlutoGrid Fork
+This is a fork of the PlutoGrid package, with some additional features.
+The original package can be found here: https://pub.dev/packages/pluto_grid.
+
+## Changes we made
+- Improve the adaptability of the column title - https://github.com/bosskmk/pluto_grid/pull/811
+- Customize the cell border color - https://github.com/bosskmk/pluto_grid/pull/810
+
+## NOTE
+Whenever the original library is updated, we need to update this as well.
+We opened two pull requests ([PR1](https://github.com/bosskmk/pluto_grid/pull/811), [PR2](https://github.com/bosskmk/pluto_grid/pull/810))
+to the original package, so hopefully they will be merged soon. If they are merged, we can remove this package and use the original one.
+
 ## PlutoGrid for flutter - v7.0.2
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
