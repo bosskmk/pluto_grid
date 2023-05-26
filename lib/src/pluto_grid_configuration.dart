@@ -11,6 +11,9 @@ class PlutoGridConfiguration {
   /// Moves the current cell when focus reaches the left or right edge in the edit state.
   final bool enableMoveHorizontalInEditing;
 
+  /// Disables/enables the PlutoGrid Key Manager which is intercepting any key event.
+  final bool useKeyManager;
+
   /// [PlutoEnterKeyAction.EditingAndMoveDown]
   /// It switches to the editing state, and moves down in the editing state.
   ///
@@ -76,6 +79,7 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration({
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
+    this.useKeyManager = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.shortcut = const PlutoGridShortcut(),
@@ -89,6 +93,7 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration.dark({
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
+    this.useKeyManager = true,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.shortcut = const PlutoGridShortcut(),
@@ -131,6 +136,7 @@ class PlutoGridConfiguration {
   PlutoGridConfiguration copyWith({
     bool? enableMoveDownAfterSelecting,
     bool? enableMoveHorizontalInEditing,
+    bool? useKeyManager,
     PlutoGridEnterKeyAction? enterKeyAction,
     PlutoGridTabKeyAction? tabKeyAction,
     PlutoGridShortcut? shortcut,
@@ -145,6 +151,7 @@ class PlutoGridConfiguration {
           enableMoveDownAfterSelecting ?? this.enableMoveDownAfterSelecting,
       enableMoveHorizontalInEditing:
           enableMoveHorizontalInEditing ?? this.enableMoveHorizontalInEditing,
+      useKeyManager: useKeyManager ?? this.useKeyManager,
       enterKeyAction: enterKeyAction ?? this.enterKeyAction,
       tabKeyAction: tabKeyAction ?? this.tabKeyAction,
       shortcut: shortcut ?? this.shortcut,
@@ -165,6 +172,7 @@ class PlutoGridConfiguration {
                 other.enableMoveDownAfterSelecting &&
             enableMoveHorizontalInEditing ==
                 other.enableMoveHorizontalInEditing &&
+            useKeyManager == other.useKeyManager &&
             enterKeyAction == other.enterKeyAction &&
             tabKeyAction == other.tabKeyAction &&
             shortcut == other.shortcut &&
@@ -179,6 +187,7 @@ class PlutoGridConfiguration {
   int get hashCode => Object.hash(
         enableMoveDownAfterSelecting,
         enableMoveHorizontalInEditing,
+        useKeyManager,
         enterKeyAction,
         tabKeyAction,
         shortcut,
