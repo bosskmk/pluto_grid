@@ -1,3 +1,9 @@
+## [7.1.0] - 2023. 5. 31
+
+* Improve the adaptability of the column title - https://github.com/bosskmk/pluto_grid/pull/811
+* Customize the cell border color - https://github.com/bosskmk/pluto_grid/pull/810
+* Be able to disable the internal Key Manager
+
 ## [7.0.2] - 2023. 5. 13
 
 * Add Japanese, Turkish languages.
