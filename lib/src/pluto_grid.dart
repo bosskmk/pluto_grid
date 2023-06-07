@@ -1224,10 +1224,10 @@ class _GridContainer extends StatelessWidget {
           decoration: BoxDecoration(
             color: style.gridBackgroundColor,
             borderRadius: style.gridBorderRadius,
-            border: Border.all(
-              color: style.gridBorderColor,
-              width: PlutoGridSettings.gridBorderWidth,
-            ),
+            // border: Border.all(
+            //   color: style.gridBorderColor,
+            //   width: PlutoGridSettings.gridBorderWidth,
+            // ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
