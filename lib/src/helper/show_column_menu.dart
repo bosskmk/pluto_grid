@@ -79,6 +79,7 @@ Future<T?>? showColumnMenu<T>({
   required BuildContext context,
   required Offset position,
   required List<PopupMenuEntry<T>> items,
+  ShapeBorder? shape,
   Color backgroundColor = Colors.white,
 }) {
   final RenderBox overlay =
@@ -87,6 +88,7 @@ Future<T?>? showColumnMenu<T>({
   return showMenu<T>(
     context: context,
     color: backgroundColor,
+    shape: shape,
     position: RelativeRect.fromLTRB(
       position.dx,
       position.dy,
@@ -102,7 +104,7 @@ List<PopupMenuEntry<PlutoGridColumnMenuItem>> _getDefaultColumnMenuItems({
   required PlutoGridStateManager stateManager,
   required PlutoColumn column,
 }) {
-  final Color textColor = stateManager.style.cellTextStyle.color!;
+  final Color textColor = stateManager.style.tooltipTextStyle.color!;
 
   final Color disableTextColor = textColor.withOpacity(0.5);
 
