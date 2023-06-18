@@ -341,7 +341,7 @@ class PlutoColumnTypeCurrency
           decimalDigits: decimalDigits,
           customPattern: format,
         ) {
-    decimalPoint = numberFormat.decimalDigits ?? 0;
+    decimalPoint = numberFormat.decimalDigits ?? defaultValue;
   }
 
   @override
@@ -550,6 +550,8 @@ mixin PlutoColumnTypeWithNumberFormat {
 
   String? get locale;
 
+  dynamic defaultValue;
+
   bool isValid(dynamic value) {
     if (!isNumeric(value)) {
       return false;
@@ -571,17 +573,19 @@ mixin PlutoColumnTypeWithNumberFormat {
   }
 
   dynamic makeCompareValue(dynamic v) {
-    return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
+    return v.runtimeType != num
+        ? num.tryParse(v.toString()) ?? defaultValue
+        : v;
   }
 
   String applyFormat(dynamic value) {
     num number = num.tryParse(
           value.toString().replaceAll(numberFormat.symbols.DECIMAL_SEP, '.'),
         ) ??
-        0;
+        defaultValue;
 
     if (negative == false && number < 0) {
-      number = 0;
+      number = defaultValue;
     }
 
     return numberFormat.format(number);
@@ -599,9 +603,9 @@ mixin PlutoColumnTypeWithNumberFormat {
         .replaceAll(RegExp('[^$match]'), '')
         .replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
 
-    final num formattedNumber = num.tryParse(formatted) ?? 0;
+    final num formattedNumber = num.tryParse(formatted) ?? defaultValue;
 
-    return formattedNumber.isFinite ? formattedNumber : 0;
+    return formattedNumber.isFinite ? formattedNumber : defaultValue;
   }
 
   bool isNumeric(dynamic s) {

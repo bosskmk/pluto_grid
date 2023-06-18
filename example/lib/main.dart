@@ -45,7 +45,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Age',
       field: 'age',
-      type: PlutoColumnType.number(),
+      type: PlutoColumnType.number(defaultValue: 11),
     ),
     PlutoColumn(
       title: 'Role',
@@ -108,7 +108,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       cells: {
         'id': PlutoCell(value: 'user2'),
         'name': PlutoCell(value: 'Jack'),
-        'age': PlutoCell(value: 25),
+        'age': PlutoCell(value: null),
         'role': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
         'working_time': PlutoCell(value: '10:00'),
