@@ -48,6 +48,11 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       type: PlutoColumnType.number(defaultValue: 11),
     ),
     PlutoColumn(
+      title: 'Buy',
+      field: 'buy',
+      type: PlutoColumnType.bool(),
+    ),
+    PlutoColumn(
       title: 'Role',
       field: 'role',
       type: PlutoColumnType.select(<String>[
@@ -98,6 +103,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'id': PlutoCell(value: 'user1'),
         'name': PlutoCell(value: 'Mike'),
         'age': PlutoCell(value: 20),
+        'buy': PlutoCell(value: false),
         'role': PlutoCell(value: 'Programmer'),
         'joined': PlutoCell(value: '2021-01-01'),
         'working_time': PlutoCell(value: '09:00'),
@@ -109,6 +115,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'id': PlutoCell(value: 'user2'),
         'name': PlutoCell(value: 'Jack'),
         'age': PlutoCell(value: null),
+        'buy': PlutoCell(value: true),
         'role': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
         'working_time': PlutoCell(value: '10:00'),
@@ -120,6 +127,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'id': PlutoCell(value: 'user3'),
         'name': PlutoCell(value: 'Suzi'),
         'age': PlutoCell(value: 40),
+        'buy': PlutoCell(value: null),
         'role': PlutoCell(value: 'Owner'),
         'joined': PlutoCell(value: '2021-03-01'),
         'working_time': PlutoCell(value: '11:00'),

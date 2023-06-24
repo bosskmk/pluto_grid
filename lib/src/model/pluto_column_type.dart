@@ -13,6 +13,11 @@ abstract class PlutoColumnType {
     );
   }
 
+  /// Set as a bool column.
+  factory PlutoColumnType.bool() {
+    return const PlutoColumnTypeBool();
+  }
+
   /// Set to numeric column.
   ///
   /// [format]
@@ -242,6 +247,30 @@ class PlutoColumnTypeText implements PlutoColumnType {
   @override
   bool isValid(dynamic value) {
     return value is String || value is num;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return _compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v.toString();
+  }
+}
+
+class PlutoColumnTypeBool implements PlutoColumnType {
+  @override
+  final dynamic defaultValue;
+
+  const PlutoColumnTypeBool({
+    this.defaultValue,
+  });
+
+  @override
+  bool isValid(dynamic value) {
+    return value is bool? || value is bool;
   }
 
   @override
