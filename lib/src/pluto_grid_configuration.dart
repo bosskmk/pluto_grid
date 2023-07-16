@@ -1501,6 +1501,86 @@ class PlutoGridLocaleText {
     this.loadingText = 'Lädt',
   });
 
+  const PlutoGridLocaleText.turkish({
+    // Column menu
+    this.unfreezeColumn = 'Sütunu serbest bırak',
+    this.freezeColumnToStart = 'Başa sabitle',
+    this.freezeColumnToEnd = 'Sona sabitle',
+    this.autoFitColumn = 'Otomatik genişlik',
+    this.hideColumn = 'Sütunu gizle',
+    this.setColumns = 'Sütunları seç',
+    this.setFilter = 'Filtre uygula',
+    this.resetFilter = 'Filtreyi sıfırla',
+    // SetColumns popup
+    this.setColumnsTitle = 'Sütun başlıkları',
+    // Filter popup
+    this.filterColumn = 'Sütun',
+    this.filterType = 'Tip',
+    this.filterValue = 'Değer',
+    this.filterAllColumns = 'Tüm sütunlar',
+    this.filterContains = 'İçerir',
+    this.filterEquals = 'Eşittir',
+    this.filterStartsWith = 'Başlar',
+    this.filterEndsWith = 'Biter',
+    this.filterGreaterThan = 'Büyüktür',
+    this.filterGreaterThanOrEqualTo = 'Büyük veya eşittir',
+    this.filterLessThan = 'Küçüktür',
+    this.filterLessThanOrEqualTo = 'Küçük veya eşittir',
+    // Date popup
+    this.sunday = 'Paz',
+    this.monday = 'Pzt',
+    this.tuesday = 'Sal',
+    this.wednesday = 'Çar',
+    this.thursday = 'Per',
+    this.friday = 'Cum',
+    this.saturday = 'Cmt',
+    // Time column popup
+    this.hour = 'Saat',
+    this.minute = 'Dakika',
+    // Common
+    this.loadingText = 'Yükleniyor',
+  });
+
+  const PlutoGridLocaleText.japanese({
+    // Column menu
+    this.unfreezeColumn = '列の固定を解除する',
+    this.freezeColumnToStart = '列を最初に固定する',
+    this.freezeColumnToEnd = '列を最後に固定する',
+    this.autoFitColumn = '列幅の自動修正',
+    this.hideColumn = '列を非表示にする',
+    this.setColumns = '列の表示設定',
+    this.setFilter = 'フィルタの作成',
+    this.resetFilter = 'フィルタの削除',
+    // SetColumns popup
+    this.setColumnsTitle = '列のタイトル',
+    // Filter popup
+    this.filterColumn = '列',
+    this.filterType = '種類',
+    this.filterValue = '値',
+    this.filterAllColumns = '全列',
+    this.filterContains = '含む',
+    this.filterEquals = '等しい',
+    this.filterStartsWith = '指定の値で始まる',
+    this.filterEndsWith = '指定の値で終わる',
+    this.filterGreaterThan = 'より大きい',
+    this.filterGreaterThanOrEqualTo = '以上',
+    this.filterLessThan = '未満',
+    this.filterLessThanOrEqualTo = '以下',
+    // Date popup
+    this.sunday = '日',
+    this.monday = '月',
+    this.tuesday = '火',
+    this.wednesday = '水',
+    this.thursday = '木',
+    this.friday = '金',
+    this.saturday = '土',
+    // Time column popup
+    this.hour = '時間',
+    this.minute = '分',
+    // Common
+    this.loadingText = 'にゃ〜',
+  });
+
   @override
   bool operator ==(covariant Object other) {
     return identical(this, other) ||
