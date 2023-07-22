@@ -274,7 +274,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     }
 
     return isCheckedRow
-        ? Color.alphaBlend(stateManager.configuration.style.checkedColor, color)
+        ? Color.alphaBlend(stateManager.configuration.style.activatedColor, color)
         : color;
   }
 
