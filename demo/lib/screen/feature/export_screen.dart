@@ -1,11 +1,9 @@
 // ignore_for_file: unused_local_variable
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
+
+// import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -179,25 +177,25 @@ class _Header extends StatefulWidget {
 
 class _HeaderState extends State<_Header> {
   void _printToPdfAndShareOrSave() async {
-    final themeData = pluto_grid_export.ThemeData.withFont(
-      base: pluto_grid_export.Font.ttf(
-        await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
-      ),
-      bold: pluto_grid_export.Font.ttf(
-        await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
-      ),
-    );
-
-    var plutoGridPdfExport = pluto_grid_export.PlutoGridDefaultPdfExport(
-      title: "Pluto Grid Sample pdf print",
-      creator: "Pluto Grid Rocks!",
-      format: pluto_grid_export.PdfPageFormat.a4.landscape,
-      themeData: themeData,
-    );
-
-    await pluto_grid_export.Printing.sharePdf(
-        bytes: await plutoGridPdfExport.export(widget.stateManager),
-        filename: plutoGridPdfExport.getFilename());
+    // final themeData = pluto_grid_export.ThemeData.withFont(
+    //   base: pluto_grid_export.Font.ttf(
+    //     await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
+    //   ),
+    //   bold: pluto_grid_export.Font.ttf(
+    //     await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
+    //   ),
+    // );
+    //
+    // var plutoGridPdfExport = pluto_grid_export.PlutoGridDefaultPdfExport(
+    //   title: "Pluto Grid Sample pdf print",
+    //   creator: "Pluto Grid Rocks!",
+    //   format: pluto_grid_export.PdfPageFormat.a4.landscape,
+    //   themeData: themeData,
+    // );
+    //
+    // await pluto_grid_export.Printing.sharePdf(
+    //     bytes: await plutoGridPdfExport.export(widget.stateManager),
+    //     filename: plutoGridPdfExport.getFilename());
   }
 
   // This doesn't works properly in systems different from Windows.
@@ -221,33 +219,33 @@ class _HeaderState extends State<_Header> {
   // }
 
   void _defaultExportGridAsCSV() async {
-    String title = "pluto_grid_export";
-    var exported = const Utf8Encoder().convert(
-        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
+    // String title = "pluto_grid_export";
+    // var exported = const Utf8Encoder().convert(
+    //     pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
     // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVCompatibleWithExcel() async {
-    String title = "pluto_grid_export";
-    var exportCSV =
-        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
-    var exported = const Utf8Encoder().convert(
-        // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
-        // This allows open the file in Excel with proper character interpretation
-        // See https://stackoverflow.com/a/155176
-        '\u{FEFF}$exportCSV');
+    // String title = "pluto_grid_export";
+    // var exportCSV =
+    //     pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
+    // var exported = const Utf8Encoder().convert(
+    //     // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
+    //     // This allows open the file in Excel with proper character interpretation
+    //     // See https://stackoverflow.com/a/155176
+    //     '\u{FEFF}$exportCSV');
     // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
   void _defaultExportGridAsCSVFakeExcel() async {
-    String title = "pluto_grid_export";
-    var exportCSV =
-        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
-    var exported = const Utf8Encoder().convert(
-        // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
-        // This allows open the file in Excel with proper character interpretation
-        // See https://stackoverflow.com/a/155176
-        '\u{FEFF}$exportCSV');
+    // String title = "pluto_grid_export";
+    // var exportCSV =
+    //     pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager);
+    // var exported = const Utf8Encoder().convert(
+    //     // FIX Add starting \u{FEFF} / 0xEF, 0xBB, 0xBF
+    //     // This allows open the file in Excel with proper character interpretation
+    //     // See https://stackoverflow.com/a/155176
+    //     '\u{FEFF}$exportCSV');
     // await FileSaver.instance.saveFile("$title.xls", exported, ".xls");
   }
 
@@ -261,12 +259,12 @@ class _HeaderState extends State<_Header> {
   // }
 
   void _defaultExportGridAsCSVWithSemicolon() async {
-    String title = "pluto_grid_export";
-    var exported =
-        const Utf8Encoder().convert(pluto_grid_export.PlutoGridExport.exportCSV(
-      widget.stateManager,
-      fieldDelimiter: ";",
-    ));
+    // String title = "pluto_grid_export";
+    // var exported =
+    //     const Utf8Encoder().convert(pluto_grid_export.PlutoGridExport.exportCSV(
+    //   widget.stateManager,
+    //   fieldDelimiter: ";",
+    // ));
     // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
   }
 
