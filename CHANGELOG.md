@@ -1,3 +1,16 @@
+## [7.0.2] - 2023. 5. 13
+
+* Add Japanese, Turkish languages.
+* Fix Intl version.
+
+## [7.0.1] - 2023. 5. 11
+
+* Fix SDK version.
+
+## [7.0.0] - 2023. 5. 11
+
+* Compatible with Flutter 3.10.
+
 ## [6.0.4] - 2023. 3. 7
 
 * Add Scrollbar properties. https://github.com/bosskmk/pluto_grid/issues/743
