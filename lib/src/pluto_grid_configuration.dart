@@ -246,6 +246,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableClickCursor = true,
   });
 
   const PlutoGridStyleConfig.dark({
@@ -303,6 +304,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableClickCursor = true,
   });
 
   /// Enable borderShadow in [PlutoGrid].
@@ -452,6 +454,11 @@ class PlutoGridStyleConfig {
 
   /// Apply border radius to popup opened inside [PlutoGrid].
   final BorderRadiusGeometry gridPopupBorderRadius;
+
+  /// Changes the mouse cursor when pointer is overr the row.
+  ///
+  /// Applicable for web platform.
+  final bool enableClickCursor;
 
   PlutoGridStyleConfig copyWith({
     bool? enableGridBorderShadow,
