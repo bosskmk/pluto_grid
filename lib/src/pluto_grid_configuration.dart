@@ -211,6 +211,7 @@ class PlutoGridStyleConfig {
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
     this.menuBackgroundColor = Colors.white,
+    this.enableGridBorder = true,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.borderColor = const Color(0xFFDDE2EB),
     this.activatedBorderColor = Colors.lightBlue,
@@ -267,6 +268,7 @@ class PlutoGridStyleConfig {
     this.iconColor = Colors.white38,
     this.disabledIconColor = Colors.white12,
     this.menuBackgroundColor = const Color(0xFF414141),
+    this.enableGridBorder = true,
     this.gridBorderColor = const Color(0xFF666666),
     this.borderColor = const Color(0xFF222222),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
@@ -368,6 +370,9 @@ class PlutoGridStyleConfig {
 
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
+
+  /// Enables the border around the [PlutoGrid].
+  final bool enableGridBorder;
 
   /// Set the border color of [PlutoGrid].
   final Color gridBorderColor;
