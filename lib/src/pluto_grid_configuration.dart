@@ -211,6 +211,7 @@ class PlutoGridStyleConfig {
     this.iconColor = Colors.black26,
     this.disabledIconColor = Colors.black12,
     this.menuBackgroundColor = Colors.white,
+    this.enableGridBorder = true,
     this.gridBorderColor = const Color(0xFFA1A5AE),
     this.borderColor = const Color(0xFFDDE2EB),
     this.activatedBorderColor = Colors.lightBlue,
@@ -245,6 +246,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableClickCursor = true,
   });
 
   const PlutoGridStyleConfig.dark({
@@ -267,6 +269,7 @@ class PlutoGridStyleConfig {
     this.iconColor = Colors.white38,
     this.disabledIconColor = Colors.white12,
     this.menuBackgroundColor = const Color(0xFF414141),
+    this.enableGridBorder = true,
     this.gridBorderColor = const Color(0xFF666666),
     this.borderColor = const Color(0xFF222222),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
@@ -301,6 +304,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.enableClickCursor = true,
   });
 
   /// Enable borderShadow in [PlutoGrid].
@@ -368,6 +372,9 @@ class PlutoGridStyleConfig {
 
   /// BackgroundColor of Popup menu. (column menu)
   final Color menuBackgroundColor;
+
+  /// Enables the border around the [PlutoGrid].
+  final bool enableGridBorder;
 
   /// Set the border color of [PlutoGrid].
   final Color gridBorderColor;
@@ -447,6 +454,11 @@ class PlutoGridStyleConfig {
 
   /// Apply border radius to popup opened inside [PlutoGrid].
   final BorderRadiusGeometry gridPopupBorderRadius;
+
+  /// Changes the mouse cursor when pointer is overr the row.
+  ///
+  /// Applicable for web platform.
+  final bool enableClickCursor;
 
   PlutoGridStyleConfig copyWith({
     bool? enableGridBorderShadow,
