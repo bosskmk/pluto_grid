@@ -401,6 +401,18 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       gridAWidth = savedGridBWidth;
     }
 
+    if (gridAWidth < 0) {
+      gridAWidth = 0;
+    } else if (gridAWidth > size.width - dividerWidth) {
+      gridAWidth = size.width - dividerWidth;
+    }
+
+    if (gridBWidth < 0) {
+      gridBWidth = 0;
+    } else if (gridBWidth > size.width - dividerWidth) {
+      gridBWidth = size.width - dividerWidth;
+    }
+
     if (isVertical) {
       gridAWidth = size.width;
       gridBWidth = size.width;
@@ -422,18 +434,6 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       } else if (gridBHeight > size.height - dividerWidth) {
         gridBHeight = size.height - dividerWidth;
       }
-    }
-
-    if (gridAWidth < 0) {
-      gridAWidth = 0;
-    } else if (gridAWidth > size.width - dividerWidth) {
-      gridAWidth = size.width - dividerWidth;
-    }
-
-    if (gridBWidth < 0) {
-      gridBWidth = 0;
-    } else if (gridBWidth > size.width - dividerWidth) {
-      gridBWidth = size.width - dividerWidth;
     }
 
     if (hasChild(_PlutoDualGridId.gridA)) {
