@@ -77,7 +77,8 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       horizontalController:
           scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
       isAlwaysShown: scrollbarConfig.isAlwaysShown,
-      onlyDraggingThumb: scrollbarConfig.onlyDraggingThumb,
+      onlyDraggingHorizontalThumb: scrollbarConfig.onlyDraggingHorizontalThumb,
+      onlyDraggingVerticalThumb: scrollbarConfig.onlyDraggingVerticalThumb,
       enableHover: PlatformHelper.isDesktop,
       enableScrollAfterDragEnd: scrollbarConfig.enableScrollAfterDragEnd,
       thickness: scrollbarConfig.scrollbarThickness,
@@ -93,13 +94,13 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       child: SingleChildScrollView(
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
-        physics: const ClampingScrollPhysics(),
+        physics: scrollbarConfig.onlyDraggingHorizontalThumb ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
         child: CustomSingleChildLayout(
           delegate: ListResizeDelegate(stateManager, _columns),
           child: ListView.builder(
             controller: _verticalScroll,
             scrollDirection: Axis.vertical,
-            physics: const ClampingScrollPhysics(),
+            physics: scrollbarConfig.onlyDraggingVerticalThumb ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
             itemCount: _rows.length,
             itemExtent: stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
