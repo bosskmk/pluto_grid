@@ -659,7 +659,8 @@ class PlutoGridScrollbarConfig {
   const PlutoGridScrollbarConfig({
     this.draggableScrollbar = true,
     this.isAlwaysShown = false,
-    this.onlyDraggingThumb = true,
+    this.onlyDraggingHorizontalThumb = false,
+    this.onlyDraggingVerticalThumb = false,
     this.enableScrollAfterDragEnd = true,
     this.scrollbarThickness = PlutoScrollbar.defaultThickness,
     this.scrollbarThicknessWhileDragging =
@@ -680,8 +681,11 @@ class PlutoGridScrollbarConfig {
 
   final bool isAlwaysShown;
 
-  /// If [onlyDraggingThumb] is false, scrolling can be done by dragging the track area.
-  final bool onlyDraggingThumb;
+  /// If [onlyDraggingHorizontalThumb] is true,horizontal scrolling can be done by dragging horizontal the track area.
+  final bool onlyDraggingHorizontalThumb;
+
+  /// If [onlyDraggingVerticalThumb] is true,vertical scrolling can be done by dragging vertical the track area.
+  final bool onlyDraggingVerticalThumb;
 
   /// If you release the scroll bar after scrolling,
   /// the scroll bar moves further according to the moving speed.
@@ -722,7 +726,8 @@ class PlutoGridScrollbarConfig {
             runtimeType == other.runtimeType &&
             draggableScrollbar == other.draggableScrollbar &&
             isAlwaysShown == other.isAlwaysShown &&
-            onlyDraggingThumb == other.onlyDraggingThumb &&
+            onlyDraggingHorizontalThumb == other.onlyDraggingHorizontalThumb &&
+            onlyDraggingVerticalThumb == other.onlyDraggingVerticalThumb &&
             enableScrollAfterDragEnd == other.enableScrollAfterDragEnd &&
             scrollbarThickness == other.scrollbarThickness &&
             scrollbarThicknessWhileDragging ==
@@ -743,7 +748,8 @@ class PlutoGridScrollbarConfig {
   int get hashCode => Object.hash(
         draggableScrollbar,
         isAlwaysShown,
-        onlyDraggingThumb,
+        onlyDraggingHorizontalThumb,
+        onlyDraggingVerticalThumb,
         enableScrollAfterDragEnd,
         scrollbarThickness,
         scrollbarThicknessWhileDragging,

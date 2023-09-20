@@ -38,7 +38,8 @@ class PlutoScrollbar extends StatefulWidget {
     this.horizontalController,
     this.verticalController,
     this.isAlwaysShown = false,
-    this.onlyDraggingThumb = true,
+    this.onlyDraggingHorizontalThumb = false,
+    this.onlyDraggingVerticalThumb = false,
     this.enableHover = true,
     this.enableScrollAfterDragEnd = true,
     this.thickness = defaultThickness,
@@ -68,7 +69,8 @@ class PlutoScrollbar extends StatefulWidget {
 
   final bool isAlwaysShown;
 
-  final bool onlyDraggingThumb;
+  final bool onlyDraggingHorizontalThumb;
+  final bool onlyDraggingVerticalThumb;
 
   final bool enableHover;
 
@@ -436,7 +438,8 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
         customPaintKey: _customPaintKey,
         debugOwner: this,
         duration: widget.longPressDuration,
-        onlyDraggingThumb: widget.onlyDraggingThumb,
+        onlyDraggingHorizontalThumb: widget.onlyDraggingHorizontalThumb,
+        onlyDraggingVerticalThumb: widget.onlyDraggingVerticalThumb,
       ),
       (_ThumbPressGestureRecognizer instance) {
         instance
@@ -1389,7 +1392,8 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
     required GlobalKey customPaintKey,
     required Object debugOwner,
     required Duration duration,
-    this.onlyDraggingThumb = false,
+    this.onlyDraggingHorizontalThumb = false,
+    this.onlyDraggingVerticalThumb = false,
   })  : _customPaintKey = customPaintKey,
         super(
           postAcceptSlopTolerance: postAcceptSlopTolerance,
@@ -1399,12 +1403,14 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
         );
 
   final GlobalKey _customPaintKey;
-  final bool onlyDraggingThumb;
+  final bool onlyDraggingHorizontalThumb;
+
+  final bool onlyDraggingVerticalThumb;
 
   @override
   bool isPointerAllowed(PointerDownEvent event) {
     if (!_hitTestInteractive(
-        _customPaintKey, event.position, event.kind, onlyDraggingThumb)) {
+        _customPaintKey, event.position, event.kind, onlyDraggingHorizontalThumb,onlyDraggingVerticalThumb)) {
       return false;
     }
     return super.isPointerAllowed(event);
@@ -1415,7 +1421,7 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
 // scrollbar should only respond to a gesture directly on its thumb, so
 // manually check for a hit on the thumb here.
 bool _hitTestInteractive(GlobalKey customPaintKey, Offset offset,
-    PointerDeviceKind kind, bool onlyDraggingThumb) {
+    PointerDeviceKind kind,bool onlyDraggingHorizontalThumb,bool onlyDraggingVerticalThumb) {
   if (customPaintKey.currentContext == null) {
     return false;
   }
@@ -1425,7 +1431,7 @@ bool _hitTestInteractive(GlobalKey customPaintKey, Offset offset,
       customPaint.foregroundPainter! as _ScrollbarPainter;
   final Offset localOffset = _getLocalOffset(customPaintKey, offset);
   // We can only receive track taps that are on the thumb.
-  return onlyDraggingThumb
+  return onlyDraggingHorizontalThumb || onlyDraggingVerticalThumb
       ? painter.hitTestOnlyThumbInteractive(localOffset, kind)
       : painter.hitTestInteractive(localOffset, kind);
 }
