@@ -119,6 +119,13 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
   @override
   Widget build(BuildContext context) {
+    int depth = 0;
+    PlutoRow? row = widget.row;
+    while (row?.parent != null) {
+      depth++;
+      row = row?.parent;
+    }
+
     final cellWidget = _DefaultCellWidget(
       stateManager: stateManager,
       rowIdx: widget.rowIdx,
@@ -177,7 +184,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             color: style.iconColor,
           ),
         ),
-      if (widget.column.enableRowChecked)
+      if (widget.column.enableRowChecked && depth >= widget.column.rowCheckBoxGroupDepth)
         CheckboxSelectionWidget(
           column: widget.column,
           row: widget.row,
