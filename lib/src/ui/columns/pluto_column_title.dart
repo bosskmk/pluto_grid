@@ -395,7 +395,7 @@ class _ColumnWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    if (column.enableRowChecked)
+                    if (column.enableRowChecked && column.rowCheckBoxGroupDepth == 0)
                       CheckboxAllSelectionWidget(stateManager: stateManager),
                     Expanded(
                       child: _ColumnTextWidget(
