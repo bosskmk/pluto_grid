@@ -149,6 +149,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
     Widget? expandIcon;
     if (_canExpand) {
       expandIcon = IconButton(
+        padding: EdgeInsets.only(bottom: 0.0),
         onPressed: _isEmptyGroup ? null : _handleToggleExpandedRowGroup,
         icon: _isEmptyGroup
             ? Icon(
