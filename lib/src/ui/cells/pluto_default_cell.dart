@@ -158,14 +158,14 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
               )
             : widget.row.type.group.expanded
                 ? Icon(
-                    style.rowGroupExpandedIcon,
-                    size: style.iconSize,
-                    color: style.iconColor,
+                    Icons.remove_circle_outline,
+                    size: 15,
+                    color: Colors.black38,
                   )
                 : Icon(
-                    style.rowGroupCollapsedIcon,
-                    size: style.iconSize,
-                    color: style.iconColor,
+                    Icons.add_circle_outline,
+                    size: 15,
+                    color: Colors.black38,
                   ),
       );
     }
