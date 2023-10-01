@@ -75,6 +75,8 @@ class PlutoGridPopup {
 
   final double? height;
 
+  final bool? barrierDismissible;
+  
   PlutoGridPopup({
     required this.context,
     required this.columns,
@@ -98,6 +100,7 @@ class PlutoGridPopup {
     this.mode = PlutoGridMode.normal,
     this.width,
     this.height,
+    this.barrierDismissible,
   }) {
     open();
   }
@@ -111,6 +114,7 @@ class PlutoGridPopup {
 
     PlutoGridOnSelectedEvent? selected =
         await showDialog<PlutoGridOnSelectedEvent>(
+            barrierDismissible: barrierDismissible ?? true,
             context: context,
             builder: (BuildContext ctx) {
               return Dialog(
