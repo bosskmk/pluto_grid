@@ -83,7 +83,7 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
   initState() {
     super.initState();
 
-    _focusNode = FocusNode(onKey: _handleOnKey);
+    _focusNode = FocusNode(onKeyEvent: _handleOnKey);
 
     widget.column.setFilterFocusNode(_focusNode);
 

@@ -33,7 +33,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: FocusScope(
         autofocus: true,
-        onKey: callback,
+        onKeyEvent: callback,
         child: Focus(
           focusNode: focusNode,
           child: const SizedBox(width: 100, height: 100),

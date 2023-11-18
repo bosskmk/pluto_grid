@@ -4557,7 +4557,7 @@ class MockFocusNode extends _i1.Mock implements _i3.FocusNode {
           [context],
           {
             #onKeyEvent: onKeyEvent,
-            #onKey: onKey,
+            #onKeyEvent: onKey,
           },
         ),
         returnValue: _FakeFocusAttachment_32(
@@ -4567,7 +4567,7 @@ class MockFocusNode extends _i1.Mock implements _i3.FocusNode {
             [context],
             {
               #onKeyEvent: onKeyEvent,
-              #onKey: onKey,
+              #onKeyEvent: onKey,
             },
           ),
         ),
@@ -4578,7 +4578,7 @@ class MockFocusNode extends _i1.Mock implements _i3.FocusNode {
             [context],
             {
               #onKeyEvent: onKeyEvent,
-              #onKey: onKey,
+              #onKeyEvent: onKey,
             },
           ),
         ),
