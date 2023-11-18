@@ -172,7 +172,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     });
   }
 
-  KeyEventResult _handleOnKey(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _handleOnKey(FocusNode node, KeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,

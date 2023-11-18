@@ -175,7 +175,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
     }
   }
 
-  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, KeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
