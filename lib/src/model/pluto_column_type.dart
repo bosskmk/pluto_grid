@@ -589,18 +589,21 @@ mixin PlutoColumnTypeWithNumberFormat {
 
   /// Convert [String] converted to [applyFormat] to [number].
   dynamic toNumber(String formatted) {
-    String match = '0-9\\-${numberFormat.symbols.DECIMAL_SEP}';
-
+    String match = '0-9\-${numberFormat.symbols.DECIMAL_SEP}';
+    if (numberFormat.symbols.DECIMAL_SEP == ',') {
+      int countP = formatted.split('.').length - 1;
+      int countV = formatted.split(',').length - 1;
+      if ((countV == 0) && (countP == 1)) {
+        match += '.';
+      }
+    }
     if (negative) {
       match += numberFormat.symbols.MINUS_SIGN;
     }
-
     formatted = formatted
         .replaceAll(RegExp('[^$match]'), '')
         .replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
-
     final num formattedNumber = num.tryParse(formatted) ?? 0;
-
     return formattedNumber.isFinite ? formattedNumber : 0;
   }
 
