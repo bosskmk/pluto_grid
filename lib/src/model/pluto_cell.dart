@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoCell {
@@ -100,6 +101,9 @@ class PlutoCell {
 
     _needToApplyFormatOnInit = false;
   }
+
+  @override
+  String toString() => 'PlutoCell(value: $value)';
 }
 
 _assertUnInitializedCell(bool flag) {

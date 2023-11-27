@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRow {
@@ -293,6 +294,9 @@ class PlutoRow {
 
     return json;
   }
+
+  @override
+  String toString() => 'PlutoRow(type: $type, cell : $cells)';
 }
 
 enum PlutoRowState {
