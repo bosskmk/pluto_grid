@@ -1,3 +1,9 @@
+## [8.1.0] - 2023. 12. 8
+* Customize filter column by @RamshaFarheen bosskmk#739
+* Add column title (padding, icon-size, and checkBox size to auto-fit calculation by @Milad-Akarie bosskmk#715
+* add onSelectedItem function in plutoColumnType.select bosskmk#935
+
+
 ## [8.0.0] - 2023. 7. 12
 * Change Package name to pluto_grid_plus
 * Upgrade the packages to the latest version.
