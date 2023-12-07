@@ -1,3 +1,7 @@
+## [8.0.0] - 2023. 7. 12
+* Change Package name to pluto_grid_plus
+* Upgrade the packages to the latest version.
+
 ## [7.0.2] - 2023. 5. 13
 
 * Add Japanese, Turkish languages.
