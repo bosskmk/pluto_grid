@@ -176,6 +176,18 @@ class PlutoColumn {
   /// Valid only when [enableContextMenu] is activated.
   bool enableFilterMenuItem;
 
+  ///Set hint text for filter field
+  String? filterHintText;
+
+  ///Set hint text color for filter field
+  Color? filterHintTextColor;
+
+  ///Set suffix icon for filter field
+  Icon? filterSuffixIcon;
+
+  ///Set custom widget
+  Widget? filterWidget;
+
   /// Displays Hide column menu in the column context menu.
   /// Valid only when [enableContextMenu] is activated.
   bool enableHideColumnMenuItem;
@@ -221,6 +233,10 @@ class PlutoColumn {
     this.enableContextMenu = true,
     this.enableDropToResize = true,
     this.enableFilterMenuItem = true,
+    this.filterHintText,
+    this.filterHintTextColor,
+    this.filterSuffixIcon,
+    this.filterWidget,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,
     this.enableAutoEditing = false,
