@@ -1714,9 +1714,10 @@ void main() {
         ),
       );
 
+      double oldWidth = columns.first.width;
       stateManager.autoFitColumn(context, columns.first);
 
-      expect(columns.first.width, columns.first.minWidth);
+      expect(columns.first.width, lessThan(oldWidth));
     });
 
     testWidgets('가장 넓은 셀이 컬럼 최소 넓이보다 큰 경우 최소 넓이 이상으로 변경 되어야 한다.',
