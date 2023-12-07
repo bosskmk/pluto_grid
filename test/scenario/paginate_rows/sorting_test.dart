@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/ui/pluto_base_cell.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/src/ui/pluto_base_cell.dart';
 
 void main() {
   late PlutoGridStateManager stateManager;

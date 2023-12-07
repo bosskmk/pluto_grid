@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../ui/ui.dart';
 
@@ -237,9 +237,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
                         ? SystemMouseCursors.basic
                         : SystemMouseCursors.click,
                   ),
-                  ..._pageNumbers
-                      .map(_makeNumberButton)
-                      .toList(growable: false),
+                  ..._pageNumbers.map(_makeNumberButton),
                   IconButton(
                     onPressed: _isLastPage ? null : _nextPage,
                     icon: const Icon(Icons.navigate_next),

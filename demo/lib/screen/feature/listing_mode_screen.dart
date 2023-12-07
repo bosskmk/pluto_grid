@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -10,7 +10,7 @@ import '../../widget/pluto_example_screen.dart';
 class ListingModeScreen extends StatefulWidget {
   static const routeName = 'feature/listing-mode';
 
-  const ListingModeScreen({Key? key}) : super(key: key);
+  const ListingModeScreen({super.key});
 
   @override
   _ListingModeScreenState createState() => _ListingModeScreenState();
@@ -181,12 +181,10 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                           autofocus: true,
                         ),
                         const SizedBox(height: 20),
-                        ...row!.cells.entries
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(e.value.value.toString()),
-                                ))
-                            .toList(),
+                        ...row!.cells.entries.map((e) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(e.value.value.toString()),
+                            )),
                         const SizedBox(height: 20),
                         Center(
                           child: Wrap(

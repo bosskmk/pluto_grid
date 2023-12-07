@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../ui.dart';
 
@@ -205,8 +205,8 @@ class PlutoGridColumnIcon extends StatelessWidget {
     this.icon = Icons.dehaze,
     this.ascendingIcon,
     this.descendingIcon,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -248,8 +248,7 @@ class _DraggableWidget extends StatelessWidget {
     required this.stateManager,
     required this.column,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+  });
 
   void _handleOnPointerMove(PointerMoveEvent event) {
     stateManager.eventManager!.addEvent(PlutoGridScrollUpdateEvent(
@@ -307,11 +306,10 @@ class _SortableWidget extends StatelessWidget {
   final Widget child;
 
   const _SortableWidget({
-    Key? key,
     required this.stateManager,
     required this.column,
     required this.child,
-  }) : super(key: key);
+  });
 
   void _onTap() {
     stateManager.toggleSortColumn(column);
@@ -343,8 +341,7 @@ class _ColumnWidget extends StatelessWidget {
     required this.stateManager,
     required this.column,
     required this.height,
-    Key? key,
-  }) : super(key: key);
+  });
 
   EdgeInsets get padding =>
       column.titlePadding ??
@@ -419,8 +416,7 @@ class _ColumnWidget extends StatelessWidget {
 class CheckboxAllSelectionWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
-  const CheckboxAllSelectionWidget({required this.stateManager, Key? key})
-      : super(key: key);
+  const CheckboxAllSelectionWidget({required this.stateManager, super.key});
 
   @override
   CheckboxAllSelectionWidgetState createState() =>
@@ -496,8 +492,7 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
     required this.stateManager,
     required this.column,
     required this.height,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   _ColumnTextWidgetState createState() => _ColumnTextWidgetState();

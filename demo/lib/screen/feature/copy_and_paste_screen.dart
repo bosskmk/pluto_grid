@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class CopyAndPasteScreen extends StatefulWidget {
   static const routeName = 'feature/copy-and-paste';
 
-  const CopyAndPasteScreen({Key? key}) : super(key: key);
+  const CopyAndPasteScreen({super.key});
 
   @override
   _CopyAndPasteScreenState createState() => _CopyAndPasteScreenState();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import 'decimal_input_formatter.dart';
 import 'text_cell.dart';
@@ -23,8 +23,8 @@ class PlutoNumberCell extends StatefulWidget implements TextCell {
     required this.cell,
     required this.column,
     required this.row,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PlutoNumberCellState createState() => PlutoNumberCellState();

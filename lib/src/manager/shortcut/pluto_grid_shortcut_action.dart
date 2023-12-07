@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 /// Define the action by implementing the [execute] method
 /// as an action that can be mapped to a shortcut key.

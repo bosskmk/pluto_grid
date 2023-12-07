@@ -12,24 +12,22 @@ class PlutoContributorTile extends StatelessWidget {
   final Function()? onTapLink;
 
   const PlutoContributorTile({
-    Key? key,
+    super.key,
     required this.name,
     this.description,
     this.linkTitle,
     this.onTapLink,
   })  : _color = Colors.white,
-        _fontColor = PlutoGridExampleColors.fontColor,
-        super(key: key);
+        _fontColor = PlutoGridExampleColors.fontColor;
 
   const PlutoContributorTile.invisible({
-    Key? key,
+    super.key,
     required this.name,
     this.description,
     this.linkTitle,
     this.onTapLink,
   })  : _color = Colors.white70,
-        _fontColor = Colors.black54,
-        super(key: key);
+        _fontColor = Colors.black54;
 
   final Color _color;
   final Color _fontColor;

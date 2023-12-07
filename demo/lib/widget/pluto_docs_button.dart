@@ -7,10 +7,9 @@ class PlutoDocsButton extends StatelessWidget {
   final String url;
 
   PlutoDocsButton({
-    Key? key,
+    super.key,
     required this.url,
-  })  : assert(url.isNotEmpty),
-        super(key: key);
+  }) : assert(url.isNotEmpty);
 
   @override
   Widget build(BuildContext context) {

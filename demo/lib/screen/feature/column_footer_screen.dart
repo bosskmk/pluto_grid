@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnFooterScreen extends StatefulWidget {
   static const routeName = 'feature/column-footer';
 
-  const ColumnFooterScreen({Key? key}) : super(key: key);
+  const ColumnFooterScreen({super.key});
 
   @override
   _ColumnFooterScreenState createState() => _ColumnFooterScreenState();

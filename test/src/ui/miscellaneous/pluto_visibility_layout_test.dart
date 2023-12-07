@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:pluto_grid/src/ui/miscellaneous/pluto_visibility_layout.dart';
+import 'package:pluto_grid_plus/src/ui/miscellaneous/pluto_visibility_layout.dart';
 
 import '../../../mock/shared_mocks.mocks.dart';
 
@@ -11,8 +11,7 @@ const double defaultChildWidth = 200;
 class _TestWidgetWrapper extends StatefulWidget {
   const _TestWidgetWrapper({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 /// It is used to lay out the widgets
 /// of [PlutoCell] or [PlutoColumn], [PlutoColumnGroup] of [PlutoRow]
@@ -391,10 +391,10 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
 
 class PlutoVisibilityLayoutId extends LayoutId {
   PlutoVisibilityLayoutId({
-    Key? key,
+    super.key,
     required super.id,
-    required PlutoVisibilityLayoutChild child,
-  }) : super(key: key, child: child);
+    required PlutoVisibilityLayoutChild super.child,
+  });
 
   PlutoVisibilityLayoutChild get layoutChild =>
       child as PlutoVisibilityLayoutChild;

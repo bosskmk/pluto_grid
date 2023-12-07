@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class ValueFormatterScreen extends StatefulWidget {
   static const routeName = 'feature/value-formatter';
 
-  const ValueFormatterScreen({Key? key}) : super(key: key);
+  const ValueFormatterScreen({super.key});
 
   @override
   _ValueFormatterScreenState createState() => _ValueFormatterScreenState();

@@ -34,7 +34,7 @@ const double _kScrollbarCrossAxisMargin = 3.0;
 
 class PlutoScrollbar extends StatefulWidget {
   const PlutoScrollbar({
-    Key? key,
+    super.key,
     this.horizontalController,
     this.verticalController,
     this.isAlwaysShown = false,
@@ -60,8 +60,7 @@ class PlutoScrollbar extends StatefulWidget {
         crossAxisMargin = crossAxisMargin ?? _kScrollbarCrossAxisMargin,
         scrollBarColor = scrollBarColor ?? _kScrollbarColor,
         scrollBarTrackColor = scrollBarTrackColor ?? _kTrackColor,
-        longPressDuration = longPressDuration ?? _kScrollbarLongPressDuration,
-        super(key: key);
+        longPressDuration = longPressDuration ?? _kScrollbarLongPressDuration;
   final ScrollController? horizontalController;
 
   final ScrollController? verticalController;
@@ -1384,19 +1383,11 @@ String shortHash(Object? object) {
 // thumb and ignores everything else.
 class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
   _ThumbPressGestureRecognizer({
-    double? postAcceptSlopTolerance,
-    Set<PointerDeviceKind>? supportedDevices,
     required GlobalKey customPaintKey,
-    required Object debugOwner,
-    required Duration duration,
+    required Object super.debugOwner,
+    required Duration super.duration,
     this.onlyDraggingThumb = false,
-  })  : _customPaintKey = customPaintKey,
-        super(
-          postAcceptSlopTolerance: postAcceptSlopTolerance,
-          supportedDevices: supportedDevices,
-          debugOwner: debugOwner,
-          duration: duration,
-        );
+  }) : _customPaintKey = customPaintKey;
 
   final GlobalKey _customPaintKey;
   final bool onlyDraggingThumb;

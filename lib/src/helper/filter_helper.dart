@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 typedef SetFilterPopupHandler = void Function(
     PlutoGridStateManager? stateManager);
@@ -504,11 +504,11 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
   final SetFilterPopupHandler? handleAddNewFilter;
 
   const PlutoGridFilterPopupHeader({
-    Key? key,
+    super.key,
     this.stateManager,
     this.configuration,
     this.handleAddNewFilter,
-  }) : super(key: key);
+  });
 
   void handleAddButton() {
     handleAddNewFilter!(stateManager);

@@ -1,4 +1,4 @@
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 /// Event issued when the sort state of a column is changed.
 class PlutoGridChangeColumnSortEvent extends PlutoGridEvent {

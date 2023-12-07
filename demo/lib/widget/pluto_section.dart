@@ -10,12 +10,12 @@ class PlutoSection extends StatelessWidget {
   final Color? fontColor;
 
   const PlutoSection({
-    Key? key,
+    super.key,
     this.title,
     this.child,
     this.color,
     this.fontColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

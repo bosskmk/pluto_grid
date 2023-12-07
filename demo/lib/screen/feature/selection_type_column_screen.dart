@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';
@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class SelectionTypeColumnScreen extends StatefulWidget {
   static const routeName = 'feature/selection-type-column';
 
-  const SelectionTypeColumnScreen({Key? key}) : super(key: key);
+  const SelectionTypeColumnScreen({super.key});
 
   @override
   _SelectionTypeColumnScreenState createState() =>

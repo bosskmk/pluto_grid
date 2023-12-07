@@ -1,4 +1,4 @@
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 /// Occurs when the keyboard hits the end of the grid.
 class PlutoGridCannotMoveCurrentCellEvent extends PlutoGridEvent {

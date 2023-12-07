@@ -1,4 +1,4 @@
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 /// If the value of [PlutoGridStateManager.filterOnlyEvent] is true,
 /// an event is issued.

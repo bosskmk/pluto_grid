@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:mockito/mockito.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-import 'package:pluto_grid/src/ui/ui.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/src/ui/ui.dart';
 
 import '../helper/pluto_widget_test_helper.dart';
 import '../matcher/pluto_object_matcher.dart';

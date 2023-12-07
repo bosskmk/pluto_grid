@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 import '../abstract_text_export.dart';
 import 'generic_pdf_controller.dart';
@@ -11,7 +11,7 @@ import 'generic_pdf_controller.dart';
 ///
 /// [themeData] Attributes for custom fonts.
 ///
-/// import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
+/// import 'package:pluto_grid_plus_export/pluto_grid_export.dart' as pluto_grid_export;
 ///
 /// final themeData = pluto_grid_export.ThemeData.withFont(
 ///   base: pluto_grid_export.Font.ttf(

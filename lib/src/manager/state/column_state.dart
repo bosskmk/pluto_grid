@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid.dart';
 
 abstract class IColumnState {
   /// Columns provided at grid start.
@@ -304,12 +304,12 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   PlutoColumn? get currentColumn {
-    return currentCell == null ? null : currentCell!.column;
+    return currentCell?.column;
   }
 
   @override
   String? get currentColumnField {
-    return currentCell == null ? null : currentCell!.column.field;
+    return currentCell?.column.field;
   }
 
   @override
