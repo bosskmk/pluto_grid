@@ -85,6 +85,12 @@ class PlutoSelectCellState extends State<PlutoSelectCell>
   }
 
   @override
+  void onSelected(PlutoGridOnSelectedEvent event) {
+    widget.column.type.select.onItemSelected(event);
+    super.onSelected(event);
+  }
+
+  @override
   void onLoaded(PlutoGridOnLoadedEvent event) {
     super.onLoaded(event);
 
