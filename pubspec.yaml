@@ -5,7 +5,7 @@ homepage: https://pluto.weblaze.dev
 repository: https://github.com/doonfrs/pluto_grid_plus
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
