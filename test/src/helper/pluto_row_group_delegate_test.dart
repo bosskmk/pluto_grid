@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 void main() {
   PlutoRow createRow(

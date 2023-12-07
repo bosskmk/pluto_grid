@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 abstract class IScrollState {
   /// Controller to control the scrolling of the grid.

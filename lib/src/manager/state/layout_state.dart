@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 abstract class ILayoutState {
   ChangeNotifier get resizingChangeNotifier;

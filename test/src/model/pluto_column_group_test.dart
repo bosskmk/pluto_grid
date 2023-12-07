@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 void main() {
   test('fields 가 null 이면 children 이 null 인 경우 assert 에러가 발생 되어야 한다.', () {

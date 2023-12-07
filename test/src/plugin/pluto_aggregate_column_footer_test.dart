@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../helper/pluto_widget_test_helper.dart';

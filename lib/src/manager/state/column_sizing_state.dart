@@ -1,4 +1,4 @@
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 /// Automatically adjust column width or manage width adjustment mode.
 abstract class IColumnSizingState {

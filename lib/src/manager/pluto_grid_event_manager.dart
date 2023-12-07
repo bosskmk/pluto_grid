@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlutoGridEventManager {

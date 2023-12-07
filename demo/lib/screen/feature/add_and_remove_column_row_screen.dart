@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 import '../../widget/pluto_example_button.dart';
 import '../../widget/pluto_example_screen.dart';

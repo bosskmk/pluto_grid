@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 import '../helper/platform_helper.dart';
 import 'ui.dart';

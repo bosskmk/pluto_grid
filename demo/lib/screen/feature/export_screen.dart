@@ -1,7 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 // import 'package:pluto_grid_plus_export/pluto_grid_export.dart' as pluto_grid_export;
 

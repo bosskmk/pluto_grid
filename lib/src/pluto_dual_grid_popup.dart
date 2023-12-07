@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 /// [PlutoDualGridPopup] can connect the keyboard movement between the two grids
 /// by arranging two [PlutoGrid] left and right.

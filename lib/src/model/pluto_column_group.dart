@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 class PlutoColumnGroup {
   final String title;

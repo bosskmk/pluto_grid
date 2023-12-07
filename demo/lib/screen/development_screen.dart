@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 import 'package:pluto_menu_bar/pluto_menu_bar.dart';
 
 import '../dummy_data/development.dart';

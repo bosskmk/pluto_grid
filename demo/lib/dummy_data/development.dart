@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:demo/dummy_data/words_multilingual.dart';
 import 'package:faker/faker.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 class DummyData {
   late List<PlutoColumn> columns;

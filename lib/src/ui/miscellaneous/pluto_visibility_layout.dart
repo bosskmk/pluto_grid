@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 /// It is used to lay out the widgets
 /// of [PlutoCell] or [PlutoColumn], [PlutoColumnGroup] of [PlutoRow]

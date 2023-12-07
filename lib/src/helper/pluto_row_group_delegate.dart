@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:pluto_grid_plus/pluto_grid.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 /// {@template pluto_row_group_delegate_type}
 /// Determines the grouping type of the row.
