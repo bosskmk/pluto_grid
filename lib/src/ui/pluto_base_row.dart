@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -84,29 +85,57 @@ class PlutoBaseRow extends StatelessWidget {
       enableRowColorAnimation:
           stateManager.configuration.style.enableRowColorAnimation,
       key: ValueKey('rowContainer_${row.key}'),
-      child: visibilityLayout
-          ? PlutoVisibilityLayout(
-              key: ValueKey('rowContainer_${row.key}_row'),
-              delegate: _RowCellsLayoutDelegate(
-                stateManager: stateManager,
-                columns: columns,
-                textDirection: stateManager.textDirection,
+      // child: visibilityLayout
+      //     ? PlutoVisibilityLayout(
+      //         key: ValueKey('rowContainer_${row.key}_row'),
+      //         delegate: _RowCellsLayoutDelegate(
+      //           stateManager: stateManager,
+      //           columns: columns,
+      //           textDirection: stateManager.textDirection,
+      //         ),
+      //         scrollController: stateManager.scroll.bodyRowsHorizontal!,
+      //         initialViewportDimension: MediaQuery.of(dragContext).size.width,
+      //         children: columns.map(_makeCell).toList(growable: false),
+      //       )
+      //     : CustomMultiChildLayout(
+      //         key: ValueKey('rowContainer_${row.key}_row'),
+      //         delegate: _RowCellsLayoutDelegate(
+      //           stateManager: stateManager,
+      //           columns: columns,
+      //           textDirection: stateManager.textDirection,
+      child: _maybeMouseRegion(
+        isWeb: kIsWeb && stateManager.configuration.style.enableClickCursor,
+        child: visibilityLayout
+            ? PlutoVisibilityLayout(
+                key: ValueKey('rowContainer_${row.key}_row'),
+                delegate: _RowCellsLayoutDelegate(
+                  stateManager: stateManager,
+                  columns: columns,
+                  textDirection: stateManager.textDirection,
+                ),
+                scrollController: stateManager.scroll.bodyRowsHorizontal!,
+                initialViewportDimension: MediaQuery.of(dragContext).size.width,
+                children: columns.map(_makeCell).toList(growable: false),
+              )
+            : CustomMultiChildLayout(
+                key: ValueKey('rowContainer_${row.key}_row'),
+                delegate: _RowCellsLayoutDelegate(
+                  stateManager: stateManager,
+                  columns: columns,
+                  textDirection: stateManager.textDirection,
+                ),
+                children: columns.map(_makeCell).toList(growable: false),
               ),
-              scrollController: stateManager.scroll.bodyRowsHorizontal!,
-              initialViewportDimension: MediaQuery.of(dragContext).size.width,
-              children: columns.map(_makeCell).toList(growable: false),
-            )
-          : CustomMultiChildLayout(
-              key: ValueKey('rowContainer_${row.key}_row'),
-              delegate: _RowCellsLayoutDelegate(
-                stateManager: stateManager,
-                columns: columns,
-                textDirection: stateManager.textDirection,
-              ),
-              children: columns.map(_makeCell).toList(growable: false),
-            ),
+            //   children: columns.map(_makeCell).toList(growable: false),
+            // ),
+      ),
     );
   }
+
+   Widget _maybeMouseRegion({required bool isWeb, required Widget child}) =>
+      isWeb
+          ? MouseRegion(cursor: SystemMouseCursors.click, child: child)
+          : child;
 
   @override
   Widget build(BuildContext context) {
