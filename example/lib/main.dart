@@ -57,6 +57,24 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       ]),
     ),
     PlutoColumn(
+      title: 'Role 2',
+      field: 'role2',
+      type: PlutoColumnType.select(
+        <String>[
+          'Programmer',
+          'Designer',
+          'Owner',
+        ],
+        builder: (item) {
+          return Row(children: [
+            Icon(item == 'Programmer' ? Icons.code : Icons.design_services),
+            const SizedBox(width: 8),
+            Text(item),
+          ]);
+        },
+      ),
+    ),
+    PlutoColumn(
       title: 'Joined',
       field: 'joined',
       type: PlutoColumnType.date(),
@@ -99,6 +117,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'name': PlutoCell(value: 'Mike'),
         'age': PlutoCell(value: 20),
         'role': PlutoCell(value: 'Programmer'),
+        'role2': PlutoCell(value: 'Programmer'),
         'joined': PlutoCell(value: '2021-01-01'),
         'working_time': PlutoCell(value: '09:00'),
         'salary': PlutoCell(value: 300),
@@ -110,6 +129,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'name': PlutoCell(value: 'Jack'),
         'age': PlutoCell(value: 25),
         'role': PlutoCell(value: 'Designer'),
+        'role2': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
         'working_time': PlutoCell(value: '10:00'),
         'salary': PlutoCell(value: 400),
@@ -121,6 +141,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'name': PlutoCell(value: 'Suzi'),
         'age': PlutoCell(value: 40),
         'role': PlutoCell(value: 'Owner'),
+        'role2': PlutoCell(value: 'Owner'),
         'joined': PlutoCell(value: '2021-03-01'),
         'working_time': PlutoCell(value: '11:00'),
         'salary': PlutoCell(value: 700),
@@ -134,7 +155,8 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumnGroup(title: 'User information', fields: ['name', 'age']),
     PlutoColumnGroup(title: 'Status', children: [
       PlutoColumnGroup(title: 'A', fields: ['role'], expandedColumn: true),
-      PlutoColumnGroup(title: 'Etc.', fields: ['joined', 'working_time']),
+      PlutoColumnGroup(
+          title: 'Etc.', fields: ['joined', 'working_time', 'role2']),
     ]),
   ];
 

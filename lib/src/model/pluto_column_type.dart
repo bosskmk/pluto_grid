@@ -98,14 +98,15 @@ abstract class PlutoColumnType {
     dynamic defaultValue = '',
     bool enableColumnFilter = false,
     IconData? popupIcon = Icons.arrow_drop_down,
+    Widget Function(dynamic item)? builder,
   }) {
     return PlutoColumnTypeSelect(
-      onItemSelected: onItemSelected ?? (event) {},
-      defaultValue: defaultValue,
-      items: items,
-      enableColumnFilter: enableColumnFilter,
-      popupIcon: popupIcon,
-    );
+        onItemSelected: onItemSelected ?? (event) {},
+        defaultValue: defaultValue,
+        items: items,
+        enableColumnFilter: enableColumnFilter,
+        popupIcon: popupIcon,
+        builder: builder);
   }
 
   /// Set as a date column.
@@ -361,19 +362,21 @@ class PlutoColumnTypeSelect
 
   final List<dynamic> items;
 
+  final Widget Function(dynamic item)? builder;
+
   final bool enableColumnFilter;
   final Function(PlutoGridOnSelectedEvent event) onItemSelected;
 
   @override
   final IconData? popupIcon;
 
-  const PlutoColumnTypeSelect({
-    required this.onItemSelected,
-    this.defaultValue,
-    required this.items,
-    required this.enableColumnFilter,
-    this.popupIcon,
-  });
+  const PlutoColumnTypeSelect(
+      {required this.onItemSelected,
+      this.defaultValue,
+      required this.items,
+      required this.enableColumnFilter,
+      this.popupIcon,
+      this.builder});
 
   @override
   bool isValid(dynamic value) => items.contains(value) == true;

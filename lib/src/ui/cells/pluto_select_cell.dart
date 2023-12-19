@@ -72,6 +72,14 @@ class PlutoSelectCellState extends State<PlutoSelectCell>
         enableFilterMenuItem: enableColumnFilter,
         enableHideColumnMenuItem: false,
         enableSetColumnsMenuItem: false,
+        renderer: widget.column.type.select.builder == null
+            ? null
+            : (rendererContext) {
+                var item =
+                    widget.column.type.select.items[rendererContext.rowIdx];
+
+                return widget.column.type.select.builder!(item);
+              },
       )
     ];
 
