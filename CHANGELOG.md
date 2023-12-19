@@ -1,3 +1,6 @@
+## [8.2.0] - 2023. 12. 19
+* Add builder function in plutoColumnType.select allow user to customize the popup by item widget.
+
 ## [8.1.0] - 2023. 12. 8
 * Customize filter column by @RamshaFarheen bosskmk#739
 * Add column title (padding, icon-size, and checkBox size to auto-fit calculation by @Milad-Akarie bosskmk#715
