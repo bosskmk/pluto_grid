@@ -75,7 +75,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createFooter,
     this.noRowsWidget,
     this.rowColorCallback,
-    this.columnColorCallback,
+    this.cellColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
@@ -295,7 +295,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@endtemplate}
   final PlutoRowColorCallback? rowColorCallback;
 
-  final PlutoCellColorCallback? columnColorCallback;
+  final PlutoCellColorCallback? cellColorCallback;
 
   /// {@template pluto_grid_property_columnMenuDelegate}
   /// Column menu can be customized.
@@ -521,7 +521,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowsMoved: widget.onRowsMoved,
       onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,
-      cellColorCallback: widget.columnColorCallback,
+      cellColorCallback: widget.cellColorCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       columnMenuDelegate: widget.columnMenuDelegate,
