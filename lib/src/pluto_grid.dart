@@ -45,6 +45,9 @@ typedef CreateFooterCallBack = Widget Function(
 typedef PlutoRowColorCallback = Color Function(
     PlutoRowColorContext rowColorContext);
 
+typedef PlutoCellColorCallback = Color Function(
+    PlutoCellColorContext cellColorContext);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -72,6 +75,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createFooter,
     this.noRowsWidget,
     this.rowColorCallback,
+    this.columnColorCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
@@ -290,6 +294,8 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// ```
   /// {@endtemplate}
   final PlutoRowColorCallback? rowColorCallback;
+
+  final PlutoCellColorCallback? columnColorCallback;
 
   /// {@template pluto_grid_property_columnMenuDelegate}
   /// Column menu can be customized.
@@ -515,6 +521,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowsMoved: widget.onRowsMoved,
       onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,
+      cellColorCallback: widget.columnColorCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       columnMenuDelegate: widget.columnMenuDelegate,
@@ -1467,6 +1474,28 @@ class PlutoRowColorContext {
   const PlutoRowColorContext({
     required this.row,
     required this.rowIdx,
+    required this.stateManager,
+  });
+}
+
+/// Argument of [PlutoGrid.cellColorCallback] callback
+/// to dynamically change the background color of a row.
+class PlutoCellColorContext {
+  final PlutoColumn column;
+
+  final int rowIdx;
+
+  final PlutoRow row;
+
+  final PlutoCell cell;
+
+  final PlutoGridStateManager stateManager;
+
+  PlutoCellColorContext({
+    required this.column,
+    required this.rowIdx,
+    required this.row,
+    required this.cell,
     required this.stateManager,
   });
 }
