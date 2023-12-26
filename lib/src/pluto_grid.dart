@@ -45,7 +45,7 @@ typedef CreateFooterCallBack = Widget Function(
 typedef PlutoRowColorCallback = Color Function(
     PlutoRowColorContext rowColorContext);
 
-typedef PlutoCellColorCallback = Color Function(
+typedef PlutoCellColorCallback = Color? Function(
     PlutoCellColorContext cellColorContext);
 
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
