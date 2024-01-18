@@ -156,7 +156,7 @@ List<PopupMenuEntry<PlutoGridColumnMenuItem>> _getDefaultColumnMenuItems({
       const PopupMenuDivider(),
       _buildMenuItem(
         value: PlutoGridColumnMenuItem.setFilter,
-        text: localeText.setFilter,
+        text: "changed",
         textColor: textColor,
       ),
       _buildMenuItem(
