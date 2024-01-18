@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef SetFilterPopupHandler = void Function(
-    PlutoGridStateManager? stateManager);
+typedef SetFilterPopupHandler = void Function(PlutoGridStateManager? stateManager);
 
 class FilterHelper {
   /// A value to identify all column searches when searching filters.
@@ -41,10 +40,8 @@ class FilterHelper {
   }) {
     return PlutoRow(
       cells: {
-        filterFieldColumn:
-            PlutoCell(value: columnField ?? filterFieldAllColumns),
-        filterFieldType:
-            PlutoCell(value: filterType ?? const PlutoFilterTypeContains()),
+        filterFieldColumn: PlutoCell(value: columnField ?? filterFieldAllColumns),
+        filterFieldType: PlutoCell(value: filterType ?? const PlutoFilterTypeContains()),
         filterFieldValue: PlutoCell(value: filterValue ?? ''),
       },
     );
@@ -97,8 +94,7 @@ class FilterHelper {
               flag,
               compareByFilterType(
                 filterType: filterType!,
-                base: row!.cells[e.cells[filterFieldColumn]!.value]!.value
-                    .toString(),
+                base: row!.cells[e.cells[filterFieldColumn]!.value]!.value.toString(),
                 search: e.cells[filterFieldValue]!.value.toString(),
                 column: foundColumn,
               ),
@@ -139,9 +135,7 @@ class FilterHelper {
         columnField = allField;
       }
 
-      final String filterType =
-          (row.cells[FilterHelper.filterFieldType]!.value as PlutoFilterType)
-              .title;
+      final String filterType = (row.cells[FilterHelper.filterFieldType]!.value as PlutoFilterType).title;
 
       final filterValue = row.cells[FilterHelper.filterFieldValue]!.value;
 
@@ -171,8 +165,7 @@ class FilterHelper {
     }
 
     for (var row in filteredRows) {
-      if (row!.cells[filterFieldColumn]!.value == filterFieldAllColumns ||
-          row.cells[filterFieldColumn]!.value == column.field) {
+      if (row!.cells[filterFieldColumn]!.value == filterFieldAllColumns || row.cells[filterFieldColumn]!.value == column.field) {
         return true;
       }
     }
@@ -447,8 +440,7 @@ class FilterPopupState {
     required List<PlutoColumn> columns,
   }) {
     Map<String, String> columnMap = {
-      FilterHelper.filterFieldAllColumns:
-          configuration.localeText.filterAllColumns,
+      FilterHelper.filterFieldAllColumns: configuration.localeText.filterAllColumns,
     };
 
     columns.where((element) => element.enableFilterMenuItem).forEach((element) {
@@ -526,7 +518,30 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
     if (stateManager!.rows.isEmpty) {
       Navigator.of(stateManager!.gridFocusNode.context!).pop();
     } else {
-      stateManager!.removeRows(stateManager!.rows);
+      showDialog(
+        context: stateManager!.gridFocusNode.context!,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirmation'),
+            content: const Text('Are you sure you want to clear the rows?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  stateManager!.removeRows(stateManager!.rows);
+                },
+                child: const Text('Clear'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
