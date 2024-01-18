@@ -981,13 +981,13 @@ class PlutoGridLocaleText {
 
   const PlutoGridLocaleText({
     // Column menu
-    this.unfreezeColumn = 'Unfreeze',
-    this.freezeColumnToStart = 'Freeze to start',
+    this.unfreezeColumn = 'Unfreeze edited',
+    this.freezeColumnToStart = 'Freeze to start edited',
     this.freezeColumnToEnd = 'Freeze to end',
     this.autoFitColumn = 'Auto fit',
     this.hideColumn = 'Hide column',
     this.setColumns = 'Set columns',
-    this.setFilter = 'Set filter',
+    this.setFilter = 'Set filter  edited',
     this.resetFilter = 'Reset filter',
     // SetColumns popup
     this.setColumnsTitle = 'Column title',

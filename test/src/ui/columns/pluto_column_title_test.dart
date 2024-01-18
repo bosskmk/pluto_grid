@@ -378,14 +378,14 @@ void main() {
     });
 
     tapColumn.test('기본 메뉴가 출력 되어야 한다.', (tester) async {
-      expect(find.text('Freeze to start'), findsOneWidget);
+      expect(find.text('Freeze to start edited'), findsOneWidget);
       expect(find.text('Freeze to end'), findsOneWidget);
       expect(find.text('Auto fit'), findsOneWidget);
     });
 
     tapColumn.test('Freeze to start 를 탭하면 toggleFrozenColumn 이 호출 되어야 한다.',
         (tester) async {
-      await tester.tap(find.text('Freeze to start'));
+      await tester.tap(find.text('Freeze to start edited'));
 
       verify(stateManager.toggleFrozenColumn(
         column,
@@ -444,7 +444,7 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('Freeze to start'), findsNothing);
+      expect(find.text('Freeze to start edited'), findsNothing);
       expect(find.text('Freeze to end'), findsNothing);
       expect(find.text('Auto fit'), findsOneWidget);
     });
@@ -496,7 +496,7 @@ void main() {
 
     tapColumn.test('고정 컬럼의 기본 메뉴가 출력 되어야 한다.', (tester) async {
       expect(find.text('Unfreeze'), findsOneWidget);
-      expect(find.text('Freeze to start'), findsNothing);
+      expect(find.text('Freeze to start edited'), findsNothing);
       expect(find.text('Freeze to end'), findsNothing);
       expect(find.text('Auto fit'), findsOneWidget);
     });
