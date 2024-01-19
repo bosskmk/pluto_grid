@@ -515,64 +515,57 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
   }
 
   void handleClearButton() {
-    if (stateManager!.rows.isEmpty) {
-      Navigator.of(stateManager!.gridFocusNode.context!).pop();
-    } else {
-      showDialog(
-        context: stateManager!.gridFocusNode.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Confirmation'),
-            content: const Text('Are you sure you want to clear the Filters?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('No', style: TextStyle(color: Colors.red)),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  stateManager!.removeRows(stateManager!.rows);
-                },
-                child: const Text(
-                  'Clear',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    stateManager!.removeRows(stateManager!.rows);
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            color: configuration!.style.iconColor,
-            iconSize: configuration!.style.iconSize,
-            onPressed: handleAddButton,
-          ),
-          IconButton(
-            icon: const Icon(Icons.remove),
-            color: configuration!.style.iconColor,
-            iconSize: configuration!.style.iconSize,
-            onPressed: handleRemoveButton,
-          ),
-          IconButton(
-            icon: const Icon(Icons.clear_sharp),
-            color: Colors.red,
-            iconSize: configuration!.style.iconSize,
-            onPressed: handleClearButton,
-          ),
-        ],
+      child: SizedBox(
+        width: size.width - 1328,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  color: configuration!.style.iconColor,
+                  iconSize: configuration!.style.iconSize,
+                  onPressed: handleAddButton,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  color: configuration!.style.iconColor,
+                  iconSize: configuration!.style.iconSize,
+                  onPressed: handleRemoveButton,
+                ),
+                InkWell(
+                  onTap: handleClearButton,
+                  child: const Text(
+                    'Clear Filter',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+              ),
+              onPressed: () {
+                Navigator.of(stateManager!.gridFocusNode.context!).pop();
+              },
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
