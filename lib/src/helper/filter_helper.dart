@@ -534,6 +534,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
+                  
                   stateManager!.removeRows(stateManager!.rows);
                 },
                 child: const Text('Clear'),
