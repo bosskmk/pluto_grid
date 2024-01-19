@@ -523,21 +523,23 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Confirmation'),
-            content: const Text('Are you sure you want to clear the rows?'),
+            content: const Text('Are you sure you want to clear the Filters?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: const Text('No', style: TextStyle(color: Colors.red)),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  
                   stateManager!.removeRows(stateManager!.rows);
                 },
-                child: const Text('Clear'),
+                child: const Text(
+                  'Clear',
+                  style: TextStyle(color: Colors.green),
+                ),
               ),
             ],
           );
