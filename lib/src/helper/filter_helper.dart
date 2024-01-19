@@ -547,7 +547,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
                   onTap: handleClearButton,
                   child: const Text(
                     'Clear Filter',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.blue),
                   ),
                 ),
               ],
