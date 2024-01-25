@@ -548,6 +548,9 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(
+            width: 5,
+          ),
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
