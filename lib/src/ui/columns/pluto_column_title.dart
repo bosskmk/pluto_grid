@@ -536,7 +536,9 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   }
 
   void clearFilter() {
-    stateManager.setFilter(null);
+    stateManager.setFilter(
+      null,
+    );
     debugPrint("clear filter called");
   }
 
