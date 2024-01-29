@@ -483,6 +483,33 @@ class _ColumnTextWidget extends PlutoStatefulWidget {
   _ColumnTextWidgetState createState() => _ColumnTextWidgetState();
 }
 
+abstract class IFilteringRowState {
+  List<PlutoRow> get filterRows;
+
+  bool get hasFilter;
+
+  void setFilter(FilteredListFilter<PlutoRow>? filter, {bool notify = true});
+
+  void setFilterWithFilterRows(List<PlutoRow> rows, {bool notify = true});
+
+  void setFilterRows(List<PlutoRow> rows);
+
+  List<PlutoRow> filterRowsByField(String columnField);
+
+  /// Check if the column is in a state with filtering applied.
+  bool isFilteredColumn(PlutoColumn column);
+
+  void removeColumnsInFilterRows(
+    List<PlutoColumn> columns, {
+    bool notify = true,
+  });
+
+  void showFilterPopup(
+    BuildContext context, {
+    PlutoColumn? calledColumn,
+  });
+}
+
 class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   bool _isFilteredList = false;
 
