@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-typedef PlutoDualOnSelectedEventCallback = void Function(
-    PlutoDualOnSelectedEvent event);
+typedef PlutoDualOnSelectedEventCallback = void Function(PlutoDualOnSelectedEvent event);
 
 /// In [PlutoDualGrid], set the separation widget between the two grids.
 class PlutoDualGridDivider {
@@ -84,8 +83,7 @@ class PlutoDualGridResizeNotifier extends ChangeNotifier {
 }
 
 class PlutoDualGridState extends State<PlutoDualGrid> {
-  final PlutoDualGridResizeNotifier resizeNotifier =
-      PlutoDualGridResizeNotifier();
+  final PlutoDualGridResizeNotifier resizeNotifier = PlutoDualGridResizeNotifier();
 
   late final PlutoDualGridDisplay display;
 
@@ -144,11 +142,9 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
           }
 
           if (isGridA) {
-            _streamA =
-                onLoadedEvent.stateManager.eventManager!.listener(handleEvent);
+            _streamA = onLoadedEvent.stateManager.eventManager!.listener(handleEvent);
           } else {
-            _streamB =
-                onLoadedEvent.stateManager.eventManager!.listener(handleEvent);
+            _streamB = onLoadedEvent.stateManager.eventManager!.listener(handleEvent);
           }
 
           if (props.onLoaded != null) {
@@ -194,7 +190,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
         columnMenuDelegate: props.columnMenuDelegate,
         configuration: props.configuration,
         mode: mode,
-        key: props.key,
+        parentKey: props.key,
       ),
     );
   }
@@ -224,8 +220,7 @@ class PlutoDualGridState extends State<PlutoDualGrid> {
               indicatorColor: widget.divider.indicatorColor,
               draggingColor: widget.divider.draggingColor,
               dragCallback: (details) {
-                final RenderBox object =
-                    context.findRenderObject() as RenderBox;
+                final RenderBox object = context.findRenderObject() as RenderBox;
 
                 display.offset = object
                     .globalToLocal(Offset(
@@ -266,12 +261,10 @@ class PlutoDualGridDividerWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PlutoDualGridDividerWidget> createState() =>
-      PlutoDualGridDividerWidgetState();
+  State<PlutoDualGridDividerWidget> createState() => PlutoDualGridDividerWidgetState();
 }
 
-class PlutoDualGridDividerWidgetState
-    extends State<PlutoDualGridDividerWidget> {
+class PlutoDualGridDividerWidgetState extends State<PlutoDualGridDividerWidget> {
   bool isDragging = false;
 
   void onHorizontalDragStart(DragStartDetails details) {
@@ -355,8 +348,7 @@ class PlutoDualGridLayoutDelegate extends MultiChildLayoutDelegate {
       maxHeight: size.height,
     );
 
-    final dividerHalf =
-        showDraggableDivider ? PlutoDualGrid.dividerWidth / 2 : 0;
+    final dividerHalf = showDraggableDivider ? PlutoDualGrid.dividerWidth / 2 : 0;
 
     final dividerWidth = dividerHalf * 2;
 
@@ -613,33 +605,20 @@ class PlutoDualGridProps {
     return PlutoDualGridProps(
       columns: columns ?? this.columns,
       rows: rows ?? this.rows,
-      columnGroups:
-          columnGroups == null ? this.columnGroups : columnGroups.value,
+      columnGroups: columnGroups == null ? this.columnGroups : columnGroups.value,
       onLoaded: onLoaded == null ? this.onLoaded : onLoaded.value,
       onChanged: onChanged == null ? this.onChanged : onChanged.value,
       onSorted: onSorted == null ? this.onSorted : onSorted.value,
-      onRowChecked:
-          onRowChecked == null ? this.onRowChecked : onRowChecked.value,
-      onRowDoubleTap:
-          onRowDoubleTap == null ? this.onRowDoubleTap : onRowDoubleTap.value,
-      onRowSecondaryTap: onRowSecondaryTap == null
-          ? this.onRowSecondaryTap
-          : onRowSecondaryTap.value,
+      onRowChecked: onRowChecked == null ? this.onRowChecked : onRowChecked.value,
+      onRowDoubleTap: onRowDoubleTap == null ? this.onRowDoubleTap : onRowDoubleTap.value,
+      onRowSecondaryTap: onRowSecondaryTap == null ? this.onRowSecondaryTap : onRowSecondaryTap.value,
       onRowsMoved: onRowsMoved == null ? this.onRowsMoved : onRowsMoved.value,
-      onColumnsMoved:
-          onColumnsMoved == null ? this.onColumnsMoved : onColumnsMoved.value,
-      createHeader:
-          createHeader == null ? this.createHeader : createHeader.value,
-      createFooter:
-          createFooter == null ? this.createFooter : createFooter.value,
-      noRowsWidget:
-          noRowsWidget == null ? this.noRowsWidget : noRowsWidget.value,
-      rowColorCallback: rowColorCallback == null
-          ? this.rowColorCallback
-          : rowColorCallback.value,
-      columnMenuDelegate: columnMenuDelegate == null
-          ? this.columnMenuDelegate
-          : columnMenuDelegate.value,
+      onColumnsMoved: onColumnsMoved == null ? this.onColumnsMoved : onColumnsMoved.value,
+      createHeader: createHeader == null ? this.createHeader : createHeader.value,
+      createFooter: createFooter == null ? this.createFooter : createFooter.value,
+      noRowsWidget: noRowsWidget == null ? this.noRowsWidget : noRowsWidget.value,
+      rowColorCallback: rowColorCallback == null ? this.rowColorCallback : rowColorCallback.value,
+      columnMenuDelegate: columnMenuDelegate == null ? this.columnMenuDelegate : columnMenuDelegate.value,
       configuration: configuration ?? this.configuration,
       mode: mode == null ? this.mode : mode.value,
       key: key ?? this.key,

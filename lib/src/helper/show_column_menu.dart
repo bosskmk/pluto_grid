@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+GlobalKey<PlutoGridState> parentKey = GlobalKey<PlutoGridState>();
+
 abstract class PlutoColumnMenuDelegate<T> {
   List<PopupMenuEntry<T>> buildMenuItems({
     required PlutoGridStateManager stateManager,
@@ -16,8 +18,7 @@ abstract class PlutoColumnMenuDelegate<T> {
   });
 }
 
-class PlutoColumnMenuDelegateDefault
-    implements PlutoColumnMenuDelegate<PlutoGridColumnMenuItem> {
+class PlutoColumnMenuDelegateDefault implements PlutoColumnMenuDelegate<PlutoGridColumnMenuItem> {
   const PlutoColumnMenuDelegateDefault();
 
   @override
@@ -81,8 +82,7 @@ Future<T?>? showColumnMenu<T>({
   required List<PopupMenuEntry<T>> items,
   Color backgroundColor = Colors.white,
 }) {
-  final RenderBox overlay =
-      Overlay.of(context).context.findRenderObject() as RenderBox;
+  final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
   return showMenu<T>(
     context: context,
