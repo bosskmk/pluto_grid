@@ -538,6 +538,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   void clearFilter() {
     stateManager.setFilter(null);
+    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   String? get _title => widget.column.titleSpan == null ? widget.column.title : null;
