@@ -537,6 +537,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   void clearFilter() {
     stateManager.setFilter(null);
+    debugPrint("clear filter called");
   }
 
   String? get _title => widget.column.titleSpan == null ? widget.column.title : null;
@@ -558,20 +559,21 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
               ),
             ),
           ),
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: IconButton(
-            icon: Icon(
-              Icons.filter_alt_off,
-              color: stateManager.configuration.style.iconColor,
-              size: stateManager.configuration.style.iconSize,
-            ),
-            onPressed: clearFilter,
-            constraints: BoxConstraints(
-              maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
+        if (_isFilteredList)
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: IconButton(
+              icon: Icon(
+                Icons.filter_alt_off,
+                color: stateManager.configuration.style.iconColor,
+                size: stateManager.configuration.style.iconSize,
+              ),
+              onPressed: clearFilter,
+              constraints: BoxConstraints(
+                maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
+              ),
             ),
           ),
-        ),
       ];
 
   @override
