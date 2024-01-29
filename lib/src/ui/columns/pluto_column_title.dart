@@ -517,7 +517,6 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
   @override
   void initState() {
     super.initState();
-
     updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
@@ -538,7 +537,6 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   void clearFilter() {
     stateManager.setFilter(null);
-    updateState(PlutoNotifierEventForceUpdate.instance);
   }
 
   String? get _title => widget.column.titleSpan == null ? widget.column.title : null;
@@ -560,21 +558,20 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
               ),
             ),
           ),
-        if (_isFilteredList)
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: IconButton(
-              icon: Icon(
-                Icons.filter_alt_off,
-                color: stateManager.configuration.style.iconColor,
-                size: stateManager.configuration.style.iconSize,
-              ),
-              onPressed: clearFilter,
-              constraints: BoxConstraints(
-                maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
-              ),
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: IconButton(
+            icon: Icon(
+              Icons.filter_alt_off,
+              color: stateManager.configuration.style.iconColor,
+              size: stateManager.configuration.style.iconSize,
+            ),
+            onPressed: clearFilter,
+            constraints: BoxConstraints(
+              maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
             ),
           ),
+        ),
       ];
 
   @override
