@@ -55,7 +55,7 @@ typedef PlutoRowColorCallback = Color Function(
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
 class PlutoGrid extends PlutoStatefulWidget {
   const PlutoGrid({
-    Key? parentKey,
+    Key? key,
     required this.columns,
     required this.rows,
     this.columnGroups,
@@ -76,7 +76,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
-  }) : super(key: parentKey);
+  }) : super(key: key);
 
   /// {@template pluto_grid_property_columns}
   /// The [PlutoColumn] column is delivered as a list and can be added or deleted after grid creation.
