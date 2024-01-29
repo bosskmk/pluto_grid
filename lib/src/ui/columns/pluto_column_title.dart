@@ -567,7 +567,9 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
                 size: stateManager.configuration.style.iconSize,
               ),
               onPressed: () {
-                stateManager.setFilter(null);
+                setState(() {
+                  stateManager.setFilter(null);
+                });
               },
               constraints: BoxConstraints(
                 maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
