@@ -540,8 +540,6 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
       null,
     );
     stateManager.setPage(1);
-
-    debugPrint("clear filter called");
   }
 
   String? get _title => widget.column.titleSpan == null ? widget.column.title : null;
