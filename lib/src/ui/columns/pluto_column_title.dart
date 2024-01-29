@@ -467,7 +467,6 @@ class CheckboxAllSelectionWidgetState extends PlutoStateWithChange<CheckboxAllSe
 
 class _ColumnTextWidget extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
-
   final PlutoColumn column;
 
   final double height;
@@ -515,7 +514,6 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   @override
   PlutoGridStateManager get stateManager => widget.stateManager;
-
   @override
   void initState() {
     super.initState();
@@ -536,6 +534,10 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
       context,
       calledColumn: widget.column,
     );
+  }
+
+  void clearFilter() {
+    stateManager.setFilter(null);
   }
 
   String? get _title => widget.column.titleSpan == null ? widget.column.title : null;
@@ -566,10 +568,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
                 color: stateManager.configuration.style.iconColor,
                 size: stateManager.configuration.style.iconSize,
               ),
-              onPressed: () {
-                stateManager.setFilter(null);
-                parentKey.currentState?.stateManager.setFilter(null);
-              },
+              onPressed: clearFilter,
               constraints: BoxConstraints(
                 maxHeight: widget.height + (PlutoGridSettings.rowBorderWidth * 2),
               ),

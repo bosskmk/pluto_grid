@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
-GlobalKey<PlutoGridState> parentKey = GlobalKey<PlutoGridState>();
-
 abstract class PlutoColumnMenuDelegate<T> {
   List<PopupMenuEntry<T>> buildMenuItems({
     required PlutoGridStateManager stateManager,
