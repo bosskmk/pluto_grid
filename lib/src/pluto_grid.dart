@@ -503,7 +503,9 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     _stateManager = PlutoGridStateManager(
       columns: widget.columns,
       rows: widget.rows,
-      rowWrapper: widget.rowWrapper,
+      rowWrapper: (PlutoRow row, Widget child) {
+        return Card(child: child);
+      },
       gridFocusNode: _gridFocusNode,
       scroll: PlutoGridScrollController(
         vertical: _verticalScroll,
