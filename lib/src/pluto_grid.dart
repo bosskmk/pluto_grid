@@ -54,10 +54,13 @@ typedef PlutoRowColorCallback = Color Function(
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
 class PlutoGrid extends PlutoStatefulWidget {
+  final rowWrapper;
+
   const PlutoGrid({
     Key? key,
     required this.columns,
     required this.rows,
+    this.rowWrapper,
     this.columnGroups,
     this.onLoaded,
     this.onChanged,
@@ -500,6 +503,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     _stateManager = PlutoGridStateManager(
       columns: widget.columns,
       rows: widget.rows,
+      rowWrapper: widget.rowWrapper,
       gridFocusNode: _gridFocusNode,
       scroll: PlutoGridScrollController(
         vertical: _verticalScroll,

@@ -104,14 +104,28 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             itemExtent: stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
-              return PlutoBaseRow(
-                key: ValueKey('body_row_${_rows[i].key}'),
-                rowIdx: i,
-                row: _rows[i],
-                columns: _columns,
-                stateManager: stateManager,
-                visibilityLayout: true,
-              );
+              // if statemanager.rowWrapper != null
+              // wrap the pluto base row with the rowWrapper
+              if (stateManager.rowWrapper != null)
+                return stateManager.rowWrapper!(
+                    _rows[i],
+                    PlutoBaseRow(
+                      key: ValueKey('body_row_${_rows[i].key}'),
+                      rowIdx: i,
+                      row: _rows[i],
+                      columns: _columns,
+                      stateManager: stateManager,
+                      visibilityLayout: true,
+                    ));
+              else
+                return PlutoBaseRow(
+                  key: ValueKey('body_row_${_rows[i].key}'),
+                  rowIdx: i,
+                  row: _rows[i],
+                  columns: _columns,
+                  stateManager: stateManager,
+                  visibilityLayout: true,
+                );
             },
           ),
         ),
