@@ -105,19 +105,20 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
               final row = _rows[i];
-              final Widget rowWidget = PlutoBaseRow(
+              Widget rowWidget = PlutoBaseRow(
                 key: ValueKey('body_row_${row.key}'),
                 rowIdx: i,
                 row: row,
                 columns: _columns,
                 stateManager: stateManager,
-                visibilityLayout: true,
               );
 
-              // Conditionally wrap the rowWidget with the rowWrapper if provided
-              return stateManager.rowWrapper != null
-                  ? stateManager.rowWrapper!(row, rowWidget)
-                  : rowWidget;
+              // Apply rowWrapper if not null
+              if (stateManager.rowWrapper != null) {
+                rowWidget = stateManager.rowWrapper!(row, rowWidget);
+              }
+
+              return rowWidget;
             },
           ),
         ),
