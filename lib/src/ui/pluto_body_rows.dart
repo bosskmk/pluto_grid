@@ -113,7 +113,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 stateManager: stateManager,
               );
 
-              // Apply rowWrapper if not null
+              // Apply rowWrapper if it's not null.
               if (stateManager.rowWrapper != null) {
                 rowWidget = stateManager.rowWrapper!(row, rowWidget);
               }
