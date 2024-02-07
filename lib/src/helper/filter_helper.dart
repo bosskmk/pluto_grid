@@ -521,54 +521,49 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        width: size.width - 1330,
-        child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  color: configuration!.style.iconColor,
-                  iconSize: configuration!.style.iconSize,
-                  onPressed: handleAddButton,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  color: configuration!.style.iconColor,
-                  iconSize: configuration!.style.iconSize,
-                  onPressed: handleRemoveButton,
-                ),
-                InkWell(
-                  onTap: handleClearButton,
-                  child: const Text(
-                    'Clear Filter',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 370,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+    return SizedBox(
+      width: size.width ,
+      child: Row(
+        children: [
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                color: configuration!.style.iconColor,
+                iconSize: configuration!.style.iconSize,
+                onPressed: handleAddButton,
               ),
-              onPressed: () {
-                Navigator.of(stateManager!.gridFocusNode.context!).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(color: Colors.white),
+              IconButton(
+                icon: const Icon(Icons.remove),
+                color: configuration!.style.iconColor,
+                iconSize: configuration!.style.iconSize,
+                onPressed: handleRemoveButton,
               ),
+              InkWell(
+                onTap: handleClearButton,
+                child: const Text(
+                  'Clear Filter',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 370,
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
             ),
-          ],
-        ),
+            onPressed: () {
+              Navigator.of(stateManager!.gridFocusNode.context!).pop();
+            },
+            child: const Text(
+              'Close',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
