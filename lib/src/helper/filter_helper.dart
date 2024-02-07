@@ -525,9 +525,9 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
-        width: size.width -1330,
+        width: size.width - 1330,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
@@ -553,7 +553,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              width: 5,
+              width: 370,
             ),
             ElevatedButton(
               style: ButtonStyle(
@@ -566,7 +566,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
                 'Close',
                 style: TextStyle(color: Colors.white),
               ),
-          ),
+            ),
           ],
         ),
       ),
