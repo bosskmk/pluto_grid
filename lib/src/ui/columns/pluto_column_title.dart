@@ -65,25 +65,14 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    final selected = await showColumnMenu(
+    // Execute the action associated with "Set Filter"
+    stateManager.columnMenuDelegate.onSelected(
       context: context,
-      position: position,
-      backgroundColor: stateManager.style.menuBackgroundColor,
-      items: stateManager.columnMenuDelegate.buildMenuItems(
-        stateManager: stateManager,
-        column: widget.column,
-      ),
+      stateManager: stateManager,
+      column: widget.column,
+      mounted: mounted,
+      selected: PlutoGridColumnMenuItem.setFilter, // Directly pass the option
     );
-
-    if (context.mounted) {
-      stateManager.columnMenuDelegate.onSelected(
-        context: context,
-        stateManager: stateManager,
-        column: widget.column,
-        mounted: mounted,
-        selected: selected,
-      );
-    }
   }
 
   void _handleOnPointDown(PointerDownEvent event) {

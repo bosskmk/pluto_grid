@@ -39,33 +39,9 @@ class PlutoColumnMenuDelegateDefault implements PlutoColumnMenuDelegate<PlutoGri
     required PlutoGridColumnMenuItem? selected,
   }) {
     switch (selected) {
-      case PlutoGridColumnMenuItem.unfreeze:
-        stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.none);
-        break;
-      case PlutoGridColumnMenuItem.freezeToStart:
-        stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.start);
-        break;
-      case PlutoGridColumnMenuItem.freezeToEnd:
-        stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.end);
-        break;
-      case PlutoGridColumnMenuItem.autoFit:
-        if (!mounted) return;
-        stateManager.autoFitColumn(context, column);
-        stateManager.notifyResizingListeners();
-        break;
-      case PlutoGridColumnMenuItem.hideColumn:
-        stateManager.hideColumn(column, true);
-        break;
-      case PlutoGridColumnMenuItem.setColumns:
-        if (!mounted) return;
-        stateManager.showSetColumnsPopup(context);
-        break;
       case PlutoGridColumnMenuItem.setFilter:
         if (!mounted) return;
         stateManager.showFilterPopup(context, calledColumn: column);
-        break;
-      case PlutoGridColumnMenuItem.resetFilter:
-        stateManager.setFilter(null);
         break;
       default:
         break;
@@ -101,69 +77,14 @@ List<PopupMenuEntry<PlutoGridColumnMenuItem>> _getDefaultColumnMenuItems({
   required PlutoColumn column,
 }) {
   final Color textColor = stateManager.style.cellTextStyle.color!;
-
-  final Color disableTextColor = textColor.withOpacity(0.5);
-
-  final bool enoughFrozenColumnsWidth = stateManager.enoughFrozenColumnsWidth(
-    stateManager.maxWidth! - column.width,
-  );
-
   final localeText = stateManager.localeText;
 
   return [
-    if (column.frozen.isFrozen == true)
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.unfreeze,
-        text: localeText.unfreezeColumn,
-        textColor: textColor,
-      ),
-    if (column.frozen.isFrozen != true) ...[
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.freezeToStart,
-        enabled: enoughFrozenColumnsWidth,
-        text: localeText.freezeColumnToStart,
-        textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
-      ),
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.freezeToEnd,
-        enabled: enoughFrozenColumnsWidth,
-        text: localeText.freezeColumnToEnd,
-        textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor,
-      ),
-    ],
-    const PopupMenuDivider(),
     _buildMenuItem(
-      value: PlutoGridColumnMenuItem.autoFit,
-      text: localeText.autoFitColumn,
+      value: PlutoGridColumnMenuItem.setFilter,
+      text: localeText.setFilter,
       textColor: textColor,
     ),
-    if (column.enableHideColumnMenuItem == true)
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.hideColumn,
-        text: localeText.hideColumn,
-        textColor: textColor,
-        enabled: stateManager.refColumns.length > 1,
-      ),
-    if (column.enableSetColumnsMenuItem == true)
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.setColumns,
-        text: localeText.setColumns,
-        textColor: textColor,
-      ),
-    if (column.enableFilterMenuItem == true) ...[
-      const PopupMenuDivider(),
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.setFilter,
-        text: localeText.setFilter,
-        textColor: textColor,
-      ),
-      _buildMenuItem(
-        value: PlutoGridColumnMenuItem.resetFilter,
-        text: localeText.resetFilter,
-        textColor: textColor,
-        enabled: stateManager.hasFilter,
-      ),
-    ],
   ];
 }
 
@@ -189,12 +110,5 @@ PopupMenuItem<PlutoGridColumnMenuItem> _buildMenuItem<PlutoGridColumnMenuItem>({
 
 /// Items in the context menu on the right side of the column
 enum PlutoGridColumnMenuItem {
-  unfreeze,
-  freezeToStart,
-  freezeToEnd,
-  hideColumn,
-  setColumns,
-  autoFit,
   setFilter,
-  resetFilter,
 }
