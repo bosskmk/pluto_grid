@@ -13,6 +13,15 @@ abstract class PlutoColumnType {
     );
   }
 
+  /// Set as a boolean column.
+  factory PlutoColumnType.boolean({
+    dynamic defaultValue = false,
+  }) {
+    return PlutoColumnTypeBoolean(
+      defaultValue: defaultValue,
+    );
+  }
+
   /// Set to numeric column.
   ///
   /// [format]
@@ -31,12 +40,31 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.number({
     dynamic defaultValue = 0,
     bool negative = true,
-    String format = '#,###',
+    String format = '#,###.#######',
     bool applyFormatOnInit = true,
     bool allowFirstDot = false,
     String? locale,
   }) {
     return PlutoColumnTypeNumber(
+      defaultValue: defaultValue,
+      format: format,
+      negative: negative,
+      applyFormatOnInit: applyFormatOnInit,
+      allowFirstDot: allowFirstDot,
+      locale: locale,
+    );
+  }
+
+//this sorting is custom build for sorting double
+  factory PlutoColumnType.double({
+    dynamic defaultValue = 0.0,
+    bool negative = true,
+    String format = '#,###.#######',
+    bool applyFormatOnInit = true,
+    bool allowFirstDot = false,
+    String? locale,
+  }) {
+    return PlutoColumnTypeDouble(
       defaultValue: defaultValue,
       format: format,
       negative: negative,
@@ -224,11 +252,37 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
 
   bool get hasFormat => this is PlutoColumnTypeHasFormat;
 
-  bool get applyFormatOnInit =>
-      hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormatOnInit : false;
+  bool get applyFormatOnInit => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormatOnInit : false;
 
-  dynamic applyFormat(dynamic value) =>
-      hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
+  dynamic applyFormat(dynamic value) => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
+}
+
+class PlutoColumnTypeBoolean implements PlutoColumnType {
+  @override
+  final dynamic defaultValue;
+
+  const PlutoColumnTypeBoolean({
+    this.defaultValue,
+  });
+
+  @override
+  bool isValid(dynamic value) {
+    return value is bool;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    bool boolA = a == null ? false : a as bool;
+    bool boolB = b == null ? false : b as bool;
+
+    // Custom sorting for booleans: false first, then true
+    return boolA == boolB ? 0 : (boolA ? 1 : -1);
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v == null ? false : v as bool;
+  }
 }
 
 class PlutoColumnTypeText implements PlutoColumnType {
@@ -255,9 +309,49 @@ class PlutoColumnTypeText implements PlutoColumnType {
   }
 }
 
-class PlutoColumnTypeNumber
-    with PlutoColumnTypeWithNumberFormat
-    implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
+class PlutoColumnTypeDouble with PlutoColumnTypeWithDoubleFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
+  @override
+  final dynamic defaultValue;
+
+  @override
+  final bool negative;
+
+  @override
+  final String format;
+
+  @override
+  final bool applyFormatOnInit;
+
+  @override
+  final bool allowFirstDot;
+
+  @override
+  final String? locale;
+
+  PlutoColumnTypeDouble({
+    this.defaultValue,
+    required this.negative,
+    required this.format,
+    required this.applyFormatOnInit,
+    required this.allowFirstDot,
+    required this.locale,
+  })  : numberFormat = intl.NumberFormat(format, locale),
+        decimalPoint = _getDecimalPoint(format);
+
+  @override
+  final intl.NumberFormat numberFormat;
+
+  @override
+  final int decimalPoint;
+
+  static int _getDecimalPoint(String format) {
+    final int dotIndex = format.indexOf('.');
+
+    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  }
+}
+
+class PlutoColumnTypeNumber with PlutoColumnTypeWithNumberFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
   @override
   final dynamic defaultValue;
 
@@ -299,9 +393,7 @@ class PlutoColumnTypeNumber
   }
 }
 
-class PlutoColumnTypeCurrency
-    with PlutoColumnTypeWithNumberFormat
-    implements PlutoColumnType, PlutoColumnTypeHasFormat<String?> {
+class PlutoColumnTypeCurrency with PlutoColumnTypeWithNumberFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String?> {
   @override
   final dynamic defaultValue;
 
@@ -351,8 +443,7 @@ class PlutoColumnTypeCurrency
   late final int decimalPoint;
 }
 
-class PlutoColumnTypeSelect
-    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
+class PlutoColumnTypeSelect implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -386,12 +477,7 @@ class PlutoColumnTypeSelect
   }
 }
 
-class PlutoColumnTypeDate
-    implements
-        PlutoColumnType,
-        PlutoColumnTypeHasFormat<String>,
-        PlutoColumnTypeHasDateFormat,
-        PlutoColumnTypeHasPopupIcon {
+class PlutoColumnTypeDate implements PlutoColumnType, PlutoColumnTypeHasFormat<String>, PlutoColumnTypeHasDateFormat, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -477,8 +563,7 @@ class PlutoColumnTypeDate
   }
 }
 
-class PlutoColumnTypeTime
-    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
+class PlutoColumnTypeTime implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -539,6 +624,74 @@ abstract class PlutoColumnTypeHasPopupIcon {
   IconData? get popupIcon;
 }
 
+mixin PlutoColumnTypeWithDoubleFormat {
+  intl.NumberFormat get numberFormat;
+
+  bool get negative;
+
+  int get decimalPoint;
+
+  bool get allowFirstDot;
+
+  String? get locale;
+
+  bool isValid(dynamic value) {
+    if (!isNumeric(value)) {
+      return false;
+    }
+
+    if (negative == false && num.parse(value.toString()) < 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  int compare(dynamic a, dynamic b) {
+    return _compareWithNull(
+      a,
+      b,
+      () => toDouble(a.toString()).compareTo(toDouble(b.toString())),
+    );
+  }
+
+  dynamic makeCompareValue(dynamic v) {
+    return v.runtimeType != num ? toDouble(v.toString()) : v;
+  }
+
+  String applyFormat(dynamic value) {
+    double number = toDouble(value.toString());
+
+    if (negative == false && number < 0) {
+      number = 0.0;
+    }
+
+    return numberFormat.format(number);
+  }
+
+  /// Convert [String] converted to [applyFormat] to [double].
+  double toDouble(String formatted) {
+    String match = '0-9\\-${numberFormat.symbols.DECIMAL_SEP}';
+
+    if (negative) {
+      match += numberFormat.symbols.MINUS_SIGN;
+    }
+
+    formatted = formatted.replaceAll(RegExp('[^$match]'), '').replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
+
+    final double formattedDouble = double.tryParse(formatted) ?? 0.0;
+
+    return formattedDouble.isFinite ? formattedDouble : 0.0;
+  }
+
+  bool isNumeric(dynamic s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s.toString()) != null;
+  }
+}
+
 mixin PlutoColumnTypeWithNumberFormat {
   intl.NumberFormat get numberFormat;
 
@@ -595,9 +748,7 @@ mixin PlutoColumnTypeWithNumberFormat {
       match += numberFormat.symbols.MINUS_SIGN;
     }
 
-    formatted = formatted
-        .replaceAll(RegExp('[^$match]'), '')
-        .replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
+    formatted = formatted.replaceAll(RegExp('[^$match]'), '').replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
 
     final num formattedNumber = num.tryParse(formatted) ?? 0;
 

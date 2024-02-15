@@ -186,7 +186,6 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 ///   onLoaded: (PlutoGridOnLoadedEvent event) => stateManager = event.stateManager,
 /// )
 /// ```
-/// {@template initialize_rows_sync_or_async}
 /// It is created when [PlutoGrid] is first created,
 /// and the state required for the grid is set for `List<PlutoRow> rows`.
 /// [PlutoGridStateManager.initializeRows], which operates at this time, works synchronously,
