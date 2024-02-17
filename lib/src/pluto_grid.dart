@@ -593,7 +593,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     }
   }
 
-  KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, KeyEvent event) {
     if (_keyManager.eventResult.isSkip == false) {
       _keyManager.subject.add(PlutoKeyManagerEvent(
         focusNode: focusNode,
@@ -608,7 +608,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   Widget build(BuildContext context) {
     return FocusScope(
       onFocusChange: _stateManager.setKeepFocus,
-      onKey: _handleGridFocusOnKey,
+      onKeyEvent: _handleGridFocusOnKey,
       child: _GridContainer(
         stateManager: _stateManager,
         child: LayoutBuilder(
@@ -1229,12 +1229,9 @@ class _GridContainer extends StatelessWidget {
               width: PlutoGridSettings.gridBorderWidth,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
-            child: borderRadius == BorderRadius.zero
-                ? child
-                : ClipRRect(borderRadius: borderRadius, child: child),
-          ),
+          child: borderRadius == BorderRadius.zero
+              ? child
+              : ClipRRect(borderRadius: borderRadius, child: child),
         ),
       ),
     );
@@ -1536,7 +1533,7 @@ abstract class PlutoGridSettings {
       PlutoGridSettings.shadowLineSize * 2;
 
   /// Grid - padding
-  static const double gridPadding = 2.0;
+  static const double gridPadding = 0;
 
   /// Grid - border width
   static const double gridBorderWidth = 1.0;
