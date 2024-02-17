@@ -41,18 +41,14 @@ class PlutoBaseRow extends StatelessWidget {
     return true;
   }
 
-  bool _handleOnWillAccept(PlutoRow? draggingRow) {
-    if (draggingRow == null) {
-      return false;
-    }
-
-    return !_checkSameDragRows(draggingRow);
+  bool _handleOnWillAccept(DragTargetDetails<PlutoRow> details) {
+    return !_checkSameDragRows(details.data);
   }
 
-  void _handleOnAccept(PlutoRow draggingRow) async {
+  void _handleOnAccept(DragTargetDetails<PlutoRow> details) async {
     final draggingRows = stateManager.currentSelectingRows.isNotEmpty
         ? stateManager.currentSelectingRows
-        : [draggingRow];
+        : [details.data];
 
     stateManager.eventManager!.addEvent(
       PlutoGridDragRowsEvent(
@@ -111,8 +107,8 @@ class PlutoBaseRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<PlutoRow>(
-      onWillAccept: _handleOnWillAccept,
-      onAccept: _handleOnAccept,
+      onWillAcceptWithDetails: _handleOnWillAccept,
+      onAcceptWithDetails: _handleOnAccept,
       builder: _dragTargetBuilder,
     );
   }
