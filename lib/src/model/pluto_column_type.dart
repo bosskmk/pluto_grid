@@ -224,11 +224,9 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
 
   bool get hasFormat => this is PlutoColumnTypeHasFormat;
 
-  bool get applyFormatOnInit =>
-      hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormatOnInit : false;
+  bool get applyFormatOnInit => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormatOnInit : false;
 
-  dynamic applyFormat(dynamic value) =>
-      hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
+  dynamic applyFormat(dynamic value) => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
 }
 
 class PlutoColumnTypeText implements PlutoColumnType {
@@ -351,8 +349,7 @@ class PlutoColumnTypeCurrency
   late final int decimalPoint;
 }
 
-class PlutoColumnTypeSelect
-    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
+class PlutoColumnTypeSelect implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -385,6 +382,8 @@ class PlutoColumnTypeSelect
     return v;
   }
 }
+
+
 
 class PlutoColumnTypeDate
     implements
@@ -477,8 +476,7 @@ class PlutoColumnTypeDate
   }
 }
 
-class PlutoColumnTypeTime
-    implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
+class PlutoColumnTypeTime implements PlutoColumnType, PlutoColumnTypeHasPopupIcon {
   @override
   final dynamic defaultValue;
 
@@ -595,9 +593,7 @@ mixin PlutoColumnTypeWithNumberFormat {
       match += numberFormat.symbols.MINUS_SIGN;
     }
 
-    formatted = formatted
-        .replaceAll(RegExp('[^$match]'), '')
-        .replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
+    formatted = formatted.replaceAll(RegExp('[^$match]'), '').replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
 
     final num formattedNumber = num.tryParse(formatted) ?? 0;
 

@@ -46,8 +46,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -98,8 +98,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -150,8 +150,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -204,8 +204,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -258,8 +258,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -311,8 +311,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,
@@ -440,8 +440,8 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
-            child: RawKeyboardListener(
-              onKey: (event) {
+            child: KeyboardListener(
+              onKeyEvent: (event) {
                 keyManager.subject.add(PlutoKeyManagerEvent(
                   focusNode: FocusNode(),
                   event: event,

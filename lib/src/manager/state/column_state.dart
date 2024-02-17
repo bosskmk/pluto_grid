@@ -1,7 +1,9 @@
 import 'dart:collection';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/cells/pluto_default_cell.dart';
 
 abstract class IColumnState {
   /// Columns provided at grid start.
@@ -304,12 +306,12 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   PlutoColumn? get currentColumn {
-    return currentCell == null ? null : currentCell!.column;
+    return currentCell?.column;
   }
 
   @override
   String? get currentColumnField {
-    return currentCell == null ? null : currentCell!.column.field;
+    return currentCell?.column.field;
   }
 
   @override
@@ -571,47 +573,65 @@ mixin ColumnState implements IPlutoGridState {
 
   @override
   void autoFitColumn(BuildContext context, PlutoColumn column) {
-    final String maxValue = refRows.fold('', (previousValue, element) {
-      final value = column.formattedValueForDisplay(
-        element.cells.entries
-            .firstWhere((element) => element.key == column.field)
-            .value
-            .value,
-      );
+    String maxValue = '';
+    bool hasExpandableRowGroup = false;
+    for (final row in refRows) {
+      final cell = row.cells.entries.firstWhere((element) => element.key == column.field).value;
+      var value = column.formattedValueForDisplay(cell.value);
+      if (hasRowGroups) {
+        if (PlutoDefaultCell.showGroupCount(rowGroupDelegate!, cell)) {
+          final groupCountValue = PlutoDefaultCell.groupCountText(rowGroupDelegate!, row);
+          if (groupCountValue.isNotEmpty) {
+            value = '$value $groupCountValue';
+          }
+        }
 
-      if (previousValue.length < value.length) {
-        return value;
+        hasExpandableRowGroup |= PlutoDefaultCell.canExpand(rowGroupDelegate!, cell);
       }
-
-      return previousValue;
-    });
+      if (maxValue.length < value.length) {
+        maxValue = value;
+      }
+    }
 
     // Get size after rendering virtually
     // https://stackoverflow.com/questions/54351655/flutter-textfield-width-should-match-width-of-contained-text
-    TextSpan textSpan = TextSpan(
-      style: DefaultTextStyle.of(context).style,
-      text: maxValue,
-    );
+    final titleTextWidth = _visualTextWidth(column.title, style.columnTextStyle);
+    final maxValueTextWidth = _visualTextWidth(maxValue, style.cellTextStyle);
 
-    TextPainter textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-    );
+    // todo : Handle (renderer) width
 
-    textPainter.layout();
+    final calculatedTileWidth = titleTextWidth -
+        column.width +
+        [
+          (column.titlePadding ?? style.defaultColumnTitlePadding).horizontal,
+          if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
+          if (column.isShowRightIcon) style.iconSize,
+          8,
+        ].reduce((acc, a) => acc + a);
 
-    // todo : Apply (popup type icon, checkbox, drag indicator, renderer)
-
-    EdgeInsets cellPadding =
-        column.cellPadding ?? configuration.style.defaultCellPadding;
-
-    resizeColumn(
-      column,
-      textPainter.width -
-          column.width +
-          (cellPadding.left + cellPadding.right) +
+    final calculatedCellWidth = maxValueTextWidth -
+        column.width +
+        [
+          (column.cellPadding ?? style.defaultCellPadding).horizontal,
+          if (hasExpandableRowGroup) _getEffectiveButtonWidth(context),
+          if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
+          if (column.isShowRightIcon) style.iconSize,
           2,
-    );
+        ].reduce((acc, a) => acc + a);
+
+    resizeColumn(column, math.max(calculatedTileWidth, calculatedCellWidth));
+  }
+
+  double _visualTextWidth(String text, TextStyle style) {
+    if (text.isEmpty) return 0;
+    final painter = TextPainter(
+      text: TextSpan(
+        style: style,
+        text: text,
+      ),
+      textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+    )..layout();
+    return painter.width;
   }
 
   @override
@@ -1019,9 +1039,7 @@ mixin ColumnState implements IPlutoGridState {
       return false;
     }
 
-    final columns = showFrozenColumn
-        ? leftFrozenColumns + bodyColumns + rightFrozenColumns
-        : refColumns;
+    final columns = showFrozenColumn ? leftFrozenColumns + bodyColumns + rightFrozenColumns : refColumns;
 
     final resizeHelper = getColumnsResizeHelper(
       columns: columns,
@@ -1031,4 +1049,22 @@ mixin ColumnState implements IPlutoGridState {
 
     return resizeHelper.update();
   }
+
+  double _getEffectiveButtonWidth(BuildContext context, {bool checkBox = false}) {
+    final theme = Theme.of(context);
+    late double width;
+    switch (theme.materialTapTargetSize) {
+      case MaterialTapTargetSize.padded:
+        width = kMinInteractiveDimension;
+        break;
+      case MaterialTapTargetSize.shrinkWrap:
+        width = kMinInteractiveDimension - 8.0;
+        break;
+    }
+    if (!checkBox) {
+      return width;
+    }
+    return width + theme.visualDensity.baseSizeAdjustment.dx;
+  }
 }
+
