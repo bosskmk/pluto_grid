@@ -1,4 +1,4 @@
-## PlutoGridExport for PlutoGrid - v1.0.2
+## PlutoGridExport for PlutoGrid - v1.0.4
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -9,7 +9,7 @@ https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/export
 
 <br>
 
-### [Pub.Dev](https://pub.dev/packages/pluto_grid_export_plus)
+### [Pub.Dev](https://pub.dev/packages/pluto_grid_plus_export)
 > Check out how to install from the official distribution site.
 
 <br>
@@ -28,7 +28,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
-import 'package:pluto_grid_plus_export/pluto_grid_plus_export.dart' as pluto_grid_plus_export;
+import 'package:pluto_grid_plus_export/pluto_grid_plus_export.dart' as pluto_grid_export;
 
 void main() {
   runApp(const MyApp());
