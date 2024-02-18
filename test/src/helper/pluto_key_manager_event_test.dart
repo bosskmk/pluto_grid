@@ -8,7 +8,7 @@ void main() {
 
   late PlutoKeyManagerEvent? keyManagerEvent;
 
-  KeyEventResult callback(FocusNode node, RawKeyEvent event) {
+  KeyEventResult callback(FocusNode node, KeyEvent event) {
     keyManagerEvent = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
@@ -23,17 +23,16 @@ void main() {
 
   tearDown(() {
     keyManagerEvent = null;
-    focusNode.dispose();
   });
 
   Future<void> buildWidget({
     required WidgetTester tester,
-    required KeyEventResult Function(FocusNode, RawKeyEvent) callback,
+    required KeyEventResult Function(FocusNode, KeyEvent) callback,
   }) async {
     await tester.pumpWidget(MaterialApp(
       home: FocusScope(
         autofocus: true,
-        onKey: callback,
+        onKeyEvent: callback,
         child: Focus(
           focusNode: focusNode,
           child: const SizedBox(width: 100, height: 100),
@@ -62,7 +61,7 @@ void main() {
     (tester) async {
       late PlutoKeyManagerEvent keyManagerEvent;
 
-      KeyEventResult callback(FocusNode node, RawKeyEvent event) {
+      KeyEventResult callback(FocusNode node, KeyEvent event) {
         keyManagerEvent = PlutoKeyManagerEvent(
           focusNode: node,
           event: event,
@@ -140,15 +139,25 @@ void main() {
     },
   );
 
+  // While key combos still work in the real world, these 3 tests are failing due to what I suspect is an
+  // incomplete deprecation/migration from focusNode `onKey` to `onKeyEvent`.
+  // Flutter 3.19 does not trigger our event for `sendKeyUpEvent` only, and I prefer not
+  // to switch these tests to `sendKeyDownEvent` as that may cause unexpected behavior
+  // such as pasting multiple times due to repeating key presses. It might also be fine.
+
+  // https://github.com/flutter/flutter/issues/136419
   testWidgets(
     'Control + C 키를 입력하면 isCtrlC 가 true 여야 한다.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
       const key = LogicalKeyboardKey.control;
+      const key2 = LogicalKeyboardKey.keyC;
       await tester.sendKeyDownEvent(key);
-      await tester.sendKeyUpEvent(LogicalKeyboardKey.keyC);
-      expect(keyManagerEvent!.isCtrlC, true);
+      await tester.sendKeyUpEvent(
+          key2); // sendKeyUpEvent is not sending a keyManagerEvent
+
+      expect(keyManagerEvent?.isCtrlC, true);
       await tester.sendKeyUpEvent(key);
     },
   );

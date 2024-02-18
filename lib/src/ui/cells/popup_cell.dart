@@ -62,7 +62,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
       ..text =
           widget.column.formattedValueForDisplayInEditing(widget.cell.value);
 
-    textFocus = FocusNode(onKey: _handleKeyboardFocusOnKey);
+    textFocus = FocusNode(onKeyEvent: _handleKeyboardFocusOnKey);
   }
 
   @override
@@ -175,7 +175,7 @@ mixin PopupCellState<T extends PopupCell> on State<T>
     }
   }
 
-  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, RawKeyEvent event) {
+  KeyEventResult _handleKeyboardFocusOnKey(FocusNode node, KeyEvent event) {
     var keyManager = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
