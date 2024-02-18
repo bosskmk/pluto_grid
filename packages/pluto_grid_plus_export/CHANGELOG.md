@@ -1,3 +1,6 @@
+## [1.0.4] - 2024. 2. 18
+* Change repo path & class name in readme
+
 ## [1.0.3] - 2024. 2. 18
 * Change repo path in readme
 
