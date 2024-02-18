@@ -31,7 +31,7 @@ dependencies:
     sdk: flutter
   pluto_grid_plus:
     path: ../../../
-  pluto_grid_export:
+  pluto_grid_plus_export:
     path: ../
   file_saver: ^0.1.0
 

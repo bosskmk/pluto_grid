@@ -1,3 +1,7 @@
+## [8.3.0] - 2024. 02. 18
+* Change pluto_grid_export to pluto_grid_plus_export as the old version is not maintained.
+* fix & enhance the example for csv export.
+
 ## [8.2.0] - 2023. 12. 19
 * Add builder function in plutoColumnType.select allow user to customize the popup by item widget.
 

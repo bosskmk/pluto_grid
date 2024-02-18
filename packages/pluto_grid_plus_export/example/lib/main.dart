@@ -1,34 +1,11 @@
-## PlutoGridExport for PlutoGrid - v1.0.2
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-This package can export the metadata of PlutoGrid as CSV or PDF.  
-
-Please refer to the link below for how to use it.
-https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/export_screen.dart
-
-<br>
-
-### [Pub.Dev](https://pub.dev/packages/pluto_grid_export)
-> Check out how to install from the official distribution site.
-
-<br>
-
-### Contributor
-
-* [Enrique Cardona](https://github.com/henry2man)
-
-<br>
-
-### Example
-```dart
 import 'dart:convert';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
-import 'package:pluto_grid_plus_export/pluto_grid_export.dart' as pluto_grid_export;
+import 'package:pluto_grid_plus_export/pluto_grid_plus_export.dart'
+    as pluto_grid_export;
 
 void main() {
   runApp(const MyApp());
@@ -173,4 +150,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-```

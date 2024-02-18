@@ -30,7 +30,9 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   rainbow_color: ^2.0.1
   pluto_menu_bar: ^3.0.1
-
+  file_saver: ^0.2.10
+  pluto_grid_plus_export: 
+    path: ../packages/pluto_grid_plus_export
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6

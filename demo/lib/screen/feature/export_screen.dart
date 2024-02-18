@@ -1,9 +1,14 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:convert';
+
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
-// import 'package:pluto_grid_plus_export/pluto_grid_export.dart' as pluto_grid_export;
+import 'package:pluto_grid_plus_export/pluto_grid_plus_export.dart'
+    as pluto_grid_export;
 
 import '../../dummy_data/development.dart';
 import '../../widget/pluto_example_button.dart';
@@ -176,25 +181,25 @@ class _Header extends StatefulWidget {
 
 class _HeaderState extends State<_Header> {
   void _printToPdfAndShareOrSave() async {
-    // final themeData = pluto_grid_export.ThemeData.withFont(
-    //   base: pluto_grid_export.Font.ttf(
-    //     await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
-    //   ),
-    //   bold: pluto_grid_export.Font.ttf(
-    //     await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
-    //   ),
-    // );
-    //
-    // var plutoGridPdfExport = pluto_grid_export.PlutoGridDefaultPdfExport(
-    //   title: "Pluto Grid Sample pdf print",
-    //   creator: "Pluto Grid Rocks!",
-    //   format: pluto_grid_export.PdfPageFormat.a4.landscape,
-    //   themeData: themeData,
-    // );
-    //
-    // await pluto_grid_export.Printing.sharePdf(
-    //     bytes: await plutoGridPdfExport.export(widget.stateManager),
-    //     filename: plutoGridPdfExport.getFilename());
+    final themeData = pluto_grid_export.ThemeData.withFont(
+      base: pluto_grid_export.Font.ttf(
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Regular.ttf'),
+      ),
+      bold: pluto_grid_export.Font.ttf(
+        await rootBundle.load('assets/fonts/open_sans/OpenSans-Bold.ttf'),
+      ),
+    );
+
+    var plutoGridPdfExport = pluto_grid_export.PlutoGridDefaultPdfExport(
+      title: "Pluto Grid Sample pdf print",
+      creator: "Pluto Grid Rocks!",
+      format: pluto_grid_export.PdfPageFormat.a4.landscape,
+      themeData: themeData,
+    );
+
+    await pluto_grid_export.Printing.sharePdf(
+        bytes: await plutoGridPdfExport.export(widget.stateManager),
+        filename: plutoGridPdfExport.getFilename());
   }
 
   // This doesn't works properly in systems different from Windows.
@@ -218,10 +223,30 @@ class _HeaderState extends State<_Header> {
   // }
 
   void _defaultExportGridAsCSV() async {
-    // String title = "pluto_grid_export";
-    // var exported = const Utf8Encoder().convert(
-    //     pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
-    // await FileSaver.instance.saveFile("$title.csv", exported, ".csv");
+    String title = "pluto_grid_export";
+    var exported = const Utf8Encoder().convert(
+        pluto_grid_export.PlutoGridExport.exportCSV(widget.stateManager));
+    String savedFile = await FileSaver.instance
+        .saveFile(name: title, bytes: exported, ext: ".csv");
+    if (!mounted) return;
+    String msg = 'Exported successfully';
+
+    msg =
+        'Exported successfully. Please open the file in Excel. Path: $savedFile';
+    if (!mounted) return;
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: const Text('Success'),
+                content: Text(msg),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('OK'),
+                  )
+                ]));
   }
 
   void _defaultExportGridAsCSVCompatibleWithExcel() async {
