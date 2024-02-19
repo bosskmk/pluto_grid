@@ -203,7 +203,9 @@ class PlutoGridStyleConfig {
     this.oddRowColor,
     this.evenRowColor,
     this.activatedColor = const Color(0xFFDCF5FF),
-    this.checkedColor = const Color(0x11757575),
+    Color? columnCheckedColor,
+    Color? cellCheckedColor,
+    this.rowCheckedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
     this.cellColorGroupedRow,
@@ -228,6 +230,10 @@ class PlutoGridStyleConfig {
       fontSize: 14,
       fontWeight: FontWeight.w600,
     ),
+    Color? columnUnselectedColor,
+    Color? columnActiveColor,
+    Color? cellUnselectedColor,
+    Color? cellActiveColor,
     this.cellTextStyle = const TextStyle(
       color: Colors.black,
       fontSize: 14,
@@ -247,64 +253,81 @@ class PlutoGridStyleConfig {
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.filterHeaderColor,
     this.filterHeaderIconColor,
-  });
+  })  : columnCheckedColor = (columnCheckedColor ?? activatedColor),
+        cellCheckedColor = (cellCheckedColor ?? activatedColor),
+        columnUnselectedColor = (columnUnselectedColor ?? iconColor),
+        columnActiveColor = (columnActiveColor ?? activatedBorderColor),
+        cellUnselectedColor = (cellUnselectedColor ?? iconColor),
+        cellActiveColor = (cellActiveColor ?? activatedBorderColor);
 
-  const PlutoGridStyleConfig.dark(
-      {this.enableGridBorderShadow = false,
-      this.enableColumnBorderVertical = true,
-      this.enableColumnBorderHorizontal = true,
-      this.enableCellBorderVertical = true,
-      this.enableCellBorderHorizontal = true,
-      this.enableRowColorAnimation = false,
-      this.gridBackgroundColor = const Color(0xFF111111),
-      this.rowColor = const Color(0xFF111111),
-      this.oddRowColor,
-      this.evenRowColor,
-      this.activatedColor = const Color(0xFF313131),
-      this.checkedColor = const Color(0x11202020),
-      this.cellColorInEditState = const Color(0xFF666666),
-      this.cellColorInReadOnlyState = const Color(0xFF222222),
-      this.cellColorGroupedRow,
-      this.dragTargetColumnColor = const Color(0xFF313131),
-      this.iconColor = Colors.white38,
-      this.disabledIconColor = Colors.white12,
-      this.menuBackgroundColor = const Color(0xFF414141),
-      this.gridBorderColor = const Color(0xFF666666),
-      this.borderColor = const Color(0xFF222222),
-      this.activatedBorderColor = const Color(0xFFFFFFFF),
-      this.inactivatedBorderColor = const Color(0xFF666666),
-      this.iconSize = 18,
-      this.rowHeight = PlutoGridSettings.rowHeight,
-      this.columnHeight = PlutoGridSettings.rowHeight,
-      this.columnFilterHeight = PlutoGridSettings.rowHeight,
-      this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
-      this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
-      this.defaultCellPadding = PlutoGridSettings.cellPadding,
-      this.columnTextStyle = const TextStyle(
-        color: Colors.white,
-        decoration: TextDecoration.none,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-      ),
-      this.cellTextStyle = const TextStyle(
-        color: Colors.white,
-        fontSize: 14,
-      ),
-      this.columnContextIcon = Icons.dehaze,
-      this.columnResizeIcon = Icons.code_sharp,
-      this.columnAscendingIcon,
-      this.columnDescendingIcon,
-      this.rowGroupExpandedIcon = Icons.keyboard_arrow_down,
-      this.rowGroupCollapsedIcon = const IconData(
-        0xe355,
-        matchTextDirection: true,
-        fontFamily: 'MaterialIcons',
-      ),
-      this.rowGroupEmptyIcon = Icons.noise_control_off,
-      this.gridBorderRadius = BorderRadius.zero,
-      this.gridPopupBorderRadius = BorderRadius.zero,
-      this.filterHeaderColor,
-      this.filterHeaderIconColor});
+  const PlutoGridStyleConfig.dark({
+    this.enableGridBorderShadow = false,
+    this.enableColumnBorderVertical = true,
+    this.enableColumnBorderHorizontal = true,
+    this.enableCellBorderVertical = true,
+    this.enableCellBorderHorizontal = true,
+    this.enableRowColorAnimation = false,
+    this.gridBackgroundColor = const Color(0xFF111111),
+    this.rowColor = const Color(0xFF111111),
+    this.oddRowColor,
+    this.evenRowColor,
+    this.activatedColor = const Color(0xFF313131),
+    Color? columnCheckedColor,
+    Color? cellCheckedColor,
+    this.rowCheckedColor = const Color(0x11202020),
+    this.cellColorInEditState = const Color(0xFF666666),
+    this.cellColorInReadOnlyState = const Color(0xFF222222),
+    this.cellColorGroupedRow,
+    this.dragTargetColumnColor = const Color(0xFF313131),
+    this.iconColor = Colors.white38,
+    this.disabledIconColor = Colors.white12,
+    this.menuBackgroundColor = const Color(0xFF414141),
+    this.gridBorderColor = const Color(0xFF666666),
+    this.borderColor = const Color(0xFF222222),
+    this.activatedBorderColor = const Color(0xFFFFFFFF),
+    this.inactivatedBorderColor = const Color(0xFF666666),
+    this.iconSize = 18,
+    this.rowHeight = PlutoGridSettings.rowHeight,
+    this.columnHeight = PlutoGridSettings.rowHeight,
+    this.columnFilterHeight = PlutoGridSettings.rowHeight,
+    this.defaultColumnTitlePadding = PlutoGridSettings.columnTitlePadding,
+    this.defaultColumnFilterPadding = PlutoGridSettings.columnFilterPadding,
+    this.defaultCellPadding = PlutoGridSettings.cellPadding,
+    this.columnTextStyle = const TextStyle(
+      color: Colors.white,
+      decoration: TextDecoration.none,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    ),
+    Color? columnUnselectedColor,
+    Color? columnActiveColor,
+    Color? cellUnselectedColor,
+    Color? cellActiveColor,
+    this.cellTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 14,
+    ),
+    this.columnContextIcon = Icons.dehaze,
+    this.columnResizeIcon = Icons.code_sharp,
+    this.columnAscendingIcon,
+    this.columnDescendingIcon,
+    this.rowGroupExpandedIcon = Icons.keyboard_arrow_down,
+    this.rowGroupCollapsedIcon = const IconData(
+      0xe355,
+      matchTextDirection: true,
+      fontFamily: 'MaterialIcons',
+    ),
+    this.rowGroupEmptyIcon = Icons.noise_control_off,
+    this.gridBorderRadius = BorderRadius.zero,
+    this.gridPopupBorderRadius = BorderRadius.zero,
+    this.filterHeaderColor,
+    this.filterHeaderIconColor,
+  })  : columnCheckedColor = (columnCheckedColor ?? activatedColor),
+        cellCheckedColor = (cellCheckedColor ?? activatedColor),
+        columnUnselectedColor = (columnUnselectedColor ?? iconColor),
+        columnActiveColor = (columnActiveColor ?? activatedBorderColor),
+        cellUnselectedColor = (cellUnselectedColor ?? iconColor),
+        cellActiveColor = (cellActiveColor ?? activatedBorderColor);
 
   /// Enable borderShadow in [PlutoGrid].
   final bool enableGridBorderShadow;
@@ -347,8 +370,14 @@ class PlutoGridStyleConfig {
   /// Activated Color. (Current or Selected row, cell)
   final Color activatedColor;
 
-  /// Checked Color. (Checked rows)
-  final Color checkedColor;
+  /// Checked Color for the column title. (Checked rows)
+  final Color columnCheckedColor;
+
+  /// Checked Color for the cell. (Checked rows)
+  final Color cellCheckedColor;
+
+  /// Checked Color for the row. (Checked rows)
+  final Color rowCheckedColor;
 
   /// Cell color in edit state. (only current cell)
   final Color cellColorInEditState;
@@ -415,6 +444,18 @@ class PlutoGridStyleConfig {
   /// Column - text style
   final TextStyle columnTextStyle;
 
+  /// Unselected color of the column.
+  final Color columnUnselectedColor;
+
+  /// Active color of the column.
+  final Color columnActiveColor;
+
+  /// Unselected color of the default cell.
+  final Color cellUnselectedColor;
+
+  /// Active color of the default cell.
+  final Color cellActiveColor;
+
   /// Cell - text style
   final TextStyle cellTextStyle;
 
@@ -469,7 +510,8 @@ class PlutoGridStyleConfig {
     PlutoOptional<Color?>? oddRowColor,
     PlutoOptional<Color?>? evenRowColor,
     Color? activatedColor,
-    Color? checkedColor,
+    Color? columnCheckedColor,
+    Color? cellCheckedColor,
     Color? cellColorInEditState,
     Color? cellColorInReadOnlyState,
     PlutoOptional<Color?>? cellColorGroupedRow,
@@ -489,6 +531,10 @@ class PlutoGridStyleConfig {
     EdgeInsets? defaultColumnFilterPadding,
     EdgeInsets? defaultCellPadding,
     TextStyle? columnTextStyle,
+    Color? columnUnselectedColor,
+    Color? columnActiveColor,
+    Color? cellUnselectedColor,
+    Color? cellActiveColor,
     TextStyle? cellTextStyle,
     IconData? columnContextIcon,
     IconData? columnResizeIcon,
@@ -519,7 +565,8 @@ class PlutoGridStyleConfig {
         evenRowColor:
             evenRowColor == null ? this.evenRowColor : evenRowColor.value,
         activatedColor: activatedColor ?? this.activatedColor,
-        checkedColor: checkedColor ?? this.checkedColor,
+        columnCheckedColor: columnCheckedColor ?? this.columnCheckedColor,
+        cellCheckedColor: cellCheckedColor ?? this.cellCheckedColor,
         cellColorInEditState: cellColorInEditState ?? this.cellColorInEditState,
         cellColorInReadOnlyState:
             cellColorInReadOnlyState ?? this.cellColorInReadOnlyState,
@@ -546,6 +593,10 @@ class PlutoGridStyleConfig {
             defaultColumnFilterPadding ?? this.defaultColumnFilterPadding,
         defaultCellPadding: defaultCellPadding ?? this.defaultCellPadding,
         columnTextStyle: columnTextStyle ?? this.columnTextStyle,
+        columnUnselectedColor: columnUnselectedColor ?? this.columnUnselectedColor,
+        columnActiveColor: columnActiveColor ?? this.columnActiveColor,
+        cellUnselectedColor: cellUnselectedColor ?? this.cellUnselectedColor,
+        cellActiveColor: cellActiveColor ?? this.cellActiveColor,
         cellTextStyle: cellTextStyle ?? this.cellTextStyle,
         columnContextIcon: columnContextIcon ?? this.columnContextIcon,
         columnResizeIcon: columnResizeIcon ?? this.columnResizeIcon,
@@ -583,7 +634,8 @@ class PlutoGridStyleConfig {
             oddRowColor == other.oddRowColor &&
             evenRowColor == other.evenRowColor &&
             activatedColor == other.activatedColor &&
-            checkedColor == other.checkedColor &&
+            columnCheckedColor == other.columnCheckedColor &&
+            cellCheckedColor == other.cellCheckedColor &&
             cellColorInEditState == other.cellColorInEditState &&
             cellColorInReadOnlyState == other.cellColorInReadOnlyState &&
             cellColorGroupedRow == other.cellColorGroupedRow &&
@@ -603,6 +655,10 @@ class PlutoGridStyleConfig {
             defaultColumnFilterPadding == other.defaultColumnFilterPadding &&
             defaultCellPadding == other.defaultCellPadding &&
             columnTextStyle == other.columnTextStyle &&
+            columnUnselectedColor == other.columnUnselectedColor &&
+            columnActiveColor == other.columnActiveColor &&
+            cellUnselectedColor == other.cellUnselectedColor &&
+            cellActiveColor == other.cellActiveColor &&
             cellTextStyle == other.cellTextStyle &&
             columnContextIcon == other.columnContextIcon &&
             columnResizeIcon == other.columnResizeIcon &&
@@ -628,7 +684,8 @@ class PlutoGridStyleConfig {
         oddRowColor,
         evenRowColor,
         activatedColor,
-        checkedColor,
+        columnCheckedColor,
+        cellCheckedColor,
         cellColorInEditState,
         cellColorInReadOnlyState,
         cellColorGroupedRow,
@@ -648,6 +705,10 @@ class PlutoGridStyleConfig {
         defaultColumnFilterPadding,
         defaultCellPadding,
         columnTextStyle,
+        columnUnselectedColor,
+        columnActiveColor,
+        cellUnselectedColor,
+        cellActiveColor,
         cellTextStyle,
         columnContextIcon,
         columnResizeIcon,
