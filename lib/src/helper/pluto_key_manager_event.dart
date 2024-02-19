@@ -67,14 +67,10 @@ class PlutoKeyManagerEvent {
       event.logicalKey.keyId == LogicalKeyboardKey.backspace.keyId;
 
   bool get isShift =>
-      event.logicalKey.keyId == LogicalKeyboardKey.shift.keyId ||
-      event.logicalKey.keyId == LogicalKeyboardKey.shiftLeft.keyId ||
-      event.logicalKey.keyId == LogicalKeyboardKey.shiftRight.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.shift.keyId;
 
   bool get isControl =>
-      event.logicalKey.keyId == LogicalKeyboardKey.control.keyId ||
-      event.logicalKey.keyId == LogicalKeyboardKey.controlLeft.keyId ||
-      event.logicalKey.keyId == LogicalKeyboardKey.controlRight.keyId;
+      event.logicalKey.keyId == LogicalKeyboardKey.control.keyId;
 
   bool get isCharacter => _characters.contains(event.logicalKey.keyId);
 
