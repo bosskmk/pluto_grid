@@ -315,6 +315,18 @@ class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implem
 
     return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
   }
+
+  int compareTo(dynamic other) {
+    String thisValue = defaultValue.toString();
+    String otherValue = other.toString();
+    double? thisDouble = double.tryParse(thisValue);
+    double? otherDouble = double.tryParse(otherValue);
+    if (thisDouble != null && otherDouble != null) {
+      return thisDouble.compareTo(otherDouble);
+    } else {
+      return thisValue.compareTo(otherValue);
+    }
+  }
 }
 
 class PlutoColumnTypeBoolean implements PlutoColumnType {
