@@ -321,8 +321,13 @@ class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implem
     String otherValue = other.toString();
     double? thisDouble = double.tryParse(thisValue);
     double? otherDouble = double.tryParse(otherValue);
+
     if (thisDouble != null && otherDouble != null) {
       return thisDouble.compareTo(otherDouble);
+    } else if (thisDouble != null) {
+      return thisDouble.compareTo(double.tryParse(otherValue) ?? double.nan);
+    } else if (otherDouble != null) {
+      return (double.tryParse(thisValue) ?? double.nan).compareTo(otherDouble);
     } else {
       return thisValue.compareTo(otherValue);
     }
