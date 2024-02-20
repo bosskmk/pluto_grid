@@ -55,6 +55,24 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.stringAndNumber({
+    dynamic defaultValue = 0.0,
+    bool negative = true,
+    String format = '#,###.#######',
+    bool applyFormatOnInit = true,
+    bool allowFirstDot = false,
+    String? locale,
+  }) {
+    return PlutoColumnTypeStringAndNumber(
+      defaultValue: defaultValue,
+      format: format,
+      negative: negative,
+      applyFormatOnInit: applyFormatOnInit,
+      allowFirstDot: allowFirstDot,
+      locale: locale,
+    );
+  }
+
 //this sorting is custom build for sorting double
   factory PlutoColumnType.double({
     dynamic defaultValue = 0.0,
@@ -255,6 +273,48 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get applyFormatOnInit => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormatOnInit : false;
 
   dynamic applyFormat(dynamic value) => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
+}
+
+class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
+  @override
+  final dynamic defaultValue;
+
+  @override
+  final bool negative;
+
+  @override
+  final String format;
+
+  @override
+  final bool applyFormatOnInit;
+
+  @override
+  final bool allowFirstDot;
+
+  @override
+  final String? locale;
+
+  PlutoColumnTypeStringAndNumber({
+    this.defaultValue,
+    required this.negative,
+    required this.format,
+    required this.applyFormatOnInit,
+    required this.allowFirstDot,
+    required this.locale,
+  })  : numberFormat = intl.NumberFormat(format, locale),
+        decimalPoint = _getDecimalPoint(format);
+
+  @override
+  final intl.NumberFormat numberFormat;
+
+  @override
+  final int decimalPoint;
+
+  static int _getDecimalPoint(String format) {
+    final int dotIndex = format.indexOf('.');
+
+    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  }
 }
 
 class PlutoColumnTypeBoolean implements PlutoColumnType {
