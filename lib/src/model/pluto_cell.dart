@@ -4,9 +4,11 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
+    dynamic displayValue,
     Key? key,
   })  : _key = key ?? UniqueKey(),
-        _value = value;
+        _value = value,
+        _displayValue = displayValue;
 
   final Key _key;
 
@@ -39,14 +41,6 @@ class PlutoCell {
 
   dynamic _valueForSorting;
 
-  /// Set initial value according to [PlutoColumn] setting.
-  ///
-  /// [setColumn] is called when [PlutoGridStateManager.initializeRows] is called.
-  /// When [setColumn] is called, this value is changed to `true` according to the column setting.
-  /// If this value is `true` when the getter of [PlutoCell.value] is called,
-  /// it calls [_applyFormatOnInit] to update the value according to the format.
-  /// [_applyFormatOnInit] is called once, and if [setColumn] is not called again,
-  /// it is not called anymore.
   bool _needToApplyFormatOnInit = false;
 
   PlutoColumn? _column;
@@ -118,7 +112,7 @@ class PlutoCell {
   }
 }
 
-_assertUnInitializedCell(bool flag) {
+void _assertUnInitializedCell(bool flag) {
   assert(
     flag,
     'PlutoCell is not initialized.'
