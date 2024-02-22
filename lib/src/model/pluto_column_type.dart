@@ -55,7 +55,7 @@ abstract class PlutoColumnType {
     );
   }
 
-  factory PlutoColumnType.stringAndNumber({
+  factory PlutoColumnType.duration({
     dynamic defaultValue = 0.0,
     bool negative = true,
     String format = '#,###.#######',
@@ -320,15 +320,17 @@ class PlutoColumnTypeDuration with PlutoColumnTypeWithDoubleFormat implements Pl
     final int seconds = (defaultValue ?? 0).toInt();
     final Duration duration = Duration(seconds: seconds);
 
-    final int days = duration.inDays;
-    final int hours = duration.inHours.remainder(24);
-    final int minutes = duration.inMinutes.remainder(60);
+    final Duration difference = DateTime.now().difference(DateTime.now().subtract(duration));
 
-    if (days > 0) {
+    final int days = difference.inDays;
+    final int hours = difference.inHours.remainder(24);
+    final int minutes = difference.inMinutes.remainder(60);
+
+    if (days > 1) {
       return '$days days ago';
-    } else if (hours > 0) {
+    } else if (hours > 1) {
       return '$hours hours ago';
-    } else if (minutes > 0) {
+    } else if (minutes > 1) {
       return '$minutes minutes ago';
     } else {
       return 'Just now';

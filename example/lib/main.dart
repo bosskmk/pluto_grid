@@ -36,7 +36,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Id',
       field: 'id',
-      type: PlutoColumnType.stringAndNumber(),
+      type: PlutoColumnType.duration(),
     ),
     PlutoColumn(
       title: 'Name',
