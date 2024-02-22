@@ -11,6 +11,31 @@ class PlutoCell {
   final Key _key;
 
   dynamic _value;
+  dynamic _displayValue;
+
+  dynamic get displayValue {
+    if (_displayValue != null) {
+      return _displayValue;
+    } else {
+      return value;
+    }
+  }
+
+  set displayValue(dynamic changed) {
+    if (_displayValue == changed) {
+      return;
+    }
+
+    _displayValue = changed;
+  }
+
+  dynamic get value {
+    if (_needToApplyFormatOnInit) {
+      _applyFormatOnInit();
+    }
+
+    return _value;
+  }
 
   dynamic _valueForSorting;
 
@@ -42,14 +67,6 @@ class PlutoCell {
     _assertUnInitializedCell(_row != null);
 
     return _row!;
-  }
-
-  dynamic get value {
-    if (_needToApplyFormatOnInit) {
-      _applyFormatOnInit();
-    }
-
-    return _value;
   }
 
   set value(dynamic changed) {
@@ -94,8 +111,7 @@ class PlutoCell {
     _value = _column!.type.applyFormat(_value);
 
     if (_column!.type is PlutoColumnTypeWithNumberFormat) {
-      _value =
-          (_column!.type as PlutoColumnTypeWithNumberFormat).toNumber(_value);
+      _value = (_column!.type as PlutoColumnTypeWithNumberFormat).toNumber(_value);
     }
 
     _needToApplyFormatOnInit = false;

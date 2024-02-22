@@ -58,7 +58,7 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.duration({
     dynamic defaultValue = 0.0,
     bool negative = true,
-    String format = '#,###.#######',
+    String format = '',
     bool applyFormatOnInit = true,
     bool allowFirstDot = false,
     String? locale,
@@ -77,7 +77,7 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.double({
     dynamic defaultValue = 0.0,
     bool negative = true,
-    String format = '#,###.#######',
+    String format = '#,###.###,###,#',
     bool applyFormatOnInit = true,
     bool allowFirstDot = false,
     String? locale,
@@ -312,16 +312,13 @@ class PlutoColumnTypeDuration with PlutoColumnTypeWithDoubleFormat implements Pl
 
   static int _getDecimalPoint(String format) {
     final int dotIndex = format.indexOf('.');
-
     return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
   }
 
   String getHumanReadableDuration() {
     final int seconds = (defaultValue ?? 0).toInt();
     final Duration duration = Duration(seconds: seconds);
-
     final Duration difference = DateTime.now().difference(DateTime.now().subtract(duration));
-
     final int days = difference.inDays;
     final int hours = difference.inHours.remainder(24);
     final int minutes = difference.inMinutes.remainder(60);
