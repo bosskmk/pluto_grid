@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
