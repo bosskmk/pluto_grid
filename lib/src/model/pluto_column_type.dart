@@ -77,7 +77,7 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.double({
     dynamic defaultValue = 0.0,
     bool negative = true,
-    String format = '#,###.###,###,#',
+    String format = '#,###.#######',
     bool applyFormatOnInit = true,
     bool allowFirstDot = false,
     String? locale,

@@ -4,43 +4,24 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
-    dynamic displayValue,
     Key? key,
   })  : _key = key ?? UniqueKey(),
-        _value = value,
-        _displayValue = displayValue;
+        _value = value;
 
   final Key _key;
 
   dynamic _value;
-  dynamic _displayValue;
-
-  dynamic get displayValue {
-    if (_displayValue != null) {
-      return _displayValue;
-    } else {
-      return value;
-    }
-  }
-
-  set displayValue(dynamic changed) {
-    if (_displayValue == changed) {
-      return;
-    }
-
-    _displayValue = changed;
-  }
-
-  dynamic get value {
-    if (_needToApplyFormatOnInit) {
-      _applyFormatOnInit();
-    }
-
-    return _value;
-  }
 
   dynamic _valueForSorting;
 
+  /// Set initial value according to [PlutoColumn] setting.
+  ///
+  /// [setColumn] is called when [PlutoGridStateManager.initializeRows] is called.
+  /// When [setColumn] is called, this value is changed to `true` according to the column setting.
+  /// If this value is `true` when the getter of [PlutoCell.value] is called,
+  /// it calls [_applyFormatOnInit] to update the value according to the format.
+  /// [_applyFormatOnInit] is called once, and if [setColumn] is not called again,
+  /// it is not called anymore.
   bool _needToApplyFormatOnInit = false;
 
   PlutoColumn? _column;
@@ -61,6 +42,14 @@ class PlutoCell {
     _assertUnInitializedCell(_row != null);
 
     return _row!;
+  }
+
+  dynamic get value {
+    if (_needToApplyFormatOnInit) {
+      _applyFormatOnInit();
+    }
+
+    return _value;
   }
 
   set value(dynamic changed) {
@@ -90,32 +79,30 @@ class PlutoCell {
   }
 
   dynamic _getValueForSorting() {
-    if (displayValue != null) {
-      return displayValue;
-    }
     if (_column == null) {
-      return displayValue;
+      return _value;
     }
 
     if (_needToApplyFormatOnInit) {
       _applyFormatOnInit();
     }
 
-    return _column!.type.makeCompareValue(displayValue);
+    return _column!.type.makeCompareValue(_value);
   }
 
   void _applyFormatOnInit() {
     _value = _column!.type.applyFormat(_value);
 
     if (_column!.type is PlutoColumnTypeWithNumberFormat) {
-      _value = (_column!.type as PlutoColumnTypeWithNumberFormat).toNumber(_value);
+      _value =
+          (_column!.type as PlutoColumnTypeWithNumberFormat).toNumber(_value);
     }
 
     _needToApplyFormatOnInit = false;
   }
 }
 
-void _assertUnInitializedCell(bool flag) {
+_assertUnInitializedCell(bool flag) {
   assert(
     flag,
     'PlutoCell is not initialized.'
