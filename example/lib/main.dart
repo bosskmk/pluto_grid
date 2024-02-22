@@ -36,7 +36,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Id',
       field: 'id',
-      type: PlutoColumnType.text(),
+      type: PlutoColumnType.stringAndNumber(),
     ),
     PlutoColumn(
       title: 'Name',
@@ -96,7 +96,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
   final List<PlutoRow> rows = [
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user1'),
+        'id': PlutoCell(value: 'user 113'),
         'name': PlutoCell(value: 'Mike'),
         'age': PlutoCell(value: 20),
         'role': PlutoCell(value: 'Programmer'),
@@ -107,7 +107,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     ),
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user2'),
+        'id': PlutoCell(value: 'user 212'),
         'name': PlutoCell(value: 'Jack'),
         'age': PlutoCell(value: 25),
         'role': PlutoCell(value: 'Designer'),
@@ -118,7 +118,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     ),
     PlutoRow(
       cells: {
-        'id': PlutoCell(value: 'user3'),
+        'id': PlutoCell(value: 'user 312'),
         'name': PlutoCell(value: 'Suzi'),
         'age': PlutoCell(value: 40),
         'role': PlutoCell(value: 'Owner'),

@@ -63,7 +63,7 @@ abstract class PlutoColumnType {
     bool allowFirstDot = false,
     String? locale,
   }) {
-    return PlutoColumnTypeStringAndNumber(
+    return PlutoColumnTypeDuration(
       defaultValue: defaultValue,
       format: format,
       negative: negative,
@@ -275,7 +275,7 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   dynamic applyFormat(dynamic value) => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
 }
 
-class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
+class PlutoColumnTypeDuration with PlutoColumnTypeWithDoubleFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
   @override
   final dynamic defaultValue;
 
@@ -294,7 +294,7 @@ class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implem
   @override
   final String? locale;
 
-  PlutoColumnTypeStringAndNumber({
+  PlutoColumnTypeDuration({
     this.defaultValue,
     required this.negative,
     required this.format,
@@ -316,21 +316,30 @@ class PlutoColumnTypeStringAndNumber with PlutoColumnTypeWithDoubleFormat implem
     return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
   }
 
-  int compareTo(dynamic other) {
-    String thisValue = defaultValue.toString();
-    String otherValue = other.toString();
-    double? thisDouble = double.tryParse(thisValue);
-    double? otherDouble = double.tryParse(otherValue);
+  String getHumanReadableDuration() {
+    final int seconds = (defaultValue ?? 0).toInt();
+    final Duration duration = Duration(seconds: seconds);
 
-    if (thisDouble != null && otherDouble != null) {
-      return thisDouble.compareTo(otherDouble);
-    } else if (thisDouble != null) {
-      return thisDouble.compareTo(double.tryParse(otherValue) ?? double.nan);
-    } else if (otherDouble != null) {
-      return (double.tryParse(thisValue) ?? double.nan).compareTo(otherDouble);
+    final int days = duration.inDays;
+    final int hours = duration.inHours.remainder(24);
+    final int minutes = duration.inMinutes.remainder(60);
+
+    if (days > 0) {
+      return '$days days ago';
+    } else if (hours > 0) {
+      return '$hours hours ago';
+    } else if (minutes > 0) {
+      return '$minutes minutes ago';
     } else {
-      return thisValue.compareTo(otherValue);
+      return 'Just now';
     }
+  }
+
+  int compareTo(dynamic other) {
+    final int thisSeconds = (defaultValue ?? 0).toInt();
+    final int otherSeconds = (other ?? 0).toInt();
+
+    return thisSeconds.compareTo(otherSeconds);
   }
 }
 
@@ -377,12 +386,12 @@ class PlutoColumnTypeText implements PlutoColumnType {
 
   @override
   int compare(dynamic a, dynamic b) {
-    return _compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+    return _compareWithNull(a, b, () => a.toString().toLowerCase().compareTo(b.toString().toLowerCase()));
   }
 
   @override
   dynamic makeCompareValue(dynamic v) {
-    return v.toString();
+    return v.toString().toLowerCase();
   }
 }
 
