@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
-    String? displayValue,
+    dynamic displayValue,
     Key? key,
   })  : _key = key ?? UniqueKey(),
         _value = value,
@@ -101,7 +101,7 @@ class PlutoCell {
       _applyFormatOnInit();
     }
 
-    return _column!.type.makeCompareValue(_value || displayValue);
+    return _column!.type.makeCompareValue(displayValue);
   }
 
   void _applyFormatOnInit() {
