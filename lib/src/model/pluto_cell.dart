@@ -90,15 +90,18 @@ class PlutoCell {
   }
 
   dynamic _getValueForSorting() {
+    if (displayValue != null) {
+      return displayValue;
+    }
     if (_column == null) {
-      return _value;
+      return displayValue;
     }
 
     if (_needToApplyFormatOnInit) {
       _applyFormatOnInit();
     }
 
-    return _column!.type.makeCompareValue(_value);
+    return _column!.type.makeCompareValue(_value || displayValue);
   }
 
   void _applyFormatOnInit() {
