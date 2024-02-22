@@ -4,7 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 class PlutoCell {
   PlutoCell({
     dynamic value,
-    dynamic displayValue,
+    String? displayValue,
     Key? key,
   })  : _key = key ?? UniqueKey(),
         _value = value,
