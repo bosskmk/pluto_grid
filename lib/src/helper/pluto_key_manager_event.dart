@@ -12,9 +12,9 @@ class PlutoKeyManagerEvent {
 
   bool get needsThrottle => isMoving || isTab || isPageUp || isPageDown;
 
-  bool get isKeyDownEvent => event.runtimeType == RawKeyDownEvent;
+  bool get isKeyDownEvent => event.runtimeType == KeyDownEvent;
 
-  bool get isKeyUpEvent => event.runtimeType == RawKeyUpEvent;
+  bool get isKeyUpEvent => event.runtimeType == KeyUpEvent;
 
   bool get isMoving => isHorizontal || isVertical;
 

@@ -15,8 +15,8 @@ abstract class PopupCell extends StatefulWidget {
     required this.cell,
     required this.column,
     required this.row,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 }
 
 abstract class GridPopupProps {

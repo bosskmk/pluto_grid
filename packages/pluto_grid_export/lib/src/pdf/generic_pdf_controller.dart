@@ -79,7 +79,7 @@ class GenericPdfController extends PdfController {
   }
 
   Widget _table(List<String> columns, List<List<String?>> rows) {
-    return Table.fromTextArray(
+    return TableHelper.fromTextArray(
       border: null,
       cellAlignment: Alignment.center,
       // [Resolved 3.8.1] https://github.com/DavBfr/dart_pdf/pull/1033 to replace "headerDecoration" with "headerCellDecoration"
