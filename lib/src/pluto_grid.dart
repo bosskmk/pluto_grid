@@ -12,6 +12,8 @@ import 'ui/ui.dart';
 typedef PlutoOnLoadedEventCallback = void Function(
     PlutoGridOnLoadedEvent event);
 
+typedef RowWrapperCallback = Widget Function(PlutoRow row, Widget child);
+
 typedef PlutoOnChangedEventCallback = void Function(
     PlutoGridOnChangedEvent event);
 
@@ -54,10 +56,13 @@ typedef PlutoRowColorCallback = Color Function(
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
 class PlutoGrid extends PlutoStatefulWidget {
+  final RowWrapperCallback? rowWrapper;
+
   const PlutoGrid({
     super.key,
     required this.columns,
     required this.rows,
+    this.rowWrapper,
     this.columnGroups,
     this.onLoaded,
     this.onChanged,
@@ -500,6 +505,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
     _stateManager = PlutoGridStateManager(
       columns: widget.columns,
       rows: widget.rows,
+      rowWrapper: widget.rowWrapper,
       gridFocusNode: _gridFocusNode,
       scroll: PlutoGridScrollController(
         vertical: _verticalScroll,

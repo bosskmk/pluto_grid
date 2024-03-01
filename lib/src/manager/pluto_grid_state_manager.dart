@@ -208,11 +208,13 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 /// ```
 /// {@endtemplate}
 class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
+  final rowWrapper;
   PlutoGridStateManager({
     required super.columns,
     required super.rows,
     required super.gridFocusNode,
     required super.scroll,
+    this.rowWrapper,
     super.columnGroups,
     super.onChanged,
     super.onSelected,
