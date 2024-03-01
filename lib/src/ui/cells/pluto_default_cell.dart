@@ -119,6 +119,13 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
   @override
   Widget build(BuildContext context) {
+    int depth = 0;
+    PlutoRow? row = widget.row;
+    while (row?.parent != null) {
+      depth++;
+      row = row?.parent;
+    }
+
     final cellWidget = _DefaultCellWidget(
       stateManager: stateManager,
       rowIdx: widget.rowIdx,
@@ -142,6 +149,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
     Widget? expandIcon;
     if (_canExpand) {
       expandIcon = IconButton(
+        padding: EdgeInsets.only(bottom: 0.0),
         onPressed: _isEmptyGroup ? null : _handleToggleExpandedRowGroup,
         icon: _isEmptyGroup
             ? Icon(
@@ -151,14 +159,14 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
               )
             : widget.row.type.group.expanded
                 ? Icon(
-                    style.rowGroupExpandedIcon,
-                    size: style.iconSize,
-                    color: style.iconColor,
+                    Icons.remove_circle_outline,
+                    size: 15,
+                    color: Colors.black38,
                   )
                 : Icon(
-                    style.rowGroupCollapsedIcon,
-                    size: style.iconSize,
-                    color: style.iconColor,
+                    Icons.add_circle_outline,
+                    size: 15,
+                    color: Colors.black38,
                   ),
       );
     }
@@ -177,7 +185,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
             color: style.iconColor,
           ),
         ),
-      if (widget.column.enableRowChecked)
+      if (widget.column.enableRowChecked && depth >= widget.column.rowCheckBoxGroupDepth)
         CheckboxSelectionWidget(
           column: widget.column,
           row: widget.row,

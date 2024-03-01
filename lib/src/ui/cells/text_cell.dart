@@ -231,6 +231,10 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
+    if (widget.column.textEditingControllerListener != null) {
+      _textController.addListener(widget.column.textEditingControllerListener!);
+    }
+
     return TextField(
       focusNode: cellFocus,
       controller: _textController,
