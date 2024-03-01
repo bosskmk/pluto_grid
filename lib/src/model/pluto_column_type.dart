@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class PlutoColumnType {
   dynamic get defaultValue;
@@ -87,17 +88,26 @@ abstract class PlutoColumnType {
 
   /// Provides a selection list and sets it as a selection column.
   ///
+  ///The function[onItemSelected] is callback function, which is called
+  ///when selecting an item from the items list.
+  ///
+  ///when selecting an item the [onItemSelected] function will be called
+  ///immediately and it return [PlutoGridOnSelectedEvent] event, so you 
+  ///you can use it make decisions.
+  ///
   /// If [enableColumnFilter] is true, column filtering is enabled in the selection popup.
   ///
   /// Set the suffixIcon in the [popupIcon] cell. Tapping this icon will open a selection popup.
   /// The default icon is displayed, and if this value is set to null , the icon does not appear.
   factory PlutoColumnType.select(
     List<dynamic> items, {
+    final Function(PlutoGridOnSelectedEvent event)? onItemSelected,
     dynamic defaultValue = '',
     bool enableColumnFilter = false,
     IconData? popupIcon = Icons.arrow_drop_down,
   }) {
     return PlutoColumnTypeSelect(
+      onItemSelected: onItemSelected ?? (event) {},
       defaultValue: defaultValue,
       items: items,
       enableColumnFilter: enableColumnFilter,
@@ -360,10 +370,13 @@ class PlutoColumnTypeSelect
 
   final bool enableColumnFilter;
 
+  final Function(PlutoGridOnSelectedEvent event) onItemSelected;
+
   @override
   final IconData? popupIcon;
 
   const PlutoColumnTypeSelect({
+    required this.onItemSelected,
     this.defaultValue,
     required this.items,
     required this.enableColumnFilter,

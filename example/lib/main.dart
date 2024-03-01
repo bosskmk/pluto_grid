@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -50,11 +52,20 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Role',
       field: 'role',
-      type: PlutoColumnType.select(<String>[
-        'Programmer',
-        'Designer',
-        'Owner',
-      ]),
+      type: PlutoColumnType.select(
+        <String>[
+          'Programmer',
+          'Designer',
+          'Owner',
+        ],
+        onItemSelected: (PlutoGridOnSelectedEvent event) {
+          if (event.cell!.value == "Programmer") {
+            print("Hello Programmer");
+          } else {
+            print("Hello Developer");
+          }
+        },
+      ),
     ),
     PlutoColumn(
       title: 'Joined',
