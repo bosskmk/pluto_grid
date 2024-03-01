@@ -102,6 +102,15 @@ class PlutoGridPopup {
     open();
   }
 
+  setColumnConfig() {
+    columns.map((element) {
+      if (configuration.style.filterHeaderColor != null) {
+        element.backgroundColor = configuration.style.filterHeaderColor!;
+      }
+    }).toList();
+    return columns;
+  }
+
   Future<void> open() async {
     final textDirection = Directionality.of(context);
 
@@ -126,7 +135,7 @@ class PlutoGridPopup {
                       child: Directionality(
                         textDirection: textDirection,
                         child: PlutoGrid(
-                          columns: columns,
+                          columns: setColumnConfig(),
                           rows: rows,
                           columnGroups: columnGroups,
                           onLoaded: onLoaded,

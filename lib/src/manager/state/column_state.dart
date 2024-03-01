@@ -726,15 +726,15 @@ mixin ColumnState implements IPlutoGridState {
 
     final columns = [
       PlutoColumn(
-        title: configuration.localeText.setColumnsTitle,
-        field: titleField,
-        type: PlutoColumnType.text(),
-        enableRowChecked: true,
-        enableEditingMode: false,
-        enableDropToResize: true,
-        enableContextMenu: false,
-        enableColumnDrag: false,
-      ),
+          title: configuration.localeText.setColumnsTitle,
+          field: titleField,
+          type: PlutoColumnType.text(),
+          enableRowChecked: true,
+          enableEditingMode: false,
+          enableDropToResize: true,
+          enableContextMenu: false,
+          enableColumnDrag: false,
+          backgroundColor: configuration.style.filterHeaderColor),
       PlutoColumn(
         title: 'hidden column',
         field: columnField,
