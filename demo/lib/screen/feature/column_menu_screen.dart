@@ -113,3 +113,23 @@ enum _UserColumnMenuItem {
   moveNext,
   movePrevious,
 }
+
+/// [CustomColumnMenu] override buildMenuItems with returnning empty array to make that pop up menu won't trigger
+class CustomColumnMenu implements PlutoColumnMenuDelegate {
+  @override
+  List<PopupMenuEntry> buildMenuItems({
+    required PlutoGridStateManager stateManager,
+    required PlutoColumn column,
+  }) {
+    return [];
+  }
+
+  @override
+  void onSelected({
+    required BuildContext context,
+    required PlutoGridStateManager stateManager,
+    required PlutoColumn column,
+    required bool mounted,
+    required selected,
+  }) {}
+}
