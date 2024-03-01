@@ -1579,6 +1579,12 @@ enum PlutoGridMode {
   /// {@endtemplate}
   normal,
 
+  /// {@template pluto_grid_mode_select}
+  /// Mode for selecting one and edit cell from a specific list.
+  /// Tap a row or press Enter to select the current row.
+  ///
+  normalWithSelect,
+
   /// {@template pluto_grid_mode_readOnly}
   /// Cell cannot be edited.
   /// To try to edit by force, it is possible as follows.
@@ -1641,9 +1647,11 @@ enum PlutoGridMode {
 
   bool get isNormal => this == PlutoGridMode.normal;
 
+  bool get isNormalWithSelect => this == PlutoGridMode.normalWithSelect;
+
   bool get isReadOnly => this == PlutoGridMode.readOnly;
 
-  bool get isEditableMode => isNormal || isPopup;
+  bool get isEditableMode => isNormal || isPopup || isNormalWithSelect;
 
   bool get isSelectMode => isSingleSelectMode || isMultiSelectMode;
 

@@ -57,6 +57,7 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       stateManager.setEditing(true);
     } else {
       stateManager.setCurrentCell(cell, rowIdx);
+      _selectMode(stateManager);
     }
   }
 
@@ -151,16 +152,18 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
   void _selectMode(PlutoGridStateManager stateManager) {
     switch (stateManager.mode) {
-      case PlutoGridMode.normal:
       case PlutoGridMode.readOnly:
+      case PlutoGridMode.normal:
       case PlutoGridMode.popup:
         return;
       case PlutoGridMode.select:
+      case PlutoGridMode.normalWithSelect:
       case PlutoGridMode.selectWithOneTap:
         if (stateManager.isCurrentCell(cell) == false) {
           stateManager.setCurrentCell(cell, rowIdx);
 
-          if (!stateManager.mode.isSelectWithOneTap) {
+          if (!stateManager.mode.isSelectWithOneTap ||
+              !stateManager.mode.isNormalWithSelect) {
             return;
           }
         }

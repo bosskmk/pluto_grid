@@ -158,6 +158,7 @@ mixin GridState implements IPlutoGridState {
 
     switch (mode) {
       case PlutoGridMode.normal:
+      case PlutoGridMode.normalWithSelect:
       case PlutoGridMode.readOnly:
       case PlutoGridMode.popup:
         selectingMode = this.selectingMode;
@@ -189,7 +190,8 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void handleOnSelected() {
-    if (mode.isSelectMode == true && onSelected != null) {
+    if (mode.isSelectMode == true && onSelected != null ||
+        (mode.isNormalWithSelect == true && onSelected != null)) {
       onSelected!(
         PlutoGridOnSelectedEvent(
           row: currentRow,
