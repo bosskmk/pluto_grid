@@ -377,9 +377,12 @@ class _ColumnWidget extends StatelessWidget {
           height: height,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: noDragTarget
-                  ? column.backgroundColor
-                  : style.dragTargetColumnColor,
+              gradient: column.backgroundGradient,
+              color: column.backgroundGradient == null
+                  ? (noDragTarget
+                      ? column.backgroundColor
+                      : style.dragTargetColumnColor)
+                  : null,
               border: BorderDirectional(
                 end: style.enableColumnBorderVertical
                     ? BorderSide(color: style.borderColor, width: 1.0)
@@ -392,7 +395,9 @@ class _ColumnWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    if (column.enableRowChecked)
+                    if (column.enableRowChecked &&
+                        column.rowCheckBoxGroupDepth == 0 &&
+                        column.enableTitleChecked)
                       CheckboxAllSelectionWidget(stateManager: stateManager),
                     Expanded(
                       child: _ColumnTextWidget(
