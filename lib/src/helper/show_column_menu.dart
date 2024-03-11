@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../ui/columns/pluto_column_title.dart';
+
 abstract class PlutoColumnMenuDelegate<T> {
   List<PopupMenuEntry<T>> buildMenuItems({
     required PlutoGridStateManager stateManager,
@@ -38,13 +40,16 @@ class PlutoColumnMenuDelegateDefault implements PlutoColumnMenuDelegate<PlutoGri
     required bool mounted,
     required PlutoGridColumnMenuItem? selected,
   }) {
-    switch (selected) {
-      case PlutoGridColumnMenuItem.setFilter:
-        if (!mounted) return;
-        stateManager.showFilterPopup(context, calledColumn: column);
-        break;
-      default:
-        break;
+    if (isFiltered == false) {
+      switch (selected) {
+        case PlutoGridColumnMenuItem.setFilter:
+          stateManager.showFilterPopup(context, calledColumn: column);
+          break;
+        default:
+          break;
+      }
+    } else {
+      null;
     }
   }
 }

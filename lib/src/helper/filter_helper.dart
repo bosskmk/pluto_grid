@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
+import '../ui/columns/pluto_column_title.dart';
+
 typedef SetFilterPopupHandler = void Function(PlutoGridStateManager? stateManager);
 
 class FilterHelper {
@@ -557,6 +559,7 @@ class PlutoGridFilterPopupHeader extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.of(stateManager!.gridFocusNode.context!).pop();
+              isFiltered = false;
             },
             child: const Text(
               'Close',

@@ -324,14 +324,18 @@ class PlutoColumnTypeDuration with PlutoColumnTypeWithDoubleFormat implements Pl
     final int minutes = difference.inMinutes.remainder(60);
 
     if (days > 1) {
-      return '$days days ago';
+      return '$days ${_pluralize(days, "day")} ago';
     } else if (hours > 1) {
-      return '$hours hours ago';
+      return '$hours ${_pluralize(hours, "hour")} ago';
     } else if (minutes > 1) {
-      return '$minutes minutes ago';
+      return '$minutes ${_pluralize(minutes, "minute")} ago';
     } else {
       return 'Just now';
     }
+  }
+
+  String _pluralize(int value, String unit) {
+    return value == 1 ? unit : '${unit}s';
   }
 
   int compareTo(dynamic other) {

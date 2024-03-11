@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../ui.dart';
+bool isFiltered = false;
 
 class PlutoColumnTitle extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
@@ -65,14 +66,16 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
   }
 
   void _showContextMenu(BuildContext context, Offset position) async {
-    // Execute the action associated with "Set Filter"
-    stateManager.columnMenuDelegate.onSelected(
-      context: context,
-      stateManager: stateManager,
-      column: widget.column,
-      mounted: mounted,
-      selected: PlutoGridColumnMenuItem.setFilter, // Directly pass the option
-    );
+    if (context.mounted) {
+      stateManager.columnMenuDelegate.onSelected(
+        context: context,
+        stateManager: stateManager,
+        column: widget.column,
+        mounted: mounted,
+        selected: PlutoGridColumnMenuItem.setFilter,
+      );
+      isFiltered = true;
+    }
   }
 
   void _handleOnPointDown(PointerDownEvent event) {
