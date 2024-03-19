@@ -54,22 +54,11 @@ abstract class PlutoColumnType {
       locale: locale,
     );
   }
-
   factory PlutoColumnType.duration({
     dynamic defaultValue = 0.0,
-    bool negative = true,
-    String format = '',
-    bool applyFormatOnInit = true,
-    bool allowFirstDot = false,
-    String? locale,
   }) {
     return PlutoColumnTypeDuration(
       defaultValue: defaultValue,
-      format: format,
-      negative: negative,
-      applyFormatOnInit: applyFormatOnInit,
-      allowFirstDot: allowFirstDot,
-      locale: locale,
     );
   }
 
@@ -275,74 +264,49 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   dynamic applyFormat(dynamic value) => hasFormat ? (this as PlutoColumnTypeHasFormat).applyFormat(value) : value;
 }
 
-class PlutoColumnTypeDuration with PlutoColumnTypeWithDoubleFormat implements PlutoColumnType, PlutoColumnTypeHasFormat<String> {
+class PlutoColumnTypeDuration implements PlutoColumnType {
   @override
   final dynamic defaultValue;
 
-  @override
-  final bool negative;
-
-  @override
-  final String format;
-
-  @override
-  final bool applyFormatOnInit;
-
-  @override
-  final bool allowFirstDot;
-
-  @override
-  final String? locale;
-
-  PlutoColumnTypeDuration({
+  const PlutoColumnTypeDuration({
     this.defaultValue,
-    required this.negative,
-    required this.format,
-    required this.applyFormatOnInit,
-    required this.allowFirstDot,
-    required this.locale,
-  })  : numberFormat = intl.NumberFormat(format, locale),
-        decimalPoint = _getDecimalPoint(format);
+  });
 
   @override
-  final intl.NumberFormat numberFormat;
-
-  @override
-  final int decimalPoint;
-
-  static int _getDecimalPoint(String format) {
-    final int dotIndex = format.indexOf('.');
-    return dotIndex < 0 ? 0 : format.substring(dotIndex).length - 1;
+  bool isValid(dynamic value) {
+    return value is String || value is num;
   }
 
-  String getHumanReadableDuration() {
-    final int seconds = (defaultValue ?? 0).toInt();
-    final Duration duration = Duration(seconds: seconds);
-    final Duration difference = DateTime.now().difference(DateTime.now().subtract(duration));
-    final int days = difference.inDays;
-    final int hours = difference.inHours.remainder(24);
-    final int minutes = difference.inMinutes.remainder(60);
-
-    if (days > 1) {
-      return '$days ${_pluralize(days, "day")} ago';
-    } else if (hours > 1) {
-      return '$hours ${_pluralize(hours, "hour")} ago';
-    } else if (minutes > 1) {
-      return '$minutes ${_pluralize(minutes, "minute")} ago';
+  @override
+  int compare(dynamic a, dynamic b) {
+    if (a is num && b is num) {
+      return a.compareTo(b);
+    } else if (a is num) {
+      return 1; // a is considered greater
+    } else if (b is num) {
+      return -1; // b is considered greater
     } else {
-      return 'Just now';
+      // If both are strings containing both numbers and alphabets,
+      // extract the numeric part for comparison
+      final num aNum = _extractNumber(a);
+      final num bNum = _extractNumber(b);
+      return aNum.compareTo(bNum);
     }
   }
 
-  String _pluralize(int value, String unit) {
-    return value == 1 ? unit : '${unit}s';
+  num _extractNumber(dynamic value) {
+    final RegExp regex = RegExp(r'\d+');
+    final Iterable<Match> matches = regex.allMatches(value.toString());
+    if (matches.isNotEmpty) {
+      return num.parse(matches.first.group(0)!);
+    } else {
+      return defaultValue;
+    }
   }
 
-  int compareTo(dynamic other) {
-    final int thisSeconds = (defaultValue ?? 0).toInt();
-    final int otherSeconds = (other ?? 0).toInt();
-
-    return thisSeconds.compareTo(otherSeconds);
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v;
   }
 }
 

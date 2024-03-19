@@ -41,7 +41,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoColumn(
       title: 'Name',
       field: 'name',
-      type: PlutoColumnType.text(),
+      type: PlutoColumnType.duration(),
     ),
     PlutoColumn(
       title: 'Age',
@@ -97,7 +97,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoRow(
       cells: {
         'id': PlutoCell(value: 'user 113'),
-        'name': PlutoCell(value: 'Mike'),
+        'name': PlutoCell(value: '1111 days'),
         'age': PlutoCell(value: 20),
         'role': PlutoCell(value: 'Programmer'),
         'joined': PlutoCell(value: '2021-01-01'),
@@ -108,7 +108,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoRow(
       cells: {
         'id': PlutoCell(value: 'user 212'),
-        'name': PlutoCell(value: 'Jack'),
+        'name': PlutoCell(value: '210 days'),
         'age': PlutoCell(value: 25),
         'role': PlutoCell(value: 'Designer'),
         'joined': PlutoCell(value: '2021-02-01'),
@@ -119,7 +119,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
     PlutoRow(
       cells: {
         'id': PlutoCell(value: 'user 312'),
-        'name': PlutoCell(value: 'Suzi'),
+        'name': PlutoCell(value: '2111210 days'),
         'age': PlutoCell(value: 40),
         'role': PlutoCell(value: 'Owner'),
         'joined': PlutoCell(value: '2021-03-01'),
