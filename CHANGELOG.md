@@ -1,3 +1,6 @@
+## [8.3.1] - 2024. 03. 19
+* upgrade packages to latest major version
+
 ## [8.3.0] - 2024. 02. 18
 * Change pluto_grid_export to pluto_grid_plus_export as the old version is not maintained.
 * fix & enhance the example for csv export.
