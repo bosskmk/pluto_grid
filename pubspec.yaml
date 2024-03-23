@@ -1,6 +1,6 @@
 name: pluto_grid_plus
 description: PlutoGrid plus is a maintained version of PlutoGrid, PlutoGrid is a dataGrid that can be controlled by the keyboard on desktop and web. Of course, it works well on Android and IOS. (DataGrid, DataTable, Data Grid, Data Table, Sticky)
-version: 8.3.0
+version: 8.3.1
 homepage: https://pluto.weblaze.dev
 repository: https://github.com/doonfrs/pluto_grid_plus
 

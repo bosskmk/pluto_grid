@@ -95,6 +95,10 @@ abstract class ILayoutState {
 
   bool get isRTL;
 
+  double get gridPadding;
+
+  double get gridBorderWidth;
+
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
@@ -300,11 +304,17 @@ mixin LayoutState implements IPlutoGridState {
   double get rowTotalHeight => rowHeight + PlutoGridSettings.rowBorderWidth;
 
   @override
+  double get gridPadding => configuration.style.gridPadding;
+
+  @override
+  double get gridBorderWidth => configuration.style.gridBorderWidth;
+
+  @override
   double get bodyTopOffset =>
       gridGlobalOffset!.dy +
-      PlutoGridSettings.gridPadding +
+      gridPadding +
       headerHeight +
-      PlutoGridSettings.gridBorderWidth +
+      gridBorderWidth +
       columnGroupHeight +
       columnHeight +
       columnFilterHeight;
@@ -312,22 +322,22 @@ mixin LayoutState implements IPlutoGridState {
   @override
   double get bodyLeftOffset {
     return (showFrozenColumn && leftFrozenColumnsWidth > 0)
-        ? leftFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
+        ? leftFrozenColumnsWidth + gridBorderWidth
         : 0;
   }
 
   @override
   double get bodyRightOffset {
     return (showFrozenColumn && rightFrozenColumnsWidth > 0)
-        ? rightFrozenColumnsWidth + PlutoGridSettings.gridBorderWidth
+        ? rightFrozenColumnsWidth + gridBorderWidth
         : 0;
   }
 
   @override
   double get bodyLeftScrollOffset {
     return gridGlobalOffset!.dx +
-        PlutoGridSettings.gridPadding +
-        PlutoGridSettings.gridBorderWidth +
+        gridPadding +
+        gridBorderWidth +
         PlutoGridSettings.offsetScrollingFromEdge;
   }
 
@@ -377,9 +387,9 @@ mixin LayoutState implements IPlutoGridState {
 
     if (showFrozenColumn) {
       offset +=
-          leftFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
+          leftFrozenColumnsWidth > 0 ? gridBorderWidth: 0;
       offset +=
-          rightFrozenColumnsWidth > 0 ? PlutoGridSettings.gridBorderWidth : 0;
+          rightFrozenColumnsWidth > 0 ? gridBorderWidth : 0;
     }
 
     return offset;

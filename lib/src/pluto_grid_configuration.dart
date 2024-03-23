@@ -251,6 +251,8 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.gridPadding = PlutoGridSettings.gridPadding,
+    this.gridBorderWidth = PlutoGridSettings.gridBorderWidth,
     this.filterHeaderColor,
     this.filterHeaderIconColor,
   })  : columnCheckedColor = (columnCheckedColor ?? activatedColor),
@@ -320,6 +322,8 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.gridPadding = PlutoGridSettings.gridPadding,
+    this.gridBorderWidth = PlutoGridSettings.gridBorderWidth,
     this.filterHeaderColor,
     this.filterHeaderIconColor,
   })  : columnCheckedColor = (columnCheckedColor ?? activatedColor),
@@ -492,6 +496,12 @@ class PlutoGridStyleConfig {
   /// Apply border radius to popup opened inside [PlutoGrid].
   final BorderRadiusGeometry gridPopupBorderRadius;
 
+  /// Defaults to [PlutoGridSettings.gridPadding]
+  final double gridPadding;
+
+  /// Defaults to [PlutoGridSettings.gridBorderWidth]
+  final double gridBorderWidth;
+
   /// Set color of filter popup header
   final Color? filterHeaderColor;
 
@@ -545,6 +555,8 @@ class PlutoGridStyleConfig {
     IconData? rowGroupEmptyIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
+    double? gridPadding,
+    double? gridBorderWidth,
   }) {
     return PlutoGridStyleConfig(
         enableGridBorderShadow:
@@ -613,6 +625,8 @@ class PlutoGridStyleConfig {
         gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
         gridPopupBorderRadius:
             gridPopupBorderRadius ?? this.gridPopupBorderRadius,
+        gridPadding: gridPadding ?? this.gridPadding,
+        gridBorderWidth: gridBorderWidth ?? this.gridBorderWidth,
         filterHeaderColor: filterHeaderColor ?? filterHeaderColor,
         filterHeaderIconColor: filterHeaderIconColor ?? filterHeaderIconColor);
   }
@@ -668,7 +682,9 @@ class PlutoGridStyleConfig {
             rowGroupCollapsedIcon == other.rowGroupCollapsedIcon &&
             rowGroupEmptyIcon == other.rowGroupEmptyIcon &&
             gridBorderRadius == other.gridBorderRadius &&
-            gridPopupBorderRadius == other.gridPopupBorderRadius;
+            gridPopupBorderRadius == other.gridPopupBorderRadius &&
+            gridPadding == other.gridPadding &&
+            gridBorderWidth == other.gridBorderWidth;
   }
 
   @override
@@ -719,6 +735,8 @@ class PlutoGridStyleConfig {
         rowGroupEmptyIcon,
         gridBorderRadius,
         gridPopupBorderRadius,
+        gridPadding,
+        gridBorderWidth,
       ]);
 }
 
