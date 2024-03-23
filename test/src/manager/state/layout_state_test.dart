@@ -91,8 +91,8 @@ void main() {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset!.dx +
-              PlutoGridSettings.gridPadding +
-              PlutoGridSettings.gridBorderWidth +
+              stateManager.configuration.style.gridPadding +
+              stateManager.configuration.style.gridBorderWidth +
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },
@@ -140,8 +140,8 @@ void main() {
         expect(
           stateManager.bodyLeftScrollOffset,
           stateManager.gridGlobalOffset!.dx +
-              PlutoGridSettings.gridPadding +
-              PlutoGridSettings.gridBorderWidth +
+              stateManager.configuration.style.gridPadding +
+              stateManager.configuration.style.gridBorderWidth +
               PlutoGridSettings.offsetScrollingFromEdge,
         );
       },

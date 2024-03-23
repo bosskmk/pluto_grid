@@ -36,11 +36,11 @@ mixin VisibilityLayoutState implements IPlutoGridState {
 
     if (showFrozenColumn) {
       if (hasLeftFrozenColumns) {
-        offset += PlutoGridSettings.gridBorderWidth;
+        offset += gridBorderWidth;
       }
 
       if (hasRightFrozenColumns) {
-        offset += PlutoGridSettings.gridBorderWidth;
+        offset += gridBorderWidth;
       }
     }
 

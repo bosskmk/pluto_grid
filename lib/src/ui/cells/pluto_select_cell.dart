@@ -58,7 +58,7 @@ class PlutoSelectCellState extends State<PlutoSelectCell>
         columnFilterHeight +
         rowsHeight +
         PlutoGridSettings.gridInnerSpacing +
-        PlutoGridSettings.gridBorderWidth;
+        widget.stateManager.configuration.style.gridBorderWidth;
 
     fieldOnSelected = widget.column.title;
 
