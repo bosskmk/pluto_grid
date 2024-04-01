@@ -255,6 +255,7 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     required bool isSelecting,
     required bool hasCurrentSelectingPosition,
     required bool isCheckedRow,
+    required bool isHovered,
   }) {
     Color color = _getDefaultRowColor();
 
@@ -270,6 +271,10 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
       if (checkCurrentRow || checkSelectedRow) {
         color = stateManager.configuration.style.activatedColor;
+      } else {
+        if (isHovered) {
+          color = stateManager.configuration.style.rowHoveredColor;
+        }
       }
     }
 
@@ -306,12 +311,15 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
     final bool isFocusedCurrentRow = isCurrentRow && stateManager.hasFocus;
 
+    final bool isHovered = stateManager.isRowIdxHovered(widget.rowIdx);
+
     final Color rowColor = _getRowColor(
       isDragTarget: isDragTarget,
       isFocusedCurrentRow: isFocusedCurrentRow,
       isSelecting: isSelecting,
       hasCurrentSelectingPosition: hasCurrentSelectingPosition,
       isCheckedRow: isCheckedRow,
+      isHovered: isHovered,
     );
 
     return BoxDecoration(

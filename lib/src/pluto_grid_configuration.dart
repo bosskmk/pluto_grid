@@ -206,6 +206,7 @@ class PlutoGridStyleConfig {
     Color? columnCheckedColor,
     Color? cellCheckedColor,
     this.rowCheckedColor = const Color(0x11757575),
+    this.rowHoveredColor = const Color(0xFFB1B3B7),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
     this.cellColorGroupedRow,
@@ -277,6 +278,7 @@ class PlutoGridStyleConfig {
     Color? columnCheckedColor,
     Color? cellCheckedColor,
     this.rowCheckedColor = const Color(0x11202020),
+    this.rowHoveredColor = const Color(0xFF3D3D3D),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
     this.cellColorGroupedRow,
@@ -382,6 +384,9 @@ class PlutoGridStyleConfig {
 
   /// Checked Color for the row. (Checked rows)
   final Color rowCheckedColor;
+
+  /// Hovered Color. (Currently hovered row)
+  final Color rowHoveredColor;
 
   /// Cell color in edit state. (only current cell)
   final Color cellColorInEditState;

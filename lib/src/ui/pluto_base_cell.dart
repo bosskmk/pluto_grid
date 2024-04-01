@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
@@ -93,6 +94,30 @@ class PlutoBaseCell extends StatelessWidget
     );
   }
 
+  void _handleOnEnter(PointerEnterEvent event) {
+    _addGestureEvent(
+      PlutoGridGestureType.onEnter,
+        Offset.zero,
+    );
+    // set hovering row to true
+    stateManager.setIsHoveringRow(true, notify: true);
+
+    // set hovered row index
+    stateManager.setHoveredRowIdx(rowIdx, notify: true);
+  }
+
+  void _handleOnExit(PointerExitEvent event) {
+    _addGestureEvent(
+      PlutoGridGestureType.onExit,
+        Offset.zero,
+    );
+    // set hovering row to false
+    stateManager.setIsHoveringRow(false, notify: true);
+
+    // set hovered row index to null
+    stateManager.setHoveredRowIdx(null, notify: true);
+  }
+
   void Function()? _onDoubleTapOrNull() {
     return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
   }
@@ -103,32 +128,53 @@ class PlutoBaseCell extends StatelessWidget
         : _handleOnSecondaryTap;
   }
 
+  void Function(PointerEnterEvent event)? _onEnterOrNull() {
+    return stateManager.onRowEnter == null
+        ? null
+        : _handleOnEnter;
+  }
+
+  void Function(PointerExitEvent event)? _onExitOrNull() {
+    return stateManager.onRowExit == null
+        ? null
+        : _handleOnExit;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      // Essential gestures.
-      onTapUp: _handleOnTapUp,
-      onLongPressStart: _handleOnLongPressStart,
-      onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
-      onLongPressEnd: _handleOnLongPressEnd,
-      // Optional gestures.
-      onDoubleTap: _onDoubleTapOrNull(),
-      onSecondaryTapDown: _onSecondaryTapOrNull(),
-      child: _CellContainer(
-        cell: cell,
-        rowIdx: rowIdx,
-        row: row,
-        column: column,
-        cellPadding: column.cellPadding ??
-            stateManager.configuration.style.defaultCellPadding,
-        stateManager: stateManager,
-        child: _Cell(
-          stateManager: stateManager,
-          rowIdx: rowIdx,
-          column: column,
-          row: row,
+    return MouseRegion(
+      // Event is triggered when mouse enters the cell,
+      // which is used for hover logic
+      onEnter: _onEnterOrNull(),
+      // Event is triggered when mouse leaves the cell,
+      // which is used for hover logic
+      onExit: _onExitOrNull(),
+
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        // Essential gestures.
+        onTapUp: _handleOnTapUp,
+        onLongPressStart: _handleOnLongPressStart,
+        onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
+        onLongPressEnd: _handleOnLongPressEnd,
+        // Optional gestures.
+        onDoubleTap: _onDoubleTapOrNull(),
+        onSecondaryTapDown: _onSecondaryTapOrNull(),
+        child: _CellContainer(
           cell: cell,
+          rowIdx: rowIdx,
+          row: row,
+          column: column,
+          cellPadding: column.cellPadding ??
+              stateManager.configuration.style.defaultCellPadding,
+          stateManager: stateManager,
+          child: _Cell(
+            stateManager: stateManager,
+            rowIdx: rowIdx,
+            column: column,
+            row: row,
+            cell: cell,
+          ),
         ),
       ),
     );
