@@ -176,12 +176,10 @@ class PlutoGridOnRowSecondaryTapEvent {
 class PlutoGridOnRowEnterEvent {
   final PlutoRow? row;
   final int? rowIdx;
-  final PlutoCell cell;
 
   const PlutoGridOnRowEnterEvent({
     this.row,
     this.rowIdx,
-    required this.cell,
   });
 }
 
@@ -190,12 +188,10 @@ class PlutoGridOnRowEnterEvent {
 class PlutoGridOnRowExitEvent {
   final PlutoRow? row;
   final int? rowIdx;
-  final PlutoCell cell;
 
   const PlutoGridOnRowExitEvent({
     this.row,
     this.rowIdx,
-    required this.cell,
   });
 }
 

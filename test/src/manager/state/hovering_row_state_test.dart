@@ -35,56 +35,6 @@ void main() {
     stateManager.addListener(listener!.noParamReturnVoid);
   });
 
-  group('setIsHoveringRow', () {
-    test(
-      'If the existing isHovering value is identical'
-      'to the value to be changed, notifyListeners should not be called.',
-      () {
-        // given
-        expect(stateManager.isHoveringRow, isFalse);
-
-        // when
-        stateManager.setIsHoveringRow(false);
-
-        // then
-        verifyNever(listener!.noParamReturnVoid());
-      },
-    );
-
-    test(
-      'If the existing isHovering value is different from'
-          'the value you want to change, notifyListeners should be called.',
-      () {
-        // given
-        expect(stateManager.isHoveringRow, isFalse);
-
-        // when
-        stateManager.setIsHoveringRow(true);
-
-        // then
-        expect(stateManager.isHoveringRow, isTrue);
-        verify(listener!.noParamReturnVoid()).called(1);
-      },
-    );
-
-    test(
-      'If the existing isHovering value is different from'
-          'the value you want to change, but notify is false, '
-          'then notifyListeners should not be called.',
-      () {
-        // given
-        expect(stateManager.isHoveringRow, isFalse);
-
-        // when
-        stateManager.setIsHoveringRow(true, notify: false);
-
-        // then
-        expect(stateManager.isHoveringRow, isTrue);
-        verifyNever(listener!.noParamReturnVoid());
-      },
-    );
-  });
-
   group('setHoveredRowIdx', () {
     test(
       'If the rowIdx passed as an argument is the same as'
@@ -148,15 +98,19 @@ void main() {
       stateManager.setHoveredRowIdx(givenHoveredRowIdx);
     });
 
-    test('If rowIdx is null, false should be returned.', () {
-      expect(stateManager.isRowIdxHovered(null), isFalse);
-    });
-
-
     test('should return true if rowIdx is equal to the given rowIdx.', () {
       expect(
         stateManager.isRowIdxHovered(givenHoveredRowIdx),
         isTrue,
+      );
+    });
+
+    test('should return false if hoveredRowIdx is null.', () {
+      stateManager.setHoveredRowIdx(null);
+
+      expect(
+        stateManager.isRowIdxHovered(givenHoveredRowIdx),
+        isFalse,
       );
     });
   });

@@ -147,7 +147,6 @@ abstract class PlutoChangeNotifierFilterResolver {
       stateManager.handleAfterSelectingRow.hashCode: 'handleAfterSelectingRow',
 
       /// hovering_state
-      stateManager.setIsHoveringRow.hashCode: 'setIsHoveringRow',
       stateManager.setHoveredRowIdx.hashCode: 'setHoveredRowIdx',
       stateManager.isRowIdxHovered.hashCode: 'isRowIdxHovered',
     };
