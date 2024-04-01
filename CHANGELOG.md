@@ -1,3 +1,9 @@
+## [8.4.0] - 2024. 04. 01
+
+
+* Added onRowEnter, onRowExit callbacks to react on. @coruscant187
+* Added logic to change background color of row if hovered. @coruscant187 doonfrs/pluto_grid_plus#29
+
 ## [8.3.1] - 2024. 03. 19
 * upgrade packages to latest major version
 
