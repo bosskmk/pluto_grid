@@ -30,6 +30,12 @@ typedef PlutoOnRowDoubleTapEventCallback = void Function(
 typedef PlutoOnRowSecondaryTapEventCallback = void Function(
     PlutoGridOnRowSecondaryTapEvent event);
 
+typedef PlutoOnRowEnterEventCallback = void Function(
+    PlutoGridOnRowEnterEvent event);
+
+typedef PlutoOnRowExitEventCallback = void Function(
+    PlutoGridOnRowExitEvent event);
+
 typedef PlutoOnRowsMovedEventCallback = void Function(
     PlutoGridOnRowsMovedEvent event);
 
@@ -66,6 +72,8 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onRowChecked,
     this.onRowDoubleTap,
     this.onRowSecondaryTap,
+    this.onRowEnter,
+    this.onRowExit,
     this.onRowsMoved,
     this.onColumnsMoved,
     this.createHeader,
@@ -185,6 +193,16 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// [onRowSecondaryTap] is called when a mouse right-click event occurs.
   /// {@endtemplate}
   final PlutoOnRowSecondaryTapEventCallback? onRowSecondaryTap;
+
+  /// {@template pluto_grid_property_onRowEnter}
+  /// [onRowEnter] is called when the mouse enters the row.
+  /// {@endtemplate}
+  final PlutoOnRowEnterEventCallback? onRowEnter;
+
+  /// {@template pluto_grid_property_onRowExit}
+  /// [onRowExit] is called when the mouse exits the row.
+  /// {@endtemplate}
+  final PlutoOnRowExitEventCallback? onRowExit;
 
   /// {@template pluto_grid_property_onRowsMoved}
   /// [onRowsMoved] is called after the row is dragged and moved
@@ -512,6 +530,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowChecked: widget.onRowChecked,
       onRowDoubleTap: widget.onRowDoubleTap,
       onRowSecondaryTap: widget.onRowSecondaryTap,
+      onRowEnter: widget.onRowEnter,
+      onRowExit: widget.onRowExit,
       onRowsMoved: widget.onRowsMoved,
       onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,

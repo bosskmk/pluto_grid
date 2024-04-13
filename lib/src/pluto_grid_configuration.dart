@@ -198,6 +198,7 @@ class PlutoGridStyleConfig {
     this.enableCellBorderVertical = true,
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
+    this.enableRowHoverColor = false,
     this.gridBackgroundColor = Colors.white,
     this.rowColor = Colors.white,
     this.oddRowColor,
@@ -206,6 +207,7 @@ class PlutoGridStyleConfig {
     Color? columnCheckedColor,
     Color? cellCheckedColor,
     this.rowCheckedColor = const Color(0x11757575),
+    this.rowHoveredColor = const Color(0xFFB1B3B7),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
     this.cellColorGroupedRow,
@@ -269,6 +271,7 @@ class PlutoGridStyleConfig {
     this.enableCellBorderVertical = true,
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
+    this.enableRowHoverColor = false,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.rowColor = const Color(0xFF111111),
     this.oddRowColor,
@@ -277,6 +280,7 @@ class PlutoGridStyleConfig {
     Color? columnCheckedColor,
     Color? cellCheckedColor,
     this.rowCheckedColor = const Color(0x11202020),
+    this.rowHoveredColor = const Color(0xFF3D3D3D),
     this.cellColorInEditState = const Color(0xFF666666),
     this.cellColorInReadOnlyState = const Color(0xFF222222),
     this.cellColorGroupedRow,
@@ -352,6 +356,14 @@ class PlutoGridStyleConfig {
   /// such as when the current row or rows are dragged.
   final bool enableRowColorAnimation;
 
+  /// Hover effect on rows.
+  /// If true, the background color of the row changes to [rowHoveredColor]
+  /// when the mouse hovers over it.
+  /// If false, the background color of the row does not change and
+  /// the background color of the row is the same as [rowColor].
+  /// [rowHoveredColor] is therefore not used.
+  final bool enableRowHoverColor;
+
   final Color gridBackgroundColor;
 
   /// Default row background color
@@ -382,6 +394,9 @@ class PlutoGridStyleConfig {
 
   /// Checked Color for the row. (Checked rows)
   final Color rowCheckedColor;
+
+  /// Hovered Color. (Currently hovered row)
+  final Color rowHoveredColor;
 
   /// Cell color in edit state. (only current cell)
   final Color cellColorInEditState;

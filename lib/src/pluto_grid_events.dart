@@ -171,6 +171,30 @@ class PlutoGridOnRowSecondaryTapEvent {
   });
 }
 
+/// Argument of [PlutoGrid.onRowEnter] callback
+/// to receive the event of entering the row with the mouse.
+class PlutoGridOnRowEnterEvent {
+  final PlutoRow? row;
+  final int? rowIdx;
+
+  const PlutoGridOnRowEnterEvent({
+    this.row,
+    this.rowIdx,
+  });
+}
+
+/// Argument of [PlutoGrid.onRowExit] callback
+/// to receive the event of exiting the row with the mouse.
+class PlutoGridOnRowExitEvent {
+  final PlutoRow? row;
+  final int? rowIdx;
+
+  const PlutoGridOnRowExitEvent({
+    this.row,
+    this.rowIdx,
+  });
+}
+
 /// Argument of [PlutoGrid.onRowsMoved] callback
 /// to receive the event of moving the row by dragging it.
 class PlutoGridOnRowsMovedEvent {
