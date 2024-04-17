@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -62,9 +64,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   }
 
   List<PlutoColumn> _getColumns() {
-    return stateManager.showFrozenColumn == true
-        ? stateManager.bodyColumns
-        : stateManager.columns;
+    return stateManager.showFrozenColumn == true ? stateManager.bodyColumns : stateManager.columns;
   }
 
   @override
@@ -72,10 +72,8 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
     final scrollbarConfig = stateManager.configuration.scrollbar;
 
     return PlutoScrollbar(
-      verticalController:
-          scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
-      horizontalController:
-          scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
+      verticalController: scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
+      horizontalController: scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
       isAlwaysShown: scrollbarConfig.isAlwaysShown,
       onlyDraggingThumb: scrollbarConfig.onlyDraggingThumb,
       enableHover: PlatformHelper.isDesktop,
@@ -94,7 +92,11 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.only(bottom: stateManager.configuration.style.rowHeight),
+        padding: EdgeInsets.only(
+            bottom: max(
+          scrollbarConfig.scrollbarThicknessWhileDragging,
+          scrollbarConfig.scrollbarThickness,
+        )),
         child: CustomSingleChildLayout(
           delegate: ListResizeDelegate(stateManager, _columns),
           child: ListView.builder(
@@ -126,8 +128,7 @@ class ListResizeDelegate extends SingleChildLayoutDelegate {
 
   List<PlutoColumn> columns;
 
-  ListResizeDelegate(this.stateManager, this.columns)
-      : super(relayout: stateManager.resizingChangeNotifier);
+  ListResizeDelegate(this.stateManager, this.columns) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
   bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) {

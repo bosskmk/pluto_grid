@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -53,10 +55,17 @@ class PlutoRightFrozenRowsState
 
   @override
   Widget build(BuildContext context) {
+    final scrollbarConfig = stateManager.configuration.scrollbar;
     return ListView.builder(
       controller: _scroll,
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
+      padding: EdgeInsets.only(
+        bottom: max(
+          scrollbarConfig.scrollbarThicknessWhileDragging,
+          scrollbarConfig.scrollbarThickness,
+        ),
+      ),
       itemCount: _rows.length,
       itemExtent: stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
