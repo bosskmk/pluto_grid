@@ -138,8 +138,9 @@ class ListResizeDelegate extends SingleChildLayoutDelegate {
   }
 
   double _getWidth() {
+    final scrollbarConfig = stateManager.configuration.scrollbar;
     return columns.fold(
-      0,
+      max(scrollbarConfig.scrollbarThickness, scrollbarConfig.scrollbarThicknessWhileDragging),
       (previousValue, element) => previousValue + element.width,
     );
   }
