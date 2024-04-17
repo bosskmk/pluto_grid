@@ -70,7 +70,10 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   @override
   Widget build(BuildContext context) {
     final scrollbarConfig = stateManager.configuration.scrollbar;
-
+   final scrollbarMaxWidth = max(
+      scrollbarConfig.scrollbarThicknessWhileDragging,
+      scrollbarConfig.scrollbarThickness,
+    );
     return PlutoScrollbar(
       verticalController: scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
       horizontalController: scrollbarConfig.draggableScrollbar ? _horizontalScroll : null,
@@ -92,11 +95,6 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.only(
-            bottom: max(
-          scrollbarConfig.scrollbarThicknessWhileDragging,
-          scrollbarConfig.scrollbarThickness,
-        )),
         child: CustomSingleChildLayout(
           delegate: ListResizeDelegate(stateManager, _columns),
           child: ListView.builder(
@@ -105,6 +103,10 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             physics: const ClampingScrollPhysics(),
             itemCount: _rows.length,
             itemExtent: stateManager.rowTotalHeight,
+            padding: EdgeInsetsDirectional.only(
+              bottom: scrollbarMaxWidth,
+              end: scrollbarMaxWidth,
+            ),
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
