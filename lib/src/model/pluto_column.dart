@@ -192,6 +192,9 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
+  /// Trigger [PlutoGridOnEachChangedEvent] for each character change
+  bool enablePlutoGridOnEachChangedEvent;
+
   PlutoColumn({
     required this.title,
     required this.field,
@@ -226,6 +229,7 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
+    this.enablePlutoGridOnEachChangedEvent = false,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 

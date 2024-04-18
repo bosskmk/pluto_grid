@@ -1295,6 +1295,26 @@ class PlutoGridOnChangedEvent {
   }
 }
 
+class PlutoGridOnEachChangedEvent extends PlutoGridOnChangedEvent {
+  const PlutoGridOnEachChangedEvent({
+    required super.columnIdx,
+    required super.column,
+    required super.rowIdx,
+    required super.row,
+    super.value,
+    super.oldValue,
+  });
+
+  @override
+  String toString() {
+    String out = '[PlutoGridOnEachChangedEvent] ';
+    out += 'ColumnIndex : $columnIdx, RowIndex : $rowIdx\n';
+    out += '::: oldValue : $oldValue\n';
+    out += '::: newValue : $value';
+    return out;
+  }
+}
+
 /// This is the argument value of the [PlutoGrid.onSelected] callback
 /// that is called when the [PlutoGrid.mode] value is in select mode.
 ///

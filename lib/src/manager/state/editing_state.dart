@@ -212,6 +212,7 @@ mixin EditingState implements IPlutoGridState {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
+    bool eachChange = false,
   }) {
     final currentColumn = cell.column;
 
@@ -241,14 +242,25 @@ mixin EditingState implements IPlutoGridState {
     cell.value = value;
 
     if (callOnChangedEvent == true && onChanged != null) {
-      onChanged!(PlutoGridOnChangedEvent(
-        columnIdx: columnIndex(currentColumn)!,
-        column: currentColumn,
-        rowIdx: refRows.indexOf(currentRow),
-        row: currentRow,
-        value: value,
-        oldValue: oldValue,
-      ));
+      onChanged!(
+        eachChange
+            ? PlutoGridOnEachChangedEvent(
+                columnIdx: columnIndex(currentColumn)!,
+                column: currentColumn,
+                rowIdx: refRows.indexOf(currentRow),
+                row: currentRow,
+                value: value,
+                oldValue: oldValue,
+              )
+            : PlutoGridOnChangedEvent(
+                columnIdx: columnIndex(currentColumn)!,
+                column: currentColumn,
+                rowIdx: refRows.indexOf(currentRow),
+                row: currentRow,
+                value: value,
+                oldValue: oldValue,
+              ),
+      );
     }
 
     notifyListeners(notify, changeCellValue.hashCode);

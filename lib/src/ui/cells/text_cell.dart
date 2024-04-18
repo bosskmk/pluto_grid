@@ -157,6 +157,14 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         : _initialCellValue.toString() == value.toString()
             ? _CellEditingStatus.init
             : _CellEditingStatus.updated;
+
+    if (widget.column.enablePlutoGridOnEachChangedEvent) {
+      widget.stateManager.changeCellValue(
+        widget.cell,
+        _textController.text,
+        eachChange: true,
+      );
+    }
   }
 
   void _handleOnComplete() {
