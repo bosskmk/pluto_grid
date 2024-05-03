@@ -265,22 +265,22 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: _validateError
-                ? BorderSide(color: Colors.red)
+                ? BorderSide(color: Theme.of(context).colorScheme.error)
                 : BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: _validateError
-                ? BorderSide(color: Colors.red)
+                ? BorderSide(color: Theme.of(context).colorScheme.error)
                 : BorderSide.none,
           ),
           disabledBorder: OutlineInputBorder(
             borderSide: _validateError
-                ? BorderSide(color: Colors.red)
+                ? BorderSide(color: Theme.of(context).colorScheme.error)
                 : BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: _validateError
-                ? BorderSide(color: Colors.red)
+                ? BorderSide(color: Theme.of(context).colorScheme.error)
                 : BorderSide.none,
           ),
           contentPadding: EdgeInsets.zero,
