@@ -250,47 +250,25 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
-    return Tooltip(
-      message: _validateErrorMessage ?? widget.column.title,
-      child: TextFormField(
-        autovalidateMode: AutovalidateMode.always,
-        focusNode: cellFocus,
-        controller: _textController,
-        readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
-        onChanged: _handleOnChanged,
-        onEditingComplete: _handleOnComplete,
-        onFieldSubmitted: (_) => _handleOnComplete(),
-        onTap: _handleOnTap,
-        style: widget.stateManager.configuration.style.cellTextStyle,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: _validateError
-                ? BorderSide(color: Theme.of(context).colorScheme.error)
-                : BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: _validateError
-                ? BorderSide(color: Theme.of(context).colorScheme.error)
-                : BorderSide.none,
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderSide: _validateError
-                ? BorderSide(color: Theme.of(context).colorScheme.error)
-                : BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: _validateError
-                ? BorderSide(color: Theme.of(context).colorScheme.error)
-                : BorderSide.none,
-          ),
-          contentPadding: widget.column.cellInternalPadding ?? EdgeInsets.zero,
-        ),
-        maxLines: 1,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        textAlignVertical: TextAlignVertical.center,
-        textAlign: widget.column.textAlign.value,
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
+      focusNode: cellFocus,
+      controller: _textController,
+      readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
+      onChanged: _handleOnChanged,
+      onEditingComplete: _handleOnComplete,
+      onFieldSubmitted: (_) => _handleOnComplete(),
+      onTap: _handleOnTap,
+      style: widget.stateManager.configuration.style.cellTextStyle,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(borderSide: BorderSide.none),
+        contentPadding: widget.column.cellInternalPadding ?? EdgeInsets.zero,
       ),
+      maxLines: 1,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: widget.column.textAlign.value,
     );
   }
 

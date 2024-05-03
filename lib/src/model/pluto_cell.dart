@@ -77,7 +77,6 @@ class PlutoCell {
       return;
     }
     _validationError = changed;
-    print("SET Validation Error $_validationError");
   }
 
   dynamic get valueForSorting {

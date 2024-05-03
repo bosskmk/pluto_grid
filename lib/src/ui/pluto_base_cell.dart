@@ -307,11 +307,22 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: _decoration,
-      child: Padding(
-        padding: widget.cellPadding,
-        child: widget.child,
+    if (widget.cell.hasValidationError) {
+      _decoration = _decoration.copyWith(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+
+    return Tooltip(
+      message: widget.cell.validationError ?? "",
+      child: DecoratedBox(
+        decoration: _decoration,
+        child: Padding(
+          padding: widget.cellPadding,
+          child: widget.child,
+        ),
       ),
     );
   }
