@@ -254,13 +254,13 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       onFieldSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
       style: widget.stateManager.configuration.style.cellTextStyle,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.zero,
-        errorStyle: TextStyle(fontSize: 0),
-        errorBorder: OutlineInputBorder(),
+        errorStyle: const TextStyle(fontSize: 0),
+        errorBorder: Theme.of(context).inputDecorationTheme.errorBorder,
       ),
       maxLines: 1,
       keyboardType: keyboardType,
