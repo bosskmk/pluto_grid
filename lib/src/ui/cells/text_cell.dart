@@ -283,7 +283,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
                 ? BorderSide(color: Theme.of(context).colorScheme.error)
                 : BorderSide.none,
           ),
-          contentPadding: EdgeInsets.zero,
+          contentPadding: widget.column.cellInternalPadding ?? EdgeInsets.zero,
         ),
         maxLines: 1,
         keyboardType: keyboardType,

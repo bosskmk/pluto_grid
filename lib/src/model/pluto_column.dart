@@ -72,6 +72,9 @@ class PlutoColumn {
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
   EdgeInsets? cellPadding;
 
+  /// Customisable cellField padding.
+  EdgeInsets? cellInternalPadding;
+
   /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
 
@@ -215,6 +218,7 @@ class PlutoColumn {
     this.filterPadding,
     this.titleSpan,
     this.cellPadding,
+    this.cellInternalPadding,
     this.textAlign = PlutoColumnTextAlign.start,
     this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
