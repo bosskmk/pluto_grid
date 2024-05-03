@@ -441,6 +441,27 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
+  void validate({bool notify = true}) {
+    for (var rowElement in refRows.originalList) {
+      for (var cellElement in rowElement.cells.values) {
+        if (cellElement.column.validator != null) {
+          changeCellValue(
+            cellElement,
+            cellElement.value,
+            validationError: cellElement.column.validator?.call(
+              rowElement,
+              cellElement,
+              cellElement.value,
+            ),
+          );
+        }
+      }
+    }
+
+    notifyListeners(notify, validate.hashCode);
+  }
+
+  @override
   void setShowColumnFilter(bool flag, {bool notify = true}) {
     if (showColumnFilter == flag) {
       return;

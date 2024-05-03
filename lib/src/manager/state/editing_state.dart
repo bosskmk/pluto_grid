@@ -44,6 +44,8 @@ abstract class IEditingState {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
+    bool eachChange = false,
+    String? validationError,
   });
 }
 
