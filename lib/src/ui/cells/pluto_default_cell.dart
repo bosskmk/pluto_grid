@@ -163,39 +163,51 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       );
     }
 
-    return Row(children: [
-      if (_canRowDrag)
-        _RowDragIconWidget(
-          column: widget.column,
-          row: widget.row,
-          rowIdx: widget.rowIdx,
-          stateManager: stateManager,
-          feedbackWidget: cellWidget,
-          dragIcon: Icon(
-            Icons.drag_indicator,
-            size: style.iconSize,
-            color: style.iconColor,
-          ),
+    return Tooltip(
+      message: widget.cell.validationError ?? "",
+      child: Container(
+        decoration: BoxDecoration(
+          border: widget.cell.hasValidationError
+              ? Border.all(
+                  color: Theme.of(context).colorScheme.error,
+                )
+              : null,
         ),
-      if (widget.column.enableRowChecked)
-        CheckboxSelectionWidget(
-          column: widget.column,
-          row: widget.row,
-          rowIdx: widget.rowIdx,
-          stateManager: stateManager,
-        ),
-      if (spacingWidget != null) spacingWidget,
-      if (expandIcon != null) expandIcon,
-      Expanded(child: cellWidget),
-      if (_showGroupCount)
-        Text(
-          '($_groupCount)',
-          style: stateManager.configuration.style.cellTextStyle.copyWith(
-            decoration: TextDecoration.none,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-    ]);
+        child: Row(children: [
+          if (_canRowDrag)
+            _RowDragIconWidget(
+              column: widget.column,
+              row: widget.row,
+              rowIdx: widget.rowIdx,
+              stateManager: stateManager,
+              feedbackWidget: cellWidget,
+              dragIcon: Icon(
+                Icons.drag_indicator,
+                size: style.iconSize,
+                color: style.iconColor,
+              ),
+            ),
+          if (widget.column.enableRowChecked)
+            CheckboxSelectionWidget(
+              column: widget.column,
+              row: widget.row,
+              rowIdx: widget.rowIdx,
+              stateManager: stateManager,
+            ),
+          if (spacingWidget != null) spacingWidget,
+          if (expandIcon != null) expandIcon,
+          Expanded(child: cellWidget),
+          if (_showGroupCount)
+            Text(
+              '($_groupCount)',
+              style: stateManager.configuration.style.cellTextStyle.copyWith(
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+        ]),
+      ),
+    );
   }
 }
 

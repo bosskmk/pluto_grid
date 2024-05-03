@@ -10,6 +10,8 @@ class PlutoCell {
 
   final Key _key;
 
+  String? _validationError;
+
   dynamic _value;
 
   dynamic _valueForSorting;
@@ -52,6 +54,14 @@ class PlutoCell {
     return _value;
   }
 
+  String? get validationError {
+    return _validationError;
+  }
+
+  bool get hasValidationError {
+    return _validationError != null && _validationError!.trim().isNotEmpty;
+  }
+
   set value(dynamic changed) {
     if (_value == changed) {
       return;
@@ -60,6 +70,14 @@ class PlutoCell {
     _value = changed;
 
     _valueForSorting = null;
+  }
+
+  set validationError(String? changed) {
+    if (_validationError == changed) {
+      return;
+    }
+    _validationError = changed;
+    print("SET Validation Error $_validationError");
   }
 
   dynamic get valueForSorting {

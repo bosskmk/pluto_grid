@@ -102,6 +102,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       widget.stateManager.currentCell!,
       _initialCellValue,
       notify: false,
+      validationError: doValidation(_initialCellValue),
     );
   }
 
@@ -138,7 +139,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       return;
     }
 
-    widget.stateManager.changeCellValue(widget.cell, _textController.text);
+    widget.stateManager.changeCellValue(
+      widget.cell,
+      _textController.text,
+      validationError: doValidation(_textController.text),
+    );
 
     _textController.text = formattedValue;
 
@@ -150,6 +155,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     _cellEditingStatus = _CellEditingStatus.updated;
   }
+
+  bool get _validateError =>
+      _validateErrorMessage != null && _validateErrorMessage!.trim().isNotEmpty;
+
+  String? _validateErrorMessage;
 
   void _handleOnChanged(String value) {
     _cellEditingStatus = formattedValue != value.toString()
@@ -163,6 +173,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
         widget.cell,
         _textController.text,
         eachChange: true,
+        validationError: doValidation(value),
       );
     }
   }
@@ -239,35 +250,63 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
-    return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      focusNode: cellFocus,
-      controller: _textController,
-      readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
-      validator: (value) => widget.column.validator?.call(
+    return Tooltip(
+      message: _validateErrorMessage ?? widget.column.title,
+      child: TextFormField(
+        autovalidateMode: AutovalidateMode.always,
+        focusNode: cellFocus,
+        controller: _textController,
+        readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
+        onChanged: _handleOnChanged,
+        onEditingComplete: _handleOnComplete,
+        onFieldSubmitted: (_) => _handleOnComplete(),
+        onTap: _handleOnTap,
+        style: widget.stateManager.configuration.style.cellTextStyle,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: _validateError
+                ? BorderSide(color: Colors.red)
+                : BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: _validateError
+                ? BorderSide(color: Colors.red)
+                : BorderSide.none,
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderSide: _validateError
+                ? BorderSide(color: Colors.red)
+                : BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: _validateError
+                ? BorderSide(color: Colors.red)
+                : BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.zero,
+        ),
+        maxLines: 1,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
+        textAlignVertical: TextAlignVertical.center,
+        textAlign: widget.column.textAlign.value,
+      ),
+    );
+  }
+
+  String? doValidation(String value) {
+    if (widget.column.validator != null) {
+      _validateErrorMessage = widget.column.validator?.call(
         widget.row,
         widget.cell,
         value,
-      ),
-      onChanged: _handleOnChanged,
-      onEditingComplete: _handleOnComplete,
-      onFieldSubmitted: (_) => _handleOnComplete(),
-      onTap: _handleOnTap,
-      style: widget.stateManager.configuration.style.cellTextStyle,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: EdgeInsets.zero,
-        errorStyle: const TextStyle(fontSize: 0),
-        errorBorder: Theme.of(context).inputDecorationTheme.errorBorder,
-      ),
-      maxLines: 1,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      textAlignVertical: TextAlignVertical.center,
-      textAlign: widget.column.textAlign.value,
-    );
+      );
+
+      setState(() {});
+      return _validateErrorMessage;
+    }
+
+    return null;
   }
 }
 

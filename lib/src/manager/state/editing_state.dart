@@ -213,6 +213,7 @@ mixin EditingState implements IPlutoGridState {
     bool force = false,
     bool notify = true,
     bool eachChange = false,
+    String? validationError,
   }) {
     final currentColumn = cell.column;
 
@@ -240,6 +241,7 @@ mixin EditingState implements IPlutoGridState {
     currentRow.setState(PlutoRowState.updated);
 
     cell.value = value;
+    cell.validationError = validationError;
 
     if (callOnChangedEvent == true && onChanged != null) {
       onChanged!(
