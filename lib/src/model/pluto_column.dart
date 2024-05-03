@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 typedef PlutoColumnValueFormatter = String Function(dynamic value);
+typedef PlutoColumnValueValidator = String? Function(
+  PlutoRow row,
+  PlutoCell cell,
+  dynamic value,
+);
 
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
@@ -195,6 +200,9 @@ class PlutoColumn {
   /// Trigger [PlutoGridOnEachChangedEvent] for each character change
   bool enablePlutoGridOnEachChangedEvent;
 
+  /// Field Validator for the column
+  PlutoColumnValueValidator? validator;
+
   PlutoColumn({
     required this.title,
     required this.field,
@@ -230,6 +238,7 @@ class PlutoColumn {
     this.enableEditingMode = true,
     this.hide = false,
     this.enablePlutoGridOnEachChangedEvent = false,
+    this.validator,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 

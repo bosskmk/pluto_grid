@@ -239,13 +239,19 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
-    return TextField(
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       focusNode: cellFocus,
       controller: _textController,
       readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
+      validator: (value) => widget.column.validator?.call(
+        widget.row,
+        widget.cell,
+        value,
+      ),
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
-      onSubmitted: (_) => _handleOnComplete(),
+      onFieldSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
       style: widget.stateManager.configuration.style.cellTextStyle,
       decoration: const InputDecoration(
@@ -253,6 +259,8 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.zero,
+        errorStyle: TextStyle(fontSize: 0),
+        errorBorder: OutlineInputBorder(),
       ),
       maxLines: 1,
       keyboardType: keyboardType,
