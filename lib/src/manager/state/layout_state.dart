@@ -445,7 +445,8 @@ mixin LayoutState implements IPlutoGridState {
     for (var rowElement in refRows.originalList) {
       for (var cellElement in rowElement.cells.values) {
         if (cellElement.initialized) {
-          if (cellElement.column.validator != null) {
+          if (cellElement.column.validator != null &&
+              !cellElement.column.hide) {
             final validationError = cellElement.column.validator?.call(
               rowElement,
               cellElement,
