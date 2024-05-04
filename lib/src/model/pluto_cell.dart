@@ -55,11 +55,15 @@ class PlutoCell {
   }
 
   String? get validationError {
+    if (_needToApplyFormatOnInit) {
+      _applyFormatOnInit();
+    }
+
     return _validationError;
   }
 
   bool get hasValidationError {
-    return _validationError != null && _validationError!.trim().isNotEmpty;
+    return validationError != null && validationError!.trim().isNotEmpty;
   }
 
   set value(dynamic changed) {
