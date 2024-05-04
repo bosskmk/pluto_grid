@@ -444,22 +444,24 @@ mixin LayoutState implements IPlutoGridState {
     bool isValid = true;
     for (var rowElement in refRows.originalList) {
       for (var cellElement in rowElement.cells.values) {
-        if (cellElement.column.validator != null) {
-          final validationError = cellElement.column.validator?.call(
-            rowElement,
-            cellElement,
-            cellElement.value,
-          );
-          if (validationError != null) {
-            changeCellValue(
+        if (cellElement.initialized) {
+          if (cellElement.column.validator != null) {
+            final validationError = cellElement.column.validator?.call(
+              rowElement,
               cellElement,
               cellElement.value,
-              force: true,
-              eachChange: true,
-              callOnChangedEvent: true,
-              validationError: validationError,
             );
-            isValid = false;
+            if (validationError != null) {
+              changeCellValue(
+                cellElement,
+                cellElement.value,
+                force: true,
+                eachChange: true,
+                callOnChangedEvent: true,
+                validationError: validationError,
+              );
+              isValid = false;
+            }
           }
         }
       }
