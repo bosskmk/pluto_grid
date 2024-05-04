@@ -451,15 +451,17 @@ mixin LayoutState implements IPlutoGridState {
               cellElement,
               cellElement.value,
             );
+
+            changeCellValue(
+              cellElement,
+              cellElement.value,
+              force: true,
+              eachChange: true,
+              callOnChangedEvent: true,
+              validationError: validationError,
+            );
+
             if (validationError != null) {
-              changeCellValue(
-                cellElement,
-                cellElement.value,
-                force: true,
-                eachChange: true,
-                callOnChangedEvent: true,
-                validationError: validationError,
-              );
               isValid = false;
             }
           }
