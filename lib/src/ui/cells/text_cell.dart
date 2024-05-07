@@ -156,19 +156,15 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     _cellEditingStatus = _CellEditingStatus.updated;
   }
 
-  bool get _validateError =>
-      _validateErrorMessage != null && _validateErrorMessage!.trim().isNotEmpty;
-
-  String? _validateErrorMessage;
-
-  void _handleOnChanged(String value) {
+  void _handleOnChanged(String value, [bool forceChangeCellValue = false]) {
     _cellEditingStatus = formattedValue != value.toString()
         ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
             ? _CellEditingStatus.init
             : _CellEditingStatus.updated;
 
-    if (widget.column.enablePlutoGridOnEachChangedEvent) {
+    if (forceChangeCellValue ||
+        widget.column.enablePlutoGridOnEachChangedEvent) {
       widget.stateManager.changeCellValue(
         widget.cell,
         _textController.text,
@@ -183,7 +179,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     _changeValue();
 
-    _handleOnChanged(old);
+    _handleOnChanged(old, true);
 
     PlatformHelper.onMobile(() {
       widget.stateManager.setKeepFocus(false);
@@ -274,14 +270,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
   String? doValidation(String value) {
     if (widget.column.validator != null) {
-      _validateErrorMessage = widget.column.validator?.call(
+      return widget.column.validator?.call(
         widget.row,
         widget.cell,
         value,
       );
-
-      setState(() {});
-      return _validateErrorMessage;
     }
 
     return null;
