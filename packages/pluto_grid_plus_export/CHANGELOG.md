@@ -1,3 +1,6 @@
+## [1.0.5] - 2024. 5. 15
+upgrade for flutter 3.22.0 & pluto_grid_plus 8.4.1
+
 ## [1.0.4] - 2024. 2. 18
 * Change repo path & class name in readme
 

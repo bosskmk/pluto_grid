@@ -25,11 +25,11 @@ class PlutoBaseRow extends StatelessWidget {
     super.key,
   });
 
-  bool _checkSameDragRows(PlutoRow draggingRow) {
+  bool _checkSameDragRows(DragTargetDetails<PlutoRow> draggingRow) {
     final List<PlutoRow> selectedRows =
         stateManager.currentSelectingRows.isNotEmpty
             ? stateManager.currentSelectingRows
-            : [draggingRow];
+            : [draggingRow.data];
 
     final end = rowIdx + selectedRows.length;
 
@@ -42,18 +42,14 @@ class PlutoBaseRow extends StatelessWidget {
     return true;
   }
 
-  bool _handleOnWillAccept(PlutoRow? draggingRow) {
-    if (draggingRow == null) {
-      return false;
-    }
-
+  bool _handleOnWillAccept(DragTargetDetails<PlutoRow> draggingRow) {
     return !_checkSameDragRows(draggingRow);
   }
 
-  void _handleOnAccept(PlutoRow draggingRow) async {
+  void _handleOnAccept(DragTargetDetails<PlutoRow> draggingRow) async {
     final draggingRows = stateManager.currentSelectingRows.isNotEmpty
         ? stateManager.currentSelectingRows
-        : [draggingRow];
+        : [draggingRow.data];
 
     stateManager.eventManager!.addEvent(
       PlutoGridDragRowsEvent(
@@ -131,13 +127,12 @@ class PlutoBaseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion (
+    return MouseRegion(
       onEnter: (event) => _handleOnEnter(),
       onExit: (event) => _handleOnExit(),
-
       child: DragTarget<PlutoRow>(
-        onWillAccept: _handleOnWillAccept,
-        onAccept: _handleOnAccept,
+        onWillAcceptWithDetails: _handleOnWillAccept,
+        onAcceptWithDetails: _handleOnAccept,
         builder: _dragTargetBuilder,
       ),
     );
@@ -310,7 +305,8 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
     }
 
     return isCheckedRow
-        ? Color.alphaBlend(stateManager.configuration.style.rowCheckedColor, color)
+        ? Color.alphaBlend(
+            stateManager.configuration.style.rowCheckedColor, color)
         : color;
   }
 

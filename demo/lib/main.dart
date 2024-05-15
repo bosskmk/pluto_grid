@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: PlutoGridExampleColors.backgroundColor,
         colorScheme: const ColorScheme.light(
           primary: PlutoGridExampleColors.primaryColor,
-          background: PlutoGridExampleColors.backgroundColor,
+          surface: PlutoGridExampleColors.backgroundColor,
         ),
       ),
     );

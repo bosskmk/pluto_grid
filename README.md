@@ -1,4 +1,4 @@
-## PlutoGrid Plus for flutter - v8.4.0
+## PlutoGrid Plus for flutter - v8.4.1
 PlutoGrid Plus is a maintained version of https://github.com/bosskmk/pluto_grid
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)

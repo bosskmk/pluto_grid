@@ -14,7 +14,7 @@ void main() {
 /// For more details, please refer to the link below for how to use it.
 /// https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/export_screen.dart
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
