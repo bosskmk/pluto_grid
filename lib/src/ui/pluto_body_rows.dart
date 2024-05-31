@@ -101,7 +101,9 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             scrollDirection: Axis.vertical,
             physics: const ClampingScrollPhysics(),
             itemCount: _rows.length,
-            itemExtent: stateManager.rowTotalHeight,
+            itemExtent: stateManager.rowWrapper != null
+                ? null
+                : stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
               Widget w = PlutoBaseRow(
