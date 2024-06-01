@@ -192,6 +192,7 @@ class PlutoGridConfiguration {
 
 class PlutoGridStyleConfig {
   const PlutoGridStyleConfig({
+    this.bodyPadding = EdgeInsets.zero,
     this.enableGridBorderShadow = false,
     this.enableColumnBorderVertical = true,
     this.enableColumnBorderHorizontal = true,
@@ -248,6 +249,7 @@ class PlutoGridStyleConfig {
   });
 
   const PlutoGridStyleConfig.dark({
+    this.bodyPadding = EdgeInsets.zero,
     this.enableGridBorderShadow = false,
     this.enableColumnBorderVertical = true,
     this.enableColumnBorderHorizontal = true,
@@ -302,6 +304,9 @@ class PlutoGridStyleConfig {
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
   });
+
+  /// body padding
+  final EdgeInsets bodyPadding;
 
   /// Enable borderShadow in [PlutoGrid].
   final bool enableGridBorderShadow;

@@ -103,6 +103,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             itemCount: _rows.length,
             itemExtent: stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
+            padding: stateManager.configuration.style.bodyPadding,
             itemBuilder: (ctx, i) {
               return PlutoBaseRow(
                 key: ValueKey('body_row_${_rows[i].key}'),
