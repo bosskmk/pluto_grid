@@ -51,6 +51,9 @@ typedef CreateFooterCallBack = Widget Function(
 typedef PlutoRowColorCallback = Color Function(
     PlutoRowColorContext rowColorContext);
 
+typedef PlutoSelectDateCallBack = Future<DateTime?> Function(
+    PlutoCell dateCell, PlutoColumn column);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -80,6 +83,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.createFooter,
     this.noRowsWidget,
     this.rowColorCallback,
+    this.selectDateCallback,
     this.columnMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
@@ -309,6 +313,8 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@endtemplate}
   final PlutoRowColorCallback? rowColorCallback;
 
+  final PlutoSelectDateCallBack? selectDateCallback;
+
   /// {@template pluto_grid_property_columnMenuDelegate}
   /// Column menu can be customized.
   ///
@@ -535,6 +541,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowsMoved: widget.onRowsMoved,
       onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,
+      selectDateCallback: widget.selectDateCallback,
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       columnMenuDelegate: widget.columnMenuDelegate,
