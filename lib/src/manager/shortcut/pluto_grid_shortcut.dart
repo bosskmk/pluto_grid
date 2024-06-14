@@ -39,6 +39,14 @@ class PlutoGridShortcut {
     return false;
   }
 
+  bool shortcutHasAction({
+    required PlutoKeyManagerEvent keyEvent,
+    required HardwareKeyboard state
+  }) {
+    var handledActions = actions.entries.where((action) => action.key.accepts(keyEvent.event, state));
+    return handledActions.isNotEmpty;
+  }
+
   static final Map<ShortcutActivator, PlutoGridShortcutAction> defaultActions =
       {
     // Move cell focus

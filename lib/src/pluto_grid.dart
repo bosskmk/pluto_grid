@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
@@ -595,13 +596,22 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
   KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, KeyEvent event) {
     if (_keyManager.eventResult.isSkip == false) {
-      _keyManager.subject.add(PlutoKeyManagerEvent(
+      PlutoKeyManagerEvent plutoKeyEvent = PlutoKeyManagerEvent(
         focusNode: focusNode,
         event: event,
-      ));
+      );
+      _keyManager.subject.add(plutoKeyEvent);
+
+      bool isDefaultAction =  _keyManager.isDefaultAction(plutoKeyEvent);
+      bool shortcutHasAction = isDefaultAction ? false : stateManager.configuration.shortcut.shortcutHasAction(
+          keyEvent: plutoKeyEvent,
+          state: HardwareKeyboard.instance
+      );
+
+      return _keyManager.eventResult.consume(isDefaultAction || shortcutHasAction ? KeyEventResult.handled : KeyEventResult.ignored);
     }
 
-    return _keyManager.eventResult.consume(KeyEventResult.handled);
+    return _keyManager.eventResult.consume(KeyEventResult.ignored);
   }
 
   @override

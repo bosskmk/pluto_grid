@@ -73,6 +73,10 @@ class PlutoGridKeyManager {
     _subscription = MergeStream([normalStream, movingStream]).listen(_handler);
   }
 
+  bool isDefaultAction(PlutoKeyManagerEvent keyEvent){
+    return !keyEvent.isModifierPressed && keyEvent.isCharacter;
+  }
+
   void _handler(PlutoKeyManagerEvent keyEvent) {
     if (keyEvent.isKeyUpEvent) return;
 
@@ -88,7 +92,7 @@ class PlutoGridKeyManager {
   }
 
   void _handleDefaultActions(PlutoKeyManagerEvent keyEvent) {
-    if (!keyEvent.isModifierPressed && keyEvent.isCharacter) {
+    if (isDefaultAction(keyEvent)) {
       _handleCharacter(keyEvent);
       return;
     }
