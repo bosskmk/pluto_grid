@@ -46,7 +46,7 @@ class PlutoDateCellState extends State<PlutoDateCell>
     if (widget.column.checkReadOnly(widget.row, widget.cell)) {
       return;
     }
-
+    isOpenedPopup = true;
     if (widget.stateManager.selectDateCallback != null) {
       final sm = widget.stateManager;
       final date = await sm.selectDateCallback!(widget.cell, widget.column);
@@ -70,6 +70,5 @@ class PlutoDateCellState extends State<PlutoDateCell>
         configuration: widget.stateManager.configuration,
       );
     }
-    isOpenedPopup = true;
   }
 }
