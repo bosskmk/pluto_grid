@@ -38,6 +38,8 @@ abstract class IGridState {
 
   CreateFooterCallBack? get createFooter;
 
+  PlutoSelectDateCallBack? get selectDateCallback;
+
   PlutoGridLocaleText get localeText;
 
   PlutoGridStyleConfig get style;

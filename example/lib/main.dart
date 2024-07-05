@@ -181,6 +181,17 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
             print(event);
           },
           configuration: const PlutoGridConfiguration(),
+          selectDateCallback: (PlutoCell cell, PlutoColumn column) async {
+            return showDatePicker(
+                context: context,
+                initialDate: PlutoDateTimeHelper.parseOrNullWithFormat(
+                  cell.value,
+                  column.type.date.format,
+                ) ?? DateTime.now(),
+                firstDate: column.type.date.startDate ?? DateTime(0),
+                lastDate: column.type.date.endDate ?? DateTime(9999)
+            );
+          }
         ),
       ),
     );

@@ -42,26 +42,33 @@ class PlutoDateCellState extends State<PlutoDateCell>
   IconData? get icon => widget.column.type.date.popupIcon;
 
   @override
-  void openPopup() {
+  void openPopup() async {
     if (widget.column.checkReadOnly(widget.row, widget.cell)) {
       return;
     }
-
     isOpenedPopup = true;
-
-    PlutoGridDatePicker(
-      context: context,
-      initDate: PlutoDateTimeHelper.parseOrNullWithFormat(
-        widget.cell.value,
-        widget.column.type.date.format,
-      ),
-      startDate: widget.column.type.date.startDate,
-      endDate: widget.column.type.date.endDate,
-      dateFormat: widget.column.type.date.dateFormat,
-      headerDateFormat: widget.column.type.date.headerDateFormat,
-      onSelected: onSelected,
-      itemHeight: widget.stateManager.rowTotalHeight,
-      configuration: widget.stateManager.configuration,
-    );
+    if (widget.stateManager.selectDateCallback != null) {
+      final sm = widget.stateManager;
+      final date = await sm.selectDateCallback!(widget.cell, widget.column);
+      isOpenedPopup = false;
+      if (date != null) {
+        handleSelected(widget.column.type.date.dateFormat.format(date)); // Consider call onSelected
+      }
+    } else {
+      PlutoGridDatePicker(
+        context: context,
+        initDate: PlutoDateTimeHelper.parseOrNullWithFormat(
+          widget.cell.value,
+          widget.column.type.date.format,
+        ),
+        startDate: widget.column.type.date.startDate,
+        endDate: widget.column.type.date.endDate,
+        dateFormat: widget.column.type.date.dateFormat,
+        headerDateFormat: widget.column.type.date.headerDateFormat,
+        onSelected: onSelected,
+        itemHeight: widget.stateManager.rowTotalHeight,
+        configuration: widget.stateManager.configuration,
+      );
+    }
   }
 }
