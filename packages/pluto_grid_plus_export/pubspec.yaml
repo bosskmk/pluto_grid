@@ -1,6 +1,6 @@
 name: pluto_grid_plus_export
 description: PlutoGridExport converts PlutoGrid's metadata to CSV or PDF. Used with PlutoGrid.
-version: 1.0.4
+version: 1.0.5
 homepage: https://bosskmk.github.io
 repository: https://github.com/doonfrs/pluto_grid_plus/tree/master/packages/pluto_grid_plus_export
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pluto_grid_plus: ^8.3.0
+  pluto_grid_plus: ^8.4.1
   csv: ^6.0.0
   pdf: ^3.10.7
   printing: ^5.11.1
@@ -21,4 +21,4 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.4.3
   build_runner: ^2.4.7
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0

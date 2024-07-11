@@ -115,7 +115,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),
@@ -202,7 +202,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),

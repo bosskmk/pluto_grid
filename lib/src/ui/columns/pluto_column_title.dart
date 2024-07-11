@@ -354,17 +354,17 @@ class _ColumnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<PlutoColumn>(
-      onWillAccept: (PlutoColumn? columnToDrag) {
-        return columnToDrag != null &&
-            columnToDrag.key != column.key &&
+      onWillAcceptWithDetails: (columnToDrag) {
+        return columnToDrag.data.key != column.key &&
             !stateManager.limitMoveColumn(
-              column: columnToDrag,
+              column: columnToDrag.data,
               targetColumn: column,
             );
       },
-      onAccept: (PlutoColumn columnToMove) {
-        if (columnToMove.key != column.key) {
-          stateManager.moveColumn(column: columnToMove, targetColumn: column);
+      onAcceptWithDetails: (columnToMove) {
+        if (columnToMove.data.key != column.key) {
+          stateManager.moveColumn(
+              column: columnToMove.data, targetColumn: column);
         }
       },
       builder: (dragContext, candidate, rejected) {
