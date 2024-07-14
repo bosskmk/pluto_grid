@@ -1,29 +1,45 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [8.4.2] - 2024. 07. 15
+
+* add rowWrapper
+* Added an option for developers to use either the standard Material DatePicker or a custom datepicker.
+* Datepicker - moved isOpenedPopup = true
+* Added the ability to add a custom data property at the row level. For example: you can pass data to onSelect or any other onHandler. (not required)
+* Upgrade some used package to the latest version.
+
 ## [8.4.1] - 2024. 05. 15
+
 upgrade for flutter 3.22.0
 
 ## [8.4.0] - 2024. 04. 01
-
 
 * Added onRowEnter, onRowExit callbacks to react on. @coruscant187
 * Added logic to change background color of row if hovered. @coruscant187 doonfrs/pluto_grid_plus#29
 
 ## [8.3.1] - 2024. 03. 19
+
 * upgrade packages to latest major version
 
 ## [8.3.0] - 2024. 02. 18
+
 * Change pluto_grid_export to pluto_grid_plus_export as the old version is not maintained.
 * fix & enhance the example for csv export.
 
 ## [8.2.0] - 2023. 12. 19
+
 * Add builder function in plutoColumnType.select allow user to customize the popup by item widget.
 
 ## [8.1.0] - 2023. 12. 8
+
 * Customize filter column by @RamshaFarheen bosskmk#739
 * Add column title (padding, icon-size, and checkBox size to auto-fit calculation by @Milad-Akarie bosskmk#715
 * add onSelectedItem function in plutoColumnType.select bosskmk#935
 
-
 ## [8.0.0] - 2023. 7. 12
+
 * Change Package name to pluto_grid_plus
 * Upgrade the packages to the latest version.
 
@@ -42,12 +58,12 @@ upgrade for flutter 3.22.0
 
 ## [6.0.4] - 2023. 3. 7
 
-* Add Scrollbar properties. https://github.com/bosskmk/pluto_grid/issues/743
+* Add Scrollbar properties. <https://github.com/bosskmk/pluto_grid/issues/743>
 
 ## [6.0.3] - 2023. 3. 6
 
 * Add locales.(German, French)
-* Fix row group expanded bug. https://github.com/bosskmk/pluto_grid/issues/775
+* Fix row group expanded bug. <https://github.com/bosskmk/pluto_grid/issues/775>
 
 ## [6.0.2] - 2023. 2. 2
 
@@ -75,25 +91,25 @@ upgrade for flutter 3.22.0
 
 * Fix sorting bug.  
   Fixed sorting issue with pagination applied.  
-  https://github.com/bosskmk/pluto_grid/issues/668
+  <https://github.com/bosskmk/pluto_grid/issues/668>
 
 ## [5.4.6] - 2022. 11. 30
 
 * Fix keepAlive.  
-  Fixed a bug that slowed down when moving horizontally/vertically   
+  Fixed a bug that slowed down when moving horizontally/vertically
   with the keyboard direction keys for a long time in succession.
 
 ## [5.4.5] - 2022. 11. 30
 
-* Fix RTL initiation flicker.   
-  By https://github.com/Milad-Akarie
+* Fix RTL initiation flicker.
+  By <https://github.com/Milad-Akarie>
 * Fix column context menu is triggered after drag (column resizing).  
-  By https://github.com/Milad-Akarie
+  By <https://github.com/Milad-Akarie>
 
 ## [5.4.4] - 2022. 11. 29
 
 * Add hovered scrollbar.
-  https://pluto.weblaze.dev/scrollbar-and-scroll-behavior
+  <https://pluto.weblaze.dev/scrollbar-and-scroll-behavior>
 
 ## [5.4.3] - 2022. 11. 21
 
@@ -104,11 +120,11 @@ upgrade for flutter 3.22.0
 ## [5.4.2] - 2022. 11. 15
 
 * Add properties of PlutoGridScrollbarConfig.
-  - onlyDraggingThumb
-  - mainAxisMargin
-  - crossAxisMargin
-  - scrollBarColor
-  - scrollBarTrackColor
+  * onlyDraggingThumb
+  * mainAxisMargin
+  * crossAxisMargin
+  * scrollBarColor
+  * scrollBarTrackColor
 
 ## [5.4.1] - 2022. 11. 12
 
@@ -117,7 +133,7 @@ upgrade for flutter 3.22.0
 ## [5.4.0] - 2022. 11. 5
 
 * Add shortcut to PlutoGridConfiguration.  
-  https://pluto.weblaze.dev/shortcuts
+  <https://pluto.weblaze.dev/shortcuts>
 * Add popupIcon for popup type column.  
   You can change the icon that appears on the right of the date, time, or selection type column cell or set it to null to remove it.
 
@@ -151,7 +167,7 @@ upgrade for flutter 3.22.0
 
 * Change PlutoGridStateManager.configuration to not null.
 * Add Currency column.
-  https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/currency_type_column_screen.dart
+  <https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/currency_type_column_screen.dart>
 
 ## [5.1.1] - 2022. 9. 25
 
@@ -160,13 +176,13 @@ upgrade for flutter 3.22.0
 ## [5.1.0] - 2022. 9. 10
 
 * Add Column footer.  
-  https://weblaze.dev/pluto_grid/build/web/#feature/column-footer
+  <https://weblaze.dev/pluto_grid/build/web/#feature/column-footer>
 * Add to be able to set locale for numeric type PlutoColumn.
 
 ## [5.0.6] - 2022. 9. 5
 
 * Add support for countries that use comma as Decimal separator.
-* Breaking change - Only available for flutter 3.3,   
+* Breaking change - Only available for flutter 3.3,
   otherwise it'll show this error on console: "Error: No named parameter with the name 'disabledForegroundColor'"
 
 ## [5.0.5] - 2022. 8. 30
@@ -199,21 +215,21 @@ upgrade for flutter 3.22.0
 
 * Added middle divider for `PlutoDualGrid`, `PlutoDualPopup` widget.  
   By adding a divider in the center of the two grids, the position can be changed by dragging and dropping.  
-  https://weblaze.dev/pluto_grid/build/web/#feature/dual-mode
+  <https://weblaze.dev/pluto_grid/build/web/#feature/dual-mode>
 * Add to `PlutoGridEventManager` stream to receive column sort changes.  
   Add `PlutoGrid.onSorted` callback.
 * Added an option to disable column width adjustment while displaying the column right menu.
-  - Activate both `PlutoColumn.enableContextMenu` and `PlutoColumn.enableDropToResize`
+  * Activate both `PlutoColumn.enableContextMenu` and `PlutoColumn.enableDropToResize`
     Tap the column menu to display the context menu. Drag left or right to adjust the column width.
-  - Activate only `PlutoColumn.enableContextMenu`
+  * Activate only `PlutoColumn.enableContextMenu`
     You cannot adjust the column width by dragging the column menu.
-  - Only enable `PlutoColumn.enableDropToResize`
+  * Only enable `PlutoColumn.enableDropToResize`
     You cannot call the context menu by tapping the column menu.
 * Hide all column headings.  
   `PlutoGridStateManager.setShowColumnTitle`  
-  https://weblaze.dev/pluto_grid/build/web/#development  
+  <https://weblaze.dev/pluto_grid/build/web/#development>  
   In the link above, you can hide or show the entire column area by clicking the toggle column title button in the top show menu.
-* When the parent widget of `PlutoGrid` is scrolled, in the previous 4.0.0 logic,   
+* When the parent widget of `PlutoGrid` is scrolled, in the previous 4.0.0 logic,
   the error that the row area disappears when the column is out of the screen area has been fixed.
 * Improve text selection when edit TextCell by @DmitrySboychakov
 * Improve padding for table cells and column titles by @DmitrySboychakov
@@ -225,10 +241,10 @@ upgrade for flutter 3.22.0
 * Modified to pass `PlutoColumn` instead of passing `PlutoColumn.key` when calling `hideColumn`.
 * Add `PlutoGridStateManager.hideColumns(List<PlutoColumn> columns, bool hide)`
 * Changes due to the constraint of a frozen column.
-  - The width of the frozen column cannot be expanded beyond the limit width.
-  - When changing a non-frozen column to a frozen column, it cannot be changed if the constraint width is insufficient.
-  - If a column with a hidden frozen column state is unhidden in a narrow constraint width, the column frozen state is forcibly changed to `PlutoColumnFrozen.none`.
-  - If the entire grid width is narrowed to less than the constraint width while   
+  * The width of the frozen column cannot be expanded beyond the limit width.
+  * When changing a non-frozen column to a frozen column, it cannot be changed if the constraint width is insufficient.
+  * If a column with a hidden frozen column state is unhidden in a narrow constraint width, the column frozen state is forcibly changed to `PlutoColumnFrozen.none`.
+  * If the entire grid width is narrowed to less than the constraint width while
     there is a frozen column, the frozen column is permanently changed to `PlutoColumnFrozen.none`, and it does not return to the frozen column again even if the grid width is increased.
 * Change the logic to move by dragging rows.  
   Previous behavior: rows are moved while dragging.  
@@ -242,7 +258,7 @@ upgrade for flutter 3.22.0
   Changed left and right of `PlutoColumn.frozen` to start and end.  
   `PlutoColumn.textAlign` default value changed from left to start.  
   `PlutoColumn.titleTextAlign` default value changed from left to start.  
-  https://weblaze.dev/pluto_grid/build/web/#feature/rtl
+  <https://weblaze.dev/pluto_grid/build/web/#feature/rtl>
 * Change `PlutoGridConfiguration`.  
   Settings such as color, size, icon, border, and text style have been moved to `PlutoGridConfiguration.style`.
 * Even/Odd Color.  
@@ -250,7 +266,7 @@ upgrade for flutter 3.22.0
 * Set default row color.  
   Add `PlutoGridConfiguration.style.rowColor`.
 * Customize column menu.  
-  https://weblaze.dev/pluto_grid/build/web/#feature/column-menu
+  <https://weblaze.dev/pluto_grid/build/web/#feature/column-menu>
 
 ## [4.0.1] - 2022. 6. 21
 
@@ -262,8 +278,8 @@ upgrade for flutter 3.22.0
   Please check the performance in profile or build mode.  
   Debug mode can be slow if there are many lines.
 * Some state management is applied as a Provider.
-* Added PlutoGridStateManager.initializeRowsAsync static method.   
-  To avoid UI freezing when starting the grid with a large number of rows.    
+* Added PlutoGridStateManager.initializeRowsAsync static method.
+  To avoid UI freezing when starting the grid with a large number of rows.
   [Initialize rows asynchronously](https://weblaze.dev/pluto_grid/build/web/#feature/add-rows-asynchronously)
 
 ## [3.1.2] - 2022. 6. 2
@@ -281,7 +297,7 @@ upgrade for flutter 3.22.0
 
 ## [3.0.2] - 2022. 5. 25
 
-* CSV export has been separated into external packages.   
+* CSV export has been separated into external packages.
   Install the pluto_grid_export package.
 
 ## [3.0.0-1.pre] - 2022. 5. 14
@@ -347,7 +363,7 @@ upgrade for flutter 3.22.0
 
 ## [2.7.1] - 2021. 12. 8
 
-* Fixed an error where the row height of the popup did not change when the rowHeight value was changed. 
+* Fixed an error where the row height of the popup did not change when the rowHeight value was changed.
 
 ## [2.7.0] - 2021. 12. 7
 
@@ -387,7 +403,7 @@ upgrade for flutter 3.22.0
 
 ## [2.4.0] - 2021. 7. 31
 
-* Added pagination. 
+* Added pagination.
 * Added debounce on keyboard input in filter.
 
 ## [2.3.0] - 2021. 7. 7
@@ -402,7 +418,7 @@ upgrade for flutter 3.22.0
 
 ## [2.2.0] - 2021. 5. 29
 
-* Add callback to row checks developed by https://github.com/MrCasCode.
+* Add callback to row checks developed by <https://github.com/MrCasCode>.
 
 ## [2.1.0] - 2021. 5. 19
 
@@ -411,7 +427,7 @@ upgrade for flutter 3.22.0
 ## [2.0.0] - 2021. 5. 14
 
 * Change scroll physics.
-* Fix a bug when dragging rows. 
+* Fix a bug when dragging rows.
 * Stable release.
 
 ## [2.0.0-nullsafety.2] - 2021. 5. 1
@@ -451,9 +467,9 @@ upgrade for flutter 3.22.0
 ## [1.0.0] - 2020. 12. 30
 
 * Class name change. Just like changing PlutoConfiguration to PlutoGridConfiguration, the word Grid was added in the middle.
-  - PlutoStateManager > PlutoGridStateManager
-  - PlutoOnLoadedEvent > PlutoGridOnLoadedEvent
-  - Many other classes...
+  * PlutoStateManager > PlutoGridStateManager
+  * PlutoOnLoadedEvent > PlutoGridOnLoadedEvent
+  * Many other classes...
 
 ## [1.0.0-pre.10] - 2020. 12. 21
 
@@ -488,9 +504,9 @@ upgrade for flutter 3.22.0
 ## [1.0.0-pre.4] - 2020. 11. 16
 
 * Enable constant_identifier_names.
-  - ex) `PlutoColumnFixed.Left` > `PlutoColumnFixed.left`
-  - ex) `PlutoSelectingMode.Row` > `PlutoSelectingMode.row`
-  - All existing constants such as enum are changed.
+  * ex) `PlutoColumnFixed.Left` > `PlutoColumnFixed.left`
+  * ex) `PlutoSelectingMode.Row` > `PlutoSelectingMode.row`
+  * All existing constants such as enum are changed.
 * Add a loading indicator.
 
 ## [1.0.0-pre.3] - 2020. 11. 13
@@ -512,20 +528,20 @@ upgrade for flutter 3.22.0
 
 ## [1.0.0-pre.1] - 2020. 11. 05
 
-##### Breaking changes:
+### Breaking changes
 
 * PlutoGrid.popup has been deleted.  
   PlutoGrid.popup() has been removed.  
   Just clear the popup and create it with PlutoGrid().
 * The column property enableDraggable has been changed to enableColumnDrag.
 
-##### Improvements: 
+### Improvements
 
 * Column properties have been added.
-  - enableRowDrag : If set to true, an icon is create in the cell of the column, and the row can be moved by dragging it.
-  - enableRowChecked : If set to true, a check box is create in the cell of the column.
-  - renderer : You can change the displayed cell.
-  - applyFormatterInEditing : If this is set to true, the value changed by a formatter is a reflected in the editing state. However, it is only in the readonly state, or the state in which the cell value cannot be directly modified in the form of popup.
+  * enableRowDrag : If set to true, an icon is create in the cell of the column, and the row can be moved by dragging it.
+  * enableRowChecked : If set to true, a check box is create in the cell of the column.
+  * renderer : You can change the displayed cell.
+  * applyFormatterInEditing : If this is set to true, the value changed by a formatter is a reflected in the editing state. However, it is only in the readonly state, or the state in which the cell value cannot be directly modified in the form of popup.
 
 ## [0.1.21] - 2020. 11. 01
 
