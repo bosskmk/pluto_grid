@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pluto_grid_plus: 8.4.1
+  pluto_grid_plus: 8.4.2
   pluto_grid_plus_export:
     path: ../
   file_saver: ^0.2.12

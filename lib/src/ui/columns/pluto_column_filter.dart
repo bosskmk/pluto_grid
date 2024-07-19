@@ -254,7 +254,8 @@ class PlutoColumnFilterState extends PlutoStateWithChange<PlutoColumnFilter> {
         ),
         child: Padding(
           padding: _padding,
-          child: widget.column.filterWidget ??
+          child: widget.column.filterWidgetBuilder?.call(_focusNode,
+                  _controller, _enabled, _handleOnChanged, stateManager) ??
               TextField(
                 focusNode: _focusNode,
                 controller: _controller,

@@ -186,7 +186,16 @@ class PlutoColumn {
   Icon? filterSuffixIcon;
 
   ///Set custom widget
+  @Deprecated("Use new filterWidgetBuilder to provide some parameters")
   Widget? filterWidget;
+
+  Widget Function(
+    FocusNode focusNode,
+    TextEditingController controller,
+    bool enabled,
+    void Function(String changed) handleOnChanged,
+    PlutoGridStateManager stateManager,
+  )? filterWidgetBuilder;
 
   /// Displays Hide column menu in the column context menu.
   /// Valid only when [enableContextMenu] is activated.
@@ -242,6 +251,7 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
+    this.filterWidgetBuilder,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 
