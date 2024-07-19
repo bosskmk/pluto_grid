@@ -245,6 +245,7 @@ class PlutoColumn {
     this.filterHintText,
     this.filterHintTextColor,
     this.filterSuffixIcon,
+    @Deprecated("Use new filterWidgetBuilder to provide some parameters")
     this.filterWidget,
     this.enableHideColumnMenuItem = true,
     this.enableSetColumnsMenuItem = true,
