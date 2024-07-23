@@ -3,7 +3,7 @@ import 'package:collection/collection.dart'
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 class PlutoAggregateHelper {
-  static num sum({
+  static num? sum({
     required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
@@ -25,10 +25,12 @@ class PlutoAggregateHelper {
         )
         .whereNotNull();
 
-    return numberColumn.toNumber(numberColumn.applyFormat(numbers.sum));
+    return numbers.isNotEmpty
+        ? numberColumn.toNumber(numberColumn.applyFormat(numbers.sum))
+        : null;
   }
 
-  static num average({
+  static num? average({
     required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
@@ -50,7 +52,9 @@ class PlutoAggregateHelper {
         )
         .whereNotNull();
 
-    return numberColumn.toNumber(numberColumn.applyFormat(numbers.average));
+    return numbers.isNotEmpty
+        ? numberColumn.toNumber(numberColumn.applyFormat(numbers.average))
+        : null;
   }
 
   static num? min({
