@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart'
-    show IterableNumberExtension, IterableExtension;
+    show IterableExtension, IterableNullableExtension, IterableNumberExtension;
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
 class PlutoAggregateHelper {
-  static num sum({
+  static num? sum({
     required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
@@ -19,14 +19,18 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> numbers = foundItems.map(
-      (e) => e.cells[column.field]!.value,
-    );
+    final Iterable<num> numbers = foundItems
+        .map(
+          (e) => e.cells[column.field]?.value as num?,
+        )
+        .whereNotNull();
 
-    return numberColumn.toNumber(numberColumn.applyFormat(numbers.sum));
+    return numbers.isNotEmpty
+        ? numberColumn.toNumber(numberColumn.applyFormat(numbers.sum))
+        : null;
   }
 
-  static num average({
+  static num? average({
     required Iterable<PlutoRow> rows,
     required PlutoColumn column,
     PlutoAggregateFilter? filter,
@@ -42,11 +46,15 @@ class PlutoAggregateHelper {
         ? rows.where((row) => filter(row.cells[column.field]!))
         : rows;
 
-    final Iterable<num> numbers = foundItems.map(
-      (e) => e.cells[column.field]!.value,
-    );
+    final Iterable<num> numbers = foundItems
+        .map(
+          (e) => e.cells[column.field]?.value as num?,
+        )
+        .whereNotNull();
 
-    return numberColumn.toNumber(numberColumn.applyFormat(numbers.average));
+    return numbers.isNotEmpty
+        ? numberColumn.toNumber(numberColumn.applyFormat(numbers.average))
+        : null;
   }
 
   static num? min({
