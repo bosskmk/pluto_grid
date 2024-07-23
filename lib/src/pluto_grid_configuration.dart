@@ -215,6 +215,7 @@ class PlutoGridStyleConfig {
     this.checkedColor = const Color(0x11757575),
     this.cellColorInEditState = Colors.white,
     this.cellColorInReadOnlyState = const Color(0xFFDBDBDC),
+    this.hoveredRowColor = const Color(0xFFDCF5FF),
     this.cellColorGroupedRow,
     this.dragTargetColumnColor = const Color(0xFFDCF5FF),
     this.iconColor = Colors.black26,
@@ -281,6 +282,7 @@ class PlutoGridStyleConfig {
     this.borderColor = const Color(0xFF222222),
     this.activatedBorderColor = const Color(0xFFFFFFFF),
     this.inactivatedBorderColor = const Color(0xFF666666),
+    this.hoveredRowColor = const Color(0xFF313131),
     this.activatedCellBorderColor,
     this.iconSize = 18,
     this.rowHeight = PlutoGridSettings.rowHeight,
@@ -366,6 +368,9 @@ class PlutoGridStyleConfig {
 
   /// Background color of cells grouped by column.
   final Color? cellColorGroupedRow;
+
+  /// Border color of the cell when the cell is hovered.
+  final Color? hoveredRowColor;
 
   /// The background color of the column to be dragged.
   /// When moving a column by dragging it.

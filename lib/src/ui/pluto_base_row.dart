@@ -208,6 +208,8 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
 
   BoxDecoration _decoration = const BoxDecoration();
 
+  bool _isHovered = false;
+
   Color get _oddRowColor => stateManager.configuration.style.oddRowColor == null
       ? stateManager.configuration.style.rowColor
       : stateManager.configuration.style.oddRowColor!;
@@ -342,10 +344,25 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return _AnimatedOrNormalContainer(
-      enable: widget.enableRowColorAnimation,
-      decoration: _decoration,
-      child: widget.child,
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          _isHovered = true;
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          _isHovered = false;
+        });
+      },
+      child: _AnimatedOrNormalContainer(
+        enable: widget.enableRowColorAnimation,
+        decoration: _decoration.copyWith(
+            color: _isHovered
+                ? stateManager.configuration.style.hoveredRowColor
+                : _decoration.color),
+        child: widget.child,
+      ),
     );
   }
 }
