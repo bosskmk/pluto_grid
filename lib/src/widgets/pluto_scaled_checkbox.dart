@@ -11,9 +11,13 @@ class PlutoScaledCheckbox extends StatelessWidget {
 
   final Color unselectedColor;
 
+  final Color? semiSelectedColor;
+
   final Color? activeColor;
 
   final Color checkColor;
+
+  final Color checkboxBorderColor;
 
   const PlutoScaledCheckbox({
     Key? key,
@@ -22,12 +26,20 @@ class PlutoScaledCheckbox extends StatelessWidget {
     this.tristate = false,
     this.scale = 1.0,
     this.unselectedColor = Colors.black26,
+    this.semiSelectedColor = Colors.grey,
     this.activeColor = Colors.lightBlue,
     this.checkColor = const Color(0xFFDCF5FF),
+    this.checkboxBorderColor = Colors.grey,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final fillColor = value == null
+        ? tristate
+            ? semiSelectedColor
+            : unselectedColor
+        : activeColor;
+
     return Transform.scale(
       scale: scale,
       child: Theme(
@@ -38,8 +50,9 @@ class PlutoScaledCheckbox extends StatelessWidget {
           value: value,
           tristate: tristate,
           onChanged: handleOnChanged,
-          activeColor: value == null ? unselectedColor : activeColor,
+          activeColor: fillColor,
           checkColor: checkColor,
+          side: BorderSide(color: checkboxBorderColor),
         ),
       ),
     );

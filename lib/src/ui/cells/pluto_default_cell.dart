@@ -49,12 +49,10 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
     return _isExpandableCell;
   }
 
-  bool get _isExpandableCell =>
-      stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
+  bool get _isExpandableCell => stateManager.rowGroupDelegate!.isExpandableCell(widget.cell);
 
   bool get _showSpacing {
-    if (!stateManager.enabledRowGroups ||
-        !stateManager.rowGroupDelegate!.showFirstExpandableIcon) {
+    if (!stateManager.enabledRowGroups || !stateManager.rowGroupDelegate!.showFirstExpandableIcon) {
       return false;
     }
 
@@ -62,8 +60,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
     final parentCell = widget.row.parent?.cells[widget.column.field];
 
-    return parentCell != null &&
-        stateManager.rowGroupDelegate!.isExpandableCell(parentCell);
+    return parentCell != null && stateManager.rowGroupDelegate!.isExpandableCell(parentCell);
   }
 
   bool get _isEmptyGroup => widget.row.type.group.children.isEmpty;
@@ -75,8 +72,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       stateManager.rowGroupDelegate!.showCount;
 
   String get _groupCount => _compactCount
-      ? stateManager.rowGroupDelegate!
-          .compactNumber(widget.row.type.group.children.length)
+      ? stateManager.rowGroupDelegate!.compactNumber(widget.row.type.group.children.length)
       : widget.row.type.group.children.length.toString();
 
   bool get _compactCount => stateManager.rowGroupDelegate!.enableCompactCount;
@@ -290,10 +286,8 @@ class _RowDragIconWidget extends StatelessWidget {
             child: PlutoShadowContainer(
               width: column.width,
               height: stateManager.rowHeight,
-              backgroundColor:
-                  stateManager.configuration.style.gridBackgroundColor,
-              borderColor:
-                  stateManager.configuration.style.activatedBorderColor,
+              backgroundColor: stateManager.configuration.style.gridBackgroundColor,
+              borderColor: stateManager.configuration.style.activatedBorderColor,
               child: Row(
                 children: [
                   dragIcon,
@@ -332,8 +326,7 @@ class CheckboxSelectionWidget extends PlutoStatefulWidget {
   CheckboxSelectionWidgetState createState() => CheckboxSelectionWidgetState();
 }
 
-class CheckboxSelectionWidgetState
-    extends PlutoStateWithChange<CheckboxSelectionWidget> {
+class CheckboxSelectionWidgetState extends PlutoStateWithChange<CheckboxSelectionWidget> {
   bool _tristate = false;
 
   bool? _checked;
@@ -401,6 +394,8 @@ class CheckboxSelectionWidgetState
       unselectedColor: stateManager.configuration.style.iconColor,
       activeColor: stateManager.configuration.style.activatedBorderColor,
       checkColor: stateManager.configuration.style.activatedColor,
+      checkboxBorderColor: stateManager.configuration.style.checkboxBorderColor,
+      semiSelectedColor: stateManager.configuration.style.semiSelectedColor,
     );
   }
 }
@@ -430,8 +425,7 @@ class _DefaultCellWidget extends StatelessWidget {
       return true;
     }
 
-    return stateManager.rowGroupDelegate!.isExpandableCell(cell) ||
-        stateManager.rowGroupDelegate!.isEditableCell(cell);
+    return stateManager.rowGroupDelegate!.isExpandableCell(cell) || stateManager.rowGroupDelegate!.isEditableCell(cell);
   }
 
   String get _text {
@@ -442,8 +436,7 @@ class _DefaultCellWidget extends StatelessWidget {
     if (stateManager.enabledRowGroups &&
         stateManager.rowGroupDelegate!.showFirstExpandableIcon &&
         stateManager.rowGroupDelegate!.type.isByColumn) {
-      final delegate =
-          stateManager.rowGroupDelegate as PlutoRowGroupByColumnDelegate;
+      final delegate = stateManager.rowGroupDelegate as PlutoRowGroupByColumnDelegate;
 
       if (row.depth < delegate.columns.length) {
         cellValue = row.cells[delegate.columns[row.depth].field]!.value;
