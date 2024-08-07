@@ -30,10 +30,21 @@ class PlutoGridShortcut {
     required HardwareKeyboard state,
   }) {
     for (final action in actions.entries) {
-      if (action.key.accepts(keyEvent.event, state)) {
+     // Original code snippet
+      // The following code checks if the action's key accepts the keyEvent and executes the action if true.
+      // However, it caused an error in the new version of Flutter due to type changes.
+      // if (action.key.accepts(keyEvent.event, state)) {
+      //   action.value.execute(keyEvent: keyEvent, stateManager: stateManager);
+      //   return true;
+  // }
+
+  // Updated code snippet to fix the error in the new version of Flutter
+    // The keyEvent.event needs to be explicitly cast to KeyEvent and the state to HardwareKeyboard.
+    if (action.key.accepts(keyEvent.event as KeyEvent, state as HardwareKeyboard)) {
         action.value.execute(keyEvent: keyEvent, stateManager: stateManager);
-        return true;
+      return true;
       }
+
     }
 
     return false;
