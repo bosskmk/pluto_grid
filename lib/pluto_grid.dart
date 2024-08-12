@@ -1,5 +1,4 @@
 library pluto_grid;
-
 export './src/helper/filter_helper.dart';
 export './src/helper/filtered_list.dart';
 export './src/helper/pluto_aggregate_helper.dart';
