@@ -158,6 +158,10 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
+          createFooter: (stateManager) {
+            stateManager.setPageSize(5, notify: false);
+            return PlutoPagination(stateManager, pageSizeToMove: 1);
+            },
           configuration: const PlutoGridConfiguration(),
         ),
       ),
