@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
-class PlutoRow {
+class PlutoRow<T> {
   PlutoRow({
     required this.cells,
     PlutoRowType? type,
     this.sortIdx = 0,
+    this.data,
     bool checked = false,
     Key? key,
   })  : type = type ?? PlutoRowTypeNormal.instance,
@@ -16,6 +17,8 @@ class PlutoRow {
   final PlutoRowType type;
 
   final Key _key;
+
+  T? data;
 
   Map<String, PlutoCell> cells;
 
@@ -118,6 +121,8 @@ class PlutoRow {
   void setParent(PlutoRow? row) {
     _parent = row;
   }
+
+  void setData(T data) => this.data = data;
 
   void setChecked(bool? flag) {
     _checked = flag;
