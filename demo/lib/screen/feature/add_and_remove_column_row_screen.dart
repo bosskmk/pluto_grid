@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' as faker_package;
 import 'package:flutter/material.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 
@@ -176,7 +176,7 @@ class _Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<_Header> {
-  final faker = Faker();
+  final faker = faker_package.Faker();
 
   int addCount = 1;
 
