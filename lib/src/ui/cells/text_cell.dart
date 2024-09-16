@@ -231,7 +231,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
-    return TextField(
+    Widget w = TextField(
       focusNode: cellFocus,
       controller: _textController,
       readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
@@ -252,6 +252,12 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       textAlignVertical: TextAlignVertical.center,
       textAlign: widget.column.textAlign.value,
     );
+
+    if (widget.stateManager.editCellWrapper != null) {
+      w = widget.stateManager.editCellWrapper!(w, widget.cell, _textController);
+    }
+
+    return w;
   }
 }
 
