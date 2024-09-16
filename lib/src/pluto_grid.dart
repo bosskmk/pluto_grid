@@ -63,7 +63,7 @@ typedef PlutoSelectDateCallBack = Future<DateTime?> Function(
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
 class PlutoGrid extends PlutoStatefulWidget {
-  final rowWrapper;
+  final Widget Function(Widget rowWidget)? rowWrapper;
   const PlutoGrid({
     super.key,
     required this.columns,
