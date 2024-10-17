@@ -63,12 +63,12 @@ typedef PlutoSelectDateCallBack = Future<DateTime?> Function(
 /// and option selection used inside [PlutoGrid] are created with the API provided outside of [PlutoGrid].
 /// Also, the popup to set the filter or column inside the grid is implemented through the setting of [PlutoGrid].
 class PlutoGrid extends PlutoStatefulWidget {
-  final rowWrapper;
   const PlutoGrid({
     super.key,
     required this.columns,
     required this.rows,
     this.rowWrapper,
+    this.editCellWrapper,
     this.columnGroups,
     this.onLoaded,
     this.onChanged,
@@ -91,6 +91,11 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
   });
+
+  final Widget Function(Widget rowWidget)? rowWrapper;
+
+  final Widget Function(Widget editCellWidget, PlutoCell cell,
+      TextEditingController controller)? editCellWrapper;
 
   /// {@template pluto_grid_property_columns}
   /// The [PlutoColumn] column is delivered as a list and can be added or deleted after grid creation.
@@ -527,6 +532,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       columns: widget.columns,
       rows: widget.rows,
       rowWrapper: widget.rowWrapper,
+      editCellWrapper: widget.editCellWrapper,
       gridFocusNode: _gridFocusNode,
       scroll: PlutoGridScrollController(
         vertical: _verticalScroll,

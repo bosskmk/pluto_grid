@@ -58,6 +58,9 @@ class _State {
 mixin EditingState implements IPlutoGridState {
   final _State _state = _State();
 
+  Widget Function(Widget editCellWidget, PlutoCell cell,
+      TextEditingController controller)? get editCellWrapper;
+
   @override
   bool get isEditing => _state._isEditing;
 

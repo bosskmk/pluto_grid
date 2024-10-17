@@ -73,6 +73,8 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     required this.gridFocusNode,
     required this.scroll,
     List<PlutoColumnGroup>? columnGroups,
+    this.rowWrapper,
+    this.editCellWrapper,
     this.onChanged,
     this.onSelected,
     this.onSorted,
@@ -105,6 +107,13 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     setGridMode(mode ?? PlutoGridMode.normal);
     _initialize();
   }
+
+  @override
+  final Widget Function(Widget rowWidget)? rowWrapper;
+
+  @override
+  final Widget Function(Widget editCellWidget, PlutoCell cell,
+      TextEditingController controller)? editCellWrapper;
 
   @override
   final FilteredList<PlutoColumn> refColumns;
@@ -223,13 +232,13 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 /// ```
 /// {@endtemplate}
 class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
-  final rowWrapper;
   PlutoGridStateManager({
     required super.columns,
     required super.rows,
     required super.gridFocusNode,
     required super.scroll,
-    this.rowWrapper,
+    super.rowWrapper,
+    super.editCellWrapper,
     super.columnGroups,
     super.onChanged,
     super.onSelected,

@@ -39,6 +39,8 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow? get currentRow;
 
+  Widget Function(Widget rowWidget)? get rowWrapper;
+
   PlutoRowColorCallback? get rowColorCallback;
 
   int? getRowIdxByOffset(double offset);
