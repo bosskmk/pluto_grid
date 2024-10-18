@@ -75,7 +75,7 @@ class PlutoGridPopup {
 
   final double? height;
 
-  final bool? barrierDismissible;
+  final bool? barrierDismissible; //
 
   PlutoGridPopup({
     required this.context,

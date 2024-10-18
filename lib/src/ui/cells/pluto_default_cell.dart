@@ -129,7 +129,7 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
 
   @override
   Widget build(BuildContext context) {
-    int depth = 0;
+    int depth = 0; //
     PlutoRow? row = widget.row;
     while (row?.parent != null) {
       depth++;

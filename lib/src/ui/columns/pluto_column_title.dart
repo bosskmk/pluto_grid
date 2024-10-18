@@ -377,7 +377,7 @@ class _ColumnWidget extends StatelessWidget {
           height: height,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              gradient: column.backgroundGradient,
+              gradient: column.backgroundGradient, //
               color: column.backgroundGradient == null
                   ? (noDragTarget
                       ? column.backgroundColor

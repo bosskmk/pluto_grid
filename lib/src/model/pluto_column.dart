@@ -147,7 +147,7 @@ class PlutoColumn {
 
   /// A checkbox appears in the cell of the column.
   bool enableRowChecked;
-  int rowCheckBoxGroupDepth;
+  int rowCheckBoxGroupDepth; //
   bool enableTitleChecked;
 
   /// Sort rows by tapping on the column heading.
