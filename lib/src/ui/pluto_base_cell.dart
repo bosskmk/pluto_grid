@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
+import 'package:pluto_grid_plus/src/helper/platform_helper.dart';
+import 'package:pluto_grid_plus/src/helper/pluto_double_tap_detector.dart';
 
 import 'ui.dart';
 
@@ -46,6 +48,12 @@ class PlutoBaseCell extends StatelessWidget
   }
 
   void _handleOnTapUp(TapUpDetails details) {
+    if (PlatformHelper.isDesktop &&
+        PlutoDoubleTapDetector.isDoubleTap(cell) &&
+        stateManager.onRowDoubleTap != null) {
+      _handleOnDoubleTap();
+      return;
+    }
     _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
   }
 
@@ -94,6 +102,9 @@ class PlutoBaseCell extends StatelessWidget
   }
 
   void Function()? _onDoubleTapOrNull() {
+    if (PlatformHelper.isDesktop) {
+      return null;
+    }
     return stateManager.onRowDoubleTap == null ? null : _handleOnDoubleTap;
   }
 
