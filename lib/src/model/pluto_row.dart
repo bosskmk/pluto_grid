@@ -28,6 +28,8 @@ class PlutoRow<T> {
 
   bool? _checked;
 
+  bool? _checkedViaSelect;
+
   PlutoRow? _parent;
 
   PlutoRowState _state;
@@ -68,6 +70,10 @@ class PlutoRow<T> {
   /// or PlutoStateManager.toggleAllRowChecked methods.
   bool? get checked {
     return type.isGroup ? _tristateCheckedRow : _checked;
+  }
+
+  bool get checkedViaSelect {
+    return (checked ?? false) && (_checkedViaSelect ?? false);
   }
 
   bool? get _tristateCheckedRow {
@@ -124,8 +130,9 @@ class PlutoRow<T> {
 
   void setData(T data) => this.data = data;
 
-  void setChecked(bool? flag) {
+  void setChecked(bool? flag, {bool viaSelect = false}) {
     _checked = flag;
+    _checkedViaSelect = viaSelect;
     if (type.isGroup) {
       for (final child in type.group.children) {
         child.setChecked(flag);

@@ -11,6 +11,24 @@ class PlutoGridConfiguration {
   /// Moves the current cell when focus reaches the left or right edge in the edit state.
   final bool enableMoveHorizontalInEditing;
 
+  /// [PlutoGridRowSelectionCheckBoxBehavior.none]
+  /// Selecting a row does nothing to its checkbox
+  ///
+  /// [PlutoGridRowSelectionCheckBoxBehavior.checkRow]
+  /// Automatically enables the checkbox of the selected rows
+  ///
+  /// [PlutoGridRowSelectionCheckBoxBehavior.toggleCheckRow]
+  /// Automatically toggles the checkbox of the selected rows
+  ///
+  /// [PlutoGridRowSelectionCheckBoxBehavior.singleRowCheck]
+  /// Checks a selected row (if another row is checked via select, the previous one is unchecked)
+  ///
+  /// [PlutoGridRowSelectionCheckBoxBehavior.singleRowCheck]
+  /// Toggles the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
+  ///
+  /// Important: Only works with mode: PlutoGridMode.selectWithOneTap,
+  final PlutoGridRowSelectionCheckBoxBehavior rowSelectionCheckBoxBehavior;
+
   /// [PlutoEnterKeyAction.EditingAndMoveDown]
   /// It switches to the editing state, and moves down in the editing state.
   ///
@@ -76,6 +94,8 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration({
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
+    this.rowSelectionCheckBoxBehavior =
+        PlutoGridRowSelectionCheckBoxBehavior.none,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.shortcut = const PlutoGridShortcut(),
@@ -89,6 +109,8 @@ class PlutoGridConfiguration {
   const PlutoGridConfiguration.dark({
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
+    this.rowSelectionCheckBoxBehavior =
+        PlutoGridRowSelectionCheckBoxBehavior.none,
     this.enterKeyAction = PlutoGridEnterKeyAction.editingAndMoveDown,
     this.tabKeyAction = PlutoGridTabKeyAction.normal,
     this.shortcut = const PlutoGridShortcut(),
@@ -1757,6 +1779,19 @@ class PlutoGridLocaleText {
         minute,
         loadingText,
       ]);
+}
+
+enum PlutoGridRowSelectionCheckBoxBehavior {
+  /// Selecting a row does nothing to its checkbox
+  none,
+  /// Automatically enables the checkbox of the selected rows
+  checkRow,
+  /// Automatically toggles the checkbox value of the selected rows
+  toggleCheckRow,
+  /// Checks a selected row (if another row is selected via select, the previous one is unchecked)
+  singleRowCheck,
+  /// Toggle checks a selected (if another row is selected, the previous one is unchecked)
+  toggleSingleRowCheck,
 }
 
 /// Behavior of the Enter key when a cell is selected.
