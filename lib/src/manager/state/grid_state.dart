@@ -195,6 +195,7 @@ mixin GridState implements IPlutoGridState {
 
   @override
   void handleOnSelected() {
+    _handleSelectCheckRowBehavior();
     if (mode.isSelectMode == true && onSelected != null) {
       onSelected!(
         PlutoGridOnSelectedEvent(
@@ -204,6 +205,52 @@ mixin GridState implements IPlutoGridState {
           selectedRows: mode.isMultiSelectMode ? currentSelectingRows : null,
         ),
       );
+    }
+  }
+
+  void _handleSelectCheckRowBehavior() {
+    final stateManager = eventManager?.stateManager;
+    if (currentRow == null || stateManager == null) return;
+    final checkedRowsViaSelect = stateManager.checkedRowsViaSelect;
+    switch (configuration.rowSelectionCheckBoxBehavior) {
+      case PlutoGridRowSelectionCheckBoxBehavior.none:
+        break;
+      case PlutoGridRowSelectionCheckBoxBehavior.checkRow:
+        stateManager.setRowChecked(currentRow!, true, checkedViaSelect: true);
+        break;
+      case PlutoGridRowSelectionCheckBoxBehavior.toggleCheckRow:
+        if (checkedRowsViaSelect.contains(currentRow)) {
+          stateManager.setRowChecked(
+            currentRow!,
+            (!(currentRow?.checked ?? false)),
+            checkedViaSelect: true,
+          );
+        } else {
+          eventManager!.stateManager.setRowChecked(
+            currentRow!,
+            (!(currentRow?.checked ?? true)),
+            checkedViaSelect: true,
+          );
+        }
+        break;
+      case PlutoGridRowSelectionCheckBoxBehavior.singleRowCheck:
+        for (var row in checkedRowsViaSelect) {
+          row.setChecked(false);
+        }
+        currentRow!.setChecked(true, viaSelect: true);
+        stateManager.notifyListeners();
+        break;
+      case PlutoGridRowSelectionCheckBoxBehavior.toggleSingleRowCheck:
+        for (var row in checkedRowsViaSelect) {
+          row.setChecked(false);
+        }
+        if (checkedRowsViaSelect.contains(currentRow)) {
+          currentRow!.setChecked(false, viaSelect: false);
+        } else {
+          currentRow!.setChecked(true, viaSelect: true);
+        }
+        stateManager.notifyListeners();
+        break;
     }
   }
 

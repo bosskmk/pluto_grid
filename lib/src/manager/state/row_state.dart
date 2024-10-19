@@ -24,6 +24,8 @@ abstract class IRowState {
 
   List<PlutoRow> get checkedRows;
 
+  List<PlutoRow> get checkedRowsViaSelect;
+
   List<PlutoRow> get unCheckedRows;
 
   bool get hasCheckedRow;
@@ -109,6 +111,10 @@ mixin RowState implements IPlutoGridState {
   List<PlutoRow> get checkedRows => refRows.where((row) => row.checked!).toList(
         growable: false,
       );
+
+  @override
+  List<PlutoRow> get checkedRowsViaSelect =>
+      checkedRows.where((row) => row.checkedViaSelect).toList(growable: false);
 
   @override
   List<PlutoRow> get unCheckedRows =>
@@ -218,10 +224,11 @@ mixin RowState implements IPlutoGridState {
 
   @override
   void setRowChecked(
-    PlutoRow row,
-    bool flag, {
-    bool notify = true,
-  }) {
+      PlutoRow row,
+      bool flag, {
+        bool notify = true,
+        bool checkedViaSelect = false,
+      }) {
     final findRow = refRows.firstWhereOrNull(
       (element) => element.key == row.key,
     );
@@ -230,7 +237,7 @@ mixin RowState implements IPlutoGridState {
       return;
     }
 
-    findRow.setChecked(flag);
+    findRow.setChecked(flag, viaSelect: checkedViaSelect);
 
     notifyListeners(notify, setRowChecked.hashCode);
   }
