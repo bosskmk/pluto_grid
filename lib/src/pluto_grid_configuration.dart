@@ -21,10 +21,10 @@ class PlutoGridConfiguration {
   /// Automatically toggles the checkbox of the selected rows
   ///
   /// [PlutoGridRowSelectionCheckBoxBehavior.singleRowCheck]
-  /// Checks a selected row (if another row is checked via select, the previous one is unchecked)
+  /// Automatically enabels the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
   ///
   /// [PlutoGridRowSelectionCheckBoxBehavior.singleRowCheck]
-  /// Toggles the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
+  /// Automatically toggles the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
   ///
   /// Important: Only works with mode: PlutoGridMode.selectWithOneTap,
   final PlutoGridRowSelectionCheckBoxBehavior rowSelectionCheckBoxBehavior;
@@ -1786,11 +1786,11 @@ enum PlutoGridRowSelectionCheckBoxBehavior {
   none,
   /// Automatically enables the checkbox of the selected rows
   checkRow,
-  /// Automatically toggles the checkbox value of the selected rows
+  /// Automatically toggles the checkbox of the selected rows
   toggleCheckRow,
-  /// Checks a selected row (if another row is selected via select, the previous one is unchecked)
+  /// Automatically enabels the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
   singleRowCheck,
-  /// Toggle checks a selected (if another row is selected, the previous one is unchecked)
+  /// Automatically toggles the checkbox of a selected row (if another row is checked via select, the previous one is unchecked)
   toggleSingleRowCheck,
 }
 
