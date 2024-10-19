@@ -147,6 +147,8 @@ class PlutoColumn {
 
   /// A checkbox appears in the cell of the column.
   bool enableRowChecked;
+  int rowCheckBoxGroupDepth; //
+  bool enableTitleChecked;
 
   /// Sort rows by tapping on the column heading.
   bool enableSorting;
@@ -213,6 +215,8 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
+  LinearGradient? backgroundGradient;
+
   PlutoColumn({
     required this.title,
     required this.field,
@@ -238,6 +242,8 @@ class PlutoColumn {
     this.enableColumnDrag = true,
     this.enableRowDrag = false,
     this.enableRowChecked = false,
+    this.rowCheckBoxGroupDepth = 0,
+    this.enableTitleChecked = true,
     this.enableSorting = true,
     this.enableContextMenu = true,
     this.enableDropToResize = true,
@@ -252,6 +258,7 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
+    this.backgroundGradient,
     this.filterWidgetBuilder,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
