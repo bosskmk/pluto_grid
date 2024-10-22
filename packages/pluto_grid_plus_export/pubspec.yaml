@@ -5,13 +5,12 @@ homepage: https://bosskmk.github.io
 repository: https://github.com/doonfrs/pluto_grid_plus/tree/master/packages/pluto_grid_plus_export
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
-  flutter: ">=2.5.0"
+  sdk: ^3.0.0
 
 dependencies:
   flutter:
     sdk: flutter
-  pluto_grid_plus: ^8.4.2
+  pluto_grid_plus: ^8.4.3
   csv: ^6.0.0
   pdf: ^3.10.7
   printing: ^5.11.1
@@ -21,4 +20,4 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.4.3
   build_runner: ^2.4.7
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0

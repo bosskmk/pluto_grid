@@ -1,4 +1,4 @@
-# PlutoGrid Plus for flutter - v8.4.2
+# PlutoGrid Plus for flutter - v8.4.3
 
 PlutoGrid Plus is a maintained version of <https://github.com/bosskmk/pluto_grid>
 

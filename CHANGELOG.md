@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.4.3] - 2024. 10. 23
+
+* Added rowWrapper & editCellWrapper for the state manager
+* Manually detect doubleTaps on desktop platform to eliminate delay
+* Several improvements
+* Add PlutoGridRowSelectionCheckBehavior which enables automatically setting the CheckBox values of selected rows
+* Add PlutoGridRowSelectionCheckBehavior
+* Upgrade packages
+
+
+
 ## [8.4.2] - 2024. 07. 15
 
 * add rowWrapper
