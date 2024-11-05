@@ -67,6 +67,20 @@ abstract class ICellState {
   bool isCurrentCell(PlutoCell cell);
 
   bool isInvalidCellPosition(PlutoGridCellPosition? cellPosition);
+
+  void dragCellWithPosition({
+    required PlutoCell cell,
+    required int columnIdx,
+    required int rowIdx,
+    bool initialCell = false,
+  });
+
+  void finishCellDrag();
+
+  bool isDraggedCell({
+    required PlutoCell cell,
+    bool isInitialCell = false,
+  });
 }
 
 class _State {
@@ -77,6 +91,8 @@ class _State {
 
 mixin CellState implements IPlutoGridState {
   final _State _state = _State();
+
+  final _CellDragState _cellDragState = _CellDragState();
 
   @override
   PlutoCell? get currentCell => _state._currentCell;
@@ -336,4 +352,340 @@ mixin CellState implements IPlutoGridState {
         cellPosition.columnIdx! > refColumns.length - 1 ||
         cellPosition.rowIdx! > refRows.length - 1;
   }
+
+  @override
+  void finishCellDrag() {
+    _cellDragState.finishCellDrag();
+
+    notifyListeners();
+  }
+
+  @override
+  bool isDraggedCell({
+    required PlutoCell cell,
+    bool isInitialCell = false,
+  }) =>
+      _cellDragState.isDraggedCell(
+        cell: cell,
+        isInitialCell: isInitialCell,
+      );
+
+  @override
+  void dragCellWithPosition({
+    required PlutoCell cell,
+    required int columnIdx,
+    required int rowIdx,
+    bool initialCell = false,
+  }) {
+    _cellDragState.dragCellWithPosition(
+      cell: cell,
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+      initialCell: initialCell,
+    );
+
+    notifyListeners();
+  }
+}
+
+enum _CellDragStateDirection {
+  up,
+  down,
+  left,
+  right,
+  none,
+}
+
+class _CellDragState {
+  final _draggedCellsWithPosition = <_CellWithPositionState>[];
+
+  var _direction = _CellDragStateDirection.none;
+
+  void finishCellDrag() {
+    // No cells to drag.
+    if (_draggedCellsWithPosition.isEmpty) {
+      return;
+    }
+
+    // Get first cell that started the drag.
+    final startingCellWithPosition = _draggedCellsWithPosition.first;
+
+    // Apply starting cell value to all other cells.
+    for (var i = 1; i < _draggedCellsWithPosition.length; i++) {
+      final draggedCellWithPosition = _draggedCellsWithPosition[i];
+      // Apply value.
+      draggedCellWithPosition.cell.value = startingCellWithPosition.cell.value;
+    }
+
+    // Reset.
+    _resetCellDrag();
+  }
+
+  void dragCellWithPosition({
+    required PlutoCell cell,
+    required int columnIdx,
+    required int rowIdx,
+    bool initialCell = false,
+  }) {
+    // Cannot drag cell, so exit.
+    if (!_canCellWithPositionBeDragged(
+      cell: cell,
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+      initialCell: initialCell,
+    )) {
+      return;
+    }
+
+    // Create new cell with postion.
+    final newCellWithPosition = _CellWithPositionState(
+      cell: cell,
+      position: PlutoGridCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
+    );
+
+    // Get latest cell.
+    final latestCellWithPosition = _draggedCellsWithPosition.isNotEmpty
+        ? _draggedCellsWithPosition.last
+        : null;
+
+    // No cell yet, so just add it and return.
+    if (latestCellWithPosition == null) {
+      _draggedCellsWithPosition.add(newCellWithPosition);
+      return;
+    }
+
+    // Get potential direction from dragging new cell.
+    final newDirection = _directionFromDraggingCell(
+      latestCellWithPosition: latestCellWithPosition,
+      columnIdx: columnIdx,
+      rowIdx: rowIdx,
+    )!;
+
+    // Dragged opposite, which means we need to pop latest cell and return.
+    // Can only drag in opposite direction with one row/column at a time.
+    if (_areDirectionsOpposite(_direction, newDirection)) {
+      _draggedCellsWithPosition.removeLast();
+
+      // Reset direction if less than 2 items.
+      if (_draggedCellsWithPosition.length < 2) {
+        _direction = _CellDragStateDirection.none;
+      }
+
+      return;
+    }
+
+    // Add cell to dragged cells.
+    _draggedCellsWithPosition.add(_CellWithPositionState(
+      cell: cell,
+      position: PlutoGridCellPosition(
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      ),
+    ));
+
+    // Set direction if it is none and now we have two cells.
+    if (_direction == _CellDragStateDirection.none &&
+        _draggedCellsWithPosition.length == 2) {
+      _direction = _directionFromDraggingCell(
+        // Use first to get new direction.
+        latestCellWithPosition: _draggedCellsWithPosition.first,
+        columnIdx: columnIdx,
+        rowIdx: rowIdx,
+      )!;
+    }
+  }
+
+  bool isDraggedCell({
+    required PlutoCell cell,
+    bool isInitialCell = false,
+  }) {
+    if (_draggedCellsWithPosition.isEmpty) {
+      return false;
+    }
+
+    if (isInitialCell) {
+      return _draggedCellsWithPosition.first.cell.key == cell.key;
+    }
+
+    for (final cellWithPosition in _draggedCellsWithPosition) {
+      if (cellWithPosition.cell.key == cell.key) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool _canCellWithPositionBeDragged({
+    required PlutoCell cell,
+    required int columnIdx,
+    required int rowIdx,
+    bool initialCell = false,
+  }) {
+    // No cells yet, so if it's initial cell then we can drag.
+    if (_draggedCellsWithPosition.isEmpty) {
+      return initialCell;
+    }
+
+    // Get latest cell.
+    final latestCellWithPosition = _draggedCellsWithPosition.last;
+
+    // Same as latest cell, so cannot drag.
+    if (latestCellWithPosition.cell.key == cell.key) {
+      return false;
+    }
+
+    // Type mismatch, so we cannot drag.
+    if (cell.value.runtimeType !=
+        latestCellWithPosition.cell.value.runtimeType) {
+      return false;
+    }
+
+    // Determine new direction if this cell was dragged.
+    final direction = _directionFromDraggingCell(
+      latestCellWithPosition: latestCellWithPosition,
+      rowIdx: rowIdx,
+      columnIdx: columnIdx,
+    );
+
+    // Not a valid direction, so we cannot drag.
+    if (direction == null) {
+      return false;
+    }
+
+    // No existing direction, so we can drag.
+    if (_direction == _CellDragStateDirection.none) {
+      return true;
+    }
+
+    // Existing direction, so directions must match or must be opposites.
+    return _direction == direction ||
+        _areDirectionsOpposite(_direction, direction);
+  }
+
+  void _resetCellDrag() {
+    _direction = _CellDragStateDirection.none;
+    _draggedCellsWithPosition.clear();
+  }
+
+  _CellDragStateDirection? _directionFromDraggingCell({
+    required _CellWithPositionState latestCellWithPosition,
+    required int columnIdx,
+    required int rowIdx,
+  }) {
+    // Determine new direction based on current.
+    // Null direction means it's not a valid drag.
+    switch (_direction) {
+      case _CellDragStateDirection.none:
+        final areRowsSame = latestCellWithPosition.position.rowIdx == rowIdx;
+        final areColumnsSame =
+            latestCellWithPosition.position.columnIdx == columnIdx;
+        final areRowsDiffByOneInEitherDirection =
+            latestCellWithPosition.position.rowIdx == rowIdx + 1 ||
+                latestCellWithPosition.position.rowIdx == rowIdx - 1;
+        final areColumnsDiffByOneInEitherDirection =
+            latestCellWithPosition.position.columnIdx == columnIdx + 1 ||
+                latestCellWithPosition.position.columnIdx == columnIdx - 1;
+
+        // Not valid up, down, left, or right drag.
+        if (!(areRowsSame && areColumnsDiffByOneInEitherDirection) &&
+            !(areColumnsSame && areRowsDiffByOneInEitherDirection)) {
+          return null;
+        }
+
+        // Moving left or right.
+        if (areRowsSame) {
+          // Moving right.
+          if (latestCellWithPosition.position.columnIdx == columnIdx - 1) {
+            return _CellDragStateDirection.right;
+          }
+
+          return _CellDragStateDirection.left;
+        }
+
+        // Must be moving either up or down.
+        // Moving down.
+        if (latestCellWithPosition.position.rowIdx == rowIdx - 1) {
+          return _CellDragStateDirection.down;
+        }
+
+        return _CellDragStateDirection.up;
+      case _CellDragStateDirection.up:
+      case _CellDragStateDirection.down:
+        // Column not the same, so we cannot drag.
+        if (columnIdx != latestCellWithPosition.position.columnIdx) {
+          return null;
+        }
+
+        final draggedOneRowUp =
+            rowIdx + 1 == latestCellWithPosition.position.rowIdx;
+        final draggedOneRowDown =
+            rowIdx - 1 == latestCellWithPosition.position.rowIdx;
+
+        // Row not exactly +-1, so we cannot drag.
+        if (!draggedOneRowUp && !draggedOneRowDown) {
+          return null;
+        }
+
+        if (draggedOneRowUp) {
+          return _CellDragStateDirection.up;
+        }
+
+        return _CellDragStateDirection.down;
+      case _CellDragStateDirection.left:
+      case _CellDragStateDirection.right:
+        // Row not the same, so we cannot drag.
+        if (rowIdx != latestCellWithPosition.position.rowIdx) {
+          return null;
+        }
+
+        final draggedOneColumnRight =
+            columnIdx - 1 == latestCellWithPosition.position.columnIdx;
+        final draggedOneColumnLeft =
+            columnIdx + 1 == latestCellWithPosition.position.columnIdx;
+
+        // Column not exactly +-1, so we cannot drag.
+        if (!draggedOneColumnLeft && !draggedOneColumnRight) {
+          return null;
+        }
+
+        if (draggedOneColumnLeft) {
+          return _CellDragStateDirection.left;
+        }
+
+        return _CellDragStateDirection.right;
+    }
+  }
+
+  bool _areDirectionsOpposite(
+    _CellDragStateDirection a,
+    _CellDragStateDirection b,
+  ) {
+    switch (a) {
+      case _CellDragStateDirection.up:
+        return b == _CellDragStateDirection.down;
+      case _CellDragStateDirection.down:
+        return b == _CellDragStateDirection.up;
+      case _CellDragStateDirection.left:
+        return b == _CellDragStateDirection.right;
+      case _CellDragStateDirection.right:
+        return b == _CellDragStateDirection.left;
+      case _CellDragStateDirection.none:
+        return false;
+    }
+  }
+}
+
+class _CellWithPositionState {
+  const _CellWithPositionState({
+    required this.cell,
+    required this.position,
+  });
+
+  final PlutoCell cell;
+
+  final PlutoGridCellPosition position;
 }

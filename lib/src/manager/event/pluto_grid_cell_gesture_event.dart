@@ -38,9 +38,37 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
       case PlutoGridGestureType.onSecondaryTap:
         _onSecondaryTap(stateManager);
         break;
-      default:
+      case PlutoGridGestureType.onStartCellDrag:
+        _onStartCellDrag(stateManager);
+        break;
+      case PlutoGridGestureType.onEndCellDrag:
+        _onEndCellDrag(stateManager);
+        break;
+      case PlutoGridGestureType.onEnterCell:
+        _onEnterCell(stateManager);
+        break;
     }
   }
+
+  void _onStartCellDrag(PlutoGridStateManager stateManager) =>
+      stateManager.dragCellWithPosition(
+        cell: cell,
+        columnIdx: stateManager.columnIndex(column)!,
+        rowIdx: rowIdx,
+        initialCell: true,
+      );
+
+  void _onEndCellDrag(PlutoGridStateManager stateManager) {
+    stateManager.finishCellDrag();
+  }
+
+  void _onEnterCell(PlutoGridStateManager stateManager) =>
+      stateManager.dragCellWithPosition(
+        cell: cell,
+        columnIdx: stateManager.columnIndex(column)!,
+        rowIdx: rowIdx,
+        initialCell: false,
+      );
 
   void _onTapUp(PlutoGridStateManager stateManager) {
     if (_setKeepFocusAndCurrentCell(stateManager)) {
@@ -190,6 +218,9 @@ enum PlutoGridGestureType {
   onLongPressMoveUpdate,
   onLongPressEnd,
   onDoubleTap,
+  onStartCellDrag,
+  onEndCellDrag,
+  onEnterCell,
   onSecondaryTap;
 
   bool get isOnTapUp => this == PlutoGridGestureType.onTapUp;
@@ -204,4 +235,10 @@ enum PlutoGridGestureType {
   bool get isOnDoubleTap => this == PlutoGridGestureType.onDoubleTap;
 
   bool get isOnSecondaryTap => this == PlutoGridGestureType.onSecondaryTap;
+
+  bool get isOnStartCellDrag => this == PlutoGridGestureType.onStartCellDrag;
+
+  bool get isOnEndCellDrag => this == PlutoGridGestureType.onEndCellDrag;
+
+  bool get isOnEnterCell => this == PlutoGridGestureType.onEnterCell;
 }

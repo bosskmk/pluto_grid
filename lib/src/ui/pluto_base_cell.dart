@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -47,6 +48,30 @@ class PlutoBaseCell extends StatelessWidget
 
   void _handleOnTapUp(TapUpDetails details) {
     _addGestureEvent(PlutoGridGestureType.onTapUp, details.globalPosition);
+  }
+
+  void _handleOnVerticalDragStart(DragStartDetails details) {
+    _addGestureEvent(
+        PlutoGridGestureType.onStartCellDrag, details.globalPosition);
+  }
+
+  void _handleOnVerticalDragEnd(DragEndDetails details) {
+    _addGestureEvent(
+        PlutoGridGestureType.onEndCellDrag, details.globalPosition);
+  }
+
+  void _handleOnHorizontalDragStart(DragStartDetails details) {
+    _addGestureEvent(
+        PlutoGridGestureType.onStartCellDrag, details.globalPosition);
+  }
+
+  void _handleOnHorizontalDragEnd(DragEndDetails details) {
+    _addGestureEvent(
+        PlutoGridGestureType.onEndCellDrag, details.globalPosition);
+  }
+
+  void _handleOnEnter(PointerEnterEvent event) {
+    _addGestureEvent(PlutoGridGestureType.onEnterCell, event.position);
   }
 
   void _handleOnLongPressStart(LongPressStartDetails details) {
@@ -123,6 +148,11 @@ class PlutoBaseCell extends StatelessWidget
         cellPadding: column.cellPadding ??
             stateManager.configuration.style.defaultCellPadding,
         stateManager: stateManager,
+        onVerticalDragStart: _handleOnVerticalDragStart,
+        onVerticalDragEnd: _handleOnVerticalDragEnd,
+        onHorizontalDragStart: _handleOnHorizontalDragStart,
+        onHorizontalDragEnd: _handleOnHorizontalDragEnd,
+        onEnter: _handleOnEnter,
         child: _Cell(
           stateManager: stateManager,
           rowIdx: rowIdx,
@@ -150,6 +180,16 @@ class _CellContainer extends PlutoStatefulWidget {
 
   final Widget child;
 
+  final void Function(DragStartDetails)? onVerticalDragStart;
+
+  final void Function(DragEndDetails)? onVerticalDragEnd;
+
+  final void Function(DragStartDetails)? onHorizontalDragStart;
+
+  final void Function(DragEndDetails)? onHorizontalDragEnd;
+
+  final void Function(PointerEnterEvent)? onEnter;
+
   const _CellContainer({
     required this.cell,
     required this.row,
@@ -158,6 +198,11 @@ class _CellContainer extends PlutoStatefulWidget {
     required this.cellPadding,
     required this.stateManager,
     required this.child,
+    required this.onVerticalDragStart,
+    required this.onVerticalDragEnd,
+    required this.onHorizontalDragStart,
+    required this.onHorizontalDragEnd,
+    required this.onEnter,
   });
 
   @override
@@ -180,7 +225,6 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
   @override
   void updateState(PlutoNotifierEvent event) {
     final style = stateManager.style;
-
     final isCurrentCell = stateManager.isCurrentCell(widget.cell);
 
     _decoration = update(
@@ -194,6 +238,11 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           widget.cell,
           widget.column,
           widget.rowIdx,
+        ),
+        isDraggedCell: stateManager.isDraggedCell(cell: widget.cell),
+        isInitialDraggedCell: stateManager.isDraggedCell(
+          cell: widget.cell,
+          isInitialCell: true,
         ),
         isGroupedRowCell: stateManager.enabledRowGroups &&
             stateManager.rowGroupDelegate!.isExpandableCell(widget.cell),
@@ -238,6 +287,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required bool isEditing,
     required bool isCurrentCell,
     required bool isSelectedCell,
+    required bool isDraggedCell,
+    required bool isInitialDraggedCell,
     required bool isGroupedRowCell,
     required bool enableCellVerticalBorder,
     required Color borderColor,
@@ -275,6 +326,15 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
           width: 1,
         ),
       );
+    } else if (isDraggedCell && !isInitialDraggedCell) {
+      return BoxDecoration(
+        color: activatedColor.withOpacity(0.3),
+        border: Border.all(
+          color: (hasFocus ? activatedBorderColor : inactivatedBorderColor)
+              .withOpacity(0.3),
+          width: 1,
+        ),
+      );
     } else {
       return BoxDecoration(
         color: isGroupedRowCell ? cellColorGroupedRow : null,
@@ -292,11 +352,41 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: _decoration,
-      child: Padding(
-        padding: widget.cellPadding,
-        child: widget.child,
+    final isCurrentCell = stateManager.isCurrentCell(widget.cell);
+    final style = stateManager.style;
+    final canEdit = stateManager.mode.isEditableMode;
+
+    return MouseRegion(
+      onEnter: widget.onEnter,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Cell background.
+          DecoratedBox(
+            decoration: _decoration,
+            child: Padding(
+              padding: widget.cellPadding,
+              child: widget.child,
+            ),
+          ),
+          // Drag box.
+          // Show when selected cell and can edit.
+          if (isCurrentCell && canEdit)
+            GestureDetector(
+              onVerticalDragStart: widget.onVerticalDragStart,
+              onVerticalDragEnd: widget.onVerticalDragEnd,
+              onHorizontalDragStart: widget.onHorizontalDragStart,
+              onHorizontalDragEnd: widget.onHorizontalDragEnd,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  height: 10,
+                  width: 10,
+                  color: style.activatedBorderColor,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
