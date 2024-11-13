@@ -54,6 +54,9 @@ typedef PlutoRowColorCallback = Color Function(
 typedef PlutoSelectDateCallBack = Future<DateTime?> Function(
     PlutoCell dateCell, PlutoColumn column);
 
+typedef PlutoOnActiveCellChangedEventCallback = void Function(
+  PlutoGridOnActiveCellChangedEvent event);
+
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
 /// [PlutoGrid] supports movement and editing with the keyboard,
@@ -80,6 +83,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.onRowEnter,
     this.onRowExit,
     this.onRowsMoved,
+    this.onActiveCellChanged,
     this.onColumnsMoved,
     this.createHeader,
     this.createFooter,
@@ -220,6 +224,12 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// if [PlutoColumn.enableRowDrag] is enabled.
   /// {@endtemplate}
   final PlutoOnRowsMovedEventCallback? onRowsMoved;
+
+  /// {@template pluto_grid_property_onActiveCellChanged}
+  /// Callback for receiving events
+  /// when the active cell is changed
+  /// {@endtemplate}
+  final PlutoOnActiveCellChangedEventCallback? onActiveCellChanged;
 
   /// {@template pluto_grid_property_onColumnsMoved}
   /// Callback for receiving events
@@ -548,6 +558,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       onRowEnter: widget.onRowEnter,
       onRowExit: widget.onRowExit,
       onRowsMoved: widget.onRowsMoved,
+      onActiveCellChanged: widget.onActiveCellChanged,
       onColumnsMoved: widget.onColumnsMoved,
       rowColorCallback: widget.rowColorCallback,
       selectDateCallback: widget.selectDateCallback,
