@@ -658,6 +658,9 @@ class PlutoGridActionPasteValues extends PlutoGridShortcutAction {
     }
 
     Clipboard.getData('text/plain').then((value) {
+      if (value == null) {
+        return;
+      }
       List<List<String>> textList =
           PlutoClipboardTransformation.stringToList(value!.text!);
 
