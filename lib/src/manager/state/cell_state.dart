@@ -213,6 +213,11 @@ mixin CellState implements IPlutoGridState {
     setEditing(autoEditing, notify: false);
 
     notifyListeners(notify, setCurrentCell.hashCode);
+
+    onActiveCellChanged?.call(PlutoGridOnActiveCellChangedEvent(
+      idx: rowIdx,
+      cell: _state._currentCell,
+    ));
   }
 
   @override
