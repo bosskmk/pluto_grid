@@ -114,8 +114,7 @@ class HomeScreen extends StatelessWidget {
                                   icon: const FaIcon(FontAwesomeIcons.link),
                                   color: Colors.white,
                                   onPressed: () {
-                                    launchUrl(
-                                        'https://pub.dev/packages/pluto_grid');
+                                    launchUrl('https://pub.dev/packages/pluto_grid_plus');
                                   },
                                 ),
                                 const Text(
@@ -146,8 +145,7 @@ class HomeScreen extends StatelessWidget {
                                   icon: const FaIcon(FontAwesomeIcons.github),
                                   color: Colors.white,
                                   onPressed: () {
-                                    launchUrl(
-                                        'https://github.com/bosskmk/pluto_grid');
+                                    launchUrl('https://github.com/doonfrs/pluto_grid_plus');
                                   },
                                 ),
                                 const Text(
