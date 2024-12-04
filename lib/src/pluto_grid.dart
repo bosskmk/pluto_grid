@@ -55,7 +55,7 @@ typedef PlutoSelectDateCallBack = Future<DateTime?> Function(
     PlutoCell dateCell, PlutoColumn column);
 
 typedef PlutoOnActiveCellChangedEventCallback = void Function(
-  PlutoGridOnActiveCellChangedEvent event);
+    PlutoGridOnActiveCellChangedEvent event);
 
 /// [PlutoGrid] is a widget that receives columns and rows and is expressed as a grid-type UI.
 ///
@@ -97,7 +97,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   });
 
   /// A wrapper that wraps arround each row.
-  final WidgetBuilder? rowWrapper;
+  final Widget Function(BuildContext context, Widget row)? rowWrapper;
 
   final Widget Function(Widget editCellWidget, PlutoCell cell,
       TextEditingController controller)? editCellWrapper;
