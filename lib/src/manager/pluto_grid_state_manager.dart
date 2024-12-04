@@ -110,7 +110,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
   }
 
   @override
-  final Widget Function(BuildContext context, Widget row)? rowWrapper;
+  final RowWrapper? rowWrapper;
 
   @override
   final Widget Function(Widget editCellWidget, PlutoCell cell,

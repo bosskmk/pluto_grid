@@ -115,7 +115,9 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 visibilityLayout: true,
               );
 
-              return stateManager.rowWrapper?.call(context, row) ?? row;
+              return stateManager.rowWrapper
+                      ?.call(context, row, stateManager) ??
+                  row;
             },
           ),
         ),

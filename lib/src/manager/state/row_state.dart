@@ -41,7 +41,7 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow? get currentRow;
 
-  Widget Function(BuildContext context, Widget row)? get rowWrapper;
+  RowWrapper? get rowWrapper;
 
   PlutoRowColorCallback? get rowColorCallback;
 
