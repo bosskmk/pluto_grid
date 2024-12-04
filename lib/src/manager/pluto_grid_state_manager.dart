@@ -109,6 +109,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     _initialize();
   }
 
+  /// {@macro pluto_grid_row_wrapper}
   @override
   final RowWrapper? rowWrapper;
 

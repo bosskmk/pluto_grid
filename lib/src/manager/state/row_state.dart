@@ -41,6 +41,11 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow? get currentRow;
 
+  /// {@template pluto_grid_row_wrapper}
+  ///
+  /// A wrapper that wraps arround each row.
+  ///
+  /// {@endtemplate}
   RowWrapper? get rowWrapper;
 
   PlutoRowColorCallback? get rowColorCallback;

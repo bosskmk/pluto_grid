@@ -99,7 +99,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.mode = PlutoGridMode.normal,
   });
 
-  /// A wrapper that wraps arround each row.
+  /// {@macro pluto_grid_row_wrapper}
   final RowWrapper? rowWrapper;
 
   final Widget Function(Widget editCellWidget, PlutoCell cell,
