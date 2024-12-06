@@ -45,7 +45,7 @@ void main() {
   }
 
   testWidgets(
-    '아무 키나 입력하면 isKeyDownEvent 가 true 여야 한다.',
+    'When any key is pressed, isKeyDownEvent must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -58,7 +58,7 @@ void main() {
   );
 
   testWidgets(
-    'Home 키를 입력하면 isHome 이 true 여야 한다.',
+    'When the Home key is pressed, isHome must be `true`.',
     (tester) async {
       late PlutoKeyManagerEvent keyManagerEvent;
 
@@ -81,7 +81,7 @@ void main() {
   );
 
   testWidgets(
-    'End 키를 입력하면 isEnd 가 true 여야 한다.',
+    'When the End key is pressed, isEnd must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -93,7 +93,7 @@ void main() {
   );
 
   testWidgets(
-    'F4 키를 입력하면 isF4 가 true 여야 한다.',
+    'When the F4 key is pressed, isF4 must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -105,7 +105,7 @@ void main() {
   );
 
   testWidgets(
-    'Backspace 키를 입력하면 isBackspace 가 true 여야 한다.',
+    'When the Backspace key is pressed, isBackspace must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -141,7 +141,7 @@ void main() {
   );
 
   testWidgets(
-    'When the RightShift key is pressed, RightShift must be `true`.',
+    'When the RightShift key is pressed, isRightShift must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -153,7 +153,7 @@ void main() {
   );
 
   testWidgets(
-    'If the Control key is pressed, isControl should be true.',
+    'When the Control key is pressed, isControl must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -165,7 +165,7 @@ void main() {
   );
 
   testWidgets(
-    'If the controlLeft key is pressed, isLeftControl should be true.',
+    'When the LeftControl key is pressed, isLeftControl must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -177,7 +177,7 @@ void main() {
   );
 
   testWidgets(
-    'If the controlRight key is pressed, isRightControl should be true.',
+    'When the RightControl key is pressed, isRightControl must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -189,7 +189,7 @@ void main() {
   );
 
   testWidgets(
-    'If the Control + C keys are pressed, isCtrlC should be true.',
+    'When Control + C keys are pressed, isCtrlC must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -207,7 +207,7 @@ void main() {
   );
 
   testWidgets(
-    'If the Control + V keys are pressed, isCtrlV should be true.',
+    'When Control + V keys are pressed, isCtrlV must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -224,7 +224,7 @@ void main() {
   );
 
   testWidgets(
-    'If the Control + A keys are pressed, isCtrlA should be true.',
+    'When Control + A keys are pressed, isCtrlA must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
