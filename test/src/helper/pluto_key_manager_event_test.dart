@@ -12,6 +12,7 @@ void main() {
     keyManagerEvent = PlutoKeyManagerEvent(
       focusNode: node,
       event: event,
+      isLogicalKeyPressed: HardwareKeyboard.instance.isLogicalKeyPressed,
     );
 
     return KeyEventResult.handled;
@@ -27,7 +28,7 @@ void main() {
 
   Future<void> buildWidget({
     required WidgetTester tester,
-    required KeyEventResult Function(FocusNode, KeyEvent) callback,
+    required FocusOnKeyEventCallback callback,
   }) async {
     await tester.pumpWidget(MaterialApp(
       home: FocusScope(
@@ -116,7 +117,7 @@ void main() {
   );
 
   testWidgets(
-    'Shift 키를 입력하면 isShift 가 true 여야 한다.',
+    'When the Shift key is pressed, isShift must be `true`.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -128,7 +129,31 @@ void main() {
   );
 
   testWidgets(
-    'Control 키를 입력하면 isControl 가 true 여야 한다.',
+    'When the LeftShift key is pressed, isLeftShift must be `true`.',
+    (tester) async {
+      await buildWidget(tester: tester, callback: callback);
+
+      const key = LogicalKeyboardKey.shiftLeft;
+      await tester.sendKeyDownEvent(key);
+      expect(keyManagerEvent!.isLeftShift, true);
+      await tester.sendKeyUpEvent(key);
+    },
+  );
+
+  testWidgets(
+    'When the RightShift key is pressed, RightShift must be `true`.',
+    (tester) async {
+      await buildWidget(tester: tester, callback: callback);
+
+      const key = LogicalKeyboardKey.shiftRight;
+      await tester.sendKeyDownEvent(key);
+      expect(keyManagerEvent!.isRightShift, true);
+      await tester.sendKeyUpEvent(key);
+    },
+  );
+
+  testWidgets(
+    'If the Control key is pressed, isControl should be true.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
@@ -139,52 +164,80 @@ void main() {
     },
   );
 
-  // While key combos still work in the real world, these 3 tests are failing due to what I suspect is an
-  // incomplete deprecation/migration from focusNode `onKey` to `onKeyEvent`.
-  // Flutter 3.19 does not trigger our event for `sendKeyUpEvent` only, and I prefer not
-  // to switch these tests to `sendKeyDownEvent` as that may cause unexpected behavior
-  // such as pasting multiple times due to repeating key presses. It might also be fine.
-
-  // https://github.com/flutter/flutter/issues/136419
   testWidgets(
-    'Control + C 키를 입력하면 isCtrlC 가 true 여야 한다.',
+    'If the controlLeft key is pressed, isLeftControl should be true.',
+    (tester) async {
+      await buildWidget(tester: tester, callback: callback);
+
+      const key = LogicalKeyboardKey.controlLeft;
+      await tester.sendKeyDownEvent(key);
+      expect(keyManagerEvent!.isLeftControl, true);
+      await tester.sendKeyUpEvent(key);
+    },
+  );
+
+  testWidgets(
+    'If the controlRight key is pressed, isRightControl should be true.',
+    (tester) async {
+      await buildWidget(tester: tester, callback: callback);
+
+      const key = LogicalKeyboardKey.controlRight;
+      await tester.sendKeyDownEvent(key);
+      expect(keyManagerEvent!.isRightControl, true);
+      await tester.sendKeyUpEvent(key);
+    },
+  );
+
+  testWidgets(
+    'If the Control + C keys are pressed, isCtrlC should be true.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
       const key = LogicalKeyboardKey.control;
       const key2 = LogicalKeyboardKey.keyC;
+
       await tester.sendKeyDownEvent(key);
-      await tester.sendKeyUpEvent(
-          key2); // sendKeyUpEvent is not sending a keyManagerEvent
+      await tester.sendKeyDownEvent(key2);
 
       expect(keyManagerEvent?.isCtrlC, true);
+
       await tester.sendKeyUpEvent(key);
+      await tester.sendKeyUpEvent(key2);
     },
   );
 
   testWidgets(
-    'Control + V 키를 입력하면 isCtrlV 가 true 여야 한다.',
+    'If the Control + V keys are pressed, isCtrlV should be true.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
       const key = LogicalKeyboardKey.control;
+      const key2 = LogicalKeyboardKey.keyV;
+
       await tester.sendKeyDownEvent(key);
-      await tester.sendKeyUpEvent(LogicalKeyboardKey.keyV);
+      await tester.sendKeyDownEvent(key2);
+
       expect(keyManagerEvent!.isCtrlV, true);
       await tester.sendKeyUpEvent(key);
+      await tester.sendKeyUpEvent(key2);
     },
   );
 
   testWidgets(
-    'Control + A 키를 입력하면 isCtrlA 가 true 여야 한다.',
+    'If the Control + A keys are pressed, isCtrlA should be true.',
     (tester) async {
       await buildWidget(tester: tester, callback: callback);
 
       const key = LogicalKeyboardKey.control;
+      const key2 = LogicalKeyboardKey.keyA;
+
       await tester.sendKeyDownEvent(key);
-      await tester.sendKeyUpEvent(LogicalKeyboardKey.keyA);
+      await tester.sendKeyDownEvent(key2);
+
       expect(keyManagerEvent!.isCtrlA, true);
+
       await tester.sendKeyUpEvent(key);
+      await tester.sendKeyUpEvent(key2);
     },
   );
 }
