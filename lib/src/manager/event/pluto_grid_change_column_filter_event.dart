@@ -7,21 +7,19 @@ class PlutoGridChangeColumnFilterEvent extends PlutoGridEvent {
   final PlutoFilterType filterType;
   final String filterValue;
   final int? debounceMilliseconds;
+  final PlutoGridEventType? eventType;
 
   PlutoGridChangeColumnFilterEvent({
     required this.column,
     required this.filterType,
     required this.filterValue,
     this.debounceMilliseconds,
+    this.eventType,
   }) : super(
-          type: PlutoGridEventType.debounce,
+          type: eventType ?? PlutoGridEventType.normal,
           duration: Duration(
-            milliseconds: debounceMilliseconds == null
-                ? PlutoGridSettings.debounceMillisecondsForColumnFilter
-                : debounceMilliseconds < 0
-                    ? 0
-                    : debounceMilliseconds,
-          ),
+              milliseconds: debounceMilliseconds?.abs() ??
+                  PlutoGridSettings.debounceMillisecondsForColumnFilter),
         );
 
   List<PlutoRow> _getFilterRows(PlutoGridStateManager? stateManager) {
