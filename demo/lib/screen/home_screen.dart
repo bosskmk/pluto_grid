@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:demo/screen/empty_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -114,7 +115,8 @@ class HomeScreen extends StatelessWidget {
                                   icon: const FaIcon(FontAwesomeIcons.link),
                                   color: Colors.white,
                                   onPressed: () {
-                                    launchUrl('https://pub.dev/packages/pluto_grid_plus');
+                                    launchUrl(
+                                        'https://pub.dev/packages/pluto_grid_plus');
                                   },
                                 ),
                                 const Text(
@@ -145,7 +147,8 @@ class HomeScreen extends StatelessWidget {
                                   icon: const FaIcon(FontAwesomeIcons.github),
                                   color: Colors.white,
                                   onPressed: () {
-                                    launchUrl('https://github.com/doonfrs/pluto_grid_plus');
+                                    launchUrl(
+                                        'https://github.com/doonfrs/pluto_grid_plus');
                                   },
                                 ),
                                 const Text(
@@ -487,6 +490,14 @@ class PlutoFeatures extends StatelessWidget {
             description: 'Change the entire theme of the grid to Dark.',
             onTapLiveDemo: () {
               Navigator.pushNamed(context, DarkModeScreen.routeName);
+            },
+          ),
+          PlutoListTile.amber(
+            title: 'Empty',
+            description:
+                'This screen is used during development, this is a template to test issues',
+            onTapLiveDemo: () {
+              Navigator.pushNamed(context, EmptyScreen.routeName);
             },
           ),
           PlutoListTile.amber(
