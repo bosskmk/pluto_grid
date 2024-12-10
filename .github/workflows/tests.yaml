@@ -1,0 +1,13 @@
+name: Tests
+on:
+    pull_request:
+        branches:
+            - master
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Install Flutter Dependencies
+              run: flutter pub get
+            - name: Run Flutter Tests
+              run: flutter test

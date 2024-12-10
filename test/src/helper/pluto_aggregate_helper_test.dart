@@ -121,7 +121,7 @@ void main() {
           column: column,
           filter: (PlutoCell cell) => cell.value == 10.003,
         ),
-        0,
+        null,
       );
     });
   });
