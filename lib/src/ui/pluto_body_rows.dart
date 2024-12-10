@@ -106,7 +106,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 : stateManager.rowTotalHeight,
             addRepaintBoundaries: false,
             itemBuilder: (ctx, i) {
-              Widget w = PlutoBaseRow(
+              Widget row = PlutoBaseRow(
                 key: ValueKey('body_row_${_rows[i].key}'),
                 rowIdx: i,
                 row: _rows[i],
@@ -115,11 +115,9 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                 visibilityLayout: true,
               );
 
-              if (stateManager.rowWrapper != null) {
-                w = stateManager.rowWrapper!(w);
-              }
-
-              return w;
+              return stateManager.rowWrapper
+                      ?.call(context, row, stateManager) ??
+                  row;
             },
           ),
         ),

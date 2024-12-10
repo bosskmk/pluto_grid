@@ -41,7 +41,12 @@ abstract class IRowState {
   /// Row of currently selected cell.
   PlutoRow? get currentRow;
 
-  Widget Function(Widget rowWidget)? get rowWrapper;
+  /// {@template pluto_grid_row_wrapper}
+  ///
+  /// A wrapper that wraps arround each row.
+  ///
+  /// {@endtemplate}
+  RowWrapper? get rowWrapper;
 
   PlutoRowColorCallback? get rowColorCallback;
 
@@ -224,11 +229,11 @@ mixin RowState implements IPlutoGridState {
 
   @override
   void setRowChecked(
-      PlutoRow row,
-      bool flag, {
-        bool notify = true,
-        bool checkedViaSelect = false,
-      }) {
+    PlutoRow row,
+    bool flag, {
+    bool notify = true,
+    bool checkedViaSelect = false,
+  }) {
     final findRow = refRows.firstWhereOrNull(
       (element) => element.key == row.key,
     );
