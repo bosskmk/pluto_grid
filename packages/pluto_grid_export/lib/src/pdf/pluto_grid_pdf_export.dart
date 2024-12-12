@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -27,8 +28,12 @@ class PlutoGridDefaultPdfExport extends AbstractTextExport {
     this.creator,
     this.format,
     this.themeData,
+    this.header,
+    this.footer,
   });
 
+  final Widget? header;
+  final Widget? footer;
   final String title;
   final String? creator;
   PdfPageFormat? format;
@@ -37,6 +42,8 @@ class PlutoGridDefaultPdfExport extends AbstractTextExport {
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
     return GenericPdfController(
+      header: header,
+      footer: footer,
       title: title,
       creator: creator ?? "https://pub.dev/packages/pluto_grid",
       format: format ?? PdfPageFormat.a4.landscape,
