@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
@@ -17,9 +18,13 @@ class GenericPdfController extends PdfController {
     required this.format,
     required this.columns,
     required this.rows,
+    this.header,
+    this.footer,
     this.themeData,
   });
 
+  final Widget? header;
+  final Widget? footer;
   final String title;
   final String creator;
   final PdfPageFormat format;
@@ -51,24 +56,25 @@ class GenericPdfController extends PdfController {
   Widget getHeader(Context context) {
     String title = getDocumentTitle();
 
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 1),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
-      ),
-    );
+    return header ??
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(bottom: 1),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          ),
+        );
   }
 
   @override
@@ -124,22 +130,23 @@ class GenericPdfController extends PdfController {
 
   @override
   Widget getFooter(Context context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            '# ${context.pageNumber}/${context.pagesCount}',
+    return footer ??
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '# ${context.pageNumber}/${context.pagesCount}',
+              ),
+              Text(
+                DateTime.now().toString(),
+              ),
+            ],
           ),
-          Text(
-            DateTime.now().toString(),
-          ),
-        ],
-      ),
-    );
+        );
   }
 
   @override
