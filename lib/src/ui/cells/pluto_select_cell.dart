@@ -64,6 +64,7 @@ class PlutoSelectCellState extends State<PlutoSelectCell>
 
     popupColumns = [
       PlutoColumn(
+        width: widget.column.type.select.width ?? PlutoGridSettings.columnWidth,
         title: widget.column.title,
         field: widget.column.title,
         readOnly: true,

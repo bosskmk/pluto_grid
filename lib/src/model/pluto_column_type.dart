@@ -99,6 +99,7 @@ abstract class PlutoColumnType {
     bool enableColumnFilter = false,
     IconData? popupIcon = Icons.arrow_drop_down,
     Widget Function(dynamic item)? builder,
+    double? width,
   }) {
     return PlutoColumnTypeSelect(
         onItemSelected: onItemSelected ?? (event) {},
@@ -106,7 +107,8 @@ abstract class PlutoColumnType {
         items: items,
         enableColumnFilter: enableColumnFilter,
         popupIcon: popupIcon,
-        builder: builder);
+        builder: builder,
+        width: width);
   }
 
   /// Set as a date column.
@@ -367,6 +369,8 @@ class PlutoColumnTypeSelect
   final bool enableColumnFilter;
   final Function(PlutoGridOnSelectedEvent event) onItemSelected;
 
+  final double? width;
+
   @override
   final IconData? popupIcon;
 
@@ -376,7 +380,8 @@ class PlutoColumnTypeSelect
       required this.items,
       required this.enableColumnFilter,
       this.popupIcon,
-      this.builder});
+      this.builder,
+      this.width});
 
   @override
   bool isValid(dynamic value) => items.contains(value) == true;
