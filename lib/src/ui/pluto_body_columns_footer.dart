@@ -73,20 +73,38 @@ class PlutoBodyColumnsFooterState
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: _scroll,
-      scrollDirection: Axis.horizontal,
-      physics: const ClampingScrollPhysics(),
-      child: PlutoVisibilityLayout(
-        delegate: ColumnFooterLayoutDelegate(
-          stateManager: stateManager,
-          columns: _columns,
-          textDirection: stateManager.textDirection,
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            color: stateManager.configuration.style.footerBackgroundColor,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: SingleChildScrollView(
+                    controller: _scroll,
+                    scrollDirection: Axis.horizontal,
+                    physics: const ClampingScrollPhysics(),
+                    child: PlutoVisibilityLayout(
+                      delegate: ColumnFooterLayoutDelegate(
+                        stateManager: stateManager,
+                        columns: _columns,
+                        textDirection: stateManager.textDirection,
+                      ),
+                      scrollController: _scroll,
+                      initialViewportDimension:
+                          MediaQuery.of(context).size.width,
+                      children:
+                          _columns.map(_makeFooter).toList(growable: false),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        scrollController: _scroll,
-        initialViewportDimension: MediaQuery.of(context).size.width,
-        children: _columns.map(_makeFooter).toList(growable: false),
-      ),
+      ],
     );
   }
 }

@@ -199,6 +199,8 @@ class PlutoGridStyleConfig {
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
     this.gridBackgroundColor = Colors.white,
+    this.headerBackgroundColor = Colors.transparent,
+    this.footerBackgroundColor = Colors.transparent,
     this.rowColor = Colors.white,
     this.oddRowColor,
     this.evenRowColor,
@@ -255,6 +257,8 @@ class PlutoGridStyleConfig {
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
     this.gridBackgroundColor = const Color(0xFF111111),
+    this.headerBackgroundColor = Colors.transparent,
+    this.footerBackgroundColor = Colors.transparent,
     this.rowColor = const Color(0xFF111111),
     this.oddRowColor,
     this.evenRowColor,
@@ -323,6 +327,12 @@ class PlutoGridStyleConfig {
   final bool enableRowColorAnimation;
 
   final Color gridBackgroundColor;
+
+  /// A [Color] that defines the background color of the header.
+  final Color headerBackgroundColor;
+
+  /// The background color of the footer section in the PlutoGrid widget.
+  final Color footerBackgroundColor;
 
   /// Default row background color
   ///
@@ -456,6 +466,8 @@ class PlutoGridStyleConfig {
     bool? enableCellBorderHorizontal,
     bool? enableRowColorAnimation,
     Color? gridBackgroundColor,
+    Color? headerBackgroundColor,
+    Color? footerBackgroundColor,
     Color? rowColor,
     PlutoOptional<Color?>? oddRowColor,
     PlutoOptional<Color?>? evenRowColor,
@@ -505,6 +517,10 @@ class PlutoGridStyleConfig {
       enableRowColorAnimation:
           enableRowColorAnimation ?? this.enableRowColorAnimation,
       gridBackgroundColor: gridBackgroundColor ?? this.gridBackgroundColor,
+      headerBackgroundColor:
+          headerBackgroundColor ?? this.headerBackgroundColor,
+      footerBackgroundColor:
+          footerBackgroundColor ?? this.footerBackgroundColor,
       rowColor: rowColor ?? this.rowColor,
       oddRowColor: oddRowColor == null ? this.oddRowColor : oddRowColor.value,
       evenRowColor:
@@ -569,6 +585,8 @@ class PlutoGridStyleConfig {
             enableCellBorderHorizontal == other.enableCellBorderHorizontal &&
             enableRowColorAnimation == other.enableRowColorAnimation &&
             gridBackgroundColor == other.gridBackgroundColor &&
+            headerBackgroundColor == other.headerBackgroundColor &&
+            footerBackgroundColor == other.footerBackgroundColor &&
             rowColor == other.rowColor &&
             oddRowColor == other.oddRowColor &&
             evenRowColor == other.evenRowColor &&
@@ -614,6 +632,8 @@ class PlutoGridStyleConfig {
         enableCellBorderHorizontal,
         enableRowColorAnimation,
         gridBackgroundColor,
+        headerBackgroundColor,
+        footerBackgroundColor,
         rowColor,
         oddRowColor,
         evenRowColor,
