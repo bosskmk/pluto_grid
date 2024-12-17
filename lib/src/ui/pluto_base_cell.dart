@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/cells/pluto_customized_cell.dart';
 
 import 'ui.dart';
 
@@ -387,6 +388,14 @@ class _CellState extends PlutoStateWithChange<_Cell> {
       } else if (widget.column.type.isCurrency) {
         return PlutoCurrencyCell(
           stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
+      } else if (widget.column.type.isCustomized) {
+        return PlutoCustomizedCell(
+          stateManager: stateManager,
+          customizedType: widget.column.type as PlutoColumnTypeCustomized,
           cell: widget.cell,
           column: widget.column,
           row: widget.row,

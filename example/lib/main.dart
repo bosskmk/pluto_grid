@@ -1,3 +1,4 @@
+import 'package:example/pluto_column_customized_bool.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -90,6 +91,19 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         );
       },
     ),
+    PlutoColumn(
+      title: 'Deleted',
+      field: 'deleted',
+      type: PlutoColumnType.customized(PlutoColumnCustomizedBool()),
+      renderer: (rendererContext) {
+        return Text(
+          rendererContext.cell.value ? 'Yes' : 'No',
+          style: TextStyle(
+            color: rendererContext.cell.value ? Colors.green : Colors.red,
+          ),
+        );
+      },
+    ),
   ];
 
   final List<PlutoRow> rows = [
@@ -102,6 +116,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'joined': PlutoCell(value: '2021-01-01'),
         'working_time': PlutoCell(value: '09:00'),
         'salary': PlutoCell(value: 300),
+        'deleted': PlutoCell(value: false),
       },
     ),
     PlutoRow(
@@ -113,6 +128,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'joined': PlutoCell(value: '2021-02-01'),
         'working_time': PlutoCell(value: '10:00'),
         'salary': PlutoCell(value: 400),
+        'deleted': PlutoCell(value: false),
       },
     ),
     PlutoRow(
@@ -124,6 +140,7 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
         'joined': PlutoCell(value: '2021-03-01'),
         'working_time': PlutoCell(value: '11:00'),
         'salary': PlutoCell(value: 700),
+        'deleted': PlutoCell(value: false),
       },
     ),
   ];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:pluto_grid/src/model/columns_types/pluto_column_type_customized.dart';
 
 abstract class PlutoColumnType {
   dynamic get defaultValue;
@@ -154,6 +155,10 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.customized(PlutoColumnTypeCustomized customizedType) {
+    return customizedType;
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -173,6 +178,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isDate => this is PlutoColumnTypeDate;
 
   bool get isTime => this is PlutoColumnTypeTime;
+
+  bool get isCustomized => this is PlutoColumnTypeCustomized;
 
   PlutoColumnTypeText get text {
     if (this is! PlutoColumnTypeText) {
