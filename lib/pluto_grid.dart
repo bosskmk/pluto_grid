@@ -1,4 +1,4 @@
-library pluto_grid;
+library pluto_grid_customized;
 
 export './src/helper/filter_helper.dart';
 export './src/helper/filtered_list.dart';
@@ -27,6 +27,7 @@ export './src/manager/pluto_grid_event_manager.dart';
 export './src/manager/pluto_grid_key_manager.dart';
 export './src/manager/pluto_grid_state_manager.dart';
 export './src/manager/shortcut/shortcut.dart';
+export './src/model/columns_types/pluto_column_type_customized.dart';
 export './src/model/pluto_cell.dart';
 export './src/model/pluto_column.dart';
 export './src/model/pluto_column_group.dart';
