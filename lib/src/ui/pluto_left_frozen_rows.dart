@@ -86,7 +86,8 @@ class PlutoLeftFrozenRowsState
             top: (headerSpacing == null || headerSpacing <= 0)
                 ? BorderSide.none
                 : border.top,
-            bottom: (footerSpacing == null || footerSpacing <= 0)
+            bottom: (showColumnFooter &&
+                    (footerSpacing == null || footerSpacing <= 0))
                 ? BorderSide.none
                 : border.bottom,
             left: border.left,
@@ -102,7 +103,8 @@ class PlutoLeftFrozenRowsState
                       ? Radius.zero
                       : null,
                   topRight: Radius.zero,
-                  bottomLeft: footerSpacing == null || footerSpacing <= 0
+                  bottomLeft: showColumnFooter &&
+                          (footerSpacing == null || footerSpacing <= 0)
                       ? Radius.zero
                       : null,
                   bottomRight: Radius.zero,

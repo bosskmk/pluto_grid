@@ -132,11 +132,13 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
                       ? Radius.zero
                       : null,
                   bottomLeft: showLeftFrozen ||
-                          (footerSpacing == null || footerSpacing <= 0)
+                          (showColumnFooter &&
+                              (footerSpacing == null || footerSpacing <= 0))
                       ? Radius.zero
                       : null,
                   bottomRight: showRightFrozen ||
-                          (footerSpacing == null || footerSpacing <= 0)
+                          (showColumnFooter &&
+                              (footerSpacing == null || footerSpacing <= 0))
                       ? Radius.zero
                       : null,
                 ),

@@ -61,7 +61,7 @@ class PlutoRightFrozenColumnsFooterState
     bool showRightFrozen =
         stateManager.showFrozenColumn && stateManager.hasRightFrozenColumns;
 
-    // final bool showColumnFooter = stateManager.showColumnFooter;
+    final bool showColumnFooter = stateManager.showColumnFooter;
 
     final footerSpacing = stateManager.style.footerSpacing;
 
@@ -87,7 +87,8 @@ class PlutoRightFrozenColumnsFooterState
         borderRadius:
             decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
                   topLeft: Radius.zero,
-                  topRight: (footerSpacing == null || footerSpacing <= 0)
+                  topRight: showColumnFooter &&
+                          (footerSpacing == null || footerSpacing <= 0)
                       ? Radius.zero
                       : null,
                   bottomLeft: showRightFrozen ? Radius.zero : null,
