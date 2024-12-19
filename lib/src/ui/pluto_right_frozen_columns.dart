@@ -96,7 +96,8 @@ class PlutoRightFrozenColumnsState
 
     final headerSpacing = stateManager.style.headerSpacing;
 
-    var decoration = style.headerDecoration ??
+    var decoration = style.rightFrozenDecoration ??
+        style.headerDecoration ??
         BoxDecoration(
           color: style.gridBackgroundColor,
           borderRadius:

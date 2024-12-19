@@ -63,7 +63,8 @@ class PlutoLeftFrozenColumnsFooterState
 
     final footerSpacing = stateManager.style.footerSpacing;
 
-    var decoration = style.footerDecoration ??
+    var decoration = style.leftFrozenDecoration ??
+        style.footerDecoration ??
         BoxDecoration(
           color: style.gridBackgroundColor,
           borderRadius:
