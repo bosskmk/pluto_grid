@@ -110,8 +110,12 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             top: (headerSpacing == null || headerSpacing <= 0)
                 ? BorderSide.none
                 : border.top,
+<<<<<<< HEAD
             bottom: showColumnFooter &&
                     (footerSpacing == null || footerSpacing <= 0)
+=======
+            bottom: (footerSpacing == null || footerSpacing <= 0)
+>>>>>>> b1df73a4047e89aeec13c320739024a8bbf58101
                 ? BorderSide.none
                 : border.bottom,
             left: showLeftFrozen ? BorderSide.none : border.left,
