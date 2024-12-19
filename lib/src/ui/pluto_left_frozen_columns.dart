@@ -87,17 +87,62 @@ class PlutoLeftFrozenColumnsState
 
   @override
   Widget build(BuildContext context) {
-    return CustomMultiChildLayout(
-      delegate: MainColumnLayoutDelegate(
-        stateManager: stateManager,
-        columns: _columns,
-        columnGroups: _columnGroups,
-        frozen: PlutoColumnFrozen.start,
-        textDirection: stateManager.textDirection,
+    final style = stateManager.configuration.style;
+
+    bool showLeftFrozen =
+        stateManager.showFrozenColumn && stateManager.hasLeftFrozenColumns;
+
+    final headerSpacing = stateManager.style.headerSpacing;
+
+    var decoration = style.headerDecoration ??
+        BoxDecoration(
+          color: style.gridBackgroundColor,
+          borderRadius:
+              style.gridBorderRadius.resolve(TextDirection.ltr).copyWith(
+                    topRight: showLeftFrozen ? Radius.zero : null,
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.zero,
+                  ),
+          border: Border.all(
+            color: style.gridBorderColor,
+            width: PlutoGridSettings.gridBorderWidth,
+          ),
+        );
+
+    BorderRadiusGeometry borderRadius = BorderRadius.zero;
+
+    if (decoration is BoxDecoration) {
+      decoration = decoration.copyWith(
+        borderRadius:
+            decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
+                  topRight: Radius.zero,
+                  bottomLeft: (headerSpacing == null || headerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                  bottomRight: Radius.zero,
+                ),
+      );
+
+      borderRadius = decoration.borderRadius ?? BorderRadius.zero;
+    }
+
+    return Container(
+      decoration: decoration,
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: CustomMultiChildLayout(
+          delegate: MainColumnLayoutDelegate(
+            stateManager: stateManager,
+            columns: _columns,
+            columnGroups: _columnGroups,
+            frozen: PlutoColumnFrozen.start,
+            textDirection: stateManager.textDirection,
+          ),
+          children: _showColumnGroups == true
+              ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
+              : _columns.map(_makeColumn).toList(growable: false),
+        ),
       ),
-      children: _showColumnGroups == true
-          ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
-          : _columns.map(_makeColumn).toList(growable: false),
     );
   }
 }

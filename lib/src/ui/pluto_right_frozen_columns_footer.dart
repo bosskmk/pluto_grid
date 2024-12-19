@@ -56,13 +56,61 @@ class PlutoRightFrozenColumnsFooterState
 
   @override
   Widget build(BuildContext context) {
-    return CustomMultiChildLayout(
-      delegate: ColumnFooterLayoutDelegate(
-        stateManager: stateManager,
-        columns: _columns,
-        textDirection: stateManager.textDirection,
+    final style = stateManager.configuration.style;
+
+    bool showRightFrozen =
+        stateManager.showFrozenColumn && stateManager.hasRightFrozenColumns;
+
+    // final bool showColumnFooter = stateManager.showColumnFooter;
+
+    final footerSpacing = stateManager.style.footerSpacing;
+
+    var decoration = style.footerDecoration ??
+        BoxDecoration(
+          color: style.gridBackgroundColor,
+          borderRadius:
+              style.gridBorderRadius.resolve(TextDirection.ltr).copyWith(
+                    topLeft: Radius.zero,
+                    topRight: Radius.zero,
+                    bottomLeft: showRightFrozen ? Radius.zero : null,
+                  ),
+          border: Border.all(
+            color: style.gridBorderColor,
+            width: PlutoGridSettings.gridBorderWidth,
+          ),
+        );
+
+    BorderRadiusGeometry borderRadius = BorderRadius.zero;
+
+    if (decoration is BoxDecoration) {
+      decoration = decoration.copyWith(
+        borderRadius:
+            decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
+                  topLeft: Radius.zero,
+                  topRight: (footerSpacing == null || footerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                  bottomLeft: showRightFrozen ? Radius.zero : null,
+                ),
+      );
+
+      borderRadius = decoration.borderRadius ?? BorderRadius.zero;
+    }
+
+    return Container(
+      height: stateManager.configuration.style.footerHeight,
+      decoration: decoration,
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: CustomMultiChildLayout(
+          delegate: ColumnFooterLayoutDelegate(
+            stateManager: stateManager,
+            columns: _columns,
+            textDirection: stateManager.textDirection,
+          ),
+          children: _columns.map(_makeColumn).toList(growable: false),
+        ),
       ),
-      children: _columns.map(_makeColumn).toList(growable: false),
     );
   }
 }
