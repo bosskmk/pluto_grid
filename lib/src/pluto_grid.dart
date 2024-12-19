@@ -768,7 +768,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         _StackName.headerDivider,
         BoxConstraints.tight(
-          Size(size.width, PlutoGridSettings.gridBorderWidth),
+          Size(size.width, 0),
         ),
       );
 
@@ -799,7 +799,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         _StackName.footerDivider,
         BoxConstraints.tight(
-          Size(size.width, PlutoGridSettings.gridBorderWidth),
+          Size(size.width, 0),
         ),
       );
 
@@ -835,15 +835,13 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         _StackName.leftFrozenDivider,
         BoxConstraints.tight(
           Size(
-            PlutoGridSettings.gridBorderWidth,
+            0,
             _safe(size.height - columnsTopOffset - bodyRowsBottomOffset),
           ),
         ),
       );
 
-      final double posX = isLTR
-          ? bodyLeftOffset
-          : size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth;
+      final double posX = isLTR ? bodyLeftOffset : size.width - bodyRightOffset;
 
       positionChild(
         _StackName.leftFrozenDivider,
@@ -863,8 +861,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(size),
       );
 
-      final double posX =
-          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+      final double posX = isLTR ? size.width - s.width : 0;
 
       positionChild(
         _StackName.rightFrozenColumns,
@@ -883,15 +880,13 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         _StackName.rightFrozenDivider,
         BoxConstraints.tight(
           Size(
-            PlutoGridSettings.gridBorderWidth,
+            0,
             _safe(size.height - columnsTopOffset - bodyRowsBottomOffset),
           ),
         ),
       );
 
-      final double posX = isLTR
-          ? size.width - bodyRightOffset - PlutoGridSettings.gridBorderWidth
-          : bodyLeftOffset;
+      final double posX = isLTR ? size.width - bodyRightOffset : bodyLeftOffset;
 
       positionChild(
         _StackName.rightFrozenDivider,
@@ -955,7 +950,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       var s = layoutChild(
         _StackName.columnFooterDivider,
         BoxConstraints.tight(
-          Size(size.width, PlutoGridSettings.gridBorderWidth),
+          Size(size.width, 0),
         ),
       );
 
@@ -966,29 +961,10 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     // layout rows
-    if (hasChild(_StackName.columnRowDivider)) {
-      var s = layoutChild(
-        _StackName.columnRowDivider,
-        BoxConstraints.tight(
-          Size(size.width, PlutoGridSettings.gridBorderWidth),
-        ),
-      );
-
-      positionChild(
-        _StackName.columnRowDivider,
-        Offset(0, bodyRowsTopOffset),
-      );
-
-      bodyRowsTopOffset += s.height;
-    } else {
-      bodyRowsTopOffset += PlutoGridSettings.gridBorderWidth;
-    }
 
     if (hasChild(_StackName.leftFrozenRows)) {
       final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
-      final double posX = isLTR
-          ? 0
-          : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
+      final double posX = isLTR ? 0 : size.width - bodyRightOffset;
 
       layoutChild(
         _StackName.leftFrozenRows,
@@ -1008,9 +984,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild(_StackName.leftFrozenColumnFooters)) {
       final double offset = isLTR ? bodyLeftOffset : bodyRightOffset;
-      final double posX = isLTR
-          ? 0
-          : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
+      final double posX = isLTR ? 0 : size.width - bodyRightOffset;
 
       layoutChild(
         _StackName.leftFrozenColumnFooters,
@@ -1027,9 +1001,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild(_StackName.rightFrozenRows)) {
       final double offset = isLTR ? bodyRightOffset : bodyLeftOffset;
-      final double posX = isLTR
-          ? size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth
-          : 0;
+      final double posX = isLTR ? size.width - bodyRightOffset : 0;
 
       layoutChild(
         _StackName.rightFrozenRows,
@@ -1054,8 +1026,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.loose(Size(offset, size.height)),
       );
 
-      final double posX =
-          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+      final double posX = isLTR ? size.width - s.width : 0;
 
       positionChild(
         _StackName.rightFrozenColumnFooters,
@@ -1637,7 +1608,6 @@ enum _StackName {
   rightFrozenColumnFooters,
   rightFrozenRows,
   rightFrozenDivider,
-  columnRowDivider,
   columnFooterDivider,
   footer,
   footerDivider,

@@ -202,6 +202,8 @@ class PlutoGridStyleConfig {
     this.headerDecoration,
     this.contentDecoration,
     this.footerDecoration,
+    this.leftFrozenDecoration,
+    this.rightFrozenDecoration,
     this.rowColor = Colors.white,
     this.oddRowColor,
     this.evenRowColor,
@@ -264,6 +266,8 @@ class PlutoGridStyleConfig {
     this.headerDecoration,
     this.contentDecoration,
     this.footerDecoration,
+    this.leftFrozenDecoration,
+    this.rightFrozenDecoration,
     this.rowColor = const Color(0xFF111111),
     this.oddRowColor,
     this.evenRowColor,
@@ -352,6 +356,22 @@ class PlutoGridStyleConfig {
   ///
   /// If null, no decoration will be applied.
   final Decoration? footerDecoration;
+
+  /// A decoration to be applied to the left frozen columns in the grid.
+  ///
+  /// This can be used to customize the appearance of the left frozen columns,
+  /// such as adding a border, background color, or other visual effects.
+  ///
+  /// If null, no decoration will be applied.
+  final Decoration? leftFrozenDecoration;
+
+  /// A decoration to be applied to the right frozen columns in the grid.
+  ///
+  /// This can be used to customize the appearance of the right frozen columns,
+  /// such as adding a border, background color, or other visual effects.
+  ///
+  /// If null, no decoration will be applied.
+  final Decoration? rightFrozenDecoration;
 
   /// Default row background color
   ///
@@ -497,6 +517,8 @@ class PlutoGridStyleConfig {
     Decoration? headerDecoration,
     Decoration? contentDecoration,
     Decoration? footerDecoration,
+    Decoration? leftFrozenDecoration,
+    Decoration? rightFrozenDecoration,
     Color? rowColor,
     PlutoOptional<Color?>? oddRowColor,
     PlutoOptional<Color?>? evenRowColor,
@@ -552,6 +574,9 @@ class PlutoGridStyleConfig {
       headerDecoration: headerDecoration ?? this.headerDecoration,
       contentDecoration: contentDecoration ?? this.contentDecoration,
       footerDecoration: footerDecoration ?? this.footerDecoration,
+      leftFrozenDecoration: leftFrozenDecoration ?? this.leftFrozenDecoration,
+      rightFrozenDecoration:
+          rightFrozenDecoration ?? this.rightFrozenDecoration,
       rowColor: rowColor ?? this.rowColor,
       oddRowColor: oddRowColor == null ? this.oddRowColor : oddRowColor.value,
       evenRowColor:
@@ -622,6 +647,8 @@ class PlutoGridStyleConfig {
             headerDecoration == other.headerDecoration &&
             contentDecoration == other.contentDecoration &&
             footerDecoration == other.footerDecoration &&
+            leftFrozenDecoration == other.leftFrozenDecoration &&
+            rightFrozenDecoration == other.rightFrozenDecoration &&
             rowColor == other.rowColor &&
             oddRowColor == other.oddRowColor &&
             evenRowColor == other.evenRowColor &&
@@ -673,6 +700,8 @@ class PlutoGridStyleConfig {
         headerDecoration,
         contentDecoration,
         footerDecoration,
+        leftFrozenDecoration,
+        rightFrozenDecoration,
         rowColor,
         oddRowColor,
         evenRowColor,

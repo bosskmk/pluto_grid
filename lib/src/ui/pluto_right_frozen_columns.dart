@@ -96,7 +96,8 @@ class PlutoRightFrozenColumnsState
 
     final headerSpacing = stateManager.style.headerSpacing;
 
-    var decoration = style.headerDecoration ??
+    var decoration = style.rightFrozenDecoration ??
+        style.headerDecoration ??
         BoxDecoration(
           color: style.gridBackgroundColor,
           borderRadius:
@@ -112,9 +113,35 @@ class PlutoRightFrozenColumnsState
         );
 
     BorderRadiusGeometry borderRadius = BorderRadius.zero;
+    Border borderGradient = const Border();
+    List<BoxShadow>? boxShadow;
+
+    if (stateManager.style.rightFrozenDecoration != null &&
+        stateManager.style.rightFrozenDecoration is BoxDecoration) {
+      boxShadow =
+          (stateManager.style.rightFrozenDecoration as BoxDecoration).boxShadow;
+    }
 
     if (decoration is BoxDecoration) {
+      if (decoration.border is Border &&
+          boxShadow != null &&
+          boxShadow.isNotEmpty) {
+        final border = (decoration.border as Border);
+
+        borderGradient = Border(
+          top: BorderSide(
+            color: border.top.color,
+            width: border.top.width,
+          ),
+          bottom: BorderSide(
+            color: border.bottom.color,
+            width: border.bottom.width,
+          ),
+        );
+      }
+
       decoration = decoration.copyWith(
+        boxShadow: [],
         borderRadius:
             decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
                   topLeft: Radius.zero,
@@ -128,23 +155,58 @@ class PlutoRightFrozenColumnsState
       borderRadius = decoration.borderRadius ?? BorderRadius.zero;
     }
 
-    return Container(
-      decoration: decoration,
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: CustomMultiChildLayout(
-          delegate: MainColumnLayoutDelegate(
-            stateManager: stateManager,
-            columns: _columns,
-            columnGroups: _columnGroups,
-            frozen: PlutoColumnFrozen.end,
-            textDirection: stateManager.textDirection,
+    return Stack(
+      children: [
+        if (boxShadow != null && boxShadow.isNotEmpty)
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: Container(
+              width: boxShadow.first.blurRadius,
+              decoration: BoxDecoration(
+                border: borderGradient,
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.transparent,
+                    boxShadow.first.color,
+                  ],
+                ),
+              ),
+            ),
           ),
-          children: _showColumnGroups == true
-              ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
-              : _columns.map(_makeColumn).toList(growable: false),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (boxShadow != null && boxShadow.isNotEmpty)
+              SizedBox(width: boxShadow.first.blurRadius - 2),
+            Flexible(
+              child: Container(
+                decoration: decoration,
+                child: ClipRRect(
+                  borderRadius: borderRadius,
+                  child: CustomMultiChildLayout(
+                    delegate: MainColumnLayoutDelegate(
+                      stateManager: stateManager,
+                      columns: _columns,
+                      columnGroups: _columnGroups,
+                      frozen: PlutoColumnFrozen.end,
+                      textDirection: stateManager.textDirection,
+                    ),
+                    children: _showColumnGroups == true
+                        ? _columnGroups
+                            .map(_makeColumnGroup)
+                            .toList(growable: false)
+                        : _columns.map(_makeColumn).toList(growable: false),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }

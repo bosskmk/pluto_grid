@@ -60,7 +60,8 @@ class PlutoRightFrozenRowsState
     final headerSpacing = stateManager.style.headerSpacing;
     final footerSpacing = stateManager.style.footerSpacing;
 
-    var decoration = style.contentDecoration ??
+    var decoration = style.rightFrozenDecoration ??
+        style.contentDecoration ??
         BoxDecoration(
           color: style.gridBackgroundColor,
           borderRadius: !showColumnFooter
@@ -76,6 +77,14 @@ class PlutoRightFrozenRowsState
         );
 
     BorderRadiusGeometry borderRadius = BorderRadius.zero;
+    Border borderGradient = const Border();
+    List<BoxShadow>? boxShadow;
+
+    if (stateManager.style.rightFrozenDecoration != null &&
+        stateManager.style.rightFrozenDecoration is BoxDecoration) {
+      boxShadow =
+          (stateManager.style.rightFrozenDecoration as BoxDecoration).boxShadow;
+    }
 
     if (decoration is BoxDecoration) {
       if (decoration.border is Border) {
@@ -94,9 +103,25 @@ class PlutoRightFrozenRowsState
             right: border.right,
           ),
         );
+
+        borderGradient = Border(
+          top: (headerSpacing == null || headerSpacing <= 0)
+              ? BorderSide.none
+              : BorderSide(
+                  color: border.top.color,
+                  width: border.top.width,
+                ),
+          bottom: (footerSpacing == null || footerSpacing <= 0)
+              ? BorderSide.none
+              : BorderSide(
+                  color: border.bottom.color,
+                  width: border.bottom.width,
+                ),
+        );
       }
 
       decoration = decoration.copyWith(
+        boxShadow: [],
         borderRadius:
             decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
                   topLeft: Radius.zero,
@@ -119,31 +144,57 @@ class PlutoRightFrozenRowsState
         if (headerSpacing != null && headerSpacing > 0)
           SizedBox(height: headerSpacing),
         Expanded(
-          child: Row(
+          child: Stack(
             children: [
-              Flexible(
-                child: Container(
-                  decoration: decoration,
-                  child: ClipRRect(
-                    borderRadius: borderRadius,
-                    child: ListView.builder(
-                      controller: _scroll,
-                      scrollDirection: Axis.vertical,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: _rows.length,
-                      itemExtent: stateManager.rowTotalHeight,
-                      itemBuilder: (ctx, i) {
-                        return PlutoBaseRow(
-                          key: ValueKey('right_frozen_row_${_rows[i].key}'),
-                          rowIdx: i,
-                          row: _rows[i],
-                          columns: _columns,
-                          stateManager: stateManager,
-                        );
-                      },
+              if (boxShadow != null && boxShadow.isNotEmpty)
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    width: boxShadow.first.blurRadius,
+                    decoration: BoxDecoration(
+                      border: borderGradient,
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.transparent,
+                          boxShadow.first.color,
+                        ],
+                      ),
                     ),
                   ),
                 ),
+              Row(
+                children: [
+                  if (boxShadow != null && boxShadow.isNotEmpty)
+                    SizedBox(width: boxShadow.first.blurRadius - 2),
+                  Flexible(
+                    child: Container(
+                      decoration: decoration,
+                      child: ClipRRect(
+                        borderRadius: borderRadius,
+                        child: ListView.builder(
+                          controller: _scroll,
+                          scrollDirection: Axis.vertical,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: _rows.length,
+                          itemExtent: stateManager.rowTotalHeight,
+                          itemBuilder: (ctx, i) {
+                            return PlutoBaseRow(
+                              key: ValueKey('right_frozen_row_${_rows[i].key}'),
+                              rowIdx: i,
+                              row: _rows[i],
+                              columns: _columns,
+                              stateManager: stateManager,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
