@@ -73,34 +73,99 @@ class PlutoBodyColumnsFooterState
 
   @override
   Widget build(BuildContext context) {
+    final style = stateManager.configuration.style;
+
+    bool showLeftFrozen =
+        stateManager.showFrozenColumn && stateManager.hasLeftFrozenColumns;
+
+    bool showRightFrozen =
+        stateManager.showFrozenColumn && stateManager.hasRightFrozenColumns;
+
+    final footerSpacing = stateManager.style.footerSpacing;
+
+    var decoration = style.footerDecoration ??
+        BoxDecoration(
+          color: style.gridBackgroundColor,
+          borderRadius:
+              style.gridBorderRadius.resolve(TextDirection.ltr).copyWith(
+                    topLeft: Radius.zero,
+                    topRight: Radius.zero,
+                    bottomLeft: showLeftFrozen ? Radius.zero : null,
+                    bottomRight: showRightFrozen ? Radius.zero : null,
+                  ),
+          border: Border.all(
+            color: style.gridBorderColor,
+            width: PlutoGridSettings.gridBorderWidth,
+          ),
+        );
+
+    BorderRadiusGeometry borderRadius = BorderRadius.zero;
+
+    if (decoration is BoxDecoration) {
+      if (decoration.border is Border) {
+        final border = decoration.border as Border;
+
+        decoration = decoration.copyWith(
+          border: Border(
+            top: border.top,
+            bottom: border.bottom,
+            left: showLeftFrozen ? BorderSide.none : border.left,
+            right: showRightFrozen ? BorderSide.none : border.right,
+          ),
+        );
+      }
+
+      decoration = decoration.copyWith(
+        borderRadius:
+            decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
+                  topLeft: showLeftFrozen ||
+                          (footerSpacing == null || footerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                  topRight: showRightFrozen ||
+                          (footerSpacing == null || footerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                  bottomLeft: showLeftFrozen ? Radius.zero : null,
+                  bottomRight: showRightFrozen ? Radius.zero : null,
+                ),
+      );
+
+      borderRadius = decoration.borderRadius ?? BorderRadius.zero;
+    }
+
     return Row(
       children: [
         Expanded(
           child: Container(
-            color: stateManager.configuration.style.footerBackgroundColor,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: SingleChildScrollView(
-                    controller: _scroll,
-                    scrollDirection: Axis.horizontal,
-                    physics: const ClampingScrollPhysics(),
-                    child: PlutoVisibilityLayout(
-                      delegate: ColumnFooterLayoutDelegate(
-                        stateManager: stateManager,
-                        columns: _columns,
-                        textDirection: stateManager.textDirection,
+            height: stateManager.configuration.style.footerHeight,
+            decoration: decoration,
+            child: ClipRRect(
+              borderRadius: borderRadius,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: SingleChildScrollView(
+                      controller: _scroll,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ClampingScrollPhysics(),
+                      child: PlutoVisibilityLayout(
+                        delegate: ColumnFooterLayoutDelegate(
+                          stateManager: stateManager,
+                          columns: _columns,
+                          textDirection: stateManager.textDirection,
+                        ),
+                        scrollController: _scroll,
+                        initialViewportDimension:
+                            MediaQuery.of(context).size.width,
+                        children:
+                            _columns.map(_makeFooter).toList(growable: false),
                       ),
-                      scrollController: _scroll,
-                      initialViewportDimension:
-                          MediaQuery.of(context).size.width,
-                      children:
-                          _columns.map(_makeFooter).toList(growable: false),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

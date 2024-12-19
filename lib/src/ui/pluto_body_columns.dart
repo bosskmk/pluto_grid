@@ -106,39 +106,103 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
 
   @override
   Widget build(BuildContext context) {
+    final style = stateManager.configuration.style;
+
+    bool showLeftFrozen =
+        stateManager.showFrozenColumn && stateManager.hasLeftFrozenColumns;
+
+    bool showRightFrozen =
+        stateManager.showFrozenColumn && stateManager.hasRightFrozenColumns;
+
+    final headerSpacing = stateManager.style.headerSpacing;
+
+    var decoration = style.headerDecoration ??
+        BoxDecoration(
+          color: style.gridBackgroundColor,
+          borderRadius:
+              style.gridBorderRadius.resolve(TextDirection.ltr).copyWith(
+                    topLeft: showLeftFrozen ? Radius.zero : null,
+                    topRight: showRightFrozen ? Radius.zero : null,
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.zero,
+                  ),
+          border: Border.all(
+            color: style.gridBorderColor,
+            width: PlutoGridSettings.gridBorderWidth,
+          ),
+        );
+
+    BorderRadiusGeometry borderRadius = BorderRadius.zero;
+
+    if (decoration is BoxDecoration) {
+      if (decoration.border is Border) {
+        final border = decoration.border as Border;
+
+        decoration = decoration.copyWith(
+          border: Border(
+            top: border.top,
+            bottom: border.bottom,
+            left: showLeftFrozen ? BorderSide.none : border.left,
+            right: showRightFrozen ? BorderSide.none : border.right,
+          ),
+        );
+      }
+
+      decoration = decoration.copyWith(
+        borderRadius:
+            decoration.borderRadius?.resolve(TextDirection.ltr).copyWith(
+                  topLeft: showLeftFrozen ? Radius.zero : null,
+                  topRight: showRightFrozen ? Radius.zero : null,
+                  bottomLeft: showLeftFrozen ||
+                          (headerSpacing == null || headerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                  bottomRight: showRightFrozen ||
+                          (headerSpacing == null || headerSpacing <= 0)
+                      ? Radius.zero
+                      : null,
+                ),
+      );
+
+      borderRadius = decoration.borderRadius ?? BorderRadius.zero;
+    }
+
     return Row(
       children: [
         Expanded(
           child: Container(
-            color: stateManager.configuration.style.headerBackgroundColor,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: SingleChildScrollView(
-                    controller: _scroll,
-                    scrollDirection: Axis.horizontal,
-                    physics: const ClampingScrollPhysics(),
-                    child: PlutoVisibilityLayout(
-                      delegate: MainColumnLayoutDelegate(
-                        stateManager: stateManager,
-                        columns: _columns,
-                        columnGroups: _columnGroups,
-                        frozen: PlutoColumnFrozen.none,
-                        textDirection: stateManager.textDirection,
+            decoration: decoration,
+            child: ClipRRect(
+              borderRadius: borderRadius,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: SingleChildScrollView(
+                      controller: _scroll,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ClampingScrollPhysics(),
+                      child: PlutoVisibilityLayout(
+                        delegate: MainColumnLayoutDelegate(
+                          stateManager: stateManager,
+                          columns: _columns,
+                          columnGroups: _columnGroups,
+                          frozen: PlutoColumnFrozen.none,
+                          textDirection: stateManager.textDirection,
+                        ),
+                        scrollController: _scroll,
+                        initialViewportDimension:
+                            MediaQuery.of(context).size.width,
+                        children: _showColumnGroups == true
+                            ? _columnGroups
+                                .map(_makeColumnGroup)
+                                .toList(growable: false)
+                            : _columns.map(_makeColumn).toList(growable: false),
                       ),
-                      scrollController: _scroll,
-                      initialViewportDimension:
-                          MediaQuery.of(context).size.width,
-                      children: _showColumnGroups == true
-                          ? _columnGroups
-                              .map(_makeColumnGroup)
-                              .toList(growable: false)
-                          : _columns.map(_makeColumn).toList(growable: false),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

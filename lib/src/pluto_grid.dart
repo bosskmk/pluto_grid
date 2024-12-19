@@ -623,9 +623,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
             final bool showRightFrozen = _stateManager.showFrozenColumn &&
                 _stateManager.hasRightFrozenColumns;
 
-            final bool showColumnRowDivider =
-                _stateManager.showColumnTitle || _stateManager.showColumnFilter;
-
             final bool showColumnFooter = _stateManager.showColumnFooter;
 
             return CustomMultiChildLayout(
@@ -659,15 +656,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     child: PlutoLeftFrozenColumns(_stateManager),
                   ),
                   LayoutId(
-                      id: _StackName.leftFrozenRows,
-                      child: PlutoLeftFrozenRows(_stateManager)),
-                  LayoutId(
-                    id: _StackName.leftFrozenDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.vertical,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                    ),
+                    id: _StackName.leftFrozenRows,
+                    child: PlutoLeftFrozenRows(_stateManager),
                   ),
                   if (showColumnFooter)
                     LayoutId(
@@ -685,15 +675,6 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   LayoutId(
                       id: _StackName.rightFrozenRows,
                       child: PlutoRightFrozenRows(_stateManager)),
-                  LayoutId(
-                    id: _StackName.rightFrozenDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.vertical,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                      reverse: true,
-                    ),
-                  ),
                   if (showColumnFooter)
                     LayoutId(
                       id: _StackName.rightFrozenColumnFooters,
@@ -701,55 +682,16 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                     ),
                 ],
 
-                /// Column and row divider.
-                if (showColumnRowDivider)
-                  LayoutId(
-                    id: _StackName.columnRowDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                    ),
-                  ),
-
                 /// Header and divider.
                 if (_stateManager.showHeader) ...[
-                  LayoutId(
-                    id: _StackName.headerDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                    ),
-                  ),
                   LayoutId(
                     id: _StackName.header,
                     child: _header!,
                   ),
                 ],
 
-                /// Column footer divider.
-                if (showColumnFooter)
-                  LayoutId(
-                    id: _StackName.columnFooterDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                    ),
-                  ),
-
                 /// Footer and divider.
                 if (_stateManager.showFooter) ...[
-                  LayoutId(
-                    id: _StackName.footerDivider,
-                    child: PlutoShadowLine(
-                      axis: Axis.horizontal,
-                      color: style.gridBorderColor,
-                      shadow: style.enableGridBorderShadow,
-                      reverse: true,
-                    ),
-                  ),
                   LayoutId(
                     id: _StackName.footer,
                     child: _footer!,
@@ -1208,10 +1150,6 @@ class _GridContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = stateManager.style;
-
-    final borderRadius = style.gridBorderRadius.resolve(TextDirection.ltr);
-
     return Focus(
       focusNode: stateManager.gridFocusNode,
       child: ScrollConfiguration(
@@ -1219,22 +1157,7 @@ class _GridContainer extends StatelessWidget {
           isMobile: PlatformHelper.isMobile,
           userDragDevices: stateManager.configuration.scrollbar.dragDevices,
         ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: style.gridBackgroundColor,
-            borderRadius: style.gridBorderRadius,
-            border: Border.all(
-              color: style.gridBorderColor,
-              width: PlutoGridSettings.gridBorderWidth,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(PlutoGridSettings.gridPadding),
-            child: borderRadius == BorderRadius.zero
-                ? child
-                : ClipRRect(borderRadius: borderRadius, child: child),
-          ),
-        ),
+        child: child,
       ),
     );
   }
@@ -1545,6 +1468,9 @@ abstract class PlutoGridSettings {
 
   /// Row - Default row height
   static const double rowHeight = 45.0;
+
+  /// Footer - Default footer height
+  static const double footerHeight = 56;
 
   /// Row - border width
   static const double rowBorderWidth = 1.0;
