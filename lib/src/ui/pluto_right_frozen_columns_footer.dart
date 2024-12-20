@@ -135,6 +135,9 @@ class PlutoRightFrozenColumnsFooterState
             child: Container(
               width: boxShadow.first.blurRadius,
               decoration: BoxDecoration(
+                color: decoration is BoxDecoration
+                    ? (decoration).color
+                    : Colors.transparent,
                 border: borderGradient,
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
