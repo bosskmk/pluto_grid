@@ -80,8 +80,17 @@ class PlutoLeftFrozenColumnsFooterState
         );
 
     BorderRadiusGeometry borderRadius = BorderRadius.zero;
-    Border borderGradient = const Border();
     List<BoxShadow>? boxShadow;
+    Border borderGradient = Border(
+      top: BorderSide(
+        color: style.gridBorderColor,
+        width: PlutoGridSettings.gridBorderWidth,
+      ),
+      bottom: BorderSide(
+        color: style.gridBorderColor,
+        width: PlutoGridSettings.gridBorderWidth,
+      ),
+    );
 
     if (stateManager.style.leftFrozenDecoration != null &&
         stateManager.style.leftFrozenDecoration is BoxDecoration) {
@@ -93,18 +102,27 @@ class PlutoLeftFrozenColumnsFooterState
       if (decoration.border is Border &&
           boxShadow != null &&
           boxShadow.isNotEmpty) {
-        final border = (decoration.border as Border);
+        final decorationFooter =
+            (stateManager.style.footerDecoration is BoxDecoration?)
+                ? stateManager.style.footerDecoration as BoxDecoration?
+                : null;
 
-        borderGradient = Border(
-          top: BorderSide(
-            color: border.top.color,
-            width: border.top.width,
-          ),
-          bottom: BorderSide(
-            color: border.bottom.color,
-            width: border.bottom.width,
-          ),
-        );
+        final border = decorationFooter?.border is Border
+            ? decorationFooter?.border as Border
+            : null;
+
+        if (decorationFooter != null) {
+          borderGradient = Border(
+            top: BorderSide(
+              color: border?.top.color ?? Colors.transparent,
+              width: border?.top.width ?? 0,
+            ),
+            bottom: BorderSide(
+              color: border?.bottom.color ?? Colors.transparent,
+              width: border?.bottom.width ?? 0,
+            ),
+          );
+        }
       }
 
       decoration = decoration.copyWith(
@@ -132,9 +150,10 @@ class PlutoLeftFrozenColumnsFooterState
             child: Container(
               width: boxShadow.first.blurRadius,
               decoration: BoxDecoration(
-                color: decoration is BoxDecoration
-                    ? (decoration).color
-                    : Colors.transparent,
+                color: stateManager.style.footerDecoration is BoxDecoration?
+                    ? (stateManager.style.footerDecoration as BoxDecoration?)
+                        ?.color
+                    : style.gridBorderColor,
                 border: borderGradient,
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,

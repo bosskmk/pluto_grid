@@ -77,8 +77,21 @@ class PlutoRightFrozenRowsState
         );
 
     BorderRadiusGeometry borderRadius = BorderRadius.zero;
-    Border borderGradient = const Border();
     List<BoxShadow>? boxShadow;
+    Border borderGradient = Border(
+      top: (headerSpacing == null || headerSpacing <= 0)
+          ? BorderSide.none
+          : BorderSide(
+              color: style.gridBorderColor,
+              width: PlutoGridSettings.gridBorderWidth,
+            ),
+      bottom: (footerSpacing == null || footerSpacing <= 0)
+          ? BorderSide.none
+          : BorderSide(
+              color: style.gridBorderColor,
+              width: PlutoGridSettings.gridBorderWidth,
+            ),
+    );
 
     if (stateManager.style.rightFrozenDecoration != null &&
         stateManager.style.rightFrozenDecoration is BoxDecoration) {
@@ -104,20 +117,33 @@ class PlutoRightFrozenRowsState
           ),
         );
 
-        borderGradient = Border(
-          top: (headerSpacing == null || headerSpacing <= 0)
-              ? BorderSide.none
-              : BorderSide(
-                  color: border.top.color,
-                  width: border.top.width,
-                ),
-          bottom: (footerSpacing == null || footerSpacing <= 0)
-              ? BorderSide.none
-              : BorderSide(
-                  color: border.bottom.color,
-                  width: border.bottom.width,
-                ),
-        );
+        if (boxShadow != null && boxShadow.isNotEmpty) {
+          final decorationContent =
+              (stateManager.style.contentDecoration is BoxDecoration?)
+                  ? stateManager.style.contentDecoration as BoxDecoration?
+                  : null;
+
+          final border = decorationContent?.border is Border
+              ? decorationContent?.border as Border
+              : null;
+
+          if (decorationContent != null) {
+            borderGradient = Border(
+              top: (headerSpacing == null || headerSpacing <= 0)
+                  ? BorderSide.none
+                  : BorderSide(
+                      color: border?.top.color ?? Colors.transparent,
+                      width: border?.top.width ?? 0,
+                    ),
+              bottom: (footerSpacing == null || footerSpacing <= 0)
+                  ? BorderSide.none
+                  : BorderSide(
+                      color: border?.bottom.color ?? Colors.transparent,
+                      width: border?.bottom.width ?? 0,
+                    ),
+            );
+          }
+        }
       }
 
       decoration = decoration.copyWith(
@@ -154,9 +180,12 @@ class PlutoRightFrozenRowsState
                   child: Container(
                     width: boxShadow.first.blurRadius,
                     decoration: BoxDecoration(
-                      color: decoration is BoxDecoration
-                          ? (decoration).color
-                          : Colors.transparent,
+                      color:
+                          stateManager.style.contentDecoration is BoxDecoration?
+                              ? (stateManager.style.contentDecoration
+                                      as BoxDecoration?)
+                                  ?.color
+                              : style.gridBorderColor,
                       border: borderGradient,
                       gradient: LinearGradient(
                         begin: Alignment.centerLeft,
