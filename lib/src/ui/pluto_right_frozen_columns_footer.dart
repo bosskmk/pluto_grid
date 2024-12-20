@@ -84,10 +84,6 @@ class PlutoRightFrozenColumnsFooterState
     BorderRadiusGeometry borderRadius = BorderRadius.zero;
     List<BoxShadow>? boxShadow;
     Border borderGradient = Border(
-      top: BorderSide(
-        color: style.gridBorderColor,
-        width: PlutoGridSettings.gridBorderWidth,
-      ),
       bottom: BorderSide(
         color: style.gridBorderColor,
         width: PlutoGridSettings.gridBorderWidth,
@@ -114,10 +110,6 @@ class PlutoRightFrozenColumnsFooterState
             : null;
         if (decorationFooter != null) {
           borderGradient = Border(
-            top: BorderSide(
-              color: border?.top.color ?? Colors.transparent,
-              width: border?.top.width ?? 0,
-            ),
             bottom: BorderSide(
               color: border?.bottom.color ?? Colors.transparent,
               width: border?.bottom.width ?? 0,

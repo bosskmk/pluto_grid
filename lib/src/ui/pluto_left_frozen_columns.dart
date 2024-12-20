@@ -117,10 +117,6 @@ class PlutoLeftFrozenColumnsState
         color: style.gridBorderColor,
         width: PlutoGridSettings.gridBorderWidth,
       ),
-      bottom: BorderSide(
-        color: style.gridBorderColor,
-        width: PlutoGridSettings.gridBorderWidth,
-      ),
     );
 
     if (stateManager.style.leftFrozenDecoration != null &&
@@ -147,10 +143,6 @@ class PlutoLeftFrozenColumnsState
             top: BorderSide(
               color: border?.top.color ?? Colors.transparent,
               width: border?.top.width ?? 0,
-            ),
-            bottom: BorderSide(
-              color: border?.bottom.color ?? Colors.transparent,
-              width: border?.bottom.width ?? 0,
             ),
           );
         }

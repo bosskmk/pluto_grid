@@ -175,7 +175,31 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
           onChanged: (PlutoGridOnChangedEvent event) {
             print(event);
           },
-          configuration: const PlutoGridConfiguration(),
+          configuration: PlutoGridConfiguration(
+            style: PlutoGridStyleConfig(
+              headerDecoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              leftFrozenDecoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              rightFrozenDecoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
