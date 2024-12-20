@@ -21,7 +21,7 @@ class PlutoColumnCustomizedBool extends PlutoColumnTypeCustomized<bool> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, PlutoGridStateManager stateManager) {
     return Checkbox(
       value: _value,
       focusNode: _focusNode,

@@ -52,6 +52,6 @@ class _PlutoCustomizedCellState extends State<PlutoCustomizedCell> {
 
   @override
   Widget build(BuildContext context) {
-    return customizedType.build(context);
+    return customizedType.build(context, stateManager);
   }
 }
