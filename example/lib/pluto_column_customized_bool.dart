@@ -7,24 +7,18 @@ class PlutoColumnCustomizedBool extends PlutoColumnTypeCustomized<bool> {
   });
 
   bool? _value;
-  FocusNode _focusNode = FocusNode();
 
   @override
-  void initState(
-    PlutoGridStateManager stateManager,
-    PlutoCell cell,
-    PlutoColumn column,
-    PlutoRow row,
-  ) {
-    _value = cell.value ?? defaultValue ?? false;
-    _focusNode.requestFocus();
+  void initState() {
+    _value = cell?.value ?? defaultValue ?? false;
+    focusCellNode?.requestFocus();
   }
 
   @override
   Widget build(BuildContext context, PlutoGridStateManager stateManager) {
     return Checkbox(
       value: _value,
-      focusNode: _focusNode,
+      focusNode: focusCellNode,
       onChanged: (value) {
         setState(() {
           _value = value ?? false;

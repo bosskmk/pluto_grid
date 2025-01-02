@@ -9,15 +9,46 @@ abstract class PlutoColumnTypeCustomized<T> implements PlutoColumnType {
     this.defaultValue,
   });
 
+  PlutoGridStateManager? stateManager;
+  PlutoCell? cell;
+  PlutoColumn? column;
+  PlutoRow? row;
+
+  T? _cellValue;
+  final TextEditingController _textController = TextEditingController();
   ValueChanged<VoidCallback>? _onSetState;
   ValueChanged<T?>? _setNewValue;
+  FocusNode? _focusCellNode;
+  _CellEditingStatus _cellEditingStatus = _CellEditingStatus.init;
 
-  void initState(
+  String get formattedValue =>
+      column?.formattedValueForDisplayInEditing(cell?.value) ?? '';
+
+  void initState() {}
+
+  void initStateManage(
     PlutoGridStateManager stateManager,
     PlutoCell cell,
     PlutoColumn column,
     PlutoRow row,
-  ) {}
+  ) {
+    this.stateManager = stateManager;
+    this.cell = cell;
+    this.column = column;
+    this.row = row;
+    _focusCellNode = FocusNode(onKeyEvent: _handleOnKey);
+
+    stateManager.setTextEditingController(_textController);
+
+    _textController.text =
+        defaultValue is String ? defaultValue.toString() : '';
+
+    _cellValue = defaultValue;
+
+    _textController.addListener(() {
+      _handleOnChanged(_textController.text.toString());
+    });
+  }
 
   void dispose() {}
 
@@ -65,6 +96,141 @@ abstract class PlutoColumnTypeCustomized<T> implements PlutoColumnType {
   }
 
   void setNewValue(T? value) {
+    _cellValue = value;
     _setNewValue?.call(value);
+  }
+
+  FocusNode? get focusCellNode => _focusCellNode;
+
+  void _restoreText() {
+    if (_cellEditingStatus.isNotChanged) {
+      return;
+    }
+
+    _textController.text =
+        defaultValue is String ? defaultValue.toString() : '';
+
+    stateManager?.changeCellValue(
+      stateManager?.currentCell ?? PlutoCell(),
+      _cellValue,
+      notify: false,
+    );
+  }
+
+  bool _moveHorizontal(PlutoKeyManagerEvent keyManager) {
+    if (!keyManager.isHorizontal) {
+      return false;
+    }
+
+    if (column?.readOnly == true) {
+      return true;
+    }
+
+    final selection = _textController.selection;
+
+    if (selection.baseOffset != selection.extentOffset) {
+      return false;
+    }
+
+    if (selection.baseOffset == 0 && keyManager.isLeft) {
+      return true;
+    }
+
+    final textLength = _textController.text.length;
+
+    if (selection.baseOffset == textLength && keyManager.isRight) {
+      return true;
+    }
+
+    return false;
+  }
+
+  void _changeValue() {
+    _textController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _textController.text.length),
+    );
+
+    _cellEditingStatus = _CellEditingStatus.updated;
+  }
+
+  void _handleOnChanged(String value) {
+    _cellEditingStatus = formattedValue != value.toString()
+        ? _CellEditingStatus.changed
+        : _cellValue.toString() == value.toString()
+            ? _CellEditingStatus.init
+            : _CellEditingStatus.updated;
+  }
+
+  void _handleOnComplete() {
+    final old = _textController.text;
+
+    _changeValue();
+
+    _handleOnChanged(old);
+  }
+
+  KeyEventResult _handleOnKey(FocusNode node, KeyEvent event) {
+    var keyManager = PlutoKeyManagerEvent(
+      focusNode: node,
+      event: event,
+    );
+
+    if (keyManager.isKeyUpEvent) {
+      return KeyEventResult.handled;
+    }
+
+    final skip = !(keyManager.isVertical ||
+        _moveHorizontal(keyManager) ||
+        keyManager.isEsc ||
+        keyManager.isTab ||
+        keyManager.isF3 ||
+        keyManager.isEnter);
+
+    // Propagate key inputs such as string input to the text field, except for movement, Enter key, and left/right movement of read-only cells.
+    if (skip && stateManager != null) {
+      return stateManager?.keyManager?.eventResult.skip(
+            KeyEventResult.ignored,
+          ) ??
+          KeyEventResult.ignored;
+    }
+
+    // The Enter key is propagated to the grid focus handler.
+    if (keyManager.isEnter) {
+      _handleOnComplete();
+      return KeyEventResult.ignored;
+    }
+
+    // ESC restores the edited string to the original string.
+    if (keyManager.isEsc) {
+      _restoreText();
+    }
+
+    // Delegate event handling to KeyManager.
+    stateManager?.keyManager?.subject.add(keyManager);
+
+    // Handle all events and stop event propagation.
+    return KeyEventResult.handled;
+  }
+
+  void handleOnTap() {
+    stateManager?.setKeepFocus(true);
+  }
+}
+
+enum _CellEditingStatus {
+  init,
+  changed,
+  updated;
+
+  bool get isNotChanged {
+    return _CellEditingStatus.changed != this;
+  }
+
+  bool get isChanged {
+    return _CellEditingStatus.changed == this;
+  }
+
+  bool get isUpdated {
+    return _CellEditingStatus.updated == this;
   }
 }
