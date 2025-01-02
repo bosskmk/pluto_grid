@@ -37,7 +37,8 @@ class _PlutoCustomizedCellState extends State<PlutoCustomizedCell> {
     customizedType.setOnSetState(setState);
     customizedType.setOnNewValue(_setNewValue);
 
-    customizedType.initState(stateManager, cell, column, row);
+    customizedType.initStateManage(stateManager, cell, column, row);
+    customizedType.initState();
   }
 
   void _setNewValue(dynamic newValue) {
