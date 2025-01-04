@@ -77,7 +77,7 @@ abstract class PlutoColumnTypeCustomized<T> implements PlutoColumnType {
   }
 
   @override
-  T makeCompareValue(v) {
+  T? makeCompareValue(v) {
     assert(v is T?, 'Value is not of type ${T.runtimeType}');
 
     return v;
