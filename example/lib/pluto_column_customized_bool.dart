@@ -27,4 +27,9 @@ class PlutoColumnCustomizedBool extends PlutoColumnTypeCustomized<bool> {
       },
     );
   }
+
+  @override
+  String formattedValue(bool? value) {
+    return value == true ? 'No' : 'Yes';
+  }
 }

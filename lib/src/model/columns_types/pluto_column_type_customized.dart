@@ -21,8 +21,7 @@ abstract class PlutoColumnTypeCustomized<T> implements PlutoColumnType {
   FocusNode? _focusCellNode;
   _CellEditingStatus _cellEditingStatus = _CellEditingStatus.init;
 
-  String get formattedValue =>
-      column?.formattedValueForDisplayInEditing(cell?.value) ?? '';
+  String formattedValue(T? value);
 
   void initState() {}
 
@@ -56,7 +55,7 @@ abstract class PlutoColumnTypeCustomized<T> implements PlutoColumnType {
 
   @override
   bool isValid(value) {
-    return value is T;
+    return value is T?;
   }
 
   @override

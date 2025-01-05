@@ -296,6 +296,10 @@ class PlutoColumn {
   }
 
   String formattedValueForType(dynamic value) {
+    if (type is PlutoColumnTypeCustomized) {
+      return (type as PlutoColumnTypeCustomized).formattedValue(value);
+    }
+
     if (type is PlutoColumnTypeWithNumberFormat) {
       return type.applyFormat(value);
     }

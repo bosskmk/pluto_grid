@@ -95,14 +95,6 @@ class _PlutoGridExamplePageState extends State<PlutoGridExamplePage> {
       title: 'Deleted',
       field: 'deleted',
       type: PlutoColumnType.customized(PlutoColumnCustomizedBool()),
-      renderer: (rendererContext) {
-        return Text(
-          rendererContext.cell.value ? 'Yes' : 'No',
-          style: TextStyle(
-            color: rendererContext.cell.value ? Colors.green : Colors.red,
-          ),
-        );
-      },
     ),
   ];
 
