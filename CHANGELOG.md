@@ -1,3 +1,8 @@
+## [8.1.0] - 2025. 1. 6
+
+* Custom column configuration. 
+* Style customization for header, content, and footer.
+
 ## [8.0.0] - 2024. 3. 1
 
 * Updated for flutter 3.19 version.
