@@ -212,6 +212,7 @@ class PlutoColumn {
 
   PlutoColumn({
     this.isFilterApplied,
+    this.onPressedFilter,
     required this.title,
     required this.field,
     required this.type,
