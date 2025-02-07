@@ -26,6 +26,10 @@ typedef PlutoColumnCheckReadOnly = bool Function(
 );
 
 class PlutoColumn {
+  bool? isFilterApplied;
+
+  Function()? onPressedFilter;
+
   /// A title to be displayed on the screen.
   /// If a titleSpan value is set, the title value is not displayed.
   String title;
@@ -207,6 +211,8 @@ class PlutoColumn {
   PlutoColumnValueValidator? validator;
 
   PlutoColumn({
+    this.isFilterApplied,
+    this.onPressedFilter,
     required this.title,
     required this.field,
     required this.type,
