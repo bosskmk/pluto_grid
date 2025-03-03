@@ -12,6 +12,8 @@ class GenericPdfController extends PdfController {
   static const PdfColor baseCellColor = PdfColors.white;
 
   GenericPdfController({
+    this.textStyleBuilder,
+    this.rowCellStyles,
     this.headerDecoration,
     this.headerStyle,
     required this.title,
@@ -34,6 +36,10 @@ class GenericPdfController extends PdfController {
   final List<String> columns;
   final List<List<String?>> rows;
   final ThemeData? themeData;
+  final BoxDecoration Function(int index, dynamic data, int rowNum)?
+      rowCellStyles;
+  final TextStyle Function(int index, dynamic data, int rowNum)?
+      textStyleBuilder;
 
   @override
   PageOrientation getPageOrientation() {
@@ -89,6 +95,7 @@ class GenericPdfController extends PdfController {
 
   Widget _table(List<String> columns, List<List<String?>> rows) {
     return TableHelper.fromTextArray(
+      textStyleBuilder: textStyleBuilder,
       border: null,
       cellAlignment: Alignment.center,
       // [Resolved 3.8.1] https://github.com/DavBfr/dart_pdf/pull/1033 to replace "headerDecoration" with "headerCellDecoration"
@@ -123,13 +130,13 @@ class GenericPdfController extends PdfController {
         fontSize: 8,
       ),
       oddRowDecoration: const BoxDecoration(color: oddRowColor),
-      cellDecoration: (index, data, rowNum) => BoxDecoration(
-        color: PdfColors.red,
-        border: Border.all(
-          color: borderColor,
-          width: .5,
-        ),
-      ),
+      cellDecoration: rowCellStyles ??
+          (index, data, rowNum) => BoxDecoration(
+                border: Border.all(
+                  color: borderColor,
+                  width: .5,
+                ),
+              ),
       headers: columns,
       data: rows,
     );
