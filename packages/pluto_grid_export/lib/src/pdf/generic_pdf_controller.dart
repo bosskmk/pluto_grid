@@ -12,6 +12,10 @@ class GenericPdfController extends PdfController {
   static const PdfColor baseCellColor = PdfColors.white;
 
   GenericPdfController({
+    this.textStyleBuilder,
+    this.rowCellStyles,
+    this.headerDecoration,
+    this.headerStyle,
     required this.title,
     required this.creator,
     required this.format,
@@ -23,6 +27,8 @@ class GenericPdfController extends PdfController {
   });
 
   final Widget? header;
+  final BoxDecoration? headerDecoration;
+  final TextStyle? headerStyle;
   final Widget? footer;
   final String title;
   final String creator;
@@ -30,6 +36,10 @@ class GenericPdfController extends PdfController {
   final List<String> columns;
   final List<List<String?>> rows;
   final ThemeData? themeData;
+  final BoxDecoration Function(int index, dynamic data, int rowNum)?
+      rowCellStyles;
+  final TextStyle Function(int index, dynamic data, int rowNum)?
+      textStyleBuilder;
 
   @override
   PageOrientation getPageOrientation() {
@@ -85,30 +95,34 @@ class GenericPdfController extends PdfController {
 
   Widget _table(List<String> columns, List<List<String?>> rows) {
     return TableHelper.fromTextArray(
+      textStyleBuilder: textStyleBuilder,
       border: null,
       cellAlignment: Alignment.center,
       // [Resolved 3.8.1] https://github.com/DavBfr/dart_pdf/pull/1033 to replace "headerDecoration" with "headerCellDecoration"
-      headerCellDecoration: BoxDecoration(
-        color: headerBackground,
-        border: Border.all(
-          color: borderColor,
-          width: 0.5,
-        ),
-      ),
-      headerDecoration: BoxDecoration(
-        color: headerBackground,
-        border: Border.all(
-          color: borderColor,
-          width: 0.5,
-        ),
-      ),
+      headerCellDecoration: headerDecoration ??
+          BoxDecoration(
+            color: headerBackground,
+            border: Border.all(
+              color: borderColor,
+              width: 0.5,
+            ),
+          ),
+      headerDecoration: headerDecoration ??
+          BoxDecoration(
+            color: headerBackground,
+            border: Border.all(
+              color: borderColor,
+              width: 0.5,
+            ),
+          ),
       headerHeight: 25,
       cellHeight: 15,
-      headerStyle: TextStyle(
-        color: baseTextColor,
-        fontSize: 7,
-        fontWeight: FontWeight.bold,
-      ),
+      headerStyle: headerStyle ??
+          TextStyle(
+            color: baseTextColor,
+            fontSize: 7,
+            fontWeight: FontWeight.bold,
+          ),
       headerAlignment: Alignment.center,
       cellPadding: const EdgeInsets.all(1),
       cellStyle: const TextStyle(
@@ -116,12 +130,13 @@ class GenericPdfController extends PdfController {
         fontSize: 8,
       ),
       oddRowDecoration: const BoxDecoration(color: oddRowColor),
-      cellDecoration: (index, data, rowNum) => BoxDecoration(
-        border: Border.all(
-          color: borderColor,
-          width: .5,
-        ),
-      ),
+      cellDecoration: rowCellStyles ??
+          (index, data, rowNum) => BoxDecoration(
+                border: Border.all(
+                  color: borderColor,
+                  width: .5,
+                ),
+              ),
       headers: columns,
       data: rows,
     );
