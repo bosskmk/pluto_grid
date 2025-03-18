@@ -13,7 +13,9 @@ dependencies:
   flutter:
     sdk: flutter
   pluto_grid:
-    path: ../..
+    git:
+      url: https://github.com/ujwalbasnet1/pluto_grid.git
+      ref: d3011c67efa4b4d23c9c4de13e9cb30078a23807
   csv: ^5.0.1
   pdf: ^3.10.3
   printing: ^5.10.4
