@@ -628,4 +628,9 @@ class _ApplyRowGroup implements _Apply {
   bool _hasChildren(PlutoRow row) {
     return row.type.isGroup && row.type.group.children.originalList.isNotEmpty;
   }
+//   void setRowHeight(int rowKey, double height) {
+//   final row = _getRowByKey(rowKey);
+//   row.height = height; // تغيير الارتفاع
+//   notifyListeners();  // لتحديث الـ state
+// }flutter
 }

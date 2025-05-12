@@ -1,9 +1,0 @@
-/example/android
-/example/ios
-/example/macos
-/example/web
-/example/windows
-/example/linux
-/example/build
-/test
-pubspec.lock

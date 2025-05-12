@@ -14,7 +14,6 @@ class PlutoBaseRow extends StatelessWidget {
   final PlutoGridStateManager stateManager;
 
   final bool visibilityLayout;
-
   const PlutoBaseRow({
     required this.rowIdx,
     required this.row,
@@ -84,10 +83,10 @@ class PlutoBaseRow extends StatelessWidget {
           ? PlutoVisibilityLayout(
               key: ValueKey('rowContainer_${row.key}_row'),
               delegate: _RowCellsLayoutDelegate(
-                stateManager: stateManager,
-                columns: columns,
-                textDirection: stateManager.textDirection,
-              ),
+                  stateManager: stateManager,
+                  columns: columns,
+                  textDirection: stateManager.textDirection,
+                  rowIdx: rowIdx),
               scrollController: stateManager.scroll.bodyRowsHorizontal!,
               initialViewportDimension: MediaQuery.of(dragContext).size.width,
               children: columns.map(_makeCell).toList(growable: false),
@@ -95,10 +94,11 @@ class PlutoBaseRow extends StatelessWidget {
           : CustomMultiChildLayout(
               key: ValueKey('rowContainer_${row.key}_row'),
               delegate: _RowCellsLayoutDelegate(
-                stateManager: stateManager,
-                columns: columns,
-                textDirection: stateManager.textDirection,
-              ),
+                  stateManager: stateManager,
+                  columns: columns,
+                  textDirection: stateManager.textDirection,
+                  rowIdx: rowIdx // ✅ ADD THIS
+                  ),
               children: columns.map(_makeCell).toList(growable: false),
             ),
     );
@@ -120,11 +120,13 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
   final List<PlutoColumn> columns;
 
   final TextDirection textDirection;
+  final int rowIdx; // ✅ ADD THIS
 
   _RowCellsLayoutDelegate({
     required this.stateManager,
     required this.columns,
     required this.textDirection,
+    required this.rowIdx, // ✅ ADD THIS
   }) : super(relayout: stateManager.resizingChangeNotifier);
 
   @override
@@ -133,8 +135,9 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
       0,
       (previousValue, element) => previousValue + element.width,
     );
-
-    return Size(width, stateManager.rowHeight);
+    final double height =
+        stateManager.refRows[rowIdx].customRowHeight ?? stateManager.rowHeight;
+    return Size(width, height);
   }
 
   @override
@@ -145,13 +148,13 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
 
     for (var element in items) {
       var width = element.width;
-
       if (hasChild(element.field)) {
         layoutChild(
           element.field,
           BoxConstraints.tightFor(
             width: width,
-            height: stateManager.rowHeight,
+            height: stateManager.refRows[rowIdx].customRowHeight ??
+                stateManager.rowHeight,
           ),
         );
 
@@ -309,6 +312,28 @@ class _RowContainerWidgetState extends PlutoStateWithChange<_RowContainerWidget>
       hasCurrentSelectingPosition: hasCurrentSelectingPosition,
       isCheckedRow: isCheckedRow,
     );
+
+// i added this to test the height of the cell
+    // final double rowHeight = stateManager.rowHeight;
+
+    double _calculateRowHeight(String text) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(text: text, style: TextStyle(fontSize: 14)),
+        textDirection: TextDirection.ltr,
+        maxLines: null,
+      )..layout(maxWidth: double.infinity);
+
+      return painter.size.height + 16; // Add padding to the height
+    }
+
+    Widget _buildCell(PlutoCell cell) {
+      double height = _calculateRowHeight(cell.value.toString());
+
+      return Container(
+        height: height,
+        child: Text(cell.value.toString()),
+      );
+    }
 
     return BoxDecoration(
       color: rowColor,

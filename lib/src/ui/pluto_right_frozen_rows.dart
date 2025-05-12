@@ -58,7 +58,7 @@ class PlutoRightFrozenRowsState
       scrollDirection: Axis.vertical,
       physics: const ClampingScrollPhysics(),
       itemCount: _rows.length,
-      itemExtent: stateManager.rowTotalHeight,
+      // itemExtent: stateManager.rowTotalHeight,
       itemBuilder: (ctx, i) {
         return PlutoBaseRow(
           key: ValueKey('right_frozen_row_${_rows[i].key}'),

@@ -75,20 +75,20 @@ class _AddAndRemoveColumnRowScreenState
           TextSpan(text: 'Status'),
         ]),
         renderer: (rendererContext) {
-          Color textColor = Colors.black;
+          //Color textColor =  Colors.black;
 
-          if (rendererContext.cell.value == 'saved') {
-            textColor = Colors.green;
-          } else if (rendererContext.cell.value == 'edited') {
-            textColor = Colors.red;
-          } else if (rendererContext.cell.value == 'created') {
-            textColor = Colors.blue;
-          }
+          // if (rendererContext.cell.value == 'saved') {
+          //   textColor = Colors.green;
+          // } else if (rendererContext.cell.value == 'edited') {
+          //   textColor = Colors.red;
+          // } else if (rendererContext.cell.value == 'created') {
+          //   textColor = Colors.blue;
+          // }
 
           return Text(
             rendererContext.cell.value.toString(),
             style: TextStyle(
-              color: textColor,
+              //color: textColor,
               fontWeight: FontWeight.bold,
             ),
           );

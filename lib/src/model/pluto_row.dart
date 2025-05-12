@@ -3,6 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 class PlutoRow {
   PlutoRow({
+    this.customRowHeight,
     required this.cells,
     PlutoRowType? type,
     this.sortIdx = 0,
@@ -14,6 +15,7 @@ class PlutoRow {
         _key = key ?? UniqueKey();
 
   final PlutoRowType type;
+  final double? customRowHeight;
 
   final Key _key;
 

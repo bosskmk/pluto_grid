@@ -1,4 +1,4 @@
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' as mahmoudFaker;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -58,7 +58,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       enableCellBorderHorizontal: true,
       // oddRowColor: Colors.amber,
       // evenRowColor: const Color(0xFFF6F6F6),
-      cellColorGroupedRow: const Color(0x80F6F6F6),
+      //cellColorGroupedRow: const Color(0x80F6F6F6),
       gridBorderRadius: BorderRadius.circular(10),
       gridPopupBorderRadius: BorderRadius.circular(7),
       // columnAscendingIcon: const Icon(
@@ -128,11 +128,11 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
       columns.addAll(testColumnsA);
       columnGroups.addAll(testColumnGroupsA);
       rows.addAll(DummyData.rowsByColumns(length: 10000, columns: columns));
-      rowColorCallback = (PlutoRowColorContext rowColorContext) {
-        return rowColorContext.row.cells['column2']?.value == 'green'
-            ? const Color(0xFFE2F6DF)
-            : Colors.white;
-      };
+      // rowColorCallback = (PlutoRowColorContext rowColorContext) {
+      //   return rowColorContext.row.cells['column2']?.value == 'green'
+      //       ? const Color(0xFFE2F6DF)
+      //       : Colors.white;
+      // };
     }
 
     /// Test B
@@ -328,7 +328,7 @@ class _DevelopmentScreenState extends State<DevelopmentScreen> {
                 return PlutoPagination(stateManager);
               },
               noRowsWidget: const _NoRows(),
-              rowColorCallback: rowColorCallback,
+              //rowColorCallback: rowColorCallback,
               configuration: _configuration,
             ),
           ),
@@ -439,7 +439,7 @@ class _HeaderState extends State<_Header> {
       0,
       [
         PlutoColumn(
-          title: faker.food.cuisine(),
+          title: "mahmoud update title", //mahmoudFaker.Company.cuisine(),
           field: 'new_${DateTime.now()}',
           type: PlutoColumnType.text(),
           frozen: frozen,
@@ -1023,20 +1023,20 @@ final testColumnsA = [
       enableColumnFilter: true,
     ),
     renderer: (rendererContext) {
-      Color textColor = Colors.black;
+      // Color textColor = Colors.black;
 
-      if (rendererContext.cell.value == 'red') {
-        textColor = Colors.red;
-      } else if (rendererContext.cell.value == 'blue') {
-        textColor = Colors.blue;
-      } else if (rendererContext.cell.value == 'green') {
-        textColor = Colors.green;
-      }
+      // if (rendererContext.cell.value == 'red') {
+      //   textColor = Colors.red;
+      // } else if (rendererContext.cell.value == 'blue') {
+      //   textColor = Colors.blue;
+      // } else if (rendererContext.cell.value == 'green') {
+      //   textColor = Colors.green;
+      // }
 
       return Text(
         rendererContext.cell.value.toString(),
         style: TextStyle(
-          color: textColor,
+          //   color: textColor,
           fontWeight: FontWeight.bold,
         ),
         textAlign: rendererContext.column.textAlign.value,
