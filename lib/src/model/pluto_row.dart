@@ -15,7 +15,7 @@ class PlutoRow {
         _key = key ?? UniqueKey();
 
   final PlutoRowType type;
-  final double? customRowHeight;
+  double? customRowHeight;
 
   final Key _key;
 

@@ -138,6 +138,39 @@ class _RowCellsLayoutDelegate extends MultiChildLayoutDelegate {
     final double height =
         stateManager.refRows[rowIdx].customRowHeight ?? stateManager.rowHeight;
     return Size(width, height);
+
+    // final PlutoRow row = stateManager.refRows[rowIdx];
+
+    // double maxHeight = 0;
+
+    // final TextStyle textStyle = stateManager.configuration.style.cellTextStyle;
+
+    // for (final column in columns) {
+    //   final cell = row.cells[column.field];
+    //   final String text = cell?.value?.toString() ?? '';
+
+    //   final TextPainter textPainter = TextPainter(
+    //     text: TextSpan(
+    //       text: text,
+    //       style: textStyle,
+    //     ),
+    //     textDirection: TextDirection.ltr,
+    //     maxLines: null,
+    //   );
+
+    //   textPainter.layout(maxWidth: column.width - 16); // minus padding
+
+    //   final double cellHeight = textPainter.size.height + 16; // add padding
+
+    //   if (cellHeight > maxHeight) {
+    //     maxHeight = cellHeight;
+    //   }
+    // }
+
+    // // Optional: cache the computed height
+    // row.customRowHeight = maxHeight;
+
+    // return Size(width, maxHeight);
   }
 
   @override
