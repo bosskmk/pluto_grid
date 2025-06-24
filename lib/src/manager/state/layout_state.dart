@@ -440,6 +440,40 @@ mixin LayoutState implements IPlutoGridState {
     notifyListeners(notify, setShowColumnFooter.hashCode);
   }
 
+  bool validate({bool notify = true}) {
+    bool isValid = true;
+    for (var rowElement in refRows.originalList) {
+      for (var cellElement in rowElement.cells.values) {
+        if (cellElement.initialized) {
+          if (cellElement.column.validator != null &&
+              !cellElement.column.hide) {
+            final validationError = cellElement.column.validator?.call(
+              rowElement,
+              cellElement,
+              cellElement.value,
+            );
+
+            changeCellValue(
+              cellElement,
+              cellElement.value,
+              force: true,
+              eachChange: true,
+              callOnChangedEvent: true,
+              validationError: validationError,
+            );
+
+            if (validationError != null) {
+              isValid = false;
+            }
+          }
+        }
+      }
+    }
+
+    notifyListeners(notify, validate.hashCode);
+    return isValid;
+  }
+
   @override
   void setShowColumnFilter(bool flag, {bool notify = true}) {
     if (showColumnFilter == flag) {

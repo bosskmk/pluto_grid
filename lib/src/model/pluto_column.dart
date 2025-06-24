@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 typedef PlutoColumnValueFormatter = String Function(dynamic value);
+typedef PlutoColumnValueValidator = String? Function(
+  PlutoRow row,
+  PlutoCell cell,
+  dynamic value,
+);
 
 typedef PlutoColumnRenderer = Widget Function(
     PlutoColumnRendererContext rendererContext);
@@ -21,6 +26,10 @@ typedef PlutoColumnCheckReadOnly = bool Function(
 );
 
 class PlutoColumn {
+  bool? isFilterApplied;
+
+  Function()? onPressedFilter;
+
   /// A title to be displayed on the screen.
   /// If a titleSpan value is set, the title value is not displayed.
   String title;
@@ -66,6 +75,9 @@ class PlutoColumn {
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
   EdgeInsets? cellPadding;
+
+  /// Customisable cellField padding.
+  EdgeInsets? cellInternalPadding;
 
   /// Text alignment in Cell. (Left, Right, Center)
   PlutoColumnTextAlign textAlign;
@@ -192,7 +204,15 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
+  /// Trigger [PlutoGridOnEachChangedEvent] for each character change
+  bool enablePlutoGridOnEachChangedEvent;
+
+  /// Field Validator for the column
+  PlutoColumnValueValidator? validator;
+
   PlutoColumn({
+    this.isFilterApplied,
+    this.onPressedFilter,
     required this.title,
     required this.field,
     required this.type,
@@ -204,6 +224,7 @@ class PlutoColumn {
     this.filterPadding,
     this.titleSpan,
     this.cellPadding,
+    this.cellInternalPadding,
     this.textAlign = PlutoColumnTextAlign.start,
     this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
@@ -226,6 +247,8 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
+    this.enablePlutoGridOnEachChangedEvent = false,
+    this.validator,
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 

@@ -220,9 +220,10 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required Color cellColorInEditState,
     required Color cellColorInReadOnlyState,
     required PlutoGridSelectingMode selectingMode,
+    required Color? cellColorCallbackColor,
   }) {
     if (!hasFocus) {
-      return gridBackgroundColor;
+      return cellColorCallbackColor ?? gridBackgroundColor;
     }
 
     if (!isEditing) {
@@ -250,9 +251,23 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     required Color? cellColorGroupedRow,
     required PlutoGridSelectingMode selectingMode,
   }) {
+    Color? color;
+    if (stateManager.cellColorCallback != null) {
+      color = stateManager.cellColorCallback!(
+        PlutoCellColorContext(
+          cell: widget.cell,
+          column: widget.column,
+          rowIdx: widget.rowIdx,
+          row: widget.row,
+          stateManager: stateManager,
+        ),
+      );
+    }
+
     if (isCurrentCell) {
       return BoxDecoration(
         color: _currentCellColor(
+          cellColorCallbackColor: color,
           hasFocus: hasFocus,
           isEditing: isEditing,
           readOnly: readOnly,
@@ -269,7 +284,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
       );
     } else if (isSelectedCell) {
       return BoxDecoration(
-        color: activatedColor,
+        color: color ?? activatedColor,
         border: Border.all(
           color: hasFocus ? activatedBorderColor : inactivatedBorderColor,
           width: 1,
@@ -277,7 +292,7 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
       );
     } else {
       return BoxDecoration(
-        color: isGroupedRowCell ? cellColorGroupedRow : null,
+        color: isGroupedRowCell ? cellColorGroupedRow : color,
         border: enableCellVerticalBorder
             ? BorderDirectional(
                 end: BorderSide(
@@ -292,11 +307,22 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: _decoration,
-      child: Padding(
-        padding: widget.cellPadding,
-        child: widget.child,
+    if (widget.cell.hasValidationError) {
+      _decoration = _decoration.copyWith(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+
+    return Tooltip(
+      message: widget.cell.validationError ?? "",
+      child: DecoratedBox(
+        decoration: _decoration,
+        child: Padding(
+          padding: widget.cellPadding,
+          child: widget.child,
+        ),
       ),
     );
   }

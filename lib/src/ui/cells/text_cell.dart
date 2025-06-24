@@ -102,6 +102,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       widget.stateManager.currentCell!,
       _initialCellValue,
       notify: false,
+      validationError: doValidation(_initialCellValue),
     );
   }
 
@@ -138,7 +139,11 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       return;
     }
 
-    widget.stateManager.changeCellValue(widget.cell, _textController.text);
+    widget.stateManager.changeCellValue(
+      widget.cell,
+      _textController.text,
+      validationError: doValidation(_textController.text),
+    );
 
     _textController.text = formattedValue;
 
@@ -151,12 +156,22 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     _cellEditingStatus = _CellEditingStatus.updated;
   }
 
-  void _handleOnChanged(String value) {
+  void _handleOnChanged(String value, [bool forceChangeCellValue = false]) {
     _cellEditingStatus = formattedValue != value.toString()
         ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
             ? _CellEditingStatus.init
             : _CellEditingStatus.updated;
+
+    if (forceChangeCellValue ||
+        widget.column.enablePlutoGridOnEachChangedEvent) {
+      widget.stateManager.changeCellValue(
+        widget.cell,
+        _textController.text,
+        eachChange: true,
+        validationError: doValidation(value),
+      );
+    }
   }
 
   void _handleOnComplete() {
@@ -164,7 +179,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
 
     _changeValue();
 
-    _handleOnChanged(old);
+    _handleOnChanged(old, true);
 
     PlatformHelper.onMobile(() {
       widget.stateManager.setKeepFocus(false);
@@ -231,20 +246,19 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       cellFocus.requestFocus();
     }
 
-    return TextField(
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
       focusNode: cellFocus,
       controller: _textController,
       readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
-      onSubmitted: (_) => _handleOnComplete(),
+      onFieldSubmitted: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
       style: widget.stateManager.configuration.style.cellTextStyle,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: EdgeInsets.zero,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(borderSide: BorderSide.none),
+        contentPadding: widget.column.cellInternalPadding ?? EdgeInsets.zero,
       ),
       maxLines: 1,
       keyboardType: keyboardType,
@@ -252,6 +266,18 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       textAlignVertical: TextAlignVertical.center,
       textAlign: widget.column.textAlign.value,
     );
+  }
+
+  String? doValidation(String value) {
+    if (widget.column.validator != null) {
+      return widget.column.validator?.call(
+        widget.row,
+        widget.cell,
+        value,
+      );
+    }
+
+    return null;
   }
 }
 

@@ -530,7 +530,7 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   List<InlineSpan> get _children => [
         if (widget.column.titleSpan != null) widget.column.titleSpan!,
-        if (_isFilteredList)
+        if (widget.column.isFilterApplied ?? _isFilteredList)
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
@@ -539,7 +539,8 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
                 color: stateManager.configuration.style.iconColor,
                 size: stateManager.configuration.style.iconSize,
               ),
-              onPressed: _handleOnPressedFilter,
+              onPressed:
+                  widget.column.onPressedFilter ?? _handleOnPressedFilter,
               constraints: BoxConstraints(
                 maxHeight:
                     widget.height + (PlutoGridSettings.rowBorderWidth * 2),

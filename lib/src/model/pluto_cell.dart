@@ -10,6 +10,8 @@ class PlutoCell {
 
   final Key _key;
 
+  String? _validationError;
+
   dynamic _value;
 
   dynamic _valueForSorting;
@@ -52,6 +54,18 @@ class PlutoCell {
     return _value;
   }
 
+  String? get validationError {
+    if (_needToApplyFormatOnInit) {
+      _applyFormatOnInit();
+    }
+
+    return _validationError;
+  }
+
+  bool get hasValidationError {
+    return validationError != null && validationError!.trim().isNotEmpty;
+  }
+
   set value(dynamic changed) {
     if (_value == changed) {
       return;
@@ -60,6 +74,13 @@ class PlutoCell {
     _value = changed;
 
     _valueForSorting = null;
+  }
+
+  set validationError(String? changed) {
+    if (_validationError == changed) {
+      return;
+    }
+    _validationError = changed;
   }
 
   dynamic get valueForSorting {

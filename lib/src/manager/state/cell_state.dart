@@ -5,6 +5,8 @@ abstract class ICellState {
   /// currently selected cell.
   PlutoCell? get currentCell;
 
+  PlutoCellColorCallback? get cellColorCallback;
+
   /// The position index value of the currently selected cell.
   PlutoGridCellPosition? get currentCellPosition;
 

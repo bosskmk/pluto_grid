@@ -27,16 +27,36 @@ class PlutoGridDefaultPdfExport extends AbstractTextExport {
     this.creator,
     this.format,
     this.themeData,
+    this.header,
+    this.footer,
+    this.headerDecoration,
+    this.headerStyle,
+    this.rowCellStyles,
+    this.textStyleBuilder,
   });
 
+  final Widget? header;
+  final BoxDecoration? headerDecoration;
+  final TextStyle? headerStyle;
+  final Widget? footer;
   final String title;
   final String? creator;
   PdfPageFormat? format;
   ThemeData? themeData;
+  final BoxDecoration Function(int index, dynamic data, int rowNum)?
+      rowCellStyles;
+  final TextStyle Function(int index, dynamic data, int rowNum)?
+      textStyleBuilder;
 
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
     return GenericPdfController(
+      rowCellStyles: rowCellStyles,
+      textStyleBuilder: textStyleBuilder,
+      headerDecoration: headerDecoration,
+      headerStyle: headerStyle,
+      header: header,
+      footer: footer,
       title: title,
       creator: creator ?? "https://pub.dev/packages/pluto_grid",
       format: format ?? PdfPageFormat.a4.landscape,

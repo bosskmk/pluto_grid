@@ -44,6 +44,8 @@ abstract class IEditingState {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
+    bool eachChange = false,
+    String? validationError,
   });
 }
 
@@ -212,6 +214,8 @@ mixin EditingState implements IPlutoGridState {
     bool callOnChangedEvent = true,
     bool force = false,
     bool notify = true,
+    bool eachChange = false,
+    String? validationError,
   }) {
     final currentColumn = cell.column;
 
@@ -239,16 +243,28 @@ mixin EditingState implements IPlutoGridState {
     currentRow.setState(PlutoRowState.updated);
 
     cell.value = value;
+    cell.validationError = validationError;
 
     if (callOnChangedEvent == true && onChanged != null) {
-      onChanged!(PlutoGridOnChangedEvent(
-        columnIdx: columnIndex(currentColumn)!,
-        column: currentColumn,
-        rowIdx: refRows.indexOf(currentRow),
-        row: currentRow,
-        value: value,
-        oldValue: oldValue,
-      ));
+      onChanged!(
+        eachChange
+            ? PlutoGridOnEachChangedEvent(
+                columnIdx: columnIndex(currentColumn)!,
+                column: currentColumn,
+                rowIdx: refRows.indexOf(currentRow),
+                row: currentRow,
+                value: value,
+                oldValue: oldValue,
+              )
+            : PlutoGridOnChangedEvent(
+                columnIdx: columnIndex(currentColumn)!,
+                column: currentColumn,
+                rowIdx: refRows.indexOf(currentRow),
+                row: currentRow,
+                value: value,
+                oldValue: oldValue,
+              ),
+      );
     }
 
     notifyListeners(notify, changeCellValue.hashCode);
