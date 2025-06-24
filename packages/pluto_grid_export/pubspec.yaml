@@ -15,7 +15,7 @@ dependencies:
   pluto_grid:
     git:
       url: https://github.com/ujwalbasnet1/pluto_grid.git
-      ref: d3011c67efa4b4d23c9c4de13e9cb30078a23807
+      ref: 0c703a7bdf34117d1c9d9a0b3152e2cafb715fac
   csv: ^5.0.1
   pdf: ^3.10.3
   printing: ^5.10.4
