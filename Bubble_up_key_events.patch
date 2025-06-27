@@ -1,0 +1,95 @@
+Subject: [PATCH] Bubble up key events incl. shortcuts that are not handled
+---
+Index: lib/src/pluto_grid.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/src/pluto_grid.dart b/lib/src/pluto_grid.dart
+--- a/lib/src/pluto_grid.dart	(revision 3a2e74190d3d4bc85f82de2793f97d533aea7dbc)
++++ b/lib/src/pluto_grid.dart	(date 1718360915857)
+@@ -1,6 +1,7 @@
+ import 'dart:math';
+ import 'dart:ui';
+ 
++import 'package:flutter/services.dart';
+ import 'package:flutter/material.dart';
+ import 'package:intl/date_symbol_data_local.dart';
+ import 'package:intl/intl.dart' show Intl;
+@@ -595,13 +596,22 @@
+ 
+   KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, KeyEvent event) {
+     if (_keyManager.eventResult.isSkip == false) {
+-      _keyManager.subject.add(PlutoKeyManagerEvent(
++      PlutoKeyManagerEvent plutoKeyEvent = PlutoKeyManagerEvent(
+         focusNode: focusNode,
+         event: event,
+-      ));
++      );
++      _keyManager.subject.add(plutoKeyEvent);
++
++      bool isDefaultKey =  _keyManager.isDefaultAction(plutoKeyEvent);
++      bool shortcutHasAction = isDefaultKey ? false : stateManager.configuration.shortcut.shortcutHasAction(
++          keyEvent: plutoKeyEvent,
++          state: HardwareKeyboard.instance
++      );
++
++      return _keyManager.eventResult.consume(isDefaultKey || shortcutHasAction ? KeyEventResult.handled : KeyEventResult.ignored);
+     }
+ 
+-    return _keyManager.eventResult.consume(KeyEventResult.handled);
++    return _keyManager.eventResult.consume(KeyEventResult.ignored);
+   }
+ 
+   @override
+Index: lib/src/manager/shortcut/pluto_grid_shortcut.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/src/manager/shortcut/pluto_grid_shortcut.dart b/lib/src/manager/shortcut/pluto_grid_shortcut.dart
+--- a/lib/src/manager/shortcut/pluto_grid_shortcut.dart	(revision 3a2e74190d3d4bc85f82de2793f97d533aea7dbc)
++++ b/lib/src/manager/shortcut/pluto_grid_shortcut.dart	(date 1718361279716)
+@@ -39,6 +39,14 @@
+     return false;
+   }
+ 
++  bool shortcutHasAction({
++    required PlutoKeyManagerEvent keyEvent,
++    required HardwareKeyboard state
++  }) {
++    var handledActions = actions.entries.where((action) => action.key.accepts(keyEvent.event, state));
++    return handledActions.isNotEmpty;
++  }
++
+   static final Map<ShortcutActivator, PlutoGridShortcutAction> defaultActions =
+       {
+     // Move cell focus
+Index: lib/src/manager/pluto_grid_key_manager.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/src/manager/pluto_grid_key_manager.dart b/lib/src/manager/pluto_grid_key_manager.dart
+--- a/lib/src/manager/pluto_grid_key_manager.dart	(revision 3a2e74190d3d4bc85f82de2793f97d533aea7dbc)
++++ b/lib/src/manager/pluto_grid_key_manager.dart	(date 1718361163189)
+@@ -73,6 +73,10 @@
+     _subscription = MergeStream([normalStream, movingStream]).listen(_handler);
+   }
+ 
++  bool isDefaultAction(PlutoKeyManagerEvent keyEvent){
++    return !keyEvent.isModifierPressed && keyEvent.isCharacter;
++  }
++
+   void _handler(PlutoKeyManagerEvent keyEvent) {
+     if (keyEvent.isKeyUpEvent) return;
+ 
+@@ -88,7 +92,7 @@
+   }
+ 
+   void _handleDefaultActions(PlutoKeyManagerEvent keyEvent) {
+-    if (!keyEvent.isModifierPressed && keyEvent.isCharacter) {
++    if (isDefaultAction(keyEvent)) {
+       _handleCharacter(keyEvent);
+       return;
+     }
