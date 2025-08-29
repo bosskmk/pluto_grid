@@ -188,8 +188,8 @@ mixin ColumnState implements IPlutoGridState {
       refColumns[i].frozen.isNone
           ? bodyIndexes.add(i)
           : refColumns[i].frozen.isStart
-              ? leftIndexes.add(i)
-              : rightIndexes.add(i);
+          ? leftIndexes.add(i)
+          : rightIndexes.add(i);
     }
 
     return leftIndexes + bodyIndexes + rightIndexes;
@@ -656,10 +656,18 @@ mixin ColumnState implements IPlutoGridState {
 
     if (sortOnlyEvent) return;
 
-    compare(a, b) => column.type.compare(
+    compare(a, b) {
+      if (column.sortDelegate != null) {
+        var v1 = column.sortDelegate!(a.cells[column.field]!.value);
+        var v2 = column.sortDelegate!(b.cells[column.field]!.value);
+        return v1.compareTo(v2);
+      } else {
+        return column.type.compare(
           a.cells[column.field]!.valueForSorting,
           b.cells[column.field]!.valueForSorting,
         );
+      }
+    }
 
     if (enabledRowGroups) {
       sortRowGroup(column: column, compare: compare);
@@ -678,10 +686,18 @@ mixin ColumnState implements IPlutoGridState {
 
     if (sortOnlyEvent) return;
 
-    compare(b, a) => column.type.compare(
+    compare(b, a) {
+      if (column.sortDelegate != null) {
+        var v1 = column.sortDelegate!(a.cells[column.field]!.value);
+        var v2 = column.sortDelegate!(b.cells[column.field]!.value);
+        return v1.compareTo(v2);
+      } else {
+        return column.type.compare(
           a.cells[column.field]!.valueForSorting,
           b.cells[column.field]!.valueForSorting,
         );
+      }
+    }
 
     if (enabledRowGroups) {
       sortRowGroup(column: column, compare: compare);
