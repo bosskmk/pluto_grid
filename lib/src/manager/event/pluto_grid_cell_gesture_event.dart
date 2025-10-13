@@ -55,8 +55,12 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
 
     if (stateManager.isCurrentCell(cell) && stateManager.isEditing != true) {
       stateManager.setEditing(true);
+
+      _ensureCellVisibility(stateManager, column, rowIdx);
     } else {
       stateManager.setCurrentCell(cell, rowIdx);
+
+      _ensureCellVisibility(stateManager, column, rowIdx);
     }
   }
 
@@ -160,6 +164,8 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
         if (stateManager.isCurrentCell(cell) == false) {
           stateManager.setCurrentCell(cell, rowIdx);
 
+          _ensureCellVisibility(stateManager, column, rowIdx);
+
           if (!stateManager.mode.isSelectWithOneTap) {
             return;
           }
@@ -181,6 +187,134 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
     if (stateManager.isCurrentCell(cell) != true) {
       stateManager.setCurrentCell(cell, rowIdx, notify: false);
     }
+  }
+
+  void _ensureCellVisibility(
+    PlutoGridStateManager stateManager,
+    PlutoColumn column,
+    int rowIdx,
+  ) {
+    _ensureRowVisibility(stateManager, rowIdx);
+
+    _ensureColumnVisibility(stateManager, column);
+  }
+
+  void _ensureRowVisibility(
+    PlutoGridStateManager stateManager,
+    int rowIdx,
+  ) {
+    final verticalScroll = stateManager.scroll.vertical;
+    final bodyRowsVertical = stateManager.scroll.bodyRowsVertical;
+
+    if (verticalScroll == null || bodyRowsVertical?.hasClients != true) {
+      return;
+    }
+
+    final double rowSize = stateManager.rowTotalHeight;
+    final double rowStart = rowIdx * rowSize;
+    final double rowEnd = rowStart + rowSize;
+
+    final double topOffset = stateManager.scroll.verticalOffset;
+    final double viewportHeight = stateManager.columnRowContainerHeight -
+        stateManager.columnGroupHeight -
+        stateManager.columnHeight -
+        stateManager.columnFilterHeight -
+        stateManager.columnFooterHeight -
+        PlutoGridSettings.rowBorderWidth;
+
+    if (viewportHeight <= 0) {
+      return;
+    }
+
+    final double bottomOffset = topOffset + viewportHeight;
+
+    double? targetOffset;
+
+    if (rowStart < topOffset) {
+      targetOffset = rowStart;
+    } else if (rowEnd > bottomOffset) {
+      targetOffset = topOffset + (rowEnd - bottomOffset);
+    }
+
+    if (targetOffset == null) {
+      return;
+    }
+
+    if (targetOffset < 0) {
+      targetOffset = 0;
+    }
+
+    final double maxScroll = stateManager.scroll.maxScrollVertical;
+
+    if (targetOffset > maxScroll) {
+      targetOffset = maxScroll;
+    }
+
+    verticalScroll.jumpTo(targetOffset);
+  }
+
+  void _ensureColumnVisibility(
+    PlutoGridStateManager stateManager,
+    PlutoColumn column,
+  ) {
+    if (stateManager.scroll.horizontal == null ||
+        stateManager.scroll.bodyRowsHorizontal?.hasClients != true) {
+      return;
+    }
+
+    if (stateManager.showFrozenColumn && column.frozen.isFrozen) {
+      return;
+    }
+
+    final double? maxWidth = stateManager.maxWidth;
+
+    if (maxWidth == null) {
+      return;
+    }
+
+    final double bodyWidth = stateManager.showFrozenColumn
+        ? maxWidth -
+            stateManager.leftFrozenColumnsWidth -
+            stateManager.rightFrozenColumnsWidth
+        : maxWidth;
+
+    final double viewportWidth =
+        bodyWidth - stateManager.scrollOffsetByFrozenColumn;
+
+    if (viewportWidth <= 0) {
+      return;
+    }
+
+    final double currentOffset = stateManager.scroll.horizontal!.offset;
+    final double columnStart = column.startPosition;
+    final double columnEnd = columnStart + column.width;
+
+    final double visibleStart = currentOffset;
+    final double visibleEnd = visibleStart + viewportWidth;
+
+    double? targetOffset;
+
+    if (columnStart < visibleStart) {
+      targetOffset = columnStart;
+    } else if (columnEnd > visibleEnd) {
+      targetOffset = columnEnd - viewportWidth;
+    }
+
+    if (targetOffset == null) {
+      return;
+    }
+
+    if (targetOffset < 0) {
+      targetOffset = 0;
+    }
+
+    final double maxScroll = stateManager.scroll.maxScrollHorizontal;
+
+    if (targetOffset > maxScroll) {
+      targetOffset = maxScroll;
+    }
+
+    stateManager.scroll.horizontal!.jumpTo(targetOffset);
   }
 }
 
