@@ -152,6 +152,8 @@ void main() {
       when(stateManager.mode).thenReturn(PlutoGridMode.normal);
       when(stateManager.isEditing).thenReturn(true);
       when(verticalScroll.offset).thenReturn(40);
+      when(scroll.verticalOffset).thenReturn(40);
+      when(scroll.maxScrollVertical).thenReturn(1000);
       clearInteractions(stateManager);
       clearInteractions(verticalScroll);
 
@@ -180,6 +182,8 @@ void main() {
       when(stateManager.mode).thenReturn(PlutoGridMode.normal);
       when(stateManager.isEditing).thenReturn(true);
       when(horizontalScroll.offset).thenReturn(0);
+      when(scroll.horizontalOffset).thenReturn(0);
+      when(scroll.maxScrollHorizontal).thenReturn(1000);
       clearInteractions(stateManager);
       clearInteractions(horizontalScroll);
 
