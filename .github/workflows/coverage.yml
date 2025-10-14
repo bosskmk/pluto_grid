@@ -16,8 +16,17 @@ jobs:
     steps:
       # Without this, there are no files in the directory.
       - uses: actions/checkout@v3
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.dartServer/.analysis-driver
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.yaml', 'analysis_options.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       # using flutter
-      - uses: subosito/flutter-action@v2.4.0
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - run: dart --version

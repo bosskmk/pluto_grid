@@ -15,6 +15,8 @@ void main() {
   late MockScrollController verticalScrollController;
   late MockPlutoGridEventManager eventManager;
   late PlutoGridKeyPressed keyPressed;
+  late MockScrollPosition horizontalScrollPosition;
+  late MockScrollPosition verticalScrollPosition;
 
   eventBuilder({
     required PlutoGridGestureType gestureType,
@@ -45,6 +47,8 @@ void main() {
     verticalScrollController = MockScrollController();
     eventManager = MockPlutoGridEventManager();
     keyPressed = MockPlutoGridKeyPressed();
+    horizontalScrollPosition = MockScrollPosition();
+    verticalScrollPosition = MockScrollPosition();
 
     when(stateManager.eventManager).thenReturn(eventManager);
     when(stateManager.scroll).thenReturn(scroll);
@@ -54,8 +58,25 @@ void main() {
     when(scroll.bodyRowsHorizontal).thenReturn(horizontalScrollController);
     when(scroll.vertical).thenReturn(verticalScroll);
     when(scroll.bodyRowsVertical).thenReturn(verticalScrollController);
-    when(horizontalScrollController.offset).thenReturn(0.0);
-    when(verticalScrollController.offset).thenReturn(0.0);
+    when(horizontalScroll.offset).thenReturn(0.0);
+    when(verticalScroll.offset).thenReturn(0.0);
+    when(horizontalScrollController.hasClients).thenReturn(true);
+    when(verticalScrollController.hasClients).thenReturn(true);
+    when(horizontalScrollController.position).thenReturn(horizontalScrollPosition);
+    when(verticalScrollController.position).thenReturn(verticalScrollPosition);
+    when(horizontalScrollPosition.maxScrollExtent).thenReturn(1000);
+    when(verticalScrollPosition.maxScrollExtent).thenReturn(1000);
+    when(stateManager.columnRowContainerHeight).thenReturn(300);
+    when(stateManager.columnGroupHeight).thenReturn(0);
+    when(stateManager.columnHeight).thenReturn(0);
+    when(stateManager.columnFilterHeight).thenReturn(0);
+    when(stateManager.columnFooterHeight).thenReturn(0);
+    when(stateManager.rowTotalHeight).thenReturn(50);
+    when(stateManager.maxWidth).thenReturn(400);
+    when(stateManager.leftFrozenColumnsWidth).thenReturn(0);
+    when(stateManager.rightFrozenColumnsWidth).thenReturn(0);
+    when(stateManager.scrollOffsetByFrozenColumn).thenReturn(0);
+    when(stateManager.showFrozenColumn).thenReturn(false);
   });
 
   group('onTapUp', () {
@@ -121,6 +142,74 @@ void main() {
         verifyNever(stateManager.setEditing(any));
       },
     );
+
+    test('should reposition vertical scroll when tapped row is above viewport.',
+        () {
+      // given
+      when(stateManager.hasFocus).thenReturn(true);
+      when(stateManager.isCurrentCell(any)).thenReturn(false);
+      when(stateManager.isSelectingInteraction()).thenReturn(false);
+      when(stateManager.mode).thenReturn(PlutoGridMode.normal);
+      when(stateManager.isEditing).thenReturn(true);
+      when(verticalScroll.offset).thenReturn(40);
+      when(scroll.verticalOffset).thenReturn(40);
+      when(scroll.maxScrollVertical).thenReturn(1000);
+      clearInteractions(stateManager);
+      clearInteractions(verticalScroll);
+
+      final cell = PlutoCell(value: 'value');
+      const rowIdx = 0;
+
+      // when
+      final event = eventBuilder(
+        gestureType: PlutoGridGestureType.onTapUp,
+        cell: cell,
+        rowIdx: rowIdx,
+      );
+      event.handler(stateManager);
+
+      // then
+      verify(stateManager.setCurrentCell(cell, rowIdx)).called(1);
+      verify(verticalScroll.jumpTo(0)).called(1);
+    });
+
+    test('should reposition horizontal scroll when tapped column is clipped.',
+        () {
+      // given
+      when(stateManager.hasFocus).thenReturn(true);
+      when(stateManager.isCurrentCell(any)).thenReturn(false);
+      when(stateManager.isSelectingInteraction()).thenReturn(false);
+      when(stateManager.mode).thenReturn(PlutoGridMode.normal);
+      when(stateManager.isEditing).thenReturn(true);
+      when(horizontalScroll.offset).thenReturn(0);
+      when(scroll.horizontalOffset).thenReturn(0);
+      when(scroll.maxScrollHorizontal).thenReturn(1000);
+      clearInteractions(stateManager);
+      clearInteractions(horizontalScroll);
+
+      final column = PlutoColumn(
+        title: 'column',
+        field: 'column',
+        type: PlutoColumnType.text(),
+        width: 120,
+      )
+        ..startPosition = 350;
+      final cell = PlutoCell(value: 'value');
+      const rowIdx = 1;
+
+      // when
+      final event = eventBuilder(
+        gestureType: PlutoGridGestureType.onTapUp,
+        cell: cell,
+        column: column,
+        rowIdx: rowIdx,
+      );
+      event.handler(stateManager);
+
+      // then
+      verify(stateManager.setCurrentCell(cell, rowIdx)).called(1);
+      verify(horizontalScroll.jumpTo(70)).called(1);
+    });
 
     test(
       'When, '
