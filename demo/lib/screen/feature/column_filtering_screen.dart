@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnFilteringScreen extends StatefulWidget {
   static const routeName = 'feature/column-filtering';
 
-  const ColumnFilteringScreen({Key? key}) : super(key: key);
+  const ColumnFilteringScreen({super.key});
 
   @override
   _ColumnFilteringScreenState createState() => _ColumnFilteringScreenState();

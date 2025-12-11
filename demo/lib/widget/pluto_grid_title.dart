@@ -4,9 +4,9 @@ class PlutoGridTitle extends StatelessWidget {
   final double? fontSize;
 
   const PlutoGridTitle({
-    Key? key,
+    super.key,
     this.fontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

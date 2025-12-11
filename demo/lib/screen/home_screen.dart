@@ -51,7 +51,7 @@ import 'feature/value_formatter_screen.dart';
 class HomeScreen extends StatelessWidget {
   static const routeName = '/';
 
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +203,7 @@ class PlutoFeatures extends StatelessWidget {
     color: Colors.deepOrange,
   );
 
-  const PlutoFeatures({Key? key}) : super(key: key);
+  const PlutoFeatures({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -506,7 +506,7 @@ class PlutoFeatures extends StatelessWidget {
 }
 
 class PlutoContributors extends StatelessWidget {
-  const PlutoContributors({Key? key}) : super(key: key);
+  const PlutoContributors({super.key});
 
   @override
   Widget build(BuildContext context) {

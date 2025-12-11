@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
 //
 /// For more examples, go to the demo web link on the github below.
 class PlutoGridExamplePage extends StatefulWidget {
-  const PlutoGridExamplePage({Key? key}) : super(key: key);
+  const PlutoGridExamplePage({super.key});
 
   @override
   State<PlutoGridExamplePage> createState() => _PlutoGridExamplePageState();

@@ -32,7 +32,7 @@ class PlutoGridEventManager {
         .where((event) => event.type.isThrottleLeading)
         .transform(
           ThrottleStreamTransformer(
-            (_) => TimerStream<PlutoGridEvent>(_, _.duration as Duration),
+            (s) => TimerStream<PlutoGridEvent>(s, s.duration as Duration),
             trailing: false,
             leading: true,
           ),
@@ -42,7 +42,7 @@ class PlutoGridEventManager {
         .where((event) => event.type.isThrottleTrailing)
         .transform(
           ThrottleStreamTransformer(
-            (_) => TimerStream<PlutoGridEvent>(_, _.duration as Duration),
+            (s) => TimerStream<PlutoGridEvent>(s, s.duration as Duration),
             trailing: true,
             leading: false,
           ),
@@ -51,7 +51,7 @@ class PlutoGridEventManager {
     final debounceStream =
         _subject.stream.where((event) => event.type.isDebounce).transform(
               DebounceStreamTransformer(
-                (_) => TimerStream<PlutoGridEvent>(_, _.duration as Duration),
+                (s) => TimerStream<PlutoGridEvent>(s, s.duration as Duration),
               ),
             );
 

@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnFreezingScreen extends StatefulWidget {
   static const routeName = 'feature/column-freezing';
 
-  const ColumnFreezingScreen({Key? key}) : super(key: key);
+  const ColumnFreezingScreen({super.key});
 
   @override
   _ColumnFreezingScreenState createState() => _ColumnFreezingScreenState();

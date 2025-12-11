@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowInfinityScrollScreen extends StatefulWidget {
   static const routeName = 'feature/row-infinity-scroll';
 
-  const RowInfinityScrollScreen({Key? key}) : super(key: key);
+  const RowInfinityScrollScreen({super.key});
 
   @override
   _RowInfinityScrollScreenState createState() =>

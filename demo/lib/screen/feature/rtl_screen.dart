@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RTLScreen extends StatefulWidget {
   static const routeName = 'feature/rtl';
 
-  const RTLScreen({Key? key}) : super(key: key);
+  const RTLScreen({super.key});
 
   @override
   _RTLScreenState createState() => _RTLScreenState();

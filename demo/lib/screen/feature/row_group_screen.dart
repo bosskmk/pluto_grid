@@ -9,7 +9,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowGroupScreen extends StatefulWidget {
   static const routeName = 'feature/row-group';
 
-  const RowGroupScreen({Key? key}) : super(key: key);
+  const RowGroupScreen({super.key});
 
   @override
   _RowGroupScreenState createState() => _RowGroupScreenState();

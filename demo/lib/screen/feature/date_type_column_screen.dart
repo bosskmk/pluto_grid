@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class DateTypeColumnScreen extends StatefulWidget {
   static const routeName = 'feature/date-type-column';
 
-  const DateTypeColumnScreen({Key? key}) : super(key: key);
+  const DateTypeColumnScreen({super.key});
 
   @override
   _DateTypeColumnScreenState createState() => _DateTypeColumnScreenState();

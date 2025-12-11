@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnMovingScreen extends StatefulWidget {
   static const routeName = 'feature/column-moving';
 
-  const ColumnMovingScreen({Key? key}) : super(key: key);
+  const ColumnMovingScreen({super.key});
 
   @override
   _ColumnMovingScreenState createState() => _ColumnMovingScreenState();

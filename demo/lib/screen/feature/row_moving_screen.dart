@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowMovingScreen extends StatefulWidget {
   static const routeName = 'feature/row-moving';
 
-  const RowMovingScreen({Key? key}) : super(key: key);
+  const RowMovingScreen({super.key});
 
   @override
   _RowMovingScreenState createState() => _RowMovingScreenState();

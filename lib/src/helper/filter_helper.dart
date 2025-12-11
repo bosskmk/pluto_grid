@@ -111,7 +111,7 @@ class FilterHelper {
     };
   }
 
-  /// Converts List<PlutoRow> type with filtering information to Map type.
+  /// Converts List&lt;PlutoRow&gt; type with filtering information to Map type.
   ///
   /// [allField] determines the key value of the filter applied to the entire scope.
   /// Default is all.

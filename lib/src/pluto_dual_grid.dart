@@ -78,7 +78,7 @@ class PlutoDualGrid extends StatefulWidget {
 }
 
 class PlutoDualGridResizeNotifier extends ChangeNotifier {
-  resize() {
+  void resize() {
     notifyListeners();
   }
 }

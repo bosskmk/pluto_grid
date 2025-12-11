@@ -10,7 +10,7 @@ import '../../widget/pluto_example_screen.dart';
 class AddRowsAsynchronouslyScreen extends StatefulWidget {
   static const routeName = 'feature/add-rows-asynchronously';
 
-  const AddRowsAsynchronouslyScreen({Key? key}) : super(key: key);
+  const AddRowsAsynchronouslyScreen({super.key});
 
   @override
   _AddRowsAsynchronouslyScreenState createState() =>

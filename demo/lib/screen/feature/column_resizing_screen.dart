@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnResizingScreen extends StatefulWidget {
   static const routeName = 'feature/column-resizing';
 
-  const ColumnResizingScreen({Key? key}) : super(key: key);
+  const ColumnResizingScreen({super.key});
 
   @override
   _ColumnResizingScreenState createState() => _ColumnResizingScreenState();
@@ -78,8 +78,7 @@ class _ColumnResizingScreenState extends State<ColumnResizingScreen> {
 class _Header extends StatefulWidget {
   const _Header({
     required this.setConfig,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final void Function(PlutoGridColumnSizeConfig) setConfig;
 

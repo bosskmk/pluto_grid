@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class EditingStateScreen extends StatefulWidget {
   static const routeName = 'feature/editing-state';
 
-  const EditingStateScreen({Key? key}) : super(key: key);
+  const EditingStateScreen({super.key});
 
   @override
   _EditingStateScreenState createState() => _EditingStateScreenState();

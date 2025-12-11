@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnGroupScreen extends StatefulWidget {
   static const routeName = 'feature/column-group';
 
-  const ColumnGroupScreen({Key? key}) : super(key: key);
+  const ColumnGroupScreen({super.key});
 
   @override
   _ColumnGroupScreenState createState() => _ColumnGroupScreenState();
