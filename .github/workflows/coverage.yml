@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Without this, there are no files in the directory.
-      - uses: actions/checkout@4
+      - uses: actions/checkout@v4
       # using flutter
       - uses: subosito/flutter-action@v2.4.0
         with:
