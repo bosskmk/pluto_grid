@@ -8,11 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
     steps:
       # Without this, there are no files in the directory.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@4
       # using flutter
       - uses: subosito/flutter-action@v2.4.0
         with:
@@ -22,6 +20,7 @@ jobs:
       - run: flutter pub get
       - run: flutter test --coverage
       # codecov.io
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v5
         with:
-          file: ./coverage/lcov.info
+          files: ./coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
