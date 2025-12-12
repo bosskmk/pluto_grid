@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class GridAsPopupScreen extends StatefulWidget {
   static const routeName = 'feature/grid-as-popup';
 
-  const GridAsPopupScreen({Key? key}) : super(key: key);
+  const GridAsPopupScreen({super.key});
 
   @override
   _GridAsPopupScreenState createState() => _GridAsPopupScreenState();

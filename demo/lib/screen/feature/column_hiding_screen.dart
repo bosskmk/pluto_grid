@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnHidingScreen extends StatefulWidget {
   static const routeName = 'feature/column-hiding';
 
-  const ColumnHidingScreen({Key? key}) : super(key: key);
+  const ColumnHidingScreen({super.key});
 
   @override
   _ColumnHidingScreenState createState() => _ColumnHidingScreenState();

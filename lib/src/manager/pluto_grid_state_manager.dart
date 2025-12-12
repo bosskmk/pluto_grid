@@ -297,7 +297,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
   /// [PlutoGridStateManager.initializeRowsAsync] repeats [Timer] every [duration],
   /// Process the setting of [refRows] by the size of [chunkSize].
   /// [Isolate] is a good way to handle CPU heavy work, but
-  /// The condition that List<PlutoRow> cannot be passed to Isolate
+  /// The condition that List&lt;PlutoRow&gt; cannot be passed to Isolate
   /// solves the problem of UI freezing by dividing the work with Timer.
   ///
   /// {@macro initialize_rows_params}

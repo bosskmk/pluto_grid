@@ -1,3 +1,7 @@
+## [8.1.0] - 2025. 12. 12
+
+* Updated for flutter 3.38 version.
+
 ## [8.0.0] - 2024. 3. 1
 
 * Updated for flutter 3.19 version.

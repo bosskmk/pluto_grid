@@ -997,20 +997,20 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   Paint get _paintThumb {
     return Paint()
       ..color =
-          color.withOpacity(color.opacity * fadeoutOpacityAnimation.value);
+          color.withValues(alpha: color.a * fadeoutOpacityAnimation.value);
   }
 
   Paint _paintTrack({bool isBorder = false}) {
     if (isBorder) {
       return Paint()
-        ..color = trackBorderColor.withOpacity(
-            trackBorderColor.opacity * fadeoutOpacityAnimation.value)
+        ..color = trackBorderColor.withValues(
+            alpha: trackBorderColor.a * fadeoutOpacityAnimation.value)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.0;
     }
     return Paint()
-      ..color = trackColor
-          .withOpacity(trackColor.opacity * fadeoutOpacityAnimation.value);
+      ..color = trackColor.withValues(
+          alpha: trackColor.a * fadeoutOpacityAnimation.value);
   }
 
   void _paintScrollbar(
@@ -1220,7 +1220,9 @@ class _ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (_lastAxisDirection == null ||
         _lastMetrics == null ||
-        _lastMetrics!.maxScrollExtent <= _lastMetrics!.minScrollExtent) return;
+        _lastMetrics!.maxScrollExtent <= _lastMetrics!.minScrollExtent) {
+      return;
+    }
 
     // Skip painting if there's not enough space.
     if (_lastMetrics!.viewportDimension <= _mainAxisPadding ||

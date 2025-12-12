@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class NumberTypeColumnScreen extends StatefulWidget {
   static const routeName = 'feature/number-type-column';
 
-  const NumberTypeColumnScreen({Key? key}) : super(key: key);
+  const NumberTypeColumnScreen({super.key});
 
   @override
   _NumberTypeColumnScreenState createState() => _NumberTypeColumnScreenState();

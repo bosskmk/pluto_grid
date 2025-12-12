@@ -12,13 +12,13 @@ class PlutoExampleScreen extends StatelessWidget {
   final Widget? body;
 
   const PlutoExampleScreen({
-    Key? key,
+    super.key,
     this.title,
     this.topTitle,
     this.topContents,
     this.topButtons,
     this.body,
-  }) : super(key: key);
+  });
 
   AlertDialog reportingDialog(BuildContext context) {
     return AlertDialog(

@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class ColumnFooterScreen extends StatefulWidget {
   static const routeName = 'feature/column-footer';
 
-  const ColumnFooterScreen({Key? key}) : super(key: key);
+  const ColumnFooterScreen({super.key});
 
   @override
   _ColumnFooterScreenState createState() => _ColumnFooterScreenState();

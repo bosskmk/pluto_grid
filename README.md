@@ -1,4 +1,4 @@
-## PlutoGrid for flutter - v8.0.0
+## PlutoGrid for flutter - v8.1.0
 
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg)](https://github.com/Solido/awesome-flutter)
 [![codecov](https://codecov.io/gh/bosskmk/pluto_grid/branch/master/graph/badge.svg)](https://codecov.io/gh/bosskmk/pluto_grid)
@@ -192,6 +192,7 @@ Widget build(BuildContext context) {
 
 | Flutter          | PlutoGrid             |
 |------------------|-----------------------|
+| 3.38.0 or higher | 8.1.0 or higher       |
 | 3.19.0 or higher | 8.0.0 or higher       |
 | 3.10.0 or higher | 7.0.0 or higher       |
 | 3.7.0 or higher  | 6.0.0 or higher       |

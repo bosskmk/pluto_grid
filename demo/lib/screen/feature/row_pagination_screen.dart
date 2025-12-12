@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowPaginationScreen extends StatefulWidget {
   static const routeName = 'feature/row-pagination';
 
-  const RowPaginationScreen({Key? key}) : super(key: key);
+  const RowPaginationScreen({super.key});
 
   @override
   _RowPaginationScreenState createState() => _RowPaginationScreenState();

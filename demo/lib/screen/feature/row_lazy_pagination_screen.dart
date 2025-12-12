@@ -10,7 +10,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowLazyPaginationScreen extends StatefulWidget {
   static const routeName = 'feature/row-lazy-pagination';
 
-  const RowLazyPaginationScreen({Key? key}) : super(key: key);
+  const RowLazyPaginationScreen({super.key});
 
   @override
   State<RowLazyPaginationScreen> createState() =>

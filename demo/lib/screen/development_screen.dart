@@ -1,4 +1,4 @@
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' hide Color, Image;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -13,14 +13,16 @@ enum _Test {
   c;
 
   bool get isA => this == _Test.a;
+
   bool get isB => this == _Test.b;
+
   bool get isC => this == _Test.c;
 }
 
 class DevelopmentScreen extends StatefulWidget {
   static const routeName = 'development';
 
-  const DevelopmentScreen({Key? key}) : super(key: key);
+  const DevelopmentScreen({super.key});
 
   @override
   _DevelopmentScreenState createState() => _DevelopmentScreenState();
@@ -357,7 +359,7 @@ class ClassYouImplemented implements PlutoFilterType {
 }
 
 class _NoRows extends StatelessWidget {
-  const _NoRows({Key? key}) : super(key: key);
+  const _NoRows();
 
   @override
   Widget build(BuildContext context) {
@@ -407,8 +409,7 @@ class _Header extends StatefulWidget {
     required this.setTextDirection,
     required this.setConfiguration,
     required this.setGridMode,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   _HeaderState createState() => _HeaderState();
@@ -657,9 +658,11 @@ class _HeaderState extends State<_Header> {
     return PlutoMenuBar(
       borderColor: Colors.transparent,
       mode: _isMobile ? PlutoMenuBarMode.tap : PlutoMenuBarMode.hover,
-      textStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 14,
+      itemStyle: PlutoMenuItemStyle(
+        textStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+        ),
       ),
       menus: [
         PlutoMenuItem(

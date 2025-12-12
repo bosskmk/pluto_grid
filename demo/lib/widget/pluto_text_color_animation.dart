@@ -7,11 +7,11 @@ class PlutoTextColorAnimation extends StatefulWidget {
   final FontWeight? fontWeight;
 
   const PlutoTextColorAnimation({
-    Key? key,
+    super.key,
     this.text,
     this.fontSize,
     this.fontWeight,
-  }) : super(key: key);
+  });
 
   @override
   _PlutoTextColorAnimationState createState() =>

@@ -11,7 +11,7 @@ import '../../widget/pluto_example_screen.dart';
 class DualModeScreen extends StatefulWidget {
   static const routeName = 'feature/dual-mode';
 
-  const DualModeScreen({Key? key}) : super(key: key);
+  const DualModeScreen({super.key});
 
   @override
   _DualModeScreenState createState() => _DualModeScreenState();

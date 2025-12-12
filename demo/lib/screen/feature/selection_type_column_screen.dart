@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class SelectionTypeColumnScreen extends StatefulWidget {
   static const routeName = 'feature/selection-type-column';
 
-  const SelectionTypeColumnScreen({Key? key}) : super(key: key);
+  const SelectionTypeColumnScreen({super.key});
 
   @override
   _SelectionTypeColumnScreenState createState() =>

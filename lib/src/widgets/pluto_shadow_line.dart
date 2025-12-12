@@ -25,7 +25,7 @@ class PlutoShadowLine extends StatelessWidget {
           boxShadow: shadow == true
               ? [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
+                    color: Colors.grey.withValues(alpha: 0.15),
                     spreadRadius: 1,
                     blurRadius: 3,
                     offset: reverse == true

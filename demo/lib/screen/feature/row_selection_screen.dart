@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowSelectionScreen extends StatefulWidget {
   static const routeName = 'feature/row-selection';
 
-  const RowSelectionScreen({Key? key}) : super(key: key);
+  const RowSelectionScreen({super.key});
 
   @override
   _RowSelectionScreenState createState() => _RowSelectionScreenState();

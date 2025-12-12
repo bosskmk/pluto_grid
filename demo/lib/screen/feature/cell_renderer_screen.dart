@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class CellRendererScreen extends StatefulWidget {
   static const routeName = 'feature/cell-renderer';
 
-  const CellRendererScreen({Key? key}) : super(key: key);
+  const CellRendererScreen({super.key});
 
   @override
   _CellRendererScreenState createState() => _CellRendererScreenState();

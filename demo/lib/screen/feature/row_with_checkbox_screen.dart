@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class RowWithCheckboxScreen extends StatefulWidget {
   static const routeName = 'feature/row-with-checkbox';
 
-  const RowWithCheckboxScreen({Key? key}) : super(key: key);
+  const RowWithCheckboxScreen({super.key});
 
   @override
   _RowWithCheckboxScreenState createState() => _RowWithCheckboxScreenState();

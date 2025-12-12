@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class MovingScreen extends StatefulWidget {
   static const routeName = 'feature/moving';
 
-  const MovingScreen({Key? key}) : super(key: key);
+  const MovingScreen({super.key});
 
   @override
   _MovingScreenState createState() => _MovingScreenState();

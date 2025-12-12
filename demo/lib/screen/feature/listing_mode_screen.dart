@@ -10,7 +10,7 @@ import '../../widget/pluto_example_screen.dart';
 class ListingModeScreen extends StatefulWidget {
   static const routeName = 'feature/listing-mode';
 
-  const ListingModeScreen({Key? key}) : super(key: key);
+  const ListingModeScreen({super.key});
 
   @override
   _ListingModeScreenState createState() => _ListingModeScreenState();
@@ -115,7 +115,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),
@@ -186,7 +186,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(e.value.value.toString()),
                                 ))
-                            .toList(),
+                            ,
                         const SizedBox(height: 20),
                         Center(
                           child: Wrap(
@@ -204,7 +204,7 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                     Colors.blue,
                                   ),
                                 ),

@@ -6,7 +6,7 @@ import '../dummy_data/development.dart';
 class EmptyScreen extends StatefulWidget {
   static const routeName = 'empty';
 
-  const EmptyScreen({Key? key}) : super(key: key);
+  const EmptyScreen({super.key});
 
   @override
   _EmptyScreenState createState() => _EmptyScreenState();

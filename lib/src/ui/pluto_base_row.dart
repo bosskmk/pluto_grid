@@ -72,7 +72,7 @@ class PlutoBaseRow extends StatelessWidget {
     );
   }
 
-  Widget _dragTargetBuilder(dragContext, candidate, rejected) {
+  Widget _dragTargetBuilder(BuildContext dragContext, candidate, rejected) {
     return _RowContainerWidget(
       stateManager: stateManager,
       rowIdx: rowIdx,

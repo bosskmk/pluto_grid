@@ -5,7 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 abstract class IRowState {
   List<PlutoRow> get rows;
 
-  /// [refRows] is a List<PlutoRow> type and holds the entire row data.
+  /// [refRows] is a List&lt;PlutoRow&gt; type and holds the entire row data.
   ///
   /// [refRows] returns a list of final results
   /// according to pagination and filtering status.

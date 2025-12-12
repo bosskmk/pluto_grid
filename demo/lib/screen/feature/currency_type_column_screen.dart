@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class CurrencyTypeColumnScreen extends StatefulWidget {
   static const routeName = 'feature/currency-type-column';
 
-  const CurrencyTypeColumnScreen({Key? key}) : super(key: key);
+  const CurrencyTypeColumnScreen({super.key});
 
   @override
   _CurrencyTypeColumnScreenState createState() =>

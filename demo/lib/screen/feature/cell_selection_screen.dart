@@ -8,7 +8,7 @@ import '../../widget/pluto_example_screen.dart';
 class CellSelectionScreen extends StatefulWidget {
   static const routeName = 'feature/cell-selection';
 
-  const CellSelectionScreen({Key? key}) : super(key: key);
+  const CellSelectionScreen({super.key});
 
   @override
   _CellSelectionScreenState createState() => _CellSelectionScreenState();

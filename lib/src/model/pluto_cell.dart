@@ -102,7 +102,7 @@ class PlutoCell {
   }
 }
 
-_assertUnInitializedCell(bool flag) {
+void _assertUnInitializedCell(bool flag) {
   assert(
     flag,
     'PlutoCell is not initialized.'

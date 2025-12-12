@@ -7,7 +7,7 @@ import '../../widget/pluto_example_screen.dart';
 class ValueFormatterScreen extends StatefulWidget {
   static const routeName = 'feature/value-formatter';
 
-  const ValueFormatterScreen({Key? key}) : super(key: key);
+  const ValueFormatterScreen({super.key});
 
   @override
   _ValueFormatterScreenState createState() => _ValueFormatterScreenState();
