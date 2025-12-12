@@ -9,7 +9,7 @@ class PlutoExampleButton extends StatelessWidget {
   PlutoExampleButton({
     super.key,
     required this.url,
-  })  : assert(url.isNotEmpty);
+  }) : assert(url.isNotEmpty);
 
   @override
   Widget build(BuildContext context) {
