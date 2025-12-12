@@ -181,12 +181,10 @@ class _ListingModeScreenState extends State<ListingModeScreen> {
                           autofocus: true,
                         ),
                         const SizedBox(height: 20),
-                        ...row!.cells.entries
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(e.value.value.toString()),
-                                ))
-                            ,
+                        ...row!.cells.entries.map((e) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(e.value.value.toString()),
+                            )),
                         const SizedBox(height: 20),
                         Center(
                           child: Wrap(

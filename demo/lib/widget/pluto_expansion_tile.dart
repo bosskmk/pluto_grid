@@ -12,7 +12,7 @@ class PlutoExpansionTile extends StatelessWidget {
     required this.title,
     this.children,
     this.buttons,
-  })  : assert(title.isNotEmpty);
+  }) : assert(title.isNotEmpty);
 
   @override
   Widget build(BuildContext context) {
