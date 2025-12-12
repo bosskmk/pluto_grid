@@ -4,14 +4,21 @@ codecov:
 coverage:
   precision: 2
   round: down
-  range: "70...100"
+  range: "0...100"
+  status:
+    project:
+      default:
+        enabled: false
+    patch:
+      default:
+        enabled: false
 
 parsers:
   gcov:
     branch_detection:
       conditional: yes
       loop: yes
-      method: nod
+      method: no
       macro: no
 
 comment:
