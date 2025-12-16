@@ -170,19 +170,19 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
                 )
               : columnWidget,
         ),
-        if (showContextIcon)
-          Positioned.directional(
-            textDirection: stateManager.textDirection,
-            end: -3,
-            child: enableGesture
-                ? Listener(
-                    onPointerDown: _handleOnPointDown,
-                    onPointerMove: _handleOnPointMove,
-                    onPointerUp: _handleOnPointUp,
-                    child: contextMenuIcon,
-                  )
-                : contextMenuIcon,
-          ),
+        // if (showContextIcon)
+        //   Positioned.directional(
+        //     textDirection: stateManager.textDirection,
+        //     end: -3,
+        //     child: enableGesture
+        //         ? Listener(
+        //             onPointerDown: _handleOnPointDown,
+        //             onPointerMove: _handleOnPointMove,
+        //             onPointerUp: _handleOnPointUp,
+        //             child: contextMenuIcon,
+        //           )
+        //         : contextMenuIcon,
+        //   ),
       ],
     );
   }
@@ -518,12 +518,12 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
     );
   }
 
-  void _handleOnPressedFilter() {
-    stateManager.showFilterPopup(
-      context,
-      calledColumn: widget.column,
-    );
-  }
+  // void _handleOnPressedFilter() {
+  //   stateManager.showFilterPopup(
+  //     context,
+  //     calledColumn: widget.column,
+  //   );
+  // }
 
   String? get _title =>
       widget.column.titleSpan == null ? widget.column.title : null;
@@ -533,18 +533,19 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
         if (_isFilteredList)
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: IconButton(
-              icon: Icon(
-                Icons.filter_alt_outlined,
-                color: stateManager.configuration.style.iconColor,
-                size: stateManager.configuration.style.iconSize,
-              ),
-              onPressed: _handleOnPressedFilter,
-              constraints: BoxConstraints(
-                maxHeight:
-                    widget.height + (PlutoGridSettings.rowBorderWidth * 2),
-              ),
-            ),
+            child: Container(),
+            // child: IconButton(
+            //   icon: Icon(
+            //     Icons.filter_alt_outlined,
+            //     color: stateManager.configuration.style.iconColor,
+            //     size: stateManager.configuration.style.iconSize,
+            //   ),
+            //   onPressed: _handleOnPressedFilter,
+            //   constraints: BoxConstraints(
+            //     maxHeight:
+            //         widget.height + (PlutoGridSettings.rowBorderWidth * 2),
+            //   ),
+            // ),
           ),
       ];
 

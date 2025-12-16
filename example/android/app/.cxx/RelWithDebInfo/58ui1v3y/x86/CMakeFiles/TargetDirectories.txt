@@ -1,0 +1,2 @@
+/Users/mis/poc-fork-pluto-grid/pluto_grid/example/android/app/.cxx/RelWithDebInfo/58ui1v3y/x86/CMakeFiles/edit_cache.dir
+/Users/mis/poc-fork-pluto-grid/pluto_grid/example/android/app/.cxx/RelWithDebInfo/58ui1v3y/x86/CMakeFiles/rebuild_cache.dir
