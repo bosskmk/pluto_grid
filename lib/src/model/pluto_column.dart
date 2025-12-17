@@ -20,6 +20,8 @@ typedef PlutoColumnCheckReadOnly = bool Function(
   PlutoCell cell,
 );
 
+typedef PlutoSortDelegate = int Function(dynamic? value);
+
 class PlutoColumn {
   /// A title to be displayed on the screen.
   /// If a titleSpan value is set, the title value is not displayed.
@@ -80,6 +82,9 @@ class PlutoColumn {
 
   /// Set column sorting.
   PlutoColumnSort sort;
+
+  /// Callback that returns an int value used for custoom sorting.
+  PlutoSortDelegate? sortDelegate;
 
   /// Formatter for display of cell values.
   PlutoColumnValueFormatter? formatter;
@@ -208,6 +213,7 @@ class PlutoColumn {
     this.titleTextAlign = PlutoColumnTextAlign.start,
     this.frozen = PlutoColumnFrozen.none,
     this.sort = PlutoColumnSort.none,
+    this.sortDelegate,
     this.formatter,
     this.applyFormatterInEditing = false,
     this.backgroundColor,
@@ -227,7 +233,7 @@ class PlutoColumn {
     this.enableEditingMode = true,
     this.hide = false,
   })  : _key = UniqueKey(),
-        _checkReadOnly = checkReadOnly;
+       _checkReadOnly = checkReadOnly;
 
   final Key _key;
 
@@ -314,12 +320,12 @@ class PlutoColumn {
   String formattedValueForDisplayInEditing(dynamic value) {
     if (type is PlutoColumnTypeWithNumberFormat) {
       return value.toString().replaceFirst(
-            '.',
-            (type as PlutoColumnTypeWithNumberFormat)
-                .numberFormat
-                .symbols
-                .DECIMAL_SEP,
-          );
+        '.',
+        (type as PlutoColumnTypeWithNumberFormat)
+            .numberFormat
+            .symbols
+            .DECIMAL_SEP,
+      );
     }
 
     if (formatter != null) {
