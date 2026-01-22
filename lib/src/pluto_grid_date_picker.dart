@@ -221,8 +221,8 @@ class PlutoGridDatePicker {
     currentMonth = offsetDate.month;
 
     final List<DateTime> days = PlutoDateTimeHelper.getDaysInBetween(
-      DateTime(offsetDate.year, offsetDate.month, 1),
-      DateTime(offsetDate.year, offsetDate.month + 1, 0),
+      DateTime.utc(offsetDate.year, offsetDate.month, 1),
+      DateTime.utc(offsetDate.year, offsetDate.month + 1, 0),
     );
 
     final popupRows = _buildRows(days);
