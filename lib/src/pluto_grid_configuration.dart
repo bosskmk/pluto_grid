@@ -1581,6 +1581,46 @@ class PlutoGridLocaleText {
     this.loadingText = 'にゃ〜',
   });
 
+    const PlutoGridLocaleText.polish({
+    // Column menu
+    this.unfreezeColumn = 'Odblokuj',
+    this.freezeColumnToStart = 'Zablokuj na początku',
+    this.freezeColumnToEnd = 'Zablokuj na końcu',
+    this.autoFitColumn = 'Dopasuj',
+    this.hideColumn = 'Ukryj kolumnę',
+    this.setColumns = 'Ustaw kolumny',
+    this.setFilter = 'Ustaw filtr',
+    this.resetFilter = 'Wyczyść filtr',
+    // SetColumns popup
+    this.setColumnsTitle = 'Tytuł kolumny',
+    // Filter popup
+    this.filterColumn = 'Kolumna',
+    this.filterType = 'Typ',
+    this.filterValue = 'Wartość',
+    this.filterAllColumns = 'Wszystkie kolumny',
+    this.filterContains = 'Zawiera',
+    this.filterEquals = 'Równa się',
+    this.filterStartsWith = 'Zaczyna się od',
+    this.filterEndsWith = 'Kończy się na',
+    this.filterGreaterThan = 'Więcej niż',
+    this.filterGreaterThanOrEqualTo = 'Więcej lub równo',
+    this.filterLessThan = 'Mniej niż',
+    this.filterLessThanOrEqualTo = 'Mniej lub równo',
+    // Date popup
+    this.sunday = 'Nd',
+    this.monday = 'Pn',
+    this.tuesday = 'Wt',
+    this.wednesday = 'Śr',
+    this.thursday = 'Czw',
+    this.friday = 'Pt',
+    this.saturday = 'So',
+    // Time column popup
+    this.hour = 'Godzina',
+    this.minute = 'Minuta',
+    // Common
+    this.loadingText = 'Ładowanie',
+  });
+
   @override
   bool operator ==(covariant Object other) {
     return identical(this, other) ||
