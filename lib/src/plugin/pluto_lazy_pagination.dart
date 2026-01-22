@@ -180,20 +180,22 @@ class _PlutoLazyPaginationState extends State<PlutoLazyPagination> {
       ),
     )
         .then((data) {
-      stateManager.scroll.bodyRowsVertical!.jumpTo(0);
+          if(mounted) {
+            stateManager.scroll.bodyRowsVertical!.jumpTo(0);
 
-      stateManager.refRows.clearFromOriginal();
-      stateManager.insertRows(0, data.rows);
+            stateManager.refRows.clearFromOriginal();
+            stateManager.insertRows(0, data.rows);
 
-      setState(() {
-        _page = page;
+            setState(() {
+              _page = page;
 
-        _totalPage = data.totalPage;
+              _totalPage = data.totalPage;
 
-        _isFetching = false;
-      });
+              _isFetching = false;
+            });
 
-      stateManager.setShowLoading(false);
+            stateManager.setShowLoading(false);
+          }
     });
   }
 
