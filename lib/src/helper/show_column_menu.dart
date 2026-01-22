@@ -84,18 +84,24 @@ Future<T?>? showColumnMenu<T>({
   final RenderBox overlay =
       Overlay.of(context).context.findRenderObject() as RenderBox;
 
-  return showMenu<T>(
-    context: context,
-    color: backgroundColor,
-    position: RelativeRect.fromLTRB(
-      position.dx,
-      position.dy,
-      position.dx + overlay.size.width,
-      position.dy + overlay.size.height,
-    ),
-    items: items,
-    useRootNavigator: true,
-  );
+  // Add isNotEmpty checking here so that won't pop up menu 
+  // when can pass in empty array on buildMenuItems on class PlutoColumnMenuDelegate
+  // refer to ColumnMenuScreen class
+  if (items.isNotEmpty){
+    return showMenu<T>(
+      context: context,
+      color: backgroundColor,
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        position.dx + overlay.size.width,
+        position.dy + overlay.size.height,
+      ),
+      items: items,
+      useRootNavigator: true,
+    );
+  }
+  
 }
 
 List<PopupMenuEntry<PlutoGridColumnMenuItem>> _getDefaultColumnMenuItems({
