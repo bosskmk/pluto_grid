@@ -277,6 +277,9 @@ mixin LayoutState implements IPlutoGridState {
   double get columnHeight =>
       showColumnTitle ? configuration.style.columnHeight : 0;
 
+  BorderRadiusGeometry? get gridPopupBorderRadius =>
+      showColumnTitle ? configuration.style.gridPopupBorderRadius : null;
+
   @override
   double get columnGroupHeight =>
       showColumnGroups ? columnGroupDepth(columnGroups) * columnHeight : 0;

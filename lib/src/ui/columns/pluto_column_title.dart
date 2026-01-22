@@ -9,7 +9,6 @@ class PlutoColumnTitle extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
 
   final PlutoColumn column;
-
   late final double height;
 
   PlutoColumnTitle({
@@ -68,11 +67,16 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     );
   }
 
-  void _showContextMenu(BuildContext context, Offset position) async {
+  void _showContextMenu(
+    BuildContext context,
+    Offset position,
+    ShapeBorder? shape,
+  ) async {
     final selected = await showColumnMenu(
       context: context,
       position: position,
       backgroundColor: stateManager.style.menuBackgroundColor,
+      shape: shape,
       items: stateManager.columnMenuDelegate.buildMenuItems(
         stateManager: stateManager,
         column: widget.column,
@@ -112,11 +116,11 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
     _columnRightPosition = event.position;
   }
 
-  void _handleOnPointUp(PointerUpEvent event) {
+  void _handleOnPointUp(PointerUpEvent event, ShapeBorder? shape) {
     if (_isPointMoving) {
       stateManager.updateCorrectScrollOffset();
     } else if (mounted && widget.column.enableContextMenu) {
-      _showContextMenu(context, event.position);
+      _showContextMenu(context, event.position, shape);
     }
 
     _isPointMoving = false;
@@ -178,7 +182,14 @@ class PlutoColumnTitleState extends PlutoStateWithChange<PlutoColumnTitle> {
                 ? Listener(
                     onPointerDown: _handleOnPointDown,
                     onPointerMove: _handleOnPointMove,
-                    onPointerUp: _handleOnPointUp,
+                    onPointerUp: (PointerUpEvent event) => _handleOnPointUp(
+                      event,
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            widget.stateManager.gridPopupBorderRadius ??
+                                BorderRadius.zero,
+                      ),
+                    ),
                     child: contextMenuIcon,
                   )
                 : contextMenuIcon,
