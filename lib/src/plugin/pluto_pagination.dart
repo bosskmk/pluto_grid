@@ -5,16 +5,20 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../ui/ui.dart';
 
+
+
+
+
 /// A widget for client-side pagination.
 ///
 /// Server-side pagination can be implemented
 /// using the [PlutoLazyPagination] or [PlutoInfinityScrollRows] widgets.
 class PlutoPagination extends PlutoStatefulWidget {
   const PlutoPagination(
-    this.stateManager, {
-    this.pageSizeToMove,
-    super.key,
-  }) : assert(pageSizeToMove == null || pageSizeToMove > 0);
+      this.stateManager, {
+        this.pageSizeToMove,
+        super.key,
+      }) : assert(pageSizeToMove == null || pageSizeToMove > 0);
 
   final PlutoGridStateManager stateManager;
 
@@ -22,7 +26,6 @@ class PlutoPagination extends PlutoStatefulWidget {
   ///
   /// Default is null.
   /// Moves the page as many as the number of page buttons currently displayed.
-  ///
   /// If this value is set to 1, the next previous page is moved by one page.
   final int? pageSizeToMove;
 
@@ -112,7 +115,7 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
   List<int> get _pageNumbers {
     return List.generate(
       _endPage - _startPage,
-      (index) => _startPage + index,
+          (index) => _startPage + index,
       growable: false,
     );
   }
@@ -165,18 +168,20 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
     return TextButton.styleFrom(
       disabledForegroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      padding: const EdgeInsets.fromLTRB(5, 0, 0, 10),
-      backgroundColor: Colors.transparent,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      backgroundColor: isCurrentIndex ? Color(0xFF0C69C0) : Colors.transparent,
+      shape: const CircleBorder(),
     );
   }
 
   TextStyle _getNumberTextStyle(bool isCurrentIndex) {
     return TextStyle(
-      fontSize:
-          isCurrentIndex ? stateManager.configuration.style.iconSize : null,
-      color: isCurrentIndex
-          ? stateManager.configuration.style.activatedBorderColor
-          : stateManager.configuration.style.iconColor,
+        fontSize:
+        isCurrentIndex ? stateManager.configuration.style.iconSize : null,
+        color: isCurrentIndex
+            ? stateManager.configuration.style.activatedColor
+            : Color(0xFF808080),
+        fontWeight: isCurrentIndex ? FontWeight.bold : null
     );
   }
 
@@ -185,14 +190,24 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
 
     var isCurrentIndex = page == pageFromIndex;
 
-    return TextButton(
-      onPressed: () {
+    return InkWell(
+      onTap: () {
         stateManager.setPage(pageFromIndex);
       },
-      style: _getNumberButtonStyle(isCurrentIndex),
-      child: Text(
-        pageFromIndex.toString(),
-        style: _getNumberTextStyle(isCurrentIndex),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: isCurrentIndex ? Color(0xFF0C69C0) : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Text(
+            pageFromIndex.toString(),
+            textAlign: TextAlign.center,
+            style: _getNumberTextStyle(isCurrentIndex),
+          ),
+        ),
       ),
     );
   }
@@ -206,61 +221,76 @@ class PlutoPaginationState extends _PlutoPaginationStateWithChange {
         final Color iconColor = stateManager.configuration.style.iconColor;
 
         final Color disabledIconColor =
-            stateManager.configuration.style.disabledIconColor;
+            stateManager.configuration.style.activatedBorderColor;
 
         return SizedBox(
           width: _maxWidth,
           height: stateManager.footerHeight,
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: _isFirstPage ? null : _firstPage,
-                    icon: const Icon(Icons.first_page),
-                    color: iconColor,
-                    disabledColor: disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isFirstPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  IconButton(
-                    onPressed: _isFirstPage ? null : _beforePage,
-                    icon: const Icon(Icons.navigate_before),
-                    color: iconColor,
-                    disabledColor: disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isFirstPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  ..._pageNumbers.map(_makeNumberButton),
-                  IconButton(
-                    onPressed: _isLastPage ? null : _nextPage,
-                    icon: const Icon(Icons.navigate_next),
-                    color: iconColor,
-                    disabledColor: disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isLastPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  IconButton(
-                    onPressed: _isLastPage ? null : _lastPage,
-                    icon: const Icon(Icons.last_page),
-                    color: iconColor,
-                    disabledColor: disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isLastPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: _isFirstPage ? null : _firstPage,
+                      icon: const Icon(Icons.first_page),
+                      color: _isFirstPage ? iconColor : disabledIconColor,
+                      disabledColor: _isFirstPage ? iconColor : disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isFirstPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                    IconButton(
+                      onPressed: _isFirstPage ? null : _beforePage,
+                      icon: const Icon(Icons.navigate_before),
+                      color: _isFirstPage ? iconColor : disabledIconColor,
+                      disabledColor: _isFirstPage ? iconColor : disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isFirstPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+
+                    ..._pageNumbers.map(_makeNumberButton),
+
+                    IconButton(
+                      onPressed: _isLastPage ? null : _nextPage,
+                      icon: const Icon(Icons.navigate_next),
+                      color: _isLastPage ? iconColor : disabledIconColor,
+                      disabledColor: _isLastPage ? iconColor : disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isLastPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                    IconButton(
+                      onPressed: _isLastPage ? null : _lastPage,
+                      icon: const Icon(Icons.last_page),
+                      color: _isLastPage ? iconColor : disabledIconColor,
+                      disabledColor: _isLastPage ? iconColor : disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isLastPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                  ],
+                ),
               ),
-            ),
+
+              // Moaz
+              //  صفحة 1 من 25
+              Text(
+                "صفحة $page من $totalPage",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: stateManager.configuration.style.iconSize,
+                  color: Color(0xFF808080),
+                ),
+              ),
+            ],
           ),
         );
       },

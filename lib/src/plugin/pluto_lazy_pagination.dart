@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -29,12 +28,12 @@ class PlutoLazyPaginationRequest {
   /// Filtering column, type, and filtering value are set in [PlutoRow.cells].
   ///
   /// [filterRows] can be converted to Map type as shown below.
-  /// ```dart
+  /// dart
   /// FilterHelper.convertRowsToMap(filterRows);
   ///
   /// // Assuming that filtering is set in column2, the following values are returned.
   /// // {column2: [{Contains: 123}]}
-  /// ```
+  ///
   ///
   /// The filter type in FilterHelper.defaultFilters is the default,
   /// If there is user-defined filtering,
@@ -62,14 +61,14 @@ class PlutoLazyPaginationResponse {
 
 /// Widget for processing lazy pagination.
 ///
-/// ```dart
+/// dart
 /// createFooter: (stateManager) {
 ///   return PlutoLazyPagination(
 ///     fetch: fetch,
 ///     stateManager: stateManager,
 ///   );
 /// },
-/// ```
+///
 class PlutoLazyPagination extends StatefulWidget {
   const PlutoLazyPagination({
     this.initialPage = 1,
@@ -300,7 +299,7 @@ class _PaginationWidgetState extends State<_PaginationWidget> {
   List<int> get _pageNumbers {
     return List.generate(
       _endPage - _startPage,
-      (index) => _startPage + index,
+          (index) => _startPage + index,
       growable: false,
     );
   }
@@ -350,14 +349,14 @@ class _PaginationWidgetState extends State<_PaginationWidget> {
       disabledForegroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
       padding: const EdgeInsets.fromLTRB(5, 0, 0, 10),
-      backgroundColor: Colors.transparent,
+      backgroundColor: isCurrentIndex ? widget.activatedColor : widget.iconColor,
     );
   }
 
   TextStyle _getNumberTextStyle(bool isCurrentIndex) {
     return TextStyle(
       fontSize: isCurrentIndex ? widget.iconSize : null,
-      color: isCurrentIndex ? widget.activatedColor : widget.iconColor,
+      color: isCurrentIndex ? widget.iconColor : widget.disabledIconColor,
     );
   }
 
@@ -366,14 +365,24 @@ class _PaginationWidgetState extends State<_PaginationWidget> {
 
     var isCurrentIndex = widget.page == pageFromIndex;
 
-    return TextButton(
-      onPressed: () {
+    return InkWell(
+      onTap: () {
         _movePage(pageFromIndex);
       },
-      style: _getNumberButtonStyle(isCurrentIndex),
-      child: Text(
-        pageFromIndex.toString(),
-        style: _getNumberTextStyle(isCurrentIndex),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: isCurrentIndex ? Color(0xFF0C69C0) : Colors.transparent,
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Text(
+            pageFromIndex.toString(),
+            textAlign: TextAlign.center,
+            style: _getNumberTextStyle(isCurrentIndex),
+          ),
+        ),
       ),
     );
   }
@@ -385,60 +394,131 @@ class _PaginationWidgetState extends State<_PaginationWidget> {
         _maxWidth = size.maxWidth;
 
         return SizedBox(
-          width: size.maxWidth,
+          width: _maxWidth,
           height: widget.height,
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: _isFirstPage ? null : _firstPage,
-                    icon: const Icon(Icons.first_page),
-                    color: widget.iconColor,
-                    disabledColor: widget.disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isFirstPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  IconButton(
-                    onPressed: _isFirstPage ? null : _beforePage,
-                    icon: const Icon(Icons.navigate_before),
-                    color: widget.iconColor,
-                    disabledColor: widget.disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isFirstPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  ..._pageNumbers.map(_makeNumberButton),
-                  IconButton(
-                    onPressed: _isLastPage ? null : _nextPage,
-                    icon: const Icon(Icons.navigate_next),
-                    color: widget.iconColor,
-                    disabledColor: widget.disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isLastPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                  IconButton(
-                    onPressed: _isLastPage ? null : _lastPage,
-                    icon: const Icon(Icons.last_page),
-                    color: widget.iconColor,
-                    disabledColor: widget.disabledIconColor,
-                    splashRadius: _iconSplashRadius,
-                    mouseCursor: _isLastPage
-                        ? SystemMouseCursors.basic
-                        : SystemMouseCursors.click,
-                  ),
-                ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: _isFirstPage ? null : _firstPage,
+                      icon: const Icon(Icons.first_page),
+                      color: _isFirstPage ? widget.iconColor : widget.disabledIconColor,
+                      disabledColor: _isFirstPage ? widget.iconColor : widget.disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isFirstPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                    IconButton(
+                      onPressed: _isFirstPage ? null : _beforePage,
+                      icon: const Icon(Icons.navigate_before),
+                      color: _isFirstPage ? widget.iconColor : widget.disabledIconColor,
+                      disabledColor: _isFirstPage ? widget.iconColor : widget.disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isFirstPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+
+                    ..._pageNumbers.map(_makeNumberButton),
+
+                    IconButton(
+                      onPressed: _isLastPage ? null : _nextPage,
+                      icon: const Icon(Icons.navigate_next),
+                      color: _isLastPage ? widget.iconColor : widget.disabledIconColor,
+                      disabledColor: _isLastPage ? widget.iconColor : widget.disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isLastPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                    IconButton(
+                      onPressed: _isLastPage ? null : _lastPage,
+                      icon: const Icon(Icons.last_page),
+                      color: _isLastPage ? widget.iconColor : widget.disabledIconColor,
+                      disabledColor: _isLastPage ? widget.iconColor : widget.disabledIconColor,
+                      splashRadius: _iconSplashRadius,
+                      mouseCursor: _isLastPage
+                          ? SystemMouseCursors.basic
+                          : SystemMouseCursors.click,
+                    ),
+                  ],
+                ),
               ),
-            ),
+
+              // Moaz
+              //  صفحة 1 من 25
+              Text(
+                "صفحة ${widget.page} من $_endPage",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF808080),
+                ),
+              ),
+            ],
           ),
         );
+
+        // return SizedBox(
+        //   width: size.maxWidth,
+        //   height: widget.height,
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: SingleChildScrollView(
+        //       scrollDirection: Axis.horizontal,
+        //       child: Row(
+        //         children: [
+        //           IconButton(
+        //             onPressed: _isFirstPage ? null : _firstPage,
+        //             icon: const Icon(Icons.first_page),
+        //             color: widget.iconColor,
+        //             disabledColor: widget.disabledIconColor,
+        //             splashRadius: _iconSplashRadius,
+        //             mouseCursor: _isFirstPage
+        //                 ? SystemMouseCursors.basic
+        //                 : SystemMouseCursors.click,
+        //           ),
+        //           IconButton(
+        //             onPressed: _isFirstPage ? null : _beforePage,
+        //             icon: const Icon(Icons.navigate_before),
+        //             color: widget.iconColor,
+        //             disabledColor: widget.disabledIconColor,
+        //             splashRadius: _iconSplashRadius,
+        //             mouseCursor: _isFirstPage
+        //                 ? SystemMouseCursors.basic
+        //                 : SystemMouseCursors.click,
+        //           ),
+        //           ..._pageNumbers.map(_makeNumberButton),
+        //           IconButton(
+        //             onPressed: _isLastPage ? null : _nextPage,
+        //             icon: const Icon(Icons.navigate_next),
+        //             color: widget.iconColor,
+        //             disabledColor: widget.disabledIconColor,
+        //             splashRadius: _iconSplashRadius,
+        //             mouseCursor: _isLastPage
+        //                 ? SystemMouseCursors.basic
+        //                 : SystemMouseCursors.click,
+        //           ),
+        //           IconButton(
+        //             onPressed: _isLastPage ? null : _lastPage,
+        //             icon: const Icon(Icons.last_page),
+        //             color: widget.iconColor,
+        //             disabledColor: widget.disabledIconColor,
+        //             splashRadius: _iconSplashRadius,
+        //             mouseCursor: _isLastPage
+        //                 ? SystemMouseCursors.basic
+        //                 : SystemMouseCursors.click,
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // );
       },
     );
   }
