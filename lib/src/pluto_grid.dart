@@ -582,14 +582,28 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
  KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, KeyEvent event) {
     if (_keyManager.eventResult.isSkip == false) {
-      // When a descendant widget (e.g. a TextField in a custom cell renderer)
-      // has primary focus, pass all key events through so the focused widget
-      // handles them. Built-in cells (PlutoTextCell etc.) already route their
-      // keys via eventResult.skip(), so they never reach this block — only
-      // custom renderer widgets do. If the grid's own focus node IS the
-      // primary focus, fall through to normal grid key handling below.
+      // When an inner widget (e.g. a TextField in a custom cell renderer) has
+      // primary focus, let text-editing keys pass through so they reach that
+      // widget. Built-in cells handle this themselves via eventResult.skip();
+      // this guard covers renderers that have no intermediate Focus.onKeyEvent.
+      // We detect this by checking that the grid's own focus node is NOT the
+      // primary focus — meaning focus has moved inside a descendant widget.
       if (!_stateManager.gridFocusNode.hasPrimaryFocus) {
-        return KeyEventResult.ignored;
+        final key = event.logicalKey;
+        final isHorizontalArrow = key == LogicalKeyboardKey.arrowLeft || key == LogicalKeyboardKey.arrowRight;
+        final isTextEditingKey = isHorizontalArrow ||
+            key == LogicalKeyboardKey.backspace ||
+            key == LogicalKeyboardKey.delete ||
+            key == LogicalKeyboardKey.home ||
+            key == LogicalKeyboardKey.end;
+ 
+        if (isTextEditingKey) {
+          // Horizontal arrows are still consumed by PlutoGrid when
+          // enableMoveHorizontalInEditing is on (it moves cell focus).
+          if (!isHorizontalArrow || !_stateManager.configuration.enableMoveHorizontalInEditing) {
+            return KeyEventResult.ignored;
+          }
+        }
       }
  
       _keyManager.subject.add(PlutoKeyManagerEvent(
