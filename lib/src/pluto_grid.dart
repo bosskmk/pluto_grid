@@ -595,14 +595,39 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
 
   KeyEventResult _handleGridFocusOnKey(FocusNode focusNode, KeyEvent event) {
     if (_keyManager.eventResult.isSkip == false) {
+      // When an inner widget (e.g. a TextField in a custom cell renderer) has
+      // primary focus, let text-editing keys pass through so they reach that
+      // widget. Built-in cells handle this themselves via eventResult.skip();
+      // this guard covers renderers that have no intermediate Focus.onKeyEvent.
+      // We detect this by checking that the grid's own focus node is NOT the
+      // primary focus — meaning focus has moved inside a descendant widget.
+      if (!_stateManager.gridFocusNode.hasPrimaryFocus) {
+        final key = event.logicalKey;
+        final isHorizontalArrow = key == LogicalKeyboardKey.arrowLeft || key == LogicalKeyboardKey.arrowRight;
+        final isTextEditingKey = isHorizontalArrow ||
+            key == LogicalKeyboardKey.backspace ||
+            key == LogicalKeyboardKey.delete ||
+            key == LogicalKeyboardKey.home ||
+            key == LogicalKeyboardKey.end;
+ 
+        if (isTextEditingKey) {
+          // Horizontal arrows are still consumed by PlutoGrid when
+          // enableMoveHorizontalInEditing is on (it moves cell focus).
+          if (!isHorizontalArrow || !_stateManager.configuration.enableMoveHorizontalInEditing) {
+            return KeyEventResult.ignored;
+          }
+        }
+      }
+ 
       _keyManager.subject.add(PlutoKeyManagerEvent(
         focusNode: focusNode,
         event: event,
       ));
     }
-
+ 
     return _keyManager.eventResult.consume(KeyEventResult.handled);
   }
+ 
 
   @override
   Widget build(BuildContext context) {
