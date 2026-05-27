@@ -192,7 +192,7 @@ Widget build(BuildContext context) {
 
 | Flutter          | PlutoGrid             |
 |------------------|-----------------------|
-| 3.19.0 or higher | 8.0.0 or higher       |
+| 3.41.9 or higher | 8.0.0 or higher       |
 | 3.10.0 or higher | 7.0.0 or higher       |
 | 3.7.0 or higher  | 6.0.0 or higher       |
 | 3.3.0 or higher  | 5.0.6 or higher       |
