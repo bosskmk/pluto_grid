@@ -107,6 +107,7 @@ abstract class PlutoChangeNotifierFilterResolver {
 
       /// grid_state
       stateManager.resetCurrentState.hashCode: 'resetCurrentState',
+      stateManager.setConfiguration.hashCode: 'setConfiguration',
 
       /// layout_state
       stateManager.setShowColumnTitle.hashCode: 'setShowColumnTitle',
@@ -115,6 +116,7 @@ abstract class PlutoChangeNotifierFilterResolver {
       stateManager.setShowLoading.hashCode: 'setShowLoading',
       stateManager.notifyChangedShowFrozenColumn.hashCode:
           'notifyChangedShowFrozenColumn',
+      stateManager.setTextDirection.hashCode: 'setTextDirection',
 
       /// pagination_state
       stateManager.setPageSize.hashCode: 'setPageSize',

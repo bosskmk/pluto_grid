@@ -2427,6 +2427,7 @@ class MockPlutoGridStateManager extends _i1.Mock
     _i2.PlutoGridConfiguration? configuration, {
     bool? updateLocale = true,
     bool? applyColumnFilter = true,
+    bool? notify = true,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -2435,6 +2436,7 @@ class MockPlutoGridStateManager extends _i1.Mock
           {
             #updateLocale: updateLocale,
             #applyColumnFilter: applyColumnFilter,
+            #notify: notify,
           },
         ),
         returnValueForMissingStub: null,
@@ -2774,10 +2776,15 @@ class MockPlutoGridStateManager extends _i1.Mock
       );
 
   @override
-  void setTextDirection(_i5.TextDirection? textDirection) => super.noSuchMethod(
+  void setTextDirection(
+    _i5.TextDirection? textDirection, {
+    bool? notify = true,
+  }) =>
+      super.noSuchMethod(
         Invocation.method(
           #setTextDirection,
           [textDirection],
+          {#notify: notify},
         ),
         returnValueForMissingStub: null,
       );

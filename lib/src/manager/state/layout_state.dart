@@ -120,7 +120,7 @@ abstract class ILayoutState {
 
   void notifyChangedShowFrozenColumn();
 
-  void setTextDirection(TextDirection textDirection);
+  void setTextDirection(TextDirection textDirection, {bool notify = true});
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
@@ -503,8 +503,18 @@ mixin LayoutState implements IPlutoGridState {
   }
 
   @override
-  void setTextDirection(TextDirection textDirection) {
+  void setTextDirection(TextDirection textDirection, {bool notify = true}) {
+    if (_state._textDirection == textDirection) return;
+
     _state._textDirection = textDirection;
+
+    // setTextDirection is invoked from PlutoGridLayoutDelegate's constructor,
+    // which is created while PlutoGrid itself is building (inside
+    // LayoutBuilder). Notifying synchronously at that point would ask
+    // dependent widgets to rebuild while the widget tree above them is still
+    // being built, which Flutter disallows. Defer to the next frame instead,
+    // matching the pattern already used by setKeepFocus.
+    notifyListenersOnPostFrame(notify, setTextDirection.hashCode);
   }
 
   @override

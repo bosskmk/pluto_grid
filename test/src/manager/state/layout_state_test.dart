@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../helper/column_helper.dart';
 import '../../../helper/pluto_widget_test_helper.dart';
 import '../../../helper/row_helper.dart';
+import '../../../mock/mock_methods.dart';
 import '../../../mock/shared_mocks.mocks.dart';
 
 void main() {
@@ -155,6 +157,91 @@ void main() {
           (stateManager.gridGlobalOffset!.dx + stateManager.maxWidth!) -
               PlutoGridSettings.offsetScrollingFromEdge,
         );
+      },
+    );
+  });
+
+  group('setTextDirection', () {
+    late PlutoGridStateManager stateManager;
+
+    setUp(() {
+      List<PlutoColumn> columns = ColumnHelper.textColumn('body', count: 3);
+      List<PlutoRow> rows = RowHelper.count(3, columns);
+
+      stateManager = PlutoGridStateManager(
+        columns: columns,
+        rows: rows,
+        gridFocusNode: MockFocusNode(),
+        scroll: MockPlutoGridScrollController(),
+      );
+
+      stateManager.setEventManager(MockPlutoGridEventManager());
+    });
+
+    testWidgets(
+      'When the text direction is changed, '
+      'listeners should be notified on the next frame.',
+      (WidgetTester tester) async {
+        // given
+        expect(stateManager.isLTR, isTrue);
+
+        final listener = MockMethods();
+
+        stateManager.addListener(listener.noParamReturnVoid);
+
+        // when
+        stateManager.setTextDirection(TextDirection.rtl);
+
+        // notifyListenersOnPostFrame defers the notification, so listeners
+        // must not have been called synchronously yet.
+        verifyNever(listener.noParamReturnVoid());
+
+        await tester.pump();
+
+        // then
+        expect(stateManager.isRTL, isTrue);
+        verify(listener.noParamReturnVoid()).called(1);
+      },
+    );
+
+    testWidgets(
+      'When the text direction is set to the same value, '
+      'listeners should not be notified.',
+      (WidgetTester tester) async {
+        // given
+        expect(stateManager.isLTR, isTrue);
+
+        final listener = MockMethods();
+
+        stateManager.addListener(listener.noParamReturnVoid);
+
+        // when
+        stateManager.setTextDirection(TextDirection.ltr);
+
+        await tester.pump();
+
+        // then
+        verifyNever(listener.noParamReturnVoid());
+      },
+    );
+
+    testWidgets(
+      'When notify is false, listeners should not be notified '
+      'even though the text direction changed.',
+      (WidgetTester tester) async {
+        // given
+        final listener = MockMethods();
+
+        stateManager.addListener(listener.noParamReturnVoid);
+
+        // when
+        stateManager.setTextDirection(TextDirection.rtl, notify: false);
+
+        await tester.pump();
+
+        // then
+        expect(stateManager.isRTL, isTrue);
+        verifyNever(listener.noParamReturnVoid());
       },
     );
   });
