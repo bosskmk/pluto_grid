@@ -60,6 +60,7 @@ abstract class IGridState {
     PlutoGridConfiguration configuration, {
     bool updateLocale = true,
     bool applyColumnFilter = true,
+    bool notify = true,
   });
 
   void setGridMode(PlutoGridMode mode);
@@ -134,6 +135,7 @@ mixin GridState implements IPlutoGridState {
     PlutoGridConfiguration configuration, {
     bool updateLocale = true,
     bool applyColumnFilter = true,
+    bool notify = true,
   }) {
     if (_state._configuration == configuration) return;
 
@@ -146,6 +148,8 @@ mixin GridState implements IPlutoGridState {
     if (applyColumnFilter) {
       _state._configuration!.applyColumnFilter(refColumns.originalList);
     }
+
+    notifyListeners(notify);
   }
 
   @override
