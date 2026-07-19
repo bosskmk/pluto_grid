@@ -514,7 +514,7 @@ mixin LayoutState implements IPlutoGridState {
     // dependent widgets to rebuild while the widget tree above them is still
     // being built, which Flutter disallows. Defer to the next frame instead,
     // matching the pattern already used by setKeepFocus.
-    notifyListenersOnPostFrame(notify, setTextDirection.hashCode);
+    notifyListenersOnPostFrame(notify);
   }
 
   @override

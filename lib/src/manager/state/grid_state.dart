@@ -149,7 +149,7 @@ mixin GridState implements IPlutoGridState {
       _state._configuration!.applyColumnFilter(refColumns.originalList);
     }
 
-    notifyListeners(notify, setConfiguration.hashCode);
+    notifyListeners(notify);
   }
 
   @override
