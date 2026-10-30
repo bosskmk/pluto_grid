@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 /// [PlutoGridPopup] calls [PlutoGrid] in the form of a popup.
