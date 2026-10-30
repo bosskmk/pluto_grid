@@ -6,20 +6,22 @@ repository: https://github.com/bosskmk/pluto_grid
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
-  flutter: ">=2.5.0"
+  flutter: ">=3.47.7"
 
 dependencies:
   flutter:
     sdk: flutter
+  collection: any
+  cupertino_ui: any
+  material_ui: any
   # Follows the intl version included in Flutter.
   # https://github.com/flutter/flutter/blob/84a1e904f44f9b0e9c4510138010edcc653163f8/packages/flutter_localizations/pubspec.yaml#L11
-  intl: ^0.20.2
+  intl: ^0.20.3
   rxdart: ^0.28.0
-  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.6.1
-  build_runner: ^2.10.4
+  mockito: ^5.8.1
+  build_runner: ^2.16.2
   flutter_lints: ^6.0.0

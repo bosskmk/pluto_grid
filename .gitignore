@@ -77,4 +77,6 @@ coverage/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 # FVM Support - https://fvm.app/
-.fvm/flutter_sdk
+
+# FVM Version Cache
+.fvm/

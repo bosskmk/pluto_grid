@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:faker/faker.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../dummy_data/development.dart';
